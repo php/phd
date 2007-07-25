@@ -1,0 +1,11 @@
+PhD - PHP DocBook
+Copyright(c) 2007 Gwynne Raskind and Hannes Magnusson
+All Rights Reserved.
+<phd@php.net>
+
+At this time, all code and ideas here are completely experimental
+and untested. Don't even pretend you know what you're doing in here
+unless you're one of the authors. Please do ALL discussion inside
+the RFC/ directory and leave the rest of the filespace clean. More
+comments and information to come.
+
