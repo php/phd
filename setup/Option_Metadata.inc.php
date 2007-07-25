@@ -27,7 +27,7 @@ if ( $xvcf( $GLOBALS[ 'OPTIONS' ][ 'xml_root' ] ) ) {
         if ( ( $languageList = @scandir( $d ) ) === FALSE ) {
             PhD_Error( "Unable to scan XML root." );
         }
-        $c = 'return is_dir( "'.$d.'/{$v}" ) && !in_array( $v, array( ".", "..", "CVS", ".svn" ) );';
+        $c = 'return is_dir( "'.$d.'/${v}" ) && !in_array( $v, array( ".", "..", "CVS", ".svn" ) );';
         $languages = array_filter( $languageList, create_function( '$v', $c ) );
     }
     return $languages;
@@ -50,7 +50,8 @@ EOBLOB
     ),
 );
 
-$OPTIONS_DATA = array_merge( $OPTIONS_DATA, array(
+$OPTIONS_DATA = array_merge( $OPTIONS_DATA,
+    array(
     'output_format' => array(
         'default_value' => 'xhtml',
         'description' => <<<~EOBLOB
@@ -71,10 +72,10 @@ static $formatList = NULL;
 if ( is_null( $formatList ) ) {
     $path = dirname( __FILE__ ) . "/../formats";
     if ( ( $formats = @scandir( $path ) ) === FALSE ) {
-        PhD_Error( "The formats directory is missing or unreadable at \"{$path}\"." );
+        PhD_Error( "The formats directory is missing or unreadable at \"${path}\"." );
     }
     $formatList = array_map( create_function( '$v', 'return substr( $v, 0, -4 );' ),
-        array_filter( $formats, create_function( '$v', 'return substr( $v, -4 ) == ".php" && is_file( "'.$path.'/{$v}" );' ) ) );
+        array_filter( $formats, create_function( '$v', 'return substr( $v, -4 ) == ".php" && is_file( "'.$path.'/${v}" );' ) ) );
     if ( count( $formatList ) == 0 ) {
         PhD_Error( "No output formats are available." );
     }
@@ -113,7 +114,7 @@ if ( is_null( $themeList ) ) {
         PhD_Error( "The themes directory is missing or unreadable." );
     }
     $themeList = array_filter( $themes,
-        create_function( '$v', 'return is_dir( "'.$path.'/{$v}" ) && !in_array( $v, array( ".", "..", "CVS" ) );' ) );
+        create_function( '$v', 'return is_dir( "'.$path.'/${v}" ) && !in_array( $v, array( ".", "..", "CVS" ) );' ) );
     if ( count( $themeList ) == 0 ) {
         PhD_Error( "No themes are available." );
     }
@@ -156,8 +157,7 @@ EOBLOB
     ),
     
     'xml_root' => array(
-        'default_value' => '/Users/gwynne/Desktop/php-doc/phpdoc-all',
-//        'default_value' => '/INVALID/PATH',
+        'default_value' => '/INVALID/PATH',
         'description' => <<<~EOBLOB
 The location of the language trees.
 EOBLOB
@@ -173,7 +173,7 @@ EOBLOB
         'value_list_function' => $OPTIONS_DATA[ '__common_functions' ][ 'unknown_value_list_func' ],
         'validity_check_function' => create_function( '$root', <<<~EOBLOB
 $rv = realpath( $root );
-return ( $rv !== FALSE && is_dir( $rv ) && is_readable( $rv ) && is_executable( $rv ) && is_dir( "{$rv}/en" ) );
+return ( $rv !== FALSE && is_dir( $rv ) && is_readable( $rv ) && is_executable( $rv ) && is_dir( "${rv}/en" ) );
 EOBLOB
         ),
         'prompt' => 'Enter the full path to the XML root',
@@ -263,8 +263,7 @@ EOBLOB
     ),
     
     'database_path' => array(
-        'default_value' => '/Users/gwynne/Desktop/php-doc/phd/phd-data.sqlite',
-//      'default_value' => '/INVALID/PATH/phd-data.sqlite',
+        'default_value' => '/INVALID/PATH/phd-data.sqlite',
         'description' => <<<~EOBLOB
 The database path tells PhD where to store the SQLite 3 database file, used for
 indexing and cache data. Most installations will want to place the database
@@ -285,7 +284,7 @@ try {
     if ( !is_dir( $d ) || !is_writable( $d ) || !is_executable( $d ) ) {
         return FALSE;
     }
-    $p = new PDO( "sqlite:{$path}", NULL, NULL, array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ) );
+    $p = new PDO( "sqlite:${path}", NULL, NULL, array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ) );
     $p = NULL;
     unset( $p );
     return @unlink( $path );
@@ -302,8 +301,7 @@ EOBLOB
     ),
     
     'debug' => array(
-        'default_value' => TRUE,
-//      'default_value' => FALSE,
+        'default_value' => FALSE,
         'description' => <<<~EOBLOB
 The debug flag controls whether PhD runs in debug mode. This should NEVER be
 set in a production environment; its intended use is for PhD developers and
@@ -323,9 +321,12 @@ EOBLOB
         'prompt' => 'Type "(Y)es" to enable debug output, or "(N)o" to disable it',
         'invalid_message' => 'Please enter "(Y)es" or "(N)o".'
     ),
-) );
+    )
+);
 
-function getOptionNames() { return array_filter( array_keys( $GLOBALS[ 'OPTIONS_DATA' ] ),
-    create_function( '$v', 'return strncmp( "__", $v, 2 );' ) ); }
+function getOptionNames() {
+    return array_filter( array_keys( $GLOBALS[ 'OPTIONS_DATA' ] ),
+    create_function( '$v', 'return strncmp( "__", $v, 2 );' ) );
+}
 
 ?>

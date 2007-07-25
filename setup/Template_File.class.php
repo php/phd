@@ -126,7 +126,7 @@ class Template_File {
     protected function doSubstitutions( $substitutions, $template ) {
         
         return str_replace(
-            array_map( create_function( '$v', 'return "@{$v}@";' ), array_keys( $substitutions ) ),
+            array_map( create_function( '$v', 'return "@${v}@";' ), array_keys( $substitutions ) ),
             array_values( $substitutions ),
             $template );
 

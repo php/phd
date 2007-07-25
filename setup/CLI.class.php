@@ -51,14 +51,14 @@ class PhD_CLI_Interface implements PhD_SAPI_Interface {
     
     public function errorMessage( $message ) {
         
-        print "ERROR: {$message}\n";
+        print "ERROR: ${message}\n";
         exit( 1 );
     
     }
     
     public function warningMessage( $message ) {
         
-        print "WARNING: {$message}\n";
+        print "WARNING: ${message}\n";
     
     }
     
@@ -81,10 +81,10 @@ class PhD_CLI_Interface implements PhD_SAPI_Interface {
                     continue;
                 
                 if ( $this->quietMode < 2 ) {
-                    print "{$optionData[ 'description' ]}\n";
+                    print "${optionData[ 'description' ]}\n";
                 }
                 if ( $this->quietMode < 1 ) {
-                    print "{$optionData[ 'details' ]}\n";
+                    print "${optionData[ 'details' ]}\n";
                 }
                 
                 if ( ( $valueList = $optionData[ 'value_list_function' ]() ) !== NULL ) {
