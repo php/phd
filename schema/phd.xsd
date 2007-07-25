@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE xsd:schema PUBLIC "-//W3C//DTD XMLSCHEMA 2000102//EN" "http://www.w3.org/2001/XMLSchema.dtd">
+<!DOCTYPE xsd:schema PUBLIC "-//W3C//DTD XMLSCHEMA 2000102//EN" "http://www.w3.org/2001/XMLSchema.dtd" [
+
+ <!ENTITY % xs-datatypes PUBLIC 'datatypes' 'http://www.w3.org/2001/datatypes.dtd'>
+ <!ENTITY % p 'xsd:'>
+ <!ENTITY % s ':xsd'>
+ <!ENTITY % schemaAttrs 'xmlns:xlink    CDATA    #FIXED "http://www.w3.org/1999/xlink"
+                         xmlns:docbook  CDATA    #FIXED "http://docbook.org/ns/docbook"'>
+
+]>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:xlink="http://www.w3.org/1999/xlink"
             xmlns:docbook="http://docbook.org/ns/docbook"
@@ -9,6 +17,18 @@
             xml:lang="EN"
             targetNamespace="http://phd.php.net/ns/phd"
             version="PhD 1.0">
+
+ <xsd:annotation>
+  <xsd:documentation xml:lang="en">
+   PhD normative schema version 1.0.
+   Copyright(c) 2007 The Author(s). All Rights Reserved.
+   The Author(s) are described in a LICENSE file which should have accompanied
+   this document; if you did not receive this file, it can be downloaded from
+   the world-wide-web at:
+    &lt;http://phd.php.net/LICENSE&gt;
+  </xsd:documentation>
+  <xsd:appinfo>$Id$</xsd:appinfo>
+ </xsd:annotation>
 
  <xsd:include schemaLocation="docbook.xsd"/>
  <!-- Docbook XSD imports XML and XLink for us -->
@@ -53,7 +73,7 @@
    <xsd:sequence>
     <xsd:element ref="my-rev"/>
     <xsd:element ref="en-rev" minOccurs="0"/>
-   </xsd:squence>
+   </xsd:sequence>
   </xsd:complexType>
  </xsd:element>
  
