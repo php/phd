@@ -29,5 +29,5 @@ At the moment, the code relies on the following:
 
 
 
-vim600: sw=4 ts=4syntax=php et
+vim600: sw=4 ts=4 et
 vim<600: sw=4 ts=4
