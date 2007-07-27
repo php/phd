@@ -133,7 +133,7 @@
 {\listtext	\'a5	}The build system MUST be able to successfully process the entire DocBook 5 content model by whatever means available to it, including if necessary a fallback mechanism to contend with unrecognized elements.\
 {\listtext	\'a5	}The output model of the build system SHOULD be as flexible as possible, with the ability to select various presentation formats, including but not limited to, XML, HTML, WML, PDF, and plain text. For an initial implementation, HTML output only will suffice, but the system MUST be designed with this requirement in mind.\
 {\listtext	\'a5	}The build system MUST present a simple usage paradigm to those not already familiar with its workings.\
-{\listtext	\'a5	}The build system MUST NOT rely upon any tool or library present on the target system save PHP, unless another tool is deemed absolutely necessary in the fulfillment of the other requirements. It MAY depend on the presence of various PHP extensions, limited to those distributed with PHP 5.2 or later. The system MUST NOT rely upon PHP 6, but SHOULD be prepared for its presence, even if only by exiting with an error in that case.\
+{\listtext	\'a5	}The build system MUST NOT rely upon any tool or library present on the target system save PHP, unless another tool is deemed absolutely necessary in the fulfillment of the other requirements. It MAY depend on the presence of various PHP extensions, limited to those distributed with PHP 5.2 or later. The system MUST NOT rely upon PHP 6, but SHOULD be prepared for its presence, even if only by exiting with an error in that case. Exceptions to this rule will be determined on a case-by-case basis by the authors.\
 {\listtext	\'a5	}The build system MUST be as Unicode-aware as is reasonably possible. This includes but is not limited to respecting the encoding parameter of <?xml?> prologs, providing a heuristic for guessing the encoding of an undeclared file, handling UTF-8 validation failures gracefully, and dynamically presenting all output in either UTF-8 or an encoding of the target system's choice.\
 {\listtext	\'a5	}The build system MUST NOT attempt to fulfill roles outside its intended scope. Examples of this are management of the main PHP Web site, the presentation of small documents such as this proposal, and versioning of documentation.\
 {\listtext	\'a5	}The build system SHOULD be aware of any version control system in use, such as CVS or Subversion, and SHOULD make reasonable efforts to require that documents it processes have been successfully submitted to that system. The build system MAY place this validation under control of the target system.\
@@ -683,8 +683,7 @@ Comclusion:\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \
 	At the time of this writing, the most popular option for the system name is "PhD". It is considered likely that this will be the final name of the project.\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-\cf0 \
+\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\b\fs32 \cf0 \page XI. System licensing proposals\
@@ -707,7 +706,7 @@ Comclusion:\
 
 \f5\fs24 \cf0 \
 
-\f4\fs20 \cf0 -------------------------------------------------------------------- \
+\f4\fs20 -------------------------------------------------------------------- \
                   The PhD License, version 1.0\
              Based on the PHP license, version 3.01\
 Copyright (c) 2007 The PHP Documentation Group. All Rights Reserved.\
@@ -775,7 +774,7 @@ docgroup@php.net.\
 For more information on the PHP Documentation Group and the PhD\
 project, please see <http://phd.php.net>.\
 
-\f5\fs24 \cf0 \
+\f5\fs24 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f1\fs28 \cf0 \
