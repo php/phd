@@ -130,7 +130,7 @@ abstract class PhDReader extends XMLReader {
     			if( isset( $this->map[ $name ] ) ) {
     				return $this->transformFromMap( $type == XMLReader::ELEMENT, $name );
     			}
-    			return call_user_func( array( &$this, "format_${name}" ), $type == XMLReader::ELEMENT );
+    			return call_user_func( array( $this, "format_${name}" ), $type == XMLReader::ELEMENT );
     			break;
 
     		case XMLReader::TEXT:

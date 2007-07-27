@@ -187,7 +187,7 @@ class PhDXHTMLReader extends PhDReader {
 		);
 	
 		$tmp = preg_replace_callback( '{([\w_]+)\s*</span>(\s*<span\s+class="keyword">\s*\()}m',
-		    array( &$this, 'format_listing_hyperlink_function' ), $tmp );
+		    array( $this, 'format_listing_hyperlink_function' ), $tmp );
 		return sprintf( '<div class="phpcode">%s</div>', $tmp );
 
 	}
