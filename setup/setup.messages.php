@@ -60,7 +60,7 @@ ERRMSG;
 An internal error occurred. Please report this as a bug.
 ERRMSG;
 
-};
+}
 
 class PhD_Warnings {
     
@@ -68,7 +68,7 @@ class PhD_Warnings {
 Your changes were not saved.
 WARNMSG;
     
-};
+}
 
 class PhD_Prompts {
     
@@ -161,7 +161,7 @@ PhD.
 
 PROMPTMSG;
 
-};
+}
 
 /*
 * vim600: sw=4 ts=4 fdm=syntax syntax=php et

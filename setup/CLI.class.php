@@ -169,7 +169,7 @@ class PhD_CLI_Interface implements PhD_SAPI_Interface {
         
     }
 
-};
+}
 
 /*
 * vim600: sw=4 ts=4 fdm=syntax syntax=php et

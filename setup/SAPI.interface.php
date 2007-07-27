@@ -24,7 +24,7 @@ interface PhD_SAPI_Interface {
 
     public function run();
     
-};
+}
 
 /*
 * vim600: sw=4 ts=4 fdm=syntax syntax=php et
