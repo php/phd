@@ -1,0 +1,6 @@
+- Add constants for the namespaces (don't hardcode them)
+- Function mapping, NOT table mapping. Leave tables to the subclasses.
+
+
+vim600: sw=4 ts=4 et
+vim<600: sw=4 ts=4

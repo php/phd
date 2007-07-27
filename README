@@ -26,3 +26,8 @@ At the moment, the code relies on the following:
       and I'd like to have this be their chance to prove their worth. Until
       that decision is made, I'll make every effort to make their use less of a
       hassle for those who can't compile their own PHP.
+
+
+
+vim600: sw=4 ts=4syntax=php et
+vim<600: sw=4 ts=4

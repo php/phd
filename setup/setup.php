@@ -95,4 +95,8 @@ if ( $chosenInterface->run() === TRUE ) {
     PhD_Warning( PhD_Warnings::UNSAVED_CHANGES );
 }
 
+/*
+* vim600: sw=4 ts=4 fdm=syntax syntax=php et
+* vim<600: sw=4 ts=4
+*/
 ?>
