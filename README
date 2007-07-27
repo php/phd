@@ -1,12 +1,28 @@
 PhD - PHP DocBook
 Copyright(c) 2007 Gwynne Raskind and Hannes Magnusson
 All Rights Reserved.
-<phd@php.net>
+<gwynne@php.net>
 $Id$
 
-At this time, all code and ideas here are completely experimental
-and untested. Don't even pretend you know what you're doing in here
-unless you're one of the authors. Please do ALL discussion inside
-the RFC/ directory and leave the rest of the filespace clean. More
-comments and information to come.
+At this time, all code and ideas here are completely experimental and untested.
+Don't even pretend you know what you're doing in here unless you're one of the
+authors. Please do ALL discussion inside the RFC/ directory and leave the rest
+of the filespace clean. More comments and information to come.
 
+IMPORTANT
+At the moment, the code relies on the following:
+    - PHP 5.2.3 or later (including 5.2.4-dev). NOT COMPATIBLE WITH PHP 6.
+    - An available CLI binary.
+    - SQLite 3, using the PDO driver.
+    - PCRE.
+    - DOM and libXML2.
+    - register_globals, magic_quotes_*, and safe_mode OFF.
+    - The "nowdoc" patch for PHP_5_2, available at:
+        <http://phpdoc.gwynne.dyndns.org/nowdocs/PHP_5_2.patch>
+      
+      I recognize the annoyance and confusion involved here; if nowdocs aren't
+      implemented in mainline PHP by 5.3, I'll drop them completely and live
+      without. However, PhD currently serves as a real-use case for nowdocs,
+      and I'd like to have this be their chance to prove their worth. Until
+      that decision is made, I'll make every effort to make their use less of a
+      hassle for those who can't compile their own PHP.
