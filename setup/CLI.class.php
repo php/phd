@@ -50,14 +50,14 @@ class PhD_CLI_Interface implements PhD_SAPI_Interface {
     
     public function errorMessage( $message ) {
         
-        print "ERROR: ${message}\n";
+        print "ERROR: {$message}\n";
         exit( 1 );
     
     }
     
     public function warningMessage( $message ) {
         
-        print "WARNING: ${message}\n";
+        print "WARNING: {$message}\n";
     
     }
     
@@ -76,25 +76,27 @@ class PhD_CLI_Interface implements PhD_SAPI_Interface {
             
             foreach ( $OPTIONS_DATA as $optionName => $optionData ) {
 
-                if ( !strncmp( $optionName, '__', 2 ) )
-                    continue;
-                
                 if ( $this->quietMode < 2 ) {
-                    print "${optionData[ 'description' ]}\n";
+                    print "\n{$optionData[ 'description' ]}";
                 }
                 if ( $this->quietMode < 1 ) {
-                    print "${optionData[ 'details' ]}\n";
+                    print "\n{$optionData[ 'details' ]}";
                 }
                 
-                if ( ( $valueList = $optionData[ 'value_list_function' ]() ) !== NULL ) {
-                    if ( $valueList !== FALSE ) {
-                        print PhD_Prompts::paramPrompt( PhD_Prompts::CLI_AVAILABLE_VALUES,
-                            wordwrap( "\t" . implode( ' ', $valueList ) , 71, "\n\t", FALSE ) );
-                    }
-                } else if ( $this->quietMode < 2 ) {
-                    print "\n";
+                $valueList = $optionData[ 'value_list_function' ]();
+                if ( is_null( $valueList ) ) {
+                    print "\n" . PhD_Prompts::paramPrompt( PhD_Prompts::CLI_NO_VALUES );
+                } else if ( is_bool( $valueList ) ) {
+                    print "\n" . PhD_Prompts::paramPrompt( PhD_Prompts::CLI_BOOLEAN_VALUES );
+                } else if ( is_int( $valueList ) ) {
+                    print "\n" . PhD_Prompts::paramPrompt( PhD_Prompts::CLI_NUMBYTES_VALUES );
+                } else {
+                    print "\n" . PhD_Prompts::paramPrompt( PhD_Prompts::CLI_AVAILABLE_VALUES,
+                        wordwrap( "\t" . implode( ' ', $valueList ) , 71, "\n\t", FALSE ) );
                 }
                 
+                print "\n";
+
                 do {
                     $response = $this->getLine( PhD_Prompts::paramPrompt(
                         PhD_Prompts::CLI_OPTION_PROMPT, $optionData[ 'prompt' ], $configurator->$optionName ) );
@@ -104,10 +106,10 @@ class PhD_CLI_Interface implements PhD_SAPI_Interface {
                     if ( $optionData[ 'validity_check_function' ]( $response ) === TRUE ) {
                         break;
                     }
-                    print $optionData[ 'invalid_message' ]."\n";
+                    print "{$optionData[ 'invalid_message' ]}\n";
                 } while( TRUE );
                 
-                $configurator->$optionName = $valueList === FALSE ? ( substr( strtolower( $response ), 0, 1 ) == 'y' ) : $response;
+                $configurator->$optionName = $optionData[ 'final_value_function' ]( $response );
                 print "\n";
                 
             }

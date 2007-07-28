@@ -75,9 +75,6 @@ function PhD_Warning( $message ) {
 // Fill in defaults.
 $OPTIONS = array();
 foreach ( $OPTIONS_DATA as $name => $data ) {
-    if ( strncmp( $name, '__', 2 ) == 0 ) {
-        continue;
-    }
     $OPTIONS[ $name ] = $data[ 'default_value' ];
 }
 

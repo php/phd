@@ -121,17 +121,27 @@ is empty.
 
 PROMPTMSG;
 
-    const CLI_BOOLEAN_VALUE = "\n";/*<<<~PROMPTMSG
-This is a flag setting. Type "y" or "yes" to turn it on, or "n" or "no" to turn
-it off.
+    const CLI_NO_VALUES = <<<~PROMPTMSG
+There is no list of possible values available.
 
-
-PROMPTMSG;*/
+PROMPTMSG;
     
+    const CLI_BOOLEAN_VALUES = <<<~PROMPTMSG
+This is a yes/no setting.
+
+PROMPTMSG;
+    
+    const CLI_NUMBYTES_VALUES = <<<~PROMPTMSG
+This is a value given in number of bytes. For convenience you may use any of
+the following suffixes to multiply the number by the shown factor. By the way,
+if you actually use the P suffix, I pity you.
+    K = 1024, M = K*1024, G = M*1024, T = G*1024, P = T*1024
+
+PROMPTMSG;
+
     const CLI_AVAILABLE_VALUES = <<<~PROMPTMSG
 The available values in this installation are:
 %%%
-
 
 PROMPTMSG;
 
