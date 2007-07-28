@@ -155,7 +155,7 @@ class PhDXHTMLReader extends PhDReader {
 	public function format_listing_hyperlink_function( $matches ) {
 
 		$link = str_replace( '_', '-', $matches[ 1 ] );
-		$link = "function${link}.html";
+		$link = "function{$link}.html";
 		return '<a class="phpfunc" href="'.$link.'">'.$matches[ 1 ].'</a></span>'.$matches[ 2 ];
 
 	}
