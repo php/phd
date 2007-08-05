@@ -25,6 +25,7 @@ if ($err = extension_loaded("phnotify")) {
 	set_error_handler("err");
 }
 
+if(!file_exists("cache") || is_file("cache")) mkdir("cache") or die("Can't create the cache directory");
 require "include/PhDReader.class.php";
 require "include/PhDFormat.class.php";
 require "formats/xhtml.php";
