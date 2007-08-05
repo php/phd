@@ -87,6 +87,20 @@ abstract class PhDFormat {
         $valign = self::readAttribute("valign");
         return $valign ? $valign : "middle";
     }
+    public function initRow() {
+        $this->TABLE["next_colnum"] = 1;
+    }
+    public function getEntryOffset(array $attrs) {
+        $curr = $this->TABLE["next_colnum"];
+        foreach($this->TABLE["colspec"] as $col => $spec) {
+            if ($spec["colname"] == $attrs["colname"]) {
+                $colnum = $spec["colnum"];
+                $this->TABLE["next_colnum"] += $colnum-$curr;
+                return $colnum-$curr;
+            }
+        }
+        return -1;
+    }
     public function colspan(array $attrs) {
         if (isset($attrs["namest"])) {
             foreach($this->TABLE["colspec"] as $colnum => $spec) {
@@ -99,8 +113,11 @@ abstract class PhDFormat {
                     continue;
                 }
             }
-            return $to-$from+1;
+            $colspan = $to-$from+1;
+            $this->TABLE["next_colnum"] += $colspan;
+            return $colspan;
         }
+        $this->TABLE["next_colnum"]++;
         return 1;
     }
     public function rowspan($attrs) {

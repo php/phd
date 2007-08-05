@@ -353,6 +353,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_row($open, $name) {
         if ($open) {
+            PhDFormat::initRow();
             $valign = PhDFormat::valign();
             return sprintf('<tr valign="%s">', $valign);
         }
@@ -370,10 +371,17 @@ class XHTMLPhDFormat extends PhDFormat {
         if ($open) {
             $attrs = PhDFormat::getColspec(PhDFormat::getAttributes());
 
+            $retval = "";
+            if (isset($attrs["colname"])) {
+                for($i=PhDFormat::getEntryOffset($attrs); $i>0; --$i) {
+                    $retval .= '<td class="empty">&nbsp;</td>';
+                }
+            }
+
             $colspan = PhDFormat::colspan($attrs);
             $rowspan = PhDFormat::rowspan($attrs);
             $moreattrs = self::parse_table_entry_attributes($attrs);
-            return sprintf('<td colspan="%d" rowspan="%d" %s>', $colspan, $rowspan, $moreattrs);
+            return sprintf('%s<td colspan="%d" rowspan="%d" %s>', $retval, $colspan, $rowspan, $moreattrs);
         }
         return "</td>";
     }
