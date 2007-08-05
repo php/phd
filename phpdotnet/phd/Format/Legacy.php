@@ -5,7 +5,8 @@ abstract class PhDFormat {
     private $reader;
     private $IDs            = array();
     private $IDMap          = array();
-    protected $ext = "";
+    private $TABLE          = array();
+    protected $ext          = "";
     /* abstract */ protected $map          = array();
 
     public function __construct(PhDReader $reader, array $IDs, array $IDMap, $ext) {
@@ -55,9 +56,55 @@ abstract class PhDFormat {
     abstract public function transformFromMap($open, $tag, $name);
     abstract public function CDATA($data);
     abstract public function __call($func, $args);
+
+    /* Table helper functions */
+    public function tgroup() {
+        $attrs = self::getAttributes();
+
+        $this->TABLE["cols"] = $attrs["cols"];
+        unset($attrs["cols"]);
+
+        $this->TABLE["defaults"] = $attrs;
+        $this->TABLE["colspec"] = array();
+
+        return $attrs;
+    }
+    public function colspec() {
+        /* defaults */
+        $defaults["colname"] = count($this->TABLE["colspec"])+1;
+        $defaults["colnum"]  = count($this->TABLE["colspec"])+1;
+        $defaults["align"]   = "left";
+
+        $attrs = self::getAttributes();
+        $colspec = array_merge($defaults, $this->TABLE["defaults"], $attrs);
+
+        $this->TABLE["colspec"][$colspec["colnum"]] = $colspec;
+        return $colspec;
+    }
+    public function valign() {
+        $valign = self::readAttribute("valign");
+        return $valign ? $valign : "middle";
+    }
+    public function colspan() {
+        if ($start = $this->readAttribute("namest")) {
+            $from = array_search($start, $this->TABLE["colspec"]);
+            $end = $this->readAttribute("nameend");
+            $to = array_search($end, $this->TABLE["colspec"]);
+            return $end-$to;
+        }
+        return 1;
+    }
+    public function rowspan() {
+        $rows = 1;
+        if ($morerows = $this->readAttribute("morerows")) {
+            $rows += $morerows;
+        }
+        return $rows;
+    }
+
 }
 /*
-* vim600: sw=4 ts=4 fdm=syntax syntax=php et
-* vim<600: sw=4 ts=4
-*/
+ * vim600: sw=4 ts=4 fdm=syntax syntax=php et
+ * vim<600: sw=4 ts=4
+ */
 

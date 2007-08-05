@@ -36,13 +36,13 @@ class XHTMLPhDFormat extends PhDFormat {
         'constant'              => 'span',
         'emphasis'              => 'em',
         'enumname'              => 'span',
-        'entry'                 => array(
+        'entry'                 => array (
             /* DEFAULT */          'format_entry',
             'row'               => array(
-                /* DEFAULT */      'format_row_entry',
-                'thead'         => 'format_thead_entry',
-                'tfoot'         => 'format_tfoot_entry',
-                'tbody'         => 'format_tbody_entry',
+                /* DEFAULT */      'format_entry',
+                'thead'         => 'format_th_entry',
+                'tfoot'         => 'format_th_entry',
+                'tbody'         => 'format_entry',
             ),
         ),
         'envar'                 => 'span',
@@ -298,8 +298,6 @@ class XHTMLPhDFormat extends PhDFormat {
     }
 
 
-    /* TODO: Move the logic to PhDFormat? */
-    /* NOTE: This is not a full implementation, just a proof-of-concept */
     public function format_table($open, $name) {
         if ($open) {
             return '<table border="5">';
@@ -308,72 +306,63 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_tgroup($open, $name) {
         if ($open) {
-            $this->TABLE_COLS = $this->readAttribute("cols");
-            $this->COLSPEC = array();
+            $attrs = PhDFormat::tgroup();
             return "<colgroup>\n";
         }
         return "</colgroup>\n";
     }
     public function format_colspec($open, $name) {
         if ($open) {
-            $colname = $this->readAttribute("colname");
-            if ($colnum = $this->readAttribute("colnum")) {
-                $this->COLSPEC[$colnum] = $colname;
-            } else {
-                $count = count($this->COLSPEC);
-                $this->COLSPEC[$count] = $colname;
+            $colspec = PhDFormat::colspec();
+
+            $moreattr = "";
+            if ($colspec["align"] == "char" && isset($colspec["char"])) {
+                $moreattr .= sprintf(' char="%s"', htmlspecialchars($colspec["char"], ENT_QUOTES));
+                if (isset($colspec["charoff"])) {
+                    $moreattr .= sprintf(' charoff="%s"', htmlspecialchars($colspec["charoff"], ENT_QUOTES));
+                }
             }
-            return "<col />"; // Probably throw in couple of width and align attributes
+            if (isset($colspec["colwidth"])) {
+                $moreattr .= sprintf(' width="%d"', $colspec["colwidth"]);
+            }
+
+            return sprintf('<col align="%s"%s />', $colspec["align"], $moreattr);
         }
         /* noop */
     }
     public function format_thead($open, $name) {
         if ($open) {
-            return "<thead>";
+            $valign = PhDFormat::valign();
+            return sprintf('<thead valign="%s">', $valign);
         }
-        return "</thread>\n";
+        return "</thead>\n";
     }
     public function format_tbody($open, $name) {
         if ($open) {
-            return "<tbody>";
+            $valign = PhDFormat::valign();
+            return sprintf('<tbody valign="%s">', $valign);
         }
         return "</tbody>";
     }
     public function format_row($open, $name) {
         if ($open) {
-            return "<tr>\n";
+            $valign = PhDFormat::valign();
+            return sprintf('<tr valign="%s">', $valign);
         }
         return "</tr>\n";
     }
-    public function format_thead_entry($open, $name) {
+    public function format_th_entry($open, $name) {
         if ($open) {
-            if ($start = $this->readAttribute("namest")) {
-                $from = array_search($start, $this->COLSPEC);
-                $end = $this->readAttribute("nameend");
-                $to = array_search($end, $this->COLSPEC);
-                return sprintf('<th colspan="%d">', $end-$to);
-            }
-            return '<th>';
+            $colspan = PhDFormat::colspan();
+            return sprintf('<th colspan="%d">', $colspan);
         }
         return '</th>';
     }
-    public function format_tfoot_entry($open, $name) {
-        return $this->format_thead_entry($open, $name);
-    }
-    public function format_tbody_entry($open, $name) {
+    public function format_entry($open, $name) {
         if ($open) {
-            $colspan = 1;
-            $rows = 1;
-            if ($start = $this->readAttribute("namest")) {
-                $from = array_search($start, $this->COLSPEC);
-                $end = $this->readAttribute("nameend");
-                $to = array_search($end, $this->COLSPEC);
-                $colspan = $to-$from+1;
-            }
-            if ($morerows = $this->readAttribute("morerows")) {
-                $rows += $morerows;
-            }
-            return sprintf('<td colspan="%d" rowspan="%d">', $colspan, $rows);
+            $colspan = PhDFormat::colspan();
+            $rowspan = PhDFormat::rowspan();
+            return sprintf('<td colspan="%d" rowspan="%d">', $colspan, $rowspan);
         }
         return "</td>";
     }
@@ -381,7 +370,7 @@ class XHTMLPhDFormat extends PhDFormat {
 }
 
 /*
-* vim600: sw=4 ts=4 fdm=syntax syntax=php et
-* vim<600: sw=4 ts=4
-*/
+ * vim600: sw=4 ts=4 fdm=syntax syntax=php et
+ * vim<600: sw=4 ts=4
+ */
 
