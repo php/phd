@@ -1,165 +1,224 @@
 <?php
+/*  $Id$ */
+//6271
 
-/*  $Id$
-    +-------------------------------------------------------------------------+
-    | Copyright(c) 2007                                                       |
-    | Authors:                                                                |
-    |    Gwynne Raskind <gwynne@php.net>                                      |
-    |    Hannes Magnusson <bjori@php.net>                                     |
-    | This source file is subject to the license that is bundled with this    |
-    | package in the file LICENSE, and is available through the               |
-    | world-wide-web at the following url:                                    |
-    | http://phd.php.net/LICENSE                                              |
-    +-------------------------------------------------------------------------+
-    | The base class for reading the giant XML blob. This is intended for     |
-    | extension by output formats, and then for further extension by output   |
-    | themes. This class should not be instantiated directly.                 |
-    +-------------------------------------------------------------------------+
-*/
+class PhDReader extends XMLReader {
+    const XMLNS_XML   = "http://www.w3.org/XML/1998/namespace";
+    const XMLNS_XLINK = "http://www.w3.org/1999/xlink";
+    const XMLNS_PHD   = "http://www.php.net/ns/phd";
+    const OPEN_CHUNK  = 0x01;
+    const CLOSE_CHUNK = 0x02;
 
-abstract class PhDReader extends XMLReader {
+    private $STACK    = array();
+    private $LAST_DEPTH = -1;
+    private $lastChunkDepth = -1;
 
-	protected $map = array();
+    public $isChunk = false;
 
-	public function __construct( $file, $encoding = "utf-8", $options = NULL ) {
+    protected $CHUNK_ME = array( /* {{{ */
+        'article'               => true,
+        'appendix'              => true,
+        'bibliography'          => array(
+			/* DEFAULT */          false,
+            'article'           => true,
+            'book'              => true,
+            'part'              => true,
+       ),
+        'book'                  => true,
+        'chapter'               => true,
+        'colophon'              => true,
+        'glossary'              => array(
+			/* DEFAULT */          false,
+            'article'           => true,
+            'book'              => true,
+            'part'              => true,
+       ),
+        'index'                 => array(
+			/* DEFAULT */          false,
+            'article'           => true,
+            'book'              => true,
+            'part'              => true,
+       ),
+        'part'                  => true,
+        'preface'               => true,
+        'refentry'              => true,
+        'reference'             => true,
+        'sect1'                 => 'isSectionChunk',
+        /*
+        'sect2'                 => 'format_section_chunk',
+        'sect3'                 => 'format_section_chunk',
+        'sect4'                 => 'format_section_chunk',
+        'sect5'                 => 'format_section_chunk',
+        */
+        'section'               => 'isSectionChunk',
+        'set'                   => true,
+        'setindex'              => true,
+   ); /* }}} */
 
-		if ( !parent::open( $file, $encoding, $options ) ) {
-			throw new Exception();
-		}
-
-	}
-    
-    public function __destruct() {
+    public function __construct($file, $encoding = "UTF-8", $options = NULL) {
+        if (!XMLReader::open($file, $encoding, $options)) {
+            throw new Exception();
+        }
     }
-    
-    /* Format subclasses must implement these to make them real formats. */
-    abstract public function getFormatName();
-    abstract protected function transformFromMap( $open, $name );
-    
-    /* These are new functions, extending XMLReader. */
-    
+
+   public function notXPath($tag) {
+       $depth = $this->depth;
+       do {
+           if (isset($tag[$this->STACK[--$depth]])) {
+               $tag = $tag[$this->STACK[$depth]];
+           } else {
+               $tag = $tag[0];
+           }
+       } while (is_array($tag));
+       return $tag;
+   }
+
     /* Seek to an ID within the file. */
-	public function seek( $id ) {
+    public function seek($id) {
+        while(XMLReader::read()) {
+            if ($this->nodeType === XMLREADER::ELEMENT && $this->hasAttributes && XMLReader::moveToAttributeNs("id", self::XMLNS_XML) && $this->value === $id) {
+                return XMLReader::moveToElement();
+            }
+        }
+        return false;
+    }
 
-		while( parent::read() ) {
-			if ( $this->nodeType == XMLREADER::ELEMENT && $this->hasAttributes &&
-			        $this->moveToAttributeNs( "id", "http://www.w3.org/XML/1998/namespace" ) && $this->value == $id ) {
-				return $this->moveToElement();
-			}
-		}
-		return FALSE;
+    /* Get the ID of current node */
+    public function getID() {
+        if ($this->hasAttributes && XMLReader::moveToAttributeNs("id", self::XMLNS_XML)) {
+            $id = $this->value;
+            XMLReader::moveToElement();
+            return $id;
+        }
+        return "";
+    }
 
-	}
-    
-    /* Go to the next useful node in the file. */
-	public function nextNode() {
+    public function read() {
+        $this->isChunk = false;
+        if(XMLReader::read()) {
+            $type = $this->nodeType;
+            switch($type) {
+            case XMLReader::ELEMENT:
+                $name = $this->name;
+                $depth = $this->depth;
+                if ($this->LAST_DEPTH >= $depth) {
+                    $this->PREVIOUS_SIBLING = $this->STACK[$depth];
+                }
+                $this->STACK[$depth] = $name;
+                $isChunk = $this->isChunk($name);
+                if ($isChunk) {
+                    $this->isChunk = PhDReader::OPEN_CHUNK;
+                    $this->chunkDepths[] = $this->lastChunkDepth = $depth;
+                }
+                break;
 
-		while( $this->read() ) {
-			switch( $this->nodeType ) {
+            case XMLReader::END_ELEMENT:
+                $depth = $this->depth;
+                if ($this->lastChunkDepth == $depth) {
+                    array_pop($this->chunkDepths);
+                    $this->lastChunkDepth = end($this->chunkDepths);
+                    $this->isChunk = PhDReader::CLOSE_CHUNK;
+                }
+                $this->LAST_DEPTH = $depth;
+                break;
+            }
+            return true;
+        }
+        return false;
+    }
+   
+    /* Get the attribute value by name, if exists. */
+    public function readAttribute($attr) {
+        $retval = XMLReader::moveToAttribute($attr) ? $this->value : "";
+        XMLReader::moveToElement();
+        return $retval;
+    }
+    public function readAttributeNs($attr, $ns) {
+        $retval = XMLReader::moveToAttributeNs($attr, $ns) ? $this->value : "";
+        XMLReader::moveToElement();
+        return $retval;
+    }
+    /* Get all attributes of current node */
+    public function getAttributes() {
+        if ($this->hasAttributes) {
+            $attrs = array();
+            XMLReader::moveToFirstAttribute();
+            do {
+                $attrs[$this->name] = $this->value;
+            } while (XMLReader::moveToNextAttribute());
+            XMLReader::moveToElement();
+            return $attrs;
+        }
+        return array();
+    }
 
-    			case XMLReader::ELEMENT:
-    				if ( $this->isEmptyElement ) {
-    				    continue;
-    				}
-
-    			case XMLReader::TEXT:
-    			case XMLReader::CDATA:
-    			case XMLReader::END_ELEMENT:
-    				return TRUE;
-			}
-		}
-		return FALSE;
-
-	}
-    
-    /* Read a node with the right name? */
-	public function readNode( $nodeName ) {
-
-		return $this->read() && !( $this->nodeType == XMLReader::END_ELEMENT && $this->name == $nodeName );
-
-	}
 
     /* Get the content of a named node, or the current node. */
-	public function readContent( $node = NULL ) {
+    public function readContent($node = null) {
+        $retval = "";
 
-		$retval = "";
-		if ( !$node ) {
-			$node = $this->name;
-		}
-		if ( $this->readNode( $node ) ) {
-			$retval = $this->value;
-			$this->read(); // Jump over END_ELEMENT too
-		}
-		return $retval;
-
-	}
-    
-    /* Get the attribute value by name, if exists. */
-	public function readAttribute( $attr ) {
-
-		return $this->moveToAttribute( $attr ) ? $this->value : "";
-
-	}
-
-    /* Handle unmapped nodes. */
-	public function __call( $func, $args ) {
-
-		if ( $this->nodeType == XMLReader::END_ELEMENT ) {
-		    /* ignore */ return;
-		}
-		trigger_error( "No mapper for $func", E_USER_WARNING );
-
-		/* NOTE:
-		 *  The _content_ of the element will get processed even though we dont 
-		 *  know how to handle the elment itself
-		*/
-		return "";
-
-	}
-
-    /* Perform a transformation. */
-	public function transform() {
-
-		$type = $this->nodeType;
-		$name = $this->name;
-
-		switch( $type ) {
-
-    		case XMLReader::ELEMENT:
-    		case XMLReader::END_ELEMENT:
-    			if( isset( $this->map[ $name ] ) ) {
-    				return $this->transformFromMap( $type == XMLReader::ELEMENT, $name );
-    			}
-    			return call_user_func( array( $this, "format_${name}" ), $type == XMLReader::ELEMENT );
-    			break;
-
-    		case XMLReader::TEXT:
-    			return $this->value;
-    			break;
-
-    		case XMLReader::CDATA:
-    			return $this->highlight_php_code( $this->value );
-    			break;
-
-    		case XMLReader::COMMENT:
-    		case XMLReader::WHITESPACE:
-    		case XMLReader::SIGNIFICANT_WHITESPACE:
-    			/* swallow it */
-    			/* XXX This could lead to a recursion overflow if a lot of comment nodes get strung together. */
-    			$this->read();
-    			return $this->transform();
-
-    		default:
-    			trigger_error( "Dunno what to do with {$this->name} {$this->nodeType}", E_USER_ERROR );
-    			return "";
-		}
-
+        if($this->isEmptyElement) {
+            return $retval;
+        }
+        if (!$node) {
+            $node = $this->name;
+        }
+        $retval = "";
+        while (PhDReader::readNode($node)) {
+            $retval .= $this->value;
+        }
+        return $retval;
+    }
+    /* Read $nodeName until END_ELEMENT */
+    public function readNode($nodeName) {
+        return XMLReader::read() && !($this->nodeType === XMLReader::END_ELEMENT && $this->name == $nodeName);
     }
 
+  
+	public function isChunk($tag) {
+		if (isset($this->CHUNK_ME[$tag])) {
+			$isChunk = $this->CHUNK_ME[$tag];
+			if (is_array($isChunk)) {
+				$isChunk = $this->notXPath($isChunk);
+			}
+			if (!is_bool($isChunk)) {
+				return call_user_func(array($this, $isChunk), $tag);
+			}
+            return $isChunk;
+		}
+		return false;
+	}
+    public function isSectionChunk($tag) {
+        if ($this->PREVIOUS_SIBLING == $tag && $this->checkSectionDepth()) {
+            return true;
+        }
+        return false;
+    }
+    protected function checkSectionDepth() {
+        static $allowedParents = array("section", "sect2", "sect3", "sect4", "sect5");
+        static $chunkers       = array(
+            "sect1", "preface", "chapter", "appendix", "article", "part", "reference", "refentry",
+            "index", "bibliography", "glossary", "colopone", "book", "set", "setindex", "legalnotice",
+       );
+        
+        $nodeDepth = $this->depth;
+        $i = 1;
+        do {
+            if (in_array($this->STACK[$nodeDepth-$i], $allowedParents)) {
+                ++$i;
+                continue;
+            }
+            break;
+        } while(true);
+        if ($i <= 1 && in_array($this->STACK[$nodeDepth-$i], $chunkers)) {
+            return true;
+        }
+        return false;
+    }
 }
 
 /*
 * vim600: sw=4 ts=4 fdm=syntax syntax=php et
 * vim<600: sw=4 ts=4
 */
-?>
+
