@@ -94,6 +94,8 @@ class XHTMLPhDFormat extends PhDFormat {
         'systemitem'            => 'format_systemitem',
         'table'                 => 'format_table',
         'term'                  => 'span',
+        'tfoot'                 => 'format_th',
+        'thead'                 => 'format_th',
         'title'                 => array(
             /* DEFAULT */          'h1',
             'legalnotice'       => 'h4',
@@ -311,31 +313,36 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</colgroup>\n";
     }
+    private function parse_table_entry_attributes($attrs) {
+        $retval = sprintf('align="%s"', $attrs["align"]);
+        if ($attrs["align"] == "char" && isset($attrs["char"])) {
+            $retval .= sprintf(' char="%s"', htmlspecialchars($attrs["char"], ENT_QUOTES));
+            if (isset($attrs["charoff"])) {
+                $retval .= sprintf(' charoff="%s"', htmlspecialchars($attrs["charoff"], ENT_QUOTES));
+            }
+        }
+        if (isset($attrs["valign"])) {
+            $retval .= sprintf(' valign="%s"', $attrs["valign"]);
+        }
+        if (isset($attrs["colwidth"])) {
+            $retval .= sprintf(' width="%d"', $attrs["colwidth"]);
+        }
+        return $retval;
+    }
     public function format_colspec($open, $name) {
         if ($open) {
-            $colspec = PhDFormat::colspec();
+            $attrs = self::parse_table_entry_attributes(PhDFormat::colspec(PhDFormat::getAttributes()));
 
-            $moreattr = "";
-            if ($colspec["align"] == "char" && isset($colspec["char"])) {
-                $moreattr .= sprintf(' char="%s"', htmlspecialchars($colspec["char"], ENT_QUOTES));
-                if (isset($colspec["charoff"])) {
-                    $moreattr .= sprintf(' charoff="%s"', htmlspecialchars($colspec["charoff"], ENT_QUOTES));
-                }
-            }
-            if (isset($colspec["colwidth"])) {
-                $moreattr .= sprintf(' width="%d"', $colspec["colwidth"]);
-            }
-
-            return sprintf('<col align="%s"%s />', $colspec["align"], $moreattr);
+            return sprintf('<col %s />', $attrs);
         }
         /* noop */
     }
-    public function format_thead($open, $name) {
+    public function format_th($open, $name) {
         if ($open) {
             $valign = PhDFormat::valign();
-            return sprintf('<thead valign="%s">', $valign);
+            return sprintf('<%s valign="%s">', $name, $valign);
         }
-        return "</thead>\n";
+        return "</$name>\n";
     }
     public function format_tbody($open, $name) {
         if ($open) {
@@ -353,16 +360,20 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_th_entry($open, $name) {
         if ($open) {
-            $colspan = PhDFormat::colspan();
+            $attrs = PhDFormat::getAttributes();
+            $colspan = PhDFormat::colspan($attrs);
             return sprintf('<th colspan="%d">', $colspan);
         }
         return '</th>';
     }
     public function format_entry($open, $name) {
         if ($open) {
-            $colspan = PhDFormat::colspan();
-            $rowspan = PhDFormat::rowspan();
-            return sprintf('<td colspan="%d" rowspan="%d">', $colspan, $rowspan);
+            $attrs = PhDFormat::getColspec(PhDFormat::getAttributes());
+
+            $colspan = PhDFormat::colspan($attrs);
+            $rowspan = PhDFormat::rowspan($attrs);
+            $moreattrs = self::parse_table_entry_attributes($attrs);
+            return sprintf('<td colspan="%d" rowspan="%d" %s>', $colspan, $rowspan, $moreattrs);
         }
         return "</td>";
     }

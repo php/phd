@@ -69,37 +69,45 @@ abstract class PhDFormat {
 
         return $attrs;
     }
-    public function colspec() {
+    public function colspec(array $attrs) {
+        $colspec = self::getColSpec($attrs);
+        $this->TABLE["colspec"][$colspec["colnum"]] = $colspec;
+        return $colspec;
+    }
+    public function getColspec(array $attrs) {
         /* defaults */
         $defaults["colname"] = count($this->TABLE["colspec"])+1;
         $defaults["colnum"]  = count($this->TABLE["colspec"])+1;
         $defaults["align"]   = "left";
 
-        $attrs = self::getAttributes();
-        $colspec = array_merge($defaults, $this->TABLE["defaults"], $attrs);
-
-        $this->TABLE["colspec"][$colspec["colnum"]] = $colspec;
-        return $colspec;
+        return array_merge($defaults, $this->TABLE["defaults"], $attrs);
     }
+
     public function valign() {
         $valign = self::readAttribute("valign");
         return $valign ? $valign : "middle";
     }
-    public function colspan() {
-        if ($start = $this->readAttribute("namest")) {
-            $from = array_search($start, $this->TABLE["colspec"]);
-            $end = $this->readAttribute("nameend");
-            $to = array_search($end, $this->TABLE["colspec"]);
-            return $end-$to;
+    public function colspan(array $attrs) {
+        if (isset($attrs["namest"])) {
+            foreach($this->TABLE["colspec"] as $colnum => $spec) {
+                if ($spec["colname"] == $attrs["namest"]) {
+                    $from = $spec["colnum"];
+                    continue;
+                }
+                if ($spec["colname"] == $attrs["nameend"]) {
+                    $to = $spec["colnum"];
+                    continue;
+                }
+            }
+            return $to-$from+1;
         }
         return 1;
     }
-    public function rowspan() {
-        $rows = 1;
-        if ($morerows = $this->readAttribute("morerows")) {
-            $rows += $morerows;
+    public function rowspan($attrs) {
+        if (isset($attrs["morerows"])) {
+            return $attrs["morerows"]+1;
         }
-        return $rows;
+        return 1;
     }
 
 }
