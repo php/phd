@@ -4,8 +4,56 @@
 class phpweb extends PHPPhDFormat {
     protected $streams = array();
     protected $writeit = false;
-	protected $CURRENT_ID = "";
+    protected $CURRENT_ID = "";
+    private   $versions = array();
 
+    public function __construct(PhDReader $reader, array $IDs, array $IDMap, $filename, $ext = "php") {
+        parent::__construct($reader, $IDs, $IDMap, $ext);
+        $r = new XMLReader;
+        if (!$r->open($filename)) {
+            throw new Exception;
+        }
+        $versions = array();
+        while($r->read()) {
+            if (
+                $r->moveToAttribute("name")
+                && ($funcname = str_replace(
+                    array("::", "->", "__", "_", '$'),
+                    array("-",  "-",  "-",  "-", ""),
+                    $r->value))
+                && $r->moveToAttribute("from")
+                && ($from = $r->value)
+            ) {
+                $versions[strtolower($funcname)] = $from;
+                $r->moveToElement();
+            }
+        }
+        $r->close();
+        $this->versions = $versions;
+    }
+    public function versionInfo($funcname) {
+        $funcname = str_replace(
+                array("::", "->", "__", "_", '$'),
+                array("-",  "-",  "-",  "-", ""),
+                strtolower($funcname));
+        return isset($this->versions[$funcname]) ? $this->versions[$funcname] : "No version information available, might be only in CVS";
+    }
+    public function format_refnamediv($open, $root) {
+        while ($child = PhDFormat::getNextChild($root)) {
+            $name = $child["name"];
+            switch($name) {
+            case "refname":
+                $refname = $this->readContent($name);
+                break;
+            case "refpurpose":
+                $refpurpose = $this->readContent($name);
+                break;
+            }
+        }
+        $ver = $this->versionInfo($refname);
+        
+        return sprintf('<div class="refnamediv"><h1 class="refname">%s</h1><p class="verinfo">(%s)</p><p class="refpurpose">%1$s — %s</p></div>', $refname, $ver, $refpurpose);
+    }
     public function writeChunk($id, $stream) {
         rewind($stream);
         file_put_contents("cache/$id.php", $this->header($id));

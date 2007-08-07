@@ -41,7 +41,7 @@ if ($err) {
 }
 
 $reader = new PhDReader("/home/bjori/php/doc/.manual.xml");
-$format = new phpweb($reader, $IDs, $IDMap);
+$format = new phpweb($reader, $IDs, $IDMap, "/home/bjori/php/doc/phpbook/phpbook-xsl/version.xml");
 
 $map = $format->getMap();
 
