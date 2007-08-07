@@ -27,13 +27,14 @@ class XHTMLPhDFormat extends PhDFormat {
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
+        'caution'               => 'div',
         'classname'             => 'span',
         'code'                  => 'code',
         'collab'                => 'span',
         'collabname'            => 'span',
         'command'               => 'span',
         'computeroutput'        => 'span',
-        'constant'              => 'span',
+        'constant'              => 'format_constant',
         'emphasis'              => 'em',
         'enumname'              => 'span',
         'entry'                 => array (
@@ -46,7 +47,8 @@ class XHTMLPhDFormat extends PhDFormat {
             ),
         ),
         'envar'                 => 'span',
-        'filename'              => 'span',
+        'example'               => 'div',
+        'filename'              => 'var',
         'glossterm'             => 'span',
         'holder'                => 'span',
         'index'                 => array(
@@ -56,31 +58,37 @@ class XHTMLPhDFormat extends PhDFormat {
             'part'              => 'format_chunk',
         ),
         'info'                  => 'div',
+        'informalexample'       => 'div',
         'informaltable'         => 'table',
         'itemizedlist'          => 'ul',
         'listitem'              => array(
             /* DEFAULT */          'li',
             'varlistentry'      => 'format_varlistentry_listitem',
         ),
-        'literal'               => 'span',
+        'literal'               => 'i',
         'mediaobject'           => 'div',
         'methodparam'           => 'span',
         'member'                => 'li',
-        'note'                  => 'div',
+        'note'                  => 'format_note',
         'option'                => 'span',    
         'orderedlist'           => 'ol',
-        'para'                  => 'p',
+        'para'                  => array(
+            /* DEFAULT */          'p',
+            'example'           => 'format_example_content',
+        ),
         'parameter'             => 'tt',
         'part'                  => 'format_container_chunk',
         'partintro'             => 'div',
         'personname'            => 'span',
         'preface'               => 'format_chunk',
         'productname'           => 'span',
+        'programlisting'        => 'format_programlisting',
         'propname'              => 'span',
         'property'              => 'span',
         'proptype'              => 'span',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
+        'screen'                => 'format_screen',
         'sect1'                 => 'format_chunk',
         'sect2'                 => 'format_chunk',
         'sect3'                 => 'format_chunk',
@@ -90,34 +98,43 @@ class XHTMLPhDFormat extends PhDFormat {
         'set'                   => 'format_chunk',
         'setindex'              => 'format_chunk',
         'simplelist'            => 'ul',
-        'simpara'               => 'p',
+        'simpara'               => array(
+            /* DEFAULT */          'p',
+            'note'              => 'span',
+            'listitem'          => 'span',
+            'entry'             => 'span',
+        ),
         'systemitem'            => 'format_systemitem',
         'table'                 => 'format_table',
         'term'                  => 'span',
         'tfoot'                 => 'format_th',
         'thead'                 => 'format_th',
+        'tip'                   => 'div',
         'title'                 => array(
             /* DEFAULT */          'h1',
+            'example'           => 'format_bold_paragraph',
             'legalnotice'       => 'h4',
+            'note'              => 'format_note_title',
+            'refsect1'          => 'h3',
             'section'           => 'h2',
             'sect1'             => 'h2',
             'sect2'             => 'h3',
             'sect3'             => 'h4',
-            'refsect1'          => 'h3',
-            'example'           => 'h4',
-            'note'              => 'h4',
+            'table'             => 'format_bold_paragraph',
         ),
         'type'                  => 'format_type',
         'userinput'             => 'format_userinput',
         'variablelist'          => 'format_variablelist',
         'varlistentry'          => 'format_varlistentry',
         'varname'               => 'var',
+        'warning'               => 'div',
         'xref'                  => 'format_link',
         'year'                  => 'span',
     ); /* }}} */
 
     protected $CURRENT_ID  = "";
     protected $ext         = "html";
+    protected $role        = false;
     
     public function __construct(PhDReader $reader, array $IDs, array $IDMap, $ext = "html") {
         parent::__construct($reader, $IDs, $IDMap, $ext);
@@ -140,7 +157,13 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</$tag>";
     }
     public function CDATA($str) {
-        return sprintf('<div class="phpcode">%s</div>', highlight_string($str, 1));
+        switch($this->role) {
+        case "php":
+            return sprintf('<div class="phpcode">%s</div>', highlight_string(trim($str), 1));
+            break;
+        default:
+            return sprintf('<div class="cdata">%s</div>', $str);
+        }
     }
 
     public function format_container_chunk($open, $name) {
@@ -297,6 +320,51 @@ class XHTMLPhDFormat extends PhDFormat {
             return sprintf('<a href="%s.%s%s" class="%s %s">%5$s</a>', $href, $this->ext, ($fragment ? "#$fragment" : ""), $name, $type);
         }
         return sprintf('<span class="%s %s">%2$s</span>', $name, $type);
+    }
+    public function format_example_content($open, $name) {
+        if ($open) {
+            return '<div class="example-contents"><p>';
+        }
+        return "</p></div>";
+    }
+    public function format_programlisting($open, $name) {
+        if ($open) {
+            $this->role = PhDFormat::readAttribute("role");
+
+            return '<div class="example-contents">';
+        }
+        $this->role = false;
+        return "</div>\n";
+    }
+    public function format_screen($open, $name) {
+        if ($open) {
+            return '<div class="example-contents"><pre>';
+        }
+        return '</pre></div>';
+    }
+    public function format_constant($open, $name) {
+        if ($open) {
+            return "<b><tt>";
+        }
+        return "</tt></b>";
+    }
+    public function format_note($open, $name) {
+        if ($open) {
+            return '<blockquote><p>';
+        }
+        return "</p></blockquote>";
+    }
+    public function format_note_title($open, $name) {
+        if ($open) {
+            return '<b>';
+        }
+        return '</b>';
+    }
+    public function format_bold_paragraph($open, $name) {
+        if ($open) {
+            return "<p><b>";
+        }
+        return "</b></p>";
     }
 
 
