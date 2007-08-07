@@ -14,18 +14,15 @@
     +-------------------------------------------------------------------------+
 */
 
-class PhD_CLI_Interface implements PhD_SAPI_Interface {
+class PhD_CLI_Interface {
     
     protected $quietMode = 0;
     
     public function __construct() {
-        
-        if ( php_sapi_name() !== 'cli' ) {
-            PhD_error( PhD_Errors::CLI_WRONG_SAPI );
-        }
-        
+
+        // If we someday have a version of PHP with the nice long getopt() on all systems patch...
         if ( in_array( '-h', $_SERVER[ 'argv' ] ) || in_array( '--help', $_SERVER[ 'argv' ] ) ) {
-            print PhD_Prompts::paramPrompt( PhD_Prompts::CLI_USAGE, $_SERVER[ 'argv' ][ 0 ] );
+            print PhD_Output::paramString( 'Message', 'USAGE', $_SERVER[ 'argv' ][ 0 ] );
             exit( 1 );
         }
         
@@ -42,133 +39,115 @@ class PhD_CLI_Interface implements PhD_SAPI_Interface {
     public function __destruct() {
     }
     
-    public function getName() {
-
-        return 'Commandline';
-    
-    }
-    
-    public function errorMessage( $message ) {
-        
-        print "ERROR: {$message}\n";
-        exit( 1 );
-    
-    }
-    
-    public function warningMessage( $message ) {
-        
-        print "WARNING: {$message}\n";
-    
-    }
-    
     public function run() {
         global $configurator, $OPTIONS, $OPTIONS_DATA;
         
         $now = date( DATE_RFC2822 );
-        print PhD_Prompts::paramPrompt( PhD_Prompts::CLI_CONFIG_BEGIN, $now );
+        print PhD_Output::paramString( 'Message', 'CONFIG_BEGIN', $now ) . "\n\n";
         
         do {
         
-            print PhD_Prompts::paramPrompt( PhD_Prompts::CLI_CURRENT_SETTINGS );
-            $this->displaySettings();
+            $this->displaySettings( 'CURRENT_SETTINGS' );
     
-            print PhD_Prompts::paramPrompt( PhD_Prompts::CLI_INSTRUCTIONS );
+            print PhD_Output::paramString( 'Prompt', 'INSTRUCTIONS' ) . "\n\n";
             
             foreach ( $OPTIONS_DATA as $optionName => $optionData ) {
-
+                
+                printf( "%-40s\n", "{$optionData[ 'display_name' ]}:" );
                 if ( $this->quietMode < 2 ) {
-                    print "\n{$optionData[ 'description' ]}";
+                    print "{$optionData[ 'description' ]}\n";
                 }
                 if ( $this->quietMode < 1 ) {
-                    print "\n{$optionData[ 'details' ]}";
+                    print "{$optionData[ 'details' ]}\n";
                 }
                 
-                $valueList = $optionData[ 'value_list_function' ]();
-                if ( is_null( $valueList ) ) {
-                    print "\n" . PhD_Prompts::paramPrompt( PhD_Prompts::CLI_NO_VALUES );
-                } else if ( is_bool( $valueList ) ) {
-                    print "\n" . PhD_Prompts::paramPrompt( PhD_Prompts::CLI_BOOLEAN_VALUES );
-                } else if ( is_int( $valueList ) ) {
-                    print "\n" . PhD_Prompts::paramPrompt( PhD_Prompts::CLI_NUMBYTES_VALUES );
-                } else {
-                    print "\n" . PhD_Prompts::paramPrompt( PhD_Prompts::CLI_AVAILABLE_VALUES,
-                        wordwrap( "\t" . implode( ' ', $valueList ) , 71, "\n\t", FALSE ) );
+                switch ( PhD_Options::getType( $optionName ) ) {
+                    case PhD_Options::TYPE_ARBITRARY:
+                        print PhD_Output::paramString( 'Message', 'NO_VALUES' );
+                        break;
+                    case PhD_Options::TYPE_LIST:
+                        print PhD_Output::paramString( 'Message', 'AVAILABLE_VALUES',
+                            wordwrap( "\t" . implode( ' ', PhD_Options::getValueList( $optionName ) ), 71, "\n\t", FALSE ) );
+                        break;
+                    case PhD_Options::TYPE_NUMERIC:
+                        print PhD_Output::paramString( 'Message', 'NUMERIC_VALUE',
+                            $optionData[ 'min_value' ], $optionData[ 'max_value' ] );
+                        break;
+                    case PhD_Options::TYPE_FILESIZE:
+                        print PhD_Output::paramString( 'Message', 'NUMBYTES_VALUES' );
+                        break;
+                    case PhD_Options::TYPE_FLAG:
+                        print PhD_Output::paramString( 'Message', 'BOOLEAN_VALUES' );
+                        break;
+                    default:
+                        PhD_Error( 'INTERNAL_ERROR' );
                 }
                 
-                print "\n";
-
+                print "\n\n";
+                
                 do {
-                    $response = $this->getLine( PhD_Prompts::paramPrompt(
-                        PhD_Prompts::CLI_OPTION_PROMPT, $optionData[ 'prompt' ], $configurator->$optionName ) );
+                    $response = $this->getLine( PhD_Output::paramString( 'Prompt', 'OPTION_PROMPT', $optionData[ 'prompt' ],
+                        $configurator->$optionName ) );
                     if ( $response === '' ) {
                         $response = $configurator->$optionName;
                     }
-                    if ( $optionData[ 'validity_check_function' ]( $response ) === TRUE ) {
+                    if ( PhD_Options::checkValidity( $optionName, $response ) === TRUE ) {
                         break;
                     }
                     print "{$optionData[ 'invalid_message' ]}\n";
-                } while( TRUE );
+                } while ( TRUE );
                 
-                $configurator->$optionName = $optionData[ 'final_value_function' ]( $response );
+                $configurator->$optionName = PhD_Options::getFinalValue( $optionName, $response );
+                
                 print "\n";
-                
-            }
             
-            print "\n";
-            print PhD_Prompts::paramPrompt( PhD_Prompts::CLI_CHOSEN_SETTINGS );
-            $this->displaySettings();
+            }
+
+            $this->displaySettings( 'CHOSEN_SETTINGS' );
             
             do {
-                $response = $this->getLine( PhD_Prompts::paramPrompt( PhD_Prompts::CLI_CONFIG_COMPLETE ) );
+                $response = $this->getLine( PhD_Output::paramString( 'Prompt', 'CONFIG_COMPLETE' ) );
 
                 switch ( strval( $response ) ) {
                     case 'yes':
                         return TRUE;
-                    
                     case 'restart':
                         continue 3;
-                    
                     case 'quit':
                         return FALSE;
-                    
                     default:
-                        print PhD_Prompts::paramPrompt( PhD_Prompts::CLI_INVALID_CONFIG_COMPLETE );
+                        print PhD_Output::paramString( 'Prompt', 'INVALID_CONFIG_COMPLETE' );
                         continue 2;
                 }
             } while ( TRUE );
             
         } while ( TRUE );
-        
     }
     
     public function reportSuccess() {
-        
-        print PhD_Prompts::paramPrompt( PhD_Prompts::CLI_CONFIG_SAVED );
-    
+        print PhD_Output::paramString( 'Message', 'CONFIG_SAVED' );
     }
     
     protected function getLine( $prompt = NULL ) {
-        
         if ( !is_null( $prompt ) ) {
             print $prompt;
         }
         
         if ( ( $result = fgets( STDIN ) ) === FALSE ) {
-            PhD_Error( PhD_Errors::CLI_INPUT_EOF );
+            PhD_Error( 'INPUT_EOF' );
         }
         return trim( $result );
-    
     }
     
-    protected function displaySettings() {
-        global $configurator;
-
-        foreach ( getOptionNames() as $name ) {
+    protected function displaySettings( $headerConst ) {
+        global $configurator, $OPTIONS_DATA;
+        
+        print PhD_Output::paramString( 'Message', $headerConst ) . "\n";
+        foreach ( $OPTIONS_DATA as $name => $data ) {
             printf( "\t%-25s: %s\n", $name,
                 is_bool( $configurator->$name ) ? ( $configurator->$name ? "On" : "Off" ) : $configurator->$name );
         }
         print "\n";
-        
     }
 
 }

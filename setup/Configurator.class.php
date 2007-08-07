@@ -21,63 +21,47 @@ class PhD_Configurator {
     protected $config_php_path = '';
     
     public function __construct() {
-        
         $this->config_php_path = dirname( __FILE__ ) . '/../config.php';
-        
     }
     
     public function __destruct() {
     }
     
     public function __get( $name ) {
-        
         return $GLOBALS[ 'OPTIONS' ][ $name ];
-    
     }
     
     public function __isset( $name ) {
-        
         return isset( $GLOBALS[ 'OPTIONS' ][ $name ] );
-    
     }
     
     public function __set( $name, $value ) {
-        
         $GLOBALS[ 'OPTIONS' ][ $name ] = $value;
-        
     }
 
     public function __unset( $name ) {
-        
         unset( $GLOBALS[ 'OPTIONS' ][ $name ] );
-        
     }
     
     public function readConfig() {
-        
         if ( file_exists( $this->config_php_path ) && is_readable( $this->config_php_path ) && is_file( $this->config_php_path ) ) {
             require $this->config_php_path;
             $GLOBALS[ 'OPTIONS' ] = $OPTIONS;
         } else if ( file_exists( $this->config_php_path ) ) {
             PhD_Error( PhD_Errors::CONFIG_UNREADABLE );
         }
-        
     }
     
     public function isValidOptionValue( $name, $value ) {
-        
         $vf = $GLOBALS[ 'OPTIONS_DATA' ][ $name ][ 'validity_check_function' ];
         return is_callable( $vf ) ? $vf( $value ) : FALSE;
-    
     }
     
     public function writeConfig() {
-        
         try {
             $file = new Template_File( dirname( __FILE__ ) . '/config.in.php', $this->config_php_path, TRUE );
-            $file->SETUP_REV = $GLOBALS[ 'REVISION' ];
+            $file->SETUP_REV = $GLOBALS[ 'SETUP_REVISION' ];
             $file->SETUP_DATE = date( DATE_RFC2822 );
-            $file->SAPI = $GLOBALS[ 'chosenInterface' ]->getName();
             $file->OPTION_ARRAY = var_export( $GLOBALS[ 'OPTIONS' ], 1 );
             $file->writeTemplate();
             unset( $file );
@@ -93,7 +77,6 @@ class PhD_Configurator {
             );
             PhD_Error( isset( $codeMap[ $e->getCode() ] ) ? $codeMap[ $e->getCode() ] : PhD_Errors::INTERNAL_ERROR );
         }
-
     }
 
 }

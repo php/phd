@@ -14,10 +14,80 @@
     +-------------------------------------------------------------------------+
 */
 
+class PhD_Output {
+    
+    protected static $argList = NULL;
+    protected static function paramStringCallback( $v ) {
+        $v = next( self::$argList );
+        return ( is_bool( $v ) ? ( $v ? "Yes" : "No" ) : $v );
+    }
+    public static function paramString( $whichClass, $constName /*, ... */ ) {
+        self::$argList = func_get_args(); next( self::$argList );
+        $str = constant( "PhD_{$whichClass}s::{$constName}" );
+        return count( self::$argList ) > 2 ?
+            preg_replace_callback( '/%%%/', array( __CLASS__, 'paramStringCallback' ), $str ) :
+            $str;
+    }
+
+}
+    
+class PhD_Messages {
+    
+    const USAGE = <<<~MESSAGE
+PhD per-site configuration setup. Commandline interface.
+Usage:
+%%% [options]
+    -v | --verbose          Give full details on configuration options.
+                            This is the default.
+    -q | --quiet            Give shorter descriptions of configuration options.
+    -s | --silent           Give no descriptions of configuration options.
+    -h | --help             Show this message.
+MESSAGE;
+    
+    const CONFIG_BEGIN = <<<~MESSAGE
+PhD per-site configuration setup. Commandline interface.
+Run began at %%%.
+MESSAGE;
+
+    const CURRENT_SETTINGS = <<<~MESSAGE
+Current settings:
+MESSAGE;
+
+    const NO_VALUES = <<<~MESSAGE
+There is no list of possible values available.
+MESSAGE;
+    
+    const BOOLEAN_VALUES = <<<~MESSAGE
+This is a yes/no setting.
+MESSAGE;
+    
+    const NUMBYTES_VALUES = <<<~MESSAGE
+This is a value given in number of bytes. For convenience you may use any of
+the following suffixes to multiply the number by the shown factor. By the way,
+if you actually use the P suffix, I pity you.
+    K = 1024, M = K*1024, G = M*1024, T = G*1024, P = T*1024
+MESSAGE;
+
+    const AVAILABLE_VALUES = <<<~MESSAGE
+The available values in this installation are:
+%%%
+MESSAGE;
+    
+    const CHOSEN_SETTINGS = <<<~MESSAGE
+Chosen settings:
+MESSAGE;
+
+    const CONFIG_SAVED = <<<~MESSAGE
+The settings were successfully saved to config.php. You may now start using
+PhD.
+MESSAGE;
+
+}    
+
 class PhD_Errors {
     
-    const EMBED_UNSUPPORTED = <<<~ERRMSG
-Embedded SAPI is not supported by PhD.
+    const ONLY_CLI_SUPPORTED = <<<~ERRMSG
+The PhD setup application requires the CLI interface.
 ERRMSG;
     
     const CONFIG_UNREADABLE = <<<~ERRMSG
@@ -48,12 +118,24 @@ ERRMSG;
 The template file does not exist or is unreadable.
 ERRMSG;
 
-    const CLI_WRONG_SAPI = <<<~ERRMSG
-The CLI interface requires the CLI SAPI!
+    const INPUT_EOF = <<<~ERRMSG
+Input ended unexpectedly.
 ERRMSG;
 
-    const CLI_INPUT_EOF = <<<~ERRMSG
-Input ended unexpectedly.
+    const FORMATS_UNREADABLE = <<<~ERRMSG
+The formats directory is missing or unreadable.
+ERRMSG;
+
+    const FORMATS_UNAVAILABLE = <<<~ERRMSG
+There are no output formats available.
+ERRMSG;
+
+    const THEMES_UNREADABLE = <<<~ERRMSG
+The themes directory is missing or unreadable.
+ERRMSG;
+
+    const THEMES_UNAVAILABLE = <<<~ERRMSG
+There are no output themes available.
 ERRMSG;
     
     const INTERNAL_ERROR = <<<~ERRMSG
@@ -72,103 +154,24 @@ WARNMSG;
 
 class PhD_Prompts {
     
-    public static function paramPrompt( $prompt/*, ... */ ) {
-        
-        $args = func_get_args();
-$c = '
-static $a = NULL;
-if ( is_null( $a ) ) {
-    $a = unserialize(\''.serialize($args).'\');
-}
-$v = next( $a );
-return ( is_bool( $v ) ? ( $v ? "Yes" : "No" ) : $v );
-';
-
-        return count( $args ) > 1 ? preg_replace_callback( '/%%%/',
-            create_function( '$v', $c ),
-            $prompt ) : $prompt;
-    
-    }
-    
-    const CLI_USAGE = <<<~PROMPTMSG
-PhD per-site configuration setup. Commandline interface.
-Usage:
-%%% [options]
-    -v | --verbose          Give full details on configuration options.
-                            This is the default.
-    -q | --quiet            Give shorter descriptions of configuration options.
-    -s | --silent           Give no descriptions of configuration options.
-    -h | --help             Show this message.
-
-PROMPTMSG;
-    
-    const CLI_CONFIG_BEGIN = <<<~PROMPTMSG
-PhD per-site configuration setup. Commandline interface.
-Run began at %%%.
-
-PROMPTMSG;
-
-    const CLI_CURRENT_SETTINGS = <<<~PROMPTMSG
-Current settings:
-
-PROMPTMSG;
-
-    const CLI_INSTRUCTIONS = <<<~PROMPTMSG
+    const INSTRUCTIONS = <<<~PROMPTMSG
 Press return without entering any text to leave an option at its current value.
 This will be rejected for options which require a value but whose current value
 is empty.
-
-
 PROMPTMSG;
 
-    const CLI_NO_VALUES = <<<~PROMPTMSG
-There is no list of possible values available.
-
-PROMPTMSG;
-    
-    const CLI_BOOLEAN_VALUES = <<<~PROMPTMSG
-This is a yes/no setting.
-
-PROMPTMSG;
-    
-    const CLI_NUMBYTES_VALUES = <<<~PROMPTMSG
-This is a value given in number of bytes. For convenience you may use any of
-the following suffixes to multiply the number by the shown factor. By the way,
-if you actually use the P suffix, I pity you.
-    K = 1024, M = K*1024, G = M*1024, T = G*1024, P = T*1024
-
-PROMPTMSG;
-
-    const CLI_AVAILABLE_VALUES = <<<~PROMPTMSG
-The available values in this installation are:
-%%%
-
-PROMPTMSG;
-
-    const CLI_OPTION_PROMPT = <<<~PROMPTMSG
+    const OPTION_PROMPT = <<<~PROMPTMSG
 %%% [%%%]: 
 PROMPTMSG;
     
-    const CLI_CHOSEN_SETTINGS = <<<~PROMPTMSG
-Chosen settings:
-
-PROMPTMSG;
-
-    const CLI_CONFIG_COMPLETE = <<<~PROMPTMSG
+    const CONFIG_COMPLETE = <<<~PROMPTMSG
 To confirm these settings, type "yes" now.
 To start over, type "restart".
 To quit without saving, type "quit": 
 PROMPTMSG;
 
-    const CLI_INVALID_CONFIG_COMPLETE = <<<~PROMPTMSG
+    const INVALID_CONFIG_COMPLETE = <<<~PROMPTMSG
 This is not a valid response. Please try again.
-
-PROMPTMSG;
-    
-    const CLI_CONFIG_SAVED = <<<~PROMPTMSG
-The settings were successfully saved to config.php. You may now start using
-PhD.
-
 PROMPTMSG;
 
 }

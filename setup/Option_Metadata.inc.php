@@ -14,13 +14,116 @@
     +-------------------------------------------------------------------------+
 */
 
-$OPTIONS_DATA_COMMON_FUNCS = array(
+class Phd_Options {
+    
+    const TYPE_ARBITRARY = 0;       // Any user-entered value
+    const TYPE_LIST = 1;            // One of a list of enumerated values
+    const TYPE_NUMERIC = 2;         // Any integer
+    const TYPE_FILESIZE = 3;        // A positive integer including the [KMGTP[B]] suffix
+    const TYPE_FLAG = 4;            // Boolean flag
+    
+    public static function getType( $optName ) {
+        global $OPTIONS_DATA;
+        
+        if ( empty( $OPTIONS_DATA[ $optName ] ) ) {
+            return NULL;
+        }
+        return $OPTIONS_DATA[ $optName ][ 'type' ];
+    }
+    
+    public static function getValueList( $optName ) {   // TYPE_LIST options only
+        global $OPTIONS_DATA;
+        
+        if ( PhD_Options::getType( $optName ) != PhD_Options::TYPE_LIST ) {
+            return NULL;
+        }
+        return call_user_func( $OPTIONS_DATA[ $optName ][ 'value_list_func' ] );
+    }
+    
+    public static function checkValidity( $optName, $value ) {
+        global $OPTIONS_DATA;
+        
+        if ( ( $type = PhD_Options::getType( $optName ) ) === NULL ) {
+            return NULL;
+        }
+        switch ( $type ) {
+            case PhD_Options::TYPE_ARBITRARY:
+                return call_user_func( $OPTIONS_DATA[ $optName ][ 'validity_func' ], $value );
+            case PhD_Options::TYPE_LIST:
+                return in_array( $value, PhD_Options::getValueList( $optName ) );
+            case PhD_Options::TYPE_NUMERIC:
+                if ( ctype_digit( $value ) ) {
+                    return ( $value >= $OPTIONS_DATA[ $optName ][ 'min_value' ] &&
+                             $value <= $OPTIONS_DATA[ $optName ][ 'max_value' ] );
+                }
+                return FALSE;
+            case PhD_Options::TYPE_FILESIZE:
+                return preg_match( '/^(\d+)(?:([KMGTP])B?)?$/iu', $value ) ? TRUE : FALSE;
+            case PhD_Options::TYPE_FLAG:
+                return in_array( substr( strtolower( $value ), 0, 1 ), array( 1, 0, 'y', 'n' ) ) || $value === TRUE || $value === FALSE;
+            default:
+                return NULL;
+        }
+    }
+    
+    public static function getFinalValue( $optName, $value ) {
+        global $OPTIONS_DATA;
+        
+        if ( ( $type = PhD_Options::getType( $optName ) ) === NULL ) {
+            return NULL;
+        }
+        switch ( $type ) {
+            case PhD_Options::TYPE_ARBITRARY:
+                return isset( $OPTIONS_DATA[ $optName ][ 'final_value_func' ] ) ?
+                    call_user_func( $OPTIONS_DATA[ $optName ][ 'final_value_func' ], $value ) : $value;
+            case PhD_Options::TYPE_LIST:
+            case PhD_Options::TYPE_NUMERIC:
+                return $value;
+            case PhD_Options::TYPE_FILESIZE:
+                preg_match( '/^(\d+)(?:([KMGTP])B?)?$/iu', $value, $matches );
+                $multipliers = array(
+                    '' => 1,
+                    'K' => 1024,
+                    'M' => 1048576,
+                    'G' => 1073741824,
+                    'T' => 1099511627776,
+                    'P' => 1125899906842620
+                );
+                return ( intval( $matches[ 1 ] ) * $multipliers[ strval( $matches[ 2 ] ) ] );
+            case PhD_Options::TYPE_FLAG:
+                return is_bool( $value ) ? $value : ( substr( strtolower( $value ), 0, 1 ) == 'y' ? TRUE : FALSE );
+            default:
+                return NULL;
+        }
+    }
+    
+}    
 
-    'get_languages_func' => create_function( '', <<<~FUNCTION
-global $OPTIONS_DATA, $OPTIONS;
-static $languages = NULL;
+function OPTIONS_META_scan_script_dir( $name ) {
+    static $lists = NULL;
 
-if ( $OPTIONS_DATA[ 'xml_root' ][ 'validity_check_function' ]( $OPTIONS[ 'xml_root' ] ) ) {
+    if ( is_null( $lists ) ) {
+        $lists = array();
+    }
+    if ( !isset( $lists[ $name ] ) ) {
+        $path = dirname( __FILE__ ) . "/../{$name}";
+        if ( ( $files = @scandir( $path ) ) === FALSE ) {
+            PhD_Error( strtoupper( $name ) . '_UNREADABLE' );
+        }
+        $fileList = array_map( create_function( '$v', 'return substr( $v, 0, -4 );' ),
+            array_filter( $files, create_function( '$v', 'return substr( $v, -4 ) == ".php" && is_file( "'.$path.'/{$v}" );' ) ) );
+        if ( count( $fileList ) == 0 ) {
+            PhD_Error( strtoupper( $name ) . '_UNAVAILABLE' );
+        }
+        $lists[ $name ] = $fileList;
+    }
+    return $lists[ $name ];
+}
+
+function OPTIONS_META_get_languages() {
+    global $OPTIONS_DATA, $OPTIONS;
+    static $languages = NULL;
+
     if ( is_null( $languages ) ) {
         $d = $OPTIONS[ 'xml_root' ];
         if ( ( $languageList = @scandir( $d ) ) === FALSE ) {
@@ -31,56 +134,23 @@ if ( $OPTIONS_DATA[ 'xml_root' ][ 'validity_check_function' ]( $OPTIONS[ 'xml_ro
     }
     return $languages;
 }
-return NULL;
-FUNCTION
-    ),
-    
-    'numbytes_value_list_func' => create_function( '', <<<~FUNCTION
-return 0;
-FUNCTION
-    ),
-    
-    'numbytes_validity_func' => create_function( '$v', <<<~FUNCTION
-return preg_match( '/^(\d+)(?:([KMGTP])B?)?$/iu', $v, $matches ) ? TRUE : FALSE;
-FUNCTION
-    ),
-    
-    'numbytes_final_value_func' => create_function( '$v', <<<~FUNCTION
-preg_match( '/^(\d+)(?:([KMGTP])B?)?$/iu', $v, $matches );
-$multipliers = array( '' => 1, 'K' => 1024, 'M' => 1048576, 'G' => 1073741824, 'T' => 1099511627776, 'P' => 1125899906842620 );
-return ( intval( $matches[ 1 ] ) * $multipliers[ strval( $matches[ 2 ] ) ] );
-FUNCTION
-    ),
 
-    'boolean_value_list_func' => create_function( '', <<<~FUNCTION
-return FALSE;
-FUNCTION
-    ),
-
-    'boolean_validity_func' => create_function( '$v', <<<~FUNCTION
-return in_array( substr( strtolower( $v ), 0, 1 ), array( 1, 0, 'y', 'n' ) ) || $v === TRUE || $v === FALSE;
-FUNCTION
-    ),
-    
-    'boolean_final_value_func' => create_function( '$v', <<<~FUNCTION
-return ( substr( strtolower( $v ), 0, 1 ) == 'y' ) ? TRUE : FALSE;
-FUNCTION
-    ),
-    
-    'verbatim_final_value_func' => create_function( '$v', <<<~FUNCTION
-return $v;
-FUNCTION
-    ),
-    
-    'unknown_value_list_func' => create_function( '', <<<~FUNCTION
-return NULL;
-FUNCTION
-    ),
-
-);
+function OPTIONS_META_validate_file_save( $v, $rp = NULL ) {
+    if ( ( $rp = realpath( $v ) ) === FALSE ) {
+        return FALSE;
+    }
+    $d = dirname( $rp );
+    if ( !is_dir( $d ) || !is_writable( $d ) || !is_executable( $d ) ||
+            ( file_exists( $rp ) && ( !is_writable( $rp ) || is_dir( $rp ) ) ) ) {
+        return FALSE;
+    }
+    return TRUE;
+}
 
 $OPTIONS_DATA = array(
     'output_format' => array(
+        'display_name' => "Output Format",
+        'type' => PhD_Options::TYPE_LIST,
         'default_value' => 'xhtml',
         'description' => <<<~MESSAGE
 The output format for PhD determines the final form of any output it produces.
@@ -94,33 +164,17 @@ is the builtin XHTML. The selected theme will determine the version and
 conformance of any XML-based format.
 MESSAGE
         ,
-        'value_list_function' => create_function( '', <<<~FUNCTION
-static $formatList = NULL;
-
-if ( is_null( $formatList ) ) {
-    $path = dirname( __FILE__ ) . "/../formats";
-    if ( ( $formats = @scandir( $path ) ) === FALSE ) {
-        PhD_Error( "The formats directory is missing or unreadable at \"{$path}\"." );
-    }
-    $formatList = array_map( create_function( '$v', 'return substr( $v, 0, -4 );' ),
-        array_filter( $formats, create_function( '$v', 'return substr( $v, -4 ) == ".php" && is_file( "'.$path.'/{$v}" );' ) ) );
-    if ( count( $formatList ) == 0 ) {
-        PhD_Error( "No output formats are available." );
-    }
-}
-return $formatList;
+        'value_list_func' => create_function( '', <<<~FUNCTION
+return OPTIONS_META_scan_script_dir( 'formats' );
 FUNCTION
         ),
-        'validity_check_function' => create_function( '$format', <<<~FUNCTION
-return in_array( $format, $GLOBALS[ 'OPTIONS_DATA' ][ 'output_format' ][ 'value_list_function' ]() );
-FUNCTION
-        ),
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'verbatim_final_value_func' ],
         'prompt' => 'Choose a format',
         'invalid_message' => 'That is not an available format. Please try again.'
     ),
     
     'output_theme' => array(
+        'display_name' => 'Output Theme',
+        'type' => PhD_Options::TYPE_LIST,
         'default_value' => 'default',
         'description' => <<<~MESSAGE
 The output theme for PhD determines site-specific alterations to the selected
@@ -133,33 +187,17 @@ an error message for all cases. A valid theme must be selected by the
 administrator for the site to function.
 MESSAGE
         ,
-        'value_list_function' => create_function( '', <<<~FUNCTION
-static $themeList = NULL;
-
-if ( is_null( $themeList ) ) {
-    $path = dirname( __FILE__ ) . "/../themes";
-    if ( ( $themes = @scandir( $path ) ) === FALSE ) {
-        PhD_Error( "The themes directory is missing or unreadable." );
-    }
-    $themeList = array_filter( $themes,
-        create_function( '$v', 'return is_dir( "'.$path.'/{$v}" ) && !in_array( $v, array( ".", "..", "CVS" ) );' ) );
-    if ( count( $themeList ) == 0 ) {
-        PhD_Error( "No themes are available." );
-    }
-}
-return $themeList;
+        'value_list_func' => create_function( '', <<<~FUNCTION
+return OPTIONS_META_scan_script_dir( 'themes' );
 FUNCTION
         ),
-        'validity_check_function' => create_function( '$theme', <<<~FUNCTION
-return in_array( $theme, $GLOBALS[ 'OPTIONS_DATA' ][ 'output_theme' ][ 'value_list_function' ]() );
-FUNCTION
-        ),
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'verbatim_final_value_func' ],
         'prompt' => 'Choose a theme',
         'invalid_message' => 'That is not an available theme. Please try again.'
     ),
     
     'output_encoding' => array(
+        'display_name' => 'Output Encoding',
+        'type' => PhD_Options::TYPE_ARBITRARY,
         'default_value' => 'utf-8',
         'description' => <<<~MESSAGE
 The output encoding for PDP-E determines the encoding that will be used for all
@@ -177,17 +215,17 @@ system administrator to choose the proper one, and raise an error at runtime
 for an unsupported encoding.
 MESSAGE
         ,
-        'value_list_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'unknown_value_list_func' ],
-        'validity_check_function' => create_function( '$encoding', <<<~FUNCTION
+        'validity_func' => create_function( '$encoding', <<<~FUNCTION
 return iconv( $encoding, $encoding, "Test string" ) === "Test string";
 FUNCTION
         ),
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'verbatim_final_value_func' ],
         'prompt' => 'Choose an encoding',
         'invalid_message' => 'That encoding does not appear to be supported by your libiconv. Please try another.'
     ),
     
     'xml_root' => array(
+        'display_name' => 'XML Root Directory',
+        'type' => PhD_Options::TYPE_ARBITRARY,
         'default_value' => '/INVALID/PATH',
         'description' => <<<~MESSAGE
 The location of the language trees.
@@ -201,13 +239,11 @@ files and translations laid out by section structure. Tilde expansion is NOT
 done. Symbolic links are resolved at run time.
 MESSAGE
         ,
-        'value_list_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'unknown_value_list_func' ],
-        'validity_check_function' => create_function( '$root', <<<~FUNCTION
+        'validity_func' => create_function( '$root', <<<~FUNCTION
 $rv = realpath( $root );
 return ( $rv !== FALSE && is_dir( $rv ) && is_readable( $rv ) && is_executable( $rv ) && is_dir( "{$rv}/en" ) );
 FUNCTION
         ),
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'verbatim_final_value_func' ],
         'prompt' => 'Enter the full path to the XML root',
         'invalid_message' => <<<~MESSAGE
 The path you entered does not exist, is not a directory, is not readable, is
@@ -216,6 +252,8 @@ MESSAGE
     ),
     
     'language' => array(
+        'display_name' => 'Primary Language',
+        'type' => PhD_Options::TYPE_LIST,
         'default_value' => 'en',
         'description' => <<<~MESSAGE
 The language tells PhD which set of translations to use for display. The
@@ -230,12 +268,7 @@ The default is English. English files are always the final fallback if a
 translated version of a page is not found.
 MESSAGE
         ,
-        'value_list_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'get_languages_func' ],
-        'validity_check_function' => create_function( '$v', <<<~FUNCTION
-return in_array( $v, $GLOBALS[ 'OPTIONS_DATA' ][ 'language' ][ 'value_list_function' ]() );
-FUNCTION
-        ),
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'verbatim_final_value_func' ],
+        'value_list_func' => 'OPTIONS_META_get_languages',
         'prompt' => 'Choose a primary language code',
         'invalid_message' => <<<~MESSAGE
 The language code you entered does not appear to exist, or is not a directory
@@ -244,6 +277,8 @@ MESSAGE
     ),
     
     'fallback_language' => array(
+        'display_name' => 'Fallback Language',
+        'type' => PhD_Options::TYPE_LIST,
         'default_value' => 'en',
         'description' => <<<~MESSAGE
 The fallback language is used before English when PhD can not find a translated
@@ -257,12 +292,7 @@ This provides an optional fallback before English if another fallback would
 make more sense for a site. The default is English, causing immediate fallback.
 MESSAGE
         ,
-        'value_list_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'get_languages_func' ],
-        'validity_check_function' => create_function( '$v', <<<~FUNCTION
-return in_array( $v, $GLOBALS[ 'OPTIONS_DATA' ][ 'language' ][ 'value_list_function' ]() );
-FUNCTION
-        ),
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'verbatim_final_value_func' ],
+        'value_list_func' => 'OPTIONS_META_get_languages',
         'prompt' => 'Choose a fallback language code',
         'invalid_message' => <<<~MESSAGE
 The language code you entered does not appear to exist, or is not a directory
@@ -271,6 +301,8 @@ MESSAGE
     ),
     
     'enforce_revisions' => array(
+        'display_name' => 'Revision Enforce flag',
+        'type' => PhD_Options::TYPE_FLAG,
         'default_value' => FALSE,
         'description' => <<<~MESSAGE
 PhD is capable of using either traditional <!-- Revision: --> and
@@ -288,76 +320,40 @@ reivison mismatch is found, the active theme is given an opportunity to present
 an error or warning to users.
 MESSAGE
         ,
-        'value_list_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'boolean_value_list_func' ],
-        'validity_check_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'boolean_validity_func' ],
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'boolean_final_value_func' ],
         'prompt' => 'Type "(Y)es" to enable revision control, or "(N)o" to disable it',
         'invalid_message' => 'Please enter "(Y)es" or "(N)o".'
     ),
     
-    'database_path' => array(
-        'default_value' => '/INVALID/PATH/phd-data.sqlite',
+    'build_log_file' => array(
+        'display_name' => 'Build Log',
+        'type' => PhD_Options::TYPE_ARBITRARY,
+        'default_value' => 'none',
         'description' => <<<~MESSAGE
-The database path tells PhD where to store the SQLite 3 database file, used for
-indexing and cache data. Most installations will want to place the database
-file in the same directory as PhD itself.
+The log file is where PhD stores the output of the first phase of operation,
+the conversion of xml_root's multitude of XML files into a single blog.
 MESSAGE
         ,
         'details' => <<<~MESSAGE
-This setup will attempt to create a database file in the given location and
-remove it again. The user running PhD must have write and execute permissions
-to the enclosing directory. The file name can be whatever best suits the needs
-of the host system.
+Running the many-to-one build process can sometimes produce a copious amount of
+output, especially with the debug flag on. This setting is provided to
+automatically dump that output to a file for convenience. Multiple runs of the
+build will overwrite an existing log file, so be careful.
 MESSAGE
         ,
-        'value_list_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'unknown_value_list_func' ],
-        'validity_check_function' => create_function( '$path', <<<~FUNCTION
-try {
-    $d = dirname( realpath( $path ) );
-    if ( !is_dir( $d ) || !is_writable( $d ) || !is_executable( $d ) ) {
-        return FALSE;
-    }
-    $p = new PDO( "sqlite:{$path}", NULL, NULL, array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ) );
-    $p = NULL;
-    unset( $p );
-    return @unlink( $path );
-} catch ( PDOException $e ) {
-    return FALSE;
-}
+        'validity_func' => create_function( '$v', <<<~FUNCTION
+return ( $v === 'none' || OPTIONS_META_validate_file_save( $v ) );
 FUNCTION
         ),
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'verbatim_final_value_func' ],
-        'prompt' => 'Enter the full path to the database file',
+        'prompt' => 'Enter the full path to the build log, or "none" to log to stdout',
         'invalid_message' => <<<~MESSAGE
-The path is invalid, you don't have write permission to it, an existing
-database file is in the way, or loading SQLite failed. Please try again.
+The path you entered is invalid or you don't have write permission to it.
+Please try again.
 MESSAGE
-    ),
-    
-    'chunking_memory_limit' => array(
-        'default_value' => ( 100 * 1048576 ),  // 100MB
-        'description' => <<<~MESSAGE
-The chunking memory limit controls how big a single chunk of output data must
-grow for PhD to begin spooling it to disk to avoid memory exhaustion.
-MESSAGE
-        ,
-        'details' => <<<~MESSAGE
-While performing transformations, PhD stores a growing chunk in memory for
-efficiency. However, efficiency will quickly degrade if the chunk is too large.
-This is particularly problematic for output formats and themes which don't do
-any chunking at all. Setting this limit to zero will force PhD to spool for all
-chunks, no matter how small. This is the recommended setting for non-chunking
-outputs; the default is fine for most other installations.
-MESSAGE
-        ,
-        'value_list_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'numbytes_value_list_func' ],
-        'validity_check_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'numbytes_validity_func' ],
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'numbytes_final_value_func' ],
-        'prompt' => 'Enter the chunking limit',
-        'invalid_message' => 'You must enter a valid numeric value.'
     ),
     
     'debug' => array(
+        'display_name' => 'Debug flag',
+        'type' => PhD_Options::TYPE_FLAG,
         'default_value' => FALSE,
         'description' => <<<~MESSAGE
 The debug flag controls whether PhD runs in debug mode. This should NEVER be
@@ -373,19 +369,10 @@ consistency. This flag is only provided in the setup interface for ease of
 administration.
 MESSAGE
         ,
-        'value_list_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'boolean_value_list_func' ],
-        'validity_check_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'boolean_validity_func' ],
-        'final_value_function' => $OPTIONS_DATA_COMMON_FUNCS[ 'boolean_final_value_func' ],
         'prompt' => 'Type "(Y)es" to enable debug output, or "(N)o" to disable it',
         'invalid_message' => 'Please enter "(Y)es" or "(N)o".'
     ),
-
 );
-
-function getOptionNames() {
-    return array_filter( array_keys( $GLOBALS[ 'OPTIONS_DATA' ] ),
-    create_function( '$v', 'return strncmp( "__", $v, 2 );' ) );
-}
 
 /*
 * vim600: sw=4 ts=4 fdm=syntax syntax=php et
