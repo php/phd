@@ -1,6 +1,16 @@
-#!/home/bjori/.apps/bin/php
 <?php
 /*  $Id$ */
+
+if (isset($argc) && $argc == 3) {
+    $manual = $argv[1];
+    $version = $argv[2];
+} else if (file_exists("./config.php")) {
+    include "./config.php";
+}
+if (!file_exists($manual) || !file_exists($version)) {
+    die ("Missing path/to .manual.xml and/or version.xml");
+}
+
 
 function err($no, $str, $file, $line) {
 	global $notify;
@@ -40,8 +50,8 @@ if ($err) {
 		->show();
 }
 
-$reader = new PhDReader("/home/bjori/php/doc/.manual.xml");
-$format = new phpweb($reader, $IDs, $IDMap, "/home/bjori/php/doc/phpbook/phpbook-xsl/version.xml");
+$reader = new PhDReader($manual);
+$format = new phpweb($reader, $IDs, $IDMap, $version);
 
 $map = $format->getMap();
 
