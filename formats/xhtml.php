@@ -103,6 +103,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'note'              => 'span',
             'listitem'          => 'span',
             'entry'             => 'span',
+            'example'           => 'format_example_content',
         ),
         'systemitem'            => 'format_systemitem',
         'table'                 => 'format_table',
@@ -209,6 +210,7 @@ class XHTMLPhDFormat extends PhDFormat {
         /* We read this element to END_ELEMENT so $open is useless */
         $content = '<div class="methodsynopsis">';
 
+        $opt = $count = 0;
         while($child = PhDFormat::getNextChild($root)) {
             if ($child["type"] == XMLReader::END_ELEMENT) {
                 $content .= "</span>\n";
@@ -216,17 +218,41 @@ class XHTMLPhDFormat extends PhDFormat {
             }
             $name = $child["name"];
             switch($name) {
-            case "type":
             case "parameter":
+                $content .= sprintf('<span class="%s">%s$%s</span>', $name, $this->readAttribute("role") == "reference" ? "&" : "", $this->readContent($name));
+                break;
+            case "type":
+                $content .= sprintf('<span class="%s">%s</span> ', $name, $this->readContent($name));
+                break;
             case "methodname":
-                $content .= sprintf('<span class="%s">%s</span>', $name, $this->readContent($name));
+                $content .= sprintf('<span class="%s"><b>%s</b></span>', $name, $this->readContent($name));
                 break;
 
             case "methodparam":
-                $content .= '<span class="methodparam">';
+                if ($count == 0) {
+                    $content .= " (";
+                }
+                if ($this->readAttribute("choice") == "opt") {
+                    $opt++;
+                    $content .= "[";
+                } else if($opt) {
+                    $content .= str_repeat("]", $opt);
+                    $opt = 0;
+                }
+                if ($count) {
+                    $content .= ",";
+                }
+                $content .= ' <span class="methodparam">';
+                ++$count;
+
                 break;
             }
         }
+        if ($opt) {
+            $content .= str_repeat("]", $opt);
+        }
+        $content .= ")";
+
         $content .= "</div>";
         return $content;
     }
@@ -243,7 +269,7 @@ class XHTMLPhDFormat extends PhDFormat {
             }
         }
         
-        return sprintf('<div class="refnamediv"><span class="refname">%s</span><span class="refpurpose">%s</span></div>', $refname, $refpurpose);
+        return sprintf('<div class="refnamediv"><h1 class="refname">%s</h1><p class="refpurpose">%1$s — %s</p></div>', $refname, $refpurpose);
     }
     public function format_variablelist($open, $name) {
         if ($open) {
