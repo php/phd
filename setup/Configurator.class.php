@@ -52,11 +52,6 @@ class PhD_Configurator {
         }
     }
     
-    public function isValidOptionValue( $name, $value ) {
-        $vf = $GLOBALS[ 'OPTIONS_DATA' ][ $name ][ 'validity_check_function' ];
-        return is_callable( $vf ) ? $vf( $value ) : FALSE;
-    }
-    
     public function writeConfig() {
         try {
             $file = new Template_File( dirname( __FILE__ ) . '/config.in.php', $this->config_php_path, TRUE );

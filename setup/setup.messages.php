@@ -10,27 +10,12 @@
     | world-wide-web at the following url:                                    |
     | http://phd.php.net/LICENSE                                              |
     +-------------------------------------------------------------------------+
-    | Provides the text for error, warning, and status messages in setup.php. |
+    | The text for error, warning, and status messages in setup.php.          |
     +-------------------------------------------------------------------------+
 */
 
-class PhD_Output {
-    
-    protected static $argList = NULL;
-    protected static function paramStringCallback( $v ) {
-        $v = next( self::$argList );
-        return ( is_bool( $v ) ? ( $v ? "Yes" : "No" ) : $v );
-    }
-    public static function paramString( $whichClass, $constName /*, ... */ ) {
-        self::$argList = func_get_args(); next( self::$argList );
-        $str = constant( "PhD_{$whichClass}s::{$constName}" );
-        return count( self::$argList ) > 2 ?
-            preg_replace_callback( '/%%%/', array( __CLASS__, 'paramStringCallback' ), $str ) :
-            $str;
-    }
+require_once 'PhD_Output.class.php';
 
-}
-    
 class PhD_Messages {
     
     const USAGE = <<<~MESSAGE
@@ -63,8 +48,7 @@ MESSAGE;
     
     const NUMBYTES_VALUES = <<<~MESSAGE
 This is a value given in number of bytes. For convenience you may use any of
-the following suffixes to multiply the number by the shown factor. By the way,
-if you actually use the P suffix, I pity you.
+the following suffixes to multiply the number by the shown factor.
     K = 1024, M = K*1024, G = M*1024, T = G*1024, P = T*1024
 MESSAGE;
 
@@ -78,8 +62,7 @@ Chosen settings:
 MESSAGE;
 
     const CONFIG_SAVED = <<<~MESSAGE
-The settings were successfully saved to config.php. You may now start using
-PhD.
+Your settings were successfully saved to config.php. PhD is now ready for use.
 MESSAGE;
 
 }    

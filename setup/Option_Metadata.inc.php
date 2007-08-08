@@ -10,94 +10,11 @@
     | world-wide-web at the following url:                                    |
     | http://phd.php.net/LICENSE                                              |
     +-------------------------------------------------------------------------+
-    | Provides the common code for managing the config.php file in setup.php. |
+    | The metadata for PhD configuration options.                             |
     +-------------------------------------------------------------------------+
 */
 
-class Phd_Options {
-    
-    const TYPE_ARBITRARY = 0;       // Any user-entered value
-    const TYPE_LIST = 1;            // One of a list of enumerated values
-    const TYPE_NUMERIC = 2;         // Any integer
-    const TYPE_FILESIZE = 3;        // A positive integer including the [KMGTP[B]] suffix
-    const TYPE_FLAG = 4;            // Boolean flag
-    
-    public static function getType( $optName ) {
-        global $OPTIONS_DATA;
-        
-        if ( empty( $OPTIONS_DATA[ $optName ] ) ) {
-            return NULL;
-        }
-        return $OPTIONS_DATA[ $optName ][ 'type' ];
-    }
-    
-    public static function getValueList( $optName ) {   // TYPE_LIST options only
-        global $OPTIONS_DATA;
-        
-        if ( PhD_Options::getType( $optName ) != PhD_Options::TYPE_LIST ) {
-            return NULL;
-        }
-        return call_user_func( $OPTIONS_DATA[ $optName ][ 'value_list_func' ] );
-    }
-    
-    public static function checkValidity( $optName, $value ) {
-        global $OPTIONS_DATA;
-        
-        if ( ( $type = PhD_Options::getType( $optName ) ) === NULL ) {
-            return NULL;
-        }
-        switch ( $type ) {
-            case PhD_Options::TYPE_ARBITRARY:
-                return call_user_func( $OPTIONS_DATA[ $optName ][ 'validity_func' ], $value );
-            case PhD_Options::TYPE_LIST:
-                return in_array( $value, PhD_Options::getValueList( $optName ) );
-            case PhD_Options::TYPE_NUMERIC:
-                if ( ctype_digit( $value ) ) {
-                    return ( $value >= $OPTIONS_DATA[ $optName ][ 'min_value' ] &&
-                             $value <= $OPTIONS_DATA[ $optName ][ 'max_value' ] );
-                }
-                return FALSE;
-            case PhD_Options::TYPE_FILESIZE:
-                return preg_match( '/^(\d+)(?:([KMGTP])B?)?$/iu', $value ) ? TRUE : FALSE;
-            case PhD_Options::TYPE_FLAG:
-                return in_array( substr( strtolower( $value ), 0, 1 ), array( 1, 0, 'y', 'n' ) ) || $value === TRUE || $value === FALSE;
-            default:
-                return NULL;
-        }
-    }
-    
-    public static function getFinalValue( $optName, $value ) {
-        global $OPTIONS_DATA;
-        
-        if ( ( $type = PhD_Options::getType( $optName ) ) === NULL ) {
-            return NULL;
-        }
-        switch ( $type ) {
-            case PhD_Options::TYPE_ARBITRARY:
-                return isset( $OPTIONS_DATA[ $optName ][ 'final_value_func' ] ) ?
-                    call_user_func( $OPTIONS_DATA[ $optName ][ 'final_value_func' ], $value ) : $value;
-            case PhD_Options::TYPE_LIST:
-            case PhD_Options::TYPE_NUMERIC:
-                return $value;
-            case PhD_Options::TYPE_FILESIZE:
-                preg_match( '/^(\d+)(?:([KMGTP])B?)?$/iu', $value, $matches );
-                $multipliers = array(
-                    '' => 1,
-                    'K' => 1024,
-                    'M' => 1048576,
-                    'G' => 1073741824,
-                    'T' => 1099511627776,
-                    'P' => 1125899906842620
-                );
-                return ( intval( $matches[ 1 ] ) * $multipliers[ strval( $matches[ 2 ] ) ] );
-            case PhD_Options::TYPE_FLAG:
-                return is_bool( $value ) ? $value : ( substr( strtolower( $value ), 0, 1 ) == 'y' ? TRUE : FALSE );
-            default:
-                return NULL;
-        }
-    }
-    
-}    
+require_once 'PhD_Options.class.php';
 
 function OPTIONS_META_scan_script_dir( $name ) {
     static $lists = NULL;
@@ -305,11 +222,10 @@ MESSAGE
         'type' => PhD_Options::TYPE_FLAG,
         'default_value' => FALSE,
         'description' => <<<~MESSAGE
-PhD is capable of using either traditional <!-- Revision: --> and
-<!-- EN-Revision: --> tags or the <phd:revision/> tag to specify version
-control information for files and their translated counterparts. If the
-revision control flag is set, PhD will enforce revision matching between
-translated files and English files.
+PhD is capable of using the <phd:revision/> tag to specify version control
+information for files and their translated counterparts. If the revision
+control flag is set, PhD will enforce revision matching between translated
+files and English files.
 MESSAGE
         ,
         'details' => <<<~MESSAGE
@@ -321,6 +237,37 @@ an error or warning to users.
 MESSAGE
         ,
         'prompt' => 'Type "(Y)es" to enable revision control, or "(N)o" to disable it',
+        'invalid_message' => 'Please enter "(Y)es" or "(N)o".'
+    ),
+    
+    'compatibility_mode' => array(
+        'display_name' => 'Compatibility mode',
+        'type' => PhD_Options::TYPE_FLAG,
+        'default_value' => TRUE,
+        'description' => <<<~MESSAGE
+Turning on this flag causes PhD to modify its processing in several ways to
+make it compatible with documentation that was written for a legacy form of
+DocBook publishing, specifically XSL or DSSSL.
+MESSAGE
+        ,
+        'details' => <<<~MESSAGE
+The specific differences are:
+    - XML files without IDs are not rejected; an ID is autogenerated based on
+      its path relative to the XML root.
+    - XML files containing more than one root element are not rejected; the
+      extra elements are treated as separate sections.
+    - When revision control is on, <!-- Revision: --> and <!-- EN-Revision: -->
+      tags are automatically replaced with an equivelant <phd:revision/> tag.
+    - <!-- [name]: [value] --> tags are automatically replaced with equivelant
+      <phd:meta/> tags.
+    - Entity references and entity delcarations are replaced with equivelant
+      <phd:define/>, <phd:constant/> and <phd:include/> tags.
+WARNING: This extra processing entails an extra phase during the build, which
+will slow it down considerably. Please consider converting old documents to use
+PhD elements using convert.php.
+MESSAGE
+        ,
+        'prompt' => 'Type "(Y)es" to enable compatibility mode, or "(N)o" to disable it',
         'invalid_message' => 'Please enter "(Y)es" or "(N)o".'
     ),
     

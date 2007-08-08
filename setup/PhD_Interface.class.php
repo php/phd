@@ -10,15 +10,29 @@
     | world-wide-web at the following url:                                    |
     | http://phd.php.net/LICENSE                                              |
     +-------------------------------------------------------------------------+
-    | The commandline interface for setup.php to talk to the user.            |
+    | The interface for setup.php to talk to the user. Another version of     |
+    | this code could potentially implement a Web-based configuration.        |
     +-------------------------------------------------------------------------+
 */
 
-class PhD_CLI_Interface {
+function PhD_Error( $message ) {
+    print "ERROR: " . PhD_Output::paramString( 'Error', $message ) . "\n";
+    exit( 1 );
+}
+
+function PhD_Warning( $message ) {
+    print "WARNING: " . PhD_Output::paramString( 'Warning', $message ) ."\n";
+}
+
+class PhD_Interface {
     
     protected $quietMode = 0;
     
     public function __construct() {
+
+        if ( php_sapi_name() != 'cli' ) {
+            PhD_Error( 'ONLY_CLI_SUPPORTED' );
+        }
 
         // If we someday have a version of PHP with the nice long getopt() on all systems patch...
         if ( in_array( '-h', $_SERVER[ 'argv' ] ) || in_array( '--help', $_SERVER[ 'argv' ] ) ) {
@@ -122,10 +136,11 @@ class PhD_CLI_Interface {
             } while ( TRUE );
             
         } while ( TRUE );
+        
     }
     
     public function reportSuccess() {
-        print PhD_Output::paramString( 'Message', 'CONFIG_SAVED' );
+        print "\n" . PhD_Output::paramString( 'Message', 'CONFIG_SAVED' ) . "\n\n";
     }
     
     protected function getLine( $prompt = NULL ) {
