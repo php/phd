@@ -6,6 +6,7 @@ class PhDReader extends XMLReader {
     const XMLNS_XML   = "http://www.w3.org/XML/1998/namespace";
     const XMLNS_XLINK = "http://www.w3.org/1999/xlink";
     const XMLNS_PHD   = "http://www.php.net/ns/phd";
+    const XMLNS_DOCBOOK = "http://docbook.org/ns/docbook";
     const OPEN_CHUNK  = 0x01;
     const CLOSE_CHUNK = 0x02;
 
@@ -61,17 +62,19 @@ class PhDReader extends XMLReader {
         }
     }
 
-   public function notXPath($tag) {
-       $depth = $this->depth;
-       do {
-           if (isset($tag[$this->STACK[--$depth]])) {
-               $tag = $tag[$this->STACK[$depth]];
-           } else {
-               $tag = $tag[0];
-           }
-       } while (is_array($tag));
-       return $tag;
-   }
+    public function notXPath($tag, $depth = 0) {
+        if(!$depth) {
+            $depth = $this->depth;
+        }
+        do {
+            if (isset($tag[$this->STACK[--$depth]])) {
+                $tag = $tag[$this->STACK[$depth]];
+            } else {
+                $tag = $tag[0];
+            }
+        } while (is_array($tag));
+        return $tag;
+    }
 
     /* Seek to an ID within the file. */
     public function seek($id) {
@@ -93,6 +96,9 @@ class PhDReader extends XMLReader {
         return "";
     }
 
+    public function getParentTagName() {
+        return $this->STACK[$this->depth-1];
+    }
     public function read() {
         $this->isChunk = false;
         if(XMLReader::read()) {
@@ -140,16 +146,17 @@ class PhDReader extends XMLReader {
     }
     /* Get all attributes of current node */
     public function getAttributes() {
+        $attrs = array(PhDReader::XMLNS_DOCBOOK => array(), PhDReader::XMLNS_XML => array());
         if ($this->hasAttributes) {
-            $attrs = array();
             XMLReader::moveToFirstAttribute();
             do {
+                $k = $this->namespaceURI;
+                $attrs[!empty($k) ? $k : PhDReader::XMLNS_DOCBOOK][$this->localName] = $this->value;
                 $attrs[$this->name] = $this->value;
             } while (XMLReader::moveToNextAttribute());
             XMLReader::moveToElement();
-            return $attrs;
         }
-        return array();
+        return $attrs;
     }
 
 

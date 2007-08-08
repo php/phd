@@ -35,12 +35,16 @@ if ($err = extension_loaded("phnotify")) {
 	set_error_handler("err");
 }
 
-if(!file_exists("cache") || is_file("cache")) mkdir("cache") or die("Can't create the cache directory");
+if(!file_exists("php") || is_file("php")) mkdir("php") or die("Can't create the cache directory");
+if(!file_exists("html") || is_file("html")) mkdir("html") or die("Can't create the cache directory");
+
 require "include/PhDReader.class.php";
 require "include/PhDFormat.class.php";
 require "formats/xhtml.php";
-require "formats/php.php";
-require "themes/phpweb.php";
+require "themes/php/phpdotnet.php";
+require "themes/php/phpweb.php";
+require "themes/php/bightml.php";
+require "themes/php/chunkedhtml.php";
 require "mktoc.php";
 
 if ($err) {
@@ -50,42 +54,121 @@ if ($err) {
 		->show();
 }
 
+$themes = array();
 $reader = new PhDReader($manual);
-$format = new phpweb($reader, $IDs, $IDMap, $version);
+$format = new XHTMLPhDFormat($IDs, $IDMap, "php");
+$themes["phpweb"] = new phpweb($IDs, $IDMap, $version);
+$themes["bightml"] = new bightml($IDs, $IDMap, $version);
+$themes["chunkedhtml"] = new chunkedhtml($IDs, $IDMap, $version);
 
-$map = $format->getMap();
+$formatmap = $format->getMap();
+$maps = array();
+$textmaps = array();
+foreach($themes as $name => $theme) {
+    $maps[$name] = $theme->getMap();
+    $textmaps[$name] = $theme->getTextMap();
+}
+
 
 while($reader->read()) {
-    $type = $reader->nodeType;
-    $name = $reader->name;
+    $nodetype = $reader->nodeType;
+    $nodename = $reader->name;
 
-    switch($type) {
+    switch($nodetype) {
     case XMLReader::ELEMENT:
     case XMLReader::END_ELEMENT:
-        $open = $type == XMLReader::ELEMENT;
+        $open = $nodetype == XMLReader::ELEMENT;
 
-        $funcname = "format_$name";
-        if (isset($map[$name])) {
-            $tag = $map[$name];
-            if (is_array($tag)) {
-                $tag = $reader->notXPath($tag);
+        $funcname = "format_$nodename";
+        $skip = array();
+        foreach($maps as $theme => $map) {
+            if (isset($map[$nodename])) {
+                $tag = $map[$nodename];
+                if (is_array($tag)) {
+                    $tag = $reader->notXPath($tag);
+                }
+                if ($tag) {
+                    if (strncmp($tag, "format_", 7)) {
+                        $retval = $themes[$theme]->transformFromMap($open, $tag, $nodename);
+                        if ($retval !== false) {
+                            $themes[$theme]->appendData($retval, $reader->isChunk);
+                            $skip[] = $theme;
+                        }
+                        continue;
+                    }
+                    $funcname = $tag;
+                    $retval = $themes[$theme]->{$funcname}($open, $nodename, $reader->getAttributes());
+                    if ($retval !== false) {
+                        $themes[$theme]->appendData($retval, $reader->isChunk);
+                        $skip[] = $theme;
+                    }
+                    continue;
+                }
             }
-            if (strncmp($tag, "format_", 7)) {
-                $retval = $format->transformFromMap($open, $tag, $name);
-                break;
-            }
-            $funcname = $tag;
         }
 
-        $retval = $format->{$funcname}($open, $name);
+        if (count($skip) < count($themes)) {
+            if (isset($formatmap[$nodename])) {
+                $tag = $formatmap[$nodename];
+                if (is_array($tag)) {
+                    $tag = $reader->notXPath($tag);
+                }
+                if (strncmp($tag, "format_", 7)) {
+                    $retval = $format->transformFromMap($open, $tag, $nodename);
+                    foreach($themes as $name => $theme) {
+                        if (!in_array($name, $skip)) {
+                            $theme->appendData($retval, $reader->isChunk);
+                        }
+                    }
+                    break;
+                }
+                $funcname = $tag;
+                $retval = $format->{$funcname}($open, $nodename, $reader->getAttributes());
+                foreach($themes as $name => $theme) {
+                    if (!in_array($name, $skip)) {
+                        $theme->appendData($retval, $reader->isChunk);
+                    }
+                }
+            }
+        }
         break;
 
     case XMLReader::TEXT:
-        $retval = htmlspecialchars($reader->value, ENT_QUOTES);
+        $skip = array();
+        $value = $reader->value;
+        $tagname = $reader->getParentTagName();
+        foreach($textmaps as $theme => $map) {
+            if (isset($map[$tagname])) {
+                $tagname = $map[$tagname];
+                if (is_array($tagname)) {
+                    $tagname = $reader->notXPath($tagname, $reader->depth-1);
+                }
+
+                if ($tagname) {
+                    $retval = $themes[$theme]->{$tagname}($value, $tagname);
+                    if ($retval !== false) {
+                        $skip[] = $theme;
+                        $themes[$theme]->appendData($retval, false);
+                    }
+                }
+            }
+        }
+        if (count($skip) < count($themes)) {
+            $retval = htmlspecialchars($value, ENT_QUOTES);
+            foreach ($themes as $name => $theme) {
+                if (!in_array($name, $skip)) {
+                    $theme->appendData($retval, false);
+                }
+            }
+        }
         break;
 
     case XMLReader::CDATA:
-        $retval = $format->CDATA($reader->value);
+        $value = $reader->value;
+        $retval = $format->CDATA($value);
+        foreach($themes as $name => $theme) {
+            $theme->appendData($retval, false);
+        }
         break;
 
     case XMLReader::COMMENT:
@@ -96,13 +179,13 @@ while($reader->read()) {
         continue 2;
 
     default:
-        trigger_error("Don't know how to handle {$name} {$type}", E_USER_ERROR);
+        trigger_error("Don't know how to handle {$nodename} {$nodetype}", E_USER_ERROR);
         return;
     }
-    $format->appendData($retval, $reader->isChunk);
 }
 
-copy("cache/manual.php", "cache/index.php");
+copy("php/manual.php", "php/index.php");
+copy("html/manual.html", "html/index.html");
 $reader->close();
 
 if ($err) {

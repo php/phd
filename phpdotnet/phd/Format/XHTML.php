@@ -2,7 +2,7 @@
 /*  $Id$ */
 
 class XHTMLPhDFormat extends PhDFormat {
-    protected $map = array( /* {{{ */
+    protected $elementmap = array( /* {{{ */
         'article'               => 'format_container_chunk',
         'author'                => 'div',
         'authorgroup'           => 'div', /* DocBook-xsl prints out "by" (i.e. "PHP Manual by ...") */
@@ -32,6 +32,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'code'                  => 'code',
         'collab'                => 'span',
         'collabname'            => 'span',
+        'colspec'               => 'format_colspec',
         'command'               => 'span',
         'computeroutput'        => 'span',
         'constant'              => 'format_constant',
@@ -67,7 +68,9 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'literal'               => 'i',
         'mediaobject'           => 'div',
-        'methodparam'           => 'span',
+        'methodparam'           => 'format_methodparam',
+        'methodsynopsis'        => 'format_methodsynopsis',
+        'methodname'            => 'format_methodname',
         'member'                => 'li',
         'note'                  => 'format_note',
         'option'                => 'span',    
@@ -76,7 +79,10 @@ class XHTMLPhDFormat extends PhDFormat {
             /* DEFAULT */          'p',
             'example'           => 'format_example_content',
         ),
-        'parameter'             => 'tt',
+        'parameter'             => array(
+            /* DEFAULT */          'format_parameter',
+            'methodparam'       => 'format_methodparam_parameter',
+        ),
         'part'                  => 'format_container_chunk',
         'partintro'             => 'div',
         'personname'            => 'span',
@@ -88,6 +94,9 @@ class XHTMLPhDFormat extends PhDFormat {
         'proptype'              => 'span',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
+        'refsect1'              => 'format_refsect1',
+        'refname'               => 'h1',
+        'row'                   => 'format_row',
         'screen'                => 'format_screen',
         'sect1'                 => 'format_chunk',
         'sect2'                 => 'format_chunk',
@@ -110,6 +119,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'term'                  => 'span',
         'tfoot'                 => 'format_th',
         'thead'                 => 'format_th',
+        'tgroup'                => 'format_tgroup',
         'tip'                   => 'div',
         'title'                 => array(
             /* DEFAULT */          'h1',
@@ -123,22 +133,19 @@ class XHTMLPhDFormat extends PhDFormat {
             'sect3'             => 'h4',
             'table'             => 'format_bold_paragraph',
         ),
-        'type'                  => 'format_type',
+        'type'                  => 'span',
         'userinput'             => 'format_userinput',
         'variablelist'          => 'format_variablelist',
         'varlistentry'          => 'format_varlistentry',
         'varname'               => 'var',
         'warning'               => 'div',
-        'xref'                  => 'format_link',
         'year'                  => 'span',
     ); /* }}} */
 
-    protected $CURRENT_ID  = "";
-    protected $ext         = "html";
     protected $role        = false;
     
-    public function __construct(PhDReader $reader, array $IDs, array $IDMap, $ext = "html") {
-        parent::__construct($reader, $IDs, $IDMap, $ext);
+    public function __construct(array $IDs, array $IDMap) {
+        parent::__construct($IDs, $IDMap);
     }
     /* Overwrite PhDFormat::readContent() to convert special HTML chars */
     public function readContent($content = null) {
@@ -167,141 +174,123 @@ class XHTMLPhDFormat extends PhDFormat {
         }
     }
 
-    public function format_container_chunk($open, $name) {
-        $this->CURRENT_ID = $id = PhDFormat::getID();
+    public function format_container_chunk($open, $name, $attrs) {
         if ($open) {
-            return sprintf('<div id="%s" class="%s">', $id, $name);
+            return sprintf('<div id="%s" class="%s">', $attrs[PhDReader::XMLNS_XML]["id"], $name);
         }
         return "</div>";
     }
-    public function format_chunk($open, $name) {
-        $this->CURRENT_ID = $id = PhDFormat::getID();
+    public function format_chunk($open, $name, $attrs) {
         if ($open) {
-            return sprintf('<div id="%s" class="%s">', $id, $name);
+            if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+                return sprintf('<div id="%s" class="%s">', $attrs[PhDReader::XMLNS_XML]["id"], $name);
+            }
+            return sprintf('<div class="%s">', $name);
         }
         return "</div>";
     }
-    public function format_function($open, $name) {
-        return sprintf('<a href="function.%s.html">%1$s</a>', $this->readContent());
-    }
-    public function format_refsect1($open, $name) {
+    public function format_refsect1($open, $name, $attrs) {
         if ($open) {
-            return sprintf('<div class="refsect %s">', PhDFormat::readAttribute("role"));
+            if(!isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                $attrs[PhDReader::XMLNS_DOCBOOK] = "unkown";
+            }
+            return sprintf('<div class="refsect %s">', $attrs[PhDReader::XMLNS_DOCBOOK]["role"]);
         }
         return "</div>\n";
     }
-    public function format_link($open, $name) {
-        $content = $fragment = "";
-        $class = $name;
-        if($linkto = PhDFormat::readAttribute("linkend")) {
-            $id = $href = PhDFormat::getFilename($linkto);
-            if ($id != $linkto) {
-                $fragment = "#$linkto";
-            }
-            $href .= ".".$this->ext;
-        } elseif($href = PhDFormat::readAttributeNs("href", PhDReader::XMLNS_XLINK)) {
-            $content = "&raquo; ";
-            $class .= " external";
+
+    public function format_methodsynopsis($open, $name, $attrs) {
+        if ($open) {
+            $this->params = array("count" => 0, "opt" => 0, "content" => "");
+            return '<div class="methodsynopsis">';
         }
-        $content .= $name == "xref" ? PhDFormat::getDescription($id, false) : $this->readContent($name);
-        return sprintf('<a href="%s%s" class="%s">%s</a>', $href, $fragment, $class, $content);
-    }
-    public function format_methodsynopsis($open, $root) {
-        /* We read this element to END_ELEMENT so $open is useless */
-        $content = '<div class="methodsynopsis">';
-
-        $opt = $count = 0;
-        while($child = PhDFormat::getNextChild($root)) {
-            if ($child["type"] == XMLReader::END_ELEMENT) {
-                $content .= "</span>\n";
-                continue;
-            }
-            $name = $child["name"];
-            switch($name) {
-            case "parameter":
-                $content .= sprintf('<span class="%s">%s$%s</span>', $name, $this->readAttribute("role") == "reference" ? "&" : "", $this->readContent($name));
-                break;
-            case "type":
-                $content .= sprintf('<span class="%s">%s</span> ', $name, $this->readContent($name));
-                break;
-            case "methodname":
-                $content .= sprintf('<span class="%s"><b>%s</b></span>', $name, $this->readContent($name));
-                break;
-
-            case "methodparam":
-                if ($count == 0) {
-                    $content .= " (";
-                }
-                if ($this->readAttribute("choice") == "opt") {
-                    $opt++;
-                    $content .= "[";
-                } else if($opt) {
-                    $content .= str_repeat("]", $opt);
-                    $opt = 0;
-                }
-                if ($count) {
-                    $content .= ",";
-                }
-                $content .= ' <span class="methodparam">';
-                ++$count;
-
-                break;
-            }
-        }
-        if ($opt) {
-            $content .= str_repeat("]", $opt);
+        $content = "";
+        if ($this->params["opt"]) {
+            $content = str_repeat("]", $this->params["opt"]);
         }
         $content .= ")";
 
-        $content .= "</div>";
+        $content .= "</div>\n";
+
         return $content;
     }
-    public function format_refnamediv($open, $root) {
-        while ($child = PhDFormat::getNextChild($root)) {
-            $name = $child["name"];
-            switch($name) {
-            case "refname":
-                $refname = $this->readContent($name);
-                break;
-            case "refpurpose":
-                $refpurpose = $this->readContent($name);
-                break;
+    public function format_methodparam_parameter($open, $name, $attrs) {
+        if ($open) {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                return ' <tt class="parameter reference">&$';
             }
+            return ' <tt class="parameter">$';
         }
-        
-        return sprintf('<div class="refnamediv"><h1 class="refname">%s</h1><p class="refpurpose">%1$s — %s</p></div>', $refname, $refpurpose);
+        return "</tt>\n";
+
     }
-    public function format_variablelist($open, $name) {
+    public function format_parameter($open, $name, $attrs) {
+        if ($open) {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                return '<i><tt class="parameter reference">&';
+            }
+            return '<i><tt class="parameter">';
+        }
+        return "</tt></i>\n";
+    }
+
+    public function format_methodparam($open, $name, $attrs) {
+        if ($open) {
+            $content = '';
+                if ($this->params["count"] == 0) {
+                    $content .= " (";
+                }
+                if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["choice"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["choice"] == "opt") {
+                    $this->params["opt"]++;
+                    $content .= "[";
+                } else if($this->params["opt"]) {
+                    $content .= str_repeat("]", $this->params["opt"]);
+                    $this->params["opt"] = 0;
+                }
+                if ($this->params["count"]) {
+                    $content .= ",";
+                }
+                $content .= ' <span class="methodparam">';
+                ++$this->params["count"];
+                return $content;
+        }
+        return "</span>";
+    }
+    public function format_methodname($open, $name, $attr) {
+        if ($open) {
+            return ' <span class="methodname"><b>';
+        }
+        return '</b></span>';
+    }
+
+    public function format_variablelist($open, $name, $attrs) {
         if ($open) {
             return "<dl>\n";
         }
         return "</dl>\n";
     }
-    public function format_varlistentry($open, $name) {
+    public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
-            $id = PhDFormat::getID();
-            if ($id) {
-                return sprintf('<dt id="%s">', $id);
-            }
-            return "<dt>\n";
+            return isset($attrs[PhDReader::XMLNS_XML]["id"]) ? sprintf('<dt id="%s">', $attrs[PhDReader::XMLNS_XML]["id"]) : "<dt>\n";
         }
         return "</dt>\n";
     }
-    public function format_varlistentry_listitem($open, $name) {
+    public function format_varlistentry_listitem($open, $name, $attrs) {
         if ($open) {
             return "<dd>\n";
         }
         return "</dd>\n";
     }
-    public function format_userinput($open, $name) {
+    public function format_userinput($open, $name, $attrs) {
         if ($open) {
             return sprintf('<strong class="%s"><code>', $name);
         }
         return "</code></strong>\n";
     }
-    public function format_systemitem($open, $name) {
+    public function format_systemitem($open, $name, $attrs) {
         if ($open) {
-            switch($this->readAttribute("role")) {
+            $val = isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) ? $attrs[PhDReader::XMLNS_DOCBOOK]["role"] : null;
+            switch($val) {
             case "directive":
             /* FIXME: Different roles should probably be handled differently */
             default:
@@ -310,83 +299,50 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</code>\n";
     }
-    public function format_type($open, $name) {
-        $type = $this->readContent($name);
-        $t = strtolower($type);
-        $href = $fragment = "";
-
-        switch($t) {
-        case "bool":
-            $href = "language.types.boolean";
-            break;
-        case "int":
-            $href = "language.types.integer";
-            break;
-        case "double":
-            $href = "language.types.float";
-            break;
-        case "boolean":
-        case "integer":
-        case "float":
-        case "string":
-        case "array":
-        case "object":
-        case "resource":
-        case "null":
-            $href = "language.types.$t";
-            break;
-        case "mixed":
-        case "number":
-        case "callback":
-            $href = "language.pseudo-types";
-            $fragment = "language.types.$t";
-            break;
-        }
-        if ($href) {
-            return sprintf('<a href="%s.%s%s" class="%s %s">%5$s</a>', $href, $this->ext, ($fragment ? "#$fragment" : ""), $name, $type);
-        }
-        return sprintf('<span class="%s %s">%2$s</span>', $name, $type);
-    }
-    public function format_example_content($open, $name) {
+    public function format_example_content($open, $name, $attrs) {
         if ($open) {
             return '<div class="example-contents"><p>';
         }
         return "</p></div>";
     }
-    public function format_programlisting($open, $name) {
+    public function format_programlisting($open, $name, $attrs) {
         if ($open) {
-            $this->role = PhDFormat::readAttribute("role");
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+            } else {
+                $this->role = false;
+            }
 
             return '<div class="example-contents">';
         }
         $this->role = false;
         return "</div>\n";
     }
-    public function format_screen($open, $name) {
+    public function format_screen($open, $name, $attrs) {
         if ($open) {
             return '<div class="example-contents"><pre>';
         }
         return '</pre></div>';
     }
-    public function format_constant($open, $name) {
+    public function format_constant($open, $name, $attrs) {
         if ($open) {
             return "<b><tt>";
         }
         return "</tt></b>";
     }
-    public function format_note($open, $name) {
+    public function format_note($open, $name, $attrs) {
         if ($open) {
             return '<blockquote><p>';
         }
         return "</p></blockquote>";
     }
-    public function format_note_title($open, $name) {
+    public function format_note_title($open, $name, $attrs) {
         if ($open) {
             return '<b>';
         }
         return '</b>';
     }
-    public function format_bold_paragraph($open, $name) {
+    public function format_bold_paragraph($open, $name, $attrs) {
         if ($open) {
             return "<p><b>";
         }
@@ -394,15 +350,15 @@ class XHTMLPhDFormat extends PhDFormat {
     }
 
 
-    public function format_table($open, $name) {
+    public function format_table($open, $name, $attrs) {
         if ($open) {
             return '<table border="5">';
         }
         return "</table>\n";
     }
-    public function format_tgroup($open, $name) {
+    public function format_tgroup($open, $name, $attrs) {
         if ($open) {
-            $attrs = PhDFormat::tgroup();
+            PhDFormat::tgroup($attrs[PhDReader::XMLNS_DOCBOOK]);
             return "<colgroup>\n";
         }
         return "</colgroup>\n";
@@ -423,58 +379,57 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return $retval;
     }
-    public function format_colspec($open, $name) {
+    public function format_colspec($open, $name, $attrs) {
         if ($open) {
-            $attrs = self::parse_table_entry_attributes(PhDFormat::colspec(PhDFormat::getAttributes()));
+            $str = self::parse_table_entry_attributes(PhDFormat::colspec($attrs[PhDReader::XMLNS_DOCBOOK]));
 
-            return sprintf('<col %s />', $attrs);
+            return sprintf('<col %s />', $str);
         }
         /* noop */
     }
-    public function format_th($open, $name) {
+    public function format_th($open, $name, $attrs) {
         if ($open) {
-            $valign = PhDFormat::valign();
+            $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
             return sprintf('<%s valign="%s">', $name, $valign);
         }
         return "</$name>\n";
     }
-    public function format_tbody($open, $name) {
+    public function format_tbody($open, $name, $attrs) {
         if ($open) {
-            $valign = PhDFormat::valign();
+            $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
             return sprintf('<tbody valign="%s">', $valign);
         }
         return "</tbody>";
     }
-    public function format_row($open, $name) {
+    public function format_row($open, $name, $attrs) {
         if ($open) {
             PhDFormat::initRow();
-            $valign = PhDFormat::valign();
+            $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
             return sprintf('<tr valign="%s">', $valign);
         }
         return "</tr>\n";
     }
-    public function format_th_entry($open, $name) {
+    public function format_th_entry($open, $name, $attrs = array()) {
         if ($open) {
-            $attrs = PhDFormat::getAttributes();
-            $colspan = PhDFormat::colspan($attrs);
+            $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
             return sprintf('<th colspan="%d">', $colspan);
         }
         return '</th>';
     }
-    public function format_entry($open, $name) {
+    public function format_entry($open, $name, $attrs) {
         if ($open) {
-            $attrs = PhDFormat::getColspec(PhDFormat::getAttributes());
+            $dbattrs = PhDFormat::getColspec($attrs[PhDReader::XMLNS_DOCBOOK]);
 
             $retval = "";
-            if (isset($attrs["colname"])) {
-                for($i=PhDFormat::getEntryOffset($attrs); $i>0; --$i) {
+            if (isset($dbattrs["colname"])) {
+                for($i=PhDFormat::getEntryOffset($dbattrs); $i>0; --$i) {
                     $retval .= '<td class="empty">&nbsp;</td>';
                 }
             }
 
-            $colspan = PhDFormat::colspan($attrs);
-            $rowspan = PhDFormat::rowspan($attrs);
-            $moreattrs = self::parse_table_entry_attributes($attrs);
+            $colspan = PhDFormat::colspan($dbattrs);
+            $rowspan = PhDFormat::rowspan($dbattrs);
+            $moreattrs = self::parse_table_entry_attributes($dbattrs);
             return sprintf('%s<td colspan="%d" rowspan="%d" %s>', $retval, $colspan, $rowspan, $moreattrs);
         }
         return "</td>";
