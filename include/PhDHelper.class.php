@@ -25,7 +25,7 @@ class PhDHelper {
     final public function getParent($id) {
         return $this->IDMap[$id]["parent"];
     }
-    final public function getMap() {
+    final public function getElementMap() {
         return $this->elementmap;
     }
     final public function getTextMap() {

@@ -55,7 +55,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
 
     require "./formats/$output_format.php";
     $format = new $classname($IDs, $IDMap);
-    $formatmap = $format->getMap();
+    $formatmap = $format->getElementMap();
 
     $themes = $elementmaps = $textmaps = array();
 foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
@@ -78,7 +78,7 @@ foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
             default:
                 $themes[$themename] = new $themename($IDs, $IDMap);
         }
-        $elementmaps[$themename] = $themes[$themename]->getMap();
+        $elementmaps[$themename] = $themes[$themename]->getElementMap();
         $textmaps[$themename]    = $themes[$themename]->getTextMap();
     }
 }
