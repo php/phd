@@ -14,7 +14,7 @@
     +-------------------------------------------------------------------------+
 */
 
-require_once 'Template_file.class.php';
+require_once 'Template_File.class.php';
 
 class PhD_Configurator {
     

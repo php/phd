@@ -37,6 +37,27 @@ function OPTIONS_META_scan_script_dir( $name ) {
     return $lists[ $name ];
 }
 
+function OPTIONS_META_scan_dirs_dir( $name ) {
+    static $lists = NULL;
+
+    if ( is_null( $lists ) ) {
+        $lists = array();
+    }
+    if ( !isset( $lists[ $name ] ) ) {
+        $path = dirname( __FILE__ ) . "/../{$name}";
+        if ( ( $files = @scandir( $path ) ) === FALSE ) {
+            PhD_Error( strtoupper( $name ) . '_UNREADABLE' );
+        }
+        $folderList = array_filter( $files,
+            create_function( '$v', 'return is_dir( "'.$path.'/{$v}" ) && !in_array( $v, array( ".", "..", ".svn", "CVS" ) );' ) );
+        if ( count( $folderList ) == 0 ) {
+            PhD_Error( strtoupper( $name ) . '_UNAVAILABLE' );
+        }
+        $lists[ $name ] = $folderList;
+    }
+    return $lists[ $name ];
+}    
+
 function OPTIONS_META_get_languages() {
     global $OPTIONS_DATA, $OPTIONS;
     static $languages = NULL;
@@ -105,7 +126,7 @@ administrator for the site to function.
 MESSAGE
         ,
         'value_list_func' => create_function( '', <<<~FUNCTION
-return OPTIONS_META_scan_script_dir( 'themes' );
+return array_merge( array( 'default' ), OPTIONS_META_scan_dirs_dir( 'themes' ) );
 FUNCTION
         ),
         'prompt' => 'Choose a theme',
