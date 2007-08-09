@@ -1,7 +1,7 @@
 <?php
 /*  $Id$ */
 
-$r = new PhDReader("/home/bjori/php/doc/.manual.xml");
+$r = new PhDReader($OPTIONS["xml_root"]."/.manual.xml");
 $FILENAMES = $IDs = $IDMap = array();
 $CURRENT_FILENAME = $LAST_CHUNK = "";
 $PARENTS = array(-1 => "");
