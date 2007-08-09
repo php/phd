@@ -39,6 +39,7 @@ if(!file_exists("php") || is_file("php")) mkdir("php") or die("Can't create the 
 if(!file_exists("html") || is_file("html")) mkdir("html") or die("Can't create the cache directory");
 
 require "include/PhDReader.class.php";
+require "include/PhDHelper.class.php";
 require "include/PhDFormat.class.php";
 require "formats/xhtml.php";
 require "themes/php/phpdotnet.php";
