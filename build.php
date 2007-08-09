@@ -1,17 +1,6 @@
 <?php
 /*  $Id$ */
 
-if (isset($argc) && $argc == 3) {
-    $manual = $argv[1];
-    $version = $argv[2];
-} else if (file_exists("./config.php")) {
-    include "./config.php";
-}
-if (!file_exists($manual) || !file_exists($version)) {
-    die ("Missing path/to .manual.xml and/or version.xml");
-}
-
-
 function err($no, $str, $file, $line) {
 	global $notify;
 	if (strpos($str, "No mapper") !== false) {
@@ -35,42 +24,69 @@ if ($err = extension_loaded("phnotify")) {
 	set_error_handler("err");
 }
 
+
+(@include "./config.php")
+    && isset($OPTIONS)
+    && is_array($OPTIONS)
+    && isset($OPTIONS["output_format"], $OPTIONS["output_theme"])
+    && is_array($OPTIONS["output_theme"])
+    or die("Invalid configuration/file not found.\nYou need to run setup/setup.php first\n");
+require "./include/PhDReader.class.php";
+require "./include/PhDHelper.class.php";
+require "./include/PhDFormat.class.php";
+if ($OPTIONS["index"]) {
+    require "./mktoc.php";
+    if ($err) {
+        $mktoc = microtime(true);
+        $notify
+            ->update("mktoc finished", sprintf("mktoc ran for <b>%d</b> sec", $mktoc-$start))
+            ->show();
+    }
+} else {
+    /* FIXME: Load from sqlite db? */
+}
+
+foreach($OPTIONS["output_format"] as $output_format) {
+    switch($output_format) {
+    case "xhtml":
+        $classname = "XHTMLPhDFormat";
+        break;
+    }
+
+    require "./formats/$output_format.php";
+    $format = new $classname($IDs, $IDMap);
+    $formatmap = $format->getMap();
+
+    $themes = $elementmaps = $textmaps = array();
+foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
+    is_dir("./themes/$theme") or die("Can't find the '$theme' theme");
+    
+    /* Maybe other themes will need additional includes? */
+    switch($theme) {
+    case "php":
+        require "./themes/php/phpdotnet.php";
+        break;
+    }
+
+    foreach($array as $themename) {
+        $themename = basename($themename);
+        require "./themes/$theme/$themename.php";
+        switch($theme) {
+            case "php":
+                $themes[$themename] = new $themename($IDs, $IDMap, $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml");
+                break;
+            default:
+                $themes[$themename] = new $themename($IDs, $IDMap);
+        }
+        $elementmaps[$themename] = $themes[$themename]->getMap();
+        $textmaps[$themename]    = $themes[$themename]->getTextMap();
+    }
+}
+
 if(!file_exists("php") || is_file("php")) mkdir("php") or die("Can't create the cache directory");
 if(!file_exists("html") || is_file("html")) mkdir("html") or die("Can't create the cache directory");
 
-require "include/PhDReader.class.php";
-require "include/PhDHelper.class.php";
-require "include/PhDFormat.class.php";
-require "formats/xhtml.php";
-require "themes/php/phpdotnet.php";
-require "themes/php/phpweb.php";
-require "themes/php/bightml.php";
-require "themes/php/chunkedhtml.php";
-require "mktoc.php";
-
-if ($err) {
-	$mktoc = microtime(true);
-	$notify
-		->update("mktoc finished", sprintf("mktoc ran for <b>%d</b> sec", $mktoc-$start))
-		->show();
-}
-
-$themes = array();
-$reader = new PhDReader($manual);
-$format = new XHTMLPhDFormat($IDs, $IDMap, "php");
-$themes["phpweb"] = new phpweb($IDs, $IDMap, $version);
-$themes["bightml"] = new bightml($IDs, $IDMap, $version);
-$themes["chunkedhtml"] = new chunkedhtml($IDs, $IDMap, $version);
-
-$formatmap = $format->getMap();
-$maps = array();
-$textmaps = array();
-foreach($themes as $name => $theme) {
-    $maps[$name] = $theme->getMap();
-    $textmaps[$name] = $theme->getTextMap();
-}
-
-
+$reader = new PhDReader($OPTIONS["xml_root"] . "/.manual.xml");
 while($reader->read()) {
     $nodetype = $reader->nodeType;
     $nodename = $reader->name;
@@ -82,7 +98,7 @@ while($reader->read()) {
 
         $funcname = "format_$nodename";
         $skip = array();
-        foreach($maps as $theme => $map) {
+        foreach($elementmaps as $theme => $map) {
             if (isset($map[$nodename])) {
                 $tag = $map[$nodename];
                 if (is_array($tag)) {
@@ -197,6 +213,7 @@ if ($err) {
 				sprintf("mktoc build: <b>%d</b> sec\nPhD build   : <b>%d</b> sec\n--\nTotal time: <b>%d</b> seconds\n", $mktoc-$start, $end-$mktoc, $end-$start))
 		->show();
 }
+} // foreach($OPTIONS["output_thtemes"])
 /*
 * vim600: sw=4 ts=4 fdm=syntax syntax=php et
 * vim<600: sw=4 ts=4
