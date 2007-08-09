@@ -6,6 +6,10 @@ class phpweb extends phpdotnet implements PhDTheme {
     protected $writeit = false;
 
 
+    public function __construct($IDs, $IDMap, $filename, $ext = "php", $chunked = true) {
+        parent::__construct($IDs, $IDMap, $filename, $ext, $chunked);
+    	if(!file_exists("php") || is_file("php")) mkdir("php") or die("Can't create the cache directory");
+    }
     public function writeChunk($id, $stream) {
         rewind($stream);
         file_put_contents($this->ext."/$id.".$this->ext, $this->header($id));
@@ -61,6 +65,9 @@ manual_header();
     }
     public function footer($id) {
         return "<?php manual_footer(); ?>";
+    }
+    public function __destruct() {
+        copy("php/manual.php", "php/index.php");
     }
 }
 

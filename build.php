@@ -85,9 +85,6 @@ foreach($OPTIONS["output_format"] as $output_format) {
         }
     }
 
-    if(!file_exists("php") || is_file("php")) mkdir("php") or die("Can't create the cache directory");
-    if(!file_exists("html") || is_file("html")) mkdir("html") or die("Can't create the cache directory");
-
     $reader = new PhDReader($OPTIONS["xml_root"] . "/.manual.xml");
     while($reader->read()) {
         $nodetype = $reader->nodeType;
@@ -203,8 +200,6 @@ foreach($OPTIONS["output_format"] as $output_format) {
         }
     }
 
-    copy("php/manual.php", "php/index.php");
-    copy("html/manual.html", "html/index.html");
     $reader->close();
 
     if ($err) {
