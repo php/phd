@@ -39,8 +39,7 @@ class phpweb extends phpdotnet implements PhDTheme {
     public function header($id) {
         $toc = "";
         $parent = PhDHelper::getParent($id);
-        foreach(PhDHelper::getContainer($parent) as $k => $v) {
-            if ($k == "parent") { continue; }
+        foreach(PhDHelper::getChildren($parent) as $k => $v) {
             $toc .= sprintf("array('%s.php', '%s'),\n", $k, addslashes(PhDHelper::getDescription($k, false)));
         }
 

@@ -17,7 +17,7 @@ class PhDHelper {
             ($this->IDs[$id]["ldesc"] ? $this->IDs[$id]["ldesc"] : $this->IDs[$id]["sdesc"]) :
             ($this->IDs[$id]["sdesc"] ? $this->IDs[$id]["sdesc"] : $this->IDs[$id]["ldesc"]);
     }
-    final public function getContainer($id) {
+    final public function getChildren($id) {
         return $this->IDs[$id]["children"];
     }
     final public function getParent($id) {

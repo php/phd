@@ -159,18 +159,16 @@ class phpdotnet extends PhDHelper {
         if ($open) {
             return "<div>";
         }
-        $chunks = PhDHelper::getContainer($id);
+        $chunks = PhDHelper::getChildren($id);
         $content = "";
         if (count($chunks) > 1) {
             $content = '<ul class="chunklist chunklist_'.$name.'">';
             if ($name == "reference") {
                 foreach($chunks as $chunkid => $junk) {
-                    if ($chunkid == "parent") { continue; }
                     $content .= sprintf('<li><a href="%s%s.%s">%s</a> — %s</li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, false), PhDHelper::getDescription($chunkid, true));
                 }
             } else {
                 foreach($chunks as $chunkid => $junk) {
-                    if ($chunkid == "parent") { continue; }
                     $content .= sprintf('<li><a href="%s%s.%s">%s</a></li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, true));
                 }
             }
