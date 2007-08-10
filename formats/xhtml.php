@@ -144,8 +144,8 @@ class XHTMLPhDFormat extends PhDFormat {
 
     protected $role        = false;
     
-    public function __construct(array $IDs, array $IDMap) {
-        parent::__construct($IDs, $IDMap);
+    public function __construct(array $IDs) {
+        parent::__construct($IDs);
     }
     /* Overwrite PhDFormat::readContent() to convert special HTML chars */
     public function readContent($content = null) {

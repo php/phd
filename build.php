@@ -38,6 +38,7 @@ require "./include/PhDFormat.class.php";
 
 if ($OPTIONS["index"]) {
     require "./mktoc.php";
+
     if ($err) {
         $mktoc = microtime(true);
         $notify
@@ -56,7 +57,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
     }
 
     require "./formats/$output_format.php";
-    $format = new $classname($IDs, $IDMap);
+    $format = new $classname($IDs);
     $formatmap = $format->getElementMap();
 
     $themes = $elementmaps = $textmaps = array();
@@ -75,10 +76,10 @@ foreach($OPTIONS["output_format"] as $output_format) {
             require "./themes/$theme/$themename.php";
             switch($theme) {
                 case "php":
-                    $themes[$themename] = new $themename($IDs, $IDMap, $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml");
+                    $themes[$themename] = new $themename($IDs, $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml");
                     break;
                 default:
-                    $themes[$themename] = new $themename($IDs, $IDMap);
+                    $themes[$themename] = new $themename($IDs);
             }
             $elementmaps[$themename] = $themes[$themename]->getElementMap();
             $textmaps[$themename]    = $themes[$themename]->getTextMap();

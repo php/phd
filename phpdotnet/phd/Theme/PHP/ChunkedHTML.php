@@ -1,7 +1,7 @@
 <?php
 class chunkedhtml extends phpweb {
-    public function __construct(array $IDs, array $IDMap, $filename, $ext = "html") {
-        phpdotnet::__construct($IDs, $IDMap, $filename, $ext, true);
+    public function __construct(array $IDs, $filename, $ext = "html") {
+        phpdotnet::__construct($IDs, $filename, $ext, true);
         if(!file_exists("html") || is_file("html")) mkdir("html") or die("Can't create the cache directory");
     }
     public function header($id) {

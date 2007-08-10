@@ -1,13 +1,11 @@
 <?php
 /*  $Id$ */
-
 $r = new PhDReader($OPTIONS["xml_root"]."/.manual.xml");
-$FILENAMES = $IDs = $IDMap = array();
+$FILENAMES = array();
 $CURRENT_FILENAME = $LAST_CHUNK = "";
-$PARENTS = array(-1 => "");
+$PARENTS = array(-1 => "ROOT");
 $lastid = 0;
 
-/* someone really needs to fix this messed up logic */
 while($r->read()) {
     if (!($id = $r->getID())) {
         $name = $r->name;
@@ -30,43 +28,40 @@ while($r->read()) {
                 continue 2;
             }
         }
+        
         continue;
     }
     switch($r->isChunk) {
     case PhDReader::OPEN_CHUNK:
-        $FILENAMES[] = $id;
-        $CURRENT_FILENAME = $id;
-        $PARENTS[$r->depth] = $id;
-
-        $IDMap[$id] = array("parent" => $PARENTS[$r->depth-1]);
-        
+        $CURRENT_FILENAME = $FILENAMES[] = $PARENTS[$r->depth] = $id;
         break;
 
     case PhDReader::CLOSE_CHUNK:
         $LAST_CHUNK = array_pop($FILENAMES);
         $CURRENT_FILENAME = end($FILENAMES);
 
-        $IDMap[$CURRENT_FILENAME][$id] =& $IDMap[$LAST_CHUNK];
+        $IDs[$CURRENT_FILENAME]["children"][$LAST_CHUNK] = $IDs[$LAST_CHUNK];
+
+
         continue 2;
     }
 
     if ($r->nodeType != XMLReader::ELEMENT) {
         continue;
     }
- 
-    $IDs[$id] = array("filename" => $CURRENT_FILENAME, "sdesc" => null, "ldesc" => null);
+
+    $IDs[$id] = array(
+        "filename" => $CURRENT_FILENAME,
+        "parent"   => $r->isChunk ? $PARENTS[$r->depth-1] : end($FILENAMES),
+        "sdesc"    => null,
+        "ldesc"    => null,
+        "children" => array(),
+    );
+
     $lastid = $id;
+
 }
-#print_r($IDs);
-#var_dump($IDs["funcref"]);
-/*
-foreach($IDMap[$IDMap["function.strpos"]["parent"]] as $id => $junk) {
-    if ($id == "parent") {
-        continue;
-    }
-    printf("%s (%s): %s\n", $id, $IDs[$id]["sdesc"], $IDs[$id]["ldesc"]);
-}
-*/
+
 /*
 * vim600: sw=4 ts=4 fdm=syntax syntax=php et
 * vim<600: sw=4 ts=4

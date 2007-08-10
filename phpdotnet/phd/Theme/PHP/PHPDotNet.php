@@ -66,8 +66,8 @@ class phpdotnet extends PhDHelper {
     protected $CURRENT_ID = "";
     protected $refname;
 
-    public function __construct(array $IDs, array $IDMap, $filename, $ext = "php", $chunked = true) {
-        parent::__construct($IDs, $IDMap, $ext);
+    public function __construct(array $IDs, $filename, $ext = "php", $chunked = true) {
+        parent::__construct($IDs, $ext);
         $this->ext = $ext;
         $this->versions = self::generateVersionInfo($filename);
         $this->chunked = $chunked;

@@ -2,8 +2,8 @@
 /*  $Id$ */
 
 class bightml extends phpdotnet implements PhDTheme {
-    public function __construct(array $IDs, array $IDMap, $filename, $ext = "html") {
-        phpdotnet::__construct($IDs, $IDMap, $filename, $ext, false);
+    public function __construct(array $IDs, $filename, $ext = "html") {
+        parent::__construct($IDs, $filename, $ext, false);
         $this->stream = fopen("bightml.html", "w");
         self::header();
     }
