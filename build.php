@@ -171,7 +171,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 }
             }
             if (count($skip) < count($themes)) {
-                $retval = htmlspecialchars($value, ENT_QUOTES);
+                $retval = $format->TEXT($value);
                 foreach ($themes as $name => $theme) {
                     if (!in_array($name, $skip)) {
                         $theme->appendData($retval, false);

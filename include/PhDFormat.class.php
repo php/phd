@@ -7,6 +7,7 @@ abstract class PhDFormat extends PhDHelper {
     /* abstract functions */
     abstract public function transformFromMap($open, $tag, $name);
     abstract public function CDATA($data);
+    abstract public function TEXT($data);
     abstract public function __call($func, $args);
 
     /* Table helper functions */

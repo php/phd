@@ -147,10 +147,6 @@ class XHTMLPhDFormat extends PhDFormat {
     public function __construct(array $IDs) {
         parent::__construct($IDs);
     }
-    /* Overwrite PhDFormat::readContent() to convert special HTML chars */
-    public function readContent($content = null) {
-        return htmlspecialchars(PhDFormat::readContent($content), ENT_QUOTES, "UTF-8");
-    }
     public function __call($func, $args) {
         if ($args[0]) {
             trigger_error("No mapper found for '{$func}'", E_USER_WARNING);
@@ -172,6 +168,9 @@ class XHTMLPhDFormat extends PhDFormat {
         default:
             return sprintf('<div class="cdata">%s</div>', $str);
         }
+    }
+    public function TEXT($str) {
+        return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
     }
 
     public function format_container_chunk($open, $name, $attrs) {
