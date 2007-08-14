@@ -23,7 +23,7 @@ class phpdotnet extends PhDHelper {
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
-        'book'                  => 'format_container_chunk',
+        'book'                  => 'format_root_chunk',
         'chapter'               => 'format_container_chunk',
         'colophon'              => 'format_chunk',
         'glossary'              => array(
@@ -157,25 +157,58 @@ class phpdotnet extends PhDHelper {
     public function format_container_chunk($open, $name, $attrs) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
         if ($open) {
-            return "<div>";
-        }
-        $chunks = PhDHelper::getChildren($id);
-        $content = "";
-        if (count($chunks) > 1) {
-            $content = '<ul class="chunklist chunklist_'.$name.'">';
-            if ($name == "reference") {
-                foreach($chunks as $chunkid => $junk) {
-                    $content .= sprintf('<li><a href="%s%s.%s">%s</a> — %s</li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, false), PhDHelper::getDescription($chunkid, true));
-                }
-            } else {
+            $content = "<div>";
+
+            if ($name != "reference") {
+                $chunks = PhDHelper::getChildren($id);
+                $content .= '<ul class="chunklist chunklist_'.$name.'">';
                 foreach($chunks as $chunkid => $junk) {
                     $content .= sprintf('<li><a href="%s%s.%s">%s</a></li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, true));
                 }
+                $content .= "</ul>\n";
             }
-            $content .= "</ul>\n";
+            return $content;
+        }
+
+        $content = "";
+        if ($name == "reference") {
+            $chunks = PhDHelper::getChildren($id);
+            if (count($chunks) > 1) {
+                $content = '<ul class="chunklist chunklist_reference>';
+                foreach($chunks as $chunkid => $junk) {
+                    $content .= sprintf('<li><a href="%s%s.%s">%s</a> — %s</li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, false), PhDHelper::getDescription($chunkid, true));
+                }
+                $content .= "</ul>\n";
+            }
         }
         $content .= "</div>\n";
         
+        return $content;
+    }
+    public function format_root_chunk($open, $name, $attrs) {
+        $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        if ($open) {
+            return "<div>";
+        }
+
+        $chunks = PhDHelper::getChildren($id);
+        $content = '<ul class="chunklist chunklist_'.$name.'">';
+        foreach($chunks as $chunkid => $junk) {
+            $href = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
+            $content .= sprintf('<li><a href="%s">%s</a>', $href, PhDHelper::getDescription($chunkid, true));
+            $children = PhDHelper::getChildren($chunkid);
+            if (count($children)) {
+                $content .= '<ul class="chunklist chunklist_'.$name.' chunklist_children">';
+                foreach(PhDHelper::getChildren($chunkid) as $childid => $junk) {
+                    $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
+                    $content .= sprintf('<li><a href="%s">%s</a>', $href, PhDHelper::getDescription($childid, true));
+                }
+                $content .="</ul>";
+            }
+            $content .= "</li>";
+        }
+        $content .= "</ul>";
+
         return $content;
     }
 
