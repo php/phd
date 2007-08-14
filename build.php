@@ -140,11 +140,11 @@ foreach($OPTIONS["output_format"] as $output_format) {
                         break;
                     }
                     $funcname = $tag;
-                    $retval = $format->{$funcname}($open, $nodename, $reader->getAttributes());
-                    foreach($themes as $name => $theme) {
-                        if (!in_array($name, $skip)) {
-                            $theme->appendData($retval, $reader->isChunk);
-                        }
+                }
+                $retval = $format->{$funcname}($open, $nodename, $reader->getAttributes());
+                foreach($themes as $name => $theme) {
+                    if (!in_array($name, $skip)) {
+                        $theme->appendData($retval, $reader->isChunk);
                     }
                 }
             }
