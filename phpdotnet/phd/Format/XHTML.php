@@ -207,7 +207,7 @@ class XHTMLPhDFormat extends PhDFormat {
         if ($this->params["opt"]) {
             $content = str_repeat("]", $this->params["opt"]);
         }
-        $content .= ")";
+        $content .= " )";
 
         $content .= "</div>\n";
 
@@ -220,7 +220,7 @@ class XHTMLPhDFormat extends PhDFormat {
             }
             return ' <tt class="parameter">$';
         }
-        return "</tt>\n";
+        return "</tt>";
 
     }
     public function format_parameter($open, $name, $attrs) {
