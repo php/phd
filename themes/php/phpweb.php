@@ -8,7 +8,7 @@ class phpweb extends phpdotnet implements PhDTheme {
 
     public function __construct($IDs, $filename, $ext = "php", $chunked = true) {
         parent::__construct($IDs, $filename, $ext, $chunked);
-    	if(!file_exists("php") || is_file("php")) mkdir("php") or die("Can't create the cache directory");
+        if(!file_exists("php") || is_file("php")) mkdir("php") or die("Can't create the cache directory");
     }
     public function writeChunk($id, $stream) {
         rewind($stream);

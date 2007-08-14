@@ -2,26 +2,26 @@
 /*  $Id$ */
 
 function err($no, $str, $file, $line) {
-	global $notify;
-	if (strpos($str, "No mapper") !== false) {
-//		$notify->update("Another missing function", strstr($str, "'"))->show();
-		return false;
-	}
+    global $notify;
+    if (strpos($str, "No mapper") !== false) {
+//        $notify->update("Another missing function", strstr($str, "'"))->show();
+        return false;
+    }
 
-	$err = new PHNotify("Something wrong!", "$str\n$file:$line\n", "dialog-error");
-	$err
-		->urgency(PHNotify::URGENCY_CRITICAL)
-		->timeout(PHNotify::EXPIRES_NEVER)
-		->hint("x", 1680/2)->hint("y", 1050/2)
-		->show();
-	return false;
+    $err = new PHNotify("Something wrong!", "$str\n$file:$line\n", "dialog-error");
+    $err
+        ->urgency(PHNotify::URGENCY_CRITICAL)
+        ->timeout(PHNotify::EXPIRES_NEVER)
+        ->hint("x", 1680/2)->hint("y", 1050/2)
+        ->show();
+    return false;
 }
 
 if ($err = extension_loaded("phnotify")) {
-	$notify = new PHNotify("Starting build");
-	$notify->urgency(PHNotify::URGENCY_LOW)->hint("x", 1680)->hint("y", 10)->show();
-	$start = microtime(true);
-	set_error_handler("err");
+    $notify = new PHNotify("Starting build");
+    $notify->urgency(PHNotify::URGENCY_LOW)->hint("x", 1680)->hint("y", 10)->show();
+    $start = microtime(true);
+    set_error_handler("err");
 }
 
 

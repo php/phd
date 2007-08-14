@@ -20,7 +20,7 @@ class PhDReader extends XMLReader {
         'article'               => true,
         'appendix'              => true,
         'bibliography'          => array(
-			/* DEFAULT */          false,
+            /* DEFAULT */          false,
             'article'           => true,
             'book'              => true,
             'part'              => true,
@@ -29,13 +29,13 @@ class PhDReader extends XMLReader {
         'chapter'               => true,
         'colophon'              => true,
         'glossary'              => array(
-			/* DEFAULT */          false,
+            /* DEFAULT */          false,
             'article'           => true,
             'book'              => true,
             'part'              => true,
        ),
         'index'                 => array(
-			/* DEFAULT */          false,
+            /* DEFAULT */          false,
             'article'           => true,
             'book'              => true,
             'part'              => true,
@@ -182,19 +182,19 @@ class PhDReader extends XMLReader {
     }
 
   
-	public function isChunk($tag) {
-		if (isset($this->CHUNK_ME[$tag])) {
-			$isChunk = $this->CHUNK_ME[$tag];
-			if (is_array($isChunk)) {
-				$isChunk = $this->notXPath($isChunk);
-			}
-			if (!is_bool($isChunk)) {
-				return call_user_func(array($this, $isChunk), $tag);
-			}
+    public function isChunk($tag) {
+        if (isset($this->CHUNK_ME[$tag])) {
+            $isChunk = $this->CHUNK_ME[$tag];
+            if (is_array($isChunk)) {
+                $isChunk = $this->notXPath($isChunk);
+            }
+            if (!is_bool($isChunk)) {
+                return call_user_func(array($this, $isChunk), $tag);
+            }
             return $isChunk;
-		}
-		return false;
-	}
+        }
+        return false;
+    }
     public function isSectionChunk($tag) {
         if ($this->PREVIOUS_SIBLING == $tag && $this->checkSectionDepth()) {
             return true;
