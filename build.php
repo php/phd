@@ -105,7 +105,6 @@ foreach($OPTIONS["output_format"] as $output_format) {
             $nodename = $reader->name;
             $open = $nodetype == XMLReader::ELEMENT;
 
-            $funcname = "format_$nodename";
             $skip = array();
             foreach($elementmaps as $theme => $map) {
                 if (isset($map[$nodename])) {
@@ -133,6 +132,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 }
             }
 
+            $funcname = "format_$nodename";
             if (count($skip) < count($themes)) {
                 if (isset($formatmap[$nodename])) {
                     $tag = $formatmap[$nodename];
