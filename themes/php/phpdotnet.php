@@ -174,7 +174,7 @@ class phpdotnet extends PhDHelper {
         if ($name == "reference") {
             $chunks = PhDHelper::getChildren($id);
             if (count($chunks) > 1) {
-                $content = '<ul class="chunklist chunklist_reference>';
+                $content = '<ul class="chunklist chunklist_reference">';
                 foreach($chunks as $chunkid => $junk) {
                     $content .= sprintf('<li><a href="%s%s.%s">%s</a> — %s</li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, false), PhDHelper::getDescription($chunkid, true));
                 }
