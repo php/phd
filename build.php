@@ -81,8 +81,17 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 default:
                     $themes[$themename] = new $themename($IDs);
             }
-            $elementmaps[$themename] = $themes[$themename]->getElementMap();
-            $textmaps[$themename]    = $themes[$themename]->getTextMap();
+
+            // If the theme returns empty callback map there is no need to include it
+            $tmp = $themes[$themename]->getElementMap();
+            if(!empty($tmp)) {
+                $elementmaps[$themename] = $tmp;
+            }
+
+            $tmp = $themes[$themename]->getTextMap();
+            if (!empty($tmp)) {
+                $textmaps[$themename] = $tmp;
+            }
         }
     }
 
