@@ -89,11 +89,11 @@ foreach($OPTIONS["output_format"] as $output_format) {
     $reader = new PhDReader($OPTIONS["xml_root"] . "/.manual.xml");
     while($reader->read()) {
         $nodetype = $reader->nodeType;
-        $nodename = $reader->name;
 
         switch($nodetype) {
         case XMLReader::ELEMENT:
         case XMLReader::END_ELEMENT:
+            $nodename = $reader->name;
             $open = $nodetype == XMLReader::ELEMENT;
 
             $funcname = "format_$nodename";
@@ -196,6 +196,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
             continue 2;
 
         default:
+            $nodename = $reader->name;
             trigger_error("Don't know how to handle {$nodename} {$nodetype}", E_USER_ERROR);
             return;
         }
