@@ -75,61 +75,8 @@ $PARENTS = ' . var_export($parents, true) . ';';
             $incl = 'include_once "./toc/' .$parent. '.inc";';
             $up = array($this->getFilename($parent).$ext, PhDHelper::getDescription($parent, true));
 
-            // {{{ Create the "next" link
-            if (!empty($siblings[$id]["children"])) {
-                $tmp = reset($siblings[$id]["children"]);
-                $next = array($tmp["filename"].$ext, (empty($tmp["ldesc"]) ? $tmp["sdesc"] : $tmp["ldesc"]));
-            } else {
-                // don't overwrite these variables
-                $tid = $id;
-                $tsiblings = $siblings;
-                $tparent = $parent;
-                do {
-                    if (!isset($tsiblings[$tid])) {
-                        break;
-                    }
-
-                    // Seek to $tid
-                    in_array($tsiblings[$tid], $tsiblings, false, true) or die(var_export(debug_backtrace(), true) ."\n$tid\n$tparent"); // This should *never* happen
-                    $tmp = next($tsiblings);
-                    prev($tsiblings); // Reset the internal pointer to previous pos
-                    if ($tmp) {
-                        $next = array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
-                        break;
-                    }
-
-                    // We are the end element in this chapter
-                    $tgrandpa = PhDHelper::getParent($tparent);
-                    if (!$tgrandpa || $tgrandpa == "ROOT") {
-                        // There is no next relative
-                        break;
-                    }
-
-                    $tsiblings  = PhDHelper::getChildren($tgrandpa);
-                    $tid = $tparent;
-                    $tparent = $tgrandpa;
-                } while(true);
-            } // }}}
-
-            // {{{ Create the "previous" link
-            do {
-                if (!isset($siblings[$id])) {
-                    break;
-                }
-
-                // Seek to $id
-                in_array($siblings[$id], $siblings, false, true);
-                $tmp = prev($siblings);
-                if ($tmp) {
-                    while (!empty($tmp["children"])) {
-                        $tmp = end($tmp["children"]);
-                    }
-                    $prev = array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
-                    break;
-                }
-
-                $prev = array(PhDHelper::getFilename($parent).$ext, PhDHelper::getDescription($parent, false));
-            } while(false); // }}}
+            $prev = $this->createPrev($id, $parent, $siblings);
+            $next = $this->createNext($id, $parent, $siblings);
         }
 
         $setup = array(
@@ -157,6 +104,70 @@ manual_header();
     }
     public function footer($id) {
         return "<?php manual_footer(); ?>";
+    }
+    protected function createPrev($id, $parent, $siblings) {
+        $ext = '.' .$this->ext;
+        $prev = array(null, null);
+        // {{{ Create the "previous" link
+        do {
+            if (!isset($siblings[$id])) {
+                break;
+            }
+
+            // Seek to $id
+            in_array($siblings[$id], $siblings, false, true);
+            $tmp = prev($siblings);
+            if ($tmp) {
+                while (!empty($tmp["children"])) {
+                    $tmp = end($tmp["children"]);
+                }
+                $prev = array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
+                break;
+            }
+
+            $prev = array(PhDHelper::getFilename($parent).$ext, PhDHelper::getDescription($parent, false));
+        } while(false); // }}}
+        return $prev;
+    }
+    protected function createNext($id, $parent, $siblings) {
+        $ext = '.' .$this->ext;
+        $next = array(null, null);
+        // {{{ Create the "next" link
+        if (!empty($siblings[$id]["children"])) {
+            $tmp = reset($siblings[$id]["children"]);
+            $next = array($tmp["filename"].$ext, (empty($tmp["ldesc"]) ? $tmp["sdesc"] : $tmp["ldesc"]));
+        } else {
+            // don't overwrite these variables
+            $tid = $id;
+            $tsiblings = $siblings;
+            $tparent = $parent;
+            do {
+                if (!isset($tsiblings[$tid])) {
+                    break;
+                }
+
+                // Seek to $tid
+                in_array($tsiblings[$tid], $tsiblings, false, true) or die(var_export(debug_backtrace(), true) ."\n$tid\n$tparent"); // This should *never* happen
+                $tmp = next($tsiblings);
+                prev($tsiblings); // Reset the internal pointer to previous pos
+                if ($tmp) {
+                    $next = array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
+                    break;
+                }
+
+                // We are the end element in this chapter
+                $tgrandpa = PhDHelper::getParent($tparent);
+                if (!$tgrandpa || $tgrandpa == "ROOT") {
+                    // There is no next relative
+                    break;
+                }
+
+                $tsiblings  = PhDHelper::getChildren($tgrandpa);
+                $tid = $tparent;
+                $tparent = $tgrandpa;
+            } while(true);
+        } // }}}
+        return $next;
     }
     public function __destruct() {
         copy("php/manual.php", "php/index.php");
