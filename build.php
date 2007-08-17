@@ -162,10 +162,10 @@ foreach($OPTIONS["output_format"] as $output_format) {
         case XMLReader::TEXT:
             $skip = array();
             $value = $reader->value;
-            $tagname = $reader->getParentTagName();
+            $parentname = $reader->getParentTagName();
             foreach($textmaps as $theme => $map) {
-                if (isset($map[$tagname])) {
-                    $tagname = $map[$tagname];
+                if (isset($map[$parentname])) {
+                    $tagname = $map[$parentname];
                     if (is_array($tagname)) {
                         $tagname = $reader->notXPath($tagname, $reader->depth-1);
                     }
@@ -222,6 +222,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
             ->show();
     }
 } // foreach($OPTIONS["output_thtemes"])
+
 /*
 * vim600: sw=4 ts=4 fdm=syntax syntax=php et
 * vim<600: sw=4 ts=4
