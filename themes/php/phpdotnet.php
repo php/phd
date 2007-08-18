@@ -6,6 +6,7 @@ class phpdotnet extends PhDHelper {
         'function'              => 'format_suppressed_tags',
         'link'                  => 'format_link',
         'refpurpose'            => 'format_refpurpose',
+        'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => array(
             /* DEFAULT */          'format_suppressed_tags',
             'methodparam'       => false,
@@ -59,6 +60,7 @@ class phpdotnet extends PhDHelper {
             'methodsynopsis'    => false,
         ),
         'refname'               => 'format_refname_text',
+        'titleabbrev'           => 'format_suppressed_tags',
     );
     private   $versions = array();
     protected $chunked = true;
