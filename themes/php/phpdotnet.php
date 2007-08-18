@@ -117,7 +117,7 @@ class phpdotnet extends PhDHelper {
                 $class .= " external";
             }
             if ($name == "xref") {
-                sprintf('<a href="%s%s" class="%s">%s</a>',
+                return sprintf('<a href="%s%s" class="%s">%s</a>',
                     $this->chunked ? "" : "#",
                     $this->chunked ?
                         $href : (isset($linkto) ? $linkto : $href),
