@@ -28,7 +28,11 @@ class XHTMLPhDFormat extends PhDFormat {
             'part'              => 'format_chunk',
         ),
         'caution'               => 'div',
-        'classname'             => 'span',
+        'classname'             => array(
+            /* DEFAULT */          'span',
+            'ooclass'           => 'b',
+        ),
+        'classsynopsis'         => 'format_classsynopsis',
         'code'                  => 'code',
         'collab'                => 'span',
         'collabname'            => 'span',
@@ -36,6 +40,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'command'               => 'span',
         'computeroutput'        => 'span',
         'constant'              => 'format_constant',
+        'constructorsynopsis'   => 'format_methodsynopsis',
         'emphasis'              => 'em',
         'enumname'              => 'span',
         'entry'                 => array (
@@ -73,6 +78,10 @@ class XHTMLPhDFormat extends PhDFormat {
         'methodname'            => 'format_methodname',
         'member'                => 'li',
         'note'                  => 'format_note',
+        'ooclass'               => array(
+            /* DEFAULT */          'span',
+            'classsynopsis'     => 'format_classsynopsis_ooclass',
+        ),
         'option'                => 'span',    
         'orderedlist'           => 'ol',
         'para'                  => array(
@@ -94,8 +103,11 @@ class XHTMLPhDFormat extends PhDFormat {
         'proptype'              => 'span',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
-        'refsect1'              => 'format_refsect1',
+        'refsect1'              => 'format_refsect',
+        'refsect2'              => 'format_refsect',
+        'refsect3'              => 'format_refsect',
         'refname'               => 'h1',
+        'refnamediv'            => 'div',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
         'sect1'                 => 'format_chunk',
@@ -127,6 +139,8 @@ class XHTMLPhDFormat extends PhDFormat {
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
             'refsect1'          => 'h3',
+            'refsect2'          => 'h4',
+            'refsect3'          => 'h5',
             'section'           => 'h2',
             'sect1'             => 'h2',
             'sect2'             => 'h3',
@@ -141,6 +155,9 @@ class XHTMLPhDFormat extends PhDFormat {
         'warning'               => 'div',
         'year'                  => 'span',
     ); /* }}} */
+    protected $textmap = array(
+    );
+
 
     protected $role        = false;
     
@@ -188,20 +205,34 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</div>";
     }
-    public function format_refsect1($open, $name, $attrs) {
+    public function format_refsect($open, $name, $attrs) {
         if ($open) {
             if(!isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
                 $attrs[PhDReader::XMLNS_DOCBOOK] = "unkown";
             }
-            return sprintf('<div class="refsect %s">', $attrs[PhDReader::XMLNS_DOCBOOK]["role"]);
+            return sprintf('<div class="%s %s">', $name, $attrs[PhDReader::XMLNS_DOCBOOK]["role"]);
         }
         return "</div>\n";
     }
 
+    public function format_classsynopsis_ooclass($open, $name, $attrs) {
+        if ($open) {
+            return '<span class="'.$name.'">class ';
+        }
+
+        return "</span> {";
+    }
+    public function format_classsynopsis($open, $name, $attrs) {
+        if ($open) {
+            return '<div class="'.$name.'">';
+        }
+
+        return "}</div>";
+    }
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
             $this->params = array("count" => 0, "opt" => 0, "content" => "");
-            return '<div class="methodsynopsis">';
+            return '<div class="'.$name.'">';
         }
         $content = "";
         if ($this->params["opt"]) {
