@@ -103,7 +103,15 @@ foreach($OPTIONS["output_format"] as $output_format) {
         case XMLReader::ELEMENT:
         case XMLReader::END_ELEMENT:
             $nodename = $reader->name;
-            $open = $nodetype == XMLReader::ELEMENT;
+            $open     = $nodetype == XMLReader::ELEMENT;
+            $isChunk  = $reader->isChunk;
+            $attrs    = $reader->getAttributes();
+            $props    = array(
+                "empty" => $reader->isEmptyElement,
+                /* These two are not used at the moment */
+                "lang"  => $reader->xmlLang,
+                "ns"    => $reader->namespaceURI,
+            );
 
             $skip = array();
             foreach($elementmaps as $theme => $map) {
@@ -116,15 +124,15 @@ foreach($OPTIONS["output_format"] as $output_format) {
                         if (strncmp($tag, "format_", 7)) {
                             $retval = $themes[$theme]->transformFromMap($open, $tag, $nodename);
                             if ($retval !== false) {
-                                $themes[$theme]->appendData($retval, $reader->isChunk);
+                                $themes[$theme]->appendData($retval, $isChunk);
                                 $skip[] = $theme;
                             }
                             continue;
                         }
                         $funcname = $tag;
-                        $retval = $themes[$theme]->{$funcname}($open, $nodename, $reader->getAttributes());
+                        $retval = $themes[$theme]->{$funcname}($open, $nodename, $attrs, $props);
                         if ($retval !== false) {
-                            $themes[$theme]->appendData($retval, $reader->isChunk);
+                            $themes[$theme]->appendData($retval, $isChunk);
                             $skip[] = $theme;
                         }
                         continue;
@@ -143,17 +151,17 @@ foreach($OPTIONS["output_format"] as $output_format) {
                         $retval = $format->transformFromMap($open, $tag, $nodename);
                         foreach($themes as $name => $theme) {
                             if (!in_array($name, $skip)) {
-                                $theme->appendData($retval, $reader->isChunk);
+                                $theme->appendData($retval, $isChunk);
                             }
                         }
                         break;
                     }
                     $funcname = $tag;
                 }
-                $retval = $format->{$funcname}($open, $nodename, $reader->getAttributes());
+                $retval = $format->{$funcname}($open, $nodename, $attrs, $props);
                 foreach($themes as $name => $theme) {
                     if (!in_array($name, $skip)) {
-                        $theme->appendData($retval, $reader->isChunk);
+                        $theme->appendData($retval, $isChunk);
                     }
                 }
             }
