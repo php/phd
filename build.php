@@ -49,6 +49,9 @@ if ($OPTIONS["index"]) {
     /* FIXME: Load from sqlite db? */
 }
 
+$rf = new ReflectionFunction("in_array");
+define("HAS_ARRAY_SEEK", $rf->getNumberOfParameters() == 4);
+
 foreach($OPTIONS["output_format"] as $output_format) {
     switch($output_format) {
     case "xhtml":
