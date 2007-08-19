@@ -102,7 +102,7 @@ class phpdotnet extends PhDHelper {
         $info = $versions;
         return $versions;
     }
-    public function format_link($open, $name, $attrs) {
+    public function format_link($open, $name, $attrs, $props) {
         if ($open) {
             $content = $fragment = "";
             $class = $name;
@@ -124,6 +124,8 @@ class phpdotnet extends PhDHelper {
                     $this->chunked ?
                         $href : (isset($linkto) ? $linkto : $href),
                     $class, $content . PhDHelper::getDescription($id, false));
+            } elseif ($props["empty"]) {
+                return sprintf('<a href="%s%s%s" class="%s">%s%2$s</a>', $this->chunked ? "" : "#", $href, $fragment, $class, $content);
             } else {
                 return sprintf('<a href="%s%s%s" class="%s">', $this->chunked ? "" : "#", $href, $fragment, $class);
             }
