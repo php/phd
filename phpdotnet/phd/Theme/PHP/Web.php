@@ -41,7 +41,7 @@ class phpweb extends phpdotnet implements PhDTheme {
         $ext = '.' .$this->ext;
         $parent = PhDHelper::getParent($id);
         $filename = $this->ext . DIRECTORY_SEPARATOR . "toc" . DIRECTORY_SEPARATOR . $parent . ".inc";
-        $up = array();
+        $up = array(null, null);
         $incl = '';
 
         $next = $prev = array(null, null);
@@ -72,7 +72,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
                 file_put_contents($filename, $content);
             }
 
-            $incl = 'include_once "./toc/' .$parent. '.inc";';
+            $incl = 'include_once dirname(__FILE__) ."/toc/' .$parent. '.inc";';
             $up = array($this->getFilename($parent).$ext, PhDHelper::getDescription($parent, true));
 
             $prev = $this->createPrev($id, $parent, $siblings);
