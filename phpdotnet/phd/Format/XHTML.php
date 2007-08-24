@@ -183,7 +183,7 @@ class XHTMLPhDFormat extends PhDFormat {
             return sprintf('<div class="phpcode">%s</div>', highlight_string(trim($str), 1));
             break;
         default:
-            return sprintf('<div class="cdata">%s</div>', $str);
+            return sprintf('<div class="cdata"><pre>%s</pre></div>', htmlspecialchars($str, ENT_QUOTES, "UTF-8"));
         }
     }
     public function TEXT($str) {
