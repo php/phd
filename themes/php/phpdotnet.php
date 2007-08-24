@@ -49,7 +49,7 @@ class phpdotnet extends PhDHelper {
         'sect4'                 => 'format_chunk',
         'sect5'                 => 'format_chunk',
         'section'               => 'format_chunk',
-        'set'                   => 'format_chunk',
+        'set'                   => 'format_root_chunk',
         'setindex'              => 'format_chunk',
     );
     protected $textmap =        array(
