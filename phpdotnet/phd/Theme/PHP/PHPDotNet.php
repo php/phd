@@ -214,9 +214,9 @@ class phpdotnet extends PhDHelper {
                     $long = PhDHelper::getDescription($childid, true);
                     $short = PhDHelper::getDescription($childid, false);
                     if ($long && $short && $long != $short) {
-                        $content .= sprintf('<li><a href="%s">%s</a> — %s', $href, $short, $long);
+                        $content .= sprintf('<li><a href="%s">%s</a> — %s</li>', $href, $short, $long);
                     } else {
-                        $content .= sprintf('<li><a href="%s">%s</a>', $href, $long ? $long : $short);
+                        $content .= sprintf('<li><a href="%s">%s</a></li>', $href, $long ? $long : $short);
                     }
                 }
                 $content .="</ul>";
