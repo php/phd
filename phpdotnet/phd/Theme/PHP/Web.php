@@ -62,7 +62,7 @@ class phpweb extends phpdotnet implements PhDTheme {
                 $parents = array();
                 $p = $parent;
                 while (($p = PhDHelper::getParent($p)) && $p != "ROOT") {
-                    $parents[] = array($p, PhDHelper::getDescription($p, true));
+                    $parents[] = array($p.$ext, PhDHelper::getDescription($p, true));
                 }
 
                 $content = '<?php
@@ -93,9 +93,11 @@ $PARENTS = ' . var_export($parents, true) . ';';
         return '<?php
 include_once $_SERVER[\'DOCUMENT_ROOT\'] . \'/include/shared-manual.inc\';
 $TOC = array();
+$PARENTS = array();
 '.$incl.'
 $setup = '.$var.';
 $setup["toc"] = $TOC;
+$setup["parents"] = $PARENTS;
 manual_setup($setup);
 
 manual_header();
