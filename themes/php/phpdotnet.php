@@ -199,13 +199,25 @@ class phpdotnet extends PhDHelper {
         $content = '<ul class="chunklist chunklist_'.$name.'">';
         foreach($chunks as $chunkid => $junk) {
             $href = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
-            $content .= sprintf('<li><a href="%s">%s</a>', $href, PhDHelper::getDescription($chunkid, true));
+            $long = PhDHelper::getDescription($chunkid, true);
+            $short = PhDHelper::getDescription($chunkid, false);
+            if ($long && $short && $long != $short) {
+                $content .= sprintf('<li><a href="%s">%s</a> — %s', $href, $short, $long);
+            } else {
+                $content .= sprintf('<li><a href="%s">%s</a>', $href, $long ? $long : $short);
+            }
             $children = PhDHelper::getChildren($chunkid);
             if (count($children)) {
                 $content .= '<ul class="chunklist chunklist_'.$name.' chunklist_children">';
                 foreach(PhDHelper::getChildren($chunkid) as $childid => $junk) {
                     $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
-                    $content .= sprintf('<li><a href="%s">%s</a>', $href, PhDHelper::getDescription($childid, true));
+                    $long = PhDHelper::getDescription($childid, true);
+                    $short = PhDHelper::getDescription($childid, false);
+                    if ($long && $short && $long != $short) {
+                        $content .= sprintf('<li><a href="%s">%s</a> — %s', $href, $short, $long);
+                    } else {
+                        $content .= sprintf('<li><a href="%s">%s</a>', $href, $long ? $long : $short);
+                    }
                 }
                 $content .="</ul>";
             }
