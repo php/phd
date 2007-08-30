@@ -79,7 +79,12 @@ foreach($OPTIONS["output_format"] as $output_format) {
             require "./themes/$theme/$themename.php";
             switch($theme) {
                 case "php":
-                    $themes[$themename] = new $themename($IDs, $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml");
+                    $themes[$themename] = new $themename($IDs,
+                        array(
+                            "version" => $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml",
+                            "acronym" => $OPTIONS["xml_root"]."/entities/acronyms.xml",
+                        )
+                    );
                     break;
                 default:
                     $themes[$themename] = new $themename($IDs);

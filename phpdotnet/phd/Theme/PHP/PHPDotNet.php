@@ -3,6 +3,7 @@
 
 class phpdotnet extends PhDHelper {
     protected $elementmap = array(
+        'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
         'link'                  => 'format_link',
         'refpurpose'            => 'format_refpurpose',
@@ -53,6 +54,7 @@ class phpdotnet extends PhDHelper {
         'setindex'              => 'format_chunk',
     );
     protected $textmap =        array(
+        'acronym'               => 'format_acronym_text',
         'function'              => 'format_function_text',
         'type'                  => array(
             /* DEFAULT */          'format_type_text',
@@ -63,15 +65,19 @@ class phpdotnet extends PhDHelper {
         'titleabbrev'           => 'format_suppressed_tags',
     );
     private   $versions = array();
+    private   $acronyms = array();
     protected $chunked = true;
 
     protected $CURRENT_ID = "";
     protected $refname;
 
-    public function __construct(array $IDs, $filename, $ext = "php", $chunked = true) {
+    public function __construct(array $IDs, array $filenames, $ext = "php", $chunked = true) {
         parent::__construct($IDs, $ext);
         $this->ext = $ext;
-        $this->versions = self::generateVersionInfo($filename);
+        if (isset($filenames["version"], $filenames["acronym"])) {
+            $this->versions = self::generateVersionInfo($filenames["version"]);
+            $this->acronyms = self::generateAcronymInfo($filenames["acronym"]);
+        }
         $this->chunked = $chunked;
     }
     public static function generateVersionInfo($filename) {
@@ -101,6 +107,32 @@ class phpdotnet extends PhDHelper {
         $r->close();
         $info = $versions;
         return $versions;
+    }
+    public static function generateAcronymInfo($filename) {
+        static $info;
+        if ($info) {
+            return $info;
+        }
+        $r = new XMLReader;
+        if (!$r->open($filename)) {
+            throw new Exception("Could not open $filename");
+        }
+        $acronyms = array();
+        while ($r->read()) {
+            if ($r->nodeType != XMLReader::ELEMENT) {
+                continue;
+            }
+            if ($r->name == "term") {
+                $r->read();
+                $k = $r->value;
+                $acronyms[$k] = "";
+            } else if ($r->name == "simpara") {
+                $r->read();
+                $acronyms[$k] = $r->value;
+            }
+        }
+        $info = $acronyms;
+        return $acronyms;
     }
     public function format_link($open, $name, $attrs, $props) {
         if ($open) {
@@ -141,6 +173,17 @@ class phpdotnet extends PhDHelper {
                 array("-",  "-",  "-",  "-", ""),
                 strtolower($funcname));
         return isset($this->versions[$funcname]) ? $this->versions[$funcname] : "No version information available, might be only in CVS";
+    }
+    public function acronymInfo($acronym) {
+        return isset($this->acronyms[$acronym]) ? $this->acronyms[$acronym] : false;
+    }
+
+    public function format_acronym_text($value, $tag) {
+        $resolved = $this->acronymInfo($value);
+        if ($resolved) {
+            return '<acronym title="' .$resolved. '">' .$value. '</acronym>';
+        }
+        return '<acronym>'.$value.'</acronym>';
     }
     public function format_refpurpose($open, $tag, $attrs) {
         if ($open) {

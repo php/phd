@@ -3,6 +3,7 @@
 
 class XHTMLPhDFormat extends PhDFormat {
     protected $elementmap = array( /* {{{ */
+        'acronym'               => 'acronym',
         'article'               => 'format_container_chunk',
         'author'                => 'div',
         'authorgroup'           => 'div', /* DocBook-xsl prints out "by" (i.e. "PHP Manual by ...") */
