@@ -3,6 +3,7 @@
 
 class XHTMLPhDFormat extends PhDFormat {
     protected $elementmap = array( /* {{{ */
+        'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
         'acronym'               => 'acronym',
         'article'               => 'format_container_chunk',
         'author'                => 'div',
@@ -137,6 +138,10 @@ class XHTMLPhDFormat extends PhDFormat {
         'title'                 => array(
             /* DEFAULT */          'h1',
             'example'           => 'format_bold_paragraph',
+            'info'              => array(
+                /* DEFAULT */      'h1',
+                'example'       => 'format_bold_paragraph',
+            ),
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
             'refsect1'          => 'h3',
