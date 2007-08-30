@@ -159,7 +159,7 @@ class phpdotnet extends PhDHelper {
             } elseif ($props["empty"]) {
                 return sprintf('<a href="%s%s%s" class="%s">%s%2$s</a>', $this->chunked ? "" : "#", $href, $fragment, $class, $content);
             } else {
-                return sprintf('<a href="%s%s%s" class="%s">', $this->chunked ? "" : "#", $href, $fragment, $class);
+                return sprintf('<a href="%s%s%s" class="%s">%s', $this->chunked ? "" : "#", $href, $fragment, $class, $content);
             }
         }
         return "</a>";
