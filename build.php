@@ -213,9 +213,14 @@ foreach($OPTIONS["output_format"] as $output_format) {
             }
             break;
 
-        case XMLReader::COMMENT:
         case XMLReader::WHITESPACE:
         case XMLReader::SIGNIFICANT_WHITESPACE:
+            $value = $reader->value;
+            foreach($themes as $name => $theme) {
+                $theme->appendData($value, false);
+            }
+            break;
+        case XMLReader::COMMENT:
         case XMLReader::DOC_TYPE:
             /* swallow it */
             continue 2;
