@@ -10,6 +10,7 @@ class phpdotnet extends PhDHelper {
         'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => array(
             /* DEFAULT */          'format_suppressed_tags',
+            'fieldsynopsis'     => false,
             'methodparam'       => false,
             'methodsynopsis'    => false,
         ),
@@ -58,6 +59,7 @@ class phpdotnet extends PhDHelper {
         'function'              => 'format_function_text',
         'type'                  => array(
             /* DEFAULT */          'format_type_text',
+            'fieldsynopsis'     => false,
             'methodparam'       => false,
             'methodsynopsis'    => false,
         ),

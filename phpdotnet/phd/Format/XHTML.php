@@ -56,6 +56,7 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'envar'                 => 'span',
         'example'               => 'div',
+        'fieldsynopsis'         => 'format_fieldsynopsis',
         'filename'              => 'var',
         'glossterm'             => 'span',
         'holder'                => 'span',
@@ -79,6 +80,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'methodsynopsis'        => 'format_methodsynopsis',
         'methodname'            => 'format_methodname',
         'member'                => 'li',
+        'modifier'              => 'span',
         'note'                  => 'format_note',
         'ooclass'               => array(
             /* DEFAULT */          'span',
@@ -157,7 +159,11 @@ class XHTMLPhDFormat extends PhDFormat {
         'userinput'             => 'format_userinput',
         'variablelist'          => 'format_variablelist',
         'varlistentry'          => 'format_varlistentry',
-        'varname'               => 'var',
+        'varname'               => array(
+            /* DEFAULT */          'var',
+            'fieldsynopsis'     => 'format_varname',
+        ),
+        'void'                  => 'format_void',
         'warning'               => 'div',
         'year'                  => 'span',
     ); /* }}} */
@@ -235,6 +241,12 @@ class XHTMLPhDFormat extends PhDFormat {
 
         return "}</div>";
     }
+    public function format_fieldsynopsis($open, $name, $attrs) {
+        if ($open) {
+            return '<div class="'.$name.'">';
+        }
+        return ";</div>\n";
+    }
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
             $this->params = array("count" => 0, "opt" => 0, "content" => "");
@@ -270,6 +282,9 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</tt></i>\n";
     }
 
+    public function format_void($open, $name, $attrs) {
+        return ' ( <span class="methodparam">void</span>';
+    }
     public function format_methodparam($open, $name, $attrs) {
         if ($open) {
             $content = '';
@@ -299,6 +314,12 @@ class XHTMLPhDFormat extends PhDFormat {
         return '</b></span>';
     }
 
+    public function format_varname($open, $name, $attrs) {
+        if ($open) {
+            return '<var>$';
+        }
+        return "</var>\n";
+    }
     public function format_variablelist($open, $name, $attrs) {
         if ($open) {
             return "<dl>\n";
