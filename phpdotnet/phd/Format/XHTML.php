@@ -64,6 +64,8 @@ class XHTMLPhDFormat extends PhDFormat {
         'filename'              => 'var',
         'glossterm'             => 'span',
         'holder'                => 'span',
+        'imageobject'           => 'div',
+        'imagedata'             => 'format_imagedata',
         'index'                 => array(
             /* DEFAULT */          'div',
             'article'           => 'format_chunk',
@@ -138,6 +140,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'example'           => 'format_example_content',
         ),
         'systemitem'            => 'format_systemitem',
+        'tag'                   => 'code',
         'table'                 => 'format_table',
         'term'                  => 'span',
         'tfoot'                 => 'format_th',
@@ -419,6 +422,9 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</b></p>";
     }
 
+    public function format_imagedata($open, $name, $attrs) {
+        return sprintf('<img src="%s" />', $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]);
+    }
 
     public function format_table($open, $name, $attrs) {
         if ($open) {
