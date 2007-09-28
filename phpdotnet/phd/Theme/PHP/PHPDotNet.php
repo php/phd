@@ -10,6 +10,7 @@ class phpdotnet extends PhDHelper {
         'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => array(
             /* DEFAULT */          'format_suppressed_tags',
+            'classsynopsisinfo' => false,
             'fieldsynopsis'     => false,
             'methodparam'       => false,
             'methodsynopsis'    => false,
@@ -56,9 +57,12 @@ class phpdotnet extends PhDHelper {
     );
     protected $textmap =        array(
         'acronym'               => 'format_acronym_text',
+        'classsynopsisinfo'     => 'format_comment_multiline',
         'function'              => 'format_function_text',
+        'methodname'            => 'format_function_text',
         'type'                  => array(
             /* DEFAULT */          'format_type_text',
+            'classsynopsisinfo' => false,
             'fieldsynopsis'     => false,
             'methodparam'       => false,
             'methodsynopsis'    => false,
@@ -278,13 +282,13 @@ class phpdotnet extends PhDHelper {
         return "";
     }
     public function format_function_text($value, $tag) {
-        $link = str_replace(array("_", "::", "->"), "-", $value);
+        $link = strtolower(str_replace(array("__", "_", "::", "->"), array("", "-", "-", "-"), $value));
 
         if (!substr_compare($this->CURRENT_ID, $link, -strlen($link)) || !($filename = PhDHelper::getFilename("function.$link"))) {
-            return sprintf("<b>%s()</b>", $value);
+            return sprintf("<b>%s%s</b>", $value, $tag == "function" ? "()" : "");
         }
 
-        return sprintf('<a href="%s%s.%s" class="function">%s()</a>', $this->chunked ? "" : "#", $filename, $this->ext, $value);
+        return sprintf('<a href="%s%s.%s" class="function">%s%s</a>', $this->chunked ? "" : "#", $filename, $this->ext, $value, $tag == "function" ? "()" : "");
     }
     public function format_type_text($type, $tagname) {
         $t = strtolower($type);
@@ -325,7 +329,9 @@ class phpdotnet extends PhDHelper {
         }
         return sprintf('<span class="%s %s">%2$s</span>', $tagname, $type);
     }
-
+    public function format_comment_multiline($value, $tag) {
+        return '<span class="php_comment '.$tag. '_comment">/* ' .$value. ' */</span>';
+    }
 
 }
 

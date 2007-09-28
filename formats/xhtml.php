@@ -35,6 +35,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'ooclass'           => 'b',
         ),
         'classsynopsis'         => 'format_classsynopsis',
+        'classsynopsisinfo'     => 'format_classsynopsisinfo',
         'code'                  => 'code',
         'collab'                => 'span',
         'collabname'            => 'span',
@@ -56,7 +57,10 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'envar'                 => 'span',
         'example'               => 'div',
-        'fieldsynopsis'         => 'format_fieldsynopsis',
+        'fieldsynopsis'         => array(
+            /* DEFAULT */          'format_fieldsynopsis',
+            'entry'             => 'div',
+        ),
         'filename'              => 'var',
         'glossterm'             => 'span',
         'holder'                => 'span',
@@ -103,7 +107,10 @@ class XHTMLPhDFormat extends PhDFormat {
         'productname'           => 'span',
         'programlisting'        => 'format_programlisting',
         'propname'              => 'span',
-        'property'              => 'span',
+        'property'              => array(
+            /* DEFAULT */          'span',
+            'classsynopsisinfo' => 'format_varname',
+        ),
         'proptype'              => 'span',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
@@ -240,6 +247,12 @@ class XHTMLPhDFormat extends PhDFormat {
         }
 
         return "}</div>";
+    }
+    public function format_classsynopsisinfo($open, $name, $attrs) {
+        if ($open) {
+            return '<div class="'.$name.'">';
+        }
+        return ";</div>\n";
     }
     public function format_fieldsynopsis($open, $name, $attrs) {
         if ($open) {
