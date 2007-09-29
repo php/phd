@@ -84,6 +84,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'info'                  => 'div',
         'informalexample'       => 'div',
         'informaltable'         => 'table',
+        'initializer'           => 'format_initializer',
         'itemizedlist'          => 'ul',
         'listitem'              => array(
             /* DEFAULT */          'li',
@@ -122,6 +123,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'partintro'             => 'div',
         'personname'            => 'span',
         'preface'               => 'format_chunk',
+        'procedure'             => 'format_procedure',
         'productname'           => 'span',
         'programlisting'        => 'format_programlisting',
         'propname'              => 'span',
@@ -147,6 +149,10 @@ class XHTMLPhDFormat extends PhDFormat {
         'sect4'                 => 'format_chunk',
         'sect5'                 => 'format_chunk',
         'section'               => 'format_chunk',
+        'seg'                   => 'format_seg',
+        'segmentedlist'         => 'format_segmentedlist',
+        'seglistitem'           => 'format_seglistitem',
+        'segtitle'              => 'format_suppressed_tags',
         'set'                   => 'format_chunk',
         'setindex'              => 'format_chunk',
         'simplelist'            => 'ul', /* FIXME: simplelists has few attributes that need to be implemented */
@@ -157,6 +163,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'entry'             => 'span',
             'example'           => 'format_example_content',
         ),
+        'step'                  => 'format_step',
         'systemitem'            => 'format_systemitem',
         'synopsis'              => 'pre',
         'tag'                   => 'code',
@@ -177,6 +184,7 @@ class XHTMLPhDFormat extends PhDFormat {
             ),
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
+            'procedure'         => 'b',
             'refsect1'          => 'h3',
             'refsect2'          => 'h4',
             'refsect3'          => 'h5',
@@ -184,6 +192,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'sect1'             => 'h2',
             'sect2'             => 'h3',
             'sect3'             => 'h4',
+            'segmentedlist'     => 'strong',
             'table'             => 'format_bold_paragraph',
         ),
         'type'                  => 'span',
@@ -199,6 +208,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'year'                  => 'span',
     ); /* }}} */
     protected $textmap = array(
+        'segtitle'             => 'format_segtitle_text',
     );
 
 
@@ -232,6 +242,10 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function TEXT($str) {
         return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
+    }
+    public function format_suppressed_tags($open, $name, $attrs) {
+        /* Ignore it */
+        return "";
     }
 
     public function format_copyright($open, $name, $attrs) {
@@ -338,7 +352,12 @@ class XHTMLPhDFormat extends PhDFormat {
             return ' <tt class="parameter">$';
         }
         return "</tt>";
-
+    }
+    public function format_initializer($open, $name, $attrs) {
+        if ($open) {
+            return '<span class="'.$name.'">=';
+        }
+        return '</span>';
     }
     public function format_parameter($open, $name, $attrs) {
         if ($open) {
@@ -387,6 +406,50 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<var>$';
         }
         return "</var>\n";
+    }
+
+    public function format_segmentedlist($open, $name, $attrs) {
+        $this->tmp["segmentedlist"] = array("segtitle" => array());
+        if ($open) {
+            return '<div class="'.$name.'">';
+        }
+        return '</div>';
+    }
+    public function format_segtitle_text($value, $tag) {
+        $this->tmp["segmentedlist"]["segtitle"][count($this->tmp["segmentedlist"]["segtitle"])] = $value;
+        /* Suppress the text */
+        return "";
+    }
+    public function format_seglistitem($open, $name, $attrs) {
+        if ($open) {
+            $this->tmp["segmentedlist"]["seglistitem"] = 0;
+            return '<div class="'.$name.'">';
+        }
+        return '</div>';
+    }
+    public function format_seg($open, $name, $attrs) {
+        if ($open) {
+            return '<div class="seg"><strong><span class="segtitle">' .$this->tmp["segmentedlist"]["segtitle"][$this->tmp["segmentedlist"]["seglistitem"]++]. ':</span></strong>';
+        }
+        return '</div>';
+    }
+    public function format_procedure($open, $name, $attrs) {
+        $this->tmp["procedure"] = false;
+        if ($open) {
+            return '<div class="'.$name.'">';
+        }
+        return '</ol></div>';
+    }
+    public function format_step($open, $name, $attrs) {
+        if ($open) {
+            $ret = "";
+            if (!$this->tmp["procedure"]) {
+                $this->tmp["procedure"] = true;
+                $ret = '<ol type="1">';
+            }
+            return $ret . "<li>";
+        }
+        return '</li>';
     }
     public function format_variablelist($open, $name, $attrs) {
         if ($open) {
