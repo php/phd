@@ -32,7 +32,10 @@ class XHTMLPhDFormat extends PhDFormat {
         'caution'               => 'div',
         'classname'             => array(
             /* DEFAULT */          'span',
-            'ooclass'           => 'b',
+            'ooclass'           => array(
+				/* DEFAULT */      'b',
+				'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
+			),
         ),
         'classsynopsis'         => 'format_classsynopsis',
         'classsynopsisinfo'     => 'format_classsynopsisinfo',
@@ -90,8 +93,13 @@ class XHTMLPhDFormat extends PhDFormat {
         'note'                  => 'format_note',
         'ooclass'               => array(
             /* DEFAULT */          'span',
-            'classsynopsis'     => 'format_classsynopsis_ooclass',
+			'classsynopsis'     => 'div',
         ),
+		'oointerface'           => array(
+			/* DEFAULT */          'span',
+			'classsynopsisinfo'	=> 'format_classsynopsisinfo_oointerface',
+		),
+		'interfacename'         => 'span',
         'option'                => 'span',    
         'orderedlist'           => 'ol',
         'para'                  => array(
@@ -182,6 +190,7 @@ class XHTMLPhDFormat extends PhDFormat {
 
 
     protected $role        = false;
+	protected $tmp         = array();
     
     public function __construct(array $IDs) {
         parent::__construct($IDs);
@@ -237,25 +246,48 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</div>\n";
     }
 
-    public function format_classsynopsis_ooclass($open, $name, $attrs) {
+    public function format_classsynopsisinfo_oointerface($open, $name, $attrs) {
         if ($open) {
-            return '<span class="'.$name.'">class ';
+			if (isset($this->tmp["classsynopsisinfo"]) && !isset($this->tmp["classsynopsisinfo"]["implements"])) {
+				$this->tmp["classsynopsisinfo"]["implements"] = true;
+				return '<span class="'.$name.'">implements ';
+			}
+			return '<span class="'.$name.'">, ';
         }
 
-        return "</span> {";
+        return "</span>";
     }
+	public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs) {
+		if ($open) {
+			if (isset($this->tmp["classsynopsisinfo"]) && !isset($this->tmp["classsynopsisinfo"]["ooclass"])) {
+				$this->tmp["classsynopsisinfo"]["ooclass"] = true;
+				return ' class <b class="'.$name.'">';
+			}
+			return '<b class="'.$name.'"> ';
+		}
+		return "</b>";
+	}
+	public function format_classsynopsisinfo($open, $name, $attrs) {
+		$this->tmp["classsynopsisinfo"] = array();
+		if ($open) {
+			if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+				return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
+			}
+			return '<div class="'.$name.'">';
+		}
+
+		if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+			return ' */</div>';
+		}
+		return ' {</div>';
+	}
+
     public function format_classsynopsis($open, $name, $attrs) {
         if ($open) {
             return '<div class="'.$name.'">';
         }
 
         return "}</div>";
-    }
-    public function format_classsynopsisinfo($open, $name, $attrs) {
-        if ($open) {
-            return '<div class="'.$name.'">';
-        }
-        return ";</div>\n";
     }
     public function format_fieldsynopsis($open, $name, $attrs) {
         if ($open) {
