@@ -188,7 +188,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                     }
 
                     if ($tagname) {
-                        $retval = $themes[$theme]->{$tagname}($value, $tagname);
+                        $retval = $themes[$theme]->{$tagname}($value, $parentname);
                         if ($retval !== false) {
                             $skip[] = $theme;
                             $themes[$theme]->appendData($retval, false);
@@ -204,7 +204,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                         $tagname = $reader->notXPath($tagname, $reader->depth-1);
                     }
                     if ($tagname) {
-                        $retval = $format->{$tagname}($value, $tagname);
+                        $retval = $format->{$tagname}($value, $parentname);
                     }
                 }
                 if ($retval === false) {
