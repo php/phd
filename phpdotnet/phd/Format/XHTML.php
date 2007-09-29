@@ -4,14 +4,14 @@
 class XHTMLPhDFormat extends PhDFormat {
     protected $elementmap = array( /* {{{ */
         'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
-		'abbrev'                => 'abbr',
+        'abbrev'                => 'abbr',
         'acronym'               => 'acronym',
         'article'               => 'format_container_chunk',
         'author'                => 'div',
         'authorgroup'           => 'div', /* DocBook-xsl prints out "by" (i.e. "PHP Manual by ...") */
         'appendix'              => 'format_container_chunk',
         'application'           => 'span',
-		'blockquote'            => 'blockquote',
+        'blockquote'            => 'blockquote',
         'bibliography'          => array(
             /* DEFAULT */          'div',
             'article'           => 'format_chunk',
@@ -21,12 +21,12 @@ class XHTMLPhDFormat extends PhDFormat {
         'book'                  => 'format_container_chunk',
         'chapter'               => 'format_container_chunk',
         'colophon'              => 'format_chunk',
-		'copyright'             => 'format_copyright',
-		'editor'                => 'div', /* Docbook-xsl prints "edited by" */
+        'copyright'             => 'format_copyright',
+        'editor'                => 'div', /* Docbook-xsl prints "edited by" */
         'firstname'             => 'span',
         'surname'               => 'span',
         'othername'             => 'span',
-		'optional'              => 'span',
+        'optional'              => 'span',
         'honorific'             => 'span',
         'glossary'              => array(
             /* DEFAULT */          'div',
@@ -38,9 +38,9 @@ class XHTMLPhDFormat extends PhDFormat {
         'classname'             => array(
             /* DEFAULT */          'span',
             'ooclass'           => array(
-				/* DEFAULT */      'b',
-				'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
-			),
+                /* DEFAULT */      'b',
+                'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
+            ),
         ),
         'classsynopsis'         => 'format_classsynopsis',
         'classsynopsisinfo'     => 'format_classsynopsisinfo',
@@ -65,7 +65,7 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'envar'                 => 'span',
         'example'               => 'div',
-		'formalpara'            => 'p',
+        'formalpara'            => 'p',
         'fieldsynopsis'         => array(
             /* DEFAULT */          'format_fieldsynopsis',
             'entry'             => 'div',
@@ -90,7 +90,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'varlistentry'      => 'format_varlistentry_listitem',
         ),
         'literal'               => 'i',
-		'literallayout'         => 'pre',
+        'literallayout'         => 'pre',
         'mediaobject'           => 'div',
         'methodparam'           => 'format_methodparam',
         'methodsynopsis'        => 'format_methodsynopsis',
@@ -98,16 +98,16 @@ class XHTMLPhDFormat extends PhDFormat {
         'member'                => 'li',
         'modifier'              => 'span',
         'note'                  => 'format_note',
-		'othercredit'           => 'div',
+        'othercredit'           => 'div',
         'ooclass'               => array(
             /* DEFAULT */          'span',
-			'classsynopsis'     => 'div',
+            'classsynopsis'     => 'div',
         ),
-		'oointerface'           => array(
-			/* DEFAULT */          'span',
-			'classsynopsisinfo'	=> 'format_classsynopsisinfo_oointerface',
-		),
-		'interfacename'         => 'span',
+        'oointerface'           => array(
+            /* DEFAULT */          'span',
+            'classsynopsisinfo'    => 'format_classsynopsisinfo_oointerface',
+        ),
+        'interfacename'         => 'span',
         'option'                => 'span',    
         'orderedlist'           => 'ol',
         'para'                  => array(
@@ -130,7 +130,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'classsynopsisinfo' => 'format_varname',
         ),
         'proptype'              => 'span',
-		'pubdate'               => 'div', /* Docbook-XSL prints "published" */
+        'pubdate'               => 'div', /* Docbook-XSL prints "published" */
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
         'refsect1'              => 'format_refsect',
@@ -138,7 +138,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'refsect3'              => 'format_refsect',
         'refname'               => 'h1',
         'refnamediv'            => 'div',
-		'replaceable'           => 'span',
+        'replaceable'           => 'span',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
         'sect1'                 => 'format_chunk',
@@ -158,7 +158,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'example'           => 'format_example_content',
         ),
         'systemitem'            => 'format_systemitem',
-		'synopsis'              => 'pre',
+        'synopsis'              => 'pre',
         'tag'                   => 'code',
         'table'                 => 'format_table',
         'term'                  => 'span',
@@ -169,11 +169,11 @@ class XHTMLPhDFormat extends PhDFormat {
         'title'                 => array(
             /* DEFAULT */          'h1',
             'example'           => 'format_bold_paragraph',
-			'formalpara'        => 'h5',
+            'formalpara'        => 'h5',
             'info'              => array(
                 /* DEFAULT */      'h1',
                 'example'       => 'format_bold_paragraph',
-				'note'          => 'format_note_title',
+                'note'          => 'format_note_title',
             ),
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
@@ -203,7 +203,7 @@ class XHTMLPhDFormat extends PhDFormat {
 
 
     protected $role        = false;
-	protected $tmp         = array();
+    protected $tmp         = array();
     
     public function __construct(array $IDs) {
         parent::__construct($IDs);
@@ -234,12 +234,12 @@ class XHTMLPhDFormat extends PhDFormat {
         return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
     }
 
-	public function format_copyright($open, $name, $attrs) {
-		if ($open) {
-			return '<div class="'.$name.'">&copy; ';
-		}
-		return '</div>';
-	}
+    public function format_copyright($open, $name, $attrs) {
+        if ($open) {
+            return '<div class="'.$name.'">&copy; ';
+        }
+        return '</div>';
+    }
 
     public function format_container_chunk($open, $name, $attrs) {
         if ($open) {
@@ -268,39 +268,39 @@ class XHTMLPhDFormat extends PhDFormat {
 
     public function format_classsynopsisinfo_oointerface($open, $name, $attrs) {
         if ($open) {
-			if (isset($this->tmp["classsynopsisinfo"]) && !isset($this->tmp["classsynopsisinfo"]["implements"])) {
-				$this->tmp["classsynopsisinfo"]["implements"] = true;
-				return '<span class="'.$name.'">implements ';
-			}
-			return '<span class="'.$name.'">, ';
+            if (isset($this->tmp["classsynopsisinfo"]) && !isset($this->tmp["classsynopsisinfo"]["implements"])) {
+                $this->tmp["classsynopsisinfo"]["implements"] = true;
+                return '<span class="'.$name.'">implements ';
+            }
+            return '<span class="'.$name.'">, ';
         }
 
         return "</span>";
     }
-	public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs) {
-		if ($open) {
-			if (isset($this->tmp["classsynopsisinfo"]) && !isset($this->tmp["classsynopsisinfo"]["ooclass"])) {
-				$this->tmp["classsynopsisinfo"]["ooclass"] = true;
-				return ' class <b class="'.$name.'">';
-			}
-			return '<b class="'.$name.'"> ';
-		}
-		return "</b>";
-	}
-	public function format_classsynopsisinfo($open, $name, $attrs) {
-		$this->tmp["classsynopsisinfo"] = array();
-		if ($open) {
-			if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
-				return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
-			}
-			return '<div class="'.$name.'">';
-		}
+    public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs) {
+        if ($open) {
+            if (isset($this->tmp["classsynopsisinfo"]) && !isset($this->tmp["classsynopsisinfo"]["ooclass"])) {
+                $this->tmp["classsynopsisinfo"]["ooclass"] = true;
+                return ' class <b class="'.$name.'">';
+            }
+            return '<b class="'.$name.'"> ';
+        }
+        return "</b>";
+    }
+    public function format_classsynopsisinfo($open, $name, $attrs) {
+        $this->tmp["classsynopsisinfo"] = array();
+        if ($open) {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+                return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
+            }
+            return '<div class="'.$name.'">';
+        }
 
-		if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
-			return ' */</div>';
-		}
-		return ' {</div>';
-	}
+        if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+            return ' */</div>';
+        }
+        return ' {</div>';
+    }
 
     public function format_classsynopsis($open, $name, $attrs) {
         if ($open) {
