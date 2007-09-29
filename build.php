@@ -62,6 +62,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
     require "./formats/$output_format.php";
     $format = new $classname($IDs);
     $formatmap = $format->getElementMap();
+    $formattextmap = $format->getTextMap();
 
     $themes = $elementmaps = $textmaps = array();
     foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
@@ -196,7 +197,19 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 }
             }
             if (count($skip) < count($themes)) {
-                $retval = $format->TEXT($value);
+                $retval = false;
+                if (isset($formattextmap[$parentname])) {
+                    $tagname = $formattextmap[$parentname];
+                    if (is_array($tagname)) {
+                        $tagname = $reader->notXPath($tagname, $reader->depth-1);
+                    }
+                    if ($tagname) {
+                        $retval = $format->{$tagname}($value, $tagname);
+                    }
+                }
+                if ($retval === false) {
+                    $retval = $format->TEXT($value);
+                }
                 foreach ($themes as $name => $theme) {
                     if (!in_array($name, $skip)) {
                         $theme->appendData($retval, false);
