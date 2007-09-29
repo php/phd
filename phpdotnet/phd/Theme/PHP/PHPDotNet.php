@@ -57,7 +57,6 @@ class phpdotnet extends PhDHelper {
     );
     protected $textmap =        array(
         'acronym'               => 'format_acronym_text',
-        'classsynopsisinfo'     => 'format_comment_multiline',
         'function'              => 'format_function_text',
         'methodname'            => 'format_function_text',
         'type'                  => array(
@@ -328,9 +327,6 @@ class phpdotnet extends PhDHelper {
             return sprintf('<a href="#%s" class="%s %s">%3$s</a>', $fragment ? $fragment : $href, $tagname, $type);
         }
         return sprintf('<span class="%s %s">%2$s</span>', $tagname, $type);
-    }
-    public function format_comment_multiline($value, $tag) {
-        return '<span class="php_comment '.$tag. '_comment">/* ' .$value. ' */</span>';
     }
 
 }
