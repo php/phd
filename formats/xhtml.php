@@ -4,12 +4,14 @@
 class XHTMLPhDFormat extends PhDFormat {
     protected $elementmap = array( /* {{{ */
         'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
+		'abbrev'                => 'abbr',
         'acronym'               => 'acronym',
         'article'               => 'format_container_chunk',
         'author'                => 'div',
         'authorgroup'           => 'div', /* DocBook-xsl prints out "by" (i.e. "PHP Manual by ...") */
         'appendix'              => 'format_container_chunk',
         'application'           => 'span',
+		'blockquote'            => 'blockquote',
         'bibliography'          => array(
             /* DEFAULT */          'div',
             'article'           => 'format_chunk',
@@ -19,9 +21,12 @@ class XHTMLPhDFormat extends PhDFormat {
         'book'                  => 'format_container_chunk',
         'chapter'               => 'format_container_chunk',
         'colophon'              => 'format_chunk',
+		'copyright'             => 'format_copyright',
+		'editor'                => 'div', /* Docbook-xsl prints "edited by" */
         'firstname'             => 'span',
         'surname'               => 'span',
         'othername'             => 'span',
+		'optional'              => 'span',
         'honorific'             => 'span',
         'glossary'              => array(
             /* DEFAULT */          'div',
@@ -60,6 +65,7 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'envar'                 => 'span',
         'example'               => 'div',
+		'formalpara'            => 'p',
         'fieldsynopsis'         => array(
             /* DEFAULT */          'format_fieldsynopsis',
             'entry'             => 'div',
@@ -84,6 +90,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'varlistentry'      => 'format_varlistentry_listitem',
         ),
         'literal'               => 'i',
+		'literallayout'         => 'pre',
         'mediaobject'           => 'div',
         'methodparam'           => 'format_methodparam',
         'methodsynopsis'        => 'format_methodsynopsis',
@@ -91,6 +98,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'member'                => 'li',
         'modifier'              => 'span',
         'note'                  => 'format_note',
+		'othercredit'           => 'div',
         'ooclass'               => array(
             /* DEFAULT */          'span',
 			'classsynopsis'     => 'div',
@@ -122,6 +130,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'classsynopsisinfo' => 'format_varname',
         ),
         'proptype'              => 'span',
+		'pubdate'               => 'div', /* Docbook-XSL prints "published" */
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
         'refsect1'              => 'format_refsect',
@@ -129,6 +138,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'refsect3'              => 'format_refsect',
         'refname'               => 'h1',
         'refnamediv'            => 'div',
+		'replaceable'           => 'span',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
         'sect1'                 => 'format_chunk',
@@ -139,7 +149,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'section'               => 'format_chunk',
         'set'                   => 'format_chunk',
         'setindex'              => 'format_chunk',
-        'simplelist'            => 'ul',
+        'simplelist'            => 'ul', /* FIXME: simplelists has few attributes that need to be implemented */
         'simpara'               => array(
             /* DEFAULT */          'p',
             'note'              => 'span',
@@ -148,6 +158,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'example'           => 'format_example_content',
         ),
         'systemitem'            => 'format_systemitem',
+		'synopsis'              => 'pre',
         'tag'                   => 'code',
         'table'                 => 'format_table',
         'term'                  => 'span',
@@ -158,9 +169,11 @@ class XHTMLPhDFormat extends PhDFormat {
         'title'                 => array(
             /* DEFAULT */          'h1',
             'example'           => 'format_bold_paragraph',
+			'formalpara'        => 'h5',
             'info'              => array(
                 /* DEFAULT */      'h1',
                 'example'       => 'format_bold_paragraph',
+				'note'          => 'format_note_title',
             ),
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
@@ -220,6 +233,13 @@ class XHTMLPhDFormat extends PhDFormat {
     public function TEXT($str) {
         return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
     }
+
+	public function format_copyright($open, $name, $attrs) {
+		if ($open) {
+			return '<div class="'.$name.'">&copy; ';
+		}
+		return '</div>';
+	}
 
     public function format_container_chunk($open, $name, $attrs) {
         if ($open) {
