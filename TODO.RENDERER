@@ -1,0 +1,17 @@
+
+TODO:
+	- Learn the alphabet
+	- Sort the elementmaps after purpose and then alphabetically
+	- Sort the methods like the elementmaps
+	- Move all PHP/PHP.net specific stuff into themes/php/
+	- Generate titles/text for various elements (like Docbook-XSL does)
+	- Implement generic theme
+	- Implement CHM format which should generate the CHM indexing files
+	- Implement "mktoc.php" caching using SQLite
+	- Look for ways to generate single pages (i.e `php build.php <ID>`)
+	- Write more tests
+	- Implement method to generate markup for the default attributes
+	- Implement the remaining elements and attributes of the Docbook format
+
+
+-Hannes

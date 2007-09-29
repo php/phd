@@ -1,0 +1,40 @@
+
+Rendering the documentations for the first time:
+	cd c:/
+	mkdir phpdotnet
+	cd phpdotnet
+	cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc
+	cd phpdoc
+	php configure.php
+	cd ..
+	cvs -d:pserver:cvsread@cvs.php.net/repository co phd
+	cd phd
+	# Open config.php in text editor and change the "xml_root" to point to your phpdoc (c:/phpdotnet/phpdoc/) checkout and remove the die() line
+	php build.php
+
+On non-windows operating systems you need to replace the "c:/" with "/home/YOUR-USERNAME/"
+
+
+
+Now edit the xml files as you wish in the phpdoc folder.
+After doing all the changes you were going to do:
+	cd c:/phpdotnet/phpdoc
+	php configure.php
+	# If it shows any errors you must fix them before going further
+	cd ../phd
+	php build.php
+
+On non-windows operating systems you need to replace the "c:/" with "/home/YOUR-USERNAME/"
+
+
+
+
+This will create
+	"php" directory containing the "phpweb" files
+		NOTE: You CANNOT view these files without a phpweb mirror running. See http://doc.php.net/wiki/phd/view#viewing_the_phpfolder
+	"html" direcotry containing the "downloadable chunked html" files
+		NOTE: Do NOT move these files onto your webserver. Just double click them and your browser will open and show you the content
+	"bightml.html" file, which is the "downloadable bightml" file
+
+
+-Hannes
