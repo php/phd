@@ -6,6 +6,8 @@ class XHTMLPhDFormat extends PhDFormat {
         'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
         'abbrev'                => 'abbr',
         'acronym'               => 'acronym',
+        'affiliation'           => 'format_suppressed_tags',
+        'alt'                   => 'format_suppressed_tags',
         'article'               => 'format_container_chunk',
         'author'                => 'div',
         'authorgroup'           => 'div', /* DocBook-xsl prints out "by" (i.e. "PHP Manual by ...") */
@@ -20,6 +22,7 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'book'                  => 'format_container_chunk',
         'chapter'               => 'format_container_chunk',
+        'co'                    => 'format_co',
         'colophon'              => 'format_chunk',
         'copyright'             => 'format_copyright',
         'editor'                => 'div', /* Docbook-xsl prints "edited by" */
@@ -34,7 +37,10 @@ class XHTMLPhDFormat extends PhDFormat {
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
+        'calloutlist'           => 'format_calloutlist',
+        'callout'               => 'format_callout',
         'caution'               => 'div',
+        'citerefentry'          => 'span',
         'classname'             => array(
             /* DEFAULT */          'span',
             'ooclass'           => array(
@@ -52,6 +58,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'computeroutput'        => 'span',
         'constant'              => 'format_constant',
         'constructorsynopsis'   => 'format_methodsynopsis',
+        'destructorsynopsis'    => 'format_methodsynopsis',
         'emphasis'              => 'em',
         'enumname'              => 'span',
         'entry'                 => array (
@@ -64,12 +71,14 @@ class XHTMLPhDFormat extends PhDFormat {
             ),
         ),
         'envar'                 => 'span',
+        'errortype'             => 'span',
         'example'               => 'div',
         'formalpara'            => 'p',
         'fieldsynopsis'         => array(
             /* DEFAULT */          'format_fieldsynopsis',
             'entry'             => 'div',
         ),
+        'figure'                => 'div',
         'filename'              => 'var',
         'glossterm'             => 'span',
         'holder'                => 'span',
@@ -92,7 +101,8 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'literal'               => 'i',
         'literallayout'         => 'pre',
-        'mediaobject'           => 'div',
+        'manvolnum'             => 'format_manvolnum',
+        'mediaobject'           => 'format_mediaobject',
         'methodparam'           => 'format_methodparam',
         'methodsynopsis'        => 'format_methodsynopsis',
         'methodname'            => 'format_methodname',
@@ -134,10 +144,12 @@ class XHTMLPhDFormat extends PhDFormat {
         'proptype'              => 'span',
         'pubdate'               => 'div', /* Docbook-XSL prints "published" */
         'refentry'              => 'format_chunk',
+        'refentrytitle'         => 'span',
         'reference'             => 'format_container_chunk',
         'refsect1'              => 'format_refsect',
         'refsect2'              => 'format_refsect',
         'refsect3'              => 'format_refsect',
+        'refsynopsisdiv'        => 'div',
         'refname'               => 'h1',
         'refnamediv'            => 'div',
         'replaceable'           => 'span',
@@ -155,6 +167,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'segtitle'              => 'format_suppressed_tags',
         'set'                   => 'format_chunk',
         'setindex'              => 'format_chunk',
+        'shortaffil'            => 'format_suppressed_tags',
         'simplelist'            => 'ul', /* FIXME: simplelists has few attributes that need to be implemented */
         'simpara'               => array(
             /* DEFAULT */          'p',
@@ -164,6 +177,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'example'           => 'format_example_content',
         ),
         'step'                  => 'format_step',
+        'subscript'             => 'sub',
         'systemitem'            => 'format_systemitem',
         'synopsis'              => 'pre',
         'tag'                   => 'code',
@@ -206,20 +220,27 @@ class XHTMLPhDFormat extends PhDFormat {
         'void'                  => 'format_void',
         'warning'               => 'div',
         'year'                  => 'span',
+        'quote'                 => 'format_quote',
     ); /* }}} */
     protected $textmap = array(
         'segtitle'             => 'format_segtitle_text',
+        'affiliation'          => 'format_suppressed_text',
+        'shortaffil'           => 'format_suppressed_text',
+        'programlisting'       => 'format_programlisting_text',
+        'alt'                  => 'format_alt_text',
     );
 
 
     protected $role        = false;
     protected $tmp         = array();
+    public $errors;
     
     public function __construct(array $IDs) {
         parent::__construct($IDs);
     }
     public function __call($func, $args) {
         if ($args[0]) {
+            $this->errors[$func]++;
             trigger_error("No mapper found for '{$func}'", E_USER_WARNING);
             return "<font color='red' size='+3'>{$args[1]}</font>";
         }
@@ -245,6 +266,10 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_suppressed_tags($open, $name, $attrs) {
         /* Ignore it */
+        return "";
+    }
+    public function format_suppressed_text($value, $tag) {
+        /* Suppress any content */
         return "";
     }
 
@@ -408,6 +433,44 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</var>\n";
     }
 
+    public function format_co($open, $name, $attrs, $props) {
+        if (($open || $props["empty"]) && isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+            if(isset($this->tmp["co"])) {
+                ++$this->tmp["co"];
+            } else {
+                $this->tmp["co"] = 1;
+            }
+            return '<a name="'.$attrs[PhDReader::XMLNS_XML]["id"].'" id="'.$attrs[PhDReader::XMLNS_XML]["id"].'">' .str_repeat("*", $this->tmp["co"]) .'</a>';
+        }
+        /* Suppress closing tag if any */
+        return "";
+    }
+    public function format_calloutlist($open, $name, $attrs) {
+        if ($open) {
+            $this->tmp["callouts"] = 0;
+            return '<table>';
+        }
+        return '</table>';
+    }
+    public function format_callout($open, $name, $attrs) {
+        if ($open) {
+            return '<tr><td><a href="#'.$attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"].'">' .str_repeat("*", ++$this->tmp["callouts"]). '</a></td><td>';
+        }
+        return "</td></tr>\n";
+    }
+
+    public function format_quote($open, $name, $attrs) {
+        if ($open) {
+            return '"<span class="'.$name.'">';
+        }
+        return '</span>"';
+    }
+    public function format_manvolnum($open, $name, $attrs) {
+        if ($open) {
+            return '<span class="'.$name.'">(';
+        }
+        return ")</span>";
+    }
     public function format_segmentedlist($open, $name, $attrs) {
         $this->tmp["segmentedlist"] = array("segtitle" => array());
         if ($open) {
@@ -506,6 +569,9 @@ class XHTMLPhDFormat extends PhDFormat {
         $this->role = false;
         return "</div>\n";
     }
+    public function format_programlisting_text($value, $tag) {
+        return $this->CDATA($value);
+    }
     public function format_screen($open, $name, $attrs) {
         if ($open) {
             return '<div class="example-contents"><pre>';
@@ -537,7 +603,20 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</b></p>";
     }
 
+    public function format_mediaobject($open, $name, $attrs) {
+        $this->tmp["mediaobject"] = array();
+        if ($open) {
+            return '<div class="'.$name.'">';
+        }
+        return '</div>';
+    }
+    public function format_alt_text($value, $tag) {
+        $this->tmp["mediaobject"]["alt"] = $value;
+    }
     public function format_imagedata($open, $name, $attrs) {
+        if (isset($this->tmp["mediaobject"]["alt"])) {
+            return sprintf('<img src="%s" alt="%s" />', $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"], $this->tmp["mediaobject"]["alt"]);
+        }
         return sprintf('<img src="%s" />', $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]);
     }
 
