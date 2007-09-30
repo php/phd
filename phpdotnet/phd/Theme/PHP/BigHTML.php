@@ -23,7 +23,21 @@ class bightml extends phpdotnet implements PhDTheme {
     public function footer() {
         fwrite($this->stream, "</body></html>");
     }
+    public function format_qandaset($open, $name, $attrs) {
+        if ($open) {
+            $this->tmp["qandaentry"] = array();
+            $this->ostream = $this->stream;
+            $this->stream = fopen("php://temp/maxmemory", "r+");
+            return '';
+        }
 
+        $stream = $this->stream;
+        $this->stream = $this->ostream;
+        unset($this->ostream);
+        rewind($stream);
+
+        return parent::qandaset($stream);
+    }
 }
 
 

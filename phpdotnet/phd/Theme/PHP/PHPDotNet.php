@@ -54,6 +54,10 @@ class phpdotnet extends PhDHelper {
         'section'               => 'format_chunk',
         'set'                   => 'format_root_chunk',
         'setindex'              => 'format_chunk',
+        'qandaset'              => 'format_qandaset',
+        'qandaentry'            => 'format_qandaentry',
+        'question'              => 'format_question',
+        'answer'                => 'format_answer',
     );
     protected $textmap =        array(
         'acronym'               => 'format_acronym_text',
@@ -327,6 +331,48 @@ class phpdotnet extends PhDHelper {
             return sprintf('<a href="#%s" class="%s %s">%3$s</a>', $fragment ? $fragment : $href, $tagname, $type);
         }
         return sprintf('<span class="%s %s">%2$s</span>', $tagname, $type);
+    }
+
+    /* FIXME: This function is a crazy performance killer */
+    public function qandaset($stream) {
+        $xml = stream_get_contents($stream);
+
+        libxml_use_internal_errors(true);
+        $doc = new DOMDocument("1.0", "UTF-8");
+        $doc->preserveWhitespace = false;
+        $doc->loadHTML(html_entity_decode('<div>' .str_replace("&lt;", "&amp;lt;", $xml) .'</div>', ENT_QUOTES, "UTF-8"));
+        fclose($stream);
+        libxml_clear_errors();
+        libxml_use_internal_errors(false);
+
+        $xpath = new DOMXPath($doc);
+        $nlist = $xpath->query("//html/body/div/dl/dt");
+        $ret = '<div class="qandaset"><ol class="qandaset_questions">';
+        $i = 0;
+        foreach($nlist as $node) {
+            $ret .= sprintf('<li><a href="#%s">%s</a></li>', $this->tmp["qandaentry"][$i++], $node->textContent);
+        }
+
+        return $ret.'</ul>'.$xml.'</div>';
+    }
+    public function format_qandaentry($open, $name, $attrs) {
+        if ($open) {
+			$this->tmp["qandaentry"][] = $attrs[PhDReader::XMLNS_XML]["id"];
+            return '<dl>';
+        }
+        return '</dl>';
+    }
+    public function format_answer($open, $name, $attrs) {
+        if ($open) {
+            return '<dd><a name="' .end($this->tmp["qandaentry"]).'"></a>';
+        }
+        return "</dd>";
+    }
+    public function format_question($open, $name, $attrs) {
+        if ($open) {
+            return '<dt><strong>';
+        }
+        return '</strong></dt>';
     }
 
 }

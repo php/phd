@@ -187,6 +187,17 @@ manual_header();
     public function __destruct() {
         copy("php/manual.php", "php/index.php");
     }
+    public function format_qandaset($open, $name, $attrs) {
+        if ($open) {
+            $this->tmp["qandaentry"] = array();
+            $this->appendData(null, PhDReader::OPEN_CHUNK);
+            return '';
+        }
+
+        $stream = array_pop($this->streams);
+        rewind($stream);
+        return parent::qandaset($stream);
+    }
 }
 
 /*
