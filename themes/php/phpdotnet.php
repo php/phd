@@ -7,6 +7,21 @@ class phpdotnet extends PhDHelper {
         'function'              => 'format_suppressed_tags',
         'link'                  => 'format_link',
         'refpurpose'            => 'format_refpurpose',
+        'title'                 => array(
+            /* DEFAULT */          false,
+            'article'           => 'format_container_chunk_title',
+            'appendix'          => 'format_container_chunk_title',
+            'chapter'           => 'format_container_chunk_title',
+            'part'              => 'format_container_chunk_title',
+			'info'              => array(
+				/* DEFAULT */      false,
+				'article'       => 'format_container_chunk_title',
+				'appendix'      => 'format_container_chunk_title',
+				'chapter'       => 'format_container_chunk_title',
+				'part'          => 'format_container_chunk_title',
+			),
+        ),
+
         'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => array(
             /* DEFAULT */          'format_suppressed_tags',
@@ -72,6 +87,7 @@ class phpdotnet extends PhDHelper {
             'methodsynopsis'    => false,
         ),
         'refname'               => 'format_refname_text',
+
         'titleabbrev'           => 'format_suppressed_tags',
     );
     private   $versions = array();
@@ -214,17 +230,19 @@ class phpdotnet extends PhDHelper {
     public function format_container_chunk($open, $name, $attrs) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
         if ($open) {
-            $content = "<div>";
-
             if ($name != "reference") {
                 $chunks = PhDHelper::getChildren($id);
-                $content .= '<ul class="chunklist chunklist_'.$name.'">';
+                if (!count($chunks)) {
+                    return "<div>";
+                }
+                $content = '<ul class="chunklist chunklist_'.$name.'">';
                 foreach($chunks as $chunkid => $junk) {
                     $content .= sprintf('<li><a href="%s%s.%s">%s</a></li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, true));
                 }
                 $content .= "</ul>\n";
+                $this->tmp["container_chunk"] = $content;
             }
-            return $content;
+            return "<div>";
         }
 
         $content = "";
@@ -241,6 +259,17 @@ class phpdotnet extends PhDHelper {
         $content .= "</div>\n";
         
         return $content;
+    }
+    public function format_container_chunk_title($open, $name, $attrs) {
+        if ($open) {
+            return "<h1>";
+        }
+        $ret = "";
+        if ($this->tmp["container_chunk"]) {
+            $ret = $this->tmp["container_chunk"];
+            $this->tmp["container_chunk"] = null;
+        }
+        return "</h1>\n" .$ret;
     }
     public function format_root_chunk($open, $name, $attrs) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
@@ -358,7 +387,7 @@ class phpdotnet extends PhDHelper {
     }
     public function format_qandaentry($open, $name, $attrs) {
         if ($open) {
-			$this->tmp["qandaentry"][] = $attrs[PhDReader::XMLNS_XML]["id"];
+            $this->tmp["qandaentry"][] = $attrs[PhDReader::XMLNS_XML]["id"];
             return '<dl>';
         }
         return '</dl>';
