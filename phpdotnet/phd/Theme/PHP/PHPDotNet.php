@@ -350,7 +350,7 @@ class phpdotnet extends PhDHelper {
         $ret = '<div class="qandaset"><ol class="qandaset_questions">';
         $i = 0;
         foreach($nlist as $node) {
-            $ret .= sprintf('<li><a href="#%s">%s</a></li>', $this->tmp["qandaentry"][$i++], $node->textContent);
+            $ret .= sprintf('<li><a href="#%s">%s</a></li>', $this->tmp["qandaentry"][$i++], htmlspecialchars($node->textContent,ENT_QUOTES, "UTF-8"));
         }
 
         return $ret.'</ul>'.$xml.'</div>';
