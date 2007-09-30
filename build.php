@@ -32,6 +32,9 @@ if ($err = extension_loaded("phnotify")) {
     && is_array($OPTIONS["output_theme"])
     or die("Invalid configuration/file not found.\nYou need to run setup/setup.php first\n");
 
+$OPTIONS["chunk_extra"]["legalnotice"] = true;
+$OPTIONS["xml_file"] = $OPTIONS["xml_root"] . "/.manual.xml";
+
 require "./include/PhDReader.class.php";
 require "./include/PhDHelper.class.php";
 require "./include/PhDFormat.class.php";
@@ -104,7 +107,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
         }
     }
 
-    $reader = new PhDReader($OPTIONS["xml_root"] . "/.manual.xml");
+    $reader = new PhDReader($OPTIONS);
     while($reader->read()) {
         $nodetype = $reader->nodeType;
 

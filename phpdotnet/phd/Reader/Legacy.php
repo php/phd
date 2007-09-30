@@ -40,6 +40,7 @@ class PhDReader extends XMLReader {
             'book'              => true,
             'part'              => true,
        ),
+        'legalnotice'           => false,
         'part'                  => true,
         'preface'               => true,
         'refentry'              => true,
@@ -56,9 +57,14 @@ class PhDReader extends XMLReader {
         'setindex'              => true,
    ); /* }}} */
 
-    public function __construct($file, $encoding = "UTF-8", $options = NULL) {
-        if (!XMLReader::open($file, $encoding, $options)) {
-            throw new Exception();
+    public function __construct($opts, $encoding = "UTF-8", $xml_opts = NULL) {
+        if (!XMLReader::open($opts["xml_file"], $encoding, $xml_opts)) {
+            throw new Exception("Cannot open {$opts["file"]}");
+        }
+        if (isset($opts["chunk_extra"]) && is_array($opts["chunk_extra"])) {
+            foreach($opts["chunk_extra"] as $el => $v) {
+                $this->CHUNK_ME[$el] = $v;
+            }
         }
     }
 

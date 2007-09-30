@@ -97,6 +97,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
         'itemizedlist'          => 'ul',
+        'legalnotice'           => 'format_legalnotice_chunk',
         'listitem'              => array(
             /* DEFAULT */          'li',
             'varlistentry'      => 'format_varlistentry_listitem',
@@ -241,14 +242,12 @@ class XHTMLPhDFormat extends PhDFormat {
 
     protected $role        = false;
     protected $tmp         = array();
-    public $errors;
     
     public function __construct(array $IDs) {
         parent::__construct($IDs);
     }
     public function __call($func, $args) {
         if ($args[0]) {
-            $this->errors[$func]++;
             trigger_error("No mapper found for '{$func}'", E_USER_WARNING);
             return "<font color='red' size='+3'>{$args[1]}</font>";
         }
@@ -293,6 +292,12 @@ class XHTMLPhDFormat extends PhDFormat {
             return sprintf('<div id="%s" class="%s">', $attrs[PhDReader::XMLNS_XML]["id"], $name);
         }
         return "</div>";
+    }
+    public function format_legalnotice_chunk($open, $name, $attrs) {
+        if ($open) {
+            return '<div id="legalnotice">';
+        }
+        return "</div>\n";
     }
     public function format_chunk($open, $name, $attrs) {
         if ($open) {

@@ -1,9 +1,9 @@
 <?php
 /*  $Id$ */
-$r = new PhDReader($OPTIONS["xml_root"]."/.manual.xml");
+$r = new PhDReader($OPTIONS);
 $FILENAMES = array();
 $CURRENT_FILENAME = $LAST_CHUNK = "";
-$PARENTS = array(-1 => "ROOT");
+$PARENTS = array(-1 => "ROOT", 2 => "");
 $lastid = 0;
 
 while($r->read()) {

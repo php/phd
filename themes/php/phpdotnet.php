@@ -42,6 +42,7 @@ class phpdotnet extends PhDHelper {
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
+        'legalnotice'           => 'format_chunk',
         'part'                  => 'format_container_chunk',
         'preface'               => 'format_chunk',
         'refentry'              => 'format_chunk',
