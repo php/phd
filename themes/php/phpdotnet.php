@@ -13,13 +13,13 @@ class phpdotnet extends PhDHelper {
             'appendix'          => 'format_container_chunk_title',
             'chapter'           => 'format_container_chunk_title',
             'part'              => 'format_container_chunk_title',
-			'info'              => array(
-				/* DEFAULT */      false,
-				'article'       => 'format_container_chunk_title',
-				'appendix'      => 'format_container_chunk_title',
-				'chapter'       => 'format_container_chunk_title',
-				'part'          => 'format_container_chunk_title',
-			),
+            'info'              => array(
+                /* DEFAULT */      false,
+                'article'       => 'format_container_chunk_title',
+                'appendix'      => 'format_container_chunk_title',
+                'chapter'       => 'format_container_chunk_title',
+                'part'          => 'format_container_chunk_title',
+            ),
         ),
 
         'titleabbrev'           => 'format_suppressed_tags',
@@ -93,6 +93,7 @@ class phpdotnet extends PhDHelper {
     private   $versions = array();
     private   $acronyms = array();
     protected $chunked = true;
+    protected $lang = "en";
 
     protected $CURRENT_ID = "";
     protected $refname;
@@ -221,9 +222,12 @@ class phpdotnet extends PhDHelper {
         $this->refname = $value;
         return false;
     }
-    public function format_chunk($open, $name, $attrs) {
+    public function format_chunk($open, $name, $attrs, $props) {
         if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
             $this->CURRENT_ID = $attrs[PhDReader::XMLNS_XML]["id"];
+        }
+        if (isset($props["lang"])) {
+            $this->lang = $props["lang"];
         }
         return false;
     }

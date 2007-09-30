@@ -81,7 +81,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
 
         $setup = array(
             "home" => array('index'.$ext, "PHP Manual"),
-            "head" => array("UTF-8", "en"), // FIXME: We should probably check the xml:lang on the current chunk and fallback on the roots element lang
+            "head" => array("UTF-8", $this->lang),
             "this" => array($id.$ext, PhDHelper::getDescription($id)),
             "up"   => $up,
             "prev" => $prev,
