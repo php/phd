@@ -26,9 +26,9 @@ class XHTMLPhDFormat extends PhDFormat {
         'colophon'              => 'format_chunk',
         'copyright'             => 'format_copyright',
         'editor'                => 'div', /* Docbook-xsl prints "edited by" */
-        'firstname'             => 'span',
-        'surname'               => 'span',
-        'othername'             => 'span',
+        'firstname'             => 'format_name',
+        'surname'               => 'format_name',
+        'othername'             => 'format_name',
         'optional'              => 'span',
         'honorific'             => 'span',
         'glossary'              => array(
@@ -285,6 +285,12 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<div class="'.$name.'">&copy; ';
         }
         return '</div>';
+    }
+    public function format_name($open, $name, $attrs) {
+        if ($open) {
+            return ' <span class="'.$name.'">';
+        }
+        return '</span> ';
     }
 
     public function format_container_chunk($open, $name, $attrs) {
