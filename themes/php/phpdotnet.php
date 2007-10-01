@@ -231,7 +231,7 @@ class phpdotnet extends PhDHelper {
         }
         return false;
     }
-    public function format_container_chunk($open, $name, $attrs) {
+    public function format_container_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
         if ($open) {
             if ($name != "reference") {
@@ -239,7 +239,7 @@ class phpdotnet extends PhDHelper {
                 if (!count($chunks)) {
                     return "<div>";
                 }
-                $content = '<ul class="chunklist chunklist_'.$name.'">';
+                $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_'.$name.'">';
                 foreach($chunks as $chunkid => $junk) {
                     $content .= sprintf('<li><a href="%s%s.%s">%s</a></li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, true));
                 }
@@ -253,7 +253,7 @@ class phpdotnet extends PhDHelper {
         if ($name == "reference") {
             $chunks = PhDHelper::getChildren($id);
             if (count($chunks) > 1) {
-                $content = '<ul class="chunklist chunklist_reference">';
+                $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_reference">';
                 foreach($chunks as $chunkid => $junk) {
                     $content .= sprintf('<li><a href="%s%s.%s">%s</a> — %s</li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, false), PhDHelper::getDescription($chunkid, true));
                 }

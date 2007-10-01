@@ -5,6 +5,7 @@ class PhDHelper {
     private $IDs            = array();
     /* abstract */ protected $elementmap  = array();
     /* abstract */ protected $textmap     = array();
+    private static $autogen         = array();
 
     public function __construct(array $IDs) {
         $this->IDs = $IDs;
@@ -28,6 +29,33 @@ class PhDHelper {
     }
     final public function getTextMap() {
         return $this->textmap;
+    }
+    final public function autogen($text, $lang) {
+        if (isset(PhDHelper::$autogen[$lang])) {
+            return PhDHelper::$autogen[$lang][$text];
+        }
+
+        $filename = dirname(__FILE__) ."/langs/$lang.xml";
+        $r = new XMLReader;
+        if (!$r->open($filename)) {
+            throw new Exception("Could not open $filename");
+        }
+        $autogen = array();
+        while ($r->read()) {
+            if ($r->nodeType != XMLReader::ELEMENT) {
+                continue;
+            }
+            if ($r->name == "term") {
+                $r->read();
+                $k = $r->value;
+                $autogen[$k] = "";
+            } else if ($r->name == "simpara") {
+                $r->read();
+                $autogen[$k] = $r->value;
+            }
+        }
+        PhDHelper::$autogen[$lang] = $autogen;
+        return PhDHelper::$autogen[$lang][$text];
     }
 }
 

@@ -39,7 +39,7 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'calloutlist'           => 'format_calloutlist',
         'callout'               => 'format_callout',
-        'caution'               => 'div',
+        'caution'               => 'format_admonition',
         'citerefentry'          => 'span',
         'classname'             => array(
             /* DEFAULT */          'span',
@@ -190,7 +190,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'tfoot'                 => 'format_th',
         'thead'                 => 'format_th',
         'tgroup'                => 'format_tgroup',
-        'tip'                   => 'div',
+        'tip'                   => 'format_admonition',
         'title'                 => array(
             /* DEFAULT */          'h1',
             'example'           => 'format_bold_paragraph',
@@ -223,7 +223,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'fieldsynopsis'     => 'format_varname',
         ),
         'void'                  => 'format_void',
-        'warning'               => 'div',
+        'warning'               => 'format_admonition',
         'year'                  => 'span',
         'quote'                 => 'format_quote',
         'qandaset'              => 'div',
@@ -603,9 +603,15 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</tt></b>";
     }
-    public function format_note($open, $name, $attrs) {
+    public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
-            return '<blockquote><p>';
+            return '<div class="'. $name. '">' .$this->admonition_title($name, $props["lang"]);
+        }
+        return "</div>";
+    }
+    public function format_note($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<blockquote><p>'.$this->admonition_title("note", $props["lang"]). ': ';
         }
         return "</p></blockquote>";
     }
@@ -724,6 +730,9 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</td>";
     }
 
+    public function admonition_title($title, $lang) {
+        return sprintf('<b class="%s">%s</b>', strtolower($title), $this->autogen($title, $lang));
+    }
 }
 
 /*
