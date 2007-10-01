@@ -38,6 +38,9 @@ class PhDHelper {
         $filename = dirname(__FILE__) ."/langs/$lang.xml";
         $r = new XMLReader;
         if (!$r->open($filename)) {
+            if ($lang == "en") {
+                throw new Exception("Cannot open $filename");
+            }
             return $this->autogen($text, "en");
         }
         $autogen = array();
