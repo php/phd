@@ -30,6 +30,7 @@
    <file baseinstalldir="phd" name="include/PhDFormat.class.php" role="php" />
    <file baseinstalldir="phd" name="include/PhDHelper.class.php" role="php" />
    <file baseinstalldir="phd" name="include/PhDReader.class.php" role="php" />
+   <file baseinstalldir="phd" name="include/langs/bg.xml" role="php" />
    <file baseinstalldir="phd" name="include/langs/cs.xml" role="php" />
    <file baseinstalldir="phd" name="include/langs/de.xml" role="php" />
    <file baseinstalldir="phd" name="include/langs/en.xml" role="php" />
