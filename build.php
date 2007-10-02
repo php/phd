@@ -1,3 +1,4 @@
+#!@php_bin@
 <?php
 /*  $Id$ */
 
@@ -24,8 +25,12 @@ if ($err = extension_loaded("phnotify")) {
     set_error_handler("err");
 }
 
+$ROOT = "@php_dir@/phd";
+if ($ROOT == "@php_dir"."@/phd") {
+    $ROOT = dirname(__FILE__);
+}
 
-(@include "./config.php")
+(@include $ROOT."/config.php")
     && isset($OPTIONS)
     && is_array($OPTIONS)
     && isset($OPTIONS["output_format"], $OPTIONS["output_theme"])
@@ -35,12 +40,12 @@ if ($err = extension_loaded("phnotify")) {
 $OPTIONS["chunk_extra"]["legalnotice"] = true;
 $OPTIONS["xml_file"] = $OPTIONS["xml_root"] . "/.manual.xml";
 
-require "./include/PhDReader.class.php";
-require "./include/PhDHelper.class.php";
-require "./include/PhDFormat.class.php";
+require $ROOT. "/include/PhDReader.class.php";
+require $ROOT. "/include/PhDHelper.class.php";
+require $ROOT. "/include/PhDFormat.class.php";
 
 if ($OPTIONS["index"]) {
-    require "./mktoc.php";
+    require $ROOT. "/mktoc.php";
 
     if ($err) {
         $mktoc = microtime(true);
@@ -62,25 +67,25 @@ foreach($OPTIONS["output_format"] as $output_format) {
         break;
     }
 
-    require "./formats/$output_format.php";
+    require $ROOT. "/formats/$output_format.php";
     $format = new $classname($IDs);
     $formatmap = $format->getElementMap();
     $formattextmap = $format->getTextMap();
 
     $themes = $elementmaps = $textmaps = array();
     foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
-        is_dir("./themes/$theme") or die("Can't find the '$theme' theme");
+        is_dir($ROOT. "/themes/$theme") or die("Can't find the '$theme' theme");
         
         /* Maybe other themes will need additional includes? */
         switch($theme) {
         case "php":
-            require "./themes/php/phpdotnet.php";
+            require $ROOT ."/themes/php/phpdotnet.php";
             break;
         }
 
         foreach($array as $themename) {
             $themename = basename($themename);
-            require "./themes/$theme/$themename.php";
+            require $ROOT. "/themes/$theme/$themename.php";
             switch($theme) {
                 case "php":
                     $themes[$themename] = new $themename($IDs,
