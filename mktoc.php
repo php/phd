@@ -3,7 +3,7 @@
 $r = new PhDReader($OPTIONS);
 $FILENAMES = array();
 $CURRENT_FILENAME = $LAST_CHUNK = "";
-$PARENTS = array(-1 => "ROOT", 2 => "");
+$PARENTS = array(-1 => "ROOT", 1 => "", 2 => "");
 $lastid = 0;
 
 while($r->read()) {
