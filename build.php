@@ -139,7 +139,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                     }
                     if ($tag) {
                         if (strncmp($tag, "format_", 7)) {
-                            $retval = $themes[$theme]->transformFromMap($open, $tag, $nodename);
+                            $retval = $themes[$theme]->transformFromMap($open, $tag, $nodename, $props);
                             if ($retval !== false) {
                                 $themes[$theme]->appendData($retval, $isChunk);
                                 $skip[] = $theme;
@@ -165,7 +165,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                         $tag = $reader->notXPath($tag);
                     }
                     if (strncmp($tag, "format_", 7)) {
-                        $retval = $format->transformFromMap($open, $tag, $nodename);
+                        $retval = $format->transformFromMap($open, $tag, $nodename, $props);
                         foreach($themes as $name => $theme) {
                             if (!in_array($name, $skip)) {
                                 $theme->appendData($retval, $isChunk);

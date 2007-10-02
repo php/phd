@@ -213,6 +213,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'sect3'             => 'h4',
             'segmentedlist'     => 'strong',
             'table'             => 'format_bold_paragraph',
+            'variablelist'      => 'strong',
         ),
         'type'                  => 'span',
         'userinput'             => 'format_userinput',
@@ -253,9 +254,9 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "<font color='red' size='+3'>/{$args[1]}</font>";
     }
-    public function transformFromMap($open, $tag, $name) {
+    public function transformFromMap($open, $tag, $name, $props) {
         if ($open) {
-            return sprintf('<%s class="%s">', $tag, $name);
+            return sprintf('<%s class="%s"%s>', $tag, $name, $props["empty"] ? " /" : "");
         }
         return "</$tag>";
     }
@@ -357,6 +358,7 @@ class XHTMLPhDFormat extends PhDFormat {
         if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
             return ' */</div>';
         }
+        $this->tmp["classsynopsisinfo"]["close"] = true;
         return ' {</div>';
     }
 
@@ -365,7 +367,11 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<div class="'.$name.'">';
         }
 
-        return "}</div>";
+        if (isset($this->tmp["classsynopsisinfo"]) && isset($this->tmp["classsynopsisinfo"]["close"]) && $this->tmp["classsynopsisinfo"]["close"]) {
+            $this->tmp["classsynopsisinfo"]["close"] = false;
+            return "}</div>";
+        }
+        return "</div>";
     }
     public function format_fieldsynopsis($open, $name, $attrs) {
         if ($open) {
@@ -621,7 +627,10 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return '</b>';
     }
-    public function format_bold_paragraph($open, $name, $attrs) {
+    public function format_bold_paragraph($open, $name, $attrs, $props) {
+        if ($props["empty"]) {
+            return "";
+        }
         if ($open) {
             return "<p><b>";
         }
