@@ -729,7 +729,10 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return '</th>';
     }
-    public function format_entry($open, $name, $attrs) {
+    public function format_entry($open, $name, $attrs, $props) {
+        if ($props["empty"]) {
+            return '<td class="empty">&nbsp;</td>';
+        }
         if ($open) {
             $dbattrs = PhDFormat::getColspec($attrs[PhDReader::XMLNS_DOCBOOK]);
 
