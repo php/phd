@@ -12,12 +12,14 @@ class phpdotnet extends PhDHelper {
             'article'           => 'format_container_chunk_title',
             'appendix'          => 'format_container_chunk_title',
             'chapter'           => 'format_container_chunk_title',
+            'example'           => 'format_example_title',
             'part'              => 'format_container_chunk_title',
             'info'              => array(
                 /* DEFAULT */      false,
                 'article'       => 'format_container_chunk_title',
                 'appendix'      => 'format_container_chunk_title',
                 'chapter'       => 'format_container_chunk_title',
+                'example'       => 'format_example_title',
                 'part'          => 'format_container_chunk_title',
             ),
         ),
@@ -226,6 +228,7 @@ class phpdotnet extends PhDHelper {
         if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
             $this->CURRENT_ID = $attrs[PhDReader::XMLNS_XML]["id"];
         }
+        $this->tmp["chunk"] = array("examples" => 0);
         if (isset($props["lang"])) {
             $this->lang = $props["lang"];
         }
@@ -234,6 +237,7 @@ class phpdotnet extends PhDHelper {
     public function format_container_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
         if ($open) {
+            $this->tmp["chunk"] = array("examples" => 0);
             if ($name != "reference") {
                 $chunks = PhDHelper::getChildren($id);
                 if (!count($chunks)) {
@@ -367,6 +371,16 @@ class phpdotnet extends PhDHelper {
         return sprintf('<span class="%s %s">%2$s</span>', $tagname, $type);
     }
 
+    public function format_example_title($open, $name, $attrs, $props) {
+        if ($props["empty"]) {
+            return "";
+        }
+        if ($open) {
+            return "<p><b>Example#" .++$this->tmp["chunk"]["examples"]. " ";
+        }
+        return "</b></p>";
+    }
+ 
     /* FIXME: This function is a crazy performance killer */
     public function qandaset($stream) {
         $xml = stream_get_contents($stream);
