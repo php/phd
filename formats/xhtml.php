@@ -212,7 +212,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'sect2'             => 'h3',
             'sect3'             => 'h4',
             'segmentedlist'     => 'strong',
-            'table'             => 'format_bold_paragraph',
+            'table'             => 'format_table_title',
             'variablelist'      => 'strong',
         ),
         'type'                  => 'span',
@@ -635,6 +635,15 @@ class XHTMLPhDFormat extends PhDFormat {
             return "<p><b>";
         }
         return "</b></p>";
+    }
+    public function format_table_title($open, $name, $attrs, $props) {
+        if ($props["empty"]) {
+            return "";
+        }
+        if ($open) {
+            return "<caption><b>";
+        }
+        return "</b></caption>";
     }
 
     public function format_mediaobject($open, $name, $attrs) {
