@@ -47,7 +47,7 @@
    </file>
    <file baseinstalldir="" name="phd.bat" role="script">
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
-    <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+    <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config" />
    </file>
    <file baseinstalldir="phd" name="config.php" role="php" />
    <file baseinstalldir="phd" name="LICENSE" role="php" />
