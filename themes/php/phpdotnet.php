@@ -216,7 +216,7 @@ class phpdotnet extends PhDHelper {
     }
     public function format_refpurpose($open, $tag, $attrs) {
         if ($open) {
-            return sprintf('<p class="verinfo">(%s)</p><p class="refpurpose">%s — ', $this->versionInfo($this->refname), $this->refname);
+            return sprintf('<p class="verinfo">(%s)</p><p class="refpurpose">%s — ', htmlspecialchars($this->versionInfo($this->refname), ENT_QUOTES, "UTF-8"), $this->refname);
         }
         return "</p>\n";
     }
