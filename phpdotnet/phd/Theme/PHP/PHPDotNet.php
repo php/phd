@@ -228,7 +228,9 @@ class phpdotnet extends PhDHelper {
         if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
             $this->CURRENT_ID = $attrs[PhDReader::XMLNS_XML]["id"];
         }
-        $this->tmp["chunk"] = array("examples" => 0);
+        if ($props["isChunk"]) {
+            $this->tmp["chunk"] = array("examples" => 0);
+        }
         if (isset($props["lang"])) {
             $this->lang = $props["lang"];
         }
@@ -237,7 +239,9 @@ class phpdotnet extends PhDHelper {
     public function format_container_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
         if ($open) {
-            $this->tmp["chunk"] = array("examples" => 0);
+            if ($props["isChunk"]) {
+                $this->tmp["chunk"] = array("examples" => 0);
+            }
             if ($name != "reference") {
                 $chunks = PhDHelper::getChildren($id);
                 if (!count($chunks)) {

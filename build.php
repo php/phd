@@ -125,6 +125,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
             $attrs    = $reader->getAttributes();
             $props    = array(
                 "empty" => $reader->isEmptyElement,
+                "isChunk" => $isChunk,
                 /* These two are not used at the moment */
                 "lang"  => $reader->xmlLang,
                 "ns"    => $reader->namespaceURI,
