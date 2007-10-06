@@ -112,6 +112,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'member'                => 'li',
         'modifier'              => 'span',
         'note'                  => 'format_note',
+        'orgname'               => 'span',
         'othercredit'           => 'div',
         'ooclass'               => array(
             /* DEFAULT */          'span',
