@@ -200,6 +200,8 @@ class XHTMLPhDFormat extends PhDFormat {
                 /* DEFAULT */      'h1',
                 'example'       => 'format_bold_paragraph',
                 'note'          => 'format_note_title',
+                'table'         => 'format_table_title',
+                'informaltable' => 'format_table_title',
             ),
             'indexdiv'          => 'dt',
             'legalnotice'       => 'h4',
@@ -222,7 +224,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'varlistentry'          => 'format_varlistentry',
         'varname'               => array(
             /* DEFAULT */          'var',
-            'fieldsynopsis'     => 'format_varname',
+            'fieldsynopsis'     => 'format_fieldsynopsis_varname',
         ),
         'void'                  => 'format_void',
         'warning'               => 'format_admonition',
@@ -239,6 +241,10 @@ class XHTMLPhDFormat extends PhDFormat {
         'shortaffil'           => 'format_suppressed_text',
         'programlisting'       => 'format_programlisting_text',
         'alt'                  => 'format_alt_text',
+        'modifier'             => array(
+            /* DEFAULT */         false,
+            'fieldsynopsis'    => 'format_fieldsynopsis_modifier_text',
+        ),
     );
 
 
@@ -375,10 +381,15 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</div>";
     }
     public function format_fieldsynopsis($open, $name, $attrs) {
+        $this->tmp["fieldsynopsis"] = array();
         if ($open) {
             return '<div class="'.$name.'">';
         }
         return ";</div>\n";
+    }
+    public function format_fieldsynopsis_modifier_text($value, $tag) {
+        $this->tmp["fieldsynopsis"]["modifier"] = trim($value);
+        return $value;
     }
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
@@ -454,9 +465,18 @@ class XHTMLPhDFormat extends PhDFormat {
 
     public function format_varname($open, $name, $attrs) {
         if ($open) {
-            return '<var>$';
+            return '<var class="'.$name.'">$';
         }
         return "</var>\n";
+    }
+    public function format_fieldsynopsis_varname($open, $name, $attrs) {
+        if ($open) {
+            if (isset($this->tmp["fieldsynopsis"]["modifier"]) && $this->tmp["fieldsynopsis"]["modifier"] == "const") {
+                return '<var class="fieldsynopsis_varname">';
+            }
+            return '<var class="'.$name.'">$';
+        }
+        return '</var>';
     }
 
     public function format_co($open, $name, $attrs, $props) {
