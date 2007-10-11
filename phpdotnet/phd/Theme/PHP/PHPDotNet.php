@@ -98,6 +98,7 @@ class phpdotnet extends PhDHelper {
     protected $lang = "en";
 
     protected $CURRENT_ID = "";
+    protected $CURRENT_FUNCTION = null;
     protected $refname;
 
     public function __construct(array $IDs, array $filenames, $ext = "php", $chunked = true) {
@@ -226,7 +227,15 @@ class phpdotnet extends PhDHelper {
     }
     public function format_chunk($open, $name, $attrs, $props) {
         if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-            $this->CURRENT_ID = $attrs[PhDReader::XMLNS_XML]["id"];
+            $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+            if ($name == "refentry") {
+                if(strpos($id, "function.") !== false) {
+                    $id = substr($id, 9);
+                }
+                $this->CURRENT_FUNCTION = $id;
+            } else {
+                $this->CURRENT_FUNCTION = null;
+            }
         }
         if ($props["isChunk"]) {
             $this->tmp["chunk"] = array("examples" => 0);
@@ -238,6 +247,7 @@ class phpdotnet extends PhDHelper {
     }
     public function format_container_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        $this->CURRENT_FUNCTION = null;
         if ($open) {
             if ($props["isChunk"]) {
                 $this->tmp["chunk"] = array("examples" => 0);
@@ -285,6 +295,7 @@ class phpdotnet extends PhDHelper {
     }
     public function format_root_chunk($open, $name, $attrs) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        $this->CURRENT_FUNCTION = null;
         if ($open) {
             return "<div>";
         }
@@ -329,7 +340,7 @@ class phpdotnet extends PhDHelper {
     public function format_function_text($value, $tag) {
         $link = strtolower(str_replace(array("__", "_", "::", "->"), array("", "-", "-", "-"), $value));
 
-        if (!substr_compare($this->CURRENT_ID, $link, -strlen($link)) || !($filename = PhDHelper::getFilename("function.$link"))) {
+        if ($this->CURRENT_FUNCTION === $link || !($filename = PhDHelper::getFilename("function.$link"))) {
             return sprintf("<b>%s%s</b>", $value, $tag == "function" ? "()" : "");
         }
 
