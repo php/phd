@@ -3,7 +3,9 @@
 $r = new PhDReader($OPTIONS);
 $FILENAMES = array();
 $CURRENT_FILENAME = $LAST_CHUNK = "";
-$PARENTS = array(-1 => "ROOT", 1 => "", 2 => "");
+
+#FIXME: This is a workaround for the <legalnotice> element in the PHP manual
+$PARENTS = array(-1 => "ROOT", 1 => "manual", 2 => "manual");
 $lastid = 0;
 
 while($r->read()) {
