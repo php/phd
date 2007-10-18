@@ -143,7 +143,7 @@ manual_header();
         // {{{ Create the "next" link
         if (!empty($siblings[$id]["children"])) {
             $tmp = reset($siblings[$id]["children"]);
-            return array($tmp["filename"].$ext, (empty($tmp["ldesc"]) ? $tmp["sdesc"] : $tmp["ldesc"]));
+            return array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
         }
         do {
             if (!isset($siblings[$id])) {
