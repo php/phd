@@ -199,8 +199,8 @@ class phpdotnet extends PhDHelper {
 
     public function versionInfo($funcname) {
         $funcname = str_replace(
-                array("::", "->", "__", "_", '$'),
-                array("-",  "-",  "-",  "-", ""),
+                array("::", "->", "__", "_", '$', '()'),
+                array("-",  "-",  "-",  "-", "",  ''),
                 strtolower($funcname));
         return isset($this->versions[$funcname]) ? $this->versions[$funcname] : "No version information available, might be only in CVS";
     }
