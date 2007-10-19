@@ -90,7 +90,10 @@ class XHTMLPhDFormat extends PhDFormat {
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
-        'info'                  => 'div',
+        'info'                  => array(
+            /* DEFAULT */         'div',
+            'note'              => 'span',
+        ),
         'informalexample'       => 'div',
         'informaltable'         => 'table',
         'indexdiv'              => 'dl',
@@ -128,6 +131,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'para'                  => array(
             /* DEFAULT */          'p',
             'example'           => 'format_example_content',
+            'note'              => 'format_note_content',
         ),
         'parameter'             => array(
             /* DEFAULT */          'format_parameter',
@@ -647,6 +651,13 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<b>';
         }
         return '</b>';
+    }
+    public function format_note_content($open, $name, $attrs) {
+        if ($open) {
+            /* Ignore the open tag */
+            return "";
+        }
+        return "<br />";
     }
     public function format_bold_paragraph($open, $name, $attrs, $props) {
         if ($props["empty"]) {
