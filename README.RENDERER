@@ -7,10 +7,8 @@ Rendering the documentations for the first time:
 	cd phpdoc
 	php configure.php
 	cd ..
-	cvs -d:pserver:cvsread@cvs.php.net/repository co phd
-	cd phd
-	# Open config.php in text editor and change the "xml_root" to point to your phpdoc (c:/phpdotnet/phpdoc/) checkout and remove the die() line
-	php build.php
+	mkdir output
+	phd c:/phpdotnet/phpdoc
 
 On non-windows operating systems you need to replace the "c:/" with "/home/YOUR-USERNAME/"
 
@@ -21,8 +19,8 @@ After doing all the changes you were going to do:
 	cd c:/phpdotnet/phpdoc
 	php configure.php
 	# If it shows any errors you must fix them before going further
-	cd ../phd
-	php build.php
+	cd ../output
+	phd c:/phpdotnet/phpdoc
 
 On non-windows operating systems you need to replace the "c:/" with "/home/YOUR-USERNAME/"
 
