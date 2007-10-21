@@ -59,7 +59,7 @@ class PhDReader extends XMLReader {
 
     public function __construct($opts, $encoding = "UTF-8", $xml_opts = NULL) {
         if (!XMLReader::open($opts["xml_file"], $encoding, $xml_opts)) {
-            throw new Exception("Cannot open {$opts["file"]}");
+            throw new Exception("Cannot open {$opts["xml_file"]}");
         }
         if (isset($opts["chunk_extra"]) && is_array($opts["chunk_extra"])) {
             foreach($opts["chunk_extra"] as $el => $v) {
