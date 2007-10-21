@@ -185,7 +185,9 @@ manual_header();
         return $next;
     }
     public function __destruct() {
-        copy("php/manual.php", "php/index.php");
+        if (file_exists("php/manual.php")) {
+            copy("php/manual.php", "php/index.php");
+        }
     }
     public function format_qandaset($open, $name, $attrs) {
         if ($open) {

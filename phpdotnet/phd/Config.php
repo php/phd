@@ -13,13 +13,22 @@ $OPTIONS = array (
     ),
   ),
   'index' => true,
-  'xml_root' => '/home/bjori/php/doc',
+  'xml_root' => '.',
   'language' => 'en',
   'fallback_language' => 'en',
   'enforce_revisions' => false,
   'compatibility_mode' => true,
   'build_log_file' => 'none',
   'debug' => true,
+  'render_ids' => array(
+	/*
+	"manual"           => false,
+	"ref.strings"      => false,
+	"function.strpos"  => true,
+	"function.sprintf" => true,
+	"ref.filesystem"   => true,
+	*/
+  ),
 );
 
 if ($argc == 2) {

@@ -44,7 +44,9 @@ NAV;
         return "<hr />$nav</body></html>\n";
     }
     public function __destruct() {
-        copy("html/manual.html", "html/index.html");
+        if (file_exists("html/manual.html")) {
+            copy("html/manual.html", "html/index.html");
+        }
     }
 }
 

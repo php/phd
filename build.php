@@ -41,6 +41,7 @@ $OPTIONS["chunk_extra"]["legalnotice"] = true;
 $OPTIONS["xml_file"] = $OPTIONS["xml_root"] . "/.manual.xml";
 
 require $ROOT. "/include/PhDReader.class.php";
+require $ROOT. "/include/PhDPartialReader.class.php";
 require $ROOT. "/include/PhDHelper.class.php";
 require $ROOT. "/include/PhDFormat.class.php";
 
@@ -112,7 +113,12 @@ foreach($OPTIONS["output_format"] as $output_format) {
         }
     }
 
-    $reader = new PhDReader($OPTIONS);
+    if (!empty($OPTIONS["render_ids"])) {
+        $reader = new PhDPartialReader($OPTIONS);
+    } else {
+        $reader = new PhDReader($OPTIONS);
+    }
+
     while($reader->read()) {
         $nodetype = $reader->nodeType;
 
