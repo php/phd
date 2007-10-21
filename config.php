@@ -30,6 +30,10 @@ $OPTIONS = array (
 	*/
   ),
 );
+$OPTIONS["version_info"] = $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml";
+$OPTIONS["acronyms_file"] = $OPTIONS["xml_root"]."/entities/acronyms.xml";
+$OPTIONS["chunk_extra"]["legalnotice"] = true;
+
 
 if ($argc == 2) {
     $OPTIONS["xml_root"] = $argv[1];
@@ -44,4 +48,6 @@ while (!is_dir($OPTIONS["xml_root"]) || !is_file($OPTIONS["xml_root"] . "/.manua
         $OPTIONS["xml_root"] = $root;
     }
 }
+
+$OPTIONS["xml_file"] = $OPTIONS["xml_root"] . "/.manual.xml";
 

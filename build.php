@@ -37,9 +37,6 @@ if ($ROOT == "@php_dir"."@/phd") {
     && is_array($OPTIONS["output_theme"])
     or die("Invalid configuration/file not found.\nYou need to run setup/setup.php first\n");
 
-$OPTIONS["chunk_extra"]["legalnotice"] = true;
-$OPTIONS["xml_file"] = $OPTIONS["xml_root"] . "/.manual.xml";
-
 require $ROOT. "/include/PhDReader.class.php";
 require $ROOT. "/include/PhDPartialReader.class.php";
 require $ROOT. "/include/PhDHelper.class.php";
@@ -88,8 +85,8 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 case "php":
                     $themes[$themename] = new $themename($IDs,
                         array(
-                            "version" => $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml",
-                            "acronym" => $OPTIONS["xml_root"]."/entities/acronyms.xml",
+                            "version" => $OPTIONS["version_info"],
+                            "acronym" => $OPTIONS["acronyms_file"],
                         )
                     );
                     break;
