@@ -78,9 +78,6 @@
       <extension>
         <name>dom</name>
       </extension>
-      <extension>
-        <name>reflection</name>
-      </extension>
     </required>
   </dependencies>
   <phprelease>

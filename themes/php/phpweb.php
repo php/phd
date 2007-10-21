@@ -114,16 +114,11 @@ manual_header();
         }
 
         // Seek to $id
-        if (HAS_ARRAY_SEEK) {
-        in_array($siblings[$id], $siblings, false, true);
-        } else {
-            /* Workaround PHPs incapability of seeking into array */
-            while(list($tmp,) = each($siblings)) {
-                if ($tmp == $id) {
-                    // Set the internal pointer back to $id
-                    prev($siblings);
-                    break;
-                }
+        while(list($tmp,) = each($siblings)) {
+            if ($tmp == $id) {
+                // Set the internal pointer back to $id
+                prev($siblings);
+                break;
             }
         }
         $tmp = prev($siblings);
@@ -151,20 +146,13 @@ manual_header();
             }
 
             // Seek to $id
-            if (HAS_ARRAY_SEEK) {
-            in_array($siblings[$id], $siblings, false, true) or die(var_export(debug_backtrace(), true) ."\n$id\n$parent"); // This should *never* happen
-            } else {
-                /* Workaround PHPs incapability of seeking into array */
-                while(list($tmp,) = each($siblings)) {
-                    if ($tmp == $id) {
-                        // Set the internal pointer back to $id
-                        prev($siblings);
-                        break;
-                    }
+            while(list($tmp,) = each($siblings)) {
+                if ($tmp == $id) {
+                    break;
                 }
             }
 
-            $tmp = next($siblings);
+            $tmp = current($siblings);
             prev($siblings); // Reset the internal pointer to previous pos
             if ($tmp) {
                 $next = array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
