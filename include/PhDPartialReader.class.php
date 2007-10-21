@@ -28,15 +28,28 @@ class PhDPartialReader extends PhDReader {
                 $id = $this->getAttributeNs("id", PhDReader::XMLNS_XML);
                 if (isset($this->partial[$id])) {
                     if ($this->isChunk == PhDReader::CLOSE_CHUNK) {
+                        if ($this->opts["verbose"] & VERBOSE_PARTIAL_READING) {
+                            v("%s done\n", $id);
+                        }
                         unset($this->partial[$id]);
                         --$seeked;
                         $currently_reading = false;
                     } else {
+                        if ($this->opts["verbose"] & VERBOSE_PARTIAL_READING) {
+                            v("Starting %s...\n", $id);
+                        }
                         $currently_reading = $id;
                         ++$seeked;
                     }
                     return $ret;
                 } elseif ($currently_reading && $this->partial[$currently_reading]) {
+                    if ($this->opts["verbose"] & VERBOSE_PARTIAL_CHILD_READING) {
+                        if ($this->isChunk == PhDReader::OPEN_CHUNK) {
+                            v("Rendering child of %s, %s\n", $currently_reading, $id);
+                        } else {
+                            v("%s done\n", $id);
+                        }
+                    }
                     return $ret;
                 } else {
                     $ignore = true;

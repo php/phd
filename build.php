@@ -43,7 +43,13 @@ require $ROOT. "/include/PhDHelper.class.php";
 require $ROOT. "/include/PhDFormat.class.php";
 
 if ($OPTIONS["index"]) {
+    if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
+        v("Indexing...\n");
+    }
     require $ROOT. "/mktoc.php";
+    if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
+        v("Indexing done\n");
+    }
 
     if ($err) {
         $mktoc = microtime(true);
@@ -56,6 +62,9 @@ if ($OPTIONS["index"]) {
 }
 
 foreach($OPTIONS["output_format"] as $output_format) {
+    if ($OPTIONS["verbose"] & VERBOSE_FORMAT_RENDERING) {
+        v("Starting %s rendering\n", $output_format);
+    }
     switch($output_format) {
     case "xhtml":
         $classname = "XHTMLPhDFormat";
@@ -70,6 +79,9 @@ foreach($OPTIONS["output_format"] as $output_format) {
     $themes = $elementmaps = $textmaps = array();
     foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
         is_dir($ROOT. "/themes/$theme") or die("Can't find the '$theme' theme");
+        if ($OPTIONS["verbose"] & VERBOSE_THEME_RENDERING) {
+            v("Using the %s theme (%s)\n", $theme, join(", ", $array));
+        }
         
         /* Maybe other themes will need additional includes? */
         switch($theme) {
@@ -105,11 +117,18 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 $textmaps[$themename] = $tmp;
             }
         }
+
     }
 
     if (!empty($OPTIONS["render_ids"])) {
+        if ($OPTIONS["verbose"] & VERBOSE_RENDER_STYLE) {
+            v("Running partial build\n");
+        }
         $reader = new PhDPartialReader($OPTIONS);
     } else {
+        if ($OPTIONS["verbose"] & VERBOSE_RENDER_STYLE) {
+            v("Running full build\n");
+        }
         $reader = new PhDReader($OPTIONS);
     }
 
@@ -255,6 +274,9 @@ foreach($OPTIONS["output_format"] as $output_format) {
     }
 
     $reader->close();
+    if ($OPTIONS["verbose"] & VERBOSE_FORMAT_RENDERING) {
+        v("Finished rendering\n");
+    }
 
     if ($err) {
         $end = microtime(true);

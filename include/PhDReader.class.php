@@ -56,6 +56,7 @@ class PhDReader extends XMLReader {
         'set'                   => true,
         'setindex'              => true,
    ); /* }}} */
+    protected $opts = array();
 
     public function __construct($opts, $encoding = "UTF-8", $xml_opts = NULL) {
         if (!XMLReader::open($opts["xml_file"], $encoding, $xml_opts)) {
@@ -66,6 +67,7 @@ class PhDReader extends XMLReader {
                 $this->CHUNK_ME[$el] = $v;
             }
         }
+        $this->opts = $opts;
     }
 
     public function notXPath($tag, $depth = 0) {

@@ -13,9 +13,13 @@ class phpweb extends phpdotnet implements PhDTheme {
     }
     public function writeChunk($id, $stream) {
         rewind($stream);
-        file_put_contents($this->ext."/$id.".$this->ext, $this->header($id));
-        file_put_contents($this->ext."/$id.".$this->ext, $stream, FILE_APPEND);
-        file_put_contents($this->ext."/$id.".$this->ext, $this->footer($id), FILE_APPEND);
+        $filename = $this->ext."/$id.".$this->ext;
+        file_put_contents($filename, $this->header($id));
+        file_put_contents($filename, $stream, FILE_APPEND);
+        file_put_contents($filename, $this->footer($id), FILE_APPEND);
+        if ($GLOBALS["OPTIONS"]["verbose"] & VERBOSE_CHUNK_WRITING) {
+            v("Wrote %s\n", $filename);
+        }
     }
     public function appendData($data, $isChunk) {
         switch($isChunk) {
@@ -53,7 +57,6 @@ class phpweb extends phpdotnet implements PhDTheme {
              * section.
              */
             if (!file_exists($filename)) {
-                echo "Creating $filename...\n";
 
                 foreach($siblings as $sid => $array) {
                     $toc[] = array($sid.$ext, empty($array["sdesc"]) ? $array["ldesc"] : $array["sdesc"]);
@@ -70,6 +73,10 @@ $TOC = ' . var_export($toc, true) . ';
 $PARENTS = ' . var_export($parents, true) . ';';
 
                 file_put_contents($filename, $content);
+
+                if ($GLOBALS["OPTIONS"]["verbose"] & VERBOSE_TOC_WRITING) {
+                    v("Wrote TOC (%s)\n", $filename);
+                }
             }
 
             $incl = 'include_once dirname(__FILE__) ."/toc/' .$parent. '.inc";';
