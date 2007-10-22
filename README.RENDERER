@@ -1,6 +1,6 @@
 
 Rendering the documentations for the first time:
-	cd c:/
+	cd c:\
 	mkdir phpdotnet
 	cd phpdotnet
 	cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc
@@ -8,30 +8,36 @@ Rendering the documentations for the first time:
 	php configure.php
 	cd ..
 	mkdir output
-	phd c:/phpdotnet/phpdoc
+	phd c:\phpdotnet\phpdoc
 
-On non-windows operating systems you need to replace the "c:/" with "/home/YOUR-USERNAME/"
+On non-windows operating systems you need to replace the "c:\" with
+"/home/YOUR-USERNAME/", taking into account the appropriate directory
+separators (\ for windows and / for non-windows).
 
 
 
 Now edit the xml files as you wish in the phpdoc folder.
 After doing all the changes you were going to do:
-	cd c:/phpdotnet/phpdoc
+	cd c:\phpdotnet\phpdoc
 	php configure.php
 	# If it shows any errors you must fix them before going further
-	cd ../output
-	phd c:/phpdotnet/phpdoc
+	cd ..\output
+	phd c:\phpdotnet\phpdoc
 
-On non-windows operating systems you need to replace the "c:/" with "/home/YOUR-USERNAME/"
+On non-windows operating systems you need to replace the "c:\" with
+"/home/YOUR-USERNAME/", taking into account the appropriate directory
+separators (\ for windows and / for non-windows).
 
 
 
 
 This will create
 	"php" directory containing the "phpweb" files
-		NOTE: You CANNOT view these files without a phpweb mirror running. See http://doc.php.net/wiki/phd/view#viewing_the_phpfolder
+		NOTE: You CANNOT view these files without a phpweb mirror running.
+			  See http://doc.php.net/wiki/phd/view#viewing_the_phpfolder
 	"html" direcotry containing the "downloadable chunked html" files
-		NOTE: Do NOT move these files onto your webserver. Just double click them and your browser will open and show you the content
+		NOTE: Do NOT move these files onto your webserver. Just double click
+			  them and your browser will open and show you the content
 	"bightml.html" file, which is the "downloadable bightml" file
 
 
