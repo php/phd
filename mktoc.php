@@ -11,23 +11,17 @@ $lastid = 0;
 while($r->read()) {
     if (!($id = $r->getID())) {
         $name = $r->name;
-        if (in_array($name, array("refname", "titleabbrev")) && empty($IDs[$lastid]["sdesc"])) {
-            switch($name) {
-            case "refname":
+        if (empty($IDs[$lastid]["sdesc"])) {
+            $name = $r->name;
+            if ($name == "refname" || $name == "titleabbrev") {
                 $IDs[$lastid]["sdesc"] = trim($r->readContent($name));
-                continue 2;
-            case "titleabbrev":
-                $IDs[$lastid]["sdesc"] = trim($r->readContent($name));
-                continue 2;
+                continue;
             }
-        } else if (in_array($name, array("title", "refpurpose")) && empty($IDs[$lastid]["ldesc"])) {
-            switch($name) {
-            case "title":
+        }
+        if (empty($IDs[$lastid]["ldesc"])) {
+            $name = $r->name;
+            if ($name == "title" || $name == "refpurpose") {
                 $IDs[$lastid]["ldesc"] = trim($r->readContent($name));
-                continue 2;
-            case "refpurpose":
-                $IDs[$lastid]["ldesc"] = trim($r->readContent($name));
-                continue 2;
             }
         }
         
@@ -54,14 +48,13 @@ while($r->read()) {
 
     $IDs[$id] = array(
         "filename" => $CURRENT_FILENAME,
-        "parent"   => $r->isChunk ? $PARENTS[$r->depth-1] : end($FILENAMES),
+        "parent"   => $r->isChunk ? $PARENTS[$r->depth-1] : $CURRENT_FILENAME,
         "sdesc"    => null,
         "ldesc"    => null,
         "children" => array(),
     );
 
     $lastid = $id;
-
 }
 
 /*
