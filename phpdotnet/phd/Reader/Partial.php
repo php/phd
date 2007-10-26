@@ -51,6 +51,8 @@ class PhDPartialReader extends PhDReader {
                         }
                     }
                     return $ret;
+                } elseif (empty($this->partial)) {
+                    return false;
                 } else {
                     $ignore = true;
                 }
