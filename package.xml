@@ -26,6 +26,7 @@
   <notes>
     - Added partial rendering
     - Added various verbosity levels
+    - Added getopt() parsing for few configuration options
   </notes>
   <contents>
     <dir baseinstalldir="phd" name="/">
