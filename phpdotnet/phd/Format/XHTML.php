@@ -267,17 +267,17 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function transformFromMap($open, $tag, $name, $props) {
         if ($open) {
-            return sprintf('<%s class="%s"%s>', $tag, $name, $props["empty"] ? " /" : "");
+            return '<' .$tag. ' class="' .$name. '"' . ($props["empty"] ? '/' : "") . '>';
         }
-        return "</$tag>";
+        return '</' .$tag. '>';
     }
     public function CDATA($str) {
         switch($this->role) {
         case "php":
-            return sprintf('<div class="phpcode">%s</div>', highlight_string(trim($str), 1));
+            return '<div class="phpcode">' .(highlight_string(trim($str), 1)). '</div>';
             break;
         default:
-            return sprintf('<div class="cdata"><pre>%s</pre></div>', htmlspecialchars($str, ENT_QUOTES, "UTF-8"));
+            return '<div class="cdata"><pre>' .(htmlspecialchars($str, ENT_QUOTES, "UTF-8")). '</pre></div>';
         }
     }
     public function TEXT($str) {
@@ -307,7 +307,7 @@ class XHTMLPhDFormat extends PhDFormat {
 
     public function format_container_chunk($open, $name, $attrs) {
         if ($open) {
-            return sprintf('<div id="%s" class="%s">', $attrs[PhDReader::XMLNS_XML]["id"], $name);
+            return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
         }
         return "</div>";
     }
@@ -320,9 +320,9 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_chunk($open, $name, $attrs) {
         if ($open) {
             if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-                return sprintf('<div id="%s" class="%s">', $attrs[PhDReader::XMLNS_XML]["id"], $name);
+                return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
             }
-            return sprintf('<div class="%s">', $name);
+            return '<div class="' .$name. '">';
         }
         return "</div>";
     }
@@ -331,7 +331,7 @@ class XHTMLPhDFormat extends PhDFormat {
             if(!isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
                 $attrs[PhDReader::XMLNS_DOCBOOK] = "unkown";
             }
-            return sprintf('<div class="%s %s">', $name, $attrs[PhDReader::XMLNS_DOCBOOK]["role"]);
+            return '<div class="' .$name.' ' .$attrs[PhDReader::XMLNS_DOCBOOK]["role"]. '">';
         }
         return "</div>\n";
     }
@@ -572,7 +572,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
-            return isset($attrs[PhDReader::XMLNS_XML]["id"]) ? sprintf('<dt id="%s">', $attrs[PhDReader::XMLNS_XML]["id"]) : "<dt>\n";
+            return isset($attrs[PhDReader::XMLNS_XML]["id"]) ? '<dt id="'.$attrs[PhDReader::XMLNS_XML]["id"]. '">' : "<dt>\n";
         }
         return "</dt>\n";
     }
@@ -584,7 +584,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_userinput($open, $name, $attrs) {
         if ($open) {
-            return sprintf('<strong class="%s"><code>', $name);
+            return '<strong class="' .$name. '"><code>';
         }
         return "</code></strong>\n";
     }
@@ -595,7 +595,7 @@ class XHTMLPhDFormat extends PhDFormat {
             case "directive":
             /* FIXME: Different roles should probably be handled differently */
             default:
-                return sprintf('<code class="systemitem %s">', $name);
+                return '<code class="systemitem ' .$name. '">';
             }
         }
         return "</code>\n";
@@ -690,9 +690,9 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_imagedata($open, $name, $attrs) {
         if (isset($this->tmp["mediaobject"]["alt"])) {
-            return sprintf('<img src="%s" alt="%s" />', $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"], $this->tmp["mediaobject"]["alt"]);
+            return '<img src="' .$attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]. '" alt="' .$this->tmp["mediaobject"]["alt"]. '" />';
         }
-        return sprintf('<img src="%s" />', $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]);
+        return '<img src="' .$attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]. '" />';
     }
 
     public function format_table($open, $name, $attrs) {
@@ -709,18 +709,18 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</colgroup>\n";
     }
     private function parse_table_entry_attributes($attrs) {
-        $retval = sprintf('align="%s"', $attrs["align"]);
+        $retval = 'align="' .$attrs["align"]. '"';
         if ($attrs["align"] == "char" && isset($attrs["char"])) {
-            $retval .= sprintf(' char="%s"', htmlspecialchars($attrs["char"], ENT_QUOTES));
+            $retval .= ' char="' .(htmlspecialchars($attrs["char"], ENT_QUOTES)). '"';
             if (isset($attrs["charoff"])) {
-                $retval .= sprintf(' charoff="%s"', htmlspecialchars($attrs["charoff"], ENT_QUOTES));
+                $retval .= ' charoff="' .(htmlspecialchars($attrs["charoff"], ENT_QUOTES)). '"';
             }
         }
         if (isset($attrs["valign"])) {
-            $retval .= sprintf(' valign="%s"', $attrs["valign"]);
+            $retval .= ' valign="' .$attrs["valign"]. '"';
         }
         if (isset($attrs["colwidth"])) {
-            $retval .= sprintf(' width="%d"', $attrs["colwidth"]);
+            $retval .= ' width="' .((int)$attrs["colwidth"]). '"';
         }
         return $retval;
     }
@@ -728,21 +728,21 @@ class XHTMLPhDFormat extends PhDFormat {
         if ($open) {
             $str = self::parse_table_entry_attributes(PhDFormat::colspec($attrs[PhDReader::XMLNS_DOCBOOK]));
 
-            return sprintf('<col %s />', $str);
+            return '<col '.$str. ' />';
         }
         /* noop */
     }
     public function format_th($open, $name, $attrs) {
         if ($open) {
             $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
-            return sprintf('<%s valign="%s">', $name, $valign);
+            return '<' .$name. ' valign="' .$valign. '">';
         }
         return "</$name>\n";
     }
     public function format_tbody($open, $name, $attrs) {
         if ($open) {
             $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
-            return sprintf('<tbody valign="%s">', $valign);
+            return '<tbody valign="' .$valign. '">';
         }
         return "</tbody>";
     }
@@ -750,14 +750,14 @@ class XHTMLPhDFormat extends PhDFormat {
         if ($open) {
             PhDFormat::initRow();
             $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
-            return sprintf('<tr valign="%s">', $valign);
+            return '<tr valign="' .$valign. '">';
         }
         return "</tr>\n";
     }
     public function format_th_entry($open, $name, $attrs = array()) {
         if ($open) {
             $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
-            return sprintf('<th colspan="%d">', $colspan);
+            return '<th colspan="' .((int)$colspan). '">';
         }
         return '</th>';
     }
@@ -778,13 +778,13 @@ class XHTMLPhDFormat extends PhDFormat {
             $colspan = PhDFormat::colspan($dbattrs);
             $rowspan = PhDFormat::rowspan($dbattrs);
             $moreattrs = self::parse_table_entry_attributes($dbattrs);
-            return sprintf('%s<td colspan="%d" rowspan="%d" %s>', $retval, $colspan, $rowspan, $moreattrs);
+            return $retval. '<td colspan="' .((int)$colspan). '" rowspan="' .((int)$rowspan). '" ' .$moreattrs. '>';
         }
         return "</td>";
     }
 
     public function admonition_title($title, $lang) {
-        return sprintf('<b class="%s">%s</b>', strtolower($title), $this->autogen($title, $lang));
+        return '<b class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</b>';
     }
 }
 

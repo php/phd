@@ -181,15 +181,31 @@ class phpdotnet extends PhDHelper {
                 $class .= " external";
             }
             if ($name == "xref") {
-                return sprintf('<a href="%s%s" class="%s">%s</a>',
-                    $this->chunked ? "" : "#",
-                    $this->chunked ?
-                        $href : (isset($linkto) ? $linkto : $href),
-                    $class, $content . PhDHelper::getDescription($id, false));
+                if ($this->chunked) {
+                    $link = $href;
+                } else {
+                    $link = "#";
+                    if (isset($linkto)) {
+                        $link .= $linkto;
+                    } else {
+                        $link .= $href;
+                    }
+                }
+                return '<a href="' .$link. '" class="' .$class. '">' .($content.PhDHelper::getDescription($id, false)). '</a>';
             } elseif ($props["empty"]) {
-                return sprintf('<a href="%s%s%s" class="%s">%s%2$s</a>', $this->chunked ? "" : "#", $href, $fragment, $class, $content);
+                if ($this->chunked) {
+                    $link = "";
+                } else {
+                    $link = "#";
+                }
+                return '<a href="' .$link.$href.$fragment. '" class="' .$class. '">' .$content.$href.$fragment. '</a>';
             } else {
-                return sprintf('<a href="%s%s%s" class="%s">%s', $this->chunked ? "" : "#", $href, $fragment, $class, $content);
+                if ($this->chunked) {
+                    $link = "";
+                } else {
+                    $link = "#";
+                }
+                return '<a href="' .$link.$href.$fragment. '" class="' .$class. '">' .$content;
             }
         }
         return "</a>";
@@ -217,7 +233,7 @@ class phpdotnet extends PhDHelper {
     }
     public function format_refpurpose($open, $tag, $attrs) {
         if ($open) {
-            return sprintf('<p class="verinfo">(%s)</p><p class="refpurpose">%s — ', htmlspecialchars($this->versionInfo($this->refname), ENT_QUOTES, "UTF-8"), $this->refname);
+            return '<p class="verinfo">(' .(htmlspecialchars($this->versionInfo($this->refname), ENT_QUOTES, "UTF-8")). ')</p><p class="refpurpose">'. $this->refname. ' — ';
         }
         return "</p>\n";
     }
@@ -259,7 +275,7 @@ class phpdotnet extends PhDHelper {
                 }
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_'.$name.'">';
                 foreach($chunks as $chunkid => $junk) {
-                    $content .= sprintf('<li><a href="%s%s.%s">%s</a></li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, true));
+                    $content .= '<li><a href="' .($this->chunked ? "" : "#").$chunkid. '.' .$this->ext. '">' .(PhDHelper::getDescription($chunkid, true)). '</a></li>';
                 }
                 $content .= "</ul>\n";
                 $this->tmp["container_chunk"] = $content;
@@ -273,7 +289,7 @@ class phpdotnet extends PhDHelper {
             if (count($chunks) > 1) {
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_reference">';
                 foreach($chunks as $chunkid => $junk) {
-                    $content .= sprintf('<li><a href="%s%s.%s">%s</a> — %s</li>', $this->chunked ? "" : "#", $chunkid, $this->ext, PhDHelper::getDescription($chunkid, false), PhDHelper::getDescription($chunkid, true));
+                    $content .= '<li><a href="' .($this->chunked ? "" : "#").$chunkid. '.' .$this->ext. '">' .(PhDHelper::getDescription($chunkid, false)). '</a> — ' .(PhDHelper::getDescription($chunkid, true)). '</li>';
                 }
                 $content .= "</ul>\n";
             }
@@ -307,9 +323,9 @@ class phpdotnet extends PhDHelper {
             $long = PhDHelper::getDescription($chunkid, true);
             $short = PhDHelper::getDescription($chunkid, false);
             if ($long && $short && $long != $short) {
-                $content .= sprintf('<li><a href="%s">%s</a> — %s', $href, $short, $long);
+                $content .= '<li><a href="' .$href. '">' .$short. '</a> — ' .$long;
             } else {
-                $content .= sprintf('<li><a href="%s">%s</a>', $href, $long ? $long : $short);
+                $content .= '<li><a href="' .$href. '">' .($long ? $long : $short). '</a>';
             }
             $children = PhDHelper::getChildren($chunkid);
             if (count($children)) {
@@ -319,9 +335,9 @@ class phpdotnet extends PhDHelper {
                     $long = PhDHelper::getDescription($childid, true);
                     $short = PhDHelper::getDescription($childid, false);
                     if ($long && $short && $long != $short) {
-                        $content .= sprintf('<li><a href="%s">%s</a> — %s</li>', $href, $short, $long);
+                        $content .= '<li><a href="' .$href. '">' .$short. '</a> — ' .$long. '</li>';
                     } else {
-                        $content .= sprintf('<li><a href="%s">%s</a></li>', $href, $long ? $long : $short);
+                        $content .= '<li><a href="' .$href. '">' .($long ? $long : $short). '</a></li>';
                     }
                 }
                 $content .="</ul>";
@@ -341,10 +357,10 @@ class phpdotnet extends PhDHelper {
         $link = strtolower(str_replace(array("__", "_", "::", "->"), array("", "-", "-", "-"), $value));
 
         if ($this->CURRENT_FUNCTION === $link || !($filename = PhDHelper::getFilename("function.$link"))) {
-            return sprintf("<b>%s%s</b>", $value, $tag == "function" ? "()" : "");
+            return '<b>' .$value.($tag == "function" ? "()" : ""). '</b>';
         }
 
-        return sprintf('<a href="%s%s.%s" class="function">%s%s</a>', $this->chunked ? "" : "#", $filename, $this->ext, $value, $tag == "function" ? "()" : "");
+        return '<a href="' .($this->chunked ? "" : "#").$filename. '.' .$this->ext. '" class="function">' .$value.($tag == "function" ? "()" : ""). '</a>';
     }
     public function format_type_text($type, $tagname) {
         $t = strtolower($type);
@@ -378,12 +394,12 @@ class phpdotnet extends PhDHelper {
             break;
         }
         if ($href && $this->chunked) {
-            return sprintf('<a href="%s.%s%s" class="%s %s">%5$s</a>', $href, $this->ext, ($fragment ? "#$fragment" : ""), $tagname, $type);
+            return '<a href="' .$href. '.' .$this->ext.($fragment ? "#$fragment" : ""). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
         }
         if ($href) {
-            return sprintf('<a href="#%s" class="%s %s">%3$s</a>', $fragment ? $fragment : $href, $tagname, $type);
+            return '<a href="#' .($fragment ? $fragment : $href). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
         }
-        return sprintf('<span class="%s %s">%2$s</span>', $tagname, $type);
+        return '<span class="' .$tagname. ' ' .$type. '">' .$type. '</span>';
     }
 
     public function format_example_title($open, $name, $attrs, $props) {
@@ -413,7 +429,7 @@ class phpdotnet extends PhDHelper {
         $ret = '<div class="qandaset"><ol class="qandaset_questions">';
         $i = 0;
         foreach($nlist as $node) {
-            $ret .= sprintf('<li><a href="#%s">%s</a></li>', $this->tmp["qandaentry"][$i++], htmlspecialchars($node->textContent,ENT_QUOTES, "UTF-8"));
+            $ret .= '<li><a href="#' .($this->tmp["qandaentry"][$i++]). '">' .(htmlspecialchars($node->textContent,ENT_QUOTES, "UTF-8")). '</a></li>';
         }
 
         return $ret.'</ul>'.$xml.'</div>';
