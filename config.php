@@ -18,6 +18,7 @@ define('VERBOSE_CHUNK_WRITING',          0x80);
 
 define('VERBOSE_ALL',VERBOSE_INDEXING|VERBOSE_FORMAT_RENDERING|VERBOSE_THEME_RENDERING|VERBOSE_RENDER_STYLE|VERBOSE_PARTIAL_READING|VERBOSE_PARTIAL_CHILD_READING|VERBOSE_TOC_WRITING|VERBOSE_CHUNK_WRITING);
 
+define("PHD_VERSION", "0.2.0-dev");
 
 $OPTIONS = array (
   'output_format' => array('xhtml'),
@@ -49,18 +50,19 @@ $OPTIONS = array (
 );
 
 
-$short = "vf:t:i:d:p:";
-$long = array(
-    "The build format to use"       => "format:",
-    "The output theme to use"       => "theme:",
-    "Regenerate the index or not"   => "index:",
-    "The file to render from"       => "docbook:",
-    "The IDs to render"             => "partial:",
-    "Adjust the verbosity level"    => "verbose:",
+$opts = array(
+    "format"   => "f:", // The format to render (xhtml, pdf...)
+    "theme:"   => "t:", // The theme to render (phpweb, bightml..)
+    "index:"   => "i:", // Re-index or load from cache
+    "docbook:" => "d:", // The Docbook XML file to render from (.manual.xml)
+    "partial:" => "p:", // The ID to render (optionally ignoring its childrens)
+    "verbose:" => "v",  // Adjust the verbosity level
+    "version"  => "V",  // Print out version information
+    "help"     => "h",  // Print out help
 );
 
 $verbose = 0;
-$args = getopt($short, $long);
+$args = getopt(implode("", array_values($opts)), array_keys($opts));
 foreach($args as $k => $v) {
     switch($k) {
     /* {{{ Docbook file */
@@ -179,6 +181,39 @@ foreach($args as $k => $v) {
         break;
     /* }}} */
 
+    case "V":
+    case "version":
+        v("PhD version: %s\n", PHD_VERSION);
+        v("Copyright (c) 2007 The PHP Documentation Group");
+        exit(0);
+
+    case "usage":
+    case "help":
+    case "h":
+        echo "PhD version: " .PHD_VERSION;
+        echo "\nCopyright (c) 2007 The PHP Documentation Group\n
+  -v
+  --versbose <int>           Adjusts the verbosity level.
+  -f <formatname>
+  --format <formatname>      The build format to use
+  -t <themename>
+  --theme <themename>        The theme to use
+  -i
+  --index                    Index before rendering or load from cache [NOTE: Not supported yet]
+  -d <filename>
+  --docbook <filename>       The Docbook file to render from
+  -p <id[=bool]>
+  --partial <id[=bool]>      The ID to render, optionally ignoring its children pages (default to true; render childrens)
+  -V
+  --version                  Print the PhD version information
+  -h
+  --help                     This help
+
+All options can be passed multiple times for greater affect.
+NOTE: Long options are only supported using PHP5.3\n";
+        exit(0);
+        break;
+
     default:
         v("Hmh, something weird has happend, I don't know this option");
         var_dump($k, $v);
@@ -189,7 +224,7 @@ foreach($args as $k => $v) {
 
 if ($argc == 2) {
     $OPTIONS["xml_root"] = $argv[1];
-} elseif (is_file($argv[$argc-1]) && $OPTIONS["xml_file"] != $argv[$argc-1]) {
+} elseif ($argc > 2 && is_file($argv[$argc-1]) && $OPTIONS["xml_file"] != $argv[$argc-1]) {
     $OPTIONS["xml_file"] = $argv[$argc-1];
     $OPTIONS["xml_root"] = dirname($argv[$argc-1]);
 }
