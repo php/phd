@@ -27,6 +27,8 @@
     - Added partial rendering
     - Added various verbosity levels
     - Added getopt() parsing for few configuration options
+    - Added support for errorcode, symbol and superscript elements (used by few translations)
+    - Suppressed the contrib element
   </notes>
   <contents>
     <dir baseinstalldir="phd" name="/">
