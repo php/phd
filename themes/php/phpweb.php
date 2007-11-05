@@ -1,6 +1,7 @@
 <?php
 /*  $Id$ */
 
+require_once $ROOT . '/themes/php/phpdotnet.php';
 class phpweb extends phpdotnet implements PhDTheme {
     protected $streams = array();
     protected $writeit = false;

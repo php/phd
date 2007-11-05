@@ -1,6 +1,7 @@
 <?php
 /*  $Id$ */
 
+require_once $ROOT . '/themes/php/phpdotnet.php';
 class bightml extends phpdotnet implements PhDTheme {
     public function __construct(array $IDs, $filename, $ext = "html") {
         parent::__construct($IDs, $filename, $ext, false);

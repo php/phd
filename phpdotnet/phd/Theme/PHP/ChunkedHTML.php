@@ -1,4 +1,7 @@
 <?php
+/*  $Id$ */
+
+require_once $ROOT . '/themes/php/phpweb.php';
 class chunkedhtml extends phpweb {
     private $nav = "";
 

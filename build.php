@@ -83,16 +83,9 @@ foreach($OPTIONS["output_format"] as $output_format) {
             v("Using the %s theme (%s)\n", $theme, join(", ", $array));
         }
         
-        /* Maybe other themes will need additional includes? */
-        switch($theme) {
-        case "php":
-            require $ROOT ."/themes/php/phpdotnet.php";
-            break;
-        }
-
         foreach($array as $themename) {
             $themename = basename($themename);
-            require $ROOT. "/themes/$theme/$themename.php";
+            require_once $ROOT. "/themes/$theme/$themename.php";
             switch($theme) {
                 case "php":
                     $themes[$themename] = new $themename($IDs,

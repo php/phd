@@ -29,6 +29,8 @@
     - Added getopt() parsing for few configuration options
     - Added support for errorcode, symbol and superscript elements (used by few translations)
     - Suppressed the contrib element
+
+    - Fixed bug#43191 (build.php fails to included necessary theme dependencies). (Edward Z. Yang, Richard Q)
   </notes>
   <contents>
     <dir baseinstalldir="phd" name="/">
