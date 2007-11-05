@@ -51,7 +51,7 @@ $OPTIONS = array (
 
 
 $opts = array(
-    "format"   => "f:", // The format to render (xhtml, pdf...)
+    "format:"  => "f:", // The format to render (xhtml, pdf...)
     "theme:"   => "t:", // The theme to render (phpweb, bightml..)
     "index:"   => "i:", // Re-index or load from cache
     "docbook:" => "d:", // The Docbook XML file to render from (.manual.xml)
