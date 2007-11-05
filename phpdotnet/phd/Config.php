@@ -159,12 +159,16 @@ foreach($args as $k => $v) {
 
     /* {{{ Verbosity level */
     case "verbose":
-        if (is_array($v)) {
-            foreach($v as $i => $val) {
-                $verbose |= (int)$val;
+        foreach((array)$v as $i => $val) {
+            foreach(explode("|", $val) as $const) {
+                if (defined($const)) {
+                    $verbose |= (int)constant($const);
+                } elseif (is_numeric($const)) {
+                    $verbose |= (int)$const;
+                } else {
+                    v("Unkown option passed to --$k, $const\n");
+                }
             }
-        } else {
-            $verbose |= (int)$v;
         }
         $OPTIONS["verbose"] = $verbose;
         break;
