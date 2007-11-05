@@ -8,6 +8,7 @@ class chunkedhtml extends phpweb {
     public function __construct(array $IDs, $filename, $ext = "html") {
         phpdotnet::__construct($IDs, $filename, $ext, true);
         if(!file_exists("html") || is_file("html")) mkdir("html") or die("Can't create the cache directory");
+        elseif (file_exists('html/index.html')) unlink('html/index.html'); // preserve back-compat
     }
     public function header($id) {
         $title = PhDHelper::getDescription($id, true);
@@ -47,7 +48,7 @@ NAV;
         return "<hr />$nav</body></html>\n";
     }
     public function __destruct() {
-        if (file_exists("html/manual.html")) {
+        if (file_exists("html/manual.html") && !file_exists('html/index.html')) {
             copy("html/manual.html", "html/index.html");
         }
     }

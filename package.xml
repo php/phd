@@ -30,6 +30,7 @@
     - Added support for errorcode, symbol and superscript elements (used by few translations)
     - Suppressed the contrib element
 
+    - Fixed bug#43192 (Chunked HTML output difficult to use without TOC). (Edward Z. Yang)
     - Fixed bug#43191 (build.php fails to included necessary theme dependencies). (Edward Z. Yang, Richard Q)
   </notes>
   <contents>
