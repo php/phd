@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.5.4" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
   <name>PhD</name>
-  <uri>http://doc.php.net/phd/phd-0.1.0</uri>
+  <uri>http://doc.php.net/phd/phd-0.2.0</uri>
   <summary>A PHP based Docbook renderer</summary>
   <description>
   PhD is a PHP based Docbook renderer aimed to replace the Docbook-XSL
@@ -13,13 +13,13 @@
     <email>bjori@php.net</email>
     <active>yes</active>
   </lead>
-  <date>2007-10-20</date>
+  <date>2007-11-08</date>
   <version>
     <release>0.2.0</release>
     <api>0.2.0</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>devel</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
