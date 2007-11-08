@@ -1,34 +1,31 @@
 
+After installing PhD (via pear install ...) you can use the `phd` command
+to render the documentations.
+Currently `phd` will use the current working directory to render the
+bightml.html file, create a html/ folder for the chunkedhtml and
+php/ folder for the phpweb theme.
+
+
 Rendering the documentations for the first time:
-	cd c:\
-	mkdir phpdotnet
-	cd phpdotnet
-	cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc
-	cd phpdoc
-	php configure.php
-	cd ..
-	mkdir output
-	phd c:\phpdotnet\phpdoc
-
-On non-windows operating systems you need to replace the "c:\" with
-"/home/YOUR-USERNAME/", taking into account the appropriate directory
-separators (\ for windows and / for non-windows).
-
-
-
-Now edit the xml files as you wish in the phpdoc folder.
-After doing all the changes you were going to do:
-	cd c:\phpdotnet\phpdoc
-	php configure.php
-	# If it shows any errors you must fix them before going further
-	cd ..\output
-	phd c:\phpdotnet\phpdoc
-
-On non-windows operating systems you need to replace the "c:\" with
-"/home/YOUR-USERNAME/", taking into account the appropriate directory
-separators (\ for windows and / for non-windows).
-
-
+	WINDOWS:
+		#1) cd c:\
+		#2) cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc
+		#3) cd phpdoc
+		#4) php configure.php
+		(Using PHP5.3:)
+			#5) phd --docbook c:\phpdoc\.manual.xml
+		(Using PHP prior to 5.3:)
+			#5-old) phd c:\phpdoc\
+	
+	*NIX:
+		#1) cd ~
+		#2) cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc
+		#3) cd phpdoc
+		#4) php configure.php
+		(Using PHP5.3:)
+			#5) phd --docbook ~/phpdoc/.manual.xml
+		(Using PHP prior to 5.3:)
+			#5-old) phd -d ~/phpdoc/.manual.xml
 
 
 This will create
@@ -40,5 +37,12 @@ This will create
 			  them and your browser will open and show you the content
 	"bightml.html" file, which is the "downloadable bightml" file
 
+Now edit the XML files as you wish in the phpdoc folder.
+To build the documentation again follow the instructions above, skipping step#2.
 
--Hannes
+The `phd` command optionally takes more arguments.
+For information about those arguments please type `phd -h`
+
+
+- The PHP Documentation team
+
