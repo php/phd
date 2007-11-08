@@ -61,8 +61,24 @@ $opts = array(
     "help"     => "h",  // Print out help
 );
 
-$verbose = 0;
+/* Fix for Windows prior to PHP5.3 */
+if (!function_exists("getopt")) {
+    function getopt($short, $long) {
+        v("I'm sorry, you are running an operating system that does not support getopt()\n");
+        v("Please either upgrade to PHP5.3 or try '%s /path/to/your/docbook.xml'\n", $argv[0]);
+
+        return array();
+    }
+}
+
 $args = getopt(implode("", array_values($opts)), array_keys($opts));
+if($args === false) {
+    v("Something happend with getopt(), please report a bug\n");
+    exit(-1);
+}
+
+$verbose = 0;
+$docbook = false;
 foreach($args as $k => $v) {
     switch($k) {
     /* {{{ Docbook file */
@@ -78,6 +94,7 @@ foreach($args as $k => $v) {
         }
         $OPTIONS["xml_root"] = dirname($v);
         $OPTIONS["xml_file"] = $v;
+        $docbook = true;
         break;
     /* }}} */
 
@@ -226,11 +243,15 @@ NOTE: Long options are only supported using PHP5.3\n";
 }
 
 
-if ($argc == 2) {
-    $OPTIONS["xml_root"] = $argv[1];
-} elseif ($argc > 2 && is_file($argv[$argc-1]) && $OPTIONS["xml_file"] != $argv[$argc-1]) {
-    $OPTIONS["xml_file"] = $argv[$argc-1];
-    $OPTIONS["xml_root"] = dirname($argv[$argc-1]);
+if (!$docbook) {
+    $arg = $argv[$argc-1];
+    if (is_dir($arg)) {
+        $OPTIONS["xml_root"] = $arg;
+        $OPTIONS["xml_file"] = $arg . "/.manual.xml";
+    } elseif (is_file($arg)) {
+        $OPTIONS["xml_root"] = dirname($arg);
+        $OPTIONS["xml_file"] = $arg;
+    }
 }
 
 while (!is_dir($OPTIONS["xml_root"]) || !is_file($OPTIONS["xml_file"])) {
