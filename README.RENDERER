@@ -1,5 +1,15 @@
 
-After installing PhD (via pear install ...) you can use the `phd` command
+Installing the PhD renderer:
+	From Release ball:
+		pear install http://doc.php.net/phd/PhD-0.2.0.tgz
+
+	From CVS:
+		cvs -d:pserver:cvsread@cvs.php.net/repository co phd
+		cd phd
+		pear install -f package.xml
+
+
+After installing PhD you can use the `phd` command
 to render the documentations.
 Currently `phd` will use the current working directory to render the
 bightml.html file, create a html/ folder for the chunkedhtml and
