@@ -1,7 +1,7 @@
 <?php
 /*  $Id$ */
 
-class phpdotnet extends PhDHelper {
+abstract class phpdotnet extends PhDTheme {
     protected $elementmap = array(
         'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
@@ -80,7 +80,13 @@ class phpdotnet extends PhDHelper {
     protected $textmap =        array(
         'acronym'               => 'format_acronym_text',
         'function'              => 'format_function_text',
-        'methodname'            => 'format_function_text',
+        'methodname'            => array(
+            /* DEFAULT */          'format_function_text',
+            'methodsynopsis'    => array(
+                /* DEFAULT */      'format_function_text',
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+        ),
         'type'                  => array(
             /* DEFAULT */          'format_type_text',
             'classsynopsisinfo' => false,
@@ -353,14 +359,21 @@ class phpdotnet extends PhDHelper {
         /* ignore it */
         return "";
     }
-    public function format_function_text($value, $tag) {
+    
+    public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
+        $display_value = $this->format->format_classsynopsis_methodsynopsis_methodname_text($value, $tag);
+        return $this->format_function_text($value, $tag, $display_value);
+    }
+    
+    public function format_function_text($value, $tag, $display_value = null) {
+        if ($display_value === null) $display_value = $value;
         $link = strtolower(str_replace(array("__", "_", "::", "->"), array("", "-", "-", "-"), $value));
 
         if ($this->CURRENT_FUNCTION === $link || !($filename = PhDHelper::getFilename("function.$link"))) {
-            return '<b>' .$value.($tag == "function" ? "()" : ""). '</b>';
+            return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
         }
 
-        return '<a href="' .($this->chunked ? "" : "#").$filename. '.' .$this->ext. '" class="function">' .$value.($tag == "function" ? "()" : ""). '</a>';
+        return '<a href="' .($this->chunked ? "" : "#").$filename. '.' .$this->ext. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
     }
     public function format_type_text($type, $tagname) {
         $t = strtolower($type);

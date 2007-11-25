@@ -2,7 +2,7 @@
 /*  $Id$ */
 
 require_once $ROOT . '/themes/php/phpdotnet.php';
-class bightml extends phpdotnet implements PhDTheme {
+class bightml extends phpdotnet {
     public function __construct(array $IDs, $filename, $ext = "html") {
         parent::__construct($IDs, $filename, $ext, false);
         $this->stream = fopen("bightml.html", "w");

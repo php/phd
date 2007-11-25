@@ -79,9 +79,6 @@ abstract class PhDFormat extends PhDHelper {
 
 }
 
-interface PhDTheme {
-    public function appendData($data, $isChunk);
-}
 /*
  * vim600: sw=4 ts=4 fdm=syntax syntax=php et
  * vim<600: sw=4 ts=4

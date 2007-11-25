@@ -41,6 +41,7 @@ require $ROOT. "/include/PhDReader.class.php";
 require $ROOT. "/include/PhDPartialReader.class.php";
 require $ROOT. "/include/PhDHelper.class.php";
 require $ROOT. "/include/PhDFormat.class.php";
+require $ROOT. "/include/PhDTheme.class.php";
 
 if ($OPTIONS["index"]) {
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
@@ -98,6 +99,11 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 default:
                     $themes[$themename] = new $themename($IDs);
             }
+            
+            // WARNING: this needs to go away when we add support for
+            // things other than xhtml
+            $themes[$themename]->registerFormat($format);
+            
 
             // If the theme returns empty callback map there is no need to include it
             $tmp = $themes[$themename]->getElementMap();

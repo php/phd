@@ -254,6 +254,20 @@ class XHTMLPhDFormat extends PhDFormat {
             /* DEFAULT */         false,
             'fieldsynopsis'    => 'format_fieldsynopsis_modifier_text',
         ),
+        'classname'            => array(
+            /* DEFAULT */         false,
+            'ooclass'          => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
+            ),
+        ),
+        'methodname'           => array(
+            /* DEFAULT */         false,
+            'methodsynopsis'    => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+        ),
     );
 
 
@@ -389,6 +403,19 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</div>";
     }
+    
+    public function format_classsynopsis_ooclass_classname_text($value, $tag) {
+        $this->tmp["classsynopsis"]["classname"] = $value;
+        return $value;
+    }
+    
+    public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
+        if (!isset($this->tmp["classsynopsis"]["classname"])) return $value;
+        list($class, $method) = explode('::', $value);
+        if ($class !== $this->tmp["classsynopsis"]["classname"]) return $value;
+        return $method;
+    }
+    
     public function format_fieldsynopsis($open, $name, $attrs) {
         $this->tmp["fieldsynopsis"] = array();
         if ($open) {
