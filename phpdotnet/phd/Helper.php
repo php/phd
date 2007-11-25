@@ -37,7 +37,7 @@ class PhDHelper {
 
         $filename = dirname(__FILE__) ."/langs/$lang.xml";
         $r = new XMLReader;
-        if (!$r->open($filename)) {
+        if (!file_exists($filename) || !$r->open($filename)) {
             if ($lang == "en") {
                 throw new Exception("Cannot open $filename");
             }
