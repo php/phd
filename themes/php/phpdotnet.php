@@ -82,7 +82,15 @@ abstract class phpdotnet extends PhDTheme {
         'function'              => 'format_function_text',
         'methodname'            => array(
             /* DEFAULT */          'format_function_text',
+            'constructorsynopsis' => array(
+                /* DEFAULT */      'format_function_text',
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
             'methodsynopsis'    => array(
+                /* DEFAULT */      'format_function_text',
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'destructorsynopsis' => array(
                 /* DEFAULT */      'format_function_text',
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
             ),

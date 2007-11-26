@@ -263,7 +263,15 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'methodname'           => array(
             /* DEFAULT */         false,
+            'constructorsynopsis' => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
             'methodsynopsis'    => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'destructorsynopsis' => array(
                 /* DEFAULT */     false,
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
             ),
