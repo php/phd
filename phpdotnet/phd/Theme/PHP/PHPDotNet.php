@@ -374,10 +374,23 @@ abstract class phpdotnet extends PhDTheme {
     }
     
     public function format_function_text($value, $tag, $display_value = null) {
-        if ($display_value === null) $display_value = $value;
+        if ($display_value === null) {
+            $display_value = $value;
+        }
+        
         $link = strtolower(str_replace(array("__", "_", "::", "->"), array("", "-", "-", "-"), $value));
-
-        if ($this->CURRENT_FUNCTION === $link || !($filename = PhDHelper::getFilename("function.$link"))) {
+        $oop_link = strtolower(str_replace(array("_", "::", "->"), array("", ".", "."), $value));
+        
+        if (
+            (
+                $this->CURRENT_FUNCTION === $link ||
+                !($filename = PhDHelper::getFilename("function.$link"))
+            ) ||
+            (
+                $this->CURRENT_ID === $oop_link ||
+                !($filename = PhDHelper::getFilename($oop_link))
+            )
+        ) {
             return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
         }
 
