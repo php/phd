@@ -426,7 +426,11 @@ abstract class phpdotnet extends PhDTheme {
             $href = "language.pseudo-types";
             $fragment = "language.types.$t";
             break;
+        default:
+            /* Check if its a classname. */
+            $href = PhDTheme::getFilename("class.$t");
         }
+
         if ($href && $this->chunked) {
             return '<a href="' .$href. '.' .$this->ext.($fragment ? "#$fragment" : ""). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
         }
