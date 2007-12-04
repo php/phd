@@ -418,9 +418,21 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
-        if (!isset($this->tmp["classsynopsis"]["classname"])) return $value;
-        list($class, $method) = explode('::', $value);
-        if ($class !== $this->tmp["classsynopsis"]["classname"]) return $value;
+        if (!isset($this->tmp["classsynopsis"]["classname"])) {
+            return $value;
+        }
+        if (strpos($value, '::')) {
+            $explode = '::';
+        } else if (strpos($value, '->')) {
+            $explode = '->';
+        } else {
+            return $value;
+        }
+
+        list($class, $method) = explode($explode, $value);
+        if ($class !== $this->tmp["classsynopsis"]["classname"]) {
+            return $value;
+        }
         return $method;
     }
     
