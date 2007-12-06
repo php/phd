@@ -385,7 +385,7 @@ abstract class phpdotnet extends PhDTheme {
             (
                 $this->CURRENT_FUNCTION === $link ||
                 !($filename = PhDHelper::getFilename("function.$link"))
-            ) ||
+            ) &&
             (
                 $this->CURRENT_ID === $oop_link ||
                 !($filename = PhDHelper::getFilename($oop_link))
