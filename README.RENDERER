@@ -1,7 +1,8 @@
 
 Installing the PhD renderer:
 	From Release ball:
-		pear install http://doc.php.net/phd/PhD-0.2.0.tgz
+		pear install http://doc.php.net/phd/PhD-x.y.z.tgz
+		# Where x.y.z is the version number, i.e. 0.2.1
 
 	From CVS:
 		cvs -d:pserver:cvsread@cvs.php.net/repository co phd
@@ -36,6 +37,7 @@ Rendering the documentations for the first time:
 			#5) phd --docbook ~/phpdoc/.manual.xml
 		(Using PHP prior to 5.3:)
 			#5-old) phd -d ~/phpdoc/.manual.xml
+		NOTE: The shortform works on PHP5.3 too
 
 
 This will create
