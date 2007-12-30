@@ -33,6 +33,7 @@
     <dir baseinstalldir="phd" name="/">
       <file baseinstalldir="phd" name="formats/xhtml.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDFormat.class.php" role="php"/>
+      <file baseinstalldir="phd" name="include/PhDTheme.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDHelper.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDReader.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDPartialReader.class.php" role="php"/>
