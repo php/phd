@@ -2,29 +2,6 @@
 <?php
 /*  $Id$ */
 
-function err($no, $str, $file, $line) {
-    global $notify;
-    if (strpos($str, "No mapper") !== false) {
-//        $notify->update("Another missing function", strstr($str, "'"))->show();
-        return false;
-    }
-
-    $err = new PHNotify("Something wrong!", "$str\n$file:$line\n", "dialog-error");
-    $err
-        ->urgency(PHNotify::URGENCY_CRITICAL)
-        ->timeout(PHNotify::EXPIRES_NEVER)
-        ->hint("x", 1680/2)->hint("y", 1050/2)
-        ->show();
-    return false;
-}
-
-if ($err = extension_loaded("phnotify")) {
-    $notify = new PHNotify("Starting build");
-    $notify->urgency(PHNotify::URGENCY_LOW)->hint("x", 1680)->hint("y", 10)->show();
-    $start = microtime(true);
-    set_error_handler("err");
-}
-
 $ROOT = "@php_dir@/phd";
 if ($ROOT == "@php_dir"."@/phd") {
     $ROOT = dirname(__FILE__);
@@ -50,13 +27,6 @@ if ($OPTIONS["index"]) {
     require $ROOT. "/mktoc.php";
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
         v("Indexing done\n");
-    }
-
-    if ($err) {
-        $mktoc = microtime(true);
-        $notify
-            ->update("mktoc finished", sprintf("mktoc ran for <b>%d</b> sec", $mktoc-$start))
-            ->show();
     }
 } else {
     /* FIXME: Load from sqlite db? */
@@ -278,14 +248,6 @@ foreach($OPTIONS["output_format"] as $output_format) {
         v("Finished rendering\n");
     }
 
-    if ($err) {
-        $end = microtime(true);
-        $notify
-            ->update(
-                    "PhD build finished",
-                    sprintf("mktoc build: <b>%d</b> sec\nPhD build   : <b>%d</b> sec\n--\nTotal time: <b>%d</b> seconds\n", $mktoc-$start, $end-$mktoc, $end-$start))
-            ->show();
-    }
 } // foreach($OPTIONS["output_thtemes"])
 
 /*
