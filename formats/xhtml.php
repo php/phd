@@ -195,7 +195,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'synopsis'              => 'pre',
         'tag'                   => 'code',
         'table'                 => 'format_table',
-        'term'                  => 'span',
+        'term'                  => 'format_term',
         'tfoot'                 => 'format_th',
         'thead'                 => 'format_th',
         'tgroup'                => 'format_tgroup',
@@ -633,6 +633,15 @@ class XHTMLPhDFormat extends PhDFormat {
             return "<dd>\n";
         }
         return "</dd>\n";
+    }
+    public function format_term($open, $name, $attrs, $props) {
+        if ($open) {
+            if ($props["sibling"] == $name) {
+                return '<br /><span class="' .$name. '">';
+            }
+            return '<span class="' .$name. '">';
+        }
+        return "</span>\n";
     }
     public function format_userinput($open, $name, $attrs) {
         if ($open) {
