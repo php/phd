@@ -85,11 +85,11 @@ foreach($args as $k => $v) {
     case "d":
     case "docbook":
         if (is_array($v)) {
-            v("Can only parse one file at a time");
+            v("Can only parse one file at a time\n");
             exit(-1);
         }
         if (!file_exists($v) || is_dir($v) || !is_readable($v)) {
-            v("'%s' is not a readable docbook file", $v);
+            v("'%s' is not a readable docbook file\n", $v);
             exit(-1);
         }
         $OPTIONS["xml_root"] = dirname($v);
@@ -102,7 +102,7 @@ foreach($args as $k => $v) {
     case "f":
     case "format":
         if ($v != "xhtml") {
-            v("Only xhtml is supported at this time");
+            v("Only xhtml is supported at this time\n");
             exit(-1);
         }
         break;
@@ -112,7 +112,7 @@ foreach($args as $k => $v) {
     case "i":
     case "index":
         if (is_array($v)) {
-            v("You cannot pass %s more than once", $k);
+            v("You cannot pass %s more than once\n", $k);
             exit(-1);
         }
         switch ($v) {
@@ -127,7 +127,7 @@ foreach($args as $k => $v) {
             $OPTIONS["index"] = false;
             break;
         default:
-            v("yes/no || true/false || 1/0 expected");
+            v("yes/no || true/false || 1/0 expected\n");
             exit(-1);
         }
         break;
@@ -167,7 +167,7 @@ foreach($args as $k => $v) {
                 }
                 break;
             default:
-                v("Unkown theme '%s'", $val);
+                v("Unkown theme '%s'\n", $val);
                 exit(-1);
             }
         }
@@ -205,7 +205,7 @@ foreach($args as $k => $v) {
     case "V":
     case "version":
         v("PhD version: %s\n", PHD_VERSION);
-        v("Copyright (c) 2007 The PHP Documentation Group");
+        v("Copyright (c) 2007 The PHP Documentation Group\n");
         exit(0);
 
     case "usage":
