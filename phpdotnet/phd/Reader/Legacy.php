@@ -13,6 +13,7 @@ class PhDReader extends XMLReader {
     private $STACK    = array();
     private $LAST_DEPTH = -1;
     private $lastChunkDepth = -1;
+    private $PREVIOUS_SIBLING = "";
 
     public $isChunk = false;
 
@@ -107,6 +108,10 @@ class PhDReader extends XMLReader {
     public function getParentTagName() {
         return $this->STACK[$this->depth-1];
     }
+    public function getPreviousSiblingTagName() {
+        return $this->PREVIOUS_SIBLING;
+    }
+
     public function read() {
         $this->isChunk = false;
         if(XMLReader::read()) {

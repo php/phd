@@ -144,9 +144,9 @@ foreach($OPTIONS["output_format"] as $output_format) {
             $props    = array(
                 "empty" => $reader->isEmptyElement,
                 "isChunk" => $isChunk,
-                /* These two are not used at the moment */
                 "lang"  => $reader->xmlLang,
                 "ns"    => $reader->namespaceURI,
+                "sibling" => $reader->getPreviousSiblingTagName(),
             );
 
             $skip = array();
@@ -165,6 +165,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                             }
                             continue;
                         }
+
                         $funcname = $tag;
                         $retval = $themes[$theme]->{$funcname}($open, $nodename, $attrs, $props);
                         if ($retval !== false) {
