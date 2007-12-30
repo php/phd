@@ -3,19 +3,22 @@
 //6271
 
 class PhDReader extends XMLReader {
+
+    /* {{{ Class constants */
     const XMLNS_XML   = "http://www.w3.org/XML/1998/namespace";
     const XMLNS_XLINK = "http://www.w3.org/1999/xlink";
     const XMLNS_PHD   = "http://www.php.net/ns/phd";
     const XMLNS_DOCBOOK = "http://docbook.org/ns/docbook";
     const OPEN_CHUNK  = 0x01;
     const CLOSE_CHUNK = 0x02;
+    /* }}} */
 
+    /* {{{ Private props */
     private $STACK    = array();
     private $LAST_DEPTH = -1;
     private $lastChunkDepth = -1;
     private $PREVIOUS_SIBLING = "";
-
-    public $isChunk = false;
+    /* }}} */
 
     protected $CHUNK_ME = array( /* {{{ */
         'article'               => true,
@@ -59,7 +62,9 @@ class PhDReader extends XMLReader {
    ); /* }}} */
     protected $opts = array();
 
-    public function __construct($opts, $encoding = "UTF-8", $xml_opts = NULL) {
+    public $isChunk = false;
+
+    public function __construct($opts, $encoding = "UTF-8", $xml_opts = NULL) { /* {{{ */
         if (!XMLReader::open($opts["xml_file"], $encoding, $xml_opts)) {
             throw new Exception("Cannot open {$opts["xml_file"]}");
         }
@@ -69,9 +74,9 @@ class PhDReader extends XMLReader {
             }
         }
         $this->opts = $opts;
-    }
+    } /* }}} */
 
-    public function notXPath($tag, $depth = 0) {
+    public function notXPath($tag, $depth = 0) { /* {{{ */
         if(!$depth) {
             $depth = $this->depth;
         }
@@ -83,36 +88,36 @@ class PhDReader extends XMLReader {
             }
         } while (is_array($tag));
         return $tag;
-    }
+    } /* }}} */
 
     /* Seek to an ID within the file. */
-    public function seek($id) {
+    public function seek($id) { /* {{{ */
         while(XMLReader::read()) {
             if ($this->nodeType === XMLREADER::ELEMENT && $this->hasAttributes && XMLReader::moveToAttributeNs("id", self::XMLNS_XML) && $this->value === $id) {
                 return XMLReader::moveToElement();
             }
         }
         return false;
-    }
+    } /* }}} */
 
     /* Get the ID of current node */
-    public function getID() {
+    public function getID() { /* {{{ */
         if ($this->hasAttributes && XMLReader::moveToAttributeNs("id", self::XMLNS_XML)) {
             $id = $this->value;
             XMLReader::moveToElement();
             return $id;
         }
         return "";
-    }
+    } /* }}} */
 
-    public function getParentTagName() {
+    public function getParentTagName() { /* {{{ */
         return $this->STACK[$this->depth-1];
-    }
-    public function getPreviousSiblingTagName() {
+    } /* }}} */
+    public function getPreviousSiblingTagName() { /* {{{ */
         return $this->PREVIOUS_SIBLING;
-    }
+    } /* }}} */
 
-    public function read() {
+    public function read() { /* {{{ */
         $this->isChunk = false;
         if(XMLReader::read()) {
             $type = $this->nodeType;
@@ -144,21 +149,21 @@ class PhDReader extends XMLReader {
             return true;
         }
         return false;
-    }
+    } /* }}} */
    
     /* Get the attribute value by name, if exists. */
-    public function readAttribute($attr) {
+    public function readAttribute($attr) { /* {{{ */
         $retval = XMLReader::moveToAttribute($attr) ? $this->value : "";
         XMLReader::moveToElement();
         return $retval;
-    }
-    public function readAttributeNs($attr, $ns) {
+    } /* }}} */
+    public function readAttributeNs($attr, $ns) { /* {{{ */
         $retval = XMLReader::moveToAttributeNs($attr, $ns) ? $this->value : "";
         XMLReader::moveToElement();
         return $retval;
-    }
+    } /* }}} */
     /* Get all attributes of current node */
-    public function getAttributes() {
+    public function getAttributes() { /* {{{ */
         $attrs = array(PhDReader::XMLNS_DOCBOOK => array(), PhDReader::XMLNS_XML => array());
         if ($this->hasAttributes) {
             XMLReader::moveToFirstAttribute();
@@ -170,11 +175,11 @@ class PhDReader extends XMLReader {
             XMLReader::moveToElement();
         }
         return $attrs;
-    }
+    } /* }}} */
 
 
     /* Get the content of a named node, or the current node. */
-    public function readContent($node = null) {
+    public function readContent($node = null) { /* {{{ */
         $retval = "";
 
         if($this->isEmptyElement) {
@@ -188,14 +193,14 @@ class PhDReader extends XMLReader {
             $retval .= $this->value;
         }
         return $retval;
-    }
+    } /* }}} */
     /* Read $nodeName until END_ELEMENT */
-    public function readNode($nodeName) {
+    public function readNode($nodeName) { /* {{{ */
         return XMLReader::read() && !($this->nodeType === XMLReader::END_ELEMENT && $this->name == $nodeName);
-    }
+    } /* }}} */
 
   
-    public function isChunk($tag) {
+    public function isChunk($tag) { /* {{{ */
         if (isset($this->CHUNK_ME[$tag])) {
             $isChunk = $this->CHUNK_ME[$tag];
             if (is_array($isChunk)) {
@@ -207,14 +212,14 @@ class PhDReader extends XMLReader {
             return $isChunk;
         }
         return false;
-    }
-    public function isSectionChunk($tag) {
+    } /* }}} */
+    public function isSectionChunk($tag) { /* {{{ */
         if ($this->PREVIOUS_SIBLING == $tag && $this->checkSectionDepth()) {
             return true;
         }
         return false;
-    }
-    protected function checkSectionDepth() {
+    } /* }}} */
+    protected function checkSectionDepth() { /* {{{ */
         static $allowedParents = array("section", "sect2", "sect3", "sect4", "sect5");
         static $chunkers       = array(
             "sect1", "preface", "chapter", "appendix", "article", "part", "reference", "refentry",
@@ -234,11 +239,11 @@ class PhDReader extends XMLReader {
             return true;
         }
         return false;
-    }
+    } /* }}} */
 }
 
 /*
-* vim600: sw=4 ts=4 fdm=syntax syntax=php et
+* vim600: sw=4 ts=4 syntax=php fdm=marker et
 * vim<600: sw=4 ts=4
 */
 
