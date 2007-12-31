@@ -25,6 +25,7 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Removed support for phnotify
+    - Fixed E_NOTICE on empty references
   </notes>
   <contents>
     <dir baseinstalldir="phd" name="/">

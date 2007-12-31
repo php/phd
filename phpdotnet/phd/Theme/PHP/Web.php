@@ -58,6 +58,7 @@ class phpweb extends phpdotnet {
              * section.
              */
             if (!file_exists($filename)) {
+                $toc = array();
 
                 foreach($siblings as $sid => $array) {
                     $toc[] = array($sid.$ext, empty($array["sdesc"]) ? $array["ldesc"] : $array["sdesc"]);
