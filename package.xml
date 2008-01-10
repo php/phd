@@ -26,6 +26,7 @@
   <notes>
     - Removed support for phnotify
     - Fixed E_NOTICE on empty references
+    - Added index chaching (Edward Z.)
   </notes>
   <contents>
     <dir baseinstalldir="phd" name="/">

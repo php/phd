@@ -20,16 +20,31 @@ require $ROOT. "/include/PhDHelper.class.php";
 require $ROOT. "/include/PhDFormat.class.php";
 require $ROOT. "/include/PhDTheme.class.php";
 
-if ($OPTIONS["index"]) {
+if (!$OPTIONS["index"] && file_exists("index.ser")) {
+    /* FIXME: Load from sqlite db? */
+    if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
+        v("Unserializing cached index file...\n");
+    }
+    $IDs = unserialize(file_get_contents("index.ser"));
+    if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
+        v("Unserialization done\n");
+    }
+} else {
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
         v("Indexing...\n");
     }
     require $ROOT. "/mktoc.php";
+
+    file_put_contents("index.ser", $ser = serialize($IDs));
+
+    $IDs2 = unserialize($ser);
+    if ($IDs !== $IDs2) {
+        v("WARNING: Serialized representation does not match");
+    }
+
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
         v("Indexing done\n");
     }
-} else {
-    /* FIXME: Load from sqlite db? */
 }
 
 foreach($OPTIONS["output_format"] as $output_format) {

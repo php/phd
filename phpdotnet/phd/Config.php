@@ -219,8 +219,8 @@ foreach($args as $k => $v) {
   --format <formatname>      The build format to use
   -t <themename>
   --theme <themename>        The theme to use
-  -i
-  --index                    Index before rendering or load from cache [NOTE: Not supported yet]
+  -i <bool>
+  --index <bool>             Index before rendering (default) or load from cache (false)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -p <id[=bool]>
