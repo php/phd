@@ -197,6 +197,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'table'                 => 'format_table',
         'term'                  => 'format_term',
         'tfoot'                 => 'format_th',
+        'tbody'                 => 'format_tbody',
         'thead'                 => 'format_th',
         'tgroup'                => 'format_tgroup',
         'tip'                   => 'format_admonition',
