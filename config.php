@@ -57,6 +57,7 @@ $opts = array(
     "docbook:" => "d:", // The Docbook XML file to render from (.manual.xml)
     "partial:" => "p:", // The ID to render (optionally ignoring its childrens)
     "verbose:" => "v",  // Adjust the verbosity level
+    "list::"   => "l::", // List supported themes/formats
     "version"  => "V",  // Print out version information
     "help"     => "h",  // Print out help
 );
@@ -130,6 +131,42 @@ foreach($args as $k => $v) {
             v("yes/no || true/false || 1/0 expected\n");
             exit(-1);
         }
+        break;
+    /* }}} */
+
+    /* {{{ Print out a list of formats/themes */
+    case "l":
+    case "list":
+        /* FIXME: This list should be created dynamically */
+        foreach((array)$v as $val) {
+            switch($val) {
+            case "f":
+            case "format":
+            case "formats":
+                echo "Supported formats:\n";
+                echo "\txhtml\n";
+                break;
+
+            case "t":
+            case "theme":
+            case "themes":
+                echo "Supported themes:\n";
+                echo "\tphpweb\n";
+                echo "\tchunkedhtml\n";
+                echo "\tbightml\n";
+                break;
+
+            case false:
+                echo "Supported formats:\n";
+                echo "\txhtml\n";
+                echo "Supported themes:\n";
+                echo "\tphpweb\n";
+                echo "\tchunkedhtml\n";
+                echo "\tbightml\n";
+                break;
+            }
+        }
+        exit(0);
         break;
     /* }}} */
 
@@ -225,6 +262,8 @@ foreach($args as $k => $v) {
   --docbook <filename>       The Docbook file to render from
   -p <id[=bool]>
   --partial <id[=bool]>      The ID to render, optionally ignoring its children pages (default to true; render childrens)
+  -l <formats/themes>
+  --list <formats/themes>    Print out the supported formats/themes (default: both)
   -V
   --version                  Print the PhD version information
   -h

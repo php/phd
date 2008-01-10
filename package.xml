@@ -27,6 +27,7 @@
     - Removed support for phnotify
     - Fixed E_NOTICE on empty references
     - Added index chaching (Edward Z.)
+    - Added option (-l/--list) to list the supported formats/themes
   </notes>
   <contents>
     <dir baseinstalldir="phd" name="/">
