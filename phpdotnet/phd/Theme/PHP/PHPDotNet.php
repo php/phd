@@ -300,7 +300,7 @@ abstract class phpdotnet extends PhDTheme {
         $content = "";
         if ($name == "reference") {
             $chunks = PhDHelper::getChildren($id);
-            if (count($chunks) > 1) {
+            if (count($chunks)) {
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_reference">';
                 foreach($chunks as $chunkid => $junk) {
                     $content .= '<li><a href="' .($this->chunked ? "" : "#").$chunkid. '.' .$this->ext. '">' .(PhDHelper::getDescription($chunkid, false)). '</a> — ' .(PhDHelper::getDescription($chunkid, true)). '</li>';

@@ -26,6 +26,7 @@
   <notes>
     - Removed support for phnotify
     - Fixed E_NOTICE on empty references
+    - Fixed bug#43428 (Empty TOC)
     - Added index chaching (Edward Z.)
     - Added option (-l/--list) to list the supported formats/themes
   </notes>
