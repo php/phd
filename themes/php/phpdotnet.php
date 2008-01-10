@@ -182,13 +182,17 @@ abstract class phpdotnet extends PhDTheme {
         if ($open) {
             $content = $fragment = "";
             $class = $name;
+
             if(isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
                 $linkto = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
                 $id = $href = PhDHelper::getFilename($linkto);
+
                 if ($id != $linkto) {
                     $fragment = "#$linkto";
                 }
-                $href .= ".".$this->ext;
+                if ($this->chunked) {
+                    $href .= ".".$this->ext;
+                }
             } elseif(isset($attrs[PhDReader::XMLNS_XLINK]["href"])) {
                 $href = $attrs[PhDReader::XMLNS_XLINK]["href"];
                 $content = "&raquo; ";
@@ -215,11 +219,17 @@ abstract class phpdotnet extends PhDTheme {
                 return '<a href="' .$link.$href.$fragment. '" class="' .$class. '">' .$content.$href.$fragment. '</a>';
             } else {
                 if ($this->chunked) {
-                    $link = "";
+                    $link = $href.$fragment;
+                } elseif(isset($linkto)) {
+                    if ($fragment) {
+                        $link = $fragment;
+                    } else {
+                        $link = "#$href";
+                    }
                 } else {
-                    $link = "#";
+                    $link = $href;
                 }
-                return '<a href="' .$link.$href.$fragment. '" class="' .$class. '">' .$content;
+                return '<a href="' .$link. '" class="' .$class. '">' .$content;
             }
         }
         return "</a>";
@@ -289,7 +299,11 @@ abstract class phpdotnet extends PhDTheme {
                 }
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_'.$name.'">';
                 foreach($chunks as $chunkid => $junk) {
-                    $content .= '<li><a href="' .($this->chunked ? "" : "#").$chunkid. '.' .$this->ext. '">' .(PhDHelper::getDescription($chunkid, true)). '</a></li>';
+                    if ($this->chunked) {
+                        $content .= '<li><a href="'.$chunkid. '.' .$this->ext. '">' .(PhDHelper::getDescription($chunkid, true)). '</a></li>';
+                    } else {
+                        $content .= '<li><a href="#'.$chunkid. '">' .(PhDHelper::getDescription($chunkid, true)). '</a></li>';
+                    }
                 }
                 $content .= "</ul>\n";
                 $this->tmp["container_chunk"] = $content;
@@ -303,7 +317,11 @@ abstract class phpdotnet extends PhDTheme {
             if (count($chunks)) {
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_reference">';
                 foreach($chunks as $chunkid => $junk) {
-                    $content .= '<li><a href="' .($this->chunked ? "" : "#").$chunkid. '.' .$this->ext. '">' .(PhDHelper::getDescription($chunkid, false)). '</a> — ' .(PhDHelper::getDescription($chunkid, true)). '</li>';
+                    if ($this->chunked) {
+                        $content .= '<li><a href="'.$chunkid. '.' .$this->ext. '">' .(PhDHelper::getDescription($chunkid, false)). '</a> — ' .(PhDHelper::getDescription($chunkid, true)). '</li>';
+                    } else {
+                        $content .= '<li><a href="#'.$chunkid.'">' .(PhDHelper::getDescription($chunkid, false)). '</a> — ' .(PhDHelper::getDescription($chunkid, true)). '</li>';
+                    }
                 }
                 $content .= "</ul>\n";
             }
@@ -394,7 +412,11 @@ abstract class phpdotnet extends PhDTheme {
             return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
         }
 
-        return '<a href="' .($this->chunked ? "" : "#").$filename. '.' .$this->ext. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+        if ($this->chunked) {
+            return '<a href="'.$filename. '.' .$this->ext. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+        }
+        return '<a href="#'.$filename. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+
     }
     public function format_type_text($type, $tagname) {
         $t = strtolower($type);
