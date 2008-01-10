@@ -205,14 +205,14 @@ foreach($args as $k => $v) {
     case "V":
     case "version":
         v("PhD version: %s\n", PHD_VERSION);
-        v("Copyright (c) 2007 The PHP Documentation Group\n");
+        v("Copyright (c) 2008 The PHP Documentation Group\n");
         exit(0);
 
     case "usage":
     case "help":
     case "h":
         echo "PhD version: " .PHD_VERSION;
-        echo "\nCopyright (c) 2007 The PHP Documentation Group\n
+        echo "\nCopyright (c) 2008 The PHP Documentation Group\n
   -v
   --versbose <int>           Adjusts the verbosity level.
   -f <formatname>
