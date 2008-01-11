@@ -27,6 +27,7 @@
     - Removed support for phnotify
     - Fixed E_NOTICE on empty references
     - Fixed bug#43489 (Class synopsis return types are not links)
+    - Fixed bug#43440 (Wrong encoding on some parts of the page)
     - Fixed bug#43428 (Empty TOC)
     - Fixed bug#43421 (All intra-document hyperlinks broken in the Single HTML file form of manual)
     - Added index chaching (Edward Z.)

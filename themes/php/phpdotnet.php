@@ -485,20 +485,23 @@ abstract class phpdotnet extends PhDTheme {
     public function qandaset($stream) {
         $xml = stream_get_contents($stream);
 
-        libxml_use_internal_errors(true);
+        $old = libxml_use_internal_errors(true);
         $doc = new DOMDocument("1.0", "UTF-8");
         $doc->preserveWhitespace = false;
-        $doc->loadHTML(html_entity_decode('<div>' .str_replace("&lt;", "&amp;lt;", $xml) .'</div>', ENT_QUOTES, "UTF-8"));
+        $doc->loadXML(html_entity_decode(str_replace("&", "&amp;amp;", "<div>$xml</div>"), ENT_QUOTES, "UTF-8"));
+        if ($err = libxml_get_errors()) {
+            print_r($err);
+            libxml_clear_errors();
+        }
         fclose($stream);
-        libxml_clear_errors();
-        libxml_use_internal_errors(false);
+        libxml_use_internal_errors($old);
 
         $xpath = new DOMXPath($doc);
-        $nlist = $xpath->query("//html/body/div/dl/dt");
+        $nlist = $xpath->query("//div/dl/dt");
         $ret = '<div class="qandaset"><ol class="qandaset_questions">';
         $i = 0;
         foreach($nlist as $node) {
-            $ret .= '<li><a href="#' .($this->tmp["qandaentry"][$i++]). '">' .(htmlspecialchars($node->textContent,ENT_QUOTES, "UTF-8")). '</a></li>';
+            $ret .= '<li><a href="#' .($this->tmp["qandaentry"][$i++]). '">' .($node->textContent). '</a></li>';
         }
 
         return $ret.'</ul>'.$xml.'</div>';
