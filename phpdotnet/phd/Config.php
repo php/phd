@@ -156,6 +156,10 @@ foreach($args as $k => $v) {
                 echo "\tbightml\n";
                 break;
 
+            default:
+                echo "Unknown list type '$val'\n";
+                /* break omitted intentionally */
+
             case false:
                 echo "Supported formats:\n";
                 echo "\txhtml\n";
@@ -204,7 +208,7 @@ foreach($args as $k => $v) {
                 }
                 break;
             default:
-                v("Unkown theme '%s'\n", $val);
+                v("Unknown theme '%s'\n", $val);
                 exit(-1);
             }
         }
@@ -220,7 +224,7 @@ foreach($args as $k => $v) {
                 } elseif (is_numeric($const)) {
                     $verbose |= (int)$const;
                 } else {
-                    v("Unkown option passed to --$k, $const\n");
+                    v("Unknown option passed to --$k, $const\n");
                 }
             }
         }
