@@ -255,7 +255,7 @@ foreach($args as $k => $v) {
         echo "PhD version: " .PHD_VERSION;
         echo "\nCopyright (c) 2008 The PHP Documentation Group\n
   -v
-  --versbose <int>           Adjusts the verbosity level.
+  --verbose <int>            Adjusts the verbosity level.
   -f <formatname>
   --format <formatname>      The build format to use
   -t <themename>
