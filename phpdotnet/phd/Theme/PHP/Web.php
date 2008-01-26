@@ -14,10 +14,24 @@ class phpweb extends phpdotnet {
     }
     public function writeChunk($id, $stream) {
         rewind($stream);
-        $filename = $this->ext."/$id.".$this->ext;
+
+        // Create random filename when the chunk doesn't have an ID
+        if ($id === null) {
+            $filename = tempnam($this->ext, "phd");
+            if(rename($filename, $filename. "." . $this->ext)) {
+                $filename .= "." .$this->ext;
+            } else {
+                throw new Exception("Cannot rename $filename to $filename.{$this->ext}");
+            }
+            v("WARNING: Chunk without an ID found, TOC will NOT work. Wrote content to $filename.\n");
+        } else {
+            $filename = $this->ext."/$id.".$this->ext;
+        }
+
         file_put_contents($filename, $this->header($id));
         file_put_contents($filename, $stream, FILE_APPEND);
         file_put_contents($filename, $this->footer($id), FILE_APPEND);
+
         if ($GLOBALS["OPTIONS"]["verbose"] & VERBOSE_CHUNK_WRITING) {
             v("Wrote %s\n", $filename);
         }
@@ -26,10 +40,13 @@ class phpweb extends phpdotnet {
         switch($isChunk) {
         case PhDReader::CLOSE_CHUNK:
             $id = $this->CURRENT_ID;
+
             $stream = array_pop($this->streams);
             $retval = fwrite($stream, $data);
             $this->writeChunk($id, $stream);
             fclose($stream);
+
+            $this->CURRENT_ID = null;
             return $retval;
             break;
 

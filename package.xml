@@ -26,6 +26,7 @@
   <notes>
     - Removed support for phnotify
     - Fixed E_NOTICE on empty references
+    - Fixed bug#43904 (PhD doesn't detect &lt;section&gt; without xml:id)
     - Fixed bug#43489 (Class synopsis return types are not links)
     - Fixed bug#43440 (Wrong encoding on some parts of the page)
     - Fixed bug#43428 (Empty TOC)
