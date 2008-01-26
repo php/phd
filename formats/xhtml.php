@@ -357,7 +357,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_refsect($open, $name, $attrs) {
         if ($open) {
             if(!isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                $attrs[PhDReader::XMLNS_DOCBOOK] = "unkown";
+                $attrs[PhDReader::XMLNS_DOCBOOK]["role"] = "unknown";
             }
             return '<div class="' .$name.' ' .$attrs[PhDReader::XMLNS_DOCBOOK]["role"]. '">';
         }
