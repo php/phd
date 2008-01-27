@@ -286,7 +286,7 @@ NOTE: Long options are only supported using PHP5.3\n";
 }
 
 
-if (!$docbook) {
+if (!$docbook && $argc > 1) {
     $arg = $argv[$argc-1];
     if (is_dir($arg)) {
         $OPTIONS["xml_root"] = $arg;
