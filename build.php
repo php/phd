@@ -20,12 +20,13 @@ require $ROOT. "/include/PhDHelper.class.php";
 require $ROOT. "/include/PhDFormat.class.php";
 require $ROOT. "/include/PhDTheme.class.php";
 
-if (!$OPTIONS["index"] && file_exists("index.ser")) {
+if (!$OPTIONS["index"] && (file_exists("index.ser") && file_exists("refnames.ser"))) {
     /* FIXME: Load from sqlite db? */
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
-        v("Unserializing cached index file...\n");
+        v("Unserializing cached index files...\n");
     }
     $IDs = unserialize(file_get_contents("index.ser"));
+    $REFS = unserialize(file_get_contents("refnames.ser"));
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
         v("Unserialization done\n");
     }
@@ -35,10 +36,12 @@ if (!$OPTIONS["index"] && file_exists("index.ser")) {
     }
     require $ROOT. "/mktoc.php";
 
-    file_put_contents("index.ser", $ser = serialize($IDs));
+    file_put_contents("index.ser", $ids = serialize($IDs));
+    file_put_contents("refnames.ser", $refs = serialize($REFS));
 
-    $IDs2 = unserialize($ser);
-    if ($IDs !== $IDs2) {
+    $IDs2 = unserialize($ids);
+    $REFS2 = unserialize($refs);
+    if ($IDs !== $IDs2 || $REFS !== $REFS2) {
         v("WARNING: Serialized representation does not match");
     }
 
