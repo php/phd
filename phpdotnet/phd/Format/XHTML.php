@@ -9,8 +9,11 @@ class XHTMLPhDFormat extends PhDFormat {
         'affiliation'           => 'format_suppressed_tags',
         'alt'                   => 'format_suppressed_tags',
         'article'               => 'format_container_chunk',
-        'author'                => 'div',
-        'authorgroup'           => 'div', /* DocBook-xsl prints out "by" (i.e. "PHP Manual by ...") */
+        'author'                => array(
+            /* DEFAULT */          'div',
+            'authorgroup'       => 'format_authorgroup_author',
+        ),
+        'authorgroup'           => 'div',
         'appendix'              => 'format_container_chunk',
         'application'           => 'span',
         'blockquote'            => 'blockquote',
@@ -25,7 +28,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'co'                    => 'format_co',
         'colophon'              => 'format_chunk',
         'copyright'             => 'format_copyright',
-        'editor'                => 'div', /* Docbook-xsl prints "edited by" */
+        'editor'                => 'format_editor',
         'firstname'             => 'format_name',
         'surname'               => 'format_name',
         'othername'             => 'format_name',
@@ -397,7 +400,7 @@ class XHTMLPhDFormat extends PhDFormat {
         if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
             return ' */</div>';
         }
-        $this->tmp["classsynopsisinfo"]["close"] = true;
+        $this->tmp["classsynopsis"]["close"] = true;
         return ' {</div>';
     }
 
@@ -406,8 +409,8 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<div class="'.$name.'">';
         }
 
-        if (isset($this->tmp["classsynopsisinfo"]) && isset($this->tmp["classsynopsisinfo"]["close"]) && $this->tmp["classsynopsisinfo"]["close"]) {
-            $this->tmp["classsynopsisinfo"]["close"] = false;
+        if (isset($this->tmp["classsynopsis"]) && isset($this->tmp["classsynopsis"]["close"]) && $this->tmp["classsynopsis"]["close"]) {
+            $this->tmp["classsynopsis"]["close"] = false;
             return "}</div>";
         }
         return "</div>";
@@ -701,6 +704,21 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<div class="'. $name. '">' .$this->admonition_title($name, $props["lang"]);
         }
         return "</div>";
+    }
+    public function format_authorgroup_author($open, $name, $attrs, $props) {
+        if ($open) {
+            if ($props["sibling"] !== $name) {
+                return '<div class="'.$name.'">' .$this->admonition_title("by", $props["lang"]). ':<br />';
+            }
+            return '<div class="'.$name.'">';
+        }
+        return "</div>\n";
+    }
+    public function format_editor($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<div class="editor">' .$this->admonition_title("editedby", $props["lang"]). ': ';
+        }
+        return "</div>\n";
     }
     public function format_note($open, $name, $attrs, $props) {
         if ($open) {
