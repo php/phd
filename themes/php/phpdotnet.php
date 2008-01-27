@@ -399,27 +399,14 @@ abstract class phpdotnet extends PhDTheme {
             $display_value = $value;
         }
         
-        $link = strtolower(str_replace(array("__", "_", "::", "->"), array("", "-", "-", "-"), $value));
-        $oop_link = strtolower(str_replace(array("_", "::", "->"), array("", ".", "."), $value));
-        
-        if (
-            (
-                $this->CURRENT_FUNCTION === $link ||
-                !($filename = PhDHelper::getFilename("function.$link"))
-            ) &&
-            (
-                $this->CURRENT_ID === $oop_link ||
-                !($filename = PhDHelper::getFilename($oop_link))
-            )
-        ) {
-            return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
+        $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
+        if (($filename = $this->getRefnameLink($ref)) !== null && $this->CURRENT_ID !== $filename) {
+            if ($this->chunked) {
+                return '<a href="'.$filename. '.' .$this->ext. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+            }
+            return '<a href="#'.$filename. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
         }
-
-        if ($this->chunked) {
-            return '<a href="'.$filename. '.' .$this->ext. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
-        }
-        return '<a href="#'.$filename. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
-
+        return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
     }
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
         if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {

@@ -58,7 +58,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
     }
 
     require $ROOT. "/formats/$output_format.php";
-    $format = new $classname($IDs);
+    $format = new $classname(array($IDs, $REFS));
     $formatmap = $format->getElementMap();
     $formattextmap = $format->getTextMap();
 
@@ -74,7 +74,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
             require_once $ROOT. "/themes/$theme/$themename.php";
             switch($theme) {
                 case "php":
-                    $themes[$themename] = new $themename($IDs,
+                    $themes[$themename] = new $themename(array($IDs, $REFS),
                         array(
                             "version" => $OPTIONS["version_info"],
                             "acronym" => $OPTIONS["acronyms_file"],
@@ -82,7 +82,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                     );
                     break;
                 default:
-                    $themes[$themename] = new $themename($IDs);
+                    $themes[$themename] = new $themename(array($IDs, $REFS));
             }
             
             // WARNING: this needs to go away when we add support for

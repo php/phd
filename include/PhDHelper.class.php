@@ -3,12 +3,14 @@
 
 class PhDHelper {
     private $IDs            = array();
+    private $refs           = array();
     /* abstract */ protected $elementmap  = array();
     /* abstract */ protected $textmap     = array();
     private static $autogen         = array();
 
-    public function __construct(array $IDs) {
-        $this->IDs = $IDs;
+    public function __construct(array $a) {
+        $this->IDs = $a[0];
+        $this->refs = $a[1];
     }
     final public function getFilename($id) {
         return isset($this->IDs[$id]) ? $this->IDs[$id]["filename"] : false;
@@ -23,6 +25,9 @@ class PhDHelper {
     }
     final public function getParent($id) {
         return $this->IDs[$id]["parent"];
+    }
+    public function getRefnameLink($ref) {
+        return isset($this->refs[$ref]) ? $this->refs[$ref] : null;
     }
     final public function getElementMap() {
         return $this->elementmap;
