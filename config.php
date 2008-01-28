@@ -1,11 +1,13 @@
 <?php
 /* $Id$ */
 
+/* {{{ Print messages to stderr: v("printf-format-text", $arg1, ...) */
 function v($msg) {
     $args = func_get_args();
     $args[0] = date($GLOBALS["OPTIONS"]["date_format"]);
     vfprintf(STDERR, "[%s] $msg", $args);
 }
+/* }}} */
 
 define('VERBOSE_INDEXING',               0x01);
 define('VERBOSE_FORMAT_RENDERING',       0x02);
@@ -16,10 +18,11 @@ define('VERBOSE_PARTIAL_CHILD_READING',  0x20);
 define('VERBOSE_TOC_WRITING',            0x40);
 define('VERBOSE_CHUNK_WRITING',          0x80);
 
-define('VERBOSE_ALL',VERBOSE_INDEXING|VERBOSE_FORMAT_RENDERING|VERBOSE_THEME_RENDERING|VERBOSE_RENDER_STYLE|VERBOSE_PARTIAL_READING|VERBOSE_PARTIAL_CHILD_READING|VERBOSE_TOC_WRITING|VERBOSE_CHUNK_WRITING);
+define('VERBOSE_ALL',                    0xFF);
 
 define("PHD_VERSION", "0.2.2-dev");
 
+/* {{{ Default $OPTIONS */
 $OPTIONS = array (
   'output_format' => array('xhtml'),
   'output_theme' => array(
@@ -43,13 +46,15 @@ $OPTIONS = array (
   'compatibility_mode' => true,
   'build_log_file' => 'none',
   'debug' => true,
-  'verbose' => VERBOSE_INDEXING|VERBOSE_FORMAT_RENDERING|VERBOSE_THEME_RENDERING|VERBOSE_RENDER_STYLE|VERBOSE_PARTIAL_READING|VERBOSE_TOC_WRITING,
+  'verbose' => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING),
   'date_format' => "H:i:s",
   'render_ids' => array(
   ),
 );
+/* }}} */
 
 
+/* {{{ getopt() options */
 $opts = array(
     "format:"  => "f:", // The format to render (xhtml, pdf...)
     "theme:"   => "t:", // The theme to render (phpweb, bightml..)
@@ -61,8 +66,9 @@ $opts = array(
     "version"  => "V",  // Print out version information
     "help"     => "h",  // Print out help
 );
+/* }}} */
 
-/* Fix for Windows prior to PHP5.3 */
+/* {{{ Workaround/fix for Windows prior to PHP5.3 */
 if (!function_exists("getopt")) {
     function getopt($short, $long) {
         v("I'm sorry, you are running an operating system that does not support getopt()\n");
@@ -71,6 +77,7 @@ if (!function_exists("getopt")) {
         return array();
     }
 }
+/* }}} */
 
 $args = getopt(implode("", array_values($opts)), array_keys($opts));
 if($args === false) {
@@ -80,6 +87,7 @@ if($args === false) {
 
 $verbose = 0;
 $docbook = false;
+
 foreach($args as $k => $v) {
     switch($k) {
     /* {{{ Docbook file */
@@ -243,12 +251,15 @@ foreach($args as $k => $v) {
         break;
     /* }}} */
 
+    /* {{{ Version info */
     case "V":
     case "version":
         v("PhD version: %s\n", PHD_VERSION);
         v("Copyright (c) 2008 The PHP Documentation Group\n");
         exit(0);
+    /* }}} */
 
+    /* {{{ Help/usage info */
     case "usage":
     case "help":
     case "h":
@@ -277,15 +288,20 @@ All options can be passed multiple times for greater affect.
 NOTE: Long options are only supported using PHP5.3\n";
         exit(0);
         break;
+    /* }}} */
 
+    /* {{{ Unsupported option this should *never* happen */
     default:
         v("Hmh, something weird has happend, I don't know this option");
         var_dump($k, $v);
         exit(-1);
+    /* }}} */
     }
 }
 
 
+/* {{{ BC for PhD 0.0.* (and PHP5.2 on Windows)
+       i.e. `phd path/to/.manual.xml */
 if (!$docbook && $argc > 1) {
     $arg = $argv[$argc-1];
     if (is_dir($arg)) {
@@ -296,7 +312,10 @@ if (!$docbook && $argc > 1) {
         $OPTIONS["xml_file"] = $arg;
     }
 }
+/* }}} */
 
+/* {{{ If no docbook file was passed, ask for it
+       This loop should be removed in PhD 0.3.0, and replaced with a fatal errormsg */
 while (!is_dir($OPTIONS["xml_root"]) || !is_file($OPTIONS["xml_file"])) {
     print "I need to know where you keep your '.manual.xml' file (I didn't find it in " . $OPTIONS["xml_root"] . "): ";
     $root = trim(fgets(STDIN));
@@ -308,12 +327,13 @@ while (!is_dir($OPTIONS["xml_root"]) || !is_file($OPTIONS["xml_file"])) {
         $OPTIONS["xml_root"] = $root;
     }
 }
+/* }}} */
 
 $OPTIONS["version_info"] = $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml";
 $OPTIONS["acronyms_file"] = $OPTIONS["xml_root"]."/entities/acronyms.xml";
 
 /*
-* vim600: sw=4 ts=4 fdm=syntax syntax=php et
+* vim600: sw=4 ts=4 syntax=php et
 * vim<600: sw=4 ts=4
 */
 

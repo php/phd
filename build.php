@@ -2,10 +2,15 @@
 <?php
 /*  $Id$ */
 
+/* {{{ Find the $ROOT directory of PhD
+       @php_dir@ will be replaced by the pear package manager 
+       If @php_dir@ however hasn't been replaced by anything,
+       fallback to the dir containing this file */
 $ROOT = "@php_dir@/phd";
 if ($ROOT == "@php_dir"."@/phd") {
     $ROOT = dirname(__FILE__);
 }
+/* }}} */
 
 (@include $ROOT."/config.php")
     && isset($OPTIONS)
@@ -20,6 +25,10 @@ require $ROOT. "/include/PhDHelper.class.php";
 require $ROOT. "/include/PhDFormat.class.php";
 require $ROOT. "/include/PhDTheme.class.php";
 
+/* {{{ Index the DocBook file or load from .ser cache files
+       NOTE: There are two cache files:
+        - index.ser     (containing the ID infos)
+        - refnames.ser  (containing <refname> => File ID) */
 if (!$OPTIONS["index"] && (file_exists("index.ser") && file_exists("refnames.ser"))) {
     /* FIXME: Load from sqlite db? */
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
@@ -34,6 +43,7 @@ if (!$OPTIONS["index"] && (file_exists("index.ser") && file_exists("refnames.ser
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
         v("Indexing...\n");
     }
+    /* This file will "return" an $IDs & $REFS array */
     require $ROOT. "/mktoc.php";
 
     file_put_contents("index.ser", $ids = serialize($IDs));
@@ -49,6 +59,7 @@ if (!$OPTIONS["index"] && (file_exists("index.ser") && file_exists("refnames.ser
         v("Indexing done\n");
     }
 }
+/* }}} */
 
 foreach($OPTIONS["output_format"] as $output_format) {
     if ($OPTIONS["verbose"] & VERBOSE_FORMAT_RENDERING) {
@@ -60,11 +71,14 @@ foreach($OPTIONS["output_format"] as $output_format) {
         break;
     }
 
+    // {{{ Initialize the output format and fetch the methodmaps
     require $ROOT. "/formats/$output_format.php";
     $format = new $classname(array($IDs, $REFS));
     $formatmap = $format->getElementMap();
     $formattextmap = $format->getTextMap();
+    /* }}} */
 
+    /* {{{ initialize output themes and fetch the methodmaps */
     $themes = $elementmaps = $textmaps = array();
     foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
         is_dir($ROOT. "/themes/$theme") or die("Can't find the '$theme' theme");
@@ -76,6 +90,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
             $themename = basename($themename);
             require_once $ROOT. "/themes/$theme/$themename.php";
             switch($theme) {
+                // FIXME: This is stupid and definetly does not belong in here.
                 case "php":
                     $themes[$themename] = new $themename(array($IDs, $REFS),
                         array(
@@ -88,7 +103,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                     $themes[$themename] = new $themename(array($IDs, $REFS));
             }
             
-            // WARNING: this needs to go away when we add support for
+            // FIXME: this needs to go away when we add support for
             // things other than xhtml
             $themes[$themename]->registerFormat($format);
             
@@ -106,7 +121,9 @@ foreach($OPTIONS["output_format"] as $output_format) {
         }
 
     }
+    /* }}} */
 
+    /* {{{ Initialize the PhD[Partial]Reader */
     if (!empty($OPTIONS["render_ids"])) {
         if ($OPTIONS["verbose"] & VERBOSE_RENDER_STYLE) {
             v("Running partial build\n");
@@ -118,13 +135,14 @@ foreach($OPTIONS["output_format"] as $output_format) {
         }
         $reader = new PhDReader($OPTIONS);
     }
+    /* }}} */
 
     while($reader->read()) {
         $nodetype = $reader->nodeType;
 
         switch($nodetype) {
         case XMLReader::ELEMENT:
-        case XMLReader::END_ELEMENT:
+        case XMLReader::END_ELEMENT: /* {{{ */
             $nodename = $reader->name;
             $open     = $nodetype == XMLReader::ELEMENT;
             $isChunk  = $reader->isChunk;
@@ -191,8 +209,9 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 }
             }
             break;
+            /* }}} */
 
-        case XMLReader::TEXT:
+        case XMLReader::TEXT: /* {{{ */
             $skip = array();
             $value = $reader->value;
             $parentname = $reader->getParentTagName();
@@ -233,22 +252,26 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 }
             }
             break;
+        /* }}} */
 
-        case XMLReader::CDATA:
+        case XMLReader::CDATA: /* {{{ */
             $value = $reader->value;
             $retval = $format->CDATA($value);
             foreach($themes as $name => $theme) {
                 $theme->appendData($retval, false);
             }
             break;
+        /* }}} */
 
         case XMLReader::WHITESPACE:
-        case XMLReader::SIGNIFICANT_WHITESPACE:
+        case XMLReader::SIGNIFICANT_WHITESPACE: /* {{{ */
             $value = $reader->value;
             foreach($themes as $name => $theme) {
                 $theme->appendData($value, false);
             }
             break;
+        /* }}} */
+
         case XMLReader::COMMENT:
         case XMLReader::DOC_TYPE:
             /* swallow it */
@@ -269,7 +292,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
 } // foreach($OPTIONS["output_thtemes"])
 
 /*
-* vim600: sw=4 ts=4 fdm=syntax syntax=php et
+* vim600: sw=4 ts=4 syntax=php et
 * vim<600: sw=4 ts=4
 */
 
