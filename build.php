@@ -125,9 +125,20 @@ foreach($OPTIONS["output_format"] as $output_format) {
 
     /* {{{ Initialize the PhD[Partial]Reader */
     if (!empty($OPTIONS["render_ids"])) {
+        $idlist = $OPTIONS["render_ids"];
         if ($OPTIONS["verbose"] & VERBOSE_RENDER_STYLE) {
             v("Running partial build\n");
         }
+        if (!is_array($idlist)) {
+            $idlist = array($idlist => 1);
+        }
+        foreach($idlist as $id => $notused) {
+            if (!isset($IDs[$id])) {
+                v("Unknown ID %s, bailing\n", $id);
+                exit(-1);
+            }
+        }
+
         $reader = new PhDPartialReader($OPTIONS);
     } else {
         if ($OPTIONS["verbose"] & VERBOSE_RENDER_STYLE) {
