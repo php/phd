@@ -135,7 +135,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
         foreach($idlist as $id => $notused) {
             if (!isset($IDs[$id])) {
                 v("Unknown ID %s, bailing\n", $id);
-                exit(-1);
+                exit(1);
             }
         }
 

@@ -82,7 +82,7 @@ if (!function_exists("getopt")) {
 $args = getopt(implode("", array_values($opts)), array_keys($opts));
 if($args === false) {
     v("Something happend with getopt(), please report a bug\n");
-    exit(-1);
+    exit(1);
 }
 
 $verbose = 0;
@@ -95,11 +95,11 @@ foreach($args as $k => $v) {
     case "docbook":
         if (is_array($v)) {
             v("Can only parse one file at a time\n");
-            exit(-1);
+            exit(1);
         }
         if (!file_exists($v) || is_dir($v) || !is_readable($v)) {
             v("'%s' is not a readable docbook file\n", $v);
-            exit(-1);
+            exit(1);
         }
         $OPTIONS["xml_root"] = dirname($v);
         $OPTIONS["xml_file"] = $v;
@@ -112,7 +112,7 @@ foreach($args as $k => $v) {
     case "format":
         if ($v != "xhtml") {
             v("Only xhtml is supported at this time\n");
-            exit(-1);
+            exit(1);
         }
         break;
     /* }}} */
@@ -122,7 +122,7 @@ foreach($args as $k => $v) {
     case "index":
         if (is_array($v)) {
             v("You cannot pass %s more than once\n", $k);
-            exit(-1);
+            exit(1);
         }
         switch ($v) {
         case "yes":
@@ -137,7 +137,7 @@ foreach($args as $k => $v) {
             break;
         default:
             v("yes/no || true/false || 1/0 expected\n");
-            exit(-1);
+            exit(1);
         }
         break;
     /* }}} */
@@ -217,7 +217,7 @@ foreach($args as $k => $v) {
                 break;
             default:
                 v("Unknown theme '%s'\n", $val);
-                exit(-1);
+                exit(1);
             }
         }
         break;
@@ -294,7 +294,7 @@ NOTE: Long options are only supported using PHP5.3\n";
     default:
         v("Hmh, something weird has happend, I don't know this option");
         var_dump($k, $v);
-        exit(-1);
+        exit(1);
     /* }}} */
     }
 }
