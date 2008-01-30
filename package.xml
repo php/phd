@@ -19,7 +19,7 @@
     <api>0.2.2</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>devel</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
