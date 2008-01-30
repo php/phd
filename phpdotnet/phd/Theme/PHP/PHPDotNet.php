@@ -32,6 +32,10 @@ abstract class phpdotnet extends PhDTheme {
             'methodparam'       => false,
             'methodsynopsis'    => false,
         ),
+        'varname'               => array(
+            /* DEFAULT */          false,
+            'fieldsynopsis'     => 'format_fieldsynopsis_varname',
+        ),
         'xref'                  => 'format_link',
 
 
@@ -237,6 +241,35 @@ abstract class phpdotnet extends PhDTheme {
         }
         return "</a>";
     }
+    public function format_fieldsynopsis_varname($open, $name, $attrs) {
+        if ($open) {
+            $href = "";
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
+                $linkto = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
+                $href = PhDHelper::getFilename($linkto);
+
+                if ($this->chunked) {
+                    if ($href != $linkto) {
+                        $href .= ".{$this->ext}#{$linkto}";
+                    } else {
+                        $href .= '.' .$this->ext;
+                    }
+                } else {
+                    $href = '#' .$linkto;
+                }
+                $href = '<a href="' .$href. '">';
+            }
+            if (isset($this->tmp["fieldsynopsis"]["modifier"]) && $this->tmp["fieldsynopsis"]["modifier"] == "const") {
+                return '<var class="fieldsynopsis_varname">'.$href;
+            }
+            return '<var class="'.$name.'">'.$href.'$';
+        }
+        if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
+            return '</a></var>';
+        }
+        return '</var>';
+    }
+
 
 
 
