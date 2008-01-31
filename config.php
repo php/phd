@@ -20,7 +20,7 @@ define('VERBOSE_CHUNK_WRITING',          0x80);
 
 define('VERBOSE_ALL',                    0xFF);
 
-define("PHD_VERSION", "0.2.2");
+define("PHD_VERSION", "0.2.3-dev");
 
 /* {{{ Default $OPTIONS */
 $OPTIONS = array (
