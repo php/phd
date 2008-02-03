@@ -203,7 +203,7 @@
         <release>beta</release>
         <api>devel</api>
       </stability>
-      <date>2007-12-30</date>
+      <date>2008-01-30</date>
       <notes>
     - Removed support for phnotify
     - Added index chaching (Edward Z.)
