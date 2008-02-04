@@ -284,7 +284,33 @@ class XHTMLPhDFormat extends PhDFormat {
 
 
     protected $role        = false;
-    protected $tmp         = array();
+    /* Current Chunk variables */
+    protected $cchunk      = array();
+    /* Default Chunk variables */
+    protected $dchunk      = array(
+        "classsynopsis"            => array(
+            "close"                         => false,
+            "classname"                     => false,
+        ),
+        "classsynopsisinfo"        => array(
+            "implements"                    => false,
+            "ooclass"                       => false,
+        ),
+        "fieldsynopsis"            => array(
+            "modifier"                      => "public",
+        ),
+        "co"                       => 0,
+        "callouts"                 => 0,
+        "segmentedlist"            => array(
+            "seglistitem"                   => 0,
+            "segtitle"                      => array(
+            ),
+        ),
+        "procedure"                => false,
+        "mediaobject"              => array(
+            "alt"                           => false,
+        ),
+    );
     
     public function __construct(array $IDs) {
         parent::__construct($IDs);
@@ -337,6 +363,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
 
     public function format_container_chunk($open, $name, $attrs) {
+        $this->cchunk = $this->dchunk;
         if ($open) {
             return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
         }
@@ -349,6 +376,7 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</div>\n";
     }
     public function format_chunk($open, $name, $attrs) {
+        $this->cchunk = $this->dchunk;
         if ($open) {
             if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
                 return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
@@ -369,8 +397,8 @@ class XHTMLPhDFormat extends PhDFormat {
 
     public function format_classsynopsisinfo_oointerface($open, $name, $attrs) {
         if ($open) {
-            if (isset($this->tmp["classsynopsisinfo"]) && !isset($this->tmp["classsynopsisinfo"]["implements"])) {
-                $this->tmp["classsynopsisinfo"]["implements"] = true;
+            if ($this->cchunk["classsynopsisinfo"]["implements"] === false) {
+                $this->cchunk["classsynopsisinfo"]["implements"] = true;
                 return '<span class="'.$name.'">implements ';
             }
             return '<span class="'.$name.'">, ';
@@ -380,8 +408,8 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs) {
         if ($open) {
-            if (isset($this->tmp["classsynopsisinfo"]) && !isset($this->tmp["classsynopsisinfo"]["ooclass"])) {
-                $this->tmp["classsynopsisinfo"]["ooclass"] = true;
+            if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
+                $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
                 return ' class <b class="'.$name.'">';
             }
             return '<b class="'.$name.'"> ';
@@ -389,7 +417,7 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</b>";
     }
     public function format_classsynopsisinfo($open, $name, $attrs) {
-        $this->tmp["classsynopsisinfo"] = array();
+        $this->cchunk["classsynopsisinfo"] = $this->dchunk["classsynopsisinfo"];
         if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
                 return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
@@ -400,7 +428,7 @@ class XHTMLPhDFormat extends PhDFormat {
         if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
             return ' */</div>';
         }
-        $this->tmp["classsynopsis"]["close"] = true;
+        $this->cchunk["classsynopsis"]["close"] = true;
         return ' {</div>';
     }
 
@@ -409,46 +437,46 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<div class="'.$name.'">';
         }
 
-        if (isset($this->tmp["classsynopsis"]) && isset($this->tmp["classsynopsis"]["close"]) && $this->tmp["classsynopsis"]["close"]) {
-            $this->tmp["classsynopsis"]["close"] = false;
+        if ($this->cchunk["classsynopsis"]["close"] === true) {
+            $this->cchunk["classsynopsis"]["close"] = false;
             return "}</div>";
         }
         return "</div>";
     }
     
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
-        $this->tmp["classsynopsis"]["classname"] = $value;
+        $this->cchunk["classsynopsis"]["classname"] = $value;
         return $value;
     }
     
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
-        if (!isset($this->tmp["classsynopsis"]["classname"])) {
+        if ($this->cchunk["classsynopsis"]["classname"] === false) {
             return $value;
         }
         if (strpos($value, '::')) {
             $explode = '::';
-        } else if (strpos($value, '->')) {
+        } elseif (strpos($value, '->')) {
             $explode = '->';
         } else {
             return $value;
         }
 
         list($class, $method) = explode($explode, $value);
-        if ($class !== $this->tmp["classsynopsis"]["classname"]) {
+        if ($class !== $this->cchunk["classsynopsis"]["classname"]) {
             return $value;
         }
         return $method;
     }
     
     public function format_fieldsynopsis($open, $name, $attrs) {
-        $this->tmp["fieldsynopsis"] = array();
+        $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
         if ($open) {
             return '<div class="'.$name.'">';
         }
         return ";</div>\n";
     }
     public function format_fieldsynopsis_modifier_text($value, $tag) {
-        $this->tmp["fieldsynopsis"]["modifier"] = trim($value);
+        $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
         return $value;
     }
     public function format_methodsynopsis($open, $name, $attrs) {
@@ -531,7 +559,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_fieldsynopsis_varname($open, $name, $attrs) {
         if ($open) {
-            if (isset($this->tmp["fieldsynopsis"]["modifier"]) && $this->tmp["fieldsynopsis"]["modifier"] == "const") {
+            if ($this->cchunk["fieldsynopsis"]["modifier"] === "const") {
                 return '<var class="fieldsynopsis_varname">';
             }
             return '<var class="'.$name.'">$';
@@ -541,26 +569,22 @@ class XHTMLPhDFormat extends PhDFormat {
 
     public function format_co($open, $name, $attrs, $props) {
         if (($open || $props["empty"]) && isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-            if(isset($this->tmp["co"])) {
-                ++$this->tmp["co"];
-            } else {
-                $this->tmp["co"] = 1;
-            }
-            return '<a name="'.$attrs[PhDReader::XMLNS_XML]["id"].'" id="'.$attrs[PhDReader::XMLNS_XML]["id"].'">' .str_repeat("*", $this->tmp["co"]) .'</a>';
+            $co = ++$this->cchunk["co"];
+            return '<a name="'.$attrs[PhDReader::XMLNS_XML]["id"].'" id="'.$attrs[PhDReader::XMLNS_XML]["id"].'">' .str_repeat("*", $co) .'</a>';
         }
         /* Suppress closing tag if any */
         return "";
     }
     public function format_calloutlist($open, $name, $attrs) {
         if ($open) {
-            $this->tmp["callouts"] = 0;
+            $this->cchunk["callouts"] = 0;
             return '<table>';
         }
         return '</table>';
     }
     public function format_callout($open, $name, $attrs) {
         if ($open) {
-            return '<tr><td><a href="#'.$attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"].'">' .str_repeat("*", ++$this->tmp["callouts"]). '</a></td><td>';
+            return '<tr><td><a href="#'.$attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"].'">' .str_repeat("*", ++$this->cchunk["callouts"]). '</a></td><td>';
         }
         return "</td></tr>\n";
     }
@@ -578,32 +602,32 @@ class XHTMLPhDFormat extends PhDFormat {
         return ")</span>";
     }
     public function format_segmentedlist($open, $name, $attrs) {
-        $this->tmp["segmentedlist"] = array("segtitle" => array());
+        $this->cchunk["segmentedlist"] = $this->dchunk["segmentedlist"];
         if ($open) {
             return '<div class="'.$name.'">';
         }
         return '</div>';
     }
     public function format_segtitle_text($value, $tag) {
-        $this->tmp["segmentedlist"]["segtitle"][count($this->tmp["segmentedlist"]["segtitle"])] = $value;
+        $this->cchunk["segmentedlist"]["segtitle"][count($this->cchunk["segmentedlist"]["segtitle"])] = $value;
         /* Suppress the text */
         return "";
     }
     public function format_seglistitem($open, $name, $attrs) {
         if ($open) {
-            $this->tmp["segmentedlist"]["seglistitem"] = 0;
+            $this->cchunk["segmentedlist"]["seglistitem"] = 0;
             return '<div class="'.$name.'">';
         }
         return '</div>';
     }
     public function format_seg($open, $name, $attrs) {
         if ($open) {
-            return '<div class="seg"><strong><span class="segtitle">' .$this->tmp["segmentedlist"]["segtitle"][$this->tmp["segmentedlist"]["seglistitem"]++]. ':</span></strong>';
+            return '<div class="seg"><strong><span class="segtitle">' .$this->cchunk["segmentedlist"]["segtitle"][$this->cchunk["segmentedlist"]["seglistitem"]++]. ':</span></strong>';
         }
         return '</div>';
     }
     public function format_procedure($open, $name, $attrs) {
-        $this->tmp["procedure"] = false;
+        $this->cchunk["procedure"] = false;
         if ($open) {
             return '<div class="'.$name.'">';
         }
@@ -612,8 +636,8 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_step($open, $name, $attrs) {
         if ($open) {
             $ret = "";
-            if (!$this->tmp["procedure"]) {
-                $this->tmp["procedure"] = true;
+            if ($this->cchunk["procedure"] === false) {
+                $this->cchunk["procedure"] = true;
                 $ret = '<ol type="1">';
             }
             return $ret . "<li>";
@@ -759,18 +783,18 @@ class XHTMLPhDFormat extends PhDFormat {
     }
 
     public function format_mediaobject($open, $name, $attrs) {
-        $this->tmp["mediaobject"] = array();
+        $this->cchunk["mediaobject"] = $this->dchunk["mediaobject"];
         if ($open) {
             return '<div class="'.$name.'">';
         }
         return '</div>';
     }
     public function format_alt_text($value, $tag) {
-        $this->tmp["mediaobject"]["alt"] = $value;
+        $this->cchunk["mediaobject"]["alt"] = $value;
     }
     public function format_imagedata($open, $name, $attrs) {
-        if (isset($this->tmp["mediaobject"]["alt"])) {
-            return '<img src="' .$attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]. '" alt="' .$this->tmp["mediaobject"]["alt"]. '" />';
+        if ($this->cchunk["mediaobject"]["alt"] !== false) {
+            return '<img src="' .$attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]. '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
         }
         return '<img src="' .$attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]. '" />';
     }
