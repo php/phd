@@ -122,6 +122,19 @@ abstract class phpdotnet extends PhDTheme {
     protected $CURRENT_FUNCTION = null;
     protected $refname;
 
+    /* Current Chunk settings */
+    protected $cchunk          = array();
+    /* Default Chunk settings */
+    protected $dchunk          = array(
+        "fieldsynopsis"                => array(
+            "modifier"                          => "public",
+        ),
+        "container_chunk"              => null,
+        "qandaentry"                   => array(
+        ),
+        "examples"                     => 0,
+    );
+
     public function __construct(array $IDs, array $filenames, $ext = "php", $chunked = true) {
         parent::__construct($IDs, $ext);
         $this->ext = $ext;
@@ -259,7 +272,7 @@ abstract class phpdotnet extends PhDTheme {
                 }
                 $href = '<a href="' .$href. '">';
             }
-            if (isset($this->tmp["fieldsynopsis"]["modifier"]) && $this->tmp["fieldsynopsis"]["modifier"] == "const") {
+            if ($this->cchunk["fieldsynopsis"]["modifier"] == "const") {
                 return '<var class="fieldsynopsis_varname">'.$href;
             }
             return '<var class="'.$name.'">'.$href.'$';
@@ -314,7 +327,7 @@ abstract class phpdotnet extends PhDTheme {
             }
         }
         if ($props["isChunk"]) {
-            $this->tmp["chunk"] = array("examples" => 0);
+            $this->cchunk = $this->dchunk;
         }
         if (isset($props["lang"])) {
             $this->lang = $props["lang"];
@@ -326,7 +339,7 @@ abstract class phpdotnet extends PhDTheme {
         $this->CURRENT_FUNCTION = null;
         if ($open) {
             if ($props["isChunk"]) {
-                $this->tmp["chunk"] = array("examples" => 0);
+                $this->cchunk = $this->dchunk;
             }
             if ($name != "reference") {
                 $chunks = PhDHelper::getChildren($id);
@@ -342,7 +355,7 @@ abstract class phpdotnet extends PhDTheme {
                     }
                 }
                 $content .= "</ul>\n";
-                $this->tmp["container_chunk"] = $content;
+                $this->cchunk["container_chunk"] = $content;
             }
             return "<div>";
         }
@@ -371,9 +384,9 @@ abstract class phpdotnet extends PhDTheme {
             return "<h1>";
         }
         $ret = "";
-        if ($this->tmp["container_chunk"]) {
-            $ret = $this->tmp["container_chunk"];
-            $this->tmp["container_chunk"] = null;
+        if ($this->cchunk["container_chunk"]) {
+            $ret = $this->cchunk["container_chunk"];
+            $this->cchunk["container_chunk"] = null;
         }
         return "</h1>\n" .$ret;
     }
@@ -496,7 +509,7 @@ abstract class phpdotnet extends PhDTheme {
             return "";
         }
         if ($open) {
-            return "<p><b>Example#" .++$this->tmp["chunk"]["examples"]. " ";
+            return "<p><b>Example#" .++$this->cchunk["examples"]. " ";
         }
         return "</b></p>";
     }
@@ -521,21 +534,21 @@ abstract class phpdotnet extends PhDTheme {
         $ret = '<div class="qandaset"><ol class="qandaset_questions">';
         $i = 0;
         foreach($nlist as $node) {
-            $ret .= '<li><a href="#' .($this->tmp["qandaentry"][$i++]). '">' .($node->textContent). '</a></li>';
+            $ret .= '<li><a href="#' .($this->cchunk["qandaentry"][$i++]). '">' .($node->textContent). '</a></li>';
         }
 
         return $ret.'</ul>'.$xml.'</div>';
     }
     public function format_qandaentry($open, $name, $attrs) {
         if ($open) {
-            $this->tmp["qandaentry"][] = $attrs[PhDReader::XMLNS_XML]["id"];
+            $this->cchunk["qandaentry"][] = $attrs[PhDReader::XMLNS_XML]["id"];
             return '<dl>';
         }
         return '</dl>';
     }
     public function format_answer($open, $name, $attrs) {
         if ($open) {
-            return '<dd><a name="' .end($this->tmp["qandaentry"]).'"></a>';
+            return '<dd><a name="' .end($this->cchunk["qandaentry"]).'"></a>';
         }
         return "</dd>";
     }
