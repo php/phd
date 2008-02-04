@@ -322,9 +322,14 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "<font color='red' size='+3'>/{$args[1]}</font>";
     }
-    public function transformFromMap($open, $tag, $name, $props) {
+    public function transformFromMap($open, $tag, $name, $attrs, $props) {
         if ($open) {
-            return '<' .$tag. ' class="' .$name. '"' . ($props["empty"] ? '/' : "") . '>';
+            $idstr = "";
+            if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+                $id = $attrs[PhDReader::XMLNS_XML]["id"];
+                $idstr = ' id="' .$id. '" name="' .$id. '"';
+            }
+            return '<' .$tag. ' class="' .$name. '"' . ($props["empty"] ? '/' : "") . $idstr. '>';
         }
         return '</' .$tag. '>';
     }
