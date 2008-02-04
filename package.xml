@@ -24,7 +24,8 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-   - Back to dev
+    - Added support for &gt;footnote&lt; and &gt;footnoteref&lt;
+    - Added anchor generation for various elements
   </notes>
   <contents>
     <dir baseinstalldir="phd" name="/">
