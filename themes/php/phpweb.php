@@ -205,7 +205,7 @@ manual_header();
     }
     public function format_qandaset($open, $name, $attrs) {
         if ($open) {
-            $this->tmp["qandaentry"] = array();
+            $this->cchunk["qandaentry"] = array();
             $this->appendData(null, PhDReader::OPEN_CHUNK);
             return '';
         }

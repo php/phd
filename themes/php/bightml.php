@@ -33,7 +33,7 @@ class bightml extends phpdotnet {
     }
     public function format_qandaset($open, $name, $attrs) {
         if ($open) {
-            $this->tmp["qandaentry"] = array();
+            $this->cchunk["qandaentry"] = array();
             $this->ostream = $this->stream;
             $this->stream = fopen("php://temp/maxmemory", "r+");
             return '';
