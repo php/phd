@@ -30,6 +30,8 @@ class XHTMLPhDFormat extends PhDFormat {
         'copyright'             => 'format_copyright',
         'editor'                => 'format_editor',
         'firstname'             => 'format_name',
+        'footnote'              => 'format_footnote',
+        'footnoteref'           => 'format_footnoteref',
         'surname'               => 'format_name',
         'othername'             => 'format_name',
         'optional'              => 'span',
@@ -60,7 +62,14 @@ class XHTMLPhDFormat extends PhDFormat {
         'colspec'               => 'format_colspec',
         'command'               => 'strong',
         'computeroutput'        => 'span',
-        'constant'              => 'format_constant',
+        /* FIXME: This is one crazy stupid workaround for footnotes */
+        'constant'              => array(
+            /* DEFAULT */          'format_constant',
+            'para'              => array(
+                /* DEFAULT */      'format_constant',
+                'footnote'      => 'format_footnote_constant',
+            ),
+        ),
         'constructorsynopsis'   => 'format_methodsynopsis',
         'destructorsynopsis'    => 'format_methodsynopsis',
         'emphasis'              => 'em',
@@ -137,6 +146,7 @@ class XHTMLPhDFormat extends PhDFormat {
             /* DEFAULT */          'p',
             'example'           => 'format_example_content',
             'note'              => 'format_note_content',
+            'footnote'          => 'format_footnote_para',
         ),
         'parameter'             => array(
             /* DEFAULT */          'format_parameter',
@@ -280,6 +290,19 @@ class XHTMLPhDFormat extends PhDFormat {
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
             ),
         ),
+        'para'                  => array(
+            /* DEFAULT */          false,
+            'footnote'             => 'format_footnote_para_text',
+        ),
+        /* FIXME: This is one crazy stupid workaround for footnotes */
+        'constant'              => array(
+            /* DEFAULT */          false,
+            'para'              => array(
+                /* DEFAULT */      false,
+                'footnote'      => 'format_footnote_constant_text',
+            ),
+        ),
+
     );
 
 
@@ -306,9 +329,14 @@ class XHTMLPhDFormat extends PhDFormat {
             "segtitle"                      => array(
             ),
         ),
+        "table"                    => false,
         "procedure"                => false,
         "mediaobject"              => array(
             "alt"                           => false,
+        ),
+        "footnote"                 => array(
+        ),
+        "tablefootnotes"           => array(
         ),
     );
     
@@ -381,14 +409,21 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</div>\n";
     }
     public function format_chunk($open, $name, $attrs) {
-        $this->cchunk = $this->dchunk;
         if ($open) {
+            $this->cchunk = $this->dchunk;
             if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
                 return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
             }
             return '<div class="' .$name. '">';
         }
-        return "</div>";
+        $str = "";
+        foreach ($this->cchunk["footnote"] as $k => $note) {
+            $str .= '<a name="fnid' .$note["id"]. '" href="#fn' .$note["id"]. '"><sup>[' .$k. ']</sup></a>';
+            $str .= $note["str"];
+        }
+        $this->cchunk["footnote"] = $this->dchunk["footnote"];
+
+        return $str. "</div>";
     }
     public function format_refsect($open, $name, $attrs) {
         if ($open) {
@@ -571,6 +606,62 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return '</var>';
     }
+
+    public function format_footnoteref($open, $name, $attrs, $props) {
+        if ($open) {
+            $linkend = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
+            $found = false;
+            foreach($this->cchunk["footnote"] as $k => $note) {
+                if ($note["id"] === $linkend) {
+                    return '<a href="#' .$note["id"]. '"><sup>[' .$k. ']</sup></a>';
+                }
+            }
+            trigger_error("footnoteref ID '$linkend' not foun", E_USER_WARNING);
+            return "";
+        }
+    }
+    public function format_footnote($open, $name, $attrs, $props) {
+        if ($open) {
+            $count = count($this->cchunk["footnote"]);
+            $noteid = isset($attrs[PhDReader::XMLNS_XML]["id"]) ? $attrs[PhDReader::XMLNS_XML]["id"] : $count;
+            $note = array("id" => $noteid, "str" => "");
+            $this->cchunk["footnote"][$count] = $note;
+            if ($this->cchunk["table"]) {
+                $this->cchunk["tablefootnotes"][$count] = $noteid;
+            }
+            return '<a href="#fnid' .$noteid. '" name="fn'.$noteid.'"><sup>[' .$count. ']</sup></a>';
+        }
+        return "";
+    }
+
+    /* {{{ FIXME: These are crazy workarounds :( */
+    public function format_footnote_constant($open, $name, $attrs, $props) {
+        $k = count($this->cchunk["footnote"]) - 1;
+        $this->cchunk["footnote"][$k]["str"] .= self::format_constant($open, $name, $attrs, $props);
+        return "";
+    }
+    public function format_footnote_constant_text($value, $tag) {
+        $k = count($this->cchunk["footnote"]) - 1;
+        $this->cchunk["footnote"][$k]["str"] .= $value;
+        return "";
+    }
+    public function format_footnote_para($open, $name, $attrs, $props) {
+        $k = count($this->cchunk["footnote"]) - 1;
+        if ($open) {
+            $this->cchunk["footnote"][$k]["str"] .= "<p>";
+            return "";
+        }
+
+        $this->cchunk["footnote"][$k]["str"] .= "</p>";
+        return "";
+    }
+    public function format_footnote_para_text($value, $tag) {
+        $k = count($this->cchunk["footnote"]) - 1;
+        $this->cchunk["footnote"][$k]["str"] .= $value;
+        return "";
+    }
+
+    /* }}} */
 
     public function format_co($open, $name, $attrs, $props) {
         if (($open || $props["empty"]) && isset($attrs[PhDReader::XMLNS_XML]["id"])) {
@@ -804,11 +895,29 @@ class XHTMLPhDFormat extends PhDFormat {
         return '<img src="' .$attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]. '" />';
     }
 
-    public function format_table($open, $name, $attrs) {
+    public function format_table($open, $name, $attrs, $props) {
         if ($open) {
+            $this->cchunk["table"] = true;
             return '<table border="5">';
         }
-        return "</table>\n";
+        $this->cchunk["table"] = false;
+        $str = "";
+        foreach ($this->cchunk["tablefootnotes"] as $k => $noteid) {
+            $opts = array(PhDReader::XMLNS_DOCBOOK => array());
+
+            $str =  $this->format_tbody(true, "footnote", $opts, $props);
+            $str .= $this->format_row(true, "footnote", $opts, $props);
+            $str .= $this->format_entry(true, "footnote", $opts, $props+array("colspan" => $this->getColCount()));
+
+            $str .= '<a name="fnid' .$noteid. '" href="#fn' .$noteid .'"><sup>[' .$k. ']</sup></a>' .$this->cchunk["footnote"][$k]["str"];
+            unset($this->cchunk["footnote"][$k]);
+
+            $str .= $this->format_entry(false, "footnote", $opts, $props);
+            $str .= $this->format_row(false, "footnote", $opts, $props);
+            $str .= $this->format_tbody(false, "footnote", $opts, $props);
+        }
+        $this->cchunk["tablefootnotes"] = $this->dchunk["tablefootnotes"];
+        return "$str</table>\n";
     }
     public function format_tgroup($open, $name, $attrs) {
         if ($open) {
@@ -863,7 +972,7 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</tr>\n";
     }
-    public function format_th_entry($open, $name, $attrs = array()) {
+    public function format_th_entry($open, $name, $attrs) {
         if ($open) {
             $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
             return '<th colspan="' .((int)$colspan). '">';
@@ -884,7 +993,16 @@ class XHTMLPhDFormat extends PhDFormat {
                 }
             }
 
-            $colspan = PhDFormat::colspan($dbattrs);
+            /*
+             * "colspan" is *not* an standard prop, only used to overwrite the 
+             * colspan for <footnote>s in tables
+             */
+            if (isset($props["colspan"])) {
+                $colspan = $props["colspan"];
+            } else {
+                $colspan = PhDFormat::colspan($dbattrs);
+            }
+
             $rowspan = PhDFormat::rowspan($dbattrs);
             $moreattrs = self::parse_table_entry_attributes($dbattrs);
             return $retval. '<td colspan="' .((int)$colspan). '" rowspan="' .((int)$rowspan). '" ' .$moreattrs. '>';

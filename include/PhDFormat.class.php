@@ -33,6 +33,9 @@ abstract class PhDFormat extends PhDHelper {
 
         return array_merge($defaults, $this->TABLE["defaults"], $attrs);
     }
+    public function getColCount() {
+        return $this->TABLE["cols"];
+    }
 
     public function valign($attrs) {
         return isset($attrs["valign"]) ? $attrs["valign"] : "middle";
