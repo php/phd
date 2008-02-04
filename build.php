@@ -125,7 +125,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
 
     /* {{{ Initialize the PhD[Partial]Reader */
     if (!empty($OPTIONS["render_ids"])) {
-        $idlist = $OPTIONS["render_ids"];
+        $idlist = $OPTIONS["render_ids"]+$OPTIONS["skip_ids"];
         if ($OPTIONS["verbose"] & VERBOSE_RENDER_STYLE) {
             v("Running partial build\n");
         }

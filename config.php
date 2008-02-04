@@ -50,6 +50,8 @@ $OPTIONS = array (
   'date_format' => "H:i:s",
   'render_ids' => array(
   ),
+  'skip_ids' => array(
+  ),
 );
 /* }}} */
 
@@ -61,6 +63,7 @@ $opts = array(
     "index:"   => "i:", // Re-index or load from cache
     "docbook:" => "d:", // The Docbook XML file to render from (.manual.xml)
     "partial:" => "p:", // The ID to render (optionally ignoring its childrens)
+    "skip:"    => "s:", // The ID to skip (optionally skipping its childrens too)
     "verbose:" => "v",  // Adjust the verbosity level
     "list::"   => "l::", // List supported themes/formats
     "version"  => "V",  // Print out version information
@@ -200,6 +203,24 @@ foreach($args as $k => $v) {
         break;
     /* }}} */
 
+    /* {{{ Skip list */
+    case "s":
+    case "skip":
+        foreach((array)$v as $i => $val) {
+            $recursive = true;
+            if (strpos($val, "=") !== false) {
+                list($val, $recursive) = explode("=", $val);
+
+                if (!is_numeric($recursive) && defined($recursive)) {
+                    $recursive = constant($recursive);
+                }
+                $recursive = (bool) $recursive;
+            }
+            $OPTIONS["skip_ids"][$val] = $recursive;
+        }
+        break;
+    /* }}} */
+
     /* {{{ Output themes */
     case "t":
     case "theme":
@@ -276,7 +297,9 @@ foreach($args as $k => $v) {
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -p <id[=bool]>
-  --partial <id[=bool]>      The ID to render, optionally ignoring its children pages (default to true; render childrens)
+  --partial <id[=bool]>      The ID to render, optionally skipping its children chunks (default to true; render childrens)
+  -s <id[=bool]>
+  --skip <id[=bool]>         The ID to skip, optionally skipping its children chunks (default to true; skip childrens)
   -l <formats/themes>
   --list <formats/themes>    Print out the supported formats/themes (default: both)
   -V

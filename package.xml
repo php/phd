@@ -26,6 +26,7 @@
   <notes>
     - Added support for &gt;footnote&lt; and &gt;footnoteref&lt;
     - Added anchor generation for various elements
+    - Added option (-s/--skip) to skip rendering of chunks
   </notes>
   <contents>
     <dir baseinstalldir="phd" name="/">
