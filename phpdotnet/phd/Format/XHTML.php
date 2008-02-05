@@ -418,8 +418,10 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         $str = "";
         foreach ($this->cchunk["footnote"] as $k => $note) {
+            $str .= '<div class="footnote">';
             $str .= '<a name="fnid' .$note["id"]. '" href="#fn' .$note["id"]. '"><sup>[' .$k. ']</sup></a>';
             $str .= $note["str"];
+            $str .= "</div>\n";
         }
         $this->cchunk["footnote"] = $this->dchunk["footnote"];
 
@@ -613,7 +615,7 @@ class XHTMLPhDFormat extends PhDFormat {
             $found = false;
             foreach($this->cchunk["footnote"] as $k => $note) {
                 if ($note["id"] === $linkend) {
-                    return '<a href="#' .$note["id"]. '"><sup>[' .$k. ']</sup></a>';
+                    return '<a href="#fnid' .$note["id"]. '"><sup>[' .$k. ']</sup></a>';
                 }
             }
             trigger_error("footnoteref ID '$linkend' not foun", E_USER_WARNING);
@@ -648,7 +650,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_footnote_para($open, $name, $attrs, $props) {
         $k = count($this->cchunk["footnote"]) - 1;
         if ($open) {
-            $this->cchunk["footnote"][$k]["str"] .= "<p>";
+            $this->cchunk["footnote"][$k]["str"] .= '<p class="para footnote">';
             return "";
         }
 
@@ -902,21 +904,26 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         $this->cchunk["table"] = false;
         $str = "";
-        foreach ($this->cchunk["tablefootnotes"] as $k => $noteid) {
+        if ($this->cchunk["tablefootnotes"]) {
             $opts = array(PhDReader::XMLNS_DOCBOOK => array());
 
             $str =  $this->format_tbody(true, "footnote", $opts, $props);
             $str .= $this->format_row(true, "footnote", $opts, $props);
             $str .= $this->format_entry(true, "footnote", $opts, $props+array("colspan" => $this->getColCount()));
 
-            $str .= '<a name="fnid' .$noteid. '" href="#fn' .$noteid .'"><sup>[' .$k. ']</sup></a>' .$this->cchunk["footnote"][$k]["str"];
-            unset($this->cchunk["footnote"][$k]);
+            foreach ($this->cchunk["tablefootnotes"] as $k => $noteid) {
+                $str .= '<div class="footnote">';
+                $str .= '<a name="fnid' .$noteid. '" href="#fn' .$noteid .'"><sup>[' .$k. ']</sup></a>' .$this->cchunk["footnote"][$k]["str"] . "\n";
+                unset($this->cchunk["footnote"][$k]);
+                $str .= "</div>\n";
 
+            }
             $str .= $this->format_entry(false, "footnote", $opts, $props);
             $str .= $this->format_row(false, "footnote", $opts, $props);
             $str .= $this->format_tbody(false, "footnote", $opts, $props);
+
+            $this->cchunk["tablefootnotes"] = $this->dchunk["tablefootnotes"];
         }
-        $this->cchunk["tablefootnotes"] = $this->dchunk["tablefootnotes"];
         return "$str</table>\n";
     }
     public function format_tgroup($open, $name, $attrs) {
@@ -960,7 +967,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_tbody($open, $name, $attrs) {
         if ($open) {
             $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
-            return '<tbody valign="' .$valign. '">';
+            return '<tbody valign="' .$valign. '" class="' .$name. '">';
         }
         return "</tbody>";
     }
