@@ -68,6 +68,7 @@ $opts = array(
     "list::"   => "l::", // List supported themes/formats
     "version"  => "V",  // Print out version information
     "help"     => "h",  // Print out help
+    "debug"    => "",   // Turn debug output on/off
 );
 /* }}} */
 
@@ -271,6 +272,12 @@ foreach($args as $k => $v) {
         $OPTIONS["verbose"] = $verbose;
         break;
     /* }}} */
+    
+    /* {{{ Debug flag */
+    case "debug":
+        $OPTIONS["debug"] = (bool)(count($v) % 2 != 0);
+        break;
+    /* }}} */
 
     /* {{{ Version info */
     case "V":
@@ -287,7 +294,8 @@ foreach($args as $k => $v) {
         echo "PhD version: " .PHD_VERSION;
         echo "\nCopyright (c) 2008 The PHP Documentation Group\n
   -v
-  --verbose <int>            Adjusts the verbosity level.
+  --verbose <int>            Adjusts the verbosity level
+  --debug                    Toggle debug flag
   -f <formatname>
   --format <formatname>      The build format to use
   -t <themename>
