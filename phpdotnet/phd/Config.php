@@ -68,7 +68,7 @@ $opts = array(
     "list::"   => "l::", // List supported themes/formats
     "version"  => "V",  // Print out version information
     "help"     => "h",  // Print out help
-    "debug"    => "",   // Turn debug output on/off
+    "debug"    => "g",  // Turn debug output on/off
 );
 /* }}} */
 
@@ -274,7 +274,9 @@ foreach($args as $k => $v) {
     /* }}} */
     
     /* {{{ Debug flag */
+    case "g":
     case "debug":
+        // I bow to the great and venerable gcc for the idea of the short flag name
         $OPTIONS["debug"] = (bool)(count($v) % 2 != 0);
         break;
     /* }}} */
@@ -295,6 +297,7 @@ foreach($args as $k => $v) {
         echo "\nCopyright (c) 2008 The PHP Documentation Group\n
   -v
   --verbose <int>            Adjusts the verbosity level
+  -g
   --debug                    Toggle debug flag
   -f <formatname>
   --format <formatname>      The build format to use
