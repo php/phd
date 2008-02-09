@@ -27,7 +27,7 @@
     - Added support for &gt;footnote&lt; and &gt;footnoteref&lt;
     - Added anchor generation for various elements
     - Added option (-s/--skip) to skip rendering of chunks
-    - Added option (-g/--debug) to toggle debug flag
+    - Removed debug flag entirely. The verbose flags take care of its functionality
   </notes>
   <contents>
     <dir baseinstalldir="phd" name="/">

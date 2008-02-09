@@ -45,7 +45,6 @@ $OPTIONS = array (
   'enforce_revisions' => false,
   'compatibility_mode' => true,
   'build_log_file' => 'none',
-  'debug' => true,
   'verbose' => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING),
   'date_format' => "H:i:s",
   'render_ids' => array(
@@ -68,7 +67,6 @@ $opts = array(
     "list::"   => "l::", // List supported themes/formats
     "version"  => "V",  // Print out version information
     "help"     => "h",  // Print out help
-    "debug"    => "g",  // Turn debug output on/off
 );
 /* }}} */
 
@@ -273,14 +271,6 @@ foreach($args as $k => $v) {
         break;
     /* }}} */
     
-    /* {{{ Debug flag */
-    case "g":
-    case "debug":
-        // I bow to the great and venerable gcc for the idea of the short flag name
-        $OPTIONS["debug"] = (bool)(count($v) % 2 != 0);
-        break;
-    /* }}} */
-
     /* {{{ Version info */
     case "V":
     case "version":
@@ -297,8 +287,6 @@ foreach($args as $k => $v) {
         echo "\nCopyright (c) 2008 The PHP Documentation Group\n
   -v
   --verbose <int>            Adjusts the verbosity level
-  -g
-  --debug                    Toggle debug flag
   -f <formatname>
   --format <formatname>      The build format to use
   -t <themename>
