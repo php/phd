@@ -419,7 +419,7 @@ class XHTMLPhDFormat extends PhDFormat {
         $str = "";
         foreach ($this->cchunk["footnote"] as $k => $note) {
             $str .= '<div class="footnote">';
-            $str .= '<a name="fnid' .$note["id"]. '" href="#fn' .$note["id"]. '"><sup>[' .$k. ']</sup></a>';
+            $str .= '<a name="fnid' .$note["id"]. '" href="#fn' .$note["id"]. '"><sup>[' .($k + 1). ']</sup></a>';
             $str .= $note["str"];
             $str .= "</div>\n";
         }
@@ -615,7 +615,7 @@ class XHTMLPhDFormat extends PhDFormat {
             $found = false;
             foreach($this->cchunk["footnote"] as $k => $note) {
                 if ($note["id"] === $linkend) {
-                    return '<a href="#fnid' .$note["id"]. '"><sup>[' .$k. ']</sup></a>';
+                    return '<a href="#fnid' .$note["id"]. '"><sup>[' .($k + 1). ']</sup></a>';
                 }
             }
             trigger_error("footnoteref ID '$linkend' not foun", E_USER_WARNING);
@@ -631,7 +631,7 @@ class XHTMLPhDFormat extends PhDFormat {
             if ($this->cchunk["table"]) {
                 $this->cchunk["tablefootnotes"][$count] = $noteid;
             }
-            return '<a href="#fnid' .$noteid. '" name="fn'.$noteid.'"><sup>[' .$count. ']</sup></a>';
+            return '<a href="#fnid' .$noteid. '" name="fn'.$noteid.'"><sup>[' .($count + 1). ']</sup></a>';
         }
         return "";
     }
@@ -913,7 +913,7 @@ class XHTMLPhDFormat extends PhDFormat {
 
             foreach ($this->cchunk["tablefootnotes"] as $k => $noteid) {
                 $str .= '<div class="footnote">';
-                $str .= '<a name="fnid' .$noteid. '" href="#fn' .$noteid .'"><sup>[' .$k. ']</sup></a>' .$this->cchunk["footnote"][$k]["str"] . "\n";
+                $str .= '<a name="fnid' .$noteid. '" href="#fn' .$noteid .'"><sup>[' .($k + 1). ']</sup></a>' .$this->cchunk["footnote"][$k]["str"] . "\n";
                 unset($this->cchunk["footnote"][$k]);
                 $str .= "</div>\n";
 

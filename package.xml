@@ -46,6 +46,7 @@
     - Reformatted package.xml for readability and consistency
     - Merged README.RENDERER into README and updated README with current information
     - Gwynne is a developer of PhD, unfortunately
+    - Footnotes should be rendered starting from 1, not 0
   </notes>
 
   <contents>
