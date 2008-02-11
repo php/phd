@@ -625,7 +625,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_footnote($open, $name, $attrs, $props) {
         if ($open) {
             $count = count($this->cchunk["footnote"]);
-            $noteid = isset($attrs[PhDReader::XMLNS_XML]["id"]) ? $attrs[PhDReader::XMLNS_XML]["id"] : $count;
+            $noteid = isset($attrs[PhDReader::XMLNS_XML]["id"]) ? $attrs[PhDReader::XMLNS_XML]["id"] : $count + 1;
             $note = array("id" => $noteid, "str" => "");
             $this->cchunk["footnote"][$count] = $note;
             if ($this->cchunk["table"]) {
