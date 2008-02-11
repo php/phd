@@ -80,7 +80,7 @@
       <file baseinstalldir="phd" name="config.php" role="php"/>
       <file baseinstalldir="phd" name="LICENSE" role="php"/>
       <file baseinstalldir="phd" name="mktoc.php" role="php"/>
-      <file baseinstalldir="phd" name="README.RENDERER" role="php"/>
+      <file baseinstalldir="phd" name="README" role="php"/>
       <file baseinstalldir="phd" name="TODO.RENDERER" role="php"/>
     </dir>
   </contents>
