@@ -539,7 +539,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_methodparam_parameter($open, $name, $attrs) {
         if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                return ' <tt class="parameter-reference">&$';
+                return ' <tt class="parameter reference">&$';
             }
             return ' <tt class="parameter">$';
         }
@@ -554,7 +554,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_parameter($open, $name, $attrs) {
         if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                return '<i><tt class="parameter-reference">&';
+                return '<i><tt class="parameter reference">&';
             }
             return '<i><tt class="parameter">';
         }
@@ -650,7 +650,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_footnote_para($open, $name, $attrs, $props) {
         $k = count($this->cchunk["footnote"]) - 1;
         if ($open) {
-            $this->cchunk["footnote"][$k]["str"] .= '<p class="para-footnote">';
+            $this->cchunk["footnote"][$k]["str"] .= '<p class="para footnote">';
             return "";
         }
 
