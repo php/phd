@@ -119,7 +119,7 @@ class XHTMLPhDFormat extends PhDFormat {
             /* DEFAULT */          'li',
             'varlistentry'      => 'format_varlistentry_listitem',
         ),
-        'literal'               => 'i',
+        'literal'               => 'format_literal',
         'literallayout'         => 'pre',
         'manvolnum'             => 'format_manvolnum',
         'mediaobject'           => 'format_mediaobject',
@@ -302,6 +302,7 @@ class XHTMLPhDFormat extends PhDFormat {
                 'footnote'      => 'format_footnote_constant_text',
             ),
         ),
+        'literal'               => 'format_literal_text',
 
     );
 
@@ -381,7 +382,33 @@ class XHTMLPhDFormat extends PhDFormat {
         /* Suppress any content */
         return "";
     }
-
+    
+    public function format_literal($open, $name, $attrs) {
+        if ($open) {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+            } else {
+                $this->role = false;
+            }
+            return '<i>';
+        }
+        $this->role = false;
+        return '</i>';
+    }
+    public function format_literal_text($value, $tag) {
+        switch ($this->role) {
+            case 'infdec':
+                $p = strpos($value, '.');
+                $str = substr($value, 0, $p + 1);
+                $str .= '<span style="text-decoration: overline;">';
+                $str .= substr($value, $p + 1);
+                $str .= '</span>';
+                return $str;
+            default:
+                return $value;
+        }
+    }
+    
     public function format_copyright($open, $name, $attrs) {
         if ($open) {
             return '<div class="'.$name.'">&copy; ';
@@ -650,11 +677,11 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_footnote_para($open, $name, $attrs, $props) {
         $k = count($this->cchunk["footnote"]) - 1;
         if ($open) {
-            $this->cchunk["footnote"][$k]["str"] .= '<p class="para footnote">';
+            //$this->cchunk["footnote"][$k]["str"] .= '<p class="para footnote">';
             return "";
         }
 
-        $this->cchunk["footnote"][$k]["str"] .= "</p>";
+        //$this->cchunk["footnote"][$k]["str"] .= "</p>";
         return "";
     }
     public function format_footnote_para_text($value, $tag) {
