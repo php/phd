@@ -236,6 +236,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'sect1'             => 'h2',
             'sect2'             => 'h3',
             'sect3'             => 'h4',
+            'sect4'             => 'h5',
             'segmentedlist'     => 'strong',
             'table'             => 'format_table_title',
             'variablelist'      => 'strong',
