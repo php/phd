@@ -17,7 +17,7 @@ if ($ROOT == "@php_dir"."@/phd") {
     && is_array($OPTIONS)
     && isset($OPTIONS["output_format"], $OPTIONS["output_theme"])
     && is_array($OPTIONS["output_theme"])
-    or die("Invalid configuration/file not found.\nYou need to run setup/setup.php first\n");
+    or die("Invalid configuration/file not found.\nThis should never happen, did you edit config.php yourself?\n");
 
 require $ROOT. "/include/PhDReader.class.php";
 require $ROOT. "/include/PhDPartialReader.class.php";
