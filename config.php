@@ -306,7 +306,7 @@ foreach($args as $k => $v) {
   -h
   --help                     This help
 
-All options can be passed multiple times for greater affect.
+Most options can be passed multiple times for greater affect.
 NOTE: Long options are only supported using PHP5.3\n";
         exit(0);
         break;
