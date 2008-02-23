@@ -678,11 +678,11 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_footnote_para($open, $name, $attrs, $props) {
         $k = count($this->cchunk["footnote"]) - 1;
         if ($open) {
-            //$this->cchunk["footnote"][$k]["str"] .= '<p class="para footnote">';
+            $this->cchunk["footnote"][$k]["str"] .= '<span class="para footnote">';
             return "";
         }
 
-        //$this->cchunk["footnote"][$k]["str"] .= "</p>";
+        $this->cchunk["footnote"][$k]["str"] .= "</span>";
         return "";
     }
     public function format_footnote_para_text($value, $tag) {
