@@ -25,17 +25,22 @@ require $ROOT. "/include/PhDHelper.class.php";
 require $ROOT. "/include/PhDFormat.class.php";
 require $ROOT. "/include/PhDTheme.class.php";
 
+/* {{{ Build the .ser file names to allow multiple sources for PHD. */
+$OPTIONS['index_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.index_' . basename($OPTIONS['xml_file'], '.xml') . '.ser';
+$OPTIONS['refnames_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.refnames_' . basename($OPTIONS['xml_file'], '.xml') . '.ser';
+/* }}} */
+
 /* {{{ Index the DocBook file or load from .ser cache files
-       NOTE: There are two cache files:
-        - index.ser     (containing the ID infos)
-        - refnames.ser  (containing <refname> => File ID) */
-if (!$OPTIONS["index"] && (file_exists("index.ser") && file_exists("refnames.ser"))) {
+       NOTE: There are two cache files (where * is the basename of the XML source file):
+        - index_*.ser     (containing the ID infos)
+        - refnames_*.ser  (containing <refname> => File ID) */
+if (!$OPTIONS["index"] && (file_exists($OPTIONS['index_location']) && file_exists($OPTIONS['refnames_location']))) {
     /* FIXME: Load from sqlite db? */
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
         v("Unserializing cached index files...\n");
     }
-    $IDs = unserialize(file_get_contents("index.ser"));
-    $REFS = unserialize(file_get_contents("refnames.ser"));
+    $IDs = unserialize(file_get_contents($OPTIONS['index_location']));
+    $REFS = unserialize(file_get_contents($OPTIONS['refnames_location']));
     if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
         v("Unserialization done\n");
     }
@@ -46,8 +51,8 @@ if (!$OPTIONS["index"] && (file_exists("index.ser") && file_exists("refnames.ser
     /* This file will "return" an $IDs & $REFS array */
     require $ROOT. "/mktoc.php";
 
-    file_put_contents("index.ser", $ids = serialize($IDs));
-    file_put_contents("refnames.ser", $refs = serialize($REFS));
+    file_put_contents($OPTIONS['index_location'], $ids = serialize($IDs));
+    file_put_contents($OPTIONS['refnames_location'], $refs = serialize($REFS));
 
     $IDs2 = unserialize($ids);
     $REFS2 = unserialize($refs);

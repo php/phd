@@ -43,6 +43,7 @@
     - Added support for &gt;footnote&lt; and &gt;footnoteref&lt;. (Gwynne, Hannes)
     - Added anchor generation for various elements. (Hannes)
     - Added option (-s/--skip) to skip rendering of chunks. (Hannes)
+    - Added option (-o/--output) to specify output directory (FR#43193). (Richard)
     - Added support for &gt;sect4&lt; titles . (Gwynne)
     - Added an 'infdec' role to &gt;literal&lt; in XHTML. (Gwynne)
     - Reformatted package.xml for readability and consistency. (Gwynne)

@@ -5,35 +5,39 @@ require_once $ROOT . '/themes/php/phpdotnet.php';
 class phpweb extends phpdotnet {
     protected $streams = array();
     protected $writeit = false;
+    protected $outputdir = '';
 
 
     public function __construct($IDs, $filename, $ext = "php", $chunked = true) {
         parent::__construct($IDs, $filename, $ext, $chunked);
-        if (!file_exists("php") || is_file("php")) mkdir("php") or die("Can't create the cache directory");
-        if (!file_exists("php/toc") || is_file("php/toc")) mkdir("php/toc") or die("Can't create the toc directory");
+        $this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $this->ext . DIRECTORY_SEPARATOR;
+        if (!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory");
+        if (!file_exists($this->outputdir . "toc") || is_file($this->outputdir . "toc")) mkdir($this->outputdir . "toc") or die("Can't create the toc directory");
     }
     public function writeChunk($id, $stream) {
         rewind($stream);
 
         // Create random filename when the chunk doesn't have an ID
         if ($id === null) {
-            $filename = tempnam($this->ext, "phd");
-            if(rename($filename, $filename. "." . $this->ext)) {
-                $filename .= "." .$this->ext;
+            $filename = tempnam($this->outputdir, 'phd');
+            $newfilename = $this->outputdir . basename($filename, '.tmp') . '.' . $this->ext;
+            if(rename($filename, $newfilename)) {
+                $filename = basename($filename, '.tmp');
             } else {
-                throw new Exception("Cannot rename $filename to $filename.{$this->ext}");
+                throw new Exception("Cannot rename $filename to $newfilename");
             }
-            v("WARNING: Chunk without an ID found, TOC will NOT work. Wrote content to $filename.\n");
+            v("WARNING: Chunk without an ID found, TOC will NOT work. Wrote content to $newfilename.\n");
         } else {
-            $filename = $this->ext."/$id.".$this->ext;
+            $filename = $id;
         }
+	$filename .= '.' . $this->ext;
 
-        file_put_contents($filename, $this->header($id));
-        file_put_contents($filename, $stream, FILE_APPEND);
-        file_put_contents($filename, $this->footer($id), FILE_APPEND);
+        file_put_contents($this->outputdir . $filename, $this->header($id));
+        file_put_contents($this->outputdir . $filename, $stream, FILE_APPEND);
+        file_put_contents($this->outputdir . $filename, $this->footer($id), FILE_APPEND);
 
         if ($GLOBALS["OPTIONS"]["verbose"] & VERBOSE_CHUNK_WRITING) {
-            v("Wrote %s\n", $filename);
+            v("Wrote %s\n", $this->outputdir . $filename);
         }
     }
     public function appendData($data, $isChunk) {
@@ -62,7 +66,7 @@ class phpweb extends phpdotnet {
     public function header($id) {
         $ext = '.' .$this->ext;
         $parent = PhDHelper::getParent($id);
-        $filename = $this->ext . DIRECTORY_SEPARATOR . "toc" . DIRECTORY_SEPARATOR . $parent . ".inc";
+        $filename = "toc" . DIRECTORY_SEPARATOR . $parent . ".inc";
         $up = array(null, null);
         $incl = '';
 
@@ -74,7 +78,7 @@ class phpweb extends phpdotnet {
              * to easily add new pages without needing to rebuild the entire 
              * section.
              */
-            if (!file_exists($filename)) {
+            if (!file_exists($this->outputdir . $filename)) {
                 $toc = array();
 
                 foreach($siblings as $sid => $array) {
@@ -91,10 +95,10 @@ class phpweb extends phpdotnet {
 $TOC = ' . var_export($toc, true) . ';
 $PARENTS = ' . var_export($parents, true) . ';';
 
-                file_put_contents($filename, $content);
+                file_put_contents($this->outputdir . $filename, $content);
 
                 if ($GLOBALS["OPTIONS"]["verbose"] & VERBOSE_TOC_WRITING) {
-                    v("Wrote TOC (%s)\n", $filename);
+                    v("Wrote TOC (%s)\n", $this->outputdir . $filename);
                 }
             }
 
@@ -199,8 +203,8 @@ manual_header();
         return $next;
     }
     public function __destruct() {
-        if (file_exists("php/manual.php")) {
-            copy("php/manual.php", "php/index.php");
+        if (file_exists($this->outputdir . "manual.php")) {
+            copy($this->outputdir . "manual.php", $this->outputdir . "index.php");
         }
     }
     public function format_qandaset($open, $name, $attrs) {

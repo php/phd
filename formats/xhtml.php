@@ -147,6 +147,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'example'           => 'format_example_content',
             'note'              => 'format_note_content',
             'footnote'          => 'format_footnote_para',
+            'refsect1'          => 'format_refsect1_para',
         ),
         'parameter'             => array(
             /* DEFAULT */          'format_parameter',
@@ -439,10 +440,14 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_chunk($open, $name, $attrs) {
         if ($open) {
             $this->cchunk = $this->dchunk;
+            $id = $rel = "";
             if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-                return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
+                $id = ' id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '"';
             }
-            return '<div class="' .$name. '">';
+            if ($name === "refentry") {
+                $rel = ' rel="rel:Posting"';
+            }
+            return '<div'. $id. ' class="' .$name. '"'.$rel.'>';
         }
         $str = "";
         foreach ($this->cchunk["footnote"] as $k => $note) {
@@ -460,8 +465,10 @@ class XHTMLPhDFormat extends PhDFormat {
             if(!isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
                 $attrs[PhDReader::XMLNS_DOCBOOK]["role"] = "unknown";
             }
+            $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
             return '<div class="' .$name.' ' .$attrs[PhDReader::XMLNS_DOCBOOK]["role"]. '">';
         }
+        $this->role = null;
         return "</div>\n";
     }
 
@@ -552,7 +559,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
             $this->params = array("count" => 0, "opt" => 0, "content" => "");
-            return '<div class="'.$name.'">';
+            return '<div class="'.$name.'" property="reference:summary">';
         }
         $content = "";
         if ($this->params["opt"]) {
@@ -1045,6 +1052,15 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</td>";
     }
 
+    public function format_refsect1_para($open, $name, $attrs, $props) {
+        if ($open) {
+            if ($props["sibling"] === "methodsynopsis") {
+                return '<p class="para" property="dc:description">';
+            }
+            return '<p class="para">';
+        }
+        return '</p>';
+    }
     public function admonition_title($title, $lang) {
         return '<b class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</b>';
     }

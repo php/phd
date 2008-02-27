@@ -444,13 +444,17 @@ abstract class phpdotnet extends PhDTheme {
         if ($display_value === null) {
             $display_value = $value;
         }
+        $property = "";
+        if ($this->format->role == "seealso") {
+            $property = ' property="rdfs:seeAlso"';
+        }
         
         $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
         if (($filename = $this->getRefnameLink($ref)) !== null && $this->CURRENT_ID !== $filename) {
             if ($this->chunked) {
-                return '<a href="'.$filename. '.' .$this->ext. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+                return '<a href="'.$filename. '.' .$this->ext. '" class="function"'.$property.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
             }
-            return '<a href="#'.$filename. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+            return '<a href="#'.$filename. '" class="function"'.$property.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
         }
         return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
     }

@@ -51,6 +51,7 @@ $OPTIONS = array (
   ),
   'skip_ids' => array(
   ),
+  'output_dir' => '.',
 );
 /* }}} */
 
@@ -61,6 +62,7 @@ $opts = array(
     "theme:"   => "t:", // The theme to render (phpweb, bightml..)
     "index:"   => "i:", // Re-index or load from cache
     "docbook:" => "d:", // The Docbook XML file to render from (.manual.xml)
+    "output:"  => "o:", // The output directory
     "partial:" => "p:", // The ID to render (optionally ignoring its childrens)
     "skip:"    => "s:", // The ID to skip (optionally skipping its childrens too)
     "verbose:" => "v",  // Adjust the verbosity level
@@ -106,6 +108,22 @@ foreach($args as $k => $v) {
         $OPTIONS["xml_root"] = dirname($v);
         $OPTIONS["xml_file"] = $v;
         $docbook = true;
+        break;
+    /* }}} */
+
+    /* {{{ Output location */
+    case "o":
+    case "output":
+        if (is_array($v)) {
+            v("Only a single location can be supplied\n");
+            exit(1);
+        }
+        @mkdir($v, 0777, true);
+        if (!is_dir($v) || !is_readable($v)) {
+            v("'%s' is not a valid directory\n", $v);
+            exit(1);
+        }
+        $OPTIONS["output_dir"] = realpath($v) . DIRECTORY_SEPARATOR;
         break;
     /* }}} */
 
@@ -301,6 +319,8 @@ foreach($args as $k => $v) {
   --skip <id[=bool]>         The ID to skip, optionally skipping its children chunks (default to true; skip childrens)
   -l <formats/themes>
   --list <formats/themes>    Print out the supported formats/themes (default: both)
+  -o <directory>
+  --output <directory>       The output directory (default: .)
   -V
   --version                  Print the PhD version information
   -h
