@@ -523,7 +523,7 @@ abstract class phpdotnet extends PhDTheme {
         $doc->preserveWhitespace = false;
         $doc->loadXML(html_entity_decode(str_replace("&", "&amp;amp;", "<div>$xml</div>"), ENT_QUOTES, "UTF-8"));
         if ($err = libxml_get_errors()) {
-            print_r($err);
+            //print_r($err);
             libxml_clear_errors();
         }
         fclose($stream);
