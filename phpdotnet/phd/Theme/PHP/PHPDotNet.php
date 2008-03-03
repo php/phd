@@ -523,7 +523,7 @@ abstract class phpdotnet extends PhDTheme {
         $doc->preserveWhitespace = false;
         $doc->loadXML(html_entity_decode(str_replace("&", "&amp;amp;", "<div>$xml</div>"), ENT_QUOTES, "UTF-8"));
         if ($err = libxml_get_errors()) {
-            //print_r($err);
+            print_r($err);
             libxml_clear_errors();
         }
         fclose($stream);
@@ -537,7 +537,7 @@ abstract class phpdotnet extends PhDTheme {
             $ret .= '<li><a href="#' .($this->cchunk["qandaentry"][$i++]). '">' .($node->textContent). '</a></li>';
         }
 
-        return $ret.'</ul>'.$xml.'</div>';
+        return $ret.'</ol>'.$xml.'</div>';
     }
     public function format_qandaentry($open, $name, $attrs) {
         if ($open) {

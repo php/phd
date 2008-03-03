@@ -399,6 +399,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_literal_text($value, $tag) {
         switch ($this->role) {
             case 'infdec':
+                $value = (float)$value;
                 $p = strpos($value, '.');
                 $str = substr($value, 0, $p + 1);
                 $str .= '<span style="text-decoration: overline;">';
@@ -406,7 +407,7 @@ class XHTMLPhDFormat extends PhDFormat {
                 $str .= '</span>';
                 return $str;
             default:
-                return $value;
+                return $this->TEXT($value);
         }
     }
     
@@ -516,10 +517,11 @@ class XHTMLPhDFormat extends PhDFormat {
     
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
         $this->cchunk["classsynopsis"]["classname"] = $value;
-        return $value;
+        return $this->TEXT($value);
     }
     
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
+        $value = $this->TEXT($value);
         if ($this->cchunk["classsynopsis"]["classname"] === false) {
             return $value;
         }
@@ -547,7 +549,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_fieldsynopsis_modifier_text($value, $tag) {
         $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
-        return $value;
+        return $this->TEXT($value);
     }
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
