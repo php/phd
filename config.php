@@ -63,8 +63,8 @@ $opts = array(
     "index:"   => "i:", // Re-index or load from cache
     "docbook:" => "d:", // The Docbook XML file to render from (.manual.xml)
     "output:"  => "o:", // The output directory
-    "partial:" => "p:", // The ID to render (optionally ignoring its childrens)
-    "skip:"    => "s:", // The ID to skip (optionally skipping its childrens too)
+    "partial:" => "p:", // The ID to render (optionally ignoring its children)
+    "skip:"    => "s:", // The ID to skip (optionally skipping its children too)
     "verbose:" => "v",  // Adjust the verbosity level
     "list::"   => "l::", // List supported themes/formats
     "version"  => "V",  // Print out version information
@@ -316,7 +316,7 @@ foreach($args as $k => $v) {
   -p <id[=bool]>
   --partial <id[=bool]>      The ID to render, optionally skipping its children chunks (default to true; render children)
   -s <id[=bool]>
-  --skip <id[=bool]>         The ID to skip, optionally skipping its children chunks (default to true; skip childrens)
+  --skip <id[=bool]>         The ID to skip, optionally skipping its children chunks (default to true; skip children)
   -l <formats/themes>
   --list <formats/themes>    Print out the supported formats/themes (default: both)
   -o <directory>
