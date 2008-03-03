@@ -314,7 +314,7 @@ foreach($args as $k => $v) {
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -p <id[=bool]>
-  --partial <id[=bool]>      The ID to render, optionally skipping its children chunks (default to true; render childrens)
+  --partial <id[=bool]>      The ID to render, optionally skipping its children chunks (default to true; render children)
   -s <id[=bool]>
   --skip <id[=bool]>         The ID to skip, optionally skipping its children chunks (default to true; skip childrens)
   -l <formats/themes>

@@ -648,7 +648,7 @@ class XHTMLPhDFormat extends PhDFormat {
                     return '<a href="#fnid' .$note["id"]. '"><sup>[' .($k + 1). ']</sup></a>';
                 }
             }
-            trigger_error("footnoteref ID '$linkend' not foun", E_USER_WARNING);
+            trigger_error("footnoteref ID '$linkend' not found", E_USER_WARNING);
             return "";
         }
     }
