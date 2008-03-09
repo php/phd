@@ -123,7 +123,7 @@ foreach($args as $k => $v) {
             v("'%s' is not a valid directory\n", $v);
             exit(1);
         }
-        $OPTIONS["output_dir"] = realpath($v) . DIRECTORY_SEPARATOR;
+        $OPTIONS["output_dir"] = $v;
         break;
     /* }}} */
 
@@ -371,6 +371,9 @@ while (!is_dir($OPTIONS["xml_root"]) || !is_file($OPTIONS["xml_file"])) {
 }
 /* }}} */
 
+/* This needs to be done in *all* cases! */
+$OPTIONS["output_dir"] = realpath($OPTIONS["output_dir"]) . DIRECTORY_SEPARATOR;
+
 $OPTIONS["version_info"] = $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml";
 $OPTIONS["acronyms_file"] = $OPTIONS["xml_root"]."/entities/acronyms.xml";
 
@@ -378,4 +381,3 @@ $OPTIONS["acronyms_file"] = $OPTIONS["xml_root"]."/entities/acronyms.xml";
 * vim600: sw=4 ts=4 syntax=php et
 * vim<600: sw=4 ts=4
 */
-
