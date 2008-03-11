@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- $Revision: 1.1 $ -->
+<!-- $Revision: 1.2 $ -->
 <section xml:id="autogen" xml:lang="ru">
  <title>Сгенерированный текст</title>
  <variablelist>
@@ -43,6 +43,12 @@
    <term>editedby</term>
    <listitem>
     <simpara>Под редакцией</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>example</term>
+   <listitem>
+    <simpara>Example #</simpara>
    </listitem>
   </varlistentry>
  </variablelist>

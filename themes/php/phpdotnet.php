@@ -509,7 +509,7 @@ abstract class phpdotnet extends PhDTheme {
             return "";
         }
         if ($open) {
-            return "<p><b>Example#" .++$this->cchunk["examples"]. " ";
+            return "<p><b>" . ($this->autogen('example', $props['lang']) . ++$this->cchunk["examples"]) . " ";
         }
         return "</b></p>";
     }
