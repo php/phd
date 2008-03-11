@@ -348,7 +348,7 @@ if (!$docbook && $argc > 1) {
     $arg = $argv[$argc-1];
     if (is_dir($arg)) {
         $OPTIONS["xml_root"] = $arg;
-        $OPTIONS["xml_file"] = $arg . "/.manual.xml";
+        $OPTIONS["xml_file"] = $arg . DIRECTORY_SEPARATOR . ".manual.xml";
     } elseif (is_file($arg)) {
         $OPTIONS["xml_root"] = dirname($arg);
         $OPTIONS["xml_file"] = $arg;
