@@ -147,6 +147,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'example'           => 'format_example_content',
             'note'              => 'format_note_content',
             'footnote'          => 'format_footnote_para',
+            'refsect1'          => 'format_refsect1_para',
         ),
         'parameter'             => array(
             /* DEFAULT */          'format_parameter',
@@ -308,7 +309,7 @@ class XHTMLPhDFormat extends PhDFormat {
     );
 
 
-    protected $role        = false;
+    public $role        = false;
     /* Current Chunk variables */
     protected $cchunk      = array();
     /* Default Chunk variables */
@@ -441,7 +442,11 @@ class XHTMLPhDFormat extends PhDFormat {
         if ($open) {
             $this->cchunk = $this->dchunk;
             if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-                return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
+                $class = $name;
+                if ($name === "refentry") {
+                    //$class .= " -rel-posting";
+                }
+                return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$class. '">';
             }
             return '<div class="' .$name. '">';
         }
@@ -456,13 +461,31 @@ class XHTMLPhDFormat extends PhDFormat {
 
         return $str. "</div>";
     }
+    public function format_refsect1_para($open, $name, $attrs, $props) {
+        if ($open) {
+            switch ($props["sibling"]) {
+            case "methodsynopsis":
+            case "constructorsynopsis":
+            case "destructorsynopsis":
+                return '<p class="'.$name.' rdfs-comment">';
+                break;
+
+            default:
+                return '<p class="'.$name.'">';
+            }
+
+        }
+        return '</p>';
+    }
     public function format_refsect($open, $name, $attrs) {
         if ($open) {
             if(!isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
                 $attrs[PhDReader::XMLNS_DOCBOOK]["role"] = "unknown";
             }
-            return '<div class="' .$name.' ' .$attrs[PhDReader::XMLNS_DOCBOOK]["role"]. '">';
+            $this->role = $role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+            return '<div class="' .$name.' ' .$role. '">';
         }
+        $this->role = null;
         return "</div>\n";
     }
 
@@ -554,7 +577,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
             $this->params = array("count" => 0, "opt" => 0, "content" => "");
-            return '<div class="'.$name.'">';
+            return '<div class="'.$name.' dc-description">';
         }
         $content = "";
         if ($this->params["opt"]) {

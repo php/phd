@@ -306,7 +306,7 @@ abstract class phpdotnet extends PhDTheme {
     }
     public function format_refpurpose($open, $tag, $attrs) {
         if ($open) {
-            return '<p class="verinfo">(' .(htmlspecialchars($this->versionInfo($this->refname), ENT_QUOTES, "UTF-8")). ')</p><p class="refpurpose">'. $this->refname. ' — ';
+            return '<p class="verinfo">(' .(htmlspecialchars($this->versionInfo($this->refname), ENT_QUOTES, "UTF-8")). ')</p><p class="refpurpose dc-title">'. $this->refname. ' — ';
         }
         return "</p>\n";
     }
@@ -444,13 +444,17 @@ abstract class phpdotnet extends PhDTheme {
         if ($display_value === null) {
             $display_value = $value;
         }
+        $rel = "";
+        if ($this->format->role == "seealso") {
+            $rel = ' rel="rdfs-seeAlso"';
+        }
         
         $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
         if (($filename = $this->getRefnameLink($ref)) !== null && $this->CURRENT_ID !== $filename) {
             if ($this->chunked) {
-                return '<a href="'.$filename. '.' .$this->ext. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+                return '<a href="'.$filename. '.' .$this->ext. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
             }
-            return '<a href="#'.$filename. '" class="function">' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+            return '<a href="#'.$filename. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
         }
         return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
     }
