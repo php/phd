@@ -10,7 +10,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'alt'                   => 'format_suppressed_tags',
         'article'               => 'format_container_chunk',
         'author'                => array(
-            /* DEFAULT */          'div',
+            /* DEFAULT */          'format_author',
             'authorgroup'       => 'format_authorgroup_author',
         ),
         'authorgroup'           => 'div',
@@ -155,7 +155,7 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'part'                  => 'format_container_chunk',
         'partintro'             => 'div',
-        'personname'            => 'span',
+        'personname'            => 'format_personname',
         'preface'               => 'format_chunk',
         'primaryie'             => 'format_suppressed_tags',
         'procedure'             => 'format_procedure',
@@ -418,9 +418,43 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return '</div>';
     }
+    public function format_author($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<div class="' .$name. ' vcard">';
+        }
+        return "</div>";
+    }
+    public function format_personname($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<span class="' .$name. ' fn">';
+        }
+        return "</span>";
+    }
     public function format_name($open, $name, $attrs) {
         if ($open) {
-            return ' <span class="'.$name.'">';
+            $class = "";
+            switch($name) {
+            case "firstname":
+                $class = " given-name";
+                break;
+
+            case "surname":
+                $class = " family-name";
+                break;
+
+            case "othername":
+                if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                    /* We maight want to add support for other roles */
+                    switch($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) {
+                    case "nickname":
+                        $class = " nickname";
+                        break;
+                    }
+                }
+                break;
+            }
+
+            return ' <span class="' . $name . $class . '">';
         }
         return '</span> ';
     }
@@ -883,15 +917,15 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_authorgroup_author($open, $name, $attrs, $props) {
         if ($open) {
             if ($props["sibling"] !== $name) {
-                return '<div class="'.$name.'">' .$this->admonition_title("by", $props["lang"]). ':<br />';
+                return '<div class="'.$name.' vcard">' .$this->admonition_title("by", $props["lang"]). ':<br />';
             }
-            return '<div class="'.$name.'">';
+            return '<div class="'.$name.' vcard">';
         }
         return "</div>\n";
     }
     public function format_editor($open, $name, $attrs, $props) {
         if ($open) {
-            return '<div class="editor">' .$this->admonition_title("editedby", $props["lang"]). ': ';
+            return '<div class="editor vcard">' .$this->admonition_title("editedby", $props["lang"]). ': ';
         }
         return "</div>\n";
     }
