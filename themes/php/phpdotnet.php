@@ -119,7 +119,6 @@ abstract class phpdotnet extends PhDTheme {
     protected $lang = "en";
 
     protected $CURRENT_ID = "";
-    protected $CURRENT_FUNCTION = null;
     protected $refname;
 
     /* Current Chunk settings */
@@ -317,14 +316,6 @@ abstract class phpdotnet extends PhDTheme {
     public function format_chunk($open, $name, $attrs, $props) {
         if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
             $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
-            if ($name == "refentry") {
-                if(strpos($id, "function.") !== false) {
-                    $id = substr($id, 9);
-                }
-                $this->CURRENT_FUNCTION = $id;
-            } else {
-                $this->CURRENT_FUNCTION = null;
-            }
         }
         if ($props["isChunk"]) {
             $this->cchunk = $this->dchunk;
@@ -336,7 +327,6 @@ abstract class phpdotnet extends PhDTheme {
     }
     public function format_container_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
-        $this->CURRENT_FUNCTION = null;
         if ($open) {
             if ($props["isChunk"]) {
                 $this->cchunk = $this->dchunk;
@@ -392,7 +382,6 @@ abstract class phpdotnet extends PhDTheme {
     }
     public function format_root_chunk($open, $name, $attrs) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
-        $this->CURRENT_FUNCTION = null;
         if ($open) {
             return "<div>";
         }
