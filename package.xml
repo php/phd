@@ -9,7 +9,7 @@
       http://pear.php.net/dtd/package-2.0    http://pear.php.net/dtd/package-2.0.xsd">
 
   <name>PhD</name>
-  <uri>http://doc.php.net/phd/phd-0.2.3</uri>
+  <channel>doc.php.net</channel>
   <summary>A PHP based Docbook renderer</summary>
   <description>
     PhD is a PHP based Docbook renderer aimed to replace Docbook-XSL and various
@@ -35,8 +35,8 @@
     <api>0.2.3</api>
   </version>
   <stability>
-    <release>snapshot</release>
-    <api>devel</api>
+    <release>beta</release>
+    <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
