@@ -40,14 +40,14 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added initial hCalendar support for &gt;author&lt;. (Hannes)
-    - Added initial eRDF support for &gt;refentry&lt;. (Hannes)
-    - Added support for &gt;footnote&lt; and &gt;footnoteref&lt;. (Gwynne, Hannes)
+    - Added initial hCalendar support for &lt;author&gt;. (Hannes)
+    - Added initial eRDF support for &lt;refentry&gt;. (Hannes)
+    - Added support for &lt;footnote&gt; and &lt;footnoteref&gt;. (Gwynne, Hannes)
     - Added anchor generation for various elements. (Hannes)
     - Added option (-s/--skip) to skip rendering of chunks. (Hannes)
     - Added option (-o/--output) to specify output directory (FR#43193). (Richard)
-    - Added support for &gt;sect4&lt; titles . (Gwynne)
-    - Added an 'infdec' role to &gt;literal&lt; in XHTML. (Gwynne)
+    - Added support for &lt;sect4&gt; titles . (Gwynne)
+    - Added an 'infdec' role to &lt;literal&gt; in XHTML. (Gwynne)
     - Fixed couple of typos in PhD info messages. (Richard Q.)
     - Reformatted package.xml for readability and consistency. (Gwynne)
     - Merged README.RENDERER into README and updated README with current information. (Gwynne)
