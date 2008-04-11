@@ -11,8 +11,16 @@ class phpweb extends phpdotnet {
     public function __construct($IDs, $filename, $ext = "php", $chunked = true) {
         parent::__construct($IDs, $filename, $ext, $chunked);
         $this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $this->ext . DIRECTORY_SEPARATOR;
-        if (!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory");
-        if (!file_exists($this->outputdir . "toc") || is_file($this->outputdir . "toc")) mkdir($this->outputdir . "toc") or die("Can't create the toc directory");
+        if (!file_exists($this->outputdir) || is_file($this->outputdir)) {
+            mkdir($this->outputdir) or die("Can't create the cache directory");
+        } else {
+            if (file_exists($this->outputdir . "index.php")) {
+                unlink($this->outputdir . "index.php");
+            }
+        }
+        if (!file_exists($this->outputdir . "toc") || is_file($this->outputdir . "toc")) {
+            mkdir($this->outputdir . "toc") or die("Can't create the toc directory");
+        }
     }
     public function writeChunk($id, $stream) {
         rewind($stream);
@@ -203,7 +211,7 @@ manual_header();
         return $next;
     }
     public function __destruct() {
-        if (file_exists($this->outputdir . "manual.php")) {
+        if (file_exists($this->outputdir . "manual.php") && !file_exists($this->outputdir . "index.php")) {
             copy($this->outputdir . "manual.php", $this->outputdir . "index.php");
         }
     }
