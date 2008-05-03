@@ -34,7 +34,7 @@ class phpweb extends phpdotnet {
             } else {
                 throw new Exception("Cannot rename $filename to $newfilename");
             }
-            v("WARNING: Chunk without an ID found, TOC will NOT work. Wrote content to $newfilename.\n");
+            trigger_error("Chunk without an ID found, TOC will NOT work. Wrote content to $newfilename.", E_USER_WARNING);
         } else {
             $filename = $id;
         }
@@ -44,9 +44,7 @@ class phpweb extends phpdotnet {
         file_put_contents($this->outputdir . $filename, $stream, FILE_APPEND);
         file_put_contents($this->outputdir . $filename, $this->footer($id), FILE_APPEND);
 
-        if ($GLOBALS["OPTIONS"]["verbose"] & VERBOSE_CHUNK_WRITING) {
-            v("Wrote %s\n", $this->outputdir . $filename);
-        }
+        v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);
     }
     public function appendData($data, $isChunk) {
         switch($isChunk) {
@@ -105,9 +103,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
 
                 file_put_contents($this->outputdir . $filename, $content);
 
-                if ($GLOBALS["OPTIONS"]["verbose"] & VERBOSE_TOC_WRITING) {
-                    v("Wrote TOC (%s)\n", $this->outputdir . $filename);
-                }
+                v("Wrote TOC (%s)", $this->outputdir . $filename, VERBOSE_TOC_WRITING);
             }
 
             $incl = 'include_once dirname(__FILE__) ."/toc/' .$parent. '.inc";';

@@ -1,24 +1,122 @@
 <?php
 /* $Id$ */
 
-/* {{{ Print messages to stderr: v("printf-format-text", $arg1, ...) */
-function v($msg) {
+/* {{{ PhD error & message handler */
+
+// FC For PHP5.3
+if (!defined("E_DEPRECATED")) {
+	define("E_DEPRECATED",               E_RECOVERABLE_ERROR           << 1);
+}
+
+// PhD verbose flags
+define('VERBOSE_INDEXING',               E_DEPRECATED                  << 1);
+define('VERBOSE_FORMAT_RENDERING',       VERBOSE_INDEXING              << 1);
+define('VERBOSE_THEME_RENDERING',        VERBOSE_FORMAT_RENDERING      << 1);
+define('VERBOSE_RENDER_STYLE',           VERBOSE_THEME_RENDERING       << 1);
+define('VERBOSE_PARTIAL_READING',        VERBOSE_RENDER_STYLE          << 1);
+define('VERBOSE_PARTIAL_CHILD_READING',  VERBOSE_PARTIAL_READING       << 1);
+define('VERBOSE_TOC_WRITING',            VERBOSE_PARTIAL_CHILD_READING << 1);
+define('VERBOSE_CHUNK_WRITING',          VERBOSE_TOC_WRITING           << 1);
+
+define('VERBOSE_ALL',                    (VERBOSE_CHUNK_WRITING        << 1)-1);
+
+
+/* {{{ Print info messages: v("printf-format-text" [, $arg1, ...], $verbose-level) */
+// trigger_error() only accepts E_USER_* errors :(
+function v($msg, $errno) {
     $args = func_get_args();
-    $args[0] = date($GLOBALS["OPTIONS"]["date_format"]);
-    vfprintf(STDERR, "[%s] $msg", $args);
+    $errno = array_pop($args);
+
+    $msg = vsprintf(array_shift($args), $args);
+
+    $bt = debug_backtrace();
+    return errh($errno, $msg, $bt[0]["file"], $bt[0]["line"]);
 }
 /* }}} */
 
-define('VERBOSE_INDEXING',               0x01);
-define('VERBOSE_FORMAT_RENDERING',       0x02);
-define('VERBOSE_THEME_RENDERING',        0x04);
-define('VERBOSE_RENDER_STYLE',           0x08);
-define('VERBOSE_PARTIAL_READING',        0x10);
-define('VERBOSE_PARTIAL_CHILD_READING',  0x20);
-define('VERBOSE_TOC_WRITING',            0x40);
-define('VERBOSE_CHUNK_WRITING',          0x80);
+/* {{{ The PhD errorhandler */
+function errh($errno, $msg, $file, $line, $ctx = null) {
+    global $OPTIONS;
+    static $err = array(
+        E_DEPRECATED                  => 'E_DEPRECATED',
+        E_RECOVERABLE_ERROR           => 'E_RECOVERABLE_ERROR',
+        E_STRICT                      => 'E_STRICT',
+        E_WARNING                     => 'E_WARNING',
+        E_NOTICE                      => 'E_NOTICE',
 
-define('VERBOSE_ALL',                    0xFF);
+        E_USER_ERROR                  => 'E_USER_ERROR',
+        E_USER_WARNING                => 'E_USER_WARNING',
+        E_USER_NOTICE                 => 'E_USER_NOTICE',
+
+        VERBOSE_INDEXING              => 'VERBOSE_INDEXING',
+        VERBOSE_FORMAT_RENDERING      => 'VERBOSE_FORMAT_RENDERING',
+        VERBOSE_THEME_RENDERING       => 'VERBOSE_THEME_RENDERING',
+        VERBOSE_RENDER_STYLE          => 'VERBOSE_RENDER_STYLE',
+        VERBOSE_PARTIAL_READING       => 'VERBOSE_PARTIAL_READING',
+        VERBOSE_PARTIAL_CHILD_READING => 'VERBOSE_PARTIAL_CHILD_READING',
+        VERBOSE_TOC_WRITING           => 'VERBOSE_TOC_WRITING',
+        VERBOSE_CHUNK_WRITING         => 'VERBOSE_CHUNK_WRITING',
+    );
+    static $recursive = false;
+
+    // Respect the error_reporting setting
+    if (!(error_reporting() & $errno)) {
+        return false;
+    }
+
+    // Recursive protection
+    if ($recursive) {
+        // Fallback to the default errorhandler
+        return false;
+    }
+    $recursive = true;
+
+    $time = date($OPTIONS["date_format"]);
+    switch($errno) {
+    case VERBOSE_INDEXING:
+    case VERBOSE_FORMAT_RENDERING:
+    case VERBOSE_THEME_RENDERING:
+    case VERBOSE_RENDER_STYLE:
+    case VERBOSE_PARTIAL_READING:
+    case VERBOSE_PARTIAL_CHILD_READING:
+    case VERBOSE_TOC_WRITING:
+    case VERBOSE_CHUNK_WRITING:
+        fprintf($OPTIONS["phd_info_output"], "[%s - %s] %s\n", $time, $err[$errno], $msg);
+        break;
+ 
+    // User triggered errors
+    case E_USER_ERROR:
+    case E_USER_WARNING:
+    case E_USER_NOTICE:
+        fprintf($OPTIONS["user_error_output"], "[%s - %s] %s:%d\n\t%s\n", $time, $err[$errno], $file, $line, $msg);
+        break;
+
+    // PHP triggered errors
+    case E_DEPRECATED:
+    case E_RECOVERABLE_ERROR:
+    case E_STRICT:
+    case E_WARNING:
+    case E_NOTICE:
+        fprintf($OPTIONS["php_error_output"], "[%s - %s] %s:%d\n\t%s\n", $time, $err[$errno], $file, $line, $msg);
+        break;
+
+    default:
+        // Unknown error level.. let PHP handle it
+        $recursive = false;
+        return false;
+    }
+
+    // Abort on fatal errors
+    if ($errno & (E_USER_ERROR|E_RECOVERABLE_ERROR)) {
+        exit(1);
+    }
+
+    $recursive = false;
+    return true;
+}
+/* }}} */
+set_error_handler("errh");
+/* }}} */
 
 define("PHD_VERSION", "0.2.4-dev");
 
@@ -52,9 +150,14 @@ $OPTIONS = array (
   'skip_ids' => array(
   ),
   'output_dir' => '.',
+  'php_error_output' => STDERR,
+  'user_error_output' => STDERR,
+  'phd_info_output' => STDOUT,
 );
 /* }}} */
 
+$olderr = error_reporting();
+error_reporting($olderr | $OPTIONS["verbose"]);
 
 /* {{{ getopt() options */
 $opts = array(
@@ -75,8 +178,9 @@ $opts = array(
 /* {{{ Workaround/fix for Windows prior to PHP5.3 */
 if (!function_exists("getopt")) {
     function getopt($short, $long) {
-        v("I'm sorry, you are running an operating system that does not support getopt()\n");
-        v("Please either upgrade to PHP5.3 or try '%s /path/to/your/docbook.xml'\n", $argv[0]);
+        global $argv;
+        printf("I'm sorry, you are running an operating system that does not support getopt()\n");
+        printf("Please either upgrade to PHP5.3 or try '%s /path/to/your/docbook.xml'\n", $argv[0]);
 
         return array();
     }
@@ -85,8 +189,7 @@ if (!function_exists("getopt")) {
 
 $args = getopt(implode("", array_values($opts)), array_keys($opts));
 if($args === false) {
-    v("Something happend with getopt(), please report a bug\n");
-    exit(1);
+    trigger_error("Something happend with getopt(), please report a bug", E_USER_ERROR);
 }
 
 $verbose = 0;
@@ -98,12 +201,10 @@ foreach($args as $k => $v) {
     case "d":
     case "docbook":
         if (is_array($v)) {
-            v("Can only parse one file at a time\n");
-            exit(1);
+            trigger_error("Can only parse one file at a time", E_USER_ERROR);
         }
         if (!file_exists($v) || is_dir($v) || !is_readable($v)) {
-            v("'%s' is not a readable docbook file\n", $v);
-            exit(1);
+            trigger_error(sprintf("'%s' is not a readable docbook file", $v), E_USER_ERROR);
         }
         $OPTIONS["xml_root"] = dirname($v);
         $OPTIONS["xml_file"] = $v;
@@ -115,13 +216,11 @@ foreach($args as $k => $v) {
     case "o":
     case "output":
         if (is_array($v)) {
-            v("Only a single location can be supplied\n");
-            exit(1);
+            trigger_error("Only a single output location can be supplied", E_USER_ERROR);
         }
         @mkdir($v, 0777, true);
         if (!is_dir($v) || !is_readable($v)) {
-            v("'%s' is not a valid directory\n", $v);
-            exit(1);
+            trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
         }
         $OPTIONS["output_dir"] = $v;
         break;
@@ -131,8 +230,7 @@ foreach($args as $k => $v) {
     case "f":
     case "format":
         if ($v != "xhtml") {
-            v("Only xhtml is supported at this time\n");
-            exit(1);
+            trigger_error("Only xhtml is supported at this time", E_USER_ERROR);
         }
         break;
     /* }}} */
@@ -141,8 +239,7 @@ foreach($args as $k => $v) {
     case "i":
     case "index":
         if (is_array($v)) {
-            v("You cannot pass %s more than once\n", $k);
-            exit(1);
+            trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
         }
         switch ($v) {
         case "yes":
@@ -156,8 +253,7 @@ foreach($args as $k => $v) {
             $OPTIONS["index"] = false;
             break;
         default:
-            v("yes/no || true/false || 1/0 expected\n");
-            exit(1);
+            trigger_error("yes/no || true/false || 1/0 expected", E_USER_ERROR);
         }
         break;
     /* }}} */
@@ -254,8 +350,7 @@ foreach($args as $k => $v) {
                 }
                 break;
             default:
-                v("Unknown theme '%s'\n", $val);
-                exit(1);
+                trigger_error(sprintf("Unknown theme '%s'", $val), E_USER_ERROR);
             }
         }
         break;
@@ -270,7 +365,7 @@ foreach($args as $k => $v) {
                 } elseif (is_numeric($const)) {
                     $verbose |= (int)$const;
                 } else {
-                    v("Unknown option passed to --$k, $const\n");
+                    trigger_error("Unknown option passed to --$k, $const", E_USER_ERROR);
                 }
             }
         }
@@ -292,8 +387,8 @@ foreach($args as $k => $v) {
     /* {{{ Version info */
     case "V":
     case "version":
-        v("PhD version: %s\n", PHD_VERSION);
-        v("Copyright (c) 2008 The PHP Documentation Group\n");
+        printf("PhD version: %s\n", PHD_VERSION);
+        printf("Copyright (c) 2008 The PHP Documentation Group\n");
         exit(0);
     /* }}} */
 
@@ -334,13 +429,13 @@ NOTE: Long options are only supported using PHP5.3\n";
 
     /* {{{ Unsupported option this should *never* happen */
     default:
-        v("Hmh, something weird has happend, I don't know this option");
         var_dump($k, $v);
-        exit(1);
+        trigger_error("Hmh, something weird has happend, I don't know this option", E_USER_ERROR);
     /* }}} */
     }
 }
 
+error_reporting($olderr | $OPTIONS["verbose"]);
 
 /* {{{ BC for PhD 0.0.* (and PHP5.2 on Windows)
        i.e. `phd path/to/.manual.xml */
@@ -374,6 +469,7 @@ while (!is_dir($OPTIONS["xml_root"]) || !is_file($OPTIONS["xml_file"])) {
 /* This needs to be done in *all* cases! */
 $OPTIONS["output_dir"] = realpath($OPTIONS["output_dir"]) . DIRECTORY_SEPARATOR;
 
+// Those files really should be moved into phd/
 $OPTIONS["version_info"] = $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml";
 $OPTIONS["acronyms_file"] = $OPTIONS["xml_root"]."/entities/acronyms.xml";
 

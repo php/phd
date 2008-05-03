@@ -36,18 +36,15 @@ $OPTIONS['refnames_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.r
         - refnames_*.ser  (containing <refname> => File ID) */
 if (!$OPTIONS["index"] && (file_exists($OPTIONS['index_location']) && file_exists($OPTIONS['refnames_location']))) {
     /* FIXME: Load from sqlite db? */
-    if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
-        v("Unserializing cached index files...\n");
-    }
+    v("Unserializing cached index files...", VERBOSE_INDEXING);
+
     $IDs = unserialize(file_get_contents($OPTIONS['index_location']));
     $REFS = unserialize(file_get_contents($OPTIONS['refnames_location']));
-    if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
-        v("Unserialization done\n");
-    }
+
+    v("Unserialization done", VERBOSE_INDEXING);
 } else {
-    if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
-        v("Indexing...\n");
-    }
+    v("Indexing...", VERBOSE_INDEXING);
+
     /* This file will "return" an $IDs & $REFS array */
     require $ROOT. "/mktoc.php";
 
@@ -57,19 +54,16 @@ if (!$OPTIONS["index"] && (file_exists($OPTIONS['index_location']) && file_exist
     $IDs2 = unserialize($ids);
     $REFS2 = unserialize($refs);
     if ($IDs !== $IDs2 || $REFS !== $REFS2) {
-        v("WARNING: Serialized representation does not match");
+        trigger_error("Serialized representation does not match", E_USER_WARNING);
     }
 
-    if ($OPTIONS["verbose"] & VERBOSE_INDEXING) {
-        v("Indexing done\n");
-    }
+    v("Indexing done", VERBOSE_INDEXING);
 }
 /* }}} */
 
 foreach($OPTIONS["output_format"] as $output_format) {
-    if ($OPTIONS["verbose"] & VERBOSE_FORMAT_RENDERING) {
-        v("Starting %s rendering\n", $output_format);
-    }
+    v("Starting %s rendering", $output_format, VERBOSE_FORMAT_RENDERING);
+
     switch($output_format) {
     case "xhtml":
         $classname = "XHTMLPhDFormat";
@@ -87,9 +81,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
     $themes = $elementmaps = $textmaps = array();
     foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
         is_dir($ROOT. "/themes/$theme") or die("Can't find the '$theme' theme");
-        if ($OPTIONS["verbose"] & VERBOSE_THEME_RENDERING) {
-            v("Using the %s theme (%s)\n", $theme, join(", ", $array));
-        }
+        v("Using the %s theme (%s)", $theme, join(", ", $array), VERBOSE_THEME_RENDERING);
         
         foreach($array as $themename) {
             $themename = basename($themename);
@@ -131,24 +123,21 @@ foreach($OPTIONS["output_format"] as $output_format) {
     /* {{{ Initialize the PhD[Partial]Reader */
     if (!empty($OPTIONS["render_ids"]) || !empty($OPTIONS["skip_ids"])) {
         $idlist = $OPTIONS["render_ids"]+$OPTIONS["skip_ids"];
-        if ($OPTIONS["verbose"] & VERBOSE_RENDER_STYLE) {
-            v("Running partial build\n");
-        }
+
+        v("Running partial build", VERBOSE_RENDER_STYLE);
         if (!is_array($idlist)) {
             $idlist = array($idlist => 1);
         }
         foreach($idlist as $id => $notused) {
             if (!isset($IDs[$id])) {
-                v("Unknown ID %s, bailing\n", $id);
-                exit(1);
+                trigger_error(sprintf("Unknown ID %s, bailing", $id), E_USER_ERROR);
             }
         }
 
         $reader = new PhDPartialReader($OPTIONS);
     } else {
-        if ($OPTIONS["verbose"] & VERBOSE_RENDER_STYLE) {
-            v("Running full build\n");
-        }
+        v("Running full build", VERBOSE_RENDER_STYLE);
+
         $reader = new PhDReader($OPTIONS);
     }
     /* }}} */
@@ -301,9 +290,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
     }
 
     $reader->close();
-    if ($OPTIONS["verbose"] & VERBOSE_FORMAT_RENDERING) {
-        v("Finished rendering\n");
-    }
+    v("Finished rendering", VERBOSE_FORMAT_RENDERING);
 
 } // foreach($OPTIONS["output_thtemes"])
 

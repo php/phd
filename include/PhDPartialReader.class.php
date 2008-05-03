@@ -37,51 +37,44 @@ class PhDPartialReader extends PhDReader {
                 $id = $this->getAttributeNs("id", PhDReader::XMLNS_XML);
                 if (isset($this->partial[$id])) {
                     if ($this->isChunk == PhDReader::CLOSE_CHUNK) {
-                        if ($this->opts["verbose"] & VERBOSE_PARTIAL_READING) {
-                            v("%s done\n", $id);
-                        }
+                        v("%s done", $id, VERBOSE_PARTIAL_READING);
+
                         unset($this->partial[$id]);
                         --$seeked;
                         $currently_reading = false;
                     } else {
-                        if ($this->opts["verbose"] & VERBOSE_PARTIAL_READING) {
-                            v("Starting %s...\n", $id);
-                        }
+                        v("Starting %s...", $id, VERBOSE_PARTIAL_READING);
+
                         $currently_reading = $id;
                         ++$seeked;
                     }
                     return $ret;
                 } elseif (isset($this->skip[$id])) {
                     if ($this->isChunk == PhDReader::CLOSE_CHUNK) {
-                        if ($this->opts["verbose"] & VERBOSE_PARTIAL_READING) {
-                            v("%s done\n", $id);
-                        }
+                        v("%s done", $id, VERBOSE_PARTIAL_READING);
+
                         unset($this->skip[$id]);
                         $currently_skipping = false;
                         $ignore = false;
                     } else {
-                        if ($this->opts["verbose"] & VERBOSE_PARTIAL_READING) {
-                            v("Skipping %s...\n", $id);
-                        }
+                        v("Skipping %s...", $id, VERBOSE_PARTIAL_READING);
+
                         $currently_skipping = $id;
                         $ignore = true;
                     }
                 } elseif ($currently_skipping && $this->skip[$currently_skipping]) {
-                    if ($this->opts["verbose"] & VERBOSE_PARTIAL_CHILD_READING) {
-                        if ($this->isChunk == PhDReader::OPEN_CHUNK) {
-                            v("Skipping child of %s, %s\n", $currently_reading, $id);
-                        } else {
-                            v("%s done\n", $id);
-                        }
+                    if ($this->isChunk == PhDReader::OPEN_CHUNK) {
+                        v("Skipping child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
+                    } else {
+                        v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
                     }
+
                     $ignore = true;
                 } elseif ($currently_reading && $this->partial[$currently_reading]) {
-                    if ($this->opts["verbose"] & VERBOSE_PARTIAL_CHILD_READING) {
-                        if ($this->isChunk == PhDReader::OPEN_CHUNK) {
-                            v("Rendering child of %s, %s\n", $currently_reading, $id);
-                        } else {
-                            v("%s done\n", $id);
-                        }
+                    if ($this->isChunk == PhDReader::OPEN_CHUNK) {
+                        v("Rendering child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
+                    } else {
+                        v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
                     }
                     return $ret;
                 } elseif (empty($this->partial)) {
