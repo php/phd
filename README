@@ -1,8 +1,6 @@
 PhD - PHP DocBook
 Copyright(c) 2007-2008 The PHP Documentation Team
 All Rights Reserved.
-<bjori@php.net>
-<gwynne@php.net>
 $Id$
 
 At the moment, the code depends upon the following:
@@ -13,9 +11,11 @@ At the moment, the code depends upon the following:
 
 
 Installing the PhD renderer:
-	From Release ball:
-		pear install http://doc.php.net/phd/PhD-x.y.z.tgz
-		# Where x.y.z is the version number, i.e. 0.2.3
+	From a PEAR channel:
+		pear install doc.php.net/phd-beta
+	Note: You'll have to "discover" the channel first:
+		pear channel-discover doc.php.net
+	This command only needs to be executed once
 
 	From CVS:
 		cvs -d:pserver:cvsread@cvs.php.net/repository co phd
@@ -23,10 +23,8 @@ Installing the PhD renderer:
 		pear install -f package.xml
 
 After installing PhD you can use the `phd` command
-to render the documentations.
-Currently `phd` will use the current working directory to render the
-bightml.html file, create a html/ folder for the chunkedhtml and
-php/ folder for the phpweb theme.
+to render the documentations. By default `phd` will use the current working
+directory.
 
 
 Rendering the documentations for the first time:
