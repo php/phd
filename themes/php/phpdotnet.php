@@ -132,6 +132,7 @@ abstract class phpdotnet extends PhDTheme {
         "qandaentry"                   => array(
         ),
         "examples"                     => 0,
+        "verinfo"                      => false,
     );
 
     public function __construct(array $IDs, array $filenames, $ext = "php", $chunked = true) {
@@ -311,7 +312,12 @@ abstract class phpdotnet extends PhDTheme {
     }
     public function format_refpurpose($open, $tag, $attrs) {
         if ($open) {
-            return '<p class="verinfo">(' .(htmlspecialchars($this->versionInfo($this->refname), ENT_QUOTES, "UTF-8")). ')</p><p class="refpurpose dc-title">'. $this->refname. ' — ';
+            $retval = "";
+            if ($this->cchunk["verinfo"]) {
+                $retval = '<p class="verinfo">(' .(htmlspecialchars($this->versionInfo($this->refname), ENT_QUOTES, "UTF-8")). ')</p>';
+            }
+            $retval .= '<p class="refpurpose dc-title">'. $this->refname. ' — ';
+            return $retval;
         }
         return "</p>\n";
     }
@@ -328,6 +334,13 @@ abstract class phpdotnet extends PhDTheme {
         }
         if (isset($props["lang"])) {
             $this->lang = $props["lang"];
+        }
+        if ($name == "refentry") {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                $this->cchunk["verinfo"] = !($attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "noversion");
+            } else {
+                $this->cchunk["verinfo"] = true;
+            }
         }
         return false;
     }
