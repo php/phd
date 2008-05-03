@@ -942,7 +942,7 @@ class XHTMLPhDFormat extends PhDFormat {
         if ($open) {
             return '<b>';
         }
-        return '</b>';
+        return '</b><br />';
     }
     public function format_note_content($open, $name, $attrs) {
         if ($open) {
