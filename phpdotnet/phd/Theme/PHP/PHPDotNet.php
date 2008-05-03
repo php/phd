@@ -119,7 +119,6 @@ abstract class phpdotnet extends PhDTheme {
     protected $lang = "en";
 
     protected $CURRENT_ID = "";
-    protected $refname;
 
     /* Current Chunk settings */
     protected $cchunk          = array();
@@ -133,6 +132,7 @@ abstract class phpdotnet extends PhDTheme {
         ),
         "examples"                     => 0,
         "verinfo"                      => false,
+        "refname"                      => array(),
     );
 
     public function __construct(array $IDs, array $filenames, $ext = "php", $chunked = true) {
@@ -314,15 +314,18 @@ abstract class phpdotnet extends PhDTheme {
         if ($open) {
             $retval = "";
             if ($this->cchunk["verinfo"]) {
+                $refname = current($this->cchunk["refname"]);
                 $retval = '<p class="verinfo">(' .(htmlspecialchars($this->versionInfo($this->refname), ENT_QUOTES, "UTF-8")). ')</p>';
             }
-            $retval .= '<p class="refpurpose dc-title">'. $this->refname. ' — ';
+            $refnames = implode('</span> -- <span class="refname">', $this->cchunk["refname"]);
+
+            $retval .= '<p class="refpurpose"><span class="refname">'. $refnames. '</span> &mdash; <span class="dc-title">';
             return $retval;
         }
-        return "</p>\n";
+        return "</span></p>\n";
     }
     public function format_refname_text($value, $tag) {
-        $this->refname = $value;
+        $this->cchunk["refname"][] = $this->format->TEXT($value);
         return false;
     }
     public function format_chunk($open, $name, $attrs, $props) {
