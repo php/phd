@@ -315,7 +315,7 @@ abstract class phpdotnet extends PhDTheme {
             $retval = "";
             if ($this->cchunk["verinfo"]) {
                 $refname = current($this->cchunk["refname"]);
-                $retval = '<p class="verinfo">(' .(htmlspecialchars($this->versionInfo($this->refname), ENT_QUOTES, "UTF-8")). ')</p>';
+                $retval = '<p class="verinfo">(' .(htmlspecialchars($this->versionInfo($refname), ENT_QUOTES, "UTF-8")). ')</p>';
             }
             $refnames = implode('</span> -- <span class="refname">', $this->cchunk["refname"]);
 
