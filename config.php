@@ -17,8 +17,9 @@ define('VERBOSE_PARTIAL_READING',        VERBOSE_RENDER_STYLE          << 1);
 define('VERBOSE_PARTIAL_CHILD_READING',  VERBOSE_PARTIAL_READING       << 1);
 define('VERBOSE_TOC_WRITING',            VERBOSE_PARTIAL_CHILD_READING << 1);
 define('VERBOSE_CHUNK_WRITING',          VERBOSE_TOC_WRITING           << 1);
+define('VERBOSE_NOVERSION',              VERBOSE_CHUNK_WRITING         << 1);
 
-define('VERBOSE_ALL',                    (VERBOSE_CHUNK_WRITING        << 1)-1);
+define('VERBOSE_ALL',                    (VERBOSE_NOVERSION        << 1)-1);
 
 
 /* {{{ Print info messages: v("printf-format-text" [, $arg1, ...], $verbose-level) */
@@ -56,6 +57,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         VERBOSE_PARTIAL_CHILD_READING => 'VERBOSE_PARTIAL_CHILD_READING',
         VERBOSE_TOC_WRITING           => 'VERBOSE_TOC_WRITING',
         VERBOSE_CHUNK_WRITING         => 'VERBOSE_CHUNK_WRITING',
+        VERBOSE_NOVERSION             => 'VERBOSE_NOVERSION',
     );
     static $recursive = false;
 
@@ -81,6 +83,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
     case VERBOSE_PARTIAL_CHILD_READING:
     case VERBOSE_TOC_WRITING:
     case VERBOSE_CHUNK_WRITING:
+    case VERBOSE_NOVERSION:
         fprintf($OPTIONS["phd_info_output"], "[%s - %s] %s\n", $time, $err[$errno], $msg);
         break;
  
@@ -143,7 +146,7 @@ $OPTIONS = array (
   'enforce_revisions' => false,
   'compatibility_mode' => true,
   'build_log_file' => 'none',
-  'verbose' => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING),
+  'verbose' => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION),
   'date_format' => "H:i:s",
   'render_ids' => array(
   ),

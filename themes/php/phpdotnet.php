@@ -297,7 +297,11 @@ abstract class phpdotnet extends PhDTheme {
                 array("::", "->", "__", "_", '$', '()'),
                 array("-",  "-",  "-",  "-", "",  ''),
                 strtolower($funcname));
-        return isset($this->versions[$funcname]) ? $this->versions[$funcname] : "No version information available, might be only in CVS";
+        if(isset($this->versions[$funcname])) {
+           return $this->versions[$funcname];
+        }
+        v("No version info for $funcname", VERBOSE_NOVERSION);
+        return false;
     }
     public function acronymInfo($acronym) {
         return isset($this->acronyms[$acronym]) ? $this->acronyms[$acronym] : false;
@@ -314,8 +318,19 @@ abstract class phpdotnet extends PhDTheme {
         if ($open) {
             $retval = "";
             if ($this->cchunk["verinfo"]) {
-                $refname = current($this->cchunk["refname"]);
-                $retval = '<p class="verinfo">(' .(htmlspecialchars($this->versionInfo($refname), ENT_QUOTES, "UTF-8")). ')</p>';
+                $verinfo = "";
+                foreach($this->cchunk["refname"] as $refname) {
+                    $verinfo = $this->versionInfo($refname);
+
+                    if ($verinfo) {
+                        break;
+                    }
+                }
+                if (!$verinfo) {
+                    $verinfo = "No version information available, might be only in CVS";
+                }
+
+                $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
             }
             $refnames = implode('</span> -- <span class="refname">', $this->cchunk["refname"]);
 
