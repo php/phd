@@ -376,6 +376,9 @@ class XHTMLPhDFormat extends PhDFormat {
     public function TEXT($str) {
         return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
     }
+    public function getChunkInfo() {
+        return $this->cchunk;
+    }
     public function format_suppressed_tags($open, $name, $attrs) {
         /* Ignore it */
         return "";

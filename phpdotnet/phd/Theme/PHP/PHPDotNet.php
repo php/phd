@@ -271,7 +271,13 @@ abstract class phpdotnet extends PhDTheme {
                 }
                 $href = '<a href="' .$href. '">';
             }
-            if ($this->cchunk["fieldsynopsis"]["modifier"] == "const") {
+            
+            if (
+                $this->cchunk["fieldsynopsis"]["modifier"] == "const" ||
+                (
+                    $nfo = $this->format->getChunkInfo() AND $nfo["fieldsynopsis"]["modifier"] == "const"
+                )
+            ) {
                 return '<var class="fieldsynopsis_varname">'.$href;
             }
             return '<var class="'.$name.'">'.$href.'$';
