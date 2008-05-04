@@ -279,9 +279,9 @@ abstract class phpdotnet extends PhDTheme {
                     $nfo = $this->format->getChunkInfo() AND $nfo["fieldsynopsis"]["modifier"] == "const"
                 )
             ) {
-                return '<var class="fieldsynopsis_varname">'.$href;
+                return ' <var class="fieldsynopsis_varname">'.$href;
             }
-            return '<var class="'.$name.'">'.$href.'$';
+            return ' <var class="'.$name.'">'.$href.'$';
         }
         if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
             return '</a></var>';
