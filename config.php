@@ -84,7 +84,9 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
     case VERBOSE_TOC_WRITING:
     case VERBOSE_CHUNK_WRITING:
     case VERBOSE_NOVERSION:
-        fprintf($OPTIONS["phd_info_output"], "[%s - %s] %s\n", $time, $err[$errno], $msg);
+        $cl1 = $OPTIONS['color_output'] ? "\033[01;{$OPTIONS['color_output']}m" : '';
+        $cr = $OPTIONS['color_output'] ? "\033[m" : '';
+        fprintf($OPTIONS["phd_info_output"], "{$cl1}[%s - %s]{$cr} %s\n", $time, $err[$errno], $msg);
         break;
  
     // User triggered errors
@@ -152,6 +154,7 @@ $OPTIONS = array (
   ),
   'skip_ids' => array(
   ),
+  'color_output' => false,
   'output_dir' => '.',
   'php_error_output' => STDERR,
   'user_error_output' => STDERR,
@@ -173,6 +176,7 @@ $opts = array(
     "skip:"    => "s:", // The ID to skip (optionally skipping its children too)
     "verbose:" => "v",  // Adjust the verbosity level
     "list::"   => "l::", // List supported themes/formats
+    "color::"  => "c::", // Use color output if possible
     "version"  => "V",  // Print out version information
     "help"     => "h",  // Print out help
 );
@@ -387,6 +391,28 @@ foreach($args as $k => $v) {
         break;
     /* }}} */
     
+    /* {{{ Color output */
+    case "c":
+    case "color":
+        if (is_array($v)) {
+            trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
+        }
+        switch ($v) {
+        case false:
+            $OPTIONS["color_output"] = (function_exists('posix_isatty') && posix_isatty($OPTIONS['phd_info_output'])) ? 34 : false;
+            break;
+        case "no":
+        case "false":
+        case "0":
+            $OPTIONS["color_output"] = false;
+            break;
+        default:
+            $OPTIONS["color_output"] = (function_exists('posix_isatty') && posix_isatty($OPTIONS['phd_info_output'])) ? $v : false;
+            break;
+        }
+        break;
+    /* }}} */
+    
     /* {{{ Version info */
     case "V":
     case "version":
@@ -419,6 +445,8 @@ foreach($args as $k => $v) {
   --list <formats/themes>    Print out the supported formats/themes (default: both)
   -o <directory>
   --output <directory>       The output directory (default: .)
+  -c <color>
+  --color <color>            Enable color output when output is to a terminal (default: false)
   -V
   --version                  Print the PhD version information
   -h
