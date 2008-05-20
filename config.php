@@ -277,7 +277,7 @@ foreach($args as $k => $v) {
         }
         $val = phd_bool($v);
         if (is_bool($val)) {
-            $OPTIONS["index"] = true;
+            $OPTIONS["index"] = $val;
         } else {
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
