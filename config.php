@@ -5,7 +5,7 @@
 
 // FC For PHP5.3
 if (!defined("E_DEPRECATED")) {
-	define("E_DEPRECATED",               E_RECOVERABLE_ERROR           << 1);
+    define("E_DEPRECATED",               E_RECOVERABLE_ERROR           << 1);
 }
 
 // PhD verbose flags
@@ -202,6 +202,33 @@ if($args === false) {
 $verbose = 0;
 $docbook = false;
 
+/* {{{ phd_bool($var) Returns boolean true/false on success, null on failure */
+function phd_bool($val) {
+    if (!is_string($val)) {
+        return null;
+    }
+
+    switch ($val) {
+    case "on":
+    case "yes":
+    case "true":
+    case "1":
+        return true;
+        break;
+
+    case "off":
+    case "no":
+    case "false":
+    case "0":
+        return false;
+        break;
+
+    default:
+        return null;
+    }
+}
+/* }}} */
+
 foreach($args as $k => $v) {
     switch($k) {
     /* {{{ Docbook file */
@@ -248,19 +275,11 @@ foreach($args as $k => $v) {
         if (is_array($v)) {
             trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
         }
-        switch ($v) {
-        case "yes":
-        case "true":
-        case "1":
+        $val = phd_bool($v);
+        if (is_bool($val)) {
             $OPTIONS["index"] = true;
-            break;
-        case "no":
-        case "false":
-        case "0":
-            $OPTIONS["index"] = false;
-            break;
-        default:
-            trigger_error("yes/no || true/false || 1/0 expected", E_USER_ERROR);
+        } else {
+            trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
         break;
     /* }}} */
@@ -397,18 +416,24 @@ foreach($args as $k => $v) {
         if (is_array($v)) {
             trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
         }
-        switch ($v) {
-        case false:
-            $OPTIONS["color_output"] = (function_exists('posix_isatty') && posix_isatty($OPTIONS['phd_info_output'])) ? 34 : false;
+        if (function_exists('posix_isatty') && !posix_isatty($OPTIONS['phd_info_output'])) {
+            // Terminal doesn't support colors
             break;
-        case "no":
-        case "false":
-        case "0":
+        }
+
+        $bool = phd_bool($v);
+        // No option or color specified
+        if ($v === false || ($bool === true && $v != 1)) {
+            // Fallback to default
+            $OPTIONS["color_output"] = 34;
+        } elseif ($bool === false) {
+            // Explicitly turning coloring off
             $OPTIONS["color_output"] = false;
-            break;
-        default:
-            $OPTIONS["color_output"] = (function_exists('posix_isatty') && posix_isatty($OPTIONS['phd_info_output'])) ? $v : false;
-            break;
+        } elseif (is_numeric($v)) {
+            // Color specified
+            $OPTIONS["color_output"] = (int)$v;
+        } else {
+            trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
         break;
     /* }}} */
@@ -446,7 +471,7 @@ foreach($args as $k => $v) {
   -o <directory>
   --output <directory>       The output directory (default: .)
   -c <color>
-  --color <color>            Enable color output when output is to a terminal (default: false)
+  --color <color>            Enable color output when output is to a terminal, optionally specify numerical color value (default: false)
   -V
   --version                  Print the PhD version information
   -h
