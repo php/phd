@@ -7,7 +7,7 @@ class chunkedhtml extends phpweb {
 
     public function __construct(array $IDs, $filename, $ext = "html") {
         phpdotnet::__construct($IDs, $filename, $ext, true);
-        $this->outputdir = PhDConfig::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
+	$this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $this->ext . DIRECTORY_SEPARATOR;
         if(!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory");
         elseif (file_exists($this->outputdir . 'index.html')) unlink($this->outputdir . 'index.html'); // preserve back-compat
     }

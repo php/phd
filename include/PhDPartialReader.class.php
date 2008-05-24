@@ -5,22 +5,20 @@ class PhDPartialReader extends PhDReader {
     protected $partial = array();
     protected $skip    = array();
 
-    public function __construct($encoding = "UTF-8", $xml_opts = NULL) {
-        parent::__construct($encoding, $xml_opts);
-        
-        $render_ids = PhDConfig::render_ids();
-        if ($render_ids !== NULL) {
-            if (is_array($render_ids)) {
-                $this->partial = $render_ids;
+    public function __construct($opts, $encoding = "UTF-8", $xml_opts = NULL) {
+        parent::__construct($opts, $encoding, $xml_opts);
+
+        if (isset($opts["render_ids"])) {
+            if (is_array($opts["render_ids"])) {
+                $this->partial = $opts["render_ids"];
             } else {
-                $this->partial[$render_ids] = 1;
+                $this->partial[$opts["render_ids"]] = 1;
             }
-            $skip_ids = PhDConfig::skip_ids();
-            if ($skip_ids !== NULL) {
-                if (is_array($skip_ids)) {
-                    $this->skip = $skip_ids;
+            if (isset($opts["skip_ids"])) {
+                if (is_array($opts["skip_ids"])) {
+                    $this->skip = $opts["skip_ids"];
                 } else {
-                    $this->skip[$skip_ids] = 1;
+                    $this->skip[$opts["skip_ids"]] = 1;
                 }
             }
         } else {

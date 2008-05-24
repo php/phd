@@ -1,6 +1,6 @@
 <?php
 /*  $Id$ */
-$r = new PhDReader();
+$r = new PhDReader($OPTIONS);
 $REFS = $FILENAMES = array();
 $CURRENT_FILENAME = $LAST_CHUNK = "";
 

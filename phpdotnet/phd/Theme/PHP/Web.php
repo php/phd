@@ -10,7 +10,7 @@ class phpweb extends phpdotnet {
 
     public function __construct($IDs, $filename, $ext = "php", $chunked = true) {
         parent::__construct($IDs, $filename, $ext, $chunked);
-        $this->outputdir = PhDConfig::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
+        $this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $this->ext . DIRECTORY_SEPARATOR;
         if (!file_exists($this->outputdir) || is_file($this->outputdir)) {
             mkdir($this->outputdir) or die("Can't create the cache directory");
         } else {
