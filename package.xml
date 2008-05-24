@@ -107,6 +107,11 @@
         <name>dom</name>
       </extension>
     </required>
+    <optional>
+      <extension>
+        <name>posix</name>
+      </extension>
+    </optional>
   </dependencies>
 
   <phprelease>
