@@ -203,17 +203,17 @@ class BuildOptionsParser extends OptionParser
         if (is_null($formatList)) {
             $formatList = array();
             foreach (glob($GLOBALS['ROOT'] . "/formats/*.php") as $item) {
-                $formatList[] = substr($item, 0, -4);
+                $formatList[] = substr(basename($item), 0, -4);
             }
         }
         if (is_null($themeList)) {
             $themeList = array();
             foreach (glob($GLOBALS['ROOT'] . "/themes/*", GLOB_ONLYDIR) as $item) {
-                if (!in_array($item, array('CVS', '.', '..'))) {
-                    $maintheme = $item;
+                if (!in_array(basename($item), array('CVS', '.', '..'))) {
+                    $maintheme = basename($item);
                     $subthemes = array();
-                    foreach (glob($GLOBALS['ROOT'] . "/themes/" . $item . "/*.php") as $subitem) {
-                        $subthemes[] = substr($subitem, 0, -4);
+                    foreach (glob($item . "/*.php") as $subitem) {
+                        $subthemes[] = substr(basename($subitem), 0, -4);
                     }
                     $themeList[$maintheme] = $subthemes;
                 }
