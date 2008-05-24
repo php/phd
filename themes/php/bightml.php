@@ -5,7 +5,7 @@ require_once $ROOT . '/themes/php/phpdotnet.php';
 class bightml extends phpdotnet {
     public function __construct(array $IDs, $filename, $ext = "html") {
         parent::__construct($IDs, $filename, $ext, false);
-        $this->stream = fopen($GLOBALS['OPTIONS']['output_dir'] . "bightml.html", "w");
+        $this->stream = fopen(PhDConfig::output_dir() . "bightml.html", "w");
         self::header();
     }
     public function appendData($data, $isChunk) {

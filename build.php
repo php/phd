@@ -12,12 +12,48 @@ if ($ROOT == "@php_dir"."@/phd") {
 }
 /* }}} */
 
-(@include $ROOT."/config.php")
-    && isset($OPTIONS)
-    && is_array($OPTIONS)
-    && isset($OPTIONS["output_format"], $OPTIONS["output_theme"])
-    && is_array($OPTIONS["output_theme"])
-    or die("Invalid configuration/file not found.\nThis should never happen, did you edit config.php yourself?\n");
+(include $ROOT . "/config.php")
+    or die("Configuration file not found.\nRe-run phd-setup.\n");
+
+(include $ROOT . "/include/buildoptions.php")
+    && is_array(PhDConfig::output_theme())
+    or die("Invalid configuration.\nThis should never happen, did you edit config.php yourself?\nRe-run phd-setup.\n");
+
+/* {{{ BC for PhD 0.0.* (and PHP5.2 on Windows)
+       i.e. `phd path/to/.manual.xml */
+if (!$optParser->docbook && $argc > 1) {
+    $arg = $argv[$argc-1];
+    if (is_dir($arg)) {
+        PhDConfig::set_xml_root($arg);
+        PhDConfig::set_xml_file($arg . DIRECTORY_SEPARATOR . ".manual.xml");
+    } elseif (is_file($arg)) {
+        PhDConfig::set_xml_root(dirname($arg));
+        PhDConfig::set_xml_file($arg);
+    }
+}
+/* }}} */
+
+/* {{{ If no docbook file was passed, ask for it
+       This loop should be removed in PhD 0.3.0, and replaced with a fatal errormsg */
+while (!is_dir(PhDConfig::xml_root()) || !is_file(PhDConfig::xml_file())) {
+    print "I need to know where you keep your '.manual.xml' file (I didn't find it in " . PhDConfig::xml_root() . "): ";
+    $root = trim(fgets(STDIN));
+    if (is_file($root)) {
+        PhDConfig::set_xml_file($root);
+        PhDConfig::set_xml_root(dirname($root));
+    } else {
+        PhDConfig::set_xml_file($root . "/.manual.xml");
+        PhDConfig::set_xml_root($root);
+    }
+}
+/* }}} */
+
+/* This needs to be done in *all* cases! */
+PhDConfig::set_output_dir(realpath(PhDConfig::output_dir()) . DIRECTORY_SEPARATOR);
+
+// These files really should be moved into phd/
+PhDConfig::set_version_info(PhDConfig::xml_root()."/phpbook/phpbook-xsl/version.xml");
+PhDConfig::set_acronyms_file(PhDConfig::xml_root()."/entities/acronyms.xml");
 
 require $ROOT. "/include/PhDReader.class.php";
 require $ROOT. "/include/PhDPartialReader.class.php";
@@ -26,20 +62,20 @@ require $ROOT. "/include/PhDFormat.class.php";
 require $ROOT. "/include/PhDTheme.class.php";
 
 /* {{{ Build the .ser file names to allow multiple sources for PHD. */
-$OPTIONS['index_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.index_' . basename($OPTIONS['xml_file'], '.xml') . '.ser';
-$OPTIONS['refnames_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.refnames_' . basename($OPTIONS['xml_file'], '.xml') . '.ser';
+PhDConfig::set_index_location(PhDConfig::xml_root() . DIRECTORY_SEPARATOR . '.index_' . basename(PhDConfig::xml_file(), '.xml') . '.ser');
+PhDConfig::set_refnames_location(PhDConfig::xml_root() . DIRECTORY_SEPARATOR . '.refnames_' . basename(PhDConfig::xml_file(), '.xml') . '.ser');
 /* }}} */
 
 /* {{{ Index the DocBook file or load from .ser cache files
        NOTE: There are two cache files (where * is the basename of the XML source file):
         - index_*.ser     (containing the ID infos)
         - refnames_*.ser  (containing <refname> => File ID) */
-if (!$OPTIONS["index"] && (file_exists($OPTIONS['index_location']) && file_exists($OPTIONS['refnames_location']))) {
+if (!PhDConfig::index() && (file_exists(PhDConfig::index_location()) && file_exists(PhDConfig::refnames_location()))) {
     /* FIXME: Load from sqlite db? */
     v("Unserializing cached index files...", VERBOSE_INDEXING);
 
-    $IDs = unserialize(file_get_contents($OPTIONS['index_location']));
-    $REFS = unserialize(file_get_contents($OPTIONS['refnames_location']));
+    $IDs = unserialize(file_get_contents(PhDConfig::index_location()));
+    $REFS = unserialize(file_get_contents(PhDConfig::refnames_location()));
 
     v("Unserialization done", VERBOSE_INDEXING);
 } else {
@@ -48,8 +84,8 @@ if (!$OPTIONS["index"] && (file_exists($OPTIONS['index_location']) && file_exist
     /* This file will "return" an $IDs & $REFS array */
     require $ROOT. "/mktoc.php";
 
-    file_put_contents($OPTIONS['index_location'], $ids = serialize($IDs));
-    file_put_contents($OPTIONS['refnames_location'], $refs = serialize($REFS));
+    file_put_contents(PhDConfig::index_location(), $ids = serialize($IDs));
+    file_put_contents(PhDConfig::refnames_location(), $refs = serialize($REFS));
 
     $IDs2 = unserialize($ids);
     $REFS2 = unserialize($refs);
@@ -61,7 +97,7 @@ if (!$OPTIONS["index"] && (file_exists($OPTIONS['index_location']) && file_exist
 }
 /* }}} */
 
-foreach($OPTIONS["output_format"] as $output_format) {
+foreach(PhDConfig::output_format() as $output_format) {
     v("Starting %s rendering", $output_format, VERBOSE_FORMAT_RENDERING);
 
     switch($output_format) {
@@ -79,7 +115,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
 
     /* {{{ initialize output themes and fetch the methodmaps */
     $themes = $elementmaps = $textmaps = array();
-    foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
+    foreach(val(PhDConfig::output_theme(), $output_format) as $theme => $array) {
         is_dir($ROOT. "/themes/$theme") or die("Can't find the '$theme' theme");
         v("Using the %s theme (%s)", $theme, join(", ", $array), VERBOSE_THEME_RENDERING);
         
@@ -91,8 +127,8 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 case "php":
                     $themes[$themename] = new $themename(array($IDs, $REFS),
                         array(
-                            "version" => $OPTIONS["version_info"],
-                            "acronym" => $OPTIONS["acronyms_file"],
+                            "version" => PhDConfig::version_info(),
+                            "acronym" => PhDConfig::acronyms_file(),
                         )
                     );
                     break;
@@ -121,8 +157,8 @@ foreach($OPTIONS["output_format"] as $output_format) {
     /* }}} */
 
     /* {{{ Initialize the PhD[Partial]Reader */
-    if (!empty($OPTIONS["render_ids"]) || !empty($OPTIONS["skip_ids"])) {
-        $idlist = $OPTIONS["render_ids"]+$OPTIONS["skip_ids"];
+    $idlist = PhDConfig::render_ids()+PhDConfig::skip_ids();
+    if (!empty($idlist)) {
 
         v("Running partial build", VERBOSE_RENDER_STYLE);
         if (!is_array($idlist)) {
@@ -134,11 +170,11 @@ foreach($OPTIONS["output_format"] as $output_format) {
             }
         }
 
-        $reader = new PhDPartialReader($OPTIONS);
+        $reader = new PhDPartialReader();
     } else {
         v("Running full build", VERBOSE_RENDER_STYLE);
 
-        $reader = new PhDReader($OPTIONS);
+        $reader = new PhDReader();
     }
     /* }}} */
 
@@ -292,7 +328,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
     $reader->close();
     v("Finished rendering", VERBOSE_FORMAT_RENDERING);
 
-} // foreach($OPTIONS["output_thtemes"])
+} // foreach(PhDConfig::output_themes())
 
 /*
 * vim600: sw=4 ts=4 syntax=php et
