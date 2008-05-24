@@ -60,20 +60,19 @@ class PhDReader extends XMLReader {
         'set'                   => true,
         'setindex'              => true,
    ); /* }}} */
-    protected $opts = array();
 
     public $isChunk = false;
 
-    public function __construct($opts, $encoding = "UTF-8", $xml_opts = NULL) { /* {{{ */
-        if (!XMLReader::open($opts["xml_file"], $encoding, $xml_opts)) {
-            throw new Exception("Cannot open {$opts["xml_file"]}");
+    public function __construct($encoding = "UTF-8", $xml_opts = NULL) { /* {{{ */
+        if (!XMLReader::open(PhDConfig::xml_file(), $encoding, $xml_opts)) {
+            throw new Exception("Cannot open " . PhDConfig::xml_file());
         }
-        if (isset($opts["chunk_extra"]) && is_array($opts["chunk_extra"])) {
-            foreach($opts["chunk_extra"] as $el => $v) {
+        $ce = PhDConfig::chunk_extra();
+        if (is_array($ce)) {
+            foreach($ce as $el => $v) {
                 $this->CHUNK_ME[$el] = $v;
             }
         }
-        $this->opts = $opts;
     } /* }}} */
 
     public function notXPath($tag, $depth = 0) { /* {{{ */
