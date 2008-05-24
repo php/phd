@@ -202,7 +202,7 @@ class BuildOptionsParser extends OptionParser
         
         if (is_null($formatList)) {
             $formatList = array();
-            foreach (global($GLOBALS['ROOT'] . "/formats/*.php") as $item) {
+            foreach (glob($GLOBALS['ROOT'] . "/formats/*.php") as $item) {
                 $formatList[] = substr($item, 0, -4);
             }
         }
@@ -212,10 +212,8 @@ class BuildOptionsParser extends OptionParser
                 if (!in_array($item, array('CVS', '.', '..'))) {
                     $maintheme = $item;
                     $subthemes = array();
-                    foreach (scandir($GLOBALS['ROOT'] . "/themes/" . $item) as $subitem) {
-                        if (substr($subitem, -4) === '.php') {
-                            $subthemes[] = substr($subitem, 0, -4);
-                        }
+                    foreach (glob($GLOBALS['ROOT'] . "/themes/" . $item . "/*.php") as $subitem) {
+                        $subthemes[] = substr($subitem, 0, -4);
                     }
                     $themeList[$maintheme] = $subthemes;
                 }
