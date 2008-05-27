@@ -104,7 +104,7 @@ function phd_bool($val) {
 }
 /* }}} */
 
-abstract class OptionParser
+abstract class PhDOptionParser
 {
     abstract public function getOptionList();
     

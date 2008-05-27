@@ -1,7 +1,7 @@
 <?php
 /* $Id$ */
 
-class BuildOptionsParser extends OptionParser
+class PhDBuildOptionsParser extends PhDOptionParser
 {
     public $docbook = false;
     public $verbose = 0;
@@ -322,7 +322,7 @@ NOTE: Long options are only supported using PHP5.3\n";
     }
 }
 
-$optParser = new BuildOptionsParser;
+$optParser = new PhDBuildOptionsParser;
 $optParser->getopt();
 
 ?>

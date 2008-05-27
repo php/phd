@@ -15,7 +15,7 @@ if ($ROOT == "@php_dir"."@/phd") {
 (include $ROOT . "/config.php")
     or die("Configuration file not found.\nRe-run phd-setup.\n");
 
-(include $ROOT . "/include/buildoptions.php")
+(include $ROOT . "/include/PhDBuildOptions.class.php")
     && is_array(PhDConfig::output_theme())
     or die("Invalid configuration.\nThis should never happen, did you edit config.php yourself?\nRe-run phd-setup.\n");
 
