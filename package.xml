@@ -49,7 +49,7 @@
   <contents>
     <dir baseinstalldir="phd" name="/">
       <file baseinstalldir="phd" name="formats/xhtml.php" role="php"/>
-      <file baseinstalldir="phd" name="include/buildoptions.php" role="php"/>
+      <file baseinstalldir="phd" name="include/PhDBuildOptions.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDErrors.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDFormat.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDTheme.class.php" role="php"/>
