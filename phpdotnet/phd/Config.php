@@ -17,6 +17,7 @@ class PhDConfig
                     'phpweb',
                     'chunkedhtml',
                     'bightml',
+                    'chmsource',
                 ),
             ),
         ),
