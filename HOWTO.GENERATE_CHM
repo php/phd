@@ -21,7 +21,7 @@ To render the documentation:
 	#2) php configure.php [ --with-lang={lang} ]
 		to generate the .manual.xml file required by PhD
 	#3) cd {RENDER_PATH}
-	#4) php {PHD_PATH}\build.php {PHPDOC_PATH}
+	#4) php {PHD_PATH}\build.php -t chmsource {PHPDOC_PATH}
 	#5) You should see the message "[hh:mm:ss - VERBOSE_FORMAT_RENDERING] Finished rendering"
 
 Finally, to compile the CHM sources:
