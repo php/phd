@@ -50,8 +50,9 @@ class PhDBuildOptionsParser extends PhDOptionParser
                 case "phpweb":
                 case "chunkedhtml":
                 case "bightml":
+                case "chmsource":
                     if (!in_array($val, $themes["xhtml"]["php"])) {
-                        $theses["xhtml"]["php"][] = $val;
+                        $themes["xhtml"]["php"][] = $val;
                     }
                     break;
                 default:
