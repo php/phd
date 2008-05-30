@@ -109,7 +109,6 @@ class PhDBuildOptionsParser extends PhDOptionParser
             trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
         }
         PhDConfig::set_output_dir($v);
-        break;
     }
     
     public function option_p($k, $v)
