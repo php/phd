@@ -1,9 +1,10 @@
 <?php
 /*  $Id$ */
-//class chunkedhtml {}
+
 require_once $ROOT . '/themes/php/chunkedhtml.php';
 class chmsource extends chunkedhtml {
     const DEFAULT_FONT = "Arial,10,0";
+    const DEFAULT_TITLE = "PHP Manual";
     
     // Array to manual code -> HTML Help Code conversion
 	// Code list: http://www.helpware.net/htmlhelp/hh_info.htm
@@ -41,6 +42,7 @@ class chmsource extends chunkedhtml {
 					   "preferred_charset" => "Windows-1252",
 					   "mime_charset_name" => "Windows-1252",
 					   "preferred_font" => self::DEFAULT_FONT,
+					   "title" => "PHP Handbuch",
 				   ),
 		"el"    => array(
 					   "langcode" => "0x408 Greek",
@@ -52,7 +54,8 @@ class chmsource extends chunkedhtml {
 					   "langcode" => "0x809 English (United Kingdom)",
 					   "preferred_charset" => "Windows-1252",
 					   "mime_charset_name" => "Windows-1252",
-					   "preferred_font" => self::DEFAULT_FONT
+					   "preferred_font" => self::DEFAULT_FONT,
+					   "title" => "PHP Manual",
 				   ),
 		"es"    => array(
 					   "langcode" => "0xc0a Spanish (International Sort)",
@@ -64,7 +67,8 @@ class chmsource extends chunkedhtml {
 					   "langcode" => "0x40c French (France)",
 					   "preferred_charset" => "Windows-1252",
 					   "mime_charset_name" => "Windows-1252",
-					   "preferred_font" => self::DEFAULT_FONT
+					   "preferred_font" => self::DEFAULT_FONT,
+					   "title" => "Manuel PHP"
 				   ),
 		"fi"    => array(
 					   "langcode" => "0x40b Finnish",
@@ -88,7 +92,8 @@ class chmsource extends chunkedhtml {
 					   "langcode" => "0x410 Italian (Italy)",
 					   "preferred_charset" => "Windows-1252",
 					   "mime_charset_name" => "Windows-1252",
-					   "preferred_font" => self::DEFAULT_FONT
+					   "preferred_font" => self::DEFAULT_FONT,
+					   "title" => "Manuale PHP",
 				   ),
 		"ja"    => array(
 					   "langcode" => "0x411 Japanese",
@@ -124,7 +129,8 @@ class chmsource extends chunkedhtml {
 					   "langcode" => "0x416 Portuguese (Brazil)",
 					   "preferred_charset" => "Windows-1252",
 					   "mime_charset_name" => "Windows-1252",
-					   "preferred_font" => self::DEFAULT_FONT
+					   "preferred_font" => self::DEFAULT_FONT,
+					   "title" => "Manual do PHP",
 				   ),
 		"ro"    => array(
 					   "langcode" => "0x418 Romanian",
@@ -190,6 +196,8 @@ class chmsource extends chunkedhtml {
 		$this->hhcStream = fopen($this->chmdir . "php_manual_{$lang}.hhc", "w");
 		$this->hhkStream = fopen($this->chmdir . "php_manual_{$lang}.hhk", "w");
 		
+		file_put_contents($this->outputdir . "style.css", $this->fetchStylesheet());
+		
 		self::headerChm();
     }
     
@@ -239,13 +247,14 @@ Default topic=res\index.html
 Display compile progress=Yes
 Full-text search=Yes
 Language=' . $this->LANGUAGES[$lang]["langcode"] . '
-Title=PHP Manual
-Default Font=Arial,10,0
+Title=' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '
+Default Font=' . ($this->LANGUAGES[$lang]["preferred_font"] ? $this->LANGUAGES[$lang]["preferred_font"] : self::DEFAULT_FONT). '
 
 [WINDOWS]
-doc="PHP Manual","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","res\index.html","res\index.html",,,,,0x23520,,0x386e,,,,,,,,0
+doc="' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","res\index.html","res\index.html",,,,,0x23520,,0x386e,,,,,,,,0
 
 [FILES]
+res\style.css
 ');
         fwrite($this->hhcStream, '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html>
@@ -305,6 +314,16 @@ doc="PHP Manual","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","
 		return parent::format_root_chunk($open, $name, $attrs);
     }
     
+    public function header($id) {
+        $header = parent::header($id);
+        // Add CSS link to <head>
+        $header = ereg_replace('( *)</head>','\\1 <link media="all" rel="stylesheet" type="text/css" href="style.css"/>
+\\1</head>', $header);
+        return $header;
+    }
+
+
+    
     private function grabContent($attrs) {
 		if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
 			$id = $attrs[PhDReader::XMLNS_XML]["id"];
@@ -314,6 +333,15 @@ doc="PHP Manual","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","
 					(PhDHelper::getFilename($id) ? PhDHelper::getFilename($id) : $id) . "." . $this->ext,
 				"hasChild" => (count(PhDHelper::getChildren($id)) > 0)
 			);
+		}
+    }
+    
+    private function fetchStylesheet() {
+		$stylesheet = file_get_contents("http://www.php.net/styles/site.css");
+		if ($stylesheet) return $stylesheet;
+		else {
+			v("Stylesheet not fetched. Uses default rendering style.", E_USER_WARNING);
+			return "";
 		}
     }
     
