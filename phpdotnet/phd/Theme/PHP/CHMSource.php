@@ -196,7 +196,7 @@ class chmsource extends chunkedhtml {
 		$this->hhcStream = fopen($this->chmdir . "php_manual_{$lang}.hhc", "w");
 		$this->hhkStream = fopen($this->chmdir . "php_manual_{$lang}.hhk", "w");
 		
-		file_put_contents($this->outputdir . "style.css", $this->fetchStylesheet());
+		file_put_contents($this->outputdir . "style.css", $this->fetchStylesheet() . PHP_EOL . 'body { padding : 3px;}');
 		
 		self::headerChm();
     }
@@ -251,7 +251,7 @@ Title=' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] :
 Default Font=' . ($this->LANGUAGES[$lang]["preferred_font"] ? $this->LANGUAGES[$lang]["preferred_font"] : self::DEFAULT_FONT). '
 
 [WINDOWS]
-doc="' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","res\index.html","res\index.html",,,,,0x23520,,0x386e,,,,,,,,0
+doc="' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","res\index.html","res\index.html",,,,,0x23520,,0x10386e,,,,,,,,0
 
 [FILES]
 res\style.css
