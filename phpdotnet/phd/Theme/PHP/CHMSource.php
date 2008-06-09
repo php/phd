@@ -217,13 +217,13 @@ class chmsource extends chunkedhtml {
 				$this->currentTocDepth++;
 				fwrite($this->hhpStream, "{$ref}\n");
 				fwrite($this->hhcStream, "{$this->offset(1)}<li><object type=\"text/sitemap\">\n" .
-					"{$this->offset(3)}<param name=\"Name\" value=\"{$name}\">\n" .
+					"{$this->offset(3)}<param name=\"Name\" value=\"" .htmlentities($name, ENT_NOQUOTES, 'UTF-8') . "\">\n" .
 					"{$this->offset(3)}<param name=\"Local\" value=\"{$ref}\">\n" .
 					"{$this->offset(2)}</object>\n");
 				if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
 				fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
 					"          <param name=\"Local\" value=\"{$ref}\">\n" .
-					"          <param name=\"Name\" value=\"{$name}\">\n" .
+					"          <param name=\"Name\" value=\"" . htmlentities($name, ENT_NOQUOTES, 'UTF-8') . "\">\n" .
 					"        </object>\n    </li>\n");
 				break;
 			case PhDReader::CLOSE_CHUNK :
@@ -300,17 +300,17 @@ res\style.css
     }
     
     public function format_chunk($open, $name, $attrs, $props) {
-		$this->grabContent($attrs);
+		$this->collectContent($attrs);
 		return parent::format_chunk($open, $name, $attrs, $props);
     }
     
     public function format_container_chunk($open, $name, $attrs, $props) {
-		$this->grabContent($attrs);
+		$this->collectContent($attrs);
 		return parent::format_container_chunk($open, $name, $attrs, $props);
     }
     
     public function format_root_chunk($open, $name, $attrs) {
-		$this->grabContent($attrs);
+		$this->collectContent($attrs);
 		return parent::format_root_chunk($open, $name, $attrs);
     }
     
@@ -324,7 +324,7 @@ res\style.css
 
 
     
-    private function grabContent($attrs) {
+    private function collectContent($attrs) {
 		if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
 			$id = $attrs[PhDReader::XMLNS_XML]["id"];
 			$this->lastContent = array(
