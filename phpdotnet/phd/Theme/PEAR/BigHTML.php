@@ -1,11 +1,10 @@
 <?php
-/*  $Id$ */
 
-require_once $ROOT . '/themes/php/phpdotnet.php';
-class bightml extends phpdotnet {
-    public function __construct(array $IDs, $filename, $ext = "html") {
-        parent::__construct($IDs, $filename, $ext, false);
-        $this->stream = fopen(PhDConfig::output_dir() . "bightml.html", "w");
+require_once $ROOT . '/themes/pear/peartheme.php';
+class pearbightml extends peartheme {
+    public function __construct(array $IDs, $ext = "html") {
+        parent::__construct($IDs, $ext, false);
+        $this->stream = fopen(PhDConfig::output_dir() . "pear_manual_{$this->lang}.html", "w");
         self::header();
     }
     public function appendData($data, $isChunk) {
@@ -22,16 +21,19 @@ class bightml extends phpdotnet {
         fwrite($this->stream, '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
-  <title>PHP Manual</title>
+  <title>PEAR Manual</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
  </head>
  <body>
+  <div id="doc3">
+   <div id="body">
 ');
 
     }
     public function footer() {
-        fwrite($this->stream, "</body></html>");
+        fwrite($this->stream, "</div></div></body></html>");
     }
+    
     public function format_qandaset($open, $name, $attrs) {
         if ($open) {
             $this->cchunk["qandaentry"] = array();
@@ -48,10 +50,4 @@ class bightml extends phpdotnet {
         return parent::qandaset($stream);
     }
 }
-
-
-/*
- * vim600: sw=4 ts=4 fdm=syntax syntax=php et
- * vim<600: sw=4 ts=4
- */
 

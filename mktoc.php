@@ -6,6 +6,8 @@ $CURRENT_FILENAME = $LAST_CHUNK = "";
 
 #FIXME: This is a workaround for the <legalnotice> element in the PHP manual
 $PARENTS = array(-1 => "ROOT", 1 => "manual", 2 => "manual");
+// PEAR manual needs this line :  $PARENTS = array(-1 => "ROOT", 1 => "guide");
+
 $lastid = 0;
 
 while($r->read()) {
