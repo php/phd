@@ -134,6 +134,7 @@ $OPTIONS = array (
         'phpweb',
         'chunkedhtml',
         'bightml',
+        'chmsource',
       ),
     ),
   ),
@@ -304,6 +305,7 @@ foreach($args as $k => $v) {
                 echo "\tphpweb\n";
                 echo "\tchunkedhtml\n";
                 echo "\tbightml\n";
+                echo "\tchmsource\n";
                 break;
 
             default:
@@ -317,6 +319,7 @@ foreach($args as $k => $v) {
                 echo "\tphpweb\n";
                 echo "\tchunkedhtml\n";
                 echo "\tbightml\n";
+                echo "\tchmsource\n";
                 break;
             }
         }
@@ -371,6 +374,7 @@ foreach($args as $k => $v) {
             case "phpweb":
             case "chunkedhtml":
             case "bightml":
+            case "chmsource":
                 if (!in_array($val, $OPTIONS["output_theme"]["xhtml"]["php"])) {
                     $OPTIONS["output_theme"]["xhtml"]["php"][] = $val;
                 }

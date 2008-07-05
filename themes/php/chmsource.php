@@ -184,14 +184,14 @@ class chmsource extends chunkedhtml {
 	
     public function __construct(array $IDs, $filename, $ext = "html", $dir = "chm") {
         chunkedhtml::__construct($IDs, $filename, $ext);
-        $this->chmdir = PhDConfig::output_dir() . $dir . DIRECTORY_SEPARATOR;
+        $this->chmdir = $GLOBALS['OPTIONS']['output_dir'] . $dir . DIRECTORY_SEPARATOR;
 		if(!file_exists($this->chmdir) || is_file($this->chmdir))
 			mkdir($this->chmdir) or die("Can't create the CHM project directory");
-        $this->outputdir = PhDConfig::output_dir() . $dir . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
+        $this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $dir . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
 		if(!file_exists($this->outputdir) || is_file($this->outputdir))
 			mkdir($this->outputdir) or die("Can't create the cache directory");
 		
-		$lang = PhDConfig::language();
+		$lang = $GLOBALS['OPTIONS']['language'];
 		$this->hhpStream = fopen($this->chmdir . "php_manual_{$lang}.hhp", "w");
 		$this->hhcStream = fopen($this->chmdir . "php_manual_{$lang}.hhc", "w");
 		$this->hhkStream = fopen($this->chmdir . "php_manual_{$lang}.hhk", "w");
@@ -236,7 +236,7 @@ class chmsource extends chunkedhtml {
 	}
 	
     protected function headerChm() {
-		$lang = PhDConfig::language();
+		$lang = $GLOBALS['OPTIONS']['language'];
 		fwrite($this->hhpStream, '[OPTIONS]
 Compatibility=1.1 or later
 Compiled file=php_manual_' . $lang . '.chm
