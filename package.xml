@@ -64,6 +64,7 @@
       <file baseinstalldir="phd" name="include/langs/ru.xml" role="php"/>
       <file baseinstalldir="phd" name="include/langs/sv.xml" role="php"/>
       <file baseinstalldir="phd" name="themes/php/bightml.php" role="php"/>
+      <file baseinstalldir="phd" name="themes/php/chmsource.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/chunkedhtml.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpdotnet.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpweb.php" role="php"/>
