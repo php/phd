@@ -138,14 +138,12 @@ abstract class PhDOptionParser
     }
 }
 
-/* {{{ Can't function_call()['key'], so val(function_call(), 'key') */
+/* {{{ Can't function_call()['key'], so val(function_call(), 'key')
+        See <http://wiki.php.net/rfc/functionarraydereferencing> */
 function val($a, $k)
 {
     return $a[$k];
 }
 /* }}} */
 
-/*
-* vim600: sw=4 ts=4 syntax=php et
-* vim<600: sw=4 ts=4
-*/
+?>

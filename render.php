@@ -12,41 +12,16 @@ if ($ROOT == "@php_dir"."@/phd") {
 }
 /* }}} */
 
-(include $ROOT . "/config.php")
-    or die("Configuration file not found.\nRe-run phd-setup.\n");
+require_once ($ROOT . "/config.php");
 
-(include $ROOT . "/include/PhDBuildOptions.class.php")
+(include $ROOT . "/include/PhDRenderOptions.class.php")
     && is_array(PhDConfig::output_theme())
-    or die("Invalid configuration.\nThis should never happen, did you edit config.php yourself?\nRe-run phd-setup.\n");
+    or trigger_error("Invalid configuration. This should never happen, was config.php edited manually? Please re-run phd-setup.", E_USER_ERROR);
 
-/* {{{ BC for PhD 0.0.* (and PHP5.2 on Windows)
-       i.e. `phd path/to/.manual.xml */
-if (!$optParser->docbook && $argc > 1) {
-    $arg = $argv[$argc-1];
-    if (is_dir($arg)) {
-        PhDConfig::set_xml_root($arg);
-        PhDConfig::set_xml_file($arg . DIRECTORY_SEPARATOR . ".manual.xml");
-    } elseif (is_file($arg)) {
-        PhDConfig::set_xml_root(dirname($arg));
-        PhDConfig::set_xml_file($arg);
-    }
+/* If no docbook file was passed, die */
+if (!is_dir(PhDConfig::xml_root()) || !is_file(PhDConfig::xml_file())) {
+    trigger_error("No '.manual.xml' file was given. Specify it on the command line with --docbook.", E_USER_ERROR);
 }
-/* }}} */
-
-/* {{{ If no docbook file was passed, ask for it
-       This loop should be removed in PhD 0.3.0, and replaced with a fatal errormsg */
-while (!is_dir(PhDConfig::xml_root()) || !is_file(PhDConfig::xml_file())) {
-    print "I need to know where you keep your '.manual.xml' file (I didn't find it in " . PhDConfig::xml_root() . "): ";
-    $root = trim(fgets(STDIN));
-    if (is_file($root)) {
-        PhDConfig::set_xml_file($root);
-        PhDConfig::set_xml_root(dirname($root));
-    } else {
-        PhDConfig::set_xml_file($root . "/.manual.xml");
-        PhDConfig::set_xml_root($root);
-    }
-}
-/* }}} */
 
 /* This needs to be done in *all* cases! */
 PhDConfig::set_output_dir(realpath(PhDConfig::output_dir()) . DIRECTORY_SEPARATOR);
@@ -332,8 +307,4 @@ foreach(PhDConfig::output_format() as $output_format) {
 
 } // foreach(PhDConfig::output_themes())
 
-/*
-* vim600: sw=4 ts=4 syntax=php et
-* vim<600: sw=4 ts=4
-*/
-
+?>
