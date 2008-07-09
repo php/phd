@@ -49,6 +49,7 @@
   <contents>
     <dir baseinstalldir="phd" name="/">
       <file baseinstalldir="phd" name="formats/xhtml.php" role="php"/>
+      <file baseinstalldir="phd" name="formats/manpage.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDBuildOptions.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDErrors.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDFormat.class.php" role="php"/>
@@ -74,6 +75,7 @@
       <file baseinstalldir="phd" name="themes/php/chunkedhtml.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpdotnet.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpweb.php" role="php"/>
+      <file baseinstalldir="phd" name="themes/php/phpfunctions.php" role="php"/>
       <file baseinstalldir="phd" name="themes/pear/pearbightml.php" role="php"/>
       <file baseinstalldir="phd" name="themes/pear/pearchm.php" role="php"/>
       <file baseinstalldir="phd" name="themes/pear/pearchunkedhtml.php" role="php"/>

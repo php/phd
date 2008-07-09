@@ -30,9 +30,20 @@ class PhDBuildOptionsParser extends PhDOptionParser
     }
     public function option_format($k, $v)
     {
-        if ($v != "xhtml") {
-            trigger_error("Only xhtml is supported at this time", E_USER_ERROR);
+        $formats = array();
+        foreach((array)$v as $i => $val) {
+            switch($val) {
+                case "xhtml":
+                case "manpage":
+                    if (!in_array($val, $formats)) {
+                        $formats[] = $val;
+                    }
+                    break;
+                default:
+                    trigger_error("Only xhtml and manpage are supported at this time", E_USER_ERROR);
+            }
         }
+        PhDConfig::set_output_format($formats);
     }
     
     public function option_t($k, $v)
@@ -44,6 +55,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         /* Remove the default themes */
         $themes = PhDConfig::output_theme();
         $themes['xhtml']['php'] = array();
+        $themes['manpage']['php'] = array();
 
         foreach((array)$v as $i => $val) {
             switch($val) {
@@ -53,6 +65,27 @@ class PhDBuildOptionsParser extends PhDOptionParser
                 case "chmsource":
                     if (!in_array($val, $themes["xhtml"]["php"])) {
                         $themes["xhtml"]["php"][] = $val;
+                    }
+                    break;
+                case "phpfunctions":
+                    if (!in_array($val, $themes["manpage"]["php"])) {
+                        $themes["manpage"]["php"][] = $val;
+                    }
+                    break;
+                case "pear":
+                    $themes["xhtml"]["pear"] = array(
+                        'pearweb',
+                        'pearchunkedhtml',
+                        'pearbightml',
+                        'pearchm'
+                    );
+                    break;
+                case "pearweb":
+                case "pearchunkedhtml":
+                case "pearbightml":
+                case "pearchm":
+                    if (!in_array($val, $themes["xhtml"]["pear"])) {
+                        $themes["xhtml"]["pear"][] = $val;
                     }
                     break;
                 default:

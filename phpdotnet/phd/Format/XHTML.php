@@ -25,13 +25,21 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'book'                  => 'format_container_chunk',
         'chapter'               => 'format_container_chunk',
+        'citetitle'             => 'i',
         'co'                    => 'format_co',
         'colophon'              => 'format_chunk',
         'copyright'             => 'format_copyright',
+        'date'                  => 'p',
         'editor'                => 'format_editor',
+        'email'                 => 'format_suppressed_tags',
         'firstname'             => 'format_name',
         'footnote'              => 'format_footnote',
         'footnoteref'           => 'format_footnoteref',
+        'funcdef'               => 'format_suppressed_tags',
+        'funcsynopsis'          => 'div',
+        'funcsynopsisinfo'      => 'pre',
+        'function'				=> 'span',
+        'funcprototype'         => 'code',
         'surname'               => 'format_name',
         'othername'             => 'format_name',
         'optional'              => 'span',
@@ -45,6 +53,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'calloutlist'           => 'format_calloutlist',
         'callout'               => 'format_callout',
         'caution'               => 'format_admonition',
+        'citation'              => 'format_citation',
         'citerefentry'          => 'span',
         'classname'             => array(
             /* DEFAULT */          'span',
@@ -94,10 +103,14 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'figure'                => 'div',
         'filename'              => 'var',
+        'glossentry'            => 'li',
+        'glossdef'              => 'p',
+        'glosslist'             => 'ul',
         'glossterm'             => 'span',
         'holder'                => 'span',
         'imageobject'           => 'div',
         'imagedata'             => 'format_imagedata',
+        'important'             => 'format_admonition',
         'index'                 => array(
             /* DEFAULT */          'div',
             'article'           => 'format_chunk',
@@ -119,6 +132,7 @@ class XHTMLPhDFormat extends PhDFormat {
             /* DEFAULT */          'li',
             'varlistentry'      => 'format_varlistentry_listitem',
         ),
+        'link'                  => 'a',
         'literal'               => 'format_literal',
         'literallayout'         => 'pre',
         'manvolnum'             => 'format_manvolnum',
@@ -149,6 +163,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'footnote'          => 'format_footnote_para',
             'refsect1'          => 'format_refsect1_para',
         ),
+        'paramdef'              => 'format_suppressed_tags',
         'parameter'             => array(
             /* DEFAULT */          'format_parameter',
             'methodparam'       => 'format_methodparam_parameter',
@@ -156,11 +171,14 @@ class XHTMLPhDFormat extends PhDFormat {
         'part'                  => 'format_container_chunk',
         'partintro'             => 'div',
         'personname'            => 'format_personname',
+        'personblurb'           => 'div',
+        'phrase'                => 'span',
         'preface'               => 'format_chunk',
         'primaryie'             => 'format_suppressed_tags',
         'procedure'             => 'format_procedure',
         'productname'           => 'span',
         'programlisting'        => 'format_programlisting',
+        'prompt'                => 'span',
         'propname'              => 'span',
         'property'              => array(
             /* DEFAULT */          'span',
@@ -177,6 +195,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'refsynopsisdiv'        => 'div',
         'refname'               => 'h1',
         'refnamediv'            => 'div',
+        'releaseinfo'           => 'div',
         'replaceable'           => 'span',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
@@ -201,6 +220,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'entry'             => 'span',
             'example'           => 'format_example_content',
         ),
+        'spanspec'              => 'format_suppressed_tags',
         'step'                  => 'format_step',
         'superscript'           => 'sup',
         'subscript'             => 'sub',
@@ -241,7 +261,8 @@ class XHTMLPhDFormat extends PhDFormat {
             'segmentedlist'     => 'strong',
             'table'             => 'format_table_title',
             'variablelist'      => 'strong',
-        ),
+        ), 
+        'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => 'span',
         'userinput'             => 'format_userinput',
         'variablelist'          => 'format_variablelist',
@@ -252,8 +273,10 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'void'                  => 'format_void',
         'warning'               => 'format_admonition',
+        'xref'                  => 'a',
         'year'                  => 'span',
         'quote'                 => 'format_quote',
+        'qandadiv'              => 'div',
         'qandaset'              => 'div',
         'qandaentry'            => 'dl',
         'question'              => 'dt',
@@ -264,6 +287,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'affiliation'          => 'format_suppressed_text',
         'contrib'              => 'format_suppressed_text',
         'shortaffil'           => 'format_suppressed_text',
+        'titleabbrev'          => 'format_suppressed_text',
         'programlisting'       => 'format_programlisting_text',
         'alt'                  => 'format_alt_text',
         'modifier'             => array(
@@ -305,6 +329,7 @@ class XHTMLPhDFormat extends PhDFormat {
             ),
         ),
         'literal'               => 'format_literal_text',
+        'email'                 => 'format_email_text',
 
     );
 
@@ -1109,6 +1134,17 @@ class XHTMLPhDFormat extends PhDFormat {
 
     public function admonition_title($title, $lang) {
         return '<b class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</b>';
+    }
+    
+    public function format_citation($open, $name, $attrs, $props) {
+        if ($open) {
+            return '[<span class="citation">';
+        }
+        return '</span>]';
+    }
+    
+    public function format_email_text($value) {
+        return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
     }
 }
 

@@ -104,6 +104,9 @@ foreach(PhDConfig::output_format() as $output_format) {
     case "xhtml":
         $classname = "XHTMLPhDFormat";
         break;
+    case "manpage":
+        $classname = "ManpagePhDFormat";
+        break;
     }
 
     // {{{ Initialize the output format and fetch the methodmaps

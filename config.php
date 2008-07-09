@@ -9,7 +9,8 @@ class PhDConfig
 {
     private static $optionArray = array(
         'output_format' => array(
-            'xhtml'
+            'xhtml',
+            'manpage',
         ),
         'output_theme' => array(
             'xhtml' => array(
@@ -18,6 +19,11 @@ class PhDConfig
                     'chunkedhtml',
                     'bightml',
                     'chmsource',
+                ),
+            ),
+            'manpage' => array(
+                'php' => array(
+                    'phpfunctions',
                 ),
             ),
         ),
