@@ -123,7 +123,7 @@ abstract class PhDOptionParser
         $opts = $this->getOptionList();
         $args = getopt(implode("", array_values($opts)), array_keys($opts));
         if ($args === false) {
-            trigger_error("Something happend with getopt(), please report a bug", E_USER_ERROR);
+            trigger_error("Something happened with getopt(), please report a bug", E_USER_ERROR);
         }
 
         foreach ($args as $k => $v) {
@@ -132,7 +132,7 @@ abstract class PhDOptionParser
                 call_user_func($handler, $k, $v);
             } else {
                 var_dump($k, $v);
-                trigger_error("Hmh, something weird has happend, I don't know this option", E_USER_ERROR);
+                trigger_error("Hmh, something weird has happened, I don't know this option", E_USER_ERROR);
             }
         }
     }
