@@ -85,22 +85,22 @@ function phd_bool($val) {
     }
 
     switch ($val) {
-    case "on":
-    case "yes":
-    case "true":
-    case "1":
-        return true;
-        break;
+        case "on":
+        case "yes":
+        case "true":
+        case "1":
+            return true;
+            break;
 
-    case "off":
-    case "no":
-    case "false":
-    case "0":
-        return false;
-        break;
+        case "off":
+        case "no":
+        case "false":
+        case "0":
+            return false;
+            break;
 
-    default:
-        return null;
+        default:
+            return null;
     }
 }
 /* }}} */
