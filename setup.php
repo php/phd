@@ -13,6 +13,6 @@ if ($ROOT == "@php_dir"."@/phd") {
 /* }}} */
 
 require_once $ROOT . "/config.php";
-require_once $ROOT . "/include/PhDCompileOptions.class.php";
+require_once $ROOT . "/include/PhDSetupOptions.class.php";
 
 ?>

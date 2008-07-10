@@ -13,10 +13,10 @@ if ($ROOT == "@php_dir"."@/phd") {
 }
 /* }}} */
 
-require_once ($ROOT . "/config.php");
+require_once $ROOT . "/config.php";
+require_once $ROOT . "/include/PhDRenderOptions.class.php";
 
-(include $ROOT . "/include/PhDRenderOptions.class.php")
-    && is_array(PhDConfig::output_theme())
+is_array(PhDConfig::output_theme())
     or trigger_error("Invalid configuration. This should never happen, was config.php edited manually? Please re-run phd-setup.", E_USER_ERROR);
 
 /* If no docbook file was passed, die */
