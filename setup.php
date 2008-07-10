@@ -1,7 +1,7 @@
 #!@php_bin@
 <?php
 /*  $Id$ */
-$base_revision = '$Rev$';
+$base_revision = '$Revision$';
 
 /* {{{ Find the $ROOT directory of PhD. @php_dir@ will be replaced by the PEAR
        package manager. If for some reaosn this hasn't happened, fallback to the
