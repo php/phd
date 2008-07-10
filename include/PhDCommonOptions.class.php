@@ -80,9 +80,12 @@ abstract class PhDCommonOptionsParser extends PhDOptionParser
     
     public function option_version($k, $v)
     {
-        printf("%s\n", $this->getTitleText());
-        printf("PhD version: %s\n", PHD_VERSION);
-        printf("Copyright (c) 2008 The PHP Documentation Group\n");
+        $color = PhDConfig::phd_info_color();
+        $output = PhDConfig::phd_info_output();
+        $rev = preg_replace('/\$Re[v](: ([\d.]+) ?)?\$$/e', "'\\1' == '' ? '??' : '\\2'", $GLOBALS['base_revision']);
+        fprintf($output, "%s\n", term_color($this->getTitleText(), $color));
+        fprintf($output, "%s\n", term_color("PhD Version: " . PHD_VERSION . " (" . $rev . ")", $color));
+        fprintf($output, "%s\n", term_color("Copyright(c) 2008 The PHP Documentation Group", $color));
         exit(0);
     }
     
