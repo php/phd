@@ -10,53 +10,12 @@ class PhDRenderOptionsParser extends PhDCommonOptionsParser
     public function getOptionList()
     {
         return array_merge(parent::getOptionList(), array(
-            "format:"   => "f:",        // The format to render (xhtml, pdf...)
-            "theme:"    => "t:",        // The theme to render (phpweb, bightml..)
             "index:"    => "i:",        // Re-index or load from cache
             "docbook:"  => "d:",        // The Docbook XML file to render from (.manual.xml)
             "output:"   => "o:",        // The output directory
             "partial:"  => "p:",        // The ID to render (optionally ignoring its children)
             "skip:"     => "s:",        // The ID to skip (optionally skipping its children too)
-            "list::"    => "l::",       // List supported themes/formats
         ));
-    }
-    
-    public function option_f($k, $v)
-    {
-        $this->option_format($k, $v);
-    }
-    public function option_format($k, $v)
-    {
-        if ($v != "xhtml") {
-            trigger_error("Only xhtml is supported at this time", E_USER_ERROR);
-        }
-    }
-    
-    public function option_t($k, $v)
-    {
-        $this->option_theme($k, $v);
-    }
-    public function option_theme($k, $v)
-    {
-        /* Remove the default themes */
-        $themes = PhDConfig::output_theme();
-        $themes['xhtml']['php'] = array();
-
-        foreach((array)$v as $i => $val) {
-            switch($val) {
-                case "phpweb":
-                case "chunkedhtml":
-                case "bightml":
-                case "chmsource":
-                    if (!in_array($val, $themes["xhtml"]["php"])) {
-                        $themes["xhtml"]["php"][] = $val;
-                    }
-                    break;
-                default:
-                    trigger_error(sprintf("Unknown theme '%s'", $val), E_USER_ERROR);
-            }
-        }
-        PhDConfig::set_output_theme($themes);
     }
     
     public function option_i($k, $v)
@@ -153,66 +112,6 @@ class PhDRenderOptionsParser extends PhDCommonOptionsParser
         PhDConfig::set_skip_ids($skip_ids);
     }
     
-    public function option_l($k, $v)
-    {
-        $this->option_list($k, $v);
-    }
-    public function option_list($k, $v)
-    {
-        static $formatList = NULL;
-        static $themeList = NULL;
-        
-        if (is_null($formatList)) {
-            $formatList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/formats/*.php") as $item) {
-                $formatList[] = substr(basename($item), 0, -4);
-            }
-        }
-        if (is_null($themeList)) {
-            $themeList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/themes/*", GLOB_ONLYDIR) as $item) {
-                if (!in_array(basename($item), array('CVS', '.', '..'))) {
-                    $maintheme = basename($item);
-                    $subthemes = array();
-                    foreach (glob($item . "/*.php") as $subitem) {
-                        $subthemes[] = substr(basename($subitem), 0, -4);
-                    }
-                    $themeList[$maintheme] = $subthemes;
-                }
-            }
-        }
-        
-        if ($v === false) {
-            $v = array('f', 't');
-        }
-        
-        foreach((array)$v as $val) {
-            switch($val) {
-                case "f":
-                case "format":
-                case "formats": {
-                    echo "Supported formats:\n";
-                    echo "\t" . implode("\n\t", $formatList) . "\n";
-                    break;
-                }
-
-                case "t":
-                case "theme":
-                case "themes":
-                    echo "Supported themes:\n";
-                    foreach ($themeList as $theme => $subthemes) {
-                        echo "\t" . $theme . "\n\t\t" . implode("\n\t\t", $subthemes) . "\n";
-                    }
-                    break;
-
-                default:
-                    echo "Unknown list type '$val'\n";
-                    break;
-            }
-        }
-        exit(0);
-    }
-    
     protected function getTitleText()
     {
         return "PhD Renderer";
@@ -221,10 +120,6 @@ class PhDRenderOptionsParser extends PhDCommonOptionsParser
     protected function getHelpText()
     {
         return <<<'ENDBLOB'
-  -f <formatname>
-  --format <formatname>      The build format to use
-  -t <themename>
-  --theme <themename>        The theme to use
   -i <bool>
   --index <bool>             Index before rendering (default) or load from cache (false)
   -d <filename>
@@ -233,10 +128,8 @@ class PhDRenderOptionsParser extends PhDCommonOptionsParser
   --partial <id[=bool]>      The ID to render, optionally skipping its children chunks (default to true; render children)
   -s <id[=bool]>
   --skip <id[=bool]>         The ID to skip, optionally skipping its children chunks (default to true; skip children)
-  -l <formats/themes>
-  --list <formats/themes>    Print out the supported formats/themes (default: both)
   -o <directory>
-  --output <directory>       The output directory (default: .)
+  --output <directory>       The output directory for final generated files (default: .)
 ENDBLOB;
     }
 }
