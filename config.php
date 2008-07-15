@@ -35,7 +35,9 @@ class PhDConfig
         'skip_ids' => array(
         ),
         'color_output' => false,
+        'source_dir' => '.',
         'output_dir' => '.',
+        'intermediate_output_dir' => '.',
         'php_error_output' => NULL,
         'php_error_color' => false,
         'user_error_output' => NULL,
@@ -65,18 +67,6 @@ class PhDConfig
 PhDConfig::set_php_error_output(STDERR);
 PhDConfig::set_user_error_output(STDERR);
 PhDConfig::set_phd_info_output(STDOUT);
-
-/* {{{ Workaround/fix for Windows prior to PHP5.3 */
-if (!function_exists("getopt")) {
-    function getopt($short, $long) {
-        global $argv;
-        printf("I'm sorry, you are running an operating system that does not support getopt()\n");
-        printf("Please either upgrade to PHP5.3 or try '%s /path/to/your/docbook.xml'\n", $argv[0]);
-
-        return array();
-    }
-}
-/* }}} */
 
 /* {{{ phd_bool($var) Returns boolean true/false on success, null on failure */
 function phd_bool($val) {

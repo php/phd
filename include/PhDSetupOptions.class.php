@@ -11,8 +11,7 @@ class PhDSetupOptionsParser extends PhDCommonOptionsParser
             "format:"   => "f:",        // The format to render (xhtml, pdf...)
             "theme:"    => "t:",        // The theme to render (phpweb, bightml..)
             "list::"    => "l::",       // List supported themes/formats
-            "source:"   => "s:",        // Input phpdoc checkout
-            "output:"   => "o:",        // Output directory or file
+            "output:"   => "o:",        // Intermediate output directory
         ));
     }
     
@@ -26,7 +25,7 @@ class PhDSetupOptionsParser extends PhDCommonOptionsParser
             trigger_error("Only a single output location can be supplied", E_USER_ERROR);
         }
         @mkdir($v, 0777, true);
-        if (!is_dir($v) || !is_readable($v)) {
+        if (!is_dir($v) || !is_readable($v) || !is_writable($v)) {
             trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
         }
         PhDConfig::set_intermediate_output_dir($v);
@@ -138,8 +137,6 @@ class PhDSetupOptionsParser extends PhDCommonOptionsParser
     protected function getHelpText()
     {
         return <<<'ENDBLOB'
-  -s <directory>
-  --source <directory>       The source documentation checkout (default: .)
   -o <directory>
   --output <directory>       The output directory for intermediate build files (default: .)
   -f <formatname>

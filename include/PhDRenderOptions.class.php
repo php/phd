@@ -14,7 +14,7 @@ class PhDRenderOptionsParser extends PhDCommonOptionsParser
             "docbook:"  => "d:",        // The Docbook XML file to render from (.manual.xml)
             "output:"   => "o:",        // The output directory
             "partial:"  => "p:",        // The ID to render (optionally ignoring its children)
-            "skip:"     => "s:",        // The ID to skip (optionally skipping its children too)
+            "skip:"     => "k:",        // The ID to skip (optionally skipping its children too)
         ));
     }
     
@@ -90,7 +90,7 @@ class PhDRenderOptionsParser extends PhDCommonOptionsParser
         PhDConfig::set_render_ids($render_ids);
     }
     
-    public function option_s($k, $v)
+    public function option_k($k, $v)
     {
         $this->option_skip($k, $v);
     }

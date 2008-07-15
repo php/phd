@@ -3,24 +3,38 @@
 
 /* {{{ PhD error & message handler */
 
-// FC For PHP5.3
-if (!defined("E_DEPRECATED")) {
-    define("E_DEPRECATED",               E_RECOVERABLE_ERROR           << 1);
+$error_map = array(
+    E_RECOVERABLE_ERROR             => 'PHP Error',
+    E_WARNING                       => 'PHP Warning',
+    E_NOTICE                        => 'PHP Notice',
+    E_STRICT                        => 'PHP Strict Standards Warning',
+    E_DEPRECATED                    => 'PHP Deprecated Construct Warning',
+    E_USER_ERROR                    => 'User Error',
+    E_USER_WARNING                  => 'User Warning',
+    E_USER_NOTICE                   => 'User Notice',
+);
+
+function define_error($name, $explanation) {
+    static $lastErrorValue = E_DEPRECATED;
+    
+    define($name, $lastErrorValue <<= 1);
+    $GLOBALS['error_map'][$lastErrorValue] = $explanation;
 }
 
 // PhD verbose flags
-define('VERBOSE_INDEXING',               E_DEPRECATED                  << 1);
-define('VERBOSE_FORMAT_RENDERING',       VERBOSE_INDEXING              << 1);
-define('VERBOSE_THEME_RENDERING',        VERBOSE_FORMAT_RENDERING      << 1);
-define('VERBOSE_RENDER_STYLE',           VERBOSE_THEME_RENDERING       << 1);
-define('VERBOSE_PARTIAL_READING',        VERBOSE_RENDER_STYLE          << 1);
-define('VERBOSE_PARTIAL_CHILD_READING',  VERBOSE_PARTIAL_READING       << 1);
-define('VERBOSE_TOC_WRITING',            VERBOSE_PARTIAL_CHILD_READING << 1);
-define('VERBOSE_CHUNK_WRITING',          VERBOSE_TOC_WRITING           << 1);
-define('VERBOSE_NOVERSION',              VERBOSE_CHUNK_WRITING         << 1);
+define_error('VERBOSE_INDEXING',               'PhD Indexer');
+define_error('VERBOSE_FORMAT_RENDERING',       'PhD Output Format');
+define_error('VERBOSE_THEME_RENDERING',        'PhD Output Theme');
+define_error('VERBOSE_RENDER_STYLE',           'PhD Rendering Style');
+define_error('VERBOSE_PARTIAL_READING',        'PhD Partial Reader');
+define_error('VERBOSE_PARTIAL_CHILD_READING',  'PhD Partial Child Reader');
+define_error('VERBOSE_TOC_WRITING',            'PhD TOC Writer');
+define_error('VERBOSE_CHUNK_WRITING',          'PhD Chunk Writer');
+define_error('VERBOSE_NOVERSION',              'Missing Version Information');
+define_error('VERBOSE_DONE',                   'PhD Processing Completion');
 
-define('VERBOSE_ALL',                    (VERBOSE_NOVERSION            << 1)-1);
-define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION)));
+define('VERBOSE_ALL',                          (VERBOSE_NOVERSION            << 1)-1);
+define('VERBOSE_DEFAULT',                      (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION|VERBOSE_DONE)));
 
 $olderrrep = error_reporting();
 error_reporting($olderrrep | VERBOSE_DEFAULT);
@@ -47,27 +61,6 @@ function term_color($text, $color)
 
 /* {{{ The PhD errorhandler */
 function errh($errno, $msg, $file, $line, $ctx = null) {
-    static $err = array(
-        E_DEPRECATED                  => 'E_DEPRECATED',
-        E_RECOVERABLE_ERROR           => 'E_RECOVERABLE_ERROR',
-        E_STRICT                      => 'E_STRICT',
-        E_WARNING                     => 'E_WARNING',
-        E_NOTICE                      => 'E_NOTICE',
-
-        E_USER_ERROR                  => 'E_USER_ERROR',
-        E_USER_WARNING                => 'E_USER_WARNING',
-        E_USER_NOTICE                 => 'E_USER_NOTICE',
-
-        VERBOSE_INDEXING              => 'VERBOSE_INDEXING',
-        VERBOSE_FORMAT_RENDERING      => 'VERBOSE_FORMAT_RENDERING',
-        VERBOSE_THEME_RENDERING       => 'VERBOSE_THEME_RENDERING',
-        VERBOSE_RENDER_STYLE          => 'VERBOSE_RENDER_STYLE',
-        VERBOSE_PARTIAL_READING       => 'VERBOSE_PARTIAL_READING',
-        VERBOSE_PARTIAL_CHILD_READING => 'VERBOSE_PARTIAL_CHILD_READING',
-        VERBOSE_TOC_WRITING           => 'VERBOSE_TOC_WRITING',
-        VERBOSE_CHUNK_WRITING         => 'VERBOSE_CHUNK_WRITING',
-        VERBOSE_NOVERSION             => 'VERBOSE_NOVERSION',
-    );
     static $recursive = false;
 
     // Respect the error_reporting setting
@@ -93,6 +86,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         case VERBOSE_TOC_WRITING:
         case VERBOSE_CHUNK_WRITING:
         case VERBOSE_NOVERSION:
+        case VERBOSE_DONE:
             $color = PhDConfig::phd_info_color();
             $output = PhDConfig::phd_info_output();
             $data = $msg;
@@ -123,7 +117,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
             return false;
     }
     
-    $timestamp = term_color(sprintf("[%s - %s]", $time, $err[$errno]), $color);
+    $timestamp = term_color(sprintf("[%s - %s]", $time, $GLOBALS['error_map'][$errno]), $color);
     fprintf($output, "%s %s\n", $timestamp, $data);
 
     // Abort on fatal errors

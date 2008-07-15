@@ -11,6 +11,7 @@ abstract class PhDCommonOptionsParser extends PhDOptionParser
     public function getOptionList()
     {
         return array(
+            "source:"   => "s:",        // Input data
             "color:"    => "c:",        // Use color output if possible
             "verbose:"  => "v",         // Adjust the verbosity level
             "version"   => "V",         // Print out version information
@@ -18,6 +19,21 @@ abstract class PhDCommonOptionsParser extends PhDOptionParser
         );
     }
     
+    public function option_s($k, $v)
+    {
+        $this->option_source($k, $v);
+    }
+    public function option_source($k, $v)
+    {
+        if (is_array($v)) {
+            trigger_error("Only a single input location can be supplied", E_USER_ERROR);
+        }
+        if (!is_dir($v) || !is_readable($v)) {
+            trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
+        }
+        PhDConfig::set_source_dir($v);
+    }
+
     public function option_v($k, $v)
     {
         if ($k[0] === 'V') {
@@ -101,6 +117,8 @@ abstract class PhDCommonOptionsParser extends PhDOptionParser
 Copyright (c) 2008 The PHP Documentation Group
 
 {$this->getHelpText()}  
+  -s <directory>
+  --source <directory>       The source documentation checkout or build area (default: .)
   -v
   --verbose <int>            Adjusts the verbosity level
   -c <bool>
