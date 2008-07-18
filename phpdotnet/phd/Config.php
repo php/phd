@@ -11,6 +11,7 @@ class PhDConfig
         'output_format' => array(
             'xhtml',
             'manpage',
+            'pdf',
         ),
         'output_theme' => array(
             'xhtml' => array(
@@ -25,6 +26,10 @@ class PhDConfig
                 'php' => array(
                     'phpfunctions',
                 ),
+            ),
+            'pdf' => array(
+                'php' => array(
+                 ),
             ),
         ),
         'chunk_extra' => array(

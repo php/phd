@@ -35,12 +35,13 @@ class PhDBuildOptionsParser extends PhDOptionParser
             switch($val) {
                 case "xhtml":
                 case "manpage":
+                case "pdf":
                     if (!in_array($val, $formats)) {
                         $formats[] = $val;
                     }
                     break;
                 default:
-                    trigger_error("Only xhtml and manpage are supported at this time", E_USER_ERROR);
+                    trigger_error("Only xhtml, pdf and manpage are supported at this time", E_USER_ERROR);
             }
         }
         PhDConfig::set_output_format($formats);
@@ -70,6 +71,12 @@ class PhDBuildOptionsParser extends PhDOptionParser
                 case "phpfunctions":
                     if (!in_array($val, $themes["manpage"]["php"])) {
                         $themes["manpage"]["php"][] = $val;
+                    }
+                    break;
+                case "phppdf":
+                case "phpbigpdf":
+                    if (!in_array($val, $themes["pdf"]["php"])) {
+                        $themes["pdf"]["php"][] = $val;
                     }
                     break;
                 case "pear":
