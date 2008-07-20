@@ -54,6 +54,7 @@ class phppdf extends PhDTheme {
                 'set'           => false,
             ),
         ),
+        'type'                  => 'format_type_text',
     );
     
     
@@ -167,4 +168,52 @@ class phppdf extends PhDTheme {
             }
         }
     }    
+    
+    public function format_type_text($type, $tagname) {
+        $type = trim(ereg_replace( "[ \n\t]+", ' ', $type));
+        $t = strtolower($type);
+        $href = $fragment = "";
+
+        switch($t) {
+        case "bool":
+            $href = "language.types.boolean";
+            break;
+        case "int":
+            $href = "language.types.integer";
+            break;
+        case "double":
+            $href = "language.types.float";
+            break;
+        case "boolean":
+        case "integer":
+        case "float":
+        case "string":
+        case "array":
+        case "object":
+        case "resource":
+        case "null":
+            $href = "language.types.$t";
+            break;
+        case "mixed":
+        case "number":
+        case "callback":
+            $href = "language.pseudo-types";
+            $fragment = "language.types.$t";
+            break;
+        default:
+            /* Check if its a classname. */
+            $href = PhDTheme::getFilename("class.$t");
+        }
+
+        $this->format->getPdfDoc()->setFont(PdfWriter::FONT_NORMAL, 12, array(0, 0, 1)); // blue
+        $linkAreas = $this->format->getPdfDoc()->add(PdfWriter::LINK_ANNOTATION, $type);
+        $linksToResolve = $this->format->getChunkInfo("links-to-resolve");
+        if (!isset($linksToResolve[$href]))
+            $linksToResolve[$href] = array();
+        foreach ($linkAreas as $area)
+            $linksToResolve[$href][] = $area;
+        $this->format->setChunkInfo("links-to-resolve", $linksToResolve);
+        $this->format->getPdfDoc()->revertFont();
+        return '';
+    }
 }
