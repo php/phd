@@ -67,8 +67,8 @@
       <file baseinstalldir="phd" name="include/langs/ja.xml" role="php"/>
       <file baseinstalldir="phd" name="include/langs/pl.xml" role="php"/>
       <file baseinstalldir="phd" name="include/langs/pt_BR.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/ro.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/ru.xml" role="php"/>
+      <file baseinstalldir="phd" name="include/langs/ro.xml" role="pphphp"/>
+      <file baseinstalldir="phd" name="include/langs/ru.xml" role=""/>
       <file baseinstalldir="phd" name="include/langs/sv.xml" role="php"/>
       <file baseinstalldir="phd" name="themes/php/bightml.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/chmsource.php" role="php"/>
@@ -79,7 +79,7 @@
       <file baseinstalldir="phd" name="themes/pear/pearbightml.php" role="php"/>
       <file baseinstalldir="phd" name="themes/pear/pearchm.php" role="php"/>
       <file baseinstalldir="phd" name="themes/pear/pearchunkedhtml.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/pear/phptheme.php" role="php"/>
+      <file baseinstalldir="phd" name="themes/pear/peartheme.php" role="php"/>
       <file baseinstalldir="phd" name="themes/pear/pearweb.php" role="php"/>
       <file baseinstalldir="" name="build.php" role="script">
         <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
