@@ -28,6 +28,12 @@
     <email>gwynne@php.net</email>
     <active>yes</active>
   </developer>
+  <developer>
+    <name>Rudy Nappee</name>
+    <user>loudi</user>
+    <email>loudi@php.net</email>
+    <active>yes</active>
+  </developer>
 
   <date>2008-05-24</date>
   <version>
@@ -40,6 +46,8 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+    - Added CHM output format. (Rudy)
+    - Added support for phpdoc:exception. (Hannes)
   </notes>
 
   <contents>
