@@ -68,6 +68,7 @@ abstract class phpdotnet extends PhDTheme {
         'preface'               => 'format_chunk',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
+        'phpdoc:exception'      => 'format_exception_chunk',
         'sect1'                 => 'format_chunk',
         'sect2'                 => 'format_chunk',
         'sect3'                 => 'format_chunk',
@@ -406,6 +407,10 @@ abstract class phpdotnet extends PhDTheme {
         
         return $content;
     }
+    public function format_exception_chunk($open, $name, $attrs, $props) {
+        return $this->format_container_chunk($open, "reference", $attrs, $props);
+    }
+
     public function format_container_chunk_title($open, $name, $attrs) {
         if ($open) {
             return "<h1>";

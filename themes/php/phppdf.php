@@ -31,6 +31,7 @@ class phppdf extends PhDTheme {
         'preface'               => 'format_tocnode_newpage',
         'refentry'              => 'format_tocnode_newpage',
         'reference'             => 'format_tocnode_newpage',
+        'phpdoc:exception'      => 'format_exception_chunk',
         'sect1'                 => 'format_tocnode',
         'sect2'                 => 'format_tocnode',
         'sect3'                 => 'format_tocnode',
@@ -141,7 +142,10 @@ class phppdf extends PhDTheme {
     
     public function format_tocnode_newpage($open, $name, $attrs, $props) {
         return $this->format_tocnode($open, $name, $attrs, $props, true);
-    }    
+    }
+    public function format_exception_chunk($open, $name, $attrs, $props) {
+        return $this->format_tocnode_newpage($open, "reference", $attrs, $props);
+    }
     
     // Convert the function name to a Unix valid filename
     protected function toValidName($functionName) {

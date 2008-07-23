@@ -47,6 +47,10 @@ class phpkdevelop extends PhDTheme {
             /* DEFAULT */          false,
             'book'              => 'format_tocsect2',
         ),
+        'phpdoc:exception'      => array(
+            /* DEFAULT */          false,
+            'book'              => 'format_tocsect2',
+        ),
         'refentry'              => 'format_refentry',
         'refname'               => 'format_suppressed_tags',
         'refpurpose'            => 'format_suppressed_tags',

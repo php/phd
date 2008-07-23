@@ -34,6 +34,7 @@ class PhDConfig
         ),
         'chunk_extra' => array(
             "legalnotice" => true,
+            "phpdoc:exception" => true,
         ),
         'index' => true,
         'xml_root' => '.',

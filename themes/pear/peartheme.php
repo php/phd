@@ -98,6 +98,7 @@ abstract class peartheme extends PhDTheme {
         'replaceable'           => 'format_replaceable',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
+        'phpdoc:reference'      => 'format_exception_chunk',
         'refname'               => 'h1',
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
@@ -269,6 +270,10 @@ abstract class peartheme extends PhDTheme {
             return "<div class=\"{$name}\" id=\"{$id}\">";
         }
         return "</div>\n";
+    }
+
+    public function format_exception_chunk($open, $name, $attrs, $props) {
+        return $this->format_container_chunk($open, "reference", $attrs, $props);
     }
     
     public function format_root_chunk($open, $name, $attrs, $props) {
