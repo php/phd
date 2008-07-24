@@ -3,7 +3,7 @@
 
 require $ROOT . "/include/PhDErrors.php";
 
-define("PHD_VERSION", "0.3.0-dev");
+define("PHD_VERSION", "0.4.0-dev");
 
 class PhDConfig
 {
