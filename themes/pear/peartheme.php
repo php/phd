@@ -98,7 +98,7 @@ abstract class peartheme extends PhDTheme {
         'replaceable'           => 'format_replaceable',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
-        'phpdoc:reference'      => 'format_exception_chunk',
+        'phpdoc:exception'      => 'format_exception_chunk',
         'refname'               => 'h1',
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
