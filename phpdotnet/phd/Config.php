@@ -127,7 +127,7 @@ define("PHD_VERSION", "0.2.5-dev");
 
 /* {{{ Default $OPTIONS */
 $OPTIONS = array (
-  'output_format' => array('xhtml'),
+  'output_format' => array('xhtml', /* 'manpage' */ ),
   'output_theme' => array(
     'xhtml' => array(
       'php' => array(
@@ -135,6 +135,12 @@ $OPTIONS = array (
         'chunkedhtml',
         'bightml',
         'chmsource',
+        /* 'phpkdevelop', */
+      ),
+    ),
+    'manpage' => array(
+      'php' => array(
+        /* 'phpfunctions', */
       ),
     ),
   ),
@@ -265,9 +271,20 @@ foreach($args as $k => $v) {
     /* {{{ Build format */
     case "f":
     case "format":
-        if ($v != "xhtml") {
-            trigger_error("Only xhtml is supported at this time", E_USER_ERROR);
+        $formats = array();
+        foreach((array)$v as $i => $val) {
+            switch($val) {
+                case "xhtml":
+                case "manpage":
+                    if (!in_array($val, $formats)) {
+                        $formats[] = $val;
+                    }
+                    break;
+                default:
+                    trigger_error("Only xhtml and manpage are supported at this time", E_USER_ERROR);
+            }
         }
+        $OPTIONS["output_format"] = $formats;       
         break;
     /* }}} */
 
@@ -297,16 +314,21 @@ foreach($args as $k => $v) {
             case "formats":
                 echo "Supported formats:\n";
                 echo "\txhtml\n";
+                echo "\tmanpage\n";
                 break;
 
             case "t":
             case "theme":
             case "themes":
                 echo "Supported themes:\n";
-                echo "\tphpweb\n";
-                echo "\tchunkedhtml\n";
-                echo "\tbightml\n";
-                echo "\tchmsource\n";
+                echo "\txhtml:\n";
+                echo "\t\tphpweb\n";
+                echo "\t\tchunkedhtml\n";
+                echo "\t\tbightml\n";
+                echo "\t\tchmsource\n";
+                echo "\t\phpkdevelop\n";
+                echo "\tmanpage:\n";
+                echo "\t\tphpfunctions\n";
                 break;
 
             default:
@@ -316,11 +338,16 @@ foreach($args as $k => $v) {
             case false:
                 echo "Supported formats:\n";
                 echo "\txhtml\n";
+                echo "\tmanpage\n";
                 echo "Supported themes:\n";
-                echo "\tphpweb\n";
-                echo "\tchunkedhtml\n";
-                echo "\tbightml\n";
-                echo "\tchmsource\n";
+                echo "\txhtml:\n";
+                echo "\t\tphpweb\n";
+                echo "\t\tchunkedhtml\n";
+                echo "\t\tbightml\n";
+                echo "\t\tchmsource\n";
+                echo "\t\phpkdevelop\n";
+                echo "\tmanpage:\n";
+                echo "\t\tphpfunctions\n";
                 break;
             }
         }
@@ -376,8 +403,14 @@ foreach($args as $k => $v) {
             case "chunkedhtml":
             case "bightml":
             case "chmsource":
+            case "phpkdevelop":
                 if (!in_array($val, $OPTIONS["output_theme"]["xhtml"]["php"])) {
                     $OPTIONS["output_theme"]["xhtml"]["php"][] = $val;
+                }
+                break;
+            case "phpfunctions":
+                if (!in_array($val, $OPTIONS["output_theme"]["manpage"]["php"])) {
+                    $OPTIONS["output_theme"]["manpage"]["php"][] = $val;
                 }
                 break;
             default:

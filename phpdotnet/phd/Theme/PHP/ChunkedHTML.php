@@ -33,8 +33,8 @@ HEADER;
 
         $nav = <<< NAV
 <div style="text-align: center;">
- <div class="prev" style="float: left;"><a href="{$prev[0]}">{$prev[1]}</a></div>
- <div class="next" style="float: right;"><a href="{$next[0]}">{$next[1]}</a></div>
+ <div class="prev" style="text-align: left; float: left;"><a href="{$prev[0]}">{$prev[1]}</a></div>
+ <div class="next" style="text-align: right; float: right;"><a href="{$next[0]}">{$next[1]}</a></div>
  <div class="up"><a href="{$up[0]}">{$up[1]}</a></div>
  <div class="home"><a href="index.html">PHP Manual</a></div>
 </div>
