@@ -538,6 +538,6 @@ class ManpagePhDFormat extends PhDFormat {
     
     // Convert the function name to a Unix valid filename
     public function toValidName($functionName) {
-        return str_replace(array("::", "->"), array(".", "."), $functionName);
+        return str_replace(array("::", "->", "()"), array(".", ".", ""), $functionName);
     }
 }
