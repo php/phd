@@ -123,7 +123,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
 set_error_handler("errh");
 /* }}} */
 
-define("PHD_VERSION", "0.3.0");
+define("PHD_VERSION", "0.3.1-dev");
 
 /* {{{ Default $OPTIONS */
 $OPTIONS = array (
