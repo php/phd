@@ -123,7 +123,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
 set_error_handler("errh");
 /* }}} */
 
-define("PHD_VERSION", "0.2.5-dev");
+define("PHD_VERSION", "0.3.0");
 
 /* {{{ Default $OPTIONS */
 $OPTIONS = array (
@@ -326,7 +326,7 @@ foreach($args as $k => $v) {
                 echo "\t\tchunkedhtml\n";
                 echo "\t\tbightml\n";
                 echo "\t\tchmsource\n";
-                echo "\t\phpkdevelop\n";
+                echo "\t\tphpkdevelop\n";
                 echo "\tmanpage:\n";
                 echo "\t\tphpfunctions\n";
                 break;
@@ -345,7 +345,7 @@ foreach($args as $k => $v) {
                 echo "\t\tchunkedhtml\n";
                 echo "\t\tbightml\n";
                 echo "\t\tchmsource\n";
-                echo "\t\phpkdevelop\n";
+                echo "\t\tphpkdevelop\n";
                 echo "\tmanpage:\n";
                 echo "\t\tphpfunctions\n";
                 break;
