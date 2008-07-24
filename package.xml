@@ -47,7 +47,7 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Added CHM output format. (Rudy)
-    - Added KDevelop (Index & Table of contents) output theme. (Rudy)
+    - Added KDevelop (Index &amp; Table of contents) output theme. (Rudy)
     - Added Man page output format. (Rudy)
     - Added support for phpdoc:exception. (Hannes)
   </notes>
