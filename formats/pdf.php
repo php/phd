@@ -3,9 +3,12 @@
 class PDFPhDFormat extends PhDFormat {
     protected $elementmap = array( /* {{{ */
         'abstract'              => 'format_suppressed_tags',
+        'abbrev'                => 'format_suppressed_tags',
         'acronym'               => 'format_suppressed_tags',
 //        'article'               => false,
 //        'appendix'              => false,
+        'alt'                   => 'format_suppressed_tags',
+        'application'           => 'format_suppressed_tags',
         'author'                => array(
             /* DEFAULT */          'format_newline',
             'authorgroup'       => 'format_authorgroup_author',
@@ -13,16 +16,19 @@ class PDFPhDFormat extends PhDFormat {
         'authorgroup'           => 'format_shifted_para',
         'blockquote'            => 'format_framed_block',
         'book'                  => 'format_suppressed_tags',
-        'classsynopsis'         => 'format_para',
+        'callout'               => 'format_callout',
+        'calloutlist'           => 'format_calloutlist',
         'caution'               => 'format_admonition',
 //        'chapter'               => false,
+        'citerefentry'          => 'format_suppressed_tags',
         'classname'             => array(
             /* DEFAULT */          'format_suppressed_tags',
             'ooclass'           => array(
                 /* DEFAULT */      'format_bold',
-//                'classsynopsisinfo' => false,
+                'classsynopsisinfo' => false,
             ),
         ),
+        'co'                    => 'format_co',
         'command'               => 'format_italic',
         'computeroutput'        => 'format_suppressed_tags',
         'constant'              => 'format_bold',
@@ -32,12 +38,20 @@ class PDFPhDFormat extends PhDFormat {
         'example'               => 'format_example',
         'emphasis'              => 'format_italic',
         'envar'                 => 'format_suppressed_tags',
+        'errortype'             => 'format_suppressed_tags',
+        'figure'                => 'format_suppressed_tags',
         'filename'              => 'format_italic',
         'firstname'             => 'format_suppressed_tags',
         'formalpara'            => 'format_para',
+        'footnote'              => 'format_footnote',
+        'footnoteref'           => 'format_footnoteref',
         'funcdef'               => 'format_bold',
         'function'              => 'format_suppressed_tags',
+        'glossterm'             => 'format_suppressed_tags',
         'holder'                => 'format_suppressed_tags',
+        'index'                 => 'format_para',
+        'indexdiv'              => 'format_para',
+        'indexentry'            => 'format_shifted_line',
         'info'                  => 'format_suppressed_tags',
         'informalexample'       => 'format_para',
         'itemizedlist'          => 'format_shifted_para',
@@ -48,8 +62,8 @@ class PDFPhDFormat extends PhDFormat {
         ),
         'literal'               => 'format_italic',
         'literallayout'         => 'format_verbatim_inline',
+        'manvolnum'             => 'format_manvolnum',
         'member'                => 'format_member',
-        'methodname'            => 'format_bold',
         'note'                  => 'format_admonition',
         'option'                => 'format_italic',
         'optional'              => 'format_suppressed_tags',
@@ -58,20 +72,22 @@ class PDFPhDFormat extends PhDFormat {
         'othername'             => 'format_suppressed_tags',
         'para'                  => array(
             /* DEFAULT */          'format_para',
+            'callout'           => 'format_suppressed_tags',
             'listitem'          => 'format_suppressed_tags',
             'step'              => 'format_suppressed_tags',
-        ),
-        'parameter'             => array(
-            /* DEFAULT */          'format_italic',
-            'methodparam'       => 'format_foos',
         ),
 //        'part'                  => false,
         'partintro'             => 'format_para',
         'personname'            => 'format_suppressed_tags',
         'preface'               => 'format_suppressed_tags',
+        'primaryie'             => 'format_suppressed_tags',
         'procedure'             => 'format_procedure',
         'productname'           => 'format_suppressed_tags',
         'programlisting'        => 'format_verbatim_block',
+        'property'              => array(
+            /* DEFAULT */          'format_suppressed_tags',
+            'classsynopsisinfo' => 'format_italic',
+        ),
         'pubdate'               => 'format_para',
         'quote'                 => 'format_suppressed_tags',
         'refentrytitle'         => 'format_bold',
@@ -80,19 +96,29 @@ class PDFPhDFormat extends PhDFormat {
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
         'refsect1'              => 'format_suppressed_tags',
+        'refsection'            => 'format_refsection', // DUMMY REFSECTION DELETION
+        'refsynopsisdiv'        => 'format_para',
         'replaceable'           => 'format_italic',
         'screen'                => 'format_verbatim_block',
         'section'               => 'format_suppressed_tags',
+        'seg'                   => 'format_seg',
+        'segmentedlist'         => 'format_segmentedlist',
+        'seglistitem'           => 'format_seglistitem',
+        'segtitle'              => 'format_suppressed_tags',
         'set'                   => 'format_suppressed_tags',
         'simpara'               => array(
             /* DEFAULT */          'format_para',
+            'callout'           => 'format_suppressed_tags',
             'listitem'          => 'format_suppressed_tags',
             'step'              => 'format_suppressed_tags',
         ),
         'simplelist'            => 'format_shifted_para',
+        'subscript'             => 'format_indice',
+        'superscript'           => 'format_indice',
         'surname'               => 'format_suppressed_tags',
         'synopsis'              => 'format_verbatim_block',
         'systemitem'            => 'format_verbatim_inline',
+        'tag'                   => 'format_verbatim_inline',
         'term'                  => 'format_suppressed_tags',
         'title'                 => array(
             /* DEFAULT */          'format_title',
@@ -156,8 +182,40 @@ class PDFPhDFormat extends PhDFormat {
                 'tbody'         => 'format_entry',
             ),
         ),
-//        'footnote'              => 'format_footnote',
-//        'footnoteref'           => 'format_footnoteref',
+        // SYNOPSISES & OO STUFF
+//        'void'                  => 'format_void',
+        'methodname'            => 'format_bold',
+        'methodparam'           => 'format_methodparam',
+        'methodsynopsis'        => 'format_methodsynopsis',
+        'parameter'             => array(
+            /* DEFAULT */          'format_parameter',
+            'methodparam'       => 'format_methodparam_parameter',
+        ),
+        'interfacename'         => 'format_suppressed_tags',
+        'ooclass'               => array(
+            /* DEFAULT */          'format_suppressed_tags',
+            'classsynopsis'     => 'format_framed_para',
+        ),
+        'oointerface'           => array(
+            /* DEFAULT */          'format_suppressed_tags',
+            'classsynopsisinfo'    => 'format_classsynopsisinfo_oointerface',
+        ),
+        'classsynopsis'         => 'format_classsynopsis',
+        'classsynopsisinfo'     => 'format_classsynopsisinfo',
+        'fieldsynopsis'         => array(
+            /* DEFAULT */          'format_fieldsynopsis',
+            'entry'             => 'format_para',
+        ),
+        'modifier'              => 'format_suppressed_tags',
+        'constructorsynopsis'   => 'format_methodsynopsis',
+        'destructorsynopsis'    => 'format_methodsynopsis',
+        'initializer'           => 'format_initializer',
+        // FAQ
+        'qandaset'              => 'format_para',
+        'qandaentry'            => 'format_para',
+        'question'              => 'format_bold',
+        'answer'                => 'format_shifted_para',
+        
     ); /* }}} */
     
     protected $textmap = array(
@@ -166,6 +224,33 @@ class PDFPhDFormat extends PhDFormat {
         'quote'                 => 'format_quote_text',
         'refname'               => 'format_refname_text',
         'titleabbrev'           => 'format_suppressed_text',
+        'segtitle'              => 'format_segtitle_text',
+        'modifier'             => array(
+            /* DEFAULT */         false,
+            'fieldsynopsis'    => 'format_fieldsynopsis_modifier_text',
+        ),
+//        'classname'            => array(
+//            /* DEFAULT */         false,
+//            'ooclass'          => array(
+//                /* DEFAULT */     false,
+//                'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
+//            ),
+//        ),
+        'methodname'           => array(
+            /* DEFAULT */         false,
+            'constructorsynopsis' => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'methodsynopsis'    => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'destructorsynopsis' => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+        ),
     );
 
     protected $lang = "";
@@ -174,6 +259,7 @@ class PDFPhDFormat extends PhDFormat {
     protected $cchunk      = array();
     /* Default Chunk variables */
     protected $dchunk      = array(
+        "refsection"            => false,
         "examplenumber"         => 0,
         "href"                  => "",
         "is-xref"               => false,
@@ -184,20 +270,30 @@ class PDFPhDFormat extends PhDFormat {
         "refname"               => "",
         "table"                 => false,
         "verbatim-block"        => false,
-        
-        /*"appendlater"           => false,
-        "firstitem"             => false,
-        "buffer"                => array(),
-        "examplenumber"         => 0,
-        "methodsynopsis"        => array(
-            "params"            => array(),
-            "firstsynopsis"     => true,
+        "segmentedlist"         => array(
+            "seglistitem"       => 0,
+            "segtitle"          => array(
+            ),
         ),
-        "open"                  => false,
-        "ooclass"               => null,
-        "role"                  => null,
-        "segtitle"              => array(),
-        "segindex"              => 0,*/
+        "classsynopsis"         => array(
+            "close"             => false,
+            "classname"         => false,
+        ),
+        "classsynopsisinfo"     => array(
+            "implements"        => false,
+            "ooclass"           => false,
+        ),
+        "fieldsynopsis"         => array(
+            "modifier"          => "public",
+        ),
+        "footnote"              => array(
+        ),
+        "tablefootnotes"        => array(
+        ),
+        "footrefs"              => array(),
+        "co"                    => 0,
+        "corefs"                => array(),
+        "callouts"              => 0,
     );
     
     private $pdfDoc;
@@ -223,9 +319,9 @@ class PDFPhDFormat extends PhDFormat {
     }
     
     public function __call($func, $args) {
-//        if ($args[0]) {
-//            trigger_error("No mapper found for '{$func}'", E_USER_WARNING);
-//        }
+        if ($args[0]) {
+            trigger_error("No mapper found for '{$func}'", E_USER_WARNING);
+        }
         $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 14, array(1, 0, 0)); // Helvetica 14 red
         $this->pdfDoc->appendText(($args[0] ? "<" : "</") . $args[1] . ">");
         $this->pdfDoc->revertFont();
@@ -241,7 +337,10 @@ class PDFPhDFormat extends PhDFormat {
     }
 
     public function TEXT($str) {
-        if ($this->cchunk["verbatim-block"]) {
+        if (isset($this->cchunk["refsection"]) && $this->cchunk["refsection"]) // DUMMY REFSECTION DELETION
+            return "";
+            
+        if (isset($this->cchunk["verbatim-block"]) && $this->cchunk["verbatim-block"]) {
             $this->pdfDoc->appendText(utf8_decode($str));
             return "";
         }
@@ -276,12 +375,21 @@ class PDFPhDFormat extends PhDFormat {
         $this->cchunk = $this->dchunk;
     }
     
+    // DUMMY REFSECTION DELETION
+    public function format_refsection($open, $name, $attrs, $props) {
+        if ($open) {
+            $this->cchunk["refsection"] = true;
+        } else {
+            $this->cchunk["refsection"] = false;
+        }
+        return "";
+    }
+    
     public function format_para($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::PARA);
         } else {
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
-            $this->pdfDoc->revertFont();
         }
         return "";
     }
@@ -293,12 +401,22 @@ class PDFPhDFormat extends PhDFormat {
         } else {
             $this->pdfDoc->unshift();
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
-            $this->pdfDoc->revertFont();
+        }
+        return "";
+    }
+    
+    public function format_shifted_line($open, $name, $attrs, $props) {
+        if ($open) {
+            $this->pdfDoc->shift();
+            $this->pdfDoc->add(PdfWriter::LINE_JUMP);
+        } else {
+            $this->pdfDoc->unshift();
         }
         return "";
     }
     
     public function format_title($open, $name, $attrs, $props) {
+        if ($props["empty"]) return '';
         if ($open) {
             $this->pdfDoc->add(PdfWriter::TITLE);
         } else {
@@ -309,6 +427,7 @@ class PDFPhDFormat extends PhDFormat {
     }
     
     public function format_title2($open, $name, $attrs, $props) {
+        if ($props["empty"]) return '';
         if ($open) {
             $this->pdfDoc->add(PdfWriter::TITLE2);
         } else {
@@ -319,6 +438,7 @@ class PDFPhDFormat extends PhDFormat {
     }
 
     public function format_title3($open, $name, $attrs, $props) {
+        if ($props["empty"]) return '';
         if ($open) {
             $this->pdfDoc->add(PdfWriter::TITLE3);
         } else {
@@ -329,6 +449,7 @@ class PDFPhDFormat extends PhDFormat {
     }
     
     public function format_bold($open, $name, $attrs, $props) {
+        if ($props["empty"]) return '';
         if ($open) {
             $this->pdfDoc->setFont(PdfWriter::FONT_BOLD);
         } else {
@@ -338,6 +459,7 @@ class PDFPhDFormat extends PhDFormat {
     }
 
     public function format_italic($open, $name, $attrs, $props) {
+        if ($props["empty"]) return '';
         if ($open) {
             $this->pdfDoc->setFont(PdfWriter::FONT_ITALIC);
         } else {
@@ -370,7 +492,11 @@ class PDFPhDFormat extends PhDFormat {
     }
     
     public function format_example_title($open, $name, $attrs, $props) {
-        if ($open) {
+        if ($props["empty"]) {
+            $this->pdfDoc->appendText($this->autogen("example", $this->lang) .
+                $this->cchunk["examplenumber"]);
+            $this->pdfDoc->add(PdfWriter::ADMONITION_CONTENT);
+        } elseif ($open) {
             $this->pdfDoc->appendText($this->autogen("example", $this->lang) . 
                 $this->cchunk["examplenumber"] . " -");
         } else {
@@ -411,6 +537,17 @@ class PDFPhDFormat extends PhDFormat {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::FRAMED_BLOCK);
         } else {
+            $this->pdfDoc->add(PdfWriter::END_FRAMED_BLOCK);
+        }
+        return "";
+    }
+    
+    public function format_framed_para($open, $name, $attrs, $props) {
+        if ($open) {
+            $this->pdfDoc->add(PdfWriter::FRAMED_BLOCK);
+            $this->format_para($open, $name, $attrs, $props);
+        } else {
+            $this->format_para($open, $name, $attrs, $props);
             $this->pdfDoc->add(PdfWriter::END_FRAMED_BLOCK);
         }
         return "";
@@ -510,11 +647,11 @@ class PDFPhDFormat extends PhDFormat {
             $this->pdfDoc->appendText(utf8_decode("©"));
         } else {
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
-            $this->pdfDoc->revertFont();
         }
         return "";
     }
     
+    // Lists {{{
     public function format_listitem($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
@@ -548,6 +685,32 @@ class PDFPhDFormat extends PhDFormat {
         return "";
     }
     
+    public function format_segmentedlist($open, $name, $attrs, $props) {
+        $this->cchunk["segmentedlist"] = $this->dchunk["segmentedlist"];
+        return $this->format_para($open, $name, $attrs, $props);
+    }
+    
+    public function format_segtitle_text($value, $tag) {
+        $this->cchunk["segmentedlist"]["segtitle"][count($this->cchunk["segmentedlist"]["segtitle"])] = $value;
+        return '';
+    }
+    public function format_seglistitem($open, $name, $attrs) {
+        if ($open) {
+            $this->cchunk["segmentedlist"]["seglistitem"] = 0;
+        }
+        return '';
+    }
+    public function format_seg($open, $name, $attrs) {
+        if ($open) {
+            $this->pdfDoc->add(PdfWriter::LINE_JUMP);
+            $this->pdfDoc->setFont(PdfWriter::FONT_BOLD);
+            $this->pdfDoc->appendText($this->cchunk["segmentedlist"]["segtitle"][$this->cchunk["segmentedlist"]["seglistitem"]++].":");
+            $this->pdfDoc->revertFont();
+        }
+        return '';
+    }
+    // }}} Lists
+    
     // Tables {{{
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
@@ -555,6 +718,17 @@ class PDFPhDFormat extends PhDFormat {
         } else {
             $this->cchunk["table"] = false;
             $this->pdfDoc->add(PdfWriter::END_TABLE);
+            
+            if ($this->cchunk["tablefootnotes"]) {
+                $this->pdfDoc->add(PdfWriter::FRAMED_BLOCK);
+                $this->pdfDoc->add(PdfWriter::LINE_JUMP);
+                $this->pdfDoc->appendBufferNow();
+                foreach ($this->cchunk["footrefs"] as $ref)
+                    foreach ($ref as $area)
+                        $this->pdfDoc->resolveInternalLink($area[0], array($area[1], $area[2], $area[3], $area[4]), $this->pdfDoc->getCurrentPage());
+                $this->pdfDoc->add(PdfWriter::END_FRAMED_BLOCK, array(2)); // With Dash line
+                $this->cchunk["tablefootnotes"] = $this->dchunk["tablefootnotes"];
+            }
         }
         return "";
     }
@@ -636,7 +810,9 @@ class PDFPhDFormat extends PhDFormat {
             }
 
             $rowspan = PhDFormat::rowspan($dbattrs);
+//            $moreattrs = self::parse_table_entry_attributes($dbattrs);
             $this->pdfDoc->add(PdfWriter::TABLE_ENTRY, array($colspan, $rowspan, $align));
+//            return $retval. '<td colspan="' .((int)$colspan). '" rowspan="' .((int)$rowspan). '" ' .$moreattrs. '>';
         } else {
             $this->pdfDoc->add(PdfWriter::TABLE_END_ENTRY);            
         }
@@ -652,8 +828,298 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
     // }}} Tables
+    
+    // Synopsises {{{
+    public function format_methodsynopsis($open, $name, $attrs, $props) {
+        if ($open) {
+            $this->params = array("count" => 0, "opt" => 0, "content" => "");
+            return $this->format_para($open, $name, $attrs, $props);
+        }
+        $content = "";
+        if ($this->params["opt"]) {
+            $content = str_repeat(" ]", $this->params["opt"]);
+        }
+        $content .= " )";
+
+        $this->pdfDoc->appendText($content);
+        return $this->format_para($open, $name, $attrs, $props);
+    }
+    
+    public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
+        $value = $this->TEXT($value);
+        if ($this->cchunk["classsynopsis"]["classname"] === false) {
+            $this->pdfDoc->appendText($value);
+            return '';
+        }
+        if (strpos($value, '::')) {
+            $explode = '::';
+        } elseif (strpos($value, '->')) {
+            $explode = '->';
+        } else {
+            $this->pdfDoc->appendText($value);
+            return '';
+        }
+
+        list($class, $method) = explode($explode, $value);
+        if ($class !== $this->cchunk["classsynopsis"]["classname"]) {
+            $this->pdfDoc->appendText($value);
+            return '';
+        }
+        $this->pdfDoc->appendText($method);
+        return '';
+    }
+    
+    public function format_methodparam_parameter($open, $name, $attrs, $props) {
+        if ($props["empty"]) return '';
+        if ($open) {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM, 10);
+                $this->pdfDoc->appendText(" &$");
+                return '';
+            }
+            $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM, 10);
+            $this->pdfDoc->appendText(" $");
+            return '';
+        }
+        $this->pdfDoc->revertFont();
+        return '';
+    }
+    
+    public function format_parameter($open, $name, $attrs, $props) {
+        if ($props["empty"]) return '';
+        if ($open) {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM_ITALIC, 10);
+                $this->pdfDoc->appendText(" &");
+                return '';
+            }
+            $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM_ITALIC, 10);
+            return '';
+        }
+        $this->pdfDoc->revertFont();
+        return '';
+    }
+    
+    public function format_methodparam($open, $name, $attrs) {
+        if ($open) {
+            $content = '';
+                if ($this->params["count"] == 0) {
+                    $content .= " (";
+                }
+                if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["choice"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["choice"] == "opt") {
+                    $this->params["opt"]++;
+                    $content .= " [";
+                } else if($this->params["opt"]) {
+                    $content .= str_repeat(" ]", $this->params["opt"]);
+                    $this->params["opt"] = 0;
+                }
+                if ($this->params["count"]) {
+                    $content .= ",";
+                }
+                $content .= '';
+                ++$this->params["count"];
+                $this->pdfDoc->appendText($content);
+                return '';
+        }
+        return '';
+    }
+
+    public function format_void($open, $name, $attrs) {
+        $this->pdfDoc->appendText(" ( void");
+        return '';
+    }
+    
+    public function format_classsynopsisinfo($open, $name, $attrs, $props) {
+        $this->cchunk["classsynopsisinfo"] = $this->dchunk["classsynopsisinfo"];
+        if ($open) {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+                $this->format_para($open, $name, $attrs, $props);
+                $this->pdfDoc->appendText("/* ");
+                return '';
+            }
+            return $this->format_para($open, $name, $attrs, $props);
+        }
+
+        if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+            $this->pdfDoc->appendText(" */");
+            return $this->format_para($open, $name, $attrs, $props);
+        }
+        $this->cchunk["classsynopsis"]["close"] = true;
+        $this->pdfDoc->appendText(" {");
+        $this->pdfDoc->shift();
+        return $this->format_para($open, $name, $attrs, $props);
+    }
+
+    public function format_classsynopsisinfo_oointerface($open, $name, $attrs) {
+        if ($open) {
+            if ($this->cchunk["classsynopsisinfo"]["implements"] === false) {
+                $this->cchunk["classsynopsisinfo"]["implements"] = true;
+                $this->pdfDoc->appendText(" implements");
+                return '';
+            }
+            $this->pdfDoc->appendText(",");
+            return '';
+        }
+        return '';
+    }
+    
+    public function format_classsynopsis($open, $name, $attrs, $props) {
+        if ($open) {
+            return $this->format_para($open, $name, $attrs, $props);
+        }
+
+        if ($this->cchunk["classsynopsis"]["close"] === true) {
+            $this->cchunk["classsynopsis"]["close"] = false;
+            $this->pdfDoc->unshift();
+            $this->pdfDoc->appendText("}");
+        }
+        return $this->format_para($open, $name, $attrs, $props);
+    }
+    
+    public function format_fieldsynopsis_modifier_text($value, $tag) {
+        $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
+        $this->pdfDoc->appendText($this->TEXT($value));
+        return '';
+    }
+    
+    public function format_fieldsynopsis($open, $name, $attrs, $props) {
+        $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
+        if ($open) {
+            return $this->format_para($open, $name, $attrs, $props);
+        }
+        $this->pdfDoc->appendText(";");
+        return $this->format_para($open, $name, $attrs, $props);
+    }
+    
+    public function format_initializer($open, $name, $attrs) {
+        if ($open) {
+            $this->pdfDoc->appendText(" =");
+        }
+        return '';
+    }
+
+
+//    public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs) {
+//        if ($open) {
+//            if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
+//                $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
+//                return ' class <b class="'.$name.'">';
+//            }
+//            return '<b class="'.$name.'"> ';
+//        }
+//        return "</b>";
+//    }
+//
+//    
+//    public function format_classsynopsis_ooclass_classname_text($value, $tag) {
+//        $this->cchunk["classsynopsis"]["classname"] = $value;
+//        return $this->TEXT($value);
+//    }
+    
+//    public function format_fieldsynopsis_varname($open, $name, $attrs) {
+//        if ($open) {
+//            if ($this->cchunk["fieldsynopsis"]["modifier"] === "const") {
+//                return '<var class="fieldsynopsis_varname">';
+//            }
+//            return '<var class="'.$name.'">$';
+//        }
+//        return '</var>';
+//    }
+ 
+    // }}} Synopsises
+        
+        
+    // Footnotes & Callouts {{{
+    public function format_footnoteref($open, $name, $attrs, $props) {
+        if ($open) {
+            $linkend = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
+            $found = false;
+            foreach($this->cchunk["footnote"] as $k => $note) {
+                if ($note["id"] === $linkend) {
+                    $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0,0,1));
+                    $this->cchunk["footrefs"][] = $this->pdfDoc->add(PdfWriter::LINK_ANNOTATION, "[".($k + 1)."]");
+                    $this->pdfDoc->revertFont();
+                }
+            }
+            return '';
+        }
+    }
+    
+    public function format_footnote($open, $name, $attrs, $props) {
+        if ($open) {
+            $count = count($this->cchunk["footnote"]);
+            $noteid = isset($attrs[PhDReader::XMLNS_XML]["id"]) ? $attrs[PhDReader::XMLNS_XML]["id"] : $count + 1;
+            $note = array("id" => $noteid, "str" => "");
+            $this->cchunk["footnote"][$count] = $note;
+            if ($this->cchunk["table"]) {
+                $this->cchunk["tablefootnotes"][$count] = $noteid;
+            }
+            $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0,0,1));
+            $this->cchunk["footrefs"][] = $this->pdfDoc->add(PdfWriter::LINK_ANNOTATION, "[".($count + 1)."]");
+            $this->pdfDoc->revertFont();
+            $this->pdfDoc->setAppendToBuffer(true);
+            $this->pdfDoc->setFont(PdfWriter::FONT_BOLD, 12, array(0,0,1));
+            $this->pdfDoc->appendText("[".($count + 1)."]");
+            $this->pdfDoc->revertFont();
+            return "";
+        }
+        $this->pdfDoc->appendText("\n");
+        $this->pdfDoc->setAppendToBuffer(false);
+        return "";
+    }
+    
+    public function format_co($open, $name, $attrs, $props) {
+        if (($open || $props["empty"]) && isset($attrs[PhDReader::XMLNS_XML]["id"]) && $id = $attrs[PhDReader::XMLNS_XML]["id"]) {
+            $co = ++$this->cchunk["co"];
+            $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0,0,1));
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkends"]) && $linkends = $attrs[PhDReader::XMLNS_DOCBOOK]["linkends"]) {
+                $linkAreas = $this->pdfDoc->add(PdfWriter::LINK_ANNOTATION, "[{$co}]");
+                if (!isset($this->cchunk["links-to-resolve"][$linkends]))
+                    $this->cchunk["links-to-resolve"][$linkends] = array();
+                foreach ($linkAreas as $area)
+                    $this->cchunk["links-to-resolve"][$linkends][] = $area;
+            }
+            $this->pdfDoc->revertFont();
+        }
+        return "";
+    }
+    
+    public function format_calloutlist($open, $name, $attrs) {
+        if ($open) {
+            $this->pdfDoc->add(PdfWriter::FRAMED_BLOCK);
+            $this->pdfDoc->add(PdfWriter::LINE_JUMP);
+            $this->cchunk["co"] = 0;
+        } else {
+//            foreach ($this->cchunk["corefs"] as $ref)
+//                foreach ($ref as $area)
+//                    $this->pdfDoc->resolveInternalLink($area[0], array($area[1], $area[2], $area[3], $area[4]), $this->pdfDoc->getCurrentPage());
+            $this->pdfDoc->add(PdfWriter::END_FRAMED_BLOCK, array(2)); // With Dash line
+            $this->cchunk["co"] = 0;
+        }
+        return '';
+    }
+    
+    public function format_callout($open, $name, $attrs) {
+        if ($open) {
+            $co = ++$this->cchunk["co"];
+            $this->pdfDoc->setFont(PdfWriter::FONT_BOLD, 12, array(0,0,1));
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"]) && $ref = $attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"]) {
+                $linkAreas = $this->pdfDoc->add(PdfWriter::LINK_ANNOTATION, "[{$co}]");
+                if (!isset($this->cchunk["links-to-resolve"][$ref]))
+                    $this->cchunk["links-to-resolve"][$ref] = array();
+                foreach ($linkAreas as $area)
+                    $this->cchunk["links-to-resolve"][$ref][] = $area;
+            }
+            $this->pdfDoc->revertFont();
+            
+            //return '<tr><td><a href="#'.$attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"].'">' .str_repeat("*", ++$this->cchunk["callouts"]). '</a></td><td>';
+        } else {
+            $this->pdfDoc->add(PdfWriter::LINE_JUMP);
+        }
+        return '';
+    }
+    // }}} Footnotes & Callouts
     
     public function format_quote_text($value, $tag) {
         $value = trim(ereg_replace( "[ \n\t]+", ' ', $value));
@@ -667,18 +1133,43 @@ class PDFPhDFormat extends PhDFormat {
         return "";
     }
     
-    public function format_refpurpose($open, $tag, $attrs) {
-        if ($open) {
+    public function format_refpurpose($open, $tag, $attrs, $props) {
+        if ($props["empty"]) {
+            $this->pdfDoc->add(PdfWriter::PARA);
+            foreach($this->cchunk["refname"] as $refname) {
+                $this->pdfDoc->appendText(" " . $refname . " --");
+            }
+            $this->pdfDoc->add(PdfWriter::LINE_JUMP);
+            $this->cchunk["refname"] = array();
+        } elseif ($open) {
             $this->pdfDoc->add(PdfWriter::PARA);
             foreach($this->cchunk["refname"] as $refname) {
                 $this->pdfDoc->appendText(" " . $refname . " --");
             }
         } else {
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
-            $this->pdfDoc->revertFont();
             $this->cchunk["refname"] = array();
         }
         return "";
+    }
+    
+    public function format_manvolnum($open, $name, $attrs) {
+        if ($open) {
+            $this->pdfDoc->appendText(")");
+            return '';
+        }
+        $this->pdfDoc->appendText(")");
+        return '';
+        return ")</span>";
+    }
+    
+    public function format_indice($open, $name, $attrs) {
+        if (($open && $name == "subscript") || (!$open && $name == "superscript")) {
+            $this->pdfDoc->vOffset("-4");
+            return '';
+        }
+        $this->pdfDoc->vOffset("4");
+        return '';
     }
 
 }
@@ -689,32 +1180,34 @@ class PdfWriter {
     const FONT_ITALIC = 0x02;
     const FONT_BOLD = 0x03;
     const FONT_VERBATIM = 0x04;  
+    const FONT_VERBATIM_ITALIC = 0x05;  
+    const FONT_MANUAL = 0x06;  
     
     // "Objects" constants (for add())
-    const PARA = 0x05;
-    const INDENTED_PARA = 0x06;
-    const TITLE = 0x07;
-    const DRAW_LINE = 0x08;
-    const LINE_JUMP = 0x09;
-    const PAGE = 0x0A;
-    const TITLE2 = 0x0B;
-    const VERBATIM_BLOCK = 0x0C;
-    const ADMONITION = 0x0D;
-    const ADMONITION_CONTENT = 0x0E;
-    const END_ADMONITION = 0x0F;
-    const URL_ANNOTATION = 0x10;
-    const LINK_ANNOTATION = 0x11;
-    const ADD_BULLET = 0x12;
-    const FRAMED_BLOCK = 0x13;
-    const END_FRAMED_BLOCK = 0x14;
-    const TITLE3 = 0x15;
-    const TABLE = 0x16;
-    const TABLE_ROW = 0x17;
-    const TABLE_ENTRY = 0x18;
-    const TABLE_END_ENTRY = 0x19;
-    const END_TABLE = 0x1A;
-    const TABLE_END_ROW = 0x1B;
-    const ADD_NUMBER_ITEM = 0x1C;    
+    const PARA = 0x10;
+    const INDENTED_PARA = 0x11;
+    const TITLE = 0x12;
+    const DRAW_LINE = 0x13;
+    const LINE_JUMP = 0x14;
+    const PAGE = 0x15;
+    const TITLE2 = 0x16;
+    const VERBATIM_BLOCK = 0x17;
+    const ADMONITION = 0x18;
+    const ADMONITION_CONTENT = 0x19;
+    const END_ADMONITION = 0x1A;
+    const URL_ANNOTATION = 0x1B;
+    const LINK_ANNOTATION = 0x1C;
+    const ADD_BULLET = 0x1D;
+    const FRAMED_BLOCK = 0x1E;
+    const END_FRAMED_BLOCK = 0x1F;
+    const TITLE3 = 0x20;
+    const TABLE = 0x21;
+    const TABLE_ROW = 0x22;
+    const TABLE_ENTRY = 0x23;
+    const TABLE_END_ENTRY = 0x24;
+    const END_TABLE = 0x25;
+    const TABLE_END_ROW = 0x26;
+    const ADD_NUMBER_ITEM = 0x27;    
     
     // Page format
     const VMARGIN = 56.7; // = 1 centimeter
@@ -747,6 +1240,17 @@ class PdfWriter {
     private $permanentLeftSpacing = 0;
     private $permanentRightSpacing = 0;
     
+    private $appendToBuffer = false;
+    // To append afterwards
+    private $buffer = array(
+        /* array(
+            'text'       => "",
+            'font'       => "",
+            'size'       => "",
+            'color'      => "",
+        )*/
+    );
+    
     private $current = array(
         "oldVPosition"      => 0,
         "vOffset"           => 0,
@@ -754,6 +1258,8 @@ class PdfWriter {
         "pages"             => array(),
         "row"               => array(),
         "align"             => "",
+        "char"              => "",
+        "charOffset"        => 0,
     );
     
     // To temporarily store $current(s)
@@ -777,6 +1283,7 @@ class PdfWriter {
     	$this->fonts["Helvetica-Bold"] = $this->haruDoc->getFont("Helvetica-Bold", "WinAnsiEncoding");
     	$this->fonts["Helvetica-Oblique"] = $this->haruDoc->getFont("Helvetica-Oblique", "WinAnsiEncoding");
     	$this->fonts["Courier"] = $this->haruDoc->getFont("Courier", "WinAnsiEncoding");
+    	$this->fonts["Courier-Oblique"] = $this->haruDoc->getFont("Courier-Oblique", "WinAnsiEncoding");
     	
     	// Add first page and default font settings
     	$this->currentFont = $this->fonts["Helvetica"];
@@ -792,11 +1299,24 @@ class PdfWriter {
     
     // Append text into the current position
     public function appendText($text) {
+//        if ($this->vOffset > $this->current["charOffset"] + 3*LINE_SPACING + 3*$this->currentFontSize)
+//            $this->vOffset = $this->current["charOffset"] + 3*LINE_SPACING + 3*$this->currentFontSize;
+        if ($this->appendToBuffer) {
+            array_push($this->buffer, array(
+                "text" => $text,
+                "font" => $this->currentFont,
+                "size" => $this->currentFontSize,
+                "color" => $this->currentFontColor
+            ));
+            return;
+        }
+        
         $this->currentPage->beginText();
         do {
-            // Clear the whitespace if it begins the line
-            if (strpos($text, " ") === 0 && $this->hOffset == 0)
+            // Clear the whitespace if it begins the line or if last char is a special char
+            if (strpos($text, " ") === 0 && ($this->hOffset == 0 || in_array($this->current["char"], array("&", "$")))) {
                 $text = substr($text, 1);
+            }
             
             // Number of chars allowed in the current line
             $nbCarac = $this->currentFont->measureText($text, 
@@ -849,7 +1369,8 @@ class PdfWriter {
                 $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing, 
                     $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
             }
-            
+            $this->current["char"] = $textToAppend{strlen($textToAppend)-1};
+                    
             // Offsets for next line
             if (!$isLastLine) {
                 $this->vOffset += $this->currentFontSize + self::LINE_SPACING;
@@ -857,15 +1378,18 @@ class PdfWriter {
             } else {
                 $this->hOffset += $this->currentPage->getTextWidth($textToAppend);
             }
+            
         }
         while(!$isLastLine); // While it remains chars to append
         $this->currentPage->endText();
+        $this->current["charOffset"] = $this->vOffset;
     }
 
     // Same function one line at a time
     public function appendOneLine($text) {
-        if (strpos($text, " ") === 0 && $this->hOffset == 0)
-                $text = substr($text, 1);
+        if (strpos($text, " ") === 0 && ($this->hOffset == 0 || in_array($this->current["char"], array("&", "$")))) {
+            $text = substr($text, 1);
+        }
         
         $this->currentPage->beginText();
         $nbCarac = $this->currentFont->measureText($text, 
@@ -905,22 +1429,42 @@ class PdfWriter {
         }
         $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing, 
             $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
-        
+        if ($textToAppend)
+            $this->current["char"] = $textToAppend{strlen($textToAppend)-1};
+               
         $this->hOffset += $this->currentPage->getTextWidth($textToAppend);
         
         $this->currentPage->endText();
+        $this->current["charOffset"] = $this->vOffset;
+        
         return ($isLastLine ? null : $text);
     }
     
+    public function setAppendToBuffer($appendToBuffer) {
+        $this->appendToBuffer = $appendToBuffer;
+    }
+    
+    public function appendBufferNow() {
+        foreach($this->buffer as $row) {
+            if ($row["text"] == "\n") {
+                $this->lineJump();
+            } else {
+                $this->setFont(self::FONT_MANUAL, $row["size"], $row["color"], $row["font"]);
+                $this->appendText($row["text"]);
+                $this->revertFont();
+            }
+        }
+        $this->buffer = array();
+    }
+    
     public function add($type, $option = null) {
+        if ($this->appendToBuffer) return;
         switch ($type) {
             case self::INDENTED_PARA:
-                $this->setFont(self::FONT_NORMAL, 12);
                 $this->lineJump();
                 $this->indent();
                 break;
             case self::PARA:
-                $this->setFont(self::FONT_NORMAL, 12);
                 $this->lineJump();
                 break;
             case self::VERBATIM_BLOCK:
@@ -979,7 +1523,7 @@ class PdfWriter {
                 $this->beginFrame();
                 break;
             case self::END_FRAMED_BLOCK:
-                $this->endFrame();
+                $this->endFrame($option);
                 break;
             case self::TABLE:
                 $this->addTable($option);
@@ -1006,7 +1550,7 @@ class PdfWriter {
     }
      
     // Switch font on-the-fly
-    public function setFont($type, $size = null, $color = null) {
+    public function setFont($type, $size = null, $color = null, $font = null) {
         if ($this->currentPage == null)
             return false;
         $this->oldFonts[] = array($this->currentFont, $this->currentFontSize, $this->currentFontColor);
@@ -1033,6 +1577,13 @@ class PdfWriter {
             case self::FONT_VERBATIM:
                 $this->currentPage->setFontAndSize($this->currentFont = $this->fonts["Courier"],
                     $this->currentFontSize);
+                break;
+            case self::FONT_VERBATIM_ITALIC:
+                $this->currentPage->setFontAndSize($this->currentFont = $this->fonts["Courier-Oblique"],
+                    $this->currentFontSize);
+                break;
+            case self::FONT_MANUAL:
+                $this->currentPage->setFontAndSize($this->currentFont = $font, $this->currentFontSize);
                 break;
             default:
                 trigger_error("Unknown font type : {$type}", E_USER_WARNING);
@@ -1080,6 +1631,10 @@ class PdfWriter {
     
     public function unshift($offset = self::DEFAULT_SHIFT) {
         $this->permanentLeftSpacing -= $offset;
+    }
+    
+    public function vOffset($offset) {
+        $this->vOffset += $offset;
     }
     
     private function indent($offset = self::INDENT_SPACING) {
@@ -1177,22 +1732,60 @@ class PdfWriter {
         $this->current["pages"] = array();
     }
     
-    private function endFrame() {
+    private function endFrame($dash = null) {
+        $onSinglePage = true;
         foreach ($this->current["pages"] as $page) {
-            $page->rectangle(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
-                self::VMARGIN,
-                $this->PAGE_WIDTH - 2*self::HMARGIN - ($this->permanentLeftSpacing - self::INDENT_SPACING) - $this->permanentRightSpacing,
-                ($this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]) - self::VMARGIN);
+            $page->setRGBStroke(0, 0, 0);
+            $page->setLineWidth(1.0);
+            $page->setDash($dash, 0);
+            // left border
+            $page->moveTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
+                self::VMARGIN);
+            $page->lineTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
+                $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
+            // right border
+            $page->moveTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+                self::VMARGIN);
+            $page->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+                $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
             $page->stroke();
+            $page->setDash(null, 0);
             $this->current["newVOffset"] = 0;
+            $onSinglePage = false;
         }
-        
-        $this->currentPage->rectangle(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
-            $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset,
-            $this->PAGE_WIDTH - 2*self::HMARGIN - ($this->permanentLeftSpacing - self::INDENT_SPACING) - $this->permanentRightSpacing,
-            $this->vOffset - $this->current["newVOffset"]);
+        $this->currentPage->setRGBStroke(0, 0, 0);
+        $this->currentPage->setLineWidth(1.0);
+        $this->currentPage->setDash($dash, 0);
+        // left border
+        $this->currentPage->moveTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
+            $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
+        $this->currentPage->lineTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
+            $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
+        // right border
+        $this->currentPage->moveTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+            $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
+        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+            $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
+        // bottom border
+        $this->currentPage->moveTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
+            $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
+        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+            $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
+        // top border (if frame's on a single page)
+        if ($onSinglePage) {
+            $this->currentPage->moveTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
+                $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
+            $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+                $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
+        }
+//            
+//        $this->currentPage->rectangle(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
+//            $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset,
+//            $this->PAGE_WIDTH - 2*self::HMARGIN - ($this->permanentLeftSpacing - self::INDENT_SPACING) - $this->permanentRightSpacing,
+//            $this->vOffset - $this->current["newVOffset"]);
         $this->currentPage->stroke();
         $this->lineJump();
+        $this->currentPage->setDash(null, 0);
         $this->current["oldVPosition"] = 0;
     }
     
@@ -1285,6 +1878,7 @@ class PdfWriter {
         // Create link
         $page->createLinkAnnotation($rectangle, $destPage->createDestination())
             ->setBorderStyle(0, 0, 0);
+        $page->setDash(null, 0);
     }
     
     public function addTable($colCount) {

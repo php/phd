@@ -12,8 +12,11 @@ class phppdf extends PhDTheme {
             'book'              => 'format_tocnode_newpage',
             'part'              => 'format_tocnode_newpage',
         ),
+        'callout'               => 'format_collect_id',
         'chapter'               => 'format_tocnode_newpage',
+        'co'                    => 'format_collect_id',
         'colophon'              => 'format_tocnode_newpage',
+        'footnote'              => 'format_collect_id',
         'glossary'              => array(
             /* DEFAULT */          false,
             'article'           => 'format_tocnode_newpage',
@@ -31,7 +34,6 @@ class phppdf extends PhDTheme {
         'preface'               => 'format_tocnode_newpage',
         'refentry'              => 'format_tocnode_newpage',
         'reference'             => 'format_tocnode_newpage',
-        'phpdoc:exception'      => 'format_exception_chunk',
         'sect1'                 => 'format_tocnode',
         'sect2'                 => 'format_tocnode',
         'sect3'                 => 'format_tocnode',
@@ -55,7 +57,17 @@ class phppdf extends PhDTheme {
                 'set'           => false,
             ),
         ),
-        'type'                  => 'format_type_text',
+        'type'                  => array(
+            /* DEFAULT */          'format_type_text',
+            'classsynopsisinfo' => false,
+            'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
+            'methodparam'       => 'format_type_if_object_or_pseudo_text',
+            'methodsynopsis'    => array(
+                /* DEFAULT */      'format_type_if_object_or_pseudo_text',
+                'classsynopsis' => false,
+            ),
+        ),
+
     );
     
     
@@ -142,10 +154,7 @@ class phppdf extends PhDTheme {
     
     public function format_tocnode_newpage($open, $name, $attrs, $props) {
         return $this->format_tocnode($open, $name, $attrs, $props, true);
-    }
-    public function format_exception_chunk($open, $name, $attrs, $props) {
-        return $this->format_tocnode_newpage($open, "reference", $attrs, $props);
-    }
+    }    
     
     // Convert the function name to a Unix valid filename
     protected function toValidName($functionName) {
@@ -219,5 +228,19 @@ class phppdf extends PhDTheme {
         $this->format->setChunkInfo("links-to-resolve", $linksToResolve);
         $this->format->getPdfDoc()->revertFont();
         return '';
+    }
+    
+    public function format_type_if_object_or_pseudo_text($type, $tagname) {
+        if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
+            return false;
+        }
+        return self::format_type_text($type, $tagname);
+    }
+    
+    public function format_collect_id($open, $name, $attrs, $props, $newpage = false) {
+        if ($open && isset($attrs[PhDReader::XMLNS_XML]["id"]) && $id = $attrs[PhDReader::XMLNS_XML]["id"]) {
+                $this->setIdToPage($id);
+        }
+        return false;
     }
 }
