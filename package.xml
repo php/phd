@@ -47,12 +47,15 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Added CHM output format. (Rudy)
+    - Added KDevelop (Index & Table of contents) output theme. (Rudy)
+    - Added Man page output format. (Rudy)
     - Added support for phpdoc:exception. (Hannes)
   </notes>
 
   <contents>
     <dir baseinstalldir="phd" name="/">
       <file baseinstalldir="phd" name="formats/xhtml.php" role="php"/>
+      <file baseinstalldir="phd" name="formats/manpage.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDFormat.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDTheme.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDHelper.class.php" role="php"/>
@@ -76,6 +79,8 @@
       <file baseinstalldir="phd" name="themes/php/chunkedhtml.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpdotnet.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpweb.php" role="php"/>
+      <file baseinstalldir="phd" name="themes/php/phpkdevelop.php" role="php"/>
+      <file baseinstalldir="phd" name="themes/php/phpfunctions.php" role="php"/>
       <file baseinstalldir="" name="build.php" role="script">
         <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
         <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
