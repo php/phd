@@ -44,7 +44,7 @@ class phpfunctions extends PhDTheme {
     protected $outputdir = "";
     protected $isFunctionRefSet = false;
     
-    public function __construct(array $IDs, array $filenames, $format = "man", $chunked = true) {
+    public function __construct(array $IDs, array $filenames, $format = "man3", $chunked = true) {
         parent::__construct($IDs);
         $this->format = $format;
         $this->outputdir = PhDConfig::output_dir() . $this->format . DIRECTORY_SEPARATOR;
@@ -61,20 +61,26 @@ class phpfunctions extends PhDTheme {
         $index = 0;
         rewind($stream);
         
-        $filename = $this->cchunk["funcname"][$index] . '.3';
+        $filename = $this->cchunk["funcname"][$index] . '.3.gz';
+        $gzfile = gzopen($this->outputdir . $filename, "w9");
 
-        file_put_contents($this->outputdir . $filename, $this->header($index));
-        file_put_contents($this->outputdir . $filename, $stream, FILE_APPEND);
+        gzwrite($gzfile, $this->header($index));
+        gzwrite($gzfile, stream_get_contents($stream));
+        gzclose($gzfile);
         v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);
 
         while(isset($this->cchunk["funcname"][++$index])) {
-            $filename = $this->cchunk["funcname"][$index] . '.3';
+            $filename = $this->cchunk["funcname"][$index] . '.3.gz';
             rewind($stream);
             // Replace the default function name by the alternative one
             $content = preg_replace('/'.$this->cchunk["funcname"][0].'/', 
                 $this->cchunk["funcname"][$index], stream_get_contents($stream), 1); 
-            file_put_contents($this->outputdir . $filename, $this->header($index));
-            file_put_contents($this->outputdir . $filename, $content, FILE_APPEND);
+            
+            $gzfile = gzopen($this->outputdir . $filename, "w9");
+
+            gzwrite($gzfile, $this->header($index));
+            gzwrite($gzfile, $content);
+            gzclose($gzfile);
             v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);
         }
     }
