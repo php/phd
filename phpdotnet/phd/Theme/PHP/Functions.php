@@ -44,7 +44,7 @@ class phpfunctions extends PhDTheme {
     protected $outputdir = "";
     protected $isFunctionRefSet = false;
     
-    public function __construct(array $IDs, array $filenames, $format = "man", $chunked = true) {
+    public function __construct(array $IDs, array $filenames, $format = "man3", $chunked = true) {
         parent::__construct($IDs);
         $this->format = $format;
         $this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $this->format . DIRECTORY_SEPARATOR;
