@@ -50,6 +50,13 @@
     - Rewrote config option access, avoids globals. (Gwynne)
     - Cleaned up error handler. (Gwynne)
     - --list option now glob()s the themes/ and formats/ directories. (Gwynne)
+    - Added CHM output format. (Rudy)
+    - Added KDevelop (Index &amp; Table of contents) output theme. (Rudy)
+    - Added Man page output format. (Rudy)
+    - Added PDF output format. (Rudy)
+    - Fixed bug#45618 (Bad filenames in man pages). (Rudy)
+    - Fixed bug#45626 (Unix manpages should be gzipped). (Rudy)
+    - Fixed bug#45627 (Unix manpages using non-standard folder name). (Rudy)
   </notes>
 
   <contents>
