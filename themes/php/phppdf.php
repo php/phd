@@ -87,6 +87,7 @@ class phppdf extends PhDTheme {
         "toc-root"                  => null,
         "id-to-outline"             => array(),
         "id-to-page"                => array(),
+        "root-outline"              => null,
     );
     
     public function __construct(array $IDs, array $filenames, $format = "pdf", $chunked = true) {
@@ -110,11 +111,19 @@ class phppdf extends PhDTheme {
     public function format_book($open, $name, $attrs, $props) {
         if ($open) {
             $this->format->newChunk();
-            $pdfDoc = new PdfWriter();
-            $this->format->setPdfDoc($pdfDoc);
             $this->cchunk = $this->dchunk;
+            $pdfDoc = new PdfWriter();
+            try {
+                $pdfDoc->setCompressionMode(HaruDoc::COMP_ALL);
+            } catch (HaruException $e) { 
+                v("PDF Compression failed, you need to compile libharu with Zlib...", E_USER_WARNING);
+            }
+            $this->format->setPdfDoc($pdfDoc);
+            if (isset($attrs[PhDReader::XMLNS_XML]["base"]) && $base = $attrs[PhDReader::XMLNS_XML]["base"])
+                $this->format->setChunkInfo("xml-base", $base);
+                
             $id = $attrs[PhDReader::XMLNS_XML]["id"];
-            $this->cchunk["id-to-outline"][$id] = 
+            $this->cchunk["root-outline"] = $this->cchunk["id-to-outline"][$id] = 
                 $pdfDoc->createOutline(PhDHelper::getDescription($id), null, true);
             $this->setIdToPage($id);
         } else {
@@ -143,10 +152,19 @@ class phppdf extends PhDTheme {
                 $this->format->getPdfDoc()->add(PdfWriter::PAGE);
             else 
                 $this->format->getPdfDoc()->add(PdfWriter::LINE_JUMP);
+            
+            if (isset($attrs[PhDReader::XMLNS_XML]["base"]) && $base = $attrs[PhDReader::XMLNS_XML]["base"])
+                $this->format->setChunkInfo("xml-base", $base);
+                
             if (isset($attrs[PhDReader::XMLNS_XML]["id"]) && $id = $attrs[PhDReader::XMLNS_XML]["id"]) {
                 $parentId = PhDHelper::getParent($id);
-                $this->cchunk["id-to-outline"][$id] = $this->format->getPdfDoc()->createOutline
-                    (PhDHelper::getDescription($id), $this->cchunk["id-to-outline"][$parentId], false);
+                if (isset($this->cchunk["id-to-outline"][$parentId])) {
+                    $this->cchunk["id-to-outline"][$id] = $this->format->getPdfDoc()->createOutline
+                        (PhDHelper::getDescription($id), $this->cchunk["id-to-outline"][$parentId], false);
+                } else {
+                    $this->cchunk["id-to-outline"][$id] = $this->format->getPdfDoc()->createOutline
+                        (PhDHelper::getDescription($id), $this->cchunk["root-outline"], false);
+                }
                 $this->setIdToPage($id);
             }
         }
@@ -161,7 +179,7 @@ class phppdf extends PhDTheme {
         return $this->format_tocnode($open, "reference", $attrs, $props, true);
     }    
     
-    // Convert the function name to a Unix valid filename
+    // Convert the book name to a Unix valid filename
     protected function toValidName($functionName) {
         return str_replace(array(":", "::", "->", "/", "\\", " "), array(".", ".", ".", "-", "-", "-"), $functionName);
     } 

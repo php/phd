@@ -5,8 +5,6 @@ class PDFPhDFormat extends PhDFormat {
         'abstract'              => 'format_suppressed_tags',
         'abbrev'                => 'format_suppressed_tags',
         'acronym'               => 'format_suppressed_tags',
-//        'article'               => false,
-//        'appendix'              => false,
         'alt'                   => 'format_suppressed_tags',
         'application'           => 'format_suppressed_tags',
         'author'                => array(
@@ -19,7 +17,6 @@ class PDFPhDFormat extends PhDFormat {
         'callout'               => 'format_callout',
         'calloutlist'           => 'format_calloutlist',
         'caution'               => 'format_admonition',
-//        'chapter'               => false,
         'citerefentry'          => 'format_suppressed_tags',
         'classname'             => array(
             /* DEFAULT */          'format_suppressed_tags',
@@ -49,6 +46,8 @@ class PDFPhDFormat extends PhDFormat {
         'function'              => 'format_suppressed_tags',
         'glossterm'             => 'format_suppressed_tags',
         'holder'                => 'format_suppressed_tags',
+        'imagedata'             => 'format_imagedata',
+        'imageobject'           => 'format_shifted_para',
         'index'                 => 'format_para',
         'indexdiv'              => 'format_para',
         'indexentry'            => 'format_shifted_line',
@@ -63,6 +62,7 @@ class PDFPhDFormat extends PhDFormat {
         'literal'               => 'format_italic',
         'literallayout'         => 'format_verbatim_inline',
         'manvolnum'             => 'format_manvolnum',
+        'mediaobject'           => 'format_suppressed_tags',
         'member'                => 'format_member',
         'note'                  => 'format_admonition',
         'option'                => 'format_italic',
@@ -76,7 +76,6 @@ class PDFPhDFormat extends PhDFormat {
             'listitem'          => 'format_suppressed_tags',
             'step'              => 'format_suppressed_tags',
         ),
-//        'part'                  => false,
         'partintro'             => 'format_para',
         'personname'            => 'format_suppressed_tags',
         'preface'               => 'format_suppressed_tags',
@@ -91,7 +90,6 @@ class PDFPhDFormat extends PhDFormat {
         'pubdate'               => 'format_para',
         'quote'                 => 'format_suppressed_tags',
         'refentrytitle'         => 'format_bold',
-//        'reference'             => false,
         'refname'               => 'format_title',
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
@@ -132,7 +130,6 @@ class PDFPhDFormat extends PhDFormat {
                 'informaltable' => 'format_title3',
                 'warning'           => 'format_title3',
             ),
-//            'indexdiv'          => false,
             'informaltable'     => 'format_title3',
             'legalnotice'       => 'format_title2',
             'note'              => 'format_title3',
@@ -153,10 +150,7 @@ class PDFPhDFormat extends PhDFormat {
         ), 
         'tip'                   => 'format_admonition',
         'titleabbrev'           => 'format_suppressed_tags',
-        'type'                  => array(
-            /* DEFAULT */          'format_suppressed_tags',
-//            'methodparam'       => false
-        ),
+        'type'                  => 'format_suppressed_tags',
         'userinput'             => 'format_bold',
         'variablelist'          => 'format_suppressed_tags',
         'varlistentry'          => 'format_newline',
@@ -229,13 +223,6 @@ class PDFPhDFormat extends PhDFormat {
             /* DEFAULT */         false,
             'fieldsynopsis'    => 'format_fieldsynopsis_modifier_text',
         ),
-//        'classname'            => array(
-//            /* DEFAULT */         false,
-//            'ooclass'          => array(
-//                /* DEFAULT */     false,
-//                'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
-//            ),
-//        ),
         'methodname'           => array(
             /* DEFAULT */         false,
             'constructorsynopsis' => array(
@@ -259,6 +246,7 @@ class PDFPhDFormat extends PhDFormat {
     protected $cchunk      = array();
     /* Default Chunk variables */
     protected $dchunk      = array(
+        "xml-base"              => "",
         "refsection"            => false,
         "examplenumber"         => 0,
         "href"                  => "",
@@ -304,7 +292,6 @@ class PDFPhDFormat extends PhDFormat {
     }
     
     public function __destruct() {
-        $this->pdfDoc->saveToFile("php_manual_en.pdf");
         unset($this->pdfDoc);
     }
     
@@ -715,6 +702,7 @@ class PDFPhDFormat extends PhDFormat {
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["table"] = true;
+            $this->pdfDoc->add(PdfWriter::PARA);
         } else {
             $this->cchunk["table"] = false;
             $this->pdfDoc->add(PdfWriter::END_TABLE);
@@ -810,9 +798,7 @@ class PDFPhDFormat extends PhDFormat {
             }
 
             $rowspan = PhDFormat::rowspan($dbattrs);
-//            $moreattrs = self::parse_table_entry_attributes($dbattrs);
             $this->pdfDoc->add(PdfWriter::TABLE_ENTRY, array($colspan, $rowspan, $align));
-//            return $retval. '<td colspan="' .((int)$colspan). '" rowspan="' .((int)$rowspan). '" ' .$moreattrs. '>';
         } else {
             $this->pdfDoc->add(PdfWriter::TABLE_END_ENTRY);            
         }
@@ -998,35 +984,6 @@ class PDFPhDFormat extends PhDFormat {
         }
         return '';
     }
-
-
-//    public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs) {
-//        if ($open) {
-//            if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
-//                $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
-//                return ' class <b class="'.$name.'">';
-//            }
-//            return '<b class="'.$name.'"> ';
-//        }
-//        return "</b>";
-//    }
-//
-//    
-//    public function format_classsynopsis_ooclass_classname_text($value, $tag) {
-//        $this->cchunk["classsynopsis"]["classname"] = $value;
-//        return $this->TEXT($value);
-//    }
-    
-//    public function format_fieldsynopsis_varname($open, $name, $attrs) {
-//        if ($open) {
-//            if ($this->cchunk["fieldsynopsis"]["modifier"] === "const") {
-//                return '<var class="fieldsynopsis_varname">';
-//            }
-//            return '<var class="'.$name.'">$';
-//        }
-//        return '</var>';
-//    }
- 
     // }}} Synopsises
         
         
@@ -1091,9 +1048,6 @@ class PDFPhDFormat extends PhDFormat {
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
             $this->cchunk["co"] = 0;
         } else {
-//            foreach ($this->cchunk["corefs"] as $ref)
-//                foreach ($ref as $area)
-//                    $this->pdfDoc->resolveInternalLink($area[0], array($area[1], $area[2], $area[3], $area[4]), $this->pdfDoc->getCurrentPage());
             $this->pdfDoc->add(PdfWriter::END_FRAMED_BLOCK, array(2)); // With Dash line
             $this->cchunk["co"] = 0;
         }
@@ -1112,8 +1066,6 @@ class PDFPhDFormat extends PhDFormat {
                     $this->cchunk["links-to-resolve"][$ref][] = $area;
             }
             $this->pdfDoc->revertFont();
-            
-            //return '<tr><td><a href="#'.$attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"].'">' .str_repeat("*", ++$this->cchunk["callouts"]). '</a></td><td>';
         } else {
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
         }
@@ -1171,6 +1123,17 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->vOffset("4");
         return '';
     }
+    
+    public function format_imagedata($open, $name, $attrs, $props) {
+        if ($props["empty"] && isset($this->cchunk["xml-base"]) && ($base = $this->cchunk["xml-base"]) &&
+            isset($attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]) && ($fileref = $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"])) {
+            $imagePath = PhDConfig::xml_root() . DIRECTORY_SEPARATOR . $base . $fileref;
+            if (file_exists($imagePath))
+                $this->pdfDoc->add(PdfWriter::IMAGE, $imagePath);
+            
+        }
+        return '';
+    }
 
 }
 
@@ -1207,7 +1170,8 @@ class PdfWriter {
     const TABLE_END_ENTRY = 0x24;
     const END_TABLE = 0x25;
     const TABLE_END_ROW = 0x26;
-    const ADD_NUMBER_ITEM = 0x27;    
+    const ADD_NUMBER_ITEM = 0x27;
+    const IMAGE = 0x28;    
     
     // Page format
     const VMARGIN = 56.7; // = 1 centimeter
@@ -1295,6 +1259,10 @@ class PdfWriter {
     
     public function getCurrentPage() {
         return $this->currentPage;
+    }
+    
+    public function setCompressionMode($mode) {
+        $this->haruDoc->setCompressionMode($mode);
     }
     
     // Append text into the current position
@@ -1542,6 +1510,9 @@ class PdfWriter {
                 break;
             case self::TABLE_END_ENTRY:
                 $this->endTableEntry();
+                break;
+            case self::IMAGE:
+                $this->addImage($option);
                 break;
             default:
                 trigger_error("Unknown object type : {$type}", E_USER_WARNING);
@@ -1970,7 +1941,30 @@ class PdfWriter {
         // Erase current properties
         $this->current["row"] = array();    
     }
+    
+    private function endsWith($str, $sub) {
+        return ( substr( $str, strlen( $str ) - strlen( $sub ) ) === $sub );
+    }
 
+    private function addImage($url) {
+        $image = null;
+        if ($this->endsWith(strtolower($url), ".png")) {
+            $image = $this->haruDoc->loadPNG($url);
+        } elseif ($this->endsWith(strtolower($url), ".jpg") || $this->endsWith(strtolower($url), ".jpeg")) {
+            $image = $this->haruDoc->loadJPEG($url);
+        }
+        if ($image) {
+            if ($this->PAGE_HEIGHT - $this->vOffset - 2*self::VMARGIN < $image->getHeight())
+                $this->nextPage();
+            $this->currentPage->drawImage($image,
+                self::HMARGIN + $this->permanentLeftSpacing + $this->hOffset,
+                $this->PAGE_HEIGHT - self::HMARGIN - $this->vOffset - $image->getHeight(),
+                $image->getWidth(),
+                $image->getHeight());
+            
+            $this->hOffset = 0;
+            $this->vOffset += $image->getWidth();
+        }
+    }
 }
-
 ?>
