@@ -46,9 +46,9 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Fixed bug#45618 (Bad filenames in man pages). (Rudy)
-    - Fixed bug#45626 (Unix manpages should be gzipped). (Rudy)
     - Fixed bug#45627 (Unix manpages using non-standard folder name). (Rudy)
+    - Fixed bug#45626 (Unix manpages should be gzipped). (Rudy)
+    - Fixed bug#45618 (Bad filenames in man pages). (Rudy)
   </notes>
 
   <contents>
