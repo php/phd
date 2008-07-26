@@ -147,7 +147,7 @@ class PDFPhDFormat extends PhDFormat {
             'table'             => 'format_title3',
             'variablelist'      => 'format_bold',
             'warning'           => 'format_title3',
-        ), 
+        ),
         'tip'                   => 'format_admonition',
         'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => 'format_suppressed_tags',
@@ -209,9 +209,9 @@ class PDFPhDFormat extends PhDFormat {
         'qandaentry'            => 'format_para',
         'question'              => 'format_bold',
         'answer'                => 'format_shifted_para',
-        
+
     ); /* }}} */
-    
+
     protected $textmap = array(
         'function'              => 'format_function_text',
         'link'                  => 'format_link_text',
@@ -241,7 +241,7 @@ class PDFPhDFormat extends PhDFormat {
     );
 
     protected $lang = "";
-    
+
     /* Current Chunk variables */
     protected $cchunk      = array();
     /* Default Chunk variables */
@@ -283,28 +283,28 @@ class PDFPhDFormat extends PhDFormat {
         "corefs"                => array(),
         "callouts"              => 0,
     );
-    
+
     private $pdfDoc;
-    
+
     public function __construct(array $IDs) {
         parent::__construct($IDs);
         $this->pdfDoc = new PdfWriter();
     }
-    
+
     public function __destruct() {
         unset($this->pdfDoc);
     }
-    
+
     public function getChunkInfo($info) {
         if (isset($this->cchunk[$info]))
             return $this->cchunk[$info];
         else return null;
     }
-    
+
     public function setChunkInfo($info, $value) {
         $this->cchunk[$info] = $value;
     }
-    
+
     public function __call($func, $args) {
         if ($args[0]) {
             trigger_error("No mapper found for '{$func}'", E_USER_WARNING);
@@ -317,7 +317,7 @@ class PDFPhDFormat extends PhDFormat {
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
         return "";
     }
-    
+
     public function CDATA($str) {
         $this->pdfDoc->appendText(utf8_decode(trim($str)));
         return "";
@@ -326,12 +326,12 @@ class PDFPhDFormat extends PhDFormat {
     public function TEXT($str) {
         if (isset($this->cchunk["refsection"]) && $this->cchunk["refsection"]) // DUMMY REFSECTION DELETION
             return "";
-            
+
         if (isset($this->cchunk["verbatim-block"]) && $this->cchunk["verbatim-block"]) {
             $this->pdfDoc->appendText(utf8_decode($str));
             return "";
         }
-        
+
         $ret = utf8_decode(trim(ereg_replace( "[ \n\t]+", ' ', $str)));
         // No whitespace if current text value begins with ',', ';', ':', '.'
         if (strncmp($ret, ",", 1) && strncmp($ret, ";", 1) && strncmp($ret, ":", 1) && strncmp($ret, ".", 1))
@@ -339,12 +339,12 @@ class PDFPhDFormat extends PhDFormat {
         else $this->pdfDoc->appendText($ret);
         return "";
     }
-    
+
     public function format_suppressed_tags($open, $name, $attrs) {
         /* Ignore it */
         return "";
     }
-    
+
     public function format_suppressed_text($value, $tag) {
         /* Suppress any content */
         return "";
@@ -353,15 +353,15 @@ class PDFPhDFormat extends PhDFormat {
     public function getPdfDoc() {
         return $this->pdfDoc;
     }
-    
+
     public function setPdfDoc($pdfDoc) {
         $this->pdfDoc = $pdfDoc;
     }
-    
+
     public function newChunk() {
         $this->cchunk = $this->dchunk;
     }
-    
+
     // DUMMY REFSECTION DELETION
     public function format_refsection($open, $name, $attrs, $props) {
         if ($open) {
@@ -371,7 +371,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_para($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::PARA);
@@ -380,7 +380,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_shifted_para($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->shift();
@@ -391,7 +391,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_shifted_line($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->shift();
@@ -401,7 +401,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_title($open, $name, $attrs, $props) {
         if ($props["empty"]) return '';
         if ($open) {
@@ -412,7 +412,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_title2($open, $name, $attrs, $props) {
         if ($props["empty"]) return '';
         if ($open) {
@@ -434,7 +434,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_bold($open, $name, $attrs, $props) {
         if ($props["empty"]) return '';
         if ($open) {
@@ -454,7 +454,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::ADMONITION);
@@ -465,40 +465,40 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_example($open, $name, $attrs, $props) {
         if ($open) {
             $this->lang = $props["lang"];
             $this->cchunk["examplenumber"]++;
             $this->pdfDoc->add(PdfWriter::ADMONITION);
-            
+
         } else {
             $this->pdfDoc->add(PdfWriter::END_ADMONITION);
         }
         return "";
     }
-    
+
     public function format_example_title($open, $name, $attrs, $props) {
         if ($props["empty"]) {
             $this->pdfDoc->appendText($this->autogen("example", $this->lang) .
                 $this->cchunk["examplenumber"]);
             $this->pdfDoc->add(PdfWriter::ADMONITION_CONTENT);
         } elseif ($open) {
-            $this->pdfDoc->appendText($this->autogen("example", $this->lang) . 
+            $this->pdfDoc->appendText($this->autogen("example", $this->lang) .
                 $this->cchunk["examplenumber"] . " -");
         } else {
             $this->pdfDoc->add(PdfWriter::ADMONITION_CONTENT);
         }
         return "";
     }
-    
+
     public function format_newpage($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::PAGE);
         }
         return "";
     }
-    
+
     public function format_verbatim_block($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["verbatim-block"] = true;
@@ -510,7 +510,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_verbatim_inline($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM, 10);
@@ -519,7 +519,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_framed_block($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::FRAMED_BLOCK);
@@ -528,7 +528,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_framed_para($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::FRAMED_BLOCK);
@@ -539,13 +539,13 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-        
+
     public function format_newline($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
         }
     }
-    
+
     public function format_link($open, $name, $attrs, $props) {
         if ($open && ! $props["empty"]) {
             $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0, 0, 1)); // blue
@@ -568,7 +568,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_link_text($value, $tag) {
         $value = trim(ereg_replace( "[ \n\t]+", ' ', $value));
         if (isset($this->cchunk["href"]) && $this->cchunk["href"]) {
@@ -582,13 +582,13 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_function_text($value, $tag, $display_value = null) {
         $value = trim(ereg_replace( "[ \n\t]+", ' ', $value));
         if ($display_value === null) {
             $display_value = $value;
         }
-        
+
         $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
         if (($linkend = $this->getRefnameLink($ref)) !== null) {
             $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0, 0, 1)); // blue
@@ -604,7 +604,7 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->revertFont();
         return "";
     }
-    
+
     public function format_authorgroup_author($open, $name, $attrs, $props) {
         if ($open) {
             if ($props["sibling"] !== $name) {
@@ -616,7 +616,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-   
+
     public function format_editor($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->setFont(PdfWriter::FONT_BOLD);
@@ -627,7 +627,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_copyright($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::PARA);
@@ -637,7 +637,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     // Lists {{{
     public function format_listitem($open, $name, $attrs, $props) {
         if ($open) {
@@ -648,12 +648,12 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_procedure($open, $name, $attrs, $props) {
         $this->cchunk["step"] = 0;
         return $this->format_shifted_para($open, $name, $attrs, $props);
     }
-    
+
     public function format_step($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
@@ -663,7 +663,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_member($open, $name, $attrs, $props) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::LINE_JUMP);
@@ -671,12 +671,12 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_segmentedlist($open, $name, $attrs, $props) {
         $this->cchunk["segmentedlist"] = $this->dchunk["segmentedlist"];
         return $this->format_para($open, $name, $attrs, $props);
     }
-    
+
     public function format_segtitle_text($value, $tag) {
         $this->cchunk["segmentedlist"]["segtitle"][count($this->cchunk["segmentedlist"]["segtitle"])] = $value;
         return '';
@@ -697,7 +697,7 @@ class PDFPhDFormat extends PhDFormat {
         return '';
     }
     // }}} Lists
-    
+
     // Tables {{{
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
@@ -706,7 +706,7 @@ class PDFPhDFormat extends PhDFormat {
         } else {
             $this->cchunk["table"] = false;
             $this->pdfDoc->add(PdfWriter::END_TABLE);
-            
+
             if ($this->cchunk["tablefootnotes"]) {
                 $this->pdfDoc->add(PdfWriter::FRAMED_BLOCK);
                 $this->pdfDoc->add(PdfWriter::LINE_JUMP);
@@ -788,7 +788,7 @@ class PDFPhDFormat extends PhDFormat {
             }
 
             /*
-             * "colspan" is *not* an standard prop, only used to overwrite the 
+             * "colspan" is *not* an standard prop, only used to overwrite the
              * colspan for <footnote>s in tables
              */
             if (isset($props["colspan"])) {
@@ -800,7 +800,7 @@ class PDFPhDFormat extends PhDFormat {
             $rowspan = PhDFormat::rowspan($dbattrs);
             $this->pdfDoc->add(PdfWriter::TABLE_ENTRY, array($colspan, $rowspan, $align));
         } else {
-            $this->pdfDoc->add(PdfWriter::TABLE_END_ENTRY);            
+            $this->pdfDoc->add(PdfWriter::TABLE_END_ENTRY);
         }
         return "";
     }
@@ -815,7 +815,7 @@ class PDFPhDFormat extends PhDFormat {
         return "";
     }
     // }}} Tables
-    
+
     // Synopsises {{{
     public function format_methodsynopsis($open, $name, $attrs, $props) {
         if ($open) {
@@ -831,7 +831,7 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->appendText($content);
         return $this->format_para($open, $name, $attrs, $props);
     }
-    
+
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
         $value = $this->TEXT($value);
         if ($this->cchunk["classsynopsis"]["classname"] === false) {
@@ -855,7 +855,7 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->appendText($method);
         return '';
     }
-    
+
     public function format_methodparam_parameter($open, $name, $attrs, $props) {
         if ($props["empty"]) return '';
         if ($open) {
@@ -871,7 +871,7 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->revertFont();
         return '';
     }
-    
+
     public function format_parameter($open, $name, $attrs, $props) {
         if ($props["empty"]) return '';
         if ($open) {
@@ -886,7 +886,7 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->revertFont();
         return '';
     }
-    
+
     public function format_methodparam($open, $name, $attrs) {
         if ($open) {
             $content = '';
@@ -915,7 +915,7 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->appendText(" ( void");
         return '';
     }
-    
+
     public function format_classsynopsisinfo($open, $name, $attrs, $props) {
         $this->cchunk["classsynopsisinfo"] = $this->dchunk["classsynopsisinfo"];
         if ($open) {
@@ -949,7 +949,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return '';
     }
-    
+
     public function format_classsynopsis($open, $name, $attrs, $props) {
         if ($open) {
             return $this->format_para($open, $name, $attrs, $props);
@@ -962,13 +962,13 @@ class PDFPhDFormat extends PhDFormat {
         }
         return $this->format_para($open, $name, $attrs, $props);
     }
-    
+
     public function format_fieldsynopsis_modifier_text($value, $tag) {
         $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
         $this->pdfDoc->appendText($this->TEXT($value));
         return '';
     }
-    
+
     public function format_fieldsynopsis($open, $name, $attrs, $props) {
         $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
         if ($open) {
@@ -977,7 +977,7 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->appendText(";");
         return $this->format_para($open, $name, $attrs, $props);
     }
-    
+
     public function format_initializer($open, $name, $attrs) {
         if ($open) {
             $this->pdfDoc->appendText(" =");
@@ -985,8 +985,8 @@ class PDFPhDFormat extends PhDFormat {
         return '';
     }
     // }}} Synopsises
-        
-        
+
+
     // Footnotes & Callouts {{{
     public function format_footnoteref($open, $name, $attrs, $props) {
         if ($open) {
@@ -1002,7 +1002,7 @@ class PDFPhDFormat extends PhDFormat {
             return '';
         }
     }
-    
+
     public function format_footnote($open, $name, $attrs, $props) {
         if ($open) {
             $count = count($this->cchunk["footnote"]);
@@ -1025,7 +1025,7 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->setAppendToBuffer(false);
         return "";
     }
-    
+
     public function format_co($open, $name, $attrs, $props) {
         if (($open || $props["empty"]) && isset($attrs[PhDReader::XMLNS_XML]["id"]) && $id = $attrs[PhDReader::XMLNS_XML]["id"]) {
             $co = ++$this->cchunk["co"];
@@ -1041,7 +1041,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_calloutlist($open, $name, $attrs) {
         if ($open) {
             $this->pdfDoc->add(PdfWriter::FRAMED_BLOCK);
@@ -1053,7 +1053,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return '';
     }
-    
+
     public function format_callout($open, $name, $attrs) {
         if ($open) {
             $co = ++$this->cchunk["co"];
@@ -1072,19 +1072,19 @@ class PDFPhDFormat extends PhDFormat {
         return '';
     }
     // }}} Footnotes & Callouts
-    
+
     public function format_quote_text($value, $tag) {
         $value = trim(ereg_replace( "[ \n\t]+", ' ', $value));
         $this->pdfDoc->appendText(' "'.$value.'"');
         return "";
     }
-    
+
     public function format_refname_text($value, $tag) {
         $this->cchunk["refname"][] = $value;
         $this->pdfDoc->appendText(trim(ereg_replace( "[ \n\t]+", ' ', $value)));
         return "";
     }
-    
+
     public function format_refpurpose($open, $tag, $attrs, $props) {
         if ($props["empty"]) {
             $this->pdfDoc->add(PdfWriter::PARA);
@@ -1104,7 +1104,7 @@ class PDFPhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_manvolnum($open, $name, $attrs) {
         if ($open) {
             $this->pdfDoc->appendText(")");
@@ -1114,7 +1114,7 @@ class PDFPhDFormat extends PhDFormat {
         return '';
         return ")</span>";
     }
-    
+
     public function format_indice($open, $name, $attrs) {
         if (($open && $name == "subscript") || (!$open && $name == "superscript")) {
             $this->pdfDoc->vOffset("-4");
@@ -1123,14 +1123,14 @@ class PDFPhDFormat extends PhDFormat {
         $this->pdfDoc->vOffset("4");
         return '';
     }
-    
+
     public function format_imagedata($open, $name, $attrs, $props) {
         if ($props["empty"] && isset($this->cchunk["xml-base"]) && ($base = $this->cchunk["xml-base"]) &&
             isset($attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]) && ($fileref = $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"])) {
             $imagePath = PhDConfig::xml_root() . DIRECTORY_SEPARATOR . $base . $fileref;
             if (file_exists($imagePath))
                 $this->pdfDoc->add(PdfWriter::IMAGE, $imagePath);
-            
+
         }
         return '';
     }
@@ -1142,10 +1142,10 @@ class PdfWriter {
     const FONT_NORMAL = 0x01;
     const FONT_ITALIC = 0x02;
     const FONT_BOLD = 0x03;
-    const FONT_VERBATIM = 0x04;  
-    const FONT_VERBATIM_ITALIC = 0x05;  
-    const FONT_MANUAL = 0x06;  
-    
+    const FONT_VERBATIM = 0x04;
+    const FONT_VERBATIM_ITALIC = 0x05;
+    const FONT_MANUAL = 0x06;
+
     // "Objects" constants (for add())
     const PARA = 0x10;
     const INDENTED_PARA = 0x11;
@@ -1171,8 +1171,8 @@ class PdfWriter {
     const END_TABLE = 0x25;
     const TABLE_END_ROW = 0x26;
     const ADD_NUMBER_ITEM = 0x27;
-    const IMAGE = 0x28;    
-    
+    const IMAGE = 0x28;
+
     // Page format
     const VMARGIN = 56.7; // = 1 centimeter
     const HMARGIN = 56.7; // = 1 centimeter
@@ -1182,12 +1182,13 @@ class PdfWriter {
     private $SCALE; // nb of points for 1 centimeter
     private $PAGE_WIDTH; // in points
     private $PAGE_HEIGHT; // in points
-    
+
     private $haruDoc;
     private $pages = array();
     private $currentPage;
     private $currentPageNumber;
-        
+    private $currentBookName;
+
     private $currentFont;
     private $currentFontSize;
     private $currentFontColor;
@@ -1203,7 +1204,7 @@ class PdfWriter {
     );
     private $permanentLeftSpacing = 0;
     private $permanentRightSpacing = 0;
-    
+
     private $appendToBuffer = false;
     // To append afterwards
     private $buffer = array(
@@ -1214,8 +1215,10 @@ class PdfWriter {
             'color'      => "",
         )*/
     );
-    
+
     private $current = array(
+        "leftSpacing"       => 0,
+        "rightSpacing"      => 0,
         "oldVPosition"      => 0,
         "vOffset"           => 0,
         "newVOffset"        => 0,
@@ -1225,10 +1228,10 @@ class PdfWriter {
         "char"              => "",
         "charOffset"        => 0,
     );
-    
+
     // To temporarily store $current(s)
     private $old = array();
-    
+
     function __construct($pageWidth = 210, $pageHeight = 297) {
     	// Initialization of properties
     	$this->haruDoc = new HaruDoc;
@@ -1241,14 +1244,14 @@ class PdfWriter {
     	$this->SCALE = 72/25.4;
     	$this->PAGE_WIDTH = $pageWidth * $this->SCALE;
     	$this->PAGE_HEIGHT = $pageHeight * $this->SCALE;
-    	    	    	
+
     	// Set fonts
     	$this->fonts["Helvetica"] = $this->haruDoc->getFont("Helvetica", "WinAnsiEncoding");
     	$this->fonts["Helvetica-Bold"] = $this->haruDoc->getFont("Helvetica-Bold", "WinAnsiEncoding");
     	$this->fonts["Helvetica-Oblique"] = $this->haruDoc->getFont("Helvetica-Oblique", "WinAnsiEncoding");
     	$this->fonts["Courier"] = $this->haruDoc->getFont("Courier", "WinAnsiEncoding");
     	$this->fonts["Courier-Oblique"] = $this->haruDoc->getFont("Courier-Oblique", "WinAnsiEncoding");
-    	
+
     	// Add first page and default font settings
     	$this->currentFont = $this->fonts["Helvetica"];
     	$this->currentFontSize = 12;
@@ -1256,15 +1259,15 @@ class PdfWriter {
     	$this->nextPage();
     	$this->haruDoc->addPageLabel(1, HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
     }
-    
+
     public function getCurrentPage() {
         return $this->currentPage;
     }
-    
+
     public function setCompressionMode($mode) {
         $this->haruDoc->setCompressionMode($mode);
     }
-    
+
     // Append text into the current position
     public function appendText($text) {
 //        if ($this->vOffset > $this->current["charOffset"] + 3*LINE_SPACING + 3*$this->currentFontSize)
@@ -1278,25 +1281,25 @@ class PdfWriter {
             ));
             return;
         }
-        
+
         $this->currentPage->beginText();
         do {
             // Clear the whitespace if it begins the line or if last char is a special char
             if (strpos($text, " ") === 0 && ($this->hOffset == 0 || in_array($this->current["char"], array("&", "$")))) {
                 $text = substr($text, 1);
             }
-            
+
             // Number of chars allowed in the current line
-            $nbCarac = $this->currentFont->measureText($text, 
-                ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->hOffset - $this->permanentLeftSpacing - $this->permanentRightSpacing), 
+            $nbCarac = $this->currentFont->measureText($text,
+                ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->hOffset - $this->permanentLeftSpacing - $this->permanentRightSpacing),
                 $this->currentFontSize, $this->currentPage->getCharSpace(),
                 $this->currentPage->getWordSpace(), true);
-            
+
             // If a the text content can't be appended (either there is no whitespaces,
             // either the is not enough space in the line)
             if ($nbCarac === 0) {
-                $isEnoughSpaceOnNextLine = $this->currentFont->measureText($text, 
-                    ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->permanentLeftSpacing - $this->permanentRightSpacing), 
+                $isEnoughSpaceOnNextLine = $this->currentFont->measureText($text,
+                    ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->permanentLeftSpacing - $this->permanentRightSpacing),
                     $this->currentFontSize, $this->currentPage->getCharSpace(),
                     $this->currentPage->getWordSpace(), true);
                 if ($isEnoughSpaceOnNextLine) {
@@ -1305,14 +1308,14 @@ class PdfWriter {
                     $isLastLine = false;
                     continue;
                 } else {
-                    $nbCarac = $this->currentFont->measureText($text, 
-                        ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->hOffset - $this->permanentLeftSpacing - $this->permanentRightSpacing), 
+                    $nbCarac = $this->currentFont->measureText($text,
+                        ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->hOffset - $this->permanentLeftSpacing - $this->permanentRightSpacing),
                         $this->currentFontSize, $this->currentPage->getCharSpace(),
                         $this->currentPage->getWordSpace(), false);
-                }                    
+                }
             }
             $isLastLine = ($nbCarac == strlen($text));
-            
+
             $textToAppend = substr($text, 0, $nbCarac);
             $text = substr($text, $nbCarac);
 
@@ -1324,21 +1327,22 @@ class PdfWriter {
                 $this->currentPage->beginText();
             }
             if ($this->current["align"] == "center") {
-                $spacing = $this->PAGE_WIDTH - 2*self::HMARGIN - 
+                $spacing = $this->PAGE_WIDTH - 2*self::HMARGIN -
                     $this->permanentLeftSpacing - $this->permanentRightSpacing - $this->currentPage->getTextWidth($textToAppend);
-                $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing + $spacing/2, 
+                $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing + $spacing/2,
                     $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
             } elseif ($this->current["align"] == "right") {
-                $spacing = $this->PAGE_WIDTH - 2*self::HMARGIN - 
+                $spacing = $this->PAGE_WIDTH - 2*self::HMARGIN -
                     $this->permanentLeftSpacing - $this->permanentRightSpacing - $this->currentPage->getTextWidth($textToAppend);
-                $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing + $spacing, 
+                $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing + $spacing,
                     $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
             } else { // left
-                $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing, 
+                $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing,
                     $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
             }
-            $this->current["char"] = $textToAppend{strlen($textToAppend)-1};
-                    
+            if ($textToAppend)
+                $this->current["char"] = $textToAppend{strlen($textToAppend)-1};
+
             // Offsets for next line
             if (!$isLastLine) {
                 $this->vOffset += $this->currentFontSize + self::LINE_SPACING;
@@ -1346,7 +1350,7 @@ class PdfWriter {
             } else {
                 $this->hOffset += $this->currentPage->getTextWidth($textToAppend);
             }
-            
+
         }
         while(!$isLastLine); // While it remains chars to append
         $this->currentPage->endText();
@@ -1358,33 +1362,33 @@ class PdfWriter {
         if (strpos($text, " ") === 0 && ($this->hOffset == 0 || in_array($this->current["char"], array("&", "$")))) {
             $text = substr($text, 1);
         }
-        
+
         $this->currentPage->beginText();
-        $nbCarac = $this->currentFont->measureText($text, 
-            ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->hOffset - $this->permanentLeftSpacing - $this->permanentRightSpacing), 
+        $nbCarac = $this->currentFont->measureText($text,
+            ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->hOffset - $this->permanentLeftSpacing - $this->permanentRightSpacing),
             $this->currentFontSize, $this->currentPage->getCharSpace(),
             $this->currentPage->getWordSpace(), true);
-        
+
         // If a the text content can't be appended (either there is no whitespaces,
         // either the is not enough space in the line)
         if ($nbCarac === 0) {
-            $isEnoughSpaceOnNextLine = $this->currentFont->measureText($text, 
-                ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->permanentLeftSpacing - $this->permanentRightSpacing), 
+            $isEnoughSpaceOnNextLine = $this->currentFont->measureText($text,
+                ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->permanentLeftSpacing - $this->permanentRightSpacing),
                 $this->currentFontSize, $this->currentPage->getCharSpace(),
                 $this->currentPage->getWordSpace(), true);
             if ($isEnoughSpaceOnNextLine) {
                 $this->currentPage->endText();
                 return $text;
             } else {
-                $nbCarac = $this->currentFont->measureText($text, 
-                    ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->hOffset - $this->permanentLeftSpacing - $this->permanentRightSpacing), 
+                $nbCarac = $this->currentFont->measureText($text,
+                    ($this->PAGE_WIDTH - 2*self::HMARGIN - $this->hOffset - $this->permanentLeftSpacing - $this->permanentRightSpacing),
                     $this->currentFontSize, $this->currentPage->getCharSpace(),
                     $this->currentPage->getWordSpace(), false);
-            }                    
+            }
         }
-    
+
         $isLastLine = ($nbCarac == strlen($text));
-        
+
         $textToAppend = substr($text, 0, $nbCarac);
         $text = substr($text, $nbCarac);
 
@@ -1395,23 +1399,23 @@ class PdfWriter {
             $this->nextPage();
             $this->currentPage->beginText();
         }
-        $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing, 
+        $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing,
             $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
         if ($textToAppend)
             $this->current["char"] = $textToAppend{strlen($textToAppend)-1};
-               
+
         $this->hOffset += $this->currentPage->getTextWidth($textToAppend);
-        
+
         $this->currentPage->endText();
         $this->current["charOffset"] = $this->vOffset;
-        
+
         return ($isLastLine ? null : $text);
     }
-    
+
     public function setAppendToBuffer($appendToBuffer) {
         $this->appendToBuffer = $appendToBuffer;
     }
-    
+
     public function appendBufferNow() {
         foreach($this->buffer as $row) {
             if ($row["text"] == "\n") {
@@ -1424,7 +1428,7 @@ class PdfWriter {
         }
         $this->buffer = array();
     }
-    
+
     public function add($type, $option = null) {
         if ($this->appendToBuffer) return;
         switch ($type) {
@@ -1519,7 +1523,7 @@ class PdfWriter {
                 break;
         }
     }
-     
+
     // Switch font on-the-fly
     public function setFont($type, $size = null, $color = null, $font = null) {
         if ($this->currentPage == null)
@@ -1530,7 +1534,7 @@ class PdfWriter {
             $this->setColor($color[0], $color[1], $color[2]);
             $this->currentFontColor = $color;
         }
-        else 
+        else
             $this->setColor($this->currentFontColor[0], $this->currentFontColor[1], $this->currentFontColor[2]);
         switch ($type) {
             case self::FONT_NORMAL:
@@ -1561,7 +1565,7 @@ class PdfWriter {
                 break;
         }
     }
-    
+
     // Back to the last used font
     public function revertFont() {
         $lastFont = array_pop($this->oldFonts);
@@ -1569,10 +1573,10 @@ class PdfWriter {
         $this->currentFontSize = $lastFont[1];
         $this->currentFontColor = $lastFont[2];
         $this->currentPage->setFontAndSize($lastFont[0], $lastFont[1]);
-        $this->setColor($lastFont[2][0], $lastFont[2][1], $lastFont[2][2]); 
+        $this->setColor($lastFont[2][0], $lastFont[2][1], $lastFont[2][2]);
     }
-    
-    // Change font color (1, 1, 1 = white, 0, 0, 0 = black) 
+
+    // Change font color (1, 1, 1 = white, 0, 0, 0 = black)
     public function setColor($r, $g, $b) {
         if ($r < 0 || $r > 1 || $g < 0 || $g > 1 || $b < 0 || $b > 1)
             return false;
@@ -1581,12 +1585,12 @@ class PdfWriter {
         $this->currentFontColor = array($r, $g, $b);
         return true;
     }
-    
+
     // Save the current PDF Document to a file
     public function saveToFile($filename) {
         $this->haruDoc->save($filename);
     }
-    
+
     public function createOutline($description, $parentOutline = null, $opened = false) {
         $outline = $this->haruDoc->createOutline($description, $parentOutline);
         $dest = $this->currentPage->createDestination();
@@ -1595,47 +1599,67 @@ class PdfWriter {
         $outline->setOpened($opened);
         return $outline;
     }
-    
+
     public function shift($offset = self::DEFAULT_SHIFT) {
         $this->permanentLeftSpacing += $offset;
     }
-    
+
     public function unshift($offset = self::DEFAULT_SHIFT) {
         $this->permanentLeftSpacing -= $offset;
     }
-    
+
     public function vOffset($offset) {
         $this->vOffset += $offset;
     }
-    
+
     private function indent($offset = self::INDENT_SPACING) {
         $this->hOffset = $offset;
     }
-    
+
     // Jump to next page (or create a new one if none exists)
     private function nextPage() {
         $this->lastPage = array(
             "vOffset" => $this->vOffset,
             "hOffset" => $this->hOffset,
         );
+        $footerToAppend = false;
         $this->currentPageNumber++;
         if (isset($this->pages[$this->currentPageNumber])) {
             $this->currentPage = $this->pages[$this->currentPageNumber];
             $this->vOffset = $this->currentFontSize;
             $this->hOffset = 0;
-        } else { 
+        } else {
             $this->pages[$this->currentPageNumber] = $this->haruDoc->addPage();
             $this->currentPage = $this->pages[$this->currentPageNumber];
             $this->currentPage->setTextRenderingMode(HaruPage::FILL);
             $this->vOffset = $this->currentFontSize;
             $this->hOffset = ($this->hOffset ? $this->hOffset : 0);
+            $footerToAppend = true;
         }
         if ($this->currentFont && $this->currentFontSize && $this->currentFontColor) {
             $this->currentPage->setFontAndSize($this->currentFont, $this->currentFontSize);
             $this->setColor($this->currentFontColor[0], $this->currentFontColor[1], $this->currentFontColor[2]);
         }
-    } 
-    
+        if ($footerToAppend && $this->currentPageNumber > 1) {
+            $this->currentPage->beginText();
+            $this->setFont(self::FONT_NORMAL, 12, array(0,0,0));
+            $this->currentPage->textOut($this->PAGE_WIDTH - self::HMARGIN - $this->currentPage->getTextWidth($this->currentPageNumber),
+                self::VMARGIN - 30, $this->currentPageNumber);
+            $this->revertFont();
+            $this->setFont(self::FONT_BOLD, 12, array(0,0,0));
+            $this->currentPage->textOut(self::HMARGIN,
+                self::VMARGIN - 30, $this->currentBookName);
+            $this->revertFont();
+            $this->currentPage->endText();
+
+        }
+
+    }
+
+    public function setCurrentBookName($currentBookName) {
+        $this->currentBookName = $currentBookName;
+    }
+
     // Set last page as the current page
     private function lastPage() {
         $this->currentPageNumber--;
@@ -1643,25 +1667,25 @@ class PdfWriter {
         $this->vOffset = $this->lastPage["vOffset"];
         $this->hOffset = $this->lastPage["hOffset"];
     }
-    
+
     // Returns true if a next page exists
     private function isNextPage() {
         return isset($this->pages[$this->currentPageNumber + 1]);
     }
-    
+
     // Jump a line
     private function lineJump($nbLines = 1) {
         $this->vOffset += $nbLines * ($this->currentFontSize + self::LINE_SPACING);
         $this->hOffset = 0;
     }
-    
+
     // Trace a line from the current position
     private function traceLine() {
         $this->lineJump();
         $this->currentPage->rectangle(self::HMARGIN + $this->hOffset, $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset, $this->PAGE_WIDTH - 2*$this->hOffset - 2*self::HMARGIN, 1);
         $this->currentPage->stroke();
     }
-    
+
     private function beginAdmonition() {
         // If this admonition is inside another frame
         array_push($this->old, $this->current);
@@ -1669,7 +1693,7 @@ class PdfWriter {
         $this->setFont(self::FONT_BOLD, 12);
         $this->lineJump();
         // If no space for admonition title + interleave + admonition first line on this page, then creates a new one
-        if (($this->PAGE_HEIGHT - 2*self::VMARGIN - $this->vOffset) < (3*$this->currentFontSize + 3*self::LINE_SPACING)) 
+        if (($this->PAGE_HEIGHT - 2*self::VMARGIN - $this->vOffset) < (3*$this->currentFontSize + 3*self::LINE_SPACING))
             $this->nextPage();
         $this->current["vOffset"] = $this->vOffset;
         $this->lineJump();
@@ -1677,7 +1701,7 @@ class PdfWriter {
         $this->permanentRightSpacing += self::INDENT_SPACING;
         $this->current["pages"] = array();
     }
-    
+
     private function admonitionContent() {
         if ($this->current["pages"])
             $this->current["vOffset"] = 0;
@@ -1685,24 +1709,26 @@ class PdfWriter {
         $this->revertFont();
         $this->currentPage->rectangle(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
             $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset,
-            $this->PAGE_WIDTH - 2*self::HMARGIN - ($this->permanentLeftSpacing - self::INDENT_SPACING) - $this->permanentRightSpacing,
-            $this->vOffset - $this->current["vOffset"]); 
+            $this->PAGE_WIDTH - 2*self::HMARGIN - ($this->permanentLeftSpacing - self::INDENT_SPACING) - ($this->permanentRightSpacing - self::INDENT_SPACING),
+            $this->vOffset - $this->current["vOffset"]);
         $this->currentPage->stroke();
     }
-    
+
     private function endAdmonition() {
         $this->endFrame();
         $this->permanentLeftSpacing -= self::INDENT_SPACING;
         $this->permanentRightSpacing -= self::INDENT_SPACING;
-        $this->current = array_pop($this->old);
+        $current = array_pop($this->old);
+        $current["pages"] = array_merge($current["pages"], $this->current["pages"]);
+        $this->current = $current;
     }
-    
+
     private function beginFrame() {
         $this->lineJump();
         $this->current["newVOffset"] = $this->vOffset;
         $this->current["pages"] = array();
     }
-    
+
     private function endFrame($dash = null) {
         $onSinglePage = true;
         foreach ($this->current["pages"] as $page) {
@@ -1715,9 +1741,9 @@ class PdfWriter {
             $page->lineTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
                 $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
             // right border
-            $page->moveTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+            $page->moveTo($this->PAGE_WIDTH - self::HMARGIN - ($this->permanentRightSpacing - self::INDENT_SPACING),
                 self::VMARGIN);
-            $page->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+            $page->lineTo($this->PAGE_WIDTH - self::HMARGIN - ($this->permanentRightSpacing - self::INDENT_SPACING),
                 $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
             $page->stroke();
             $page->setDash(null, 0);
@@ -1733,87 +1759,83 @@ class PdfWriter {
         $this->currentPage->lineTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
             $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
         // right border
-        $this->currentPage->moveTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+        $this->currentPage->moveTo($this->PAGE_WIDTH - self::HMARGIN - ($this->permanentRightSpacing - self::INDENT_SPACING),
             $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
-        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - ($this->permanentRightSpacing - self::INDENT_SPACING),
             $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
         // bottom border
         $this->currentPage->moveTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
             $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
-        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - ($this->permanentRightSpacing - self::INDENT_SPACING),
             $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
         // top border (if frame's on a single page)
         if ($onSinglePage) {
             $this->currentPage->moveTo(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
                 $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
-            $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->permanentRightSpacing,
+            $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - ($this->permanentRightSpacing - self::INDENT_SPACING),
                 $this->PAGE_HEIGHT - self::VMARGIN - $this->current["newVOffset"]);
         }
-//            
-//        $this->currentPage->rectangle(self::HMARGIN + ($this->permanentLeftSpacing - self::INDENT_SPACING),
-//            $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset,
-//            $this->PAGE_WIDTH - 2*self::HMARGIN - ($this->permanentLeftSpacing - self::INDENT_SPACING) - $this->permanentRightSpacing,
-//            $this->vOffset - $this->current["newVOffset"]);
+
         $this->currentPage->stroke();
         $this->lineJump();
         $this->currentPage->setDash(null, 0);
         $this->current["oldVPosition"] = 0;
     }
-    
+
     // Append $text with an underlined blue style with a link to $url
     private function appendUrlAnnotation($text, $url) {
         $this->appendText(" ");
         $fromHOffset = $this->hOffset;
-        
-        // If more than one text line to append 
+
+        // If more than one text line to append
         while ($text = $this->appendOneLine($text)) {
             // Trace the underline
             $this->currentPage->setLineWidth(1.0);
             $this->currentPage->setDash(null, 0);
-            $this->currentPage->moveTo(self::HMARGIN + $this->permanentLeftSpacing + $fromHOffset, 
+            $this->currentPage->moveTo(self::HMARGIN + $this->permanentLeftSpacing + $fromHOffset,
                 $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset + self::LINE_SPACING));
-            $this->currentPage->lineTo(self::HMARGIN + $this->permanentLeftSpacing + $this->hOffset, 
+            $this->currentPage->lineTo(self::HMARGIN + $this->permanentLeftSpacing + $this->hOffset,
                 $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset + self::LINE_SPACING));
             $this->currentPage->stroke();
-            
+
             // Create link
             $annotationArea = array(self::HMARGIN + $this->permanentLeftSpacing + $fromHOffset,
                 $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset + self::LINE_SPACING),
                 self::HMARGIN + $this->permanentLeftSpacing + $this->hOffset,
                 $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset - $this->currentFontSize));
             $this->currentPage->createURLAnnotation($annotationArea, $url)->setBorderStyle(0, 0, 0);
-            
+
             // Prepare the next line
             $this->vOffset += $this->currentFontSize + self::LINE_SPACING;
             $this->hOffset = 0;
             $fromHOffset = $this->hOffset;
         }
-        
+
         // Trace the underline
         $this->currentPage->setLineWidth(1.0);
         $this->currentPage->setDash(null, 0);
-        $this->currentPage->moveTo(self::HMARGIN + $this->permanentLeftSpacing + $fromHOffset, 
+        $this->currentPage->moveTo(self::HMARGIN + $this->permanentLeftSpacing + $fromHOffset,
             $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset + self::LINE_SPACING));
-        $this->currentPage->lineTo(self::HMARGIN + $this->permanentLeftSpacing + $this->hOffset, 
+        $this->currentPage->lineTo(self::HMARGIN + $this->permanentLeftSpacing + $this->hOffset,
             $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset + self::LINE_SPACING));
         $this->currentPage->stroke();
-        
+
         // Create link
         $annotationArea = array(self::HMARGIN + $this->permanentLeftSpacing + $fromHOffset,
             $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset + self::LINE_SPACING),
             self::HMARGIN + $this->permanentLeftSpacing + $this->hOffset,
             $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset - $this->currentFontSize));
         $this->currentPage->createURLAnnotation($annotationArea, $url)->setBorderStyle(0, 0, 0);
-        
+
     }
-    
+
     // Append $text with an underlined blue style and prepare an internal link (which will be resolved later)
     private function prepareInternalLinkAnnotation($text) {
         $this->appendText(" ");
         $fromHOffset = $this->hOffset;
         $linkAreas = array(/* page, left, bottom, right, top */);
-        
-        // If more than one text line to append 
+
+        // If more than one text line to append
         while ($text = $this->appendOneLine($text)) {
            // Create link
             $linkAreas[] = array($this->currentPage,
@@ -1821,23 +1843,23 @@ class PdfWriter {
                 $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset + self::LINE_SPACING),
                 self::HMARGIN + $this->permanentLeftSpacing + $this->hOffset,
                 $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset - $this->currentFontSize));
-            
+
             // Prepare the next line
             $this->vOffset += $this->currentFontSize + self::LINE_SPACING;
             $this->hOffset = 0;
             $fromHOffset = $this->hOffset;
         }
-        
+
         // Prepare link
         $linkAreas[] = array($this->currentPage,
                 self::HMARGIN + $this->permanentLeftSpacing + $fromHOffset,
                 $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset + self::LINE_SPACING),
                 self::HMARGIN + $this->permanentLeftSpacing + $this->hOffset,
                 $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset - $this->currentFontSize));
-        
+
         return $linkAreas;
     }
-    
+
     public function resolveInternalLink($page, $rectangle, $destPage) {
         $page->setRGBStroke(0, 0, 1); // blue
         // Trace the underline
@@ -1851,47 +1873,58 @@ class PdfWriter {
             ->setBorderStyle(0, 0, 0);
         $page->setDash(null, 0);
     }
-    
+
     public function addTable($colCount) {
-        $this->currentPage->moveTo(self::HMARGIN, $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
-        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN, $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
+        // If this table is inside another table or frame
+        array_push($this->old, $this->current);
+        $this->current["leftSpacing"] = $this->permanentLeftSpacing;
+        $this->current["rightSpacing"] = $this->permanentRightSpacing;
+        // First horizontal line
+        $this->currentPage->moveTo(self::HMARGIN + $this->current["leftSpacing"], $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
+        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->current["rightSpacing"], $this->PAGE_HEIGHT - self::VMARGIN - $this->vOffset);
         $this->currentPage->stroke();
     }
-    
+
     public function endTable() {
-        $this->permanentLeftSpacing = 0;
-        $this->permanentRightSpacing = 0;
+        $this->permanentLeftSpacing = $this->current["leftSpacing"];
+        $this->permanentRightSpacing = $this->current["rightSpacing"];
         $this->lineJump();
+        $current = array_pop($this->old);
+        $current["pages"] = array_merge($current["pages"], $this->current["pages"]);
+        $this->current = $current;
     }
-    
+
     public function newTableRow($colCount, $valign) {
         $this->current["vOffset"] = $this->vOffset;
         $this->current["row"]["cellCount"] = $colCount;
         $this->current["row"]["activeCell"] = 0;
-        $this->current["row"]["hSize"] = ($this->PAGE_WIDTH - 2*self::HMARGIN) / $this->current["row"]["cellCount"];
+        $this->current["row"]["hSize"] = ($this->PAGE_WIDTH - 2*self::HMARGIN -
+            $this->current["leftSpacing"] - $this->current["rightSpacing"]) / $this->current["row"]["cellCount"];
         $this->current["row"]["vPosition"] = 0;
         $this->current["row"]["pages"] = array();
         $this->current["row"]["cutPolicy"] = array(1);
         $this->current["pages"] = array();
     }
-    
+
     public function beginTableEntry($colspan, $rowspan, $align) {
-        $this->permanentLeftSpacing = ($this->current["row"]["activeCell"]++) * $this->current["row"]["hSize"] + self::LINE_SPACING;
+        $this->permanentLeftSpacing = ($this->current["row"]["activeCell"]++) * $this->current["row"]["hSize"] +
+            self::LINE_SPACING + $this->current["leftSpacing"];
         $this->permanentRightSpacing = $this->PAGE_WIDTH - 2*self::HMARGIN -
-            ($this->current["row"]["activeCell"] + $colspan - 1) * $this->current["row"]["hSize"] + self::LINE_SPACING;
+            ($this->current["row"]["activeCell"] + $colspan - 1) * $this->current["row"]["hSize"] -
+            $this->current["leftSpacing"] + self::LINE_SPACING;
 
         foreach ($this->current["pages"] as $page) {
             $this->lastPage();
         }
         $this->current["pages"] = array();
-        
+
         $this->hOffset = 0;
         $this->vOffset = $this->current["vOffset"] + $this->currentFontSize + self::LINE_SPACING;
         $this->current["align"] = $align;
-        
+
         array_push($this->current["row"]["cutPolicy"], $colspan);
     }
-    
+
     public function endTableEntry() {
         $this->current["align"] = "";
         $newOffset = $this->vOffset + $this->currentFontSize + self::LINE_SPACING;
@@ -1902,20 +1935,20 @@ class PdfWriter {
             $this->current["row"]["pages"] = $this->current["pages"];
         }
     }
-    
+
     public function endTableRow() {
         $vOffset = $this->current["vOffset"];
         while($this->isNextPage())
-            $this->nextPage();        
+            $this->nextPage();
         // Vertical lines
-        for ($i = 0, $x = self::HMARGIN; $i <= $this->current["row"]["cellCount"]; $i++, $x += $this->current["row"]["hSize"]) {
+        for ($i = 0, $x = self::HMARGIN + $this->current["leftSpacing"]; $i <= $this->current["row"]["cellCount"]; $i++, $x += $this->current["row"]["hSize"]) {
 
             // Don't trace vertical line if colspan
             if (($cellCount = array_shift($this->current["row"]["cutPolicy"])) > 1) {
                 array_unshift($this->current["row"]["cutPolicy"], $cellCount - 1);
                 continue;
             }
-            
+
             foreach ($this->current["row"]["pages"] as $page) {
                 $page->setRGBStroke(0, 0, 0);
                 $page->moveTo($x, self::VMARGIN);
@@ -1923,25 +1956,30 @@ class PdfWriter {
                 $page->stroke();
                 $this->current["vOffset"] = 0;
             }
-            
+
             $this->currentPage->moveTo($x, $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["vOffset"]));
             $this->currentPage->lineTo($x, $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
             $this->currentPage->stroke();
             $this->current["vOffset"] = $vOffset;
         }
         // Horizontal line
-        $this->currentPage->moveTo(self::HMARGIN, $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
-        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN, 
+        $this->currentPage->moveTo(self::HMARGIN + $this->current["leftSpacing"], $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
+        $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->current["rightSpacing"],
             $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
         $this->currentPage->stroke();
-        
+
         // Store position
-        $this->vOffset = $this->current["row"]["vPosition"] % $this->PAGE_HEIGHT;    
-        
+        $this->vOffset = $this->current["row"]["vPosition"] % $this->PAGE_HEIGHT;
+
+        // Store pages
+        $last = array_pop($this->old);
+        $last["pages"] = array_merge($last["pages"], $this->current["row"]["pages"]);
+        array_push($this->old, $last);
+
         // Erase current properties
-        $this->current["row"] = array();    
+        $this->current["row"] = array();
     }
-    
+
     private function endsWith($str, $sub) {
         return ( substr( $str, strlen( $str ) - strlen( $sub ) ) === $sub );
     }
@@ -1961,10 +1999,11 @@ class PdfWriter {
                 $this->PAGE_HEIGHT - self::HMARGIN - $this->vOffset - $image->getHeight(),
                 $image->getWidth(),
                 $image->getHeight());
-            
+
             $this->hOffset = 0;
             $this->vOffset += $image->getWidth();
         }
     }
 }
+
 ?>

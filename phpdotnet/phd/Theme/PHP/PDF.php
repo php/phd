@@ -93,9 +93,9 @@ class phppdf extends PhDTheme {
     public function __construct(array $IDs, array $filenames, $format = "pdf", $chunked = true) {
         parent::__construct($IDs);
         $this->format = $format;
-
+        if (!class_exists("HaruDoc")) die ("PDF output needs libharu & haru/pecl extensions... Please install them and start PhD again.\n");
         $this->outputdir = PhDConfig::output_dir() . $this->format . DIRECTORY_SEPARATOR;
-        if(!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory");
+        if(!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory.\n");
     }
     
     public function __destruct() {}
@@ -138,6 +138,7 @@ class phppdf extends PhDTheme {
     
     public function format_bookname($value, $tag) {
         $this->cchunk["bookname"] = trim($value);
+        $this->format->getPdfDoc()->setCurrentBookName($this->cchunk["bookname"]);
         return false;
     }
     
@@ -167,6 +168,7 @@ class phppdf extends PhDTheme {
                 }
                 $this->setIdToPage($id);
             }
+            $this->format->setChunkInfo("examplenumber", 0);
         }
         return "";
     }
