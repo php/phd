@@ -1,16 +1,117 @@
 <?php
-/*  $Id$ */
 
-abstract class PhDFormat extends PhDHelper {
-    private $TABLE          = array();
-    
-    /* abstract functions */
-    abstract public function transformFromMap($open, $tag, $name, $attrs, $props);
-    abstract public function CDATA($data);
-    abstract public function TEXT($data);
-    abstract public function __call($func, $args);
+abstract class PhDFormat extends PhDObjectStorage {
+    const SDESC = 1;
+    const LDESC = 2;
 
-    /* Table helper functions */
+	private $elementmap = array();
+	private $textmapmap = array();
+	protected $sqlite;
+
+	private static $autogen = array();
+
+	public function __construct() {
+		$this->sqlite = sqlite_open("index.sqlite");
+        $this->sortIDs();
+	}
+
+	abstract public function transformFromMap($open, $tag, $name, $attrs, $props);
+	abstract public function UNDEF($open, $name, $attrs, $props);
+	abstract public function TEXT($value);
+	abstract public function CDATA($value);
+	abstract public function createLink($for, &$desc = null, $desc = PhDFormat::SDESC);
+	abstract public function appendData($data);
+	abstract public function update($event, $value = null);
+
+    public function sortIDs() {
+        sqlite_create_aggregate($this->sqlite, "idx", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 6);
+        sqlite_unbuffered_query($this->sqlite, "SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element) FROM ids", SQLITE_ASSOC);
+        print_r($this->idx);
+    }
+    public function SQLiteIndex(&$context, $id, $filename, $parent, $sdesc, $ldesc, $element) {
+        $this->idx[$id] = array(
+            "docbook_id" => $id,
+            "filename"   => $filename,
+            "parent_id"  => $parent,
+            "sdesc"      => $sdesc,
+            "ldesc"      => $ldesc,
+            "element"    => $element
+        );
+        if ($element == "refentry") {
+            $this->refs[$sdesc] = $id;
+        }
+
+    }
+    public static function SQLiteFinal(&$context) {
+        return $context;
+    }
+
+
+	final public function notify($event, $val = null) {
+		$this->update($event, $val);
+		foreach($this as $format) {
+			$format->update($event, $val);
+		}
+	}
+	final public function registerElementMap(array $map) {
+		$this->elementmap = $map;
+	}
+	final public function registerTextMap(array $map) {
+		$this->textmap = $map;
+	}
+	final public function attach($obj, $inf = array()) {
+		if (!($obj instanceof $this) && get_class($obj) != get_class($this)) {
+			throw new InvalidArgumentException(get_class($this) . " themes *MUST* _inherit_ " .get_class($this). ", got " . get_class($obj));
+		}
+		$obj->notify(PhDRender::STANDALONE, false);
+		return parent::attach($obj, $inf);
+	}
+	final public function getElementMap() {
+		return $this->elementmap;
+	}
+	final public function getTextMap() {
+		return $this->textmap;
+	}
+    final public static function autogen($text, $lang) {
+        if (isset(self::$autogen[$lang])) {
+			if (isset(self::$autogen[$lang][$text])) {
+				return self::$autogen[$lang][$text];
+			}
+            if ($lang == PhDConfig::get("fallback_language")) {
+				throw new InvalidArgumentException("Cannot autogenerate text for '$text'");
+			}
+            return self::autogen($text, PhDConfig::get("fallback_language"));
+        }
+
+        $filename = PhDConfig::get("lang_dir") . $lang . ".xml";
+
+        $r = new XMLReader;
+        if (!file_exists($filename) || !$r->open($filename)) {
+            if ($lang == PhDConfig::get("fallback_language")) {
+                throw new Exception("Cannot open $filename");
+            }
+            return self::autogen($text, PhDConfig::get("fallback_language"));
+        }
+        $autogen = array();
+        while ($r->read()) {
+            if ($r->nodeType != XMLReader::ELEMENT) {
+                continue;
+            }
+            if ($r->name == "term") {
+                $r->read();
+                $k = $r->value;
+                $autogen[$k] = "";
+            } else if ($r->name == "simpara") {
+                $r->read();
+                $autogen[$k] = $r->value;
+            }
+        }
+        self::$autogen[$lang] = $autogen;
+		return self::autogen($text, $lang);
+    }
+
+
+    /* {{{ Table helper functions */
     public function tgroup($attrs) {
         if (isset($attrs["cols"])) {
             $this->TABLE["cols"] = $attrs["cols"];
@@ -36,7 +137,6 @@ abstract class PhDFormat extends PhDHelper {
     public function getColCount() {
         return $this->TABLE["cols"];
     }
-
     public function valign($attrs) {
         return isset($attrs["valign"]) ? $attrs["valign"] : "middle";
     }
@@ -79,7 +179,7 @@ abstract class PhDFormat extends PhDHelper {
         }
         return 1;
     }
-
+	/* }}} */
 }
 
 /*

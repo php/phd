@@ -7,7 +7,7 @@ At the moment, the code depends upon the following:
     - PHP 5.2.3 or later. PHP 5.3 is recommended. PHP 6 is unsupported, but
        might work.
     - An available CLI binary.
-    - DOM, libXML2, and xmlreader.
+    - DOM, libXML2 (20620 or greater), and xmlreader.
 
 
 Installing the PhD renderer:

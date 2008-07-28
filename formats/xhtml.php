@@ -1,20 +1,19 @@
 <?php
 /*  $Id$ */
-
-class XHTMLPhDFormat extends PhDFormat {
-    protected $elementmap = array( /* {{{ */
+class PhDXHTMLFormat extends PhDFormat {
+    private $myelementmap = array( /* {{{ */
         'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
         'abbrev'                => 'abbr',
         'acronym'               => 'acronym',
         'affiliation'           => 'format_suppressed_tags',
         'alt'                   => 'format_suppressed_tags',
-        'article'               => 'format_container_chunk',
+        'article'               => 'format_container_chunk_top',
         'author'                => array(
             /* DEFAULT */          'format_author',
             'authorgroup'       => 'format_authorgroup_author',
         ),
         'authorgroup'           => 'div',
-        'appendix'              => 'format_container_chunk',
+        'appendix'              => 'format_container_chunk_top',
         'application'           => 'span',
         'blockquote'            => 'blockquote',
         'bibliography'          => array(
@@ -23,14 +22,15 @@ class XHTMLPhDFormat extends PhDFormat {
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
-        'book'                  => 'format_container_chunk',
-        'chapter'               => 'format_container_chunk',
+        'book'                  => 'format_container_chunk_top',
+        'chapter'               => 'format_container_chunk_top',
         'citetitle'             => 'i',
         'co'                    => 'format_co',
         'colophon'              => 'format_chunk',
         'copyright'             => 'format_copyright',
         'date'                  => 'p',
         'editor'                => 'format_editor',
+        'function'              => 'b',
         'email'                 => 'format_suppressed_tags',
         'firstname'             => 'format_name',
         'footnote'              => 'format_footnote',
@@ -127,7 +127,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
         'itemizedlist'          => 'ul',
-        'legalnotice'           => 'format_legalnotice_chunk',
+        'legalnotice'           => 'format_chunk',
         'listitem'              => array(
             /* DEFAULT */          'li',
             'varlistentry'      => 'format_varlistentry_listitem',
@@ -135,6 +135,8 @@ class XHTMLPhDFormat extends PhDFormat {
         'link'                  => 'a',
         'literal'               => 'format_literal',
         'literallayout'         => 'pre',
+        'link'                  => 'format_link',
+        'xref'                  => 'format_xref',
         'manvolnum'             => 'format_manvolnum',
         'mediaobject'           => 'format_mediaobject',
         'methodparam'           => 'format_methodparam',
@@ -162,13 +164,14 @@ class XHTMLPhDFormat extends PhDFormat {
             'note'              => 'format_note_content',
             'footnote'          => 'format_footnote_para',
             'refsect1'          => 'format_refsect1_para',
+            'question'          => 'format_suppressed_tags',
         ),
         'paramdef'              => 'format_suppressed_tags',
         'parameter'             => array(
             /* DEFAULT */          'format_parameter',
             'methodparam'       => 'format_methodparam_parameter',
         ),
-        'part'                  => 'format_container_chunk',
+        'part'                  => 'format_container_chunk_top',
         'partintro'             => 'div',
         'personname'            => 'format_personname',
         'personblurb'           => 'div',
@@ -188,7 +191,8 @@ class XHTMLPhDFormat extends PhDFormat {
         'pubdate'               => 'div', /* Docbook-XSL prints "published" */
         'refentry'              => 'format_chunk',
         'refentrytitle'         => 'span',
-        'reference'             => 'format_container_chunk',
+        'refpurpose'            => 'p',
+        'reference'             => 'format_container_chunk_below',
         'refsect1'              => 'format_refsect',
         'refsect2'              => 'format_refsect',
         'refsect3'              => 'format_refsect',
@@ -199,17 +203,35 @@ class XHTMLPhDFormat extends PhDFormat {
         'replaceable'           => 'span',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
-        'sect1'                 => 'format_chunk',
-        'sect2'                 => 'format_chunk',
-        'sect3'                 => 'format_chunk',
-        'sect4'                 => 'format_chunk',
-        'sect5'                 => 'format_chunk',
-        'section'               => 'format_chunk',
+        'sect1'                 => 'format_section_chunk',
+        'sect2'                 => 'div',
+        'sect3'                 => 'div',
+        'sect4'                 => 'div',
+        'sect5'                 => 'div',
+        'section'               => array(
+            /* DEFAULT */          'div',
+            'sect1'                => 'format_section_chunk',
+            'preface'              => 'format_section_chunk',
+            'chapter'              => 'format_section_chunk',
+            'appendix'             => 'format_section_chunk',
+            'article'              => 'format_section_chunk',
+            'part'                 => 'format_section_chunk',
+            'reference'            => 'format_section_chunk',
+            'refentry'             => 'format_section_chunk',
+            'index'                => 'format_section_chunk',
+            'bibliography'         => 'format_section_chunk',
+            'glossary'             => 'format_section_chunk',
+            'colopone'             => 'format_section_chunk',
+            'book'                 => 'format_section_chunk',
+            'set'                  => 'format_section_chunk',
+            'setindex'             => 'format_section_chunk',
+            'legalnotice'          => 'format_section_chunk',
+        ),
         'seg'                   => 'format_seg',
         'segmentedlist'         => 'format_segmentedlist',
         'seglistitem'           => 'format_seglistitem',
         'segtitle'              => 'format_suppressed_tags',
-        'set'                   => 'format_chunk',
+        'set'                   => 'format_container_chunk_top',
         'setindex'              => 'format_chunk',
         'shortaffil'            => 'format_suppressed_tags',
         'simplelist'            => 'ul', /* FIXME: simplelists has few attributes that need to be implemented */
@@ -237,14 +259,22 @@ class XHTMLPhDFormat extends PhDFormat {
         'tip'                   => 'format_admonition',
         'title'                 => array(
             /* DEFAULT */          'h1',
-            'example'           => 'format_bold_paragraph',
+            'example'           => 'format_example_title',
             'formalpara'        => 'h5',
             'info'              => array(
                 /* DEFAULT */      'h1',
-                'example'       => 'format_bold_paragraph',
+                'example'       => 'format_example_title',
                 'note'          => 'format_note_title',
                 'table'         => 'format_table_title',
                 'informaltable' => 'format_table_title',
+
+                'article'       => 'format_container_chunk_top_title',
+                'appendix'      => 'format_container_chunk_top_title',
+                'book'          => 'format_container_chunk_top_title',
+                'chapter'       => 'format_container_chunk_top_title',
+                'part'          => 'format_container_chunk_top_title',
+                'set'           => 'format_container_chunk_top_title',
+
             ),
             'indexdiv'          => 'dt',
             'legalnotice'       => 'h4',
@@ -261,7 +291,13 @@ class XHTMLPhDFormat extends PhDFormat {
             'segmentedlist'     => 'strong',
             'table'             => 'format_table_title',
             'variablelist'      => 'strong',
-        ), 
+            'article'           => 'format_container_chunk_top_title',
+            'appendix'          => 'format_container_chunk_top_title',
+            'book'              => 'format_container_chunk_top_title',
+            'chapter'           => 'format_container_chunk_top_title',
+            'part'              => 'format_container_chunk_top_title',
+            'set'               => 'format_container_chunk_top_title',
+        ),
         'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => 'span',
         'userinput'             => 'format_userinput',
@@ -276,13 +312,16 @@ class XHTMLPhDFormat extends PhDFormat {
         'xref'                  => 'a',
         'year'                  => 'span',
         'quote'                 => 'format_quote',
-        'qandadiv'              => 'div',
-        'qandaset'              => 'div',
+        'qandaset'              => 'format_qandaset',
         'qandaentry'            => 'dl',
-        'question'              => 'dt',
+        'question'              => array(
+            /* DEFAULT */          'format_question',
+            'questions'         => 'format_phd_question', // From the PhD namespace
+        ),
+        'questions'             => 'ol', // From the PhD namespace
         'answer'                => 'dd',
     ); /* }}} */
-    protected $textmap = array(
+    private $mytextmap = array(
         'segtitle'             => 'format_segtitle_text',
         'affiliation'          => 'format_suppressed_text',
         'contrib'              => 'format_suppressed_text',
@@ -299,21 +338,6 @@ class XHTMLPhDFormat extends PhDFormat {
             'ooclass'          => array(
                 /* DEFAULT */     false,
                 'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
-            ),
-        ),
-        'methodname'           => array(
-            /* DEFAULT */         false,
-            'constructorsynopsis' => array(
-                /* DEFAULT */     false,
-                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
-            ),
-            'methodsynopsis'    => array(
-                /* DEFAULT */     false,
-                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
-            ),
-            'destructorsynopsis' => array(
-                /* DEFAULT */     false,
-                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
             ),
         ),
         'para'                  => array(
@@ -347,6 +371,7 @@ class XHTMLPhDFormat extends PhDFormat {
             "implements"                    => false,
             "ooclass"                       => false,
         ),
+        "examples"                 => 0,
         "fieldsynopsis"            => array(
             "modifier"                      => "public",
         ),
@@ -367,16 +392,13 @@ class XHTMLPhDFormat extends PhDFormat {
         "tablefootnotes"           => array(
         ),
     );
-    
-    public function __construct(array $IDs) {
-        parent::__construct($IDs);
-    }
-    public function __call($func, $args) {
-        if ($args[0]) {
-            trigger_error("No mapper found for '{$func}'", E_USER_WARNING);
-            return "<font color='red' size='+3'>{$args[1]}</font>";
-        }
-        return "<font color='red' size='+3'>/{$args[1]}</font>";
+
+    protected $flags;
+    protected $ext = "html";
+    protected $fp = array();
+
+    public function __construct() {
+        parent::__construct();
     }
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
         if ($open) {
@@ -389,6 +411,168 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return '</' .$tag. '>';
     }
+
+    public function appendData($data) {
+        if ($this->flags & PhDRender::CLOSE) {
+            $fp = array_pop($this->fp);
+            fwrite($fp, $data);
+            $this->writeChunk($this->CURRENT_CHUNK, $fp);
+            fclose($fp);
+
+            $this->flags ^= PhDRender::CLOSE;
+        } elseif ($this->flags & PhDRender::OPEN) {
+            $this->fp[] = $fp = fopen("php://temp/maxmemory", "r+");
+            fwrite($fp, $data);
+
+            $this->flags ^= PhDRender::OPEN;
+        } else {
+            $fp = end($this->fp);
+            fwrite($fp, $data);
+        }
+    }
+    public function header($id) {
+        $title = $this->getLongDescription($id);
+        $lang = $this->CURRENT_LANG;
+
+        $prev = $next = $parent = array("href" => null, "desc" => null);
+        /* {{{ FIXME: This is a complete fuckup */
+        $ok = false;
+        $count = count($this->CHILDRENS)-1;
+        foreach($this->CHILDRENS as $row => $data) {
+            if ($data["filename"] === $id) {
+                if ($row != 0) {
+                    $prev = array("href" => $this->CHILDRENS[$row-1]["filename"]. '.' .$this->ext, "desc" => $this->CHILDRENS[$row-1]["ldesc"] ?: $this->CHILDRENS[$row-1]["sdesc"]);
+                }
+                if ($row != $count) {
+                    $next = array("href" => $this->CHILDRENS[$row+1]["filename"]. '.' .$this->ext, "desc" => $this->CHILDRENS[$row+1]["ldesc"] ?: $this->CHILDRENS[$row+1]["sdesc"]);
+                }
+                $ok = true;
+                break;
+            }
+        }
+        if (!$ok) {
+            //var_dump($id, $this->CHILDRENS);
+            //echo "\n\n";
+        }
+        $row = $this->getParentInfo($id);
+        if (isset($row[0])) {
+            $parent = array("href" => $row[0]["filename"]. '.' .$this->ext, "desc" => $row[0]["ldesc"] ?: $row[0]["sdesc"]);
+        }
+        /* }}} */
+
+        return
+'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' .$lang. '"" lang="' .$lang. '">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>PHP: '.$title.'</title>
+</head>
+<body>
+<div style="text-align: center;">
+    <div class="prev" style="float: left;"><a href="' .$prev["href"]. '">' .$prev["desc"]. '</a></div>
+    <div class="next" style="float: right;"><a href="' .$next["href"]. '">' .$next["desc"] .'</a></div>
+    <div class="up"><a href="' .$parent["href"]. '">' .$parent["desc"]. '</a></div>
+    <div class="home"><a href="index.html">PHP Manual</a></div>
+</div>
+';
+    }
+    public function footer($id) {
+        return "\n</body>\n</html>\n";
+    }
+    public function writeChunk($id, $fp) {
+        $filename = PhDConfig::get("output_dir") . $id . '.' .$this->ext;
+
+        rewind($fp);
+        file_put_contents($filename, $this->header($id));
+        file_put_contents($filename, $fp, FILE_APPEND);
+        file_put_contents($filename, $this->footer($id), FILE_APPEND);
+    }
+    public function close() {
+        foreach ($this->fp as $fp) {
+            fclose($fp);
+        }
+    }
+    public function createLink($for, &$desc = null, $type = PhDFormat::SDESC) {
+        $retval = null;
+        if (isset($this->idx[$for])) {
+            $rsl = $this->idx[$for];
+            $retval = $rsl["filename"] . '.' . $this->ext . '#' . $rsl["docbook_id"];
+            $desc = $rsl["sdesc"] ?: $rsl["ldesc"];
+        }
+        return $retval;
+
+        return NO_SQLITE;
+        if ($desc === null) {
+            $rsl = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+
+            if (!isset($rsl[0])) {
+                return false;
+            }
+
+            $retval = $rsl[0]["filename"] . '.' . $this->ext . '#' . $rsl[0]["docbook_id"];
+        } else {
+            $rsl = sqlite_array_query($this->sqlite, $q = "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+
+            if (!isset($rsl[0])) {
+                var_dump($q);
+                return false;
+            }
+
+            $retval = $rsl[0]["filename"] . '.' . $this->ext . '#' . $rsl[0]["docbook_id"];
+
+            if ($type === self::SDESC) {
+                $desc = $rsl[0]["sdesc"] ?: $rsl[0]["ldesc"];
+            } else {
+                $desc = $rsl[0]["ldesc"] ?: $rsl[0]["sdesc"];
+            }
+        }
+
+        return $retval;
+    }
+    public function getLongDescription($for) {
+        return NO_SQLITE;
+        $rsl = sqlite_array_query($this->sqlite, $q = "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+        if (!isset($rsl[0])) {
+            var_dump($q);
+            return false;
+        }
+        return $rsl[0]["ldesc"] ?: $rsl[0]["sdesc"];
+    }
+    public function getShortDescription($for) {
+        return NO_SQLITE;
+        $rsl = sqlite_array_query($this->sqlite, "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+        return $rsl[0]["sdesc"] ?: $rsl[0]["ldesc"];
+    }
+    public function getParentInfo($for) {
+        return NO_SQLITE;
+        $rsl = sqlite_array_query($this->sqlite, "SELECT parent_id FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+        return sqlite_array_query($this->sqlite, "SELECT filename, sdesc, ldesc FROM ids WHERE docbook_id='{$rsl[0]["parent_id"]}'", SQLITE_ASSOC);
+    }
+    protected function createTOC($rsl) {
+        $toc = '<ol>';
+        $desc = $title = "";
+        foreach($rsl as $row) {
+            $link = $this->createLink($row["docbook_id"], $desc);
+            $list = "";
+            if ($this->cchunk["name"] === "book" || $this->cchunk["name"] === "set") {
+                $childrens = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='{$row["docbook_id"]}' AND filename=docbook_id", SQLITE_ASSOC);
+                if (NO_SQLITE && $childrens) {
+                    $list = "<ol>";
+                    foreach($childrens as $child) {
+                        $href = $this->createLink($child["docbook_id"], $title);
+                        $list .= '<li><a href="' .$href. '">' .$title. "</a></li>\n";
+                    }
+                    $list .="</ol>";
+                }
+            }
+            $toc .= '<li><a href="' .$link. '">' .$desc. '</a>' .$list. "</li>\n";
+        }
+        $toc .= "</ol>\n";
+
+        return $toc;
+    }
+
     public function CDATA($str) {
         switch($this->role) {
         case "php":
@@ -401,10 +585,41 @@ class XHTMLPhDFormat extends PhDFormat {
     public function TEXT($str) {
         return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
     }
+    public function UNDEF($open, $name, $attrs, $props) {
+        if ($open) {
+            trigger_error("No mapper found for '{$name}'", E_USER_WARNING);
+        }
+    }
+
+    public function admonition_title($title, $lang) {
+        return '<b class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</b>';
+    }
+    public function getDefaultElementMap() {
+        return $this->myelementmap;
+    }
+    public function getDefaultTextMap() {
+        return $this->mytextmap;
+    }
+    public function update($event, $val = null) {
+        switch($event) {
+        case PhDRender::CHUNK:
+            $this->flags = $val;
+            break;
+
+        case PhDRender::STANDALONE:
+            if ($val) {
+                $this->registerElementMap(static::getDefaultElementMap());
+                $this->registerTextMap(static::getDefaultTextMap());
+            }
+            break;
+        }
+    }
+
     public function getChunkInfo() {
         return $this->cchunk;
     }
-    public function format_suppressed_tags($open, $name, $attrs) {
+
+    public function format_suppressed_tags($open, $name, $attrs, $props) {
         /* Ignore it */
         return "";
     }
@@ -412,7 +627,42 @@ class XHTMLPhDFormat extends PhDFormat {
         /* Suppress any content */
         return "";
     }
-    
+
+    public function format_link($open, $name, $attrs, $props) {
+        $link = null;
+        if ($open) {
+            $link = $class = $content = "";
+
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
+                $link = $this->createLink($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"]);
+            }
+            elseif (isset($attrs[PhDReader::XMLNS_XLINK]["href"])) {
+                $link = $attrs[PhDReader::XMLNS_XLINK]["href"];
+                $class = " external";
+                $content = "&raquo; ";
+            }
+            if ($props["empty"]) {
+                $content .= $link ."</a>\n";
+            }
+
+            return '<a href="' . $link . '" class="' . $name . $class . '">' . $content;
+        }
+        return "</a>";
+    }
+    public function format_xref($open, $name, $attrs, $props) {
+        if ($open) {
+            $desc = "";
+            $link = $this->createLink($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"], $desc);
+
+            $ret = '<a href="' .$link. '" class="' .$name. '">' .$desc;
+
+            if ($props["empty"]) {
+                return $ret. "</a>";
+            }
+            return $ret;
+        }
+        return "</a>";
+    }
     public function format_literal($open, $name, $attrs) {
         if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
@@ -439,7 +689,7 @@ class XHTMLPhDFormat extends PhDFormat {
                 return $this->TEXT($value);
         }
     }
-    
+
     public function format_copyright($open, $name, $attrs) {
         if ($open) {
             return '<div class="'.$name.'">&copy; ';
@@ -487,31 +737,118 @@ class XHTMLPhDFormat extends PhDFormat {
         return '</span> ';
     }
 
-    public function format_container_chunk($open, $name, $attrs) {
+    public function format_container_chunk_top($open, $name, $attrs, $props) {
         $this->cchunk = $this->dchunk;
+        $this->cchunk["name"] = $name;
+        if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+            $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        } else {
+            $id = uniqid("phd");
+        }
+
         if ($open) {
+            $this->CURRENT_CHUNK = $id;
+            $this->notify(PhDRender::CHUNK, PhDRender::OPEN);
+
+            return '<div id="' .$id. '" class="' .$name. '">';
+        }
+
+        $this->CURRENT_CHUNK = $id;
+        $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
+
+        $toc = "";
+        if (NO_SQLITE && !in_array($id, $this->TOC_WRITTEN)) {
+            $rsl = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id", SQLITE_ASSOC);
+            $toc = $this->createTOC($rsl);
+        }
+        return $toc."</div>";
+    }
+    public function format_container_chunk_top_title($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<h1>';
+        }
+
+        $id = $this->CURRENT_CHUNK;
+        if (NO_SQLITE) {
+            $this->CHILDRENS = $rsl = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id", SQLITE_ASSOC);
+            $toc = $this->createToc($rsl);
+        } else {
+            $this->CHILDRENS = array();
+            $toc = "";
+        }
+        $this->TOC_WRITTEN[] = $id;
+
+        return '</h1>'.$toc;
+    }
+    public function format_container_chunk_below($open, $name, $attrs, $props) {
+        $this->cchunk = $this->dchunk;
+        if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+            $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        } else {
+            $id = uniqid("phd");
+        }
+
+        if ($open) {
+            if (NO_SQLITE) {
+                $this->CHILDRENS = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id", SQLITE_ASSOC);
+            }
+            $this->CURRENT_CHUNK = $id;
+            $this->notify(PhDRender::CHUNK, PhDRender::OPEN);
+
             return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
         }
-        return "</div>";
-    }
-    public function format_legalnotice_chunk($open, $name, $attrs) {
-        if ($open) {
-            return '<div id="legalnotice">';
+
+        $toc = '<ol>';
+        $desc = "";
+        $rsl = $this->CHILDRENS;
+        foreach($rsl as $row) {
+            $link = $this->createLink($row["docbook_id"], $desc);
+            $toc .= '<li><a href="' .$link. '">' .$desc. "</a></li>\n";
         }
-        return "</div>\n";
+        $toc .= "</ol>\n";
+
+        $this->CURRENT_CHUNK = $id;
+        $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
+        return $toc . '</div>';
     }
-    public function format_chunk($open, $name, $attrs) {
+    public function format_section_chunk($open, $name, $attrs, $props) {
+        static $a = array();
+        if ($open) {
+            $a[] = $props["sibling"];
+            if ($props["sibling"] === $name) {
+                return $this->format_chunk($open, $name, $attrs, $props);
+            }
+            return $this->transformFromMap($open, "div", $name, $attrs, $props);
+        }
+        $x = array_pop($a);
+        if ($x == $name) {
+                return $this->format_chunk($open, $name, $attrs, $props);
+        }
+        $a[] = $x;
+        return $this->transformFromMap($open, "div", $name, $attrs, $props);
+    }
+    public function format_chunk($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk = $this->dchunk;
             if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-                $class = $name;
-                if ($name === "refentry") {
-                    //$class .= " -rel-posting";
-                }
-                return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$class. '">';
+                $id = $attrs[PhDReader::XMLNS_XML]["id"];
+            } else {
+                $id = uniqid("phd");
             }
-            return '<div class="' .$name. '">';
+
+            $class = $name;
+            if ($name === "refentry") {
+                //$class .= " -rel-posting";
+            }
+
+            $this->CURRENT_CHUNK = $id;
+            $this->CURRENT_LANG  = $props["lang"];
+
+            $this->notify(PhDRender::CHUNK, PhDRender::OPEN);
+            return '<div id="' .$id. '" class="' .$class. '">';
         }
+        $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
+
         $str = "";
         foreach ($this->cchunk["footnote"] as $k => $note) {
             $str .= '<div class="footnote">';
@@ -605,26 +942,7 @@ class XHTMLPhDFormat extends PhDFormat {
         return $this->TEXT($value);
     }
     
-    public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
-        $value = $this->TEXT($value);
-        if ($this->cchunk["classsynopsis"]["classname"] === false) {
-            return $value;
-        }
-        if (strpos($value, '::')) {
-            $explode = '::';
-        } elseif (strpos($value, '->')) {
-            $explode = '->';
-        } else {
-            return $value;
-        }
-
-        list($class, $method) = explode($explode, $value);
-        if ($class !== $this->cchunk["classsynopsis"]["classname"]) {
-            return $value;
-        }
-        return $method;
-    }
-    
+   
     public function format_fieldsynopsis($open, $name, $attrs) {
         $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
         if ($open) {
@@ -976,12 +1294,12 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "<br />";
     }
-    public function format_bold_paragraph($open, $name, $attrs, $props) {
+    public function format_example_title($open, $name, $attrs, $props) {
         if ($props["empty"]) {
             return "";
         }
         if ($open) {
-            return "<p><b>";
+            return "<p><b>" . ($this->autogen('example', $props['lang']) . ++$this->cchunk["examples"]) . " ";
         }
         return "</b></p>";
     }
@@ -1131,9 +1449,51 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</td>";
     }
+    public function format_qandaset($open, $name, $attrs, $props) {
+        if ($open) {
+            $node = $this->getReader()->expand();
+            $doc = new DOMDocument;
+            $doc->appendChild($node);
 
-    public function admonition_title($title, $lang) {
-        return '<b class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</b>';
+            $xp = new DOMXPath($doc);
+            $xp->registerNamespace("db", PhDReader::XMLNS_DOCBOOK);
+
+            $questions = $xp->query("//db:qandaentry/db:question");
+
+            $xml = '<questions xmlns="' .PhDReader::XMLNS_PHD. '">';
+            foreach($questions as $node) {
+                $id = $xp->evaluate("ancestor::db:qandaentry", $node)->item(0)->getAttributeNs(PhDReader::XMLNS_XML, "id");
+
+                /* FIXME: No ID? How can we create an anchor for it then? */
+                if (!$id) {
+                    $id = uniqid("phd");
+                }
+
+                $node->setAttribute("xml:id", $id);
+                $xml .= $doc->saveXML($node);
+            }
+            $xml .= "</questions>";
+
+            $r = new PhDReader();
+            $r->XML($xml);
+
+            $render = new PhDRender;
+            $render->attach($this);
+            $render->render($r);
+        }
+    }
+    public function format_question($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<dt><strong>';
+        }
+        return '</strong></dt>';
+    }
+    public function format_phd_question($open, $name, $attrs, $props) {
+        if ($open) {
+            $href = $this->createLink($attrs[PhDReader::XMLNS_XML]["id"]);
+            return '<li><a href="' .$href. '">';
+        }
+        return '</a></li>';
     }
     
     public function format_citation($open, $name, $attrs, $props) {
