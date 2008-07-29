@@ -481,7 +481,7 @@ class PhDXHTMLFormat extends PhDFormat {
         return "\n</body>\n</html>\n";
     }
     public function writeChunk($id, $fp) {
-        $filename = PhDConfig::get("output_dir") . $id . '.' .$this->ext;
+        $filename = PhDConfig::output_dir() . $id . '.' .$this->ext;
 
         rewind($fp);
         file_put_contents($filename, $this->header($id));

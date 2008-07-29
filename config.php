@@ -3,34 +3,15 @@
 
 require $ROOT . "/include/PhDErrors.php";
 
-define("PHD_VERSION", "0.4.0-dev");
+define("PHD_VERSION", "2.0-enterprise");
 
 class PhDConfig
 {
     private static $optionArray = array(
         'output_format' => array(
             'xhtml',
-            'manpage',
-            'pdf',
-        ),
-        'output_theme' => array(
-            'xhtml' => array(
-                'php' => array(
-                    'phpweb',
-                    'chunkedhtml',
-                    'bightml',
-                    'chmsource',
-                ),
-            ),
-            'manpage' => array(
-                'php' => array(
-                    'phpfunctions',
-                ),
-            ),
-            'pdf' => array(
-                'php' => array(
-                 ),
-            ),
+            'php',
+            'bigxhtml',
         ),
         'chunk_extra' => array(
             "legalnotice" => true,
@@ -38,7 +19,8 @@ class PhDConfig
         ),
         'index' => true,
         'xml_root' => '.',
-        'xml_file' => './.manual.xml',
+        'xml_file' => "./.manual.xml",
+        'lang_dir' => './',
         'language' => 'en',
         'verbose' => VERBOSE_DEFAULT,
         'date_format' => "H:i:s",
@@ -47,7 +29,7 @@ class PhDConfig
         'skip_ids' => array(
         ),
         'color_output' => false,
-        'output_dir' => '.',
+        'output_dir' => './',
         'php_error_output' => NULL,
         'php_error_color' => false,
         'user_error_output' => NULL,
@@ -55,9 +37,22 @@ class PhDConfig
         'phd_info_output' => NULL,
         'phd_info_color' => false,
     );
+
+    public static function init(array $a) {
+        self::$optionArray = array_merge(self::$optionArray, (array)$a);
+    }
+
+    /*public static function get($opt) {
+        if (!is_string($opt)) {
+                throw new UnexpectedValueException("Excpecting a string");
+        }
+        if (!isset(self::$optionArray[$opt])) {
+                throw new UnexpectedValueException("Unknown option: $opt");
+        }
+        return self::$optionArray[$opt];
+    }*/
     
-    public static function __callStatic($name, $params)
-    {
+    public static function __callStatic($name, $params) {
         $name = strtolower($name); // FC if this becomes case-sensitive
         if (strncmp($name, 'set', 3) === 0) {
             $name = substr($name, 3);

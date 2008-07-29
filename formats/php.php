@@ -76,8 +76,8 @@ class PhDPHPFormat extends PhDXHTMLFormat {
 
     public function __construct() {
         parent::__construct();
-        $this->versions = self::generateVersionInfo(PhDConfig::get("phpweb_version_filename"));
-        $this->acronyms = self::generateAcronymInfo(PhDConfig::get("phpweb_acronym_filename"));
+        $this->versions = self::generateVersionInfo(PhDConfig::phpweb_version_filename());
+        $this->acronyms = self::generateAcronymInfo(PhDConfig::phpweb_acronym_filename());
 
     }
 

@@ -66,7 +66,7 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
     public function open() {
         static $i = 0;
         $i++;
-        $this->bigfp = fopen(PhDConfig::get("output_dir") . "bightml$i.html", "w+");
+        $this->bigfp = fopen(PhDConfig::output_dir() . "bightml$i.html", "w+");
         // FIXME: Use correct lang attribute and insert <title> of the DB file
         fwrite($this->bigfp, 
 '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
