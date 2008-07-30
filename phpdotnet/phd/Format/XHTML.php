@@ -504,7 +504,7 @@ class PhDXHTMLFormat extends PhDFormat {
 
         return NO_SQLITE;
         if ($desc === null) {
-            $rsl = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+            $rsl = $this->sqlite->query("SELECT docbook_id, filename FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
 
             if (!isset($rsl[0])) {
                 return false;
@@ -512,7 +512,7 @@ class PhDXHTMLFormat extends PhDFormat {
 
             $retval = $rsl[0]["filename"] . '.' . $this->ext . '#' . $rsl[0]["docbook_id"];
         } else {
-            $rsl = sqlite_array_query($this->sqlite, $q = "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+            $rsl = $this->sqlite->query($q = "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
 
             if (!isset($rsl[0])) {
                 var_dump($q);
@@ -532,7 +532,7 @@ class PhDXHTMLFormat extends PhDFormat {
     }
     public function getLongDescription($for) {
         return NO_SQLITE;
-        $rsl = sqlite_array_query($this->sqlite, $q = "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+        $rsl = $this->sqlite->query($q = "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
         if (!isset($rsl[0])) {
             var_dump($q);
             return false;
@@ -541,13 +541,13 @@ class PhDXHTMLFormat extends PhDFormat {
     }
     public function getShortDescription($for) {
         return NO_SQLITE;
-        $rsl = sqlite_array_query($this->sqlite, "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+        $rsl = $this->sqlite->query("SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
         return $rsl[0]["sdesc"] ?: $rsl[0]["ldesc"];
     }
     public function getParentInfo($for) {
         return NO_SQLITE;
-        $rsl = sqlite_array_query($this->sqlite, "SELECT parent_id FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
-        return sqlite_array_query($this->sqlite, "SELECT filename, sdesc, ldesc FROM ids WHERE docbook_id='{$rsl[0]["parent_id"]}'", SQLITE_ASSOC);
+        $rsl = $this->sqlite->query("SELECT parent_id FROM ids WHERE docbook_id='$for'");
+        return $this->sqlite->query("SELECT filename, sdesc, ldesc FROM ids WHERE docbook_id='{$rsl[0]["parent_id"]}'")->fetchArray(SQLITE3_ASSOC);
     }
     protected function createTOC($rsl) {
         $toc = '<ol>';
@@ -556,7 +556,7 @@ class PhDXHTMLFormat extends PhDFormat {
             $link = $this->createLink($row["docbook_id"], $desc);
             $list = "";
             if ($this->cchunk["name"] === "book" || $this->cchunk["name"] === "set") {
-                $childrens = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='{$row["docbook_id"]}' AND filename=docbook_id", SQLITE_ASSOC);
+                $childrens = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='{$row["docbook_id"]}' AND filename=docbook_id")->fetchArray(SQLITE3_ASSOC);
                 if (NO_SQLITE && $childrens) {
                     $list = "<ol>";
                     foreach($childrens as $child) {
@@ -758,7 +758,7 @@ class PhDXHTMLFormat extends PhDFormat {
 
         $toc = "";
         if (NO_SQLITE && !in_array($id, $this->TOC_WRITTEN)) {
-            $rsl = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id", SQLITE_ASSOC);
+            $rsl = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id")->fetchArray(SQLITE3_ASSOC);
             $toc = $this->createTOC($rsl);
         }
         return $toc."</div>";
@@ -770,7 +770,7 @@ class PhDXHTMLFormat extends PhDFormat {
 
         $id = $this->CURRENT_CHUNK;
         if (NO_SQLITE) {
-            $this->CHILDRENS = $rsl = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id", SQLITE_ASSOC);
+            $this->CHILDRENS = $rsl = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id")->fetchArray(SQLITE3_ASSOC);
             $toc = $this->createToc($rsl);
         } else {
             $this->CHILDRENS = array();
@@ -790,7 +790,7 @@ class PhDXHTMLFormat extends PhDFormat {
 
         if ($open) {
             if (NO_SQLITE) {
-                $this->CHILDRENS = sqlite_array_query($this->sqlite, "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id", SQLITE_ASSOC);
+                $this->CHILDRENS = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id")->fetchArray(SQLITE3_ASSOC);
             }
             $this->CURRENT_CHUNK = $id;
             $this->notify(PhDRender::CHUNK, PhDRender::OPEN);

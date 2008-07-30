@@ -42,16 +42,6 @@ class PhDConfig
         self::$optionArray = array_merge(self::$optionArray, (array)$a);
     }
 
-    /*public static function get($opt) {
-        if (!is_string($opt)) {
-                throw new UnexpectedValueException("Excpecting a string");
-        }
-        if (!isset(self::$optionArray[$opt])) {
-                throw new UnexpectedValueException("Unknown option: $opt");
-        }
-        return self::$optionArray[$opt];
-    }*/
-    
     public static function __callStatic($name, $params) {
         $name = strtolower($name); // FC if this becomes case-sensitive
         if (strncmp($name, 'set', 3) === 0) {

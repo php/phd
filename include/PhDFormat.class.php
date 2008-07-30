@@ -11,7 +11,7 @@ abstract class PhDFormat extends PhDObjectStorage {
     private static $autogen = array();
 
     public function __construct() {
-        $this->sqlite = sqlite_open("index.sqlite");
+        $this->sqlite = new SQLite3('index.sqlite');
         $this->sortIDs();
     }
 
@@ -24,18 +24,19 @@ abstract class PhDFormat extends PhDObjectStorage {
     abstract public function update($event, $value = null);
 
     public function sortIDs() {
-        sqlite_create_aggregate($this->sqlite, "idx", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 6);
-        sqlite_unbuffered_query($this->sqlite, "SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element) FROM ids", SQLITE_ASSOC);
+        $this->sqlite->createAggregate("idx", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 6);
+        $this->sqlite->querySingle('SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element) FROM ids');
+        //$this->sqlite_unbuffered_query($this->sqlite, "SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element) FROM ids", SQLITE_ASSOC);
         //print_r($this->idx);
     }
     public function SQLiteIndex(&$context, $id, $filename, $parent, $sdesc, $ldesc, $element) {
         $this->idx[$id] = array(
-"docbook_id" => $id,
-"filename"   => $filename,
-"parent_id"  => $parent,
-"sdesc"      => $sdesc,
-"ldesc"      => $ldesc,
-"element"    => $element
+            "docbook_id" => $id,
+            "filename"   => $filename,
+            "parent_id"  => $parent,
+            "sdesc"      => $sdesc,
+            "ldesc"      => $ldesc,
+            "element"    => $element
         );
         if ($element == "refentry") {
             $this->refs[$sdesc] = $id;

@@ -46,7 +46,7 @@ class PhDRender extends PhDObjectStorage {
             switch($type) {
                 case XMLReader::ELEMENT: /* {{{ */
                 $open  = true;
-                            /* break intentionally omitted */
+                    /* break intentionally omitted */
                 case XMLReader::END_ELEMENT:
                 $name  = $r->name;
                 $depth = $r->depth;
@@ -65,12 +65,12 @@ class PhDRender extends PhDObjectStorage {
                 }
 
                 $props    = array(
-                                    "empty"    => $r->isEmptyElement,
-                                    "isChunk"  => false,
-                                    "lang"     => $r->xmlLang,
-                                    "ns"       => $r->namespaceURI,
-                                    "sibling"  => $lastdepth >= $depth ? $this->STACK[$depth] : "",
-                                    "depth"    => $depth,
+                    "empty"    => $r->isEmptyElement,
+                    "isChunk"  => false,
+                    "lang"     => $r->xmlLang,
+                    "ns"       => $r->namespaceURI,
+                    "sibling"  => $lastdepth >= $depth ? $this->STACK[$depth] : "",
+                    "depth"    => $depth,
                 );
 
                 $this->STACK[$depth] = $name;

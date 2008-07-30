@@ -118,7 +118,7 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
     public function createLink($for, &$desc = null, $type = self::SDESC) {
         $retval = '#' . $for;
         if ($desc !== null) {
-            $rsl = sqlite_array_query($this->sqlite, "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'", SQLITE_ASSOC);
+            $rsl = $this->sqlite($this->sqlite, "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
             $retval = '#' . $for;
 
             if ($type === self::SDESC) {

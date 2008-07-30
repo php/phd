@@ -141,7 +141,7 @@ manual_header();
     protected function lookupRefname($for) {
         return $this->refs[$for];
         return NO_SQLITE;
-        $rsl = sqlite_array_query($this->sqlite, "SELECT filename, ldesc, sdesc FROM ids WHERE sdesc='$for' AND element='refentry'", SQLITE_ASSOC);
+        $rsl = $this->sqlite->query("SELECT filename, ldesc, sdesc FROM ids WHERE sdesc='$for' AND element='refentry'")->fetchArray(SQLITE3_ASSOC);
         if (isset($rsl[0])) {
             return $rsl[0]["filename"];
         }

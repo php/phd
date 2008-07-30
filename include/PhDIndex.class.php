@@ -91,11 +91,11 @@ class PhDIndex extends PhDFormat {
                 if (file_exists("index.sqlite")) {
                     unlink("index.sqlite");
                 }
-                $db = sqlite_open("index.sqlite");
+                $db = new SQLite3('index.sqlite');
 
-                sqlite_exec($db, 'PRAGMA default_synchronous=OFF');
-                sqlite_exec($db, 'PRAGMA count_changes=OFF');
-                sqlite_exec($db, 'PRAGMA cache_size=100000');
+                $db->exec('PRAGMA default_synchronous=OFF');
+                $db->exec('PRAGMA count_changes=OFF');
+                $db->exec('PRAGMA cache_size=100000');
 
                 $create = <<<SQL
 CREATE TABLE ids (
@@ -107,16 +107,16 @@ CREATE TABLE ids (
     element TEXT
 );
 SQL;
-                sqlite_exec($db, 'PRAGMA default_synchronous=OFF');
-                sqlite_exec($db, 'PRAGMA count_changes=OFF');
-                sqlite_exec($db, 'PRAGMA cache_size=100000');
-                sqlite_exec($db, $create);
+                $db->exec('PRAGMA default_synchronous=OFF');
+                $db->exec('PRAGMA count_changes=OFF');
+                $db->exec('PRAGMA cache_size=100000');
+                $db->exec($create);
 
                 $this->db = $db;
 
                 $this->chunks = array();
             } else {
-                //print_r($this->chunks);
+                print_r($this->chunks);
             }
         }
     }
@@ -173,12 +173,12 @@ SQL;
         }
         $this->commit .= sprintf(
                     "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element) VALUES('%s', '%s', '%s', '%s', '%s', '%s');\n",
-            sqlite_escape_string($lastchunkid),
-            sqlite_escape_string($a["filename"]),
-            sqlite_escape_string($this->currentchunk),
-            sqlite_escape_string($sdesc),
-            sqlite_escape_string($a["ldesc"]),
-            sqlite_escape_string($a["element"])
+            $this->db->escapeString($lastchunkid),
+            $this->db->escapeString($a["filename"]),
+            $this->db->escapeString($this->currentchunk),
+            $this->db->escapeString($sdesc),
+            $this->db->escapeString($a["ldesc"]),
+            $this->db->escapeString($a["element"])
         );
         if ($array === true && !empty($a["sdesc"])) {
             foreach($a["sdesc"] as $sdesc) {
@@ -186,14 +186,19 @@ SQL;
                 $this->commit .= sprintf(
                                     "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element) VALUES('%s', '%s', '', '%s', '%s', '%s');\n",
                                     "phdgen-" . $rand,
-                    sqlite_escape_string($a["filename"]),
-                    sqlite_escape_string($sdesc),
-                    sqlite_escape_string($a["ldesc"]),
-                    sqlite_escape_string($a["element"])
+                    $this->db->escapeString($a["filename"]),
+                    $this->db->escapeString($sdesc),
+                    $this->db->escapeString($a["ldesc"]),
+                    $this->db->escapeString($a["element"])
                 );
             }
         }
     }
+
+    // Don't sort IDs in indexer
+    //public function sortIDs() {
+    //}
+
     public function format_section_chunk($open, $name, $attrs, $props) {
         static $a = array();
         if ($open) {
@@ -234,7 +239,6 @@ SQL;
         $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
 
         $this->appendID();
-
         return false;
     }
     public function format_legalnotice_chunk($open, $name, $attrs, $props) {
@@ -267,8 +271,10 @@ SQL;
         }
     }
     public function commit() {
-        var_dump(sqlite_exec($this->db, 'BEGIN TRANSACTION; '.$this->commit.' COMMIT'));
-        $this->commit = null;
+        if (isset($this->commit) && $this->commit) {
+            var_dump($this->db->exec('BEGIN TRANSACTION; '.$this->commit.' COMMIT'));
+            $this->commit = null;
+        }
     }
 }
 

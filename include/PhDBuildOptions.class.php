@@ -271,4 +271,15 @@ NOTE: Long options are only supported using PHP5.3\n";
 $optParser = new PhDBuildOptionsParser;
 $optParser->getopt();
 
+if (!$optParser->docbook && $argc > 1) {
+    $arg = $argv[$argc-1];
+    if (is_dir($arg)) {
+        PhDConfig::set_xml_root($arg);
+        PhDConfig::set_xml_file($arg . DIRECTORY_SEPARATOR . ".manual.xml");
+    } elseif (is_file($arg)) {
+        PhDConfig::set_xml_root(dirname($arg));
+        PhDConfig::set_xml_file($arg);
+    }
+}
+
 ?>

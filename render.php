@@ -39,7 +39,7 @@ foreach(range(0, 0) as $i) {
         // Create indexer
         $format = new PhDIndex();
         $render->attach($format);
-
+var_dump(PhDConfig::xml_file());
         $reader->open(PhDConfig::xml_file());
         $render->render($reader);
 
