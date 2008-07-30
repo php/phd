@@ -26,7 +26,6 @@ abstract class PhDFormat extends PhDObjectStorage {
     public function sortIDs() {
         $this->sqlite->createAggregate("idx", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 6);
         $this->sqlite->querySingle('SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element) FROM ids');
-        //$this->sqlite_unbuffered_query($this->sqlite, "SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element) FROM ids", SQLITE_ASSOC);
         //print_r($this->idx);
     }
     public function SQLiteIndex(&$context, $id, $filename, $parent, $sdesc, $ldesc, $element) {

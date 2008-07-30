@@ -195,10 +195,6 @@ SQL;
         }
     }
 
-    // Don't sort IDs in indexer
-    //public function sortIDs() {
-    //}
-
     public function format_section_chunk($open, $name, $attrs, $props) {
         static $a = array();
         if ($open) {
