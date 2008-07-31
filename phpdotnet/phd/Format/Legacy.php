@@ -5,7 +5,7 @@ abstract class PhDFormat extends PhDObjectStorage {
     const LDESC = 2;
 
     private $elementmap = array();
-    private $textmapmap = array();
+    private $textmap = array();
     protected $sqlite;
 
     private static $autogen = array();
@@ -25,10 +25,9 @@ abstract class PhDFormat extends PhDObjectStorage {
 
     public function sortIDs() {
         $this->sqlite->createAggregate("idx", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 6);
-        $this->sqlite->querySingle('SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element) FROM ids');
-        //print_r($this->idx);
+        $this->sqlite->query('SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element) FROM ids');
     }
-    public function SQLiteIndex(&$context, $id, $filename, $parent, $sdesc, $ldesc, $element) {
+    public function SQLiteIndex(&$context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element) {
         $this->idx[$id] = array(
             "docbook_id" => $id,
             "filename"   => $filename,
@@ -111,6 +110,40 @@ abstract class PhDFormat extends PhDObjectStorage {
         return self::autogen($text, $lang);
     }
 
+/* {{{ TOC helper functions */
+    final public function getFilename($id) {
+        $row = $this->sqlite->query($q = "SELECT filename FROM ids WHERE docbook_id='$id'")->fetchArray(SQLITE3_ASSOC);
+        if (!is_array($row)) {
+            var_dump($q);
+            return false;
+        }
+        return $row["filename"];
+    }
+    final public function getParent($id) {
+        $row = $this->sqlite->query($q = "SELECT parent_id FROM ids WHERE docbook_id='$id'")->fetchArray(SQLITE3_ASSOC);
+        if (!is_array($row)) {
+            var_dump($q);
+            return false;
+        }
+        return $row["parent_id"];
+    }
+    final public function getLongDescription($for) {
+        $row = $this->sqlite->query($q = "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
+        if (!is_array($row)) {
+            var_dump($q);
+            return false;
+        }
+        return $row["ldesc"] ?: $row["sdesc"];
+    }
+    final public function getShortDescription($for) {
+        $row = $this->sqlite->query($q = "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
+        if (!is_array($row)) {
+            var_dump($q);
+            return false;
+        }
+        return $row["sdesc"] ?: $row["ldesc"];
+    }
+/* }}} */
 
 /* {{{ Table helper functions */
     public function tgroup($attrs) {

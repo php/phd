@@ -34,7 +34,7 @@ $reader = new PhDReader();
 foreach(range(0, 0) as $i) {
     //var_dump(date(DATE_RSS));
 
-    if (1) {
+    if (PhDConfig::index()) {
         v("Indexing...", VERBOSE_INDEXING);
         // Create indexer
         $format = new PhDIndex();
@@ -48,6 +48,8 @@ foreach(range(0, 0) as $i) {
 
         v("Indexing done", VERBOSE_INDEXING);
         //var_dump(date(DATE_RSS));
+    } else {
+        v("Skipping indexing", VERBOSE_INDEXING);
     }
 
     foreach (PhDConfig::output_format() as $format) {

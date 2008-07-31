@@ -52,7 +52,6 @@ class PhDBuildOptionsParser extends PhDOptionParser
     }
     public function option_index($k, $v)
     {
-        /*
         if (is_array($v)) {
             trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
         }
@@ -61,7 +60,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
             PhDConfig::set_index($val);
         } else {
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
-        }*/
+        }
     }
     
     public function option_d($k, $v)
