@@ -532,7 +532,7 @@ class PhDXHTMLFormat extends PhDFormat {
         $parentId = $this->getParent($for);
         return array("href" => $this->getFilename($parentId), "desc" => $this->getLongDescription($parentId));
     }
-    protected function createTOC(SQLite3_result $result) {
+    protected function createTOC(SQLite3Result $result) {
         $toc = '<ol>';
         $desc = $title = "";
         while ($row = $result->fetchArray()) {
@@ -777,7 +777,7 @@ class PhDXHTMLFormat extends PhDFormat {
 
         if ($open) {
             if (!NO_SQLITE) {
-                $this->CHILDRENS = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id")->fetchArray(SQLITE3_ASSOC);
+                $this->CHILDRENS = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id");
             }
             $this->CURRENT_CHUNK = $id;
             $this->notify(PhDRender::CHUNK, PhDRender::OPEN);
@@ -788,8 +788,8 @@ class PhDXHTMLFormat extends PhDFormat {
         $toc = '<ol>';
         $desc = "";
         $rsl = $this->CHILDRENS;
-        foreach($rsl as $row) {
-            $link = $this->createLink($row["docbook_id"], $desc);
+        while ($child = $rsl->fetchArray(SQLITE3_ASSOC)) {
+            $link = $this->createLink($child["docbook_id"], $desc);
             $toc .= '<li><a href="' .$link. '">' .$desc. "</a></li>\n";
         }
         $toc .= "</ol>\n";
