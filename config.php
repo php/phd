@@ -30,6 +30,7 @@ class PhDConfig
         ),
         'color_output' => false,
         'output_dir' => './',
+        'intermediate_output_dir' => '.',
         'php_error_output' => NULL,
         'php_error_color' => false,
         'user_error_output' => NULL,

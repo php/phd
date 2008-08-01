@@ -1,6 +1,7 @@
 <?php
 /*  $Id$ */
 class PhDXHTMLFormat extends PhDFormat {
+    private $simpleName = "XHTML";
     private $myelementmap = array( /* {{{ */
         'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
         'abbrev'                => 'abbr',
@@ -593,6 +594,10 @@ class PhDXHTMLFormat extends PhDFormat {
                 $this->registerElementMap(static::getDefaultElementMap());
                 $this->registerTextMap(static::getDefaultTextMap());
             }
+            break;
+        
+        case PhDRender::INIT:
+            v("Starting %s rendering", $this->simpleName, VERBOSE_FORMAT_RENDERING);
             break;
         }
     }

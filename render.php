@@ -20,6 +20,11 @@ require $ROOT . "/formats/php.php";
 //$INDEX = $FILENAME = "/home/bjori/php/cleandocs/json.xml";
 define("NO_SQLITE", false);
 
+/* If no docbook file was passed, die */
+if (!is_dir(PhDConfig::xml_root()) || !is_file(PhDConfig::xml_file())) {
+    trigger_error("No '.manual.xml' file was given. Specify it on the command line with --docbook.", E_USER_ERROR);
+}
+
 PhDConfig::init(array(
     "verbose"                 => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING),
     "lang_dir"                => $ROOT . DIRECTORY_SEPARATOR . "include" . DIRECTORY_SEPARATOR . "langs" . DIRECTORY_SEPARATOR,

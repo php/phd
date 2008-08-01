@@ -1,5 +1,6 @@
 <?php
 class PhDPHPFormat extends PhDXHTMLFormat {
+    private $simpleName = "PHP";
     private $myelementmap = array(
         'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
@@ -131,6 +132,10 @@ manual_header();
                 $this->registerElementMap(static::getDefaultElementMap());
                 $this->registerTextMap(static::getDefaultTextMap());
             }
+            break;
+
+        case PhDRender::INIT:
+            v("Starting %s rendering", $this->simpleName, VERBOSE_FORMAT_RENDERING);
             break;
         }
     }

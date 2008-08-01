@@ -1,5 +1,6 @@
 <?php
 class PhDBigXHTMLFormat extends PhDXHTMLFormat {
+    private $simpleName = "Big-XHTML";
     private $myelementmap = array(
         'link'                  => 'format_link',
         'xref'                  => 'format_xref',
@@ -112,6 +113,7 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
             } else {
                 $this->close();
             }
+            v("Starting %s rendering", $this->simpleName, VERBOSE_FORMAT_RENDERING);
             break;
         }
     }
