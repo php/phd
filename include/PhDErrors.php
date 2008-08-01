@@ -16,7 +16,7 @@ $error_map = array(
 
 function define_error($name, $explanation) {
     static $lastErrorValue = E_DEPRECATED;
-    
+
     define($name, $lastErrorValue <<= 1);
     $GLOBALS['error_map'][$lastErrorValue] = $explanation;
 }
@@ -31,9 +31,9 @@ define_error('VERBOSE_PARTIAL_CHILD_READING',  'PhD Partial Child Reader');
 define_error('VERBOSE_TOC_WRITING',            'PhD TOC Writer');
 define_error('VERBOSE_CHUNK_WRITING',          'PhD Chunk Writer');
 define_error('VERBOSE_NOVERSION',              'Missing Version Information');
-define_error('VERBOSE_ALL',                    'PhD Verbose');
 define_error('VERBOSE_DONE',                   'PhD Processing Completion');
 
+define('VERBOSE_ALL',                          (VERBOSE_NOVERSION            << 1)-1);
 define('VERBOSE_DEFAULT',                      (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION|VERBOSE_DONE)));
 
 $olderrrep = error_reporting();
@@ -91,7 +91,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
             $output = PhDConfig::phd_info_output();
             $data = $msg;
             break;
-    
+
         // User triggered errors
         case E_USER_ERROR:
         case E_USER_WARNING:
@@ -100,7 +100,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
             $output = PhDConfig::user_error_output();
             $data = sprintf("%s:%d\n\t%s", $file, $line, $msg);
             break;
-    
+
         // PHP triggered errors
         case E_DEPRECATED:
         case E_RECOVERABLE_ERROR:
@@ -111,12 +111,12 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
             $output = PhDConfig::php_error_output();
             $data = sprintf("%s:%d\n\t%s", $file, $line, $msg);
             break;
-    
+
         default:
             $recursive = false;
             return false;
     }
-    
+
     $timestamp = term_color(sprintf("[%s - %s]", $time, $GLOBALS['error_map'][$errno]), $color);
     fprintf($output, "%s %s\n", $timestamp, $data);
 
