@@ -24,6 +24,14 @@ define("NO_SQLITE", false);
 if (!is_dir(PhDConfig::xml_root()) || !is_file(PhDConfig::xml_file())) {
     trigger_error("No '.manual.xml' file was given. Specify it on the command line with --docbook.", E_USER_ERROR);
 }
+if (!file_exists(PhDConfig::output_dir())) {
+    v("Creating output directory..", E_USER_NOTICE);
+    if (!mkdir(PhDConfig::output_dir())) {
+        v("Can't create output directory", E_USER_ERROR);
+    }
+} elseif (!is_dir(PhDConfig::output_dir())) {
+    v("Output directory is not a file?", E_USER_ERROR);
+}
 
 PhDConfig::init(array(
     "verbose"                 => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING),

@@ -6,13 +6,14 @@ abstract class PhDFormat extends PhDObjectStorage {
 
     private $elementmap = array();
     private $textmap = array();
+    private $formatname = "UNKNOWN";
     protected $sqlite;
 
     private static $autogen = array();
 
     public function __construct() {
         if (file_exists(PhDConfig::output_dir() . "index.sqlite")) {
-            $this->sqlite = new SQLite3('index.sqlite');
+            $this->sqlite = new SQLite3(PhDConfig::output_dir() . 'index.sqlite');
             $this->sortIDs();
         }
     }
@@ -21,7 +22,7 @@ abstract class PhDFormat extends PhDObjectStorage {
     abstract public function UNDEF($open, $name, $attrs, $props);
     abstract public function TEXT($value);
     abstract public function CDATA($value);
-    abstract public function createLink($for, &$desc = null, $desc = PhDFormat::SDESC);
+    abstract public function createLink($for, &$desc = null, $type = PhDFormat::SDESC);
     abstract public function appendData($data);
     abstract public function update($event, $value = null);
 
@@ -72,6 +73,12 @@ abstract class PhDFormat extends PhDObjectStorage {
     }
     final public function getTextMap() {
         return $this->textmap;
+    }
+    final public function registerFormatName($name) {
+        $this->formatname = $name;
+    }
+    public function getFormatName() {
+        return $this->formatname;
     }
 
     final public static function autogen($text, $lang) {

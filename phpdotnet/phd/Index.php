@@ -70,7 +70,7 @@ class PhDIndex extends PhDFormat {
     }
     public function CDATA($value) {
     }
-    public function createLink($for, &$desc = null, $desc = PhDFormat::SDESC) {
+    public function createLink($for, &$desc = null, $type = PhDFormat::SDESC) {
     }
     public function appendData($data) {
     }
@@ -78,7 +78,7 @@ class PhDIndex extends PhDFormat {
     // or if xml input file has changed since the last indexing
     final static public function requireIndexing() {
         if (!PhDConfig::index() && file_exists(PhDConfig::output_dir() . "index.sqlite")) {
-            $db = new SQLite3('index.sqlite');
+            $db = new SQLite3(PhDConfig::output_dir() . 'index.sqlite');
             $indexingCount = $db->query('SELECT COUNT(time) FROM indexing')->fetchArray(SQLITE3_NUM);
             if ($indexingCount[0] > 0) {
                 $indexing = $db->query('SELECT time FROM indexing')->fetchArray(SQLITE3_ASSOC);

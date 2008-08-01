@@ -38,6 +38,7 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
 
     public function __construct() {
         parent::__construct();
+        parent::registerFormatName($this->simpleName);
     }
     public function appendData($data) {
         $id = "BIGHTML ID";
@@ -109,7 +110,7 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
             if ($val) {
                 if (!is_resource($this->bigfp)) {
                     $this->open();
-                    v("Starting %s rendering", $this->simpleName, VERBOSE_FORMAT_RENDERING);
+                    v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
                 }
             } else {
                 $this->close();

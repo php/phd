@@ -3,7 +3,7 @@
 
 require $ROOT . "/include/PhDErrors.php";
 
-define("PHD_VERSION", "2.0-enterprise");
+define("PHD_VERSION", "0.4.0-enterprise");
 
 class PhDConfig
 {
@@ -29,7 +29,7 @@ class PhDConfig
         'skip_ids' => array(
         ),
         'color_output' => false,
-        'output_dir' => './',
+        'output_dir' => './output/',
         'intermediate_output_dir' => '.',
         'php_error_output' => NULL,
         'php_error_color' => false,

@@ -397,9 +397,11 @@ class PhDXHTMLFormat extends PhDFormat {
     protected $flags;
     protected $ext = "html";
     protected $fp = array();
+    protected $outputdir = __DIR__;
 
     public function __construct() {
         parent::__construct();
+        parent::registerFormatName($this->simpleName);
     }
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
         if ($open) {
@@ -480,7 +482,7 @@ class PhDXHTMLFormat extends PhDFormat {
         return "\n</body>\n</html>\n";
     }
     public function writeChunk($id, $fp) {
-        $filename = PhDConfig::output_dir() . $id . '.' .$this->ext;
+        $filename = $this->outputdir . $id . '.' .$this->ext;
 
         rewind($fp);
         file_put_contents($filename, $this->header($id));
@@ -597,7 +599,17 @@ class PhDXHTMLFormat extends PhDFormat {
             break;
         
         case PhDRender::INIT:
-            v("Starting %s rendering", $this->simpleName, VERBOSE_FORMAT_RENDERING);
+            v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+            $this->outputdir = $tmp = PhDConfig::output_dir() . strtolower($this->getFormatName()) . '/';
+            if (file_exists($tmp)) {
+                if (!is_dir($tmp)) {
+                    v("Output directory is a file?", E_USER_ERROR);
+                }
+            } else {
+                if (!mkdir($tmp)) {
+                    v("Can't create output directory", E_USER_ERROR);
+                }
+            }
             break;
         }
     }
@@ -772,6 +784,7 @@ class PhDXHTMLFormat extends PhDFormat {
         if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
             $id = $attrs[PhDReader::XMLNS_XML]["id"];
         } else {
+            /* FIXME: This will obviously not exist in the db.. */
             $id = uniqid("phd");
         }
 

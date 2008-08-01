@@ -77,6 +77,7 @@ class PhDPHPFormat extends PhDXHTMLFormat {
 
     public function __construct() {
         parent::__construct();
+        parent::registerFormatName($this->simpleName);
         $this->versions = self::generateVersionInfo(PhDConfig::phpweb_version_filename());
         $this->acronyms = self::generateAcronymInfo(PhDConfig::phpweb_acronym_filename());
 
@@ -135,7 +136,7 @@ manual_header();
             break;
 
         case PhDRender::INIT:
-            v("Starting %s rendering", $this->simpleName, VERBOSE_FORMAT_RENDERING);
+            parent::update($event, $val);
             break;
         }
     }
@@ -144,7 +145,7 @@ manual_header();
     }
 
     protected function lookupRefname($for) {
-        return $this->refs[$for];
+        return isset($this->refs[$for]) ? $this->refs[$for] : null;
         return NO_SQLITE;
         $rsl = $this->sqlite->query("SELECT filename, ldesc, sdesc FROM ids WHERE sdesc='$for' AND element='refentry'")->fetchArray(SQLITE3_ASSOC);
         if (isset($rsl[0])) {
