@@ -46,6 +46,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+    - Added PDF output format. (Rudy)
     - Fixed bug#45627 (Unix manpages using non-standard folder name). (Rudy)
     - Fixed bug#45626 (Unix manpages should be gzipped). (Rudy)
     - Fixed bug#45618 (Bad filenames in man pages). (Rudy)
@@ -55,6 +56,7 @@
     <dir baseinstalldir="phd" name="/">
       <file baseinstalldir="phd" name="formats/xhtml.php" role="php"/>
       <file baseinstalldir="phd" name="formats/manpage.php" role="php"/>
+      <file baseinstalldir="phd" name="formats/pdf.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDFormat.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDTheme.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDHelper.class.php" role="php"/>
@@ -80,6 +82,8 @@
       <file baseinstalldir="phd" name="themes/php/phpweb.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpkdevelop.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpfunctions.php" role="php"/>
+      <file baseinstalldir="phd" name="themes/php/phppdf.php" role="php"/>
+      <file baseinstalldir="phd" name="themes/php/phpbigpdf.php" role="php"/>
       <file baseinstalldir="" name="build.php" role="script">
         <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
         <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>

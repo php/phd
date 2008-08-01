@@ -71,6 +71,9 @@ foreach($OPTIONS["output_format"] as $output_format) {
     case "manpage":
         $classname = "ManpagePhDFormat";
         break;
+    case "pdf":
+        $classname = "PDFPhDFormat";
+        break;
     }
 
 

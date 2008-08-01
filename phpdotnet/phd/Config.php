@@ -127,7 +127,7 @@ define("PHD_VERSION", "0.3.1-dev");
 
 /* {{{ Default $OPTIONS */
 $OPTIONS = array (
-  'output_format' => array('xhtml', /* 'manpage' */ ),
+  'output_format' => array('xhtml', /* 'manpage', 'pdf' */ ),
   'output_theme' => array(
     'xhtml' => array(
       'php' => array(
@@ -143,6 +143,11 @@ $OPTIONS = array (
         /* 'phpfunctions', */
       ),
     ),
+    'pdf' => array(
+      'php' => array(
+        /* 'phppdf', 'phpbigpdf' */
+      )
+    )
   ),
   'chunk_extra' => array(
     "legalnotice" => true,
@@ -276,12 +281,13 @@ foreach($args as $k => $v) {
             switch($val) {
                 case "xhtml":
                 case "manpage":
+                case "pdf":
                     if (!in_array($val, $formats)) {
                         $formats[] = $val;
                     }
                     break;
                 default:
-                    trigger_error("Only xhtml and manpage are supported at this time", E_USER_ERROR);
+                    trigger_error("Only xhtml, pdf and manpage are supported at this time", E_USER_ERROR);
             }
         }
         $OPTIONS["output_format"] = $formats;       
@@ -329,6 +335,9 @@ foreach($args as $k => $v) {
                 echo "\t\tphpkdevelop\n";
                 echo "\tmanpage:\n";
                 echo "\t\tphpfunctions\n";
+                echo "\tpdf:\n";
+                echo "\t\tphppdf\n";
+                echo "\t\tphpbigpdf\n";
                 break;
 
             default:
@@ -339,6 +348,7 @@ foreach($args as $k => $v) {
                 echo "Supported formats:\n";
                 echo "\txhtml\n";
                 echo "\tmanpage\n";
+                echo "\pdf\n";
                 echo "Supported themes:\n";
                 echo "\txhtml:\n";
                 echo "\t\tphpweb\n";
@@ -348,6 +358,9 @@ foreach($args as $k => $v) {
                 echo "\t\tphpkdevelop\n";
                 echo "\tmanpage:\n";
                 echo "\t\tphpfunctions\n";
+                echo "\tpdf:\n";
+                echo "\t\tphppdf\n";
+                echo "\t\tphpbigpdf\n";
                 break;
             }
         }
@@ -411,6 +424,12 @@ foreach($args as $k => $v) {
             case "phpfunctions":
                 if (!in_array($val, $OPTIONS["output_theme"]["manpage"]["php"])) {
                     $OPTIONS["output_theme"]["manpage"]["php"][] = $val;
+                }
+                break;
+            case "phppdf":
+            case "phpbigpdf":
+                if (!in_array($val, $OPTIONS["output_theme"]["pdf"]["php"])) {
+                    $OPTIONS["output_theme"]["pdf"]["php"][] = $val;
                 }
                 break;
             default:
