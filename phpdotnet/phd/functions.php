@@ -33,7 +33,7 @@ define_error('VERBOSE_CHUNK_WRITING',          'PhD Chunk Writer');
 define_error('VERBOSE_NOVERSION',              'Missing Version Information');
 define_error('VERBOSE_DONE',                   'PhD Processing Completion');
 
-define('VERBOSE_ALL',                          (VERBOSE_NOVERSION            << 1)-1);
+define('VERBOSE_ALL',                          (VERBOSE_DONE            << 1)-1);
 define('VERBOSE_DEFAULT',                      (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION|VERBOSE_DONE)));
 
 $olderrrep = error_reporting();

@@ -36,10 +36,11 @@ PhDConfig::init(array(
 $render = new PhDRender();
 $reader = new PhDReader();
 
+// Indexing & registering formats
 foreach(range(0, 0) as $i) {
     //var_dump(date(DATE_RSS));
 
-    if (PhDConfig::index()) {
+    if (PhDIndex::requireIndexing()) {
         v("Indexing...", VERBOSE_INDEXING);
         // Create indexer
         $format = new PhDIndex();
@@ -90,8 +91,11 @@ $render->attach($bightml);
 */
 }
 
+// Rendering formats
 foreach(range(0, 0) as $i) {
     $reader->open(PhDConfig::xml_file());
     $render->render($reader);
 }
+
+v("Finished rendering", VERBOSE_FORMAT_RENDERING);
 

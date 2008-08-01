@@ -5,6 +5,7 @@ class PhDRender extends PhDObjectStorage {
     const CLOSE        = 0x004;
     const STANDALONE   = 0x008;
     const INIT         = 0x010;
+    const FINALIZE     = 0x020;
 
     private   $STACK      = array();
 
@@ -207,9 +208,9 @@ class PhDRender extends PhDObjectStorage {
             }
         }
 
-            /* Closing time */
+        /* Closing time */
         foreach($this as $format) {
-            //$format->notify(PhDRender::INIT, false);
+            $format->notify(PhDRender::FINALIZE, true);
         }
         $r->close();
 

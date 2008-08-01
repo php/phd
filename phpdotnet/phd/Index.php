@@ -74,30 +74,43 @@ class PhDIndex extends PhDFormat {
     }
     public function appendData($data) {
     }
+    // Require indexing if --index=true, if no indexing has been successfully done before
+    // or if xml input file has changed since the last indexing
+    final static public function requireIndexing() {
+        if (!PhDConfig::index() && file_exists(PhDConfig::output_dir() . "index.sqlite")) {
+            $db = new SQLite3('index.sqlite');
+            $indexingCount = $db->query('SELECT COUNT(time) FROM indexing')->fetchArray(SQLITE3_NUM);
+            if ($indexingCount[0] > 0) {
+                $indexing = $db->query('SELECT time FROM indexing')->fetchArray(SQLITE3_ASSOC);
+                $xmlLastModification = filemtime(PhDConfig::xml_file());
+                if ($indexing["time"] > $xmlLastModification) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     public function update($event, $value = null) {
         switch($event) {
             case PhDRender::CHUNK:
-            $this->flags = $value;
-            break;
+                $this->flags = $value;
+                break;
 
             case PhDRender::STANDALONE:
-            if ($value) {
-                $this->registerElementMap(static::getDefaultElementMap());
-                $this->registerTextMap(static::getDefaultTextMap());
-            }
-            break;
-            case PhDRender::INIT:
-            if ($value) {
-                if (file_exists("index.sqlite")) {
-                    unlink("index.sqlite");
+                if ($value) {
+                    $this->registerElementMap(static::getDefaultElementMap());
+                    $this->registerTextMap(static::getDefaultTextMap());
                 }
-                $db = new SQLite3('index.sqlite');
-
-                $db->exec('PRAGMA default_synchronous=OFF');
-                $db->exec('PRAGMA count_changes=OFF');
-                $db->exec('PRAGMA cache_size=100000');
-
-                $create = <<<SQL
+                break;
+            case PhDRender::INIT:
+                if ($value) {
+                    if (file_exists(PhDConfig::output_dir() . "index.sqlite")) {
+                        $db = new SQLite3(PhDConfig::output_dir() . 'index.sqlite');
+                        $db->exec('DELETE FROM ids');
+                        $db->exec('DELETE FROM indexing');
+                    } else {
+                        $db = new SQLite3(PhDConfig::output_dir() . 'index.sqlite');
+                        $create = <<<SQL
 CREATE TABLE ids (
     docbook_id TEXT PRIMARY KEY,
     filename TEXT,
@@ -106,18 +119,25 @@ CREATE TABLE ids (
     ldesc TEXT,
     element TEXT
 );
+CREATE TABLE indexing (
+    time INTEGER PRIMARY KEY
+);
 SQL;
-                $db->exec('PRAGMA default_synchronous=OFF');
-                $db->exec('PRAGMA count_changes=OFF');
-                $db->exec('PRAGMA cache_size=100000');
-                $db->exec($create);
+                        $db->exec('PRAGMA default_synchronous=OFF');
+                        $db->exec('PRAGMA count_changes=OFF');
+                        $db->exec('PRAGMA cache_size=100000');
+                        $db->exec($create);
+                    }
+                    $this->db = $db;
 
-                $this->db = $db;
-
-                $this->chunks = array();
-            } else {
-                print_r($this->chunks);
-            }
+                    $this->chunks = array();
+                } else {
+                    print_r($this->chunks);
+                }
+                break;
+            case PhDRender::FINALIZE:
+                $this->db->exec("INSERT INTO indexing (time) VALUES ('" . time() . "')");
+                break;
         }
     }
     public function getDefaultElementMap() {

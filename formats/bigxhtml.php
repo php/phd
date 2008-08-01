@@ -109,24 +109,24 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
             if ($val) {
                 if (!is_resource($this->bigfp)) {
                     $this->open();
+                    v("Starting %s rendering", $this->simpleName, VERBOSE_FORMAT_RENDERING);
                 }
             } else {
                 $this->close();
             }
-            v("Starting %s rendering", $this->simpleName, VERBOSE_FORMAT_RENDERING);
             break;
         }
     }
     public function createLink($for, &$desc = null, $type = self::SDESC) {
         $retval = '#' . $for;
         if ($desc !== null) {
-            $rsl = $this->sqlite($this->sqlite, "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
+            $result = $this->sqlite->query("SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
             $retval = '#' . $for;
 
             if ($type === self::SDESC) {
-                $desc = $rsl[0]["sdesc"] ?: $rsl[0]["ldesc"];
+                $desc = $result["sdesc"] ?: $result["ldesc"];
             } else {
-                $desc = $rsl[0]["ldesc"] ?: $rsl[0]["sdesc"];
+                $desc = $result["ldesc"] ?: $result["sdesc"];
             }
         }
 

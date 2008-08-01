@@ -11,8 +11,10 @@ abstract class PhDFormat extends PhDObjectStorage {
     private static $autogen = array();
 
     public function __construct() {
-        $this->sqlite = new SQLite3('index.sqlite');
-        $this->sortIDs();
+        if (file_exists(PhDConfig::output_dir() . "index.sqlite")) {
+            $this->sqlite = new SQLite3('index.sqlite');
+            $this->sortIDs();
+        }
     }
 
     abstract public function transformFromMap($open, $tag, $name, $attrs, $props);
