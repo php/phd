@@ -88,7 +88,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         $cr = $OPTIONS['color_output'] ? "\033[m" : '';
         fprintf($OPTIONS["phd_info_output"], "{$cl1}[%s - %s]{$cr} %s\n", $time, $err[$errno], $msg);
         break;
- 
+
     // User triggered errors
     case E_USER_ERROR:
     case E_USER_WARNING:
@@ -290,7 +290,7 @@ foreach($args as $k => $v) {
                     trigger_error("Only xhtml, pdf and manpage are supported at this time", E_USER_ERROR);
             }
         }
-        $OPTIONS["output_format"] = $formats;       
+        $OPTIONS["output_format"] = $formats;
         break;
     /* }}} */
 
@@ -348,7 +348,7 @@ foreach($args as $k => $v) {
                 echo "Supported formats:\n";
                 echo "\txhtml\n";
                 echo "\tmanpage\n";
-                echo "\pdf\n";
+                echo "\tpdf\n";
                 echo "Supported themes:\n";
                 echo "\txhtml:\n";
                 echo "\t\tphpweb\n";
@@ -466,7 +466,7 @@ foreach($args as $k => $v) {
         $OPTIONS["verbose"] = $verbose;
         break;
     /* }}} */
-    
+
     /* {{{ Color output */
     case "c":
     case "color":
@@ -494,7 +494,7 @@ foreach($args as $k => $v) {
         }
         break;
     /* }}} */
-    
+
     /* {{{ Version info */
     case "V":
     case "version":
