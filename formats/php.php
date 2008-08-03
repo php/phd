@@ -145,11 +145,9 @@ manual_header();
     }
 
     protected function lookupRefname($for) {
-        return isset($this->refs[$for]) ? $this->refs[$for] : null;
-        return NO_SQLITE;
-        $rsl = $this->sqlite->query("SELECT filename, ldesc, sdesc FROM ids WHERE sdesc='$for' AND element='refentry'")->fetchArray(SQLITE3_ASSOC);
-        if (isset($rsl[0])) {
-            return $rsl[0]["filename"];
+        $result = $this->sqlite->query("SELECT filename, ldesc, sdesc FROM ids WHERE sdesc='$for' AND element='refentry'")->fetchArray(SQLITE3_ASSOC);
+        if (is_array($result)) {
+            return $result["filename"];
         }
         return false;
     }

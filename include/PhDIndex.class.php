@@ -27,6 +27,7 @@ class PhDIndex extends PhDFormat {
 
     'legalnotice'           => 'format_legalnotice_chunk',
     'part'                  => 'format_container_chunk',
+    'phpdoc:exception'      => 'format_container_chunk',
     'preface'               => 'format_chunk',
     'refentry'              => 'format_chunk',
     'reference'             => 'format_container_chunk',
@@ -63,6 +64,7 @@ class PhDIndex extends PhDFormat {
     private $mytextmap = array(
     );
     private $chunks    = array();
+    private $previousId = "";
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
     }
@@ -117,7 +119,9 @@ CREATE TABLE ids (
     parent_id TEXT,
     sdesc TEXT,
     ldesc TEXT,
-    element TEXT
+    element TEXT,
+    previous TEXT,
+    next TEXT
 );
 CREATE TABLE indexing (
     time INTEGER PRIMARY KEY
@@ -147,24 +151,22 @@ SQL;
         return $this->mytextmap;
     }
     public function UNDEF($open, $name, $attrs, $props) {
-        if ($open) {
-            if(!isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-                return false;
+        /*if ($open) {
+            if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+                $id = $attrs[PhDReader::XMLNS_XML]["id"];
+                $this->storeInfo($name, $id, $this->currentchunk);
             }
-            $id = $attrs[PhDReader::XMLNS_XML]["id"];
-            $this->storeInfo($name, $id, $this->currentchunk);
-
             return false;
         }
 
-        if(!isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-            return false;
-        }
-
-        $this->appendID();
+        if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+            $this->appendID();
+        }*/
         return false;
     }
-    protected function storeInfo($elm, $id, $filename) {
+    protected function storeInfo($elm, $id, $filename, $isChunk = true) {
+        $this->ids[] = $id;
+        $this->currentid = $id;
         $this->nfo[$id] = array(
                     "parent"   => "",
                     "filename" => $filename,
@@ -172,63 +174,82 @@ SQL;
                     "ldesc"    => "",
                     "element"  => $elm,
                     "children" => array(),
+                    "previous" => $this->previousId
         );
-        $this->ids[] = $id;
-        $this->currentid = $id;
+        // Append "next" to the previously inserted row
+        if ($isChunk) {
+            $this->commitAfter .= sprintf(
+                "UPDATE ids SET next = '%s' WHERE docbook_id = '%s';\n",
+                $this->db->escapeString($id),
+                $this->db->escapeString($this->previousId)
+            );
+            //echo "resquete UPDATE ids SET next = '".$this->db->escapeString($id)."' WHERE docbook_id = '".$this->db->escapeString($this->previousId)."';\n";
+            $this->previousId = $id;
+        }
     }
-    public function appendID() {
+    public function appendID($isChunk = true) {
         static $rand = 0;
 
-        $lastchunkid = array_pop($this->ids);
+        $lastChunkId = array_pop($this->ids);
         $parentid = end($this->ids);
 
         $this->currentid = $parentid;
-        $a = $this->nfo[$lastchunkid];
-        if (is_array($a["sdesc"])) {
+        $lastChunk = $this->nfo[$lastChunkId];
+        if (is_array($lastChunk["sdesc"])) {
             $array = true;
-            $sdesc = array_shift($a["sdesc"]);
+            $sdesc = array_shift($lastChunk["sdesc"]);
         } else {
             $array = false;
-            $sdesc = $a["sdesc"];
+            $sdesc = $lastChunk["sdesc"];
         }
         $this->commit .= sprintf(
-                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element) VALUES('%s', '%s', '%s', '%s', '%s', '%s');\n",
-            $this->db->escapeString($lastchunkid),
-            $this->db->escapeString($a["filename"]),
+            "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '');\n",
+            $this->db->escapeString($lastChunkId),
+            $this->db->escapeString($lastChunk["filename"]),
             $this->db->escapeString($this->currentchunk),
             $this->db->escapeString($sdesc),
-            $this->db->escapeString($a["ldesc"]),
-            $this->db->escapeString($a["element"])
+            $this->db->escapeString($lastChunk["ldesc"]),
+            $this->db->escapeString($lastChunk["element"]),
+            $this->db->escapeString($lastChunk["previous"])
         );
         if ($array === true && !empty($a["sdesc"])) {
-            foreach($a["sdesc"] as $sdesc) {
+            foreach($lastChunk["sdesc"] as $sdesc) {
                 ++$rand;
                 $this->commit .= sprintf(
-                                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element) VALUES('%s', '%s', '', '%s', '%s', '%s');\n",
-                                    "phdgen-" . $rand,
-                    $this->db->escapeString($a["filename"]),
+                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) VALUES('%s', '%s', '', '%s', '%s', '%s', '%s', '');\n",
+                    "phdgen-" . $rand,
+                    $this->db->escapeString($lastChunk["filename"]),
                     $this->db->escapeString($sdesc),
-                    $this->db->escapeString($a["ldesc"]),
-                    $this->db->escapeString($a["element"])
+                    $this->db->escapeString($lastChunk["ldesc"]),
+                    $this->db->escapeString($lastChunk["element"]),
+                    $this->db->escapeString($lastChunk["previous"])
                 );
             }
         }
     }
 
     public function format_section_chunk($open, $name, $attrs, $props) {
-        static $a = array();
+        static $sectionChunks = array();
         if ($open) {
-            $a[] = $props["sibling"];
+            $sectionChunks[] = $props["sibling"];
             if ($props["sibling"] === $name) {
                 return $this->format_chunk($open, $name, $attrs, $props);
             }
+            if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+                $id = $attrs[PhDReader::XMLNS_XML]["id"];
+                return $this->storeInfo($name, $id, $this->currentchunk, false);
+            }
             return $this->UNDEF($open, $name, $attrs, $props);
         }
-        $x = array_pop($a);
+        $x = array_pop($sectionChunks);
         if ($x == $name) {
             return $this->format_chunk($open, $name, $attrs, $props);
         }
-        $a[] = $x;
+        $sectionChunks[] = $x;
+        if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+            $id = $attrs[PhDReader::XMLNS_XML]["id"];
+            return $this->appendID(false);
+        }
         return $this->UNDEF($open, $name, $attrs, $props);
     }
     public function format_container_chunk($open, $name, $attrs, $props) {
@@ -289,7 +310,8 @@ SQL;
     public function commit() {
         if (isset($this->commit) && $this->commit) {
             var_dump($this->db->exec('BEGIN TRANSACTION; '.$this->commit.' COMMIT'));
-            $this->commit = null;
+            var_dump($this->db->exec('BEGIN TRANSACTION; '.$this->commitAfter.' COMMIT'));
+            $this->commit = $this->commitAfter = null;
         }
     }
 }

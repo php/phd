@@ -97,6 +97,7 @@ class PhDXHTMLFormat extends PhDFormat {
         'errortype'             => 'span',
         'errorcode'             => 'span',
         'example'               => 'div',
+        'phpdoc:exception'      => 'format_exception_chunk',
         'formalpara'            => 'p',
         'fieldsynopsis'         => array(
             /* DEFAULT */          'format_fieldsynopsis',
@@ -157,7 +158,7 @@ class PhDXHTMLFormat extends PhDFormat {
             'classsynopsisinfo'    => 'format_classsynopsisinfo_oointerface',
         ),
         'interfacename'         => 'span',
-        'option'                => 'span',    
+        'option'                => 'span',
         'orderedlist'           => 'ol',
         'para'                  => array(
             /* DEFAULT */          'p',
@@ -438,29 +439,20 @@ class PhDXHTMLFormat extends PhDFormat {
         $lang = $this->CURRENT_LANG;
 
         $prev = $next = $parent = array("href" => null, "desc" => null);
-        /* {{{ FIXME: This is a complete fuckup */
-        $ok = false;
-        $count = count($this->CHILDRENS)-1;
-        foreach($this->CHILDRENS as $row => $data) {
-            if ($data["filename"] === $id) {
-                if ($row != 0) {
-                    $prev = array("href" => $this->CHILDRENS[$row-1]["filename"]. '.' .$this->ext, "desc" => $this->CHILDRENS[$row-1]["ldesc"] ?: $this->CHILDRENS[$row-1]["sdesc"]);
-                }
-                if ($row != $count) {
-                    $next = array("href" => $this->CHILDRENS[$row+1]["filename"]. '.' .$this->ext, "desc" => $this->CHILDRENS[$row+1]["ldesc"] ?: $this->CHILDRENS[$row+1]["sdesc"]);
-                }
-                $ok = true;
-                break;
-            }
+        
+        if ($parentId = $this->getParent($id)) {
+            $parent = array("href" => $this->getFilename($parentId) . '.' .$this->ext,
+                "desc" => $this->getLongDescription($parentId));
         }
-        if (!$ok) {
-            //var_dump($id, $this->CHILDRENS);
-            //echo "\n\n";
+        if ($prevId = PhDFormat::getPrevious($id)) {
+            $prev = array("href" => PhDFormat::getFilename($prevId) . '.' .$this->ext,
+                "desc" => $this->getLongDescription($prevId));
         }
-
-        $parent = $this->getParentInfo($id);
-        /* }}} */
-
+        if ($nextId = PhDFormat::getNext($id)) {
+            $next = array("href" => PhDFormat::getFilename($nextId) . '.' .$this->ext,
+                "desc" => $this->getLongDescription($nextId));
+        }
+        $navBar = $this->createNavBar($id);
         return
 '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -470,16 +462,22 @@ class PhDXHTMLFormat extends PhDFormat {
     <title>PHP: '.$title.'</title>
 </head>
 <body>
-<div style="text-align: center;">
-    <div class="prev" style="float: left;"><a href="' .$prev["href"]. '">' .$prev["desc"]. '</a></div>
-    <div class="next" style="float: right;"><a href="' .$next["href"]. '">' .$next["desc"] .'</a></div>
-    <div class="up"><a href="' .$parent["href"]. '">' .$parent["desc"]. '</a></div>
-    <div class="home"><a href="index.html">PHP Manual</a></div>
-</div>
+<table width="100%">
+    <tr valign="top">
+        <td style="font-size: smaller;" width="15%">
+'.$navBar.'
+        </td>
+        <td width="85%">
+            <div style="text-align: center;">
+                '.($prevId ? '<div class="prev" style="text-align: left; float: left;"><a href="' .$prev["href"]. '">' .$prev["desc"]. '</a></div>' : '') .'
+                '.($nextId ? '<div class="next" style="text-align: right; float: right;"><a href="' .$next["href"]. '">' .$next["desc"].'</a></div>' : '') .'
+                '.($parentId ? '<div class="up"><a href="' .$parent["href"]. '">' .$parent["desc"]. '</a></div>' : '') .'
+                <div class="home"><a href="index.html">PHP Manual</a></div>
+            </div><hr/>
 ';
     }
     public function footer($id) {
-        return "\n</body>\n</html>\n";
+        return "\n        </td>\n    </tr>\n</table>\n</body>\n</html>\n";
     }
     public function writeChunk($id, $fp) {
         $filename = $this->outputdir . $id . '.' .$this->ext;
@@ -530,10 +528,6 @@ class PhDXHTMLFormat extends PhDFormat {
 
         return $retval;
     }
-    public function getParentInfo($for) {
-        $parentId = $this->getParent($for);
-        return array("href" => $this->getFilename($parentId), "desc" => $this->getLongDescription($parentId));
-    }
     protected function createTOC(SQLite3Result $result) {
         $toc = '<ol>';
         $desc = $title = "";
@@ -556,6 +550,62 @@ class PhDXHTMLFormat extends PhDFormat {
         $toc .= "</ol>\n";
 
         return $toc;
+    }
+
+    protected function createNavBar($id) {
+        $navBar =  '<style type="text/css">
+#leftbar {
+	float: left;
+	width: 186px;
+	padding: 5px;
+	font-size: smaller;
+}
+ul.toc {
+	margin: 0px 5px 5px 5px;
+	padding: 0px;
+}
+ul.toc li {
+	font-size: 85%;
+	margin: 1px 0 1px 1px;
+	padding: 1px 0 1px 11px;
+	list-style-type: none;
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+ul.toc li.header {
+	font-size: 115%;
+	padding: 5px 0px 5px 11px;
+	border-bottom: 1px solid #cccccc;
+	margin-bottom: 5px;
+}
+ul.toc li.active {
+	font-weight: bold;
+}
+ul.toc li a {
+	text-decoration: none;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+</style>
+ <ul class="toc">
+  <li class="header home"><a href="index.'.$this->ext.'">PHP Manual</a></li>
+';
+        $currentId = $id;
+        while (($currentId = $this->getParent($currentId)) && $currentId != "index") {
+            $desc = "";
+            $link = $this->createLink($currentId, $desc);
+            $navBar .= "  <li class=\"header up\"><a href=\"$link\">$desc</a></li>\n";
+        }
+        $parent = $this->getParent($id);
+        $childrens = $this->sqlite->query("SELECT docbook_id FROM ids WHERE parent_id='$parent'");
+        while ($child = $childrens->fetchArray(SQLITE3_ASSOC)) {
+            $desc = "";
+            $link = $this->createLink($child["docbook_id"], $desc);
+            $active = ($id === $child["docbook_id"]);
+            $navBar .= "  <li" .($active ? " class=\"active\"" : ""). "><a href=\"$link\">$desc</a></li>\n";
+        }
+        return $navBar . " </ul>\n";
     }
 
     public function CDATA($str) {
@@ -597,7 +647,7 @@ class PhDXHTMLFormat extends PhDFormat {
                 $this->registerTextMap(static::getDefaultTextMap());
             }
             break;
-        
+
         case PhDRender::INIT:
             v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
             $this->outputdir = $tmp = PhDConfig::output_dir() . strtolower($this->getFormatName()) . '/';
@@ -721,7 +771,7 @@ class PhDXHTMLFormat extends PhDFormat {
 
             case "othername":
                 if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                    /* We maight want to add support for other roles */
+                    /* We might want to add support for other roles */
                     switch($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) {
                     case "nickname":
                         $class = " nickname";
@@ -757,7 +807,7 @@ class PhDXHTMLFormat extends PhDFormat {
 
         $toc = "";
         if (!NO_SQLITE && !in_array($id, $this->TOC_WRITTEN)) {
-            $result = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id");
+            $result = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id'");
             $toc = $this->createTOC($result);
         }
         return $toc."</div>";
@@ -769,7 +819,7 @@ class PhDXHTMLFormat extends PhDFormat {
 
         $id = $this->CURRENT_CHUNK;
         if (!NO_SQLITE) {
-            $this->CHILDRENS = $result = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id");
+            $this->CHILDRENS = $result = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id'");
             $toc = $this->createTOC($result);
         } else {
             $this->CHILDRENS = array();
@@ -810,6 +860,9 @@ class PhDXHTMLFormat extends PhDFormat {
         $this->CURRENT_CHUNK = $id;
         $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
         return $toc . '</div>';
+    }
+    public function format_exception_chunk($open, $name, $attrs, $props) {
+        return $this->format_container_chunk_below($open, "reference", $attrs, $props);
     }
     public function format_section_chunk($open, $name, $attrs, $props) {
         static $a = array();
@@ -936,13 +989,13 @@ class PhDXHTMLFormat extends PhDFormat {
         }
         return "</div>";
     }
-    
+
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
         $this->cchunk["classsynopsis"]["classname"] = $value;
         return $this->TEXT($value);
     }
-    
-   
+
+
     public function format_fieldsynopsis($open, $name, $attrs) {
         $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
         if ($open) {
@@ -1434,7 +1487,7 @@ class PhDXHTMLFormat extends PhDFormat {
             }
 
             /*
-             * "colspan" is *not* an standard prop, only used to overwrite the 
+             * "colspan" is *not* an standard prop, only used to overwrite the
              * colspan for <footnote>s in tables
              */
             if (isset($props["colspan"])) {
@@ -1495,14 +1548,14 @@ class PhDXHTMLFormat extends PhDFormat {
         }
         return '</a></li>';
     }
-    
+
     public function format_citation($open, $name, $attrs, $props) {
         if ($open) {
             return '[<span class="citation">';
         }
         return '</span>]';
     }
-    
+
     public function format_email_text($value) {
         return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
     }

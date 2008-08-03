@@ -27,17 +27,19 @@ abstract class PhDFormat extends PhDObjectStorage {
     abstract public function update($event, $value = null);
 
     public function sortIDs() {
-        $this->sqlite->createAggregate("idx", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 6);
-        $this->sqlite->query('SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element) FROM ids');
+        $this->sqlite->createAggregate("idx", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 8);
+        $this->sqlite->query('SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) FROM ids');
     }
-    public function SQLiteIndex(&$context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element) {
+    public function SQLiteIndex(&$context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next) {
         $this->idx[$id] = array(
             "docbook_id" => $id,
             "filename"   => $filename,
             "parent_id"  => $parent,
             "sdesc"      => $sdesc,
             "ldesc"      => $ldesc,
-            "element"    => $element
+            "element"    => $element,
+            "previous"   => $previous,
+            "next"       => $next
         );
         if ($element == "refentry") {
             $this->refs[$sdesc] = $id;
@@ -127,6 +129,22 @@ abstract class PhDFormat extends PhDObjectStorage {
             return false;
         }
         return $row["filename"];
+    }
+    final public function getPrevious($id) {
+        $row = $this->sqlite->query($q = "SELECT previous FROM ids WHERE docbook_id='$id'")->fetchArray(SQLITE3_ASSOC);
+        if (!is_array($row)) {
+            var_dump($q);
+            return false;
+        }
+        return $row["previous"];
+    }
+    final public function getNext($id) {
+        $row = $this->sqlite->query($q = "SELECT next FROM ids WHERE docbook_id='$id'")->fetchArray(SQLITE3_ASSOC);
+        if (!is_array($row)) {
+            var_dump($q);
+            return false;
+        }
+        return $row["next"];
     }
     final public function getParent($id) {
         $row = $this->sqlite->query($q = "SELECT parent_id FROM ids WHERE docbook_id='$id'")->fetchArray(SQLITE3_ASSOC);
