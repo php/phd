@@ -135,6 +135,7 @@ $OPTIONS = array (
         'chunkedhtml',
         'bightml',
         'chmsource',
+        /* 'howto', */
         /* 'phpkdevelop', */
       ),
     ),
@@ -333,6 +334,7 @@ foreach($args as $k => $v) {
                 echo "\t\tbightml\n";
                 echo "\t\tchmsource\n";
                 echo "\t\tphpkdevelop\n";
+                echo "\t\thowto\n";
                 echo "\tmanpage:\n";
                 echo "\t\tphpfunctions\n";
                 echo "\tpdf:\n";
@@ -356,6 +358,7 @@ foreach($args as $k => $v) {
                 echo "\t\tbightml\n";
                 echo "\t\tchmsource\n";
                 echo "\t\tphpkdevelop\n";
+                echo "\t\thowto\n";
                 echo "\tmanpage:\n";
                 echo "\t\tphpfunctions\n";
                 echo "\tpdf:\n";
@@ -417,6 +420,7 @@ foreach($args as $k => $v) {
             case "bightml":
             case "chmsource":
             case "phpkdevelop":
+            case "howto":
                 if (!in_array($val, $OPTIONS["output_theme"]["xhtml"]["php"])) {
                     $OPTIONS["output_theme"]["xhtml"]["php"][] = $val;
                 }
