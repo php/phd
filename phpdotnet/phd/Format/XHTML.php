@@ -591,12 +591,19 @@ ul.toc li a:hover {
  <ul class="toc">
   <li class="header home"><a href="index.'.$this->ext.'">PHP Manual</a></li>
 ';
+        // Fetch ancestors of the current node
+        $ancestors = array();
         $currentId = $id;
         while (($currentId = $this->getParent($currentId)) && $currentId != "index") {
             $desc = "";
             $link = $this->createLink($currentId, $desc);
-            $navBar .= "  <li class=\"header up\"><a href=\"$link\">$desc</a></li>\n";
+            $ancestors[] = array("desc" => $desc, "link" => $link);
         }
+        // Show them from the root to the closest parent
+        foreach (array_reverse($ancestors) as $ancestor) {
+        	$navBar .= "  <li class=\"header up\"><a href=\"{$ancestor["link"]}\">{$ancestor["desc"]}</a></li>\n";
+        }
+        // Fetch siblings of the current node
         $parent = $this->getParent($id);
         $childrens = $this->sqlite->query("SELECT docbook_id FROM ids WHERE parent_id='$parent'");
         while ($child = $childrens->fetchArray(SQLITE3_ASSOC)) {
