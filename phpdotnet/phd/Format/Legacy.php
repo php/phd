@@ -83,6 +83,92 @@ abstract class PhDFormat extends PhDObjectStorage {
         return $this->formatname;
     }
 
+    final public function parse($xml) {
+    	$reader = new XMLReader();
+    	$bool = $reader->xml("<toparse>".$xml."</toparse>", "UTF-8");
+    	$parsed = "";
+    	$STACK = array();
+    	$lastdepth = -1;
+    	$depth = 0;
+    	while($reader->read()) {
+    		$data = $retval = $name = $open = false;
+            switch($reader->nodeType) {
+                case XMLReader::ELEMENT: /* {{{ */
+                $open  = true;
+                case XMLReader::END_ELEMENT:
+                $name  = $reader->name;
+                if ($name == "toparse") break;
+                $depth = $reader->depth;
+                $attrs = array(
+                    PhDReader::XMLNS_DOCBOOK => array(),
+                    PhDReader::XMLNS_XML     => array(),
+                );
+
+                if ($reader->hasAttributes) {
+                    $reader->moveToFirstAttribute();
+                    do {
+                        $k = $reader->namespaceURI;
+                        $attrs[!empty($k) ? $k : PhDReader::XMLNS_DOCBOOK][$reader->localName] = $reader->value;
+                    } while ($reader->moveToNextAttribute());
+                    $reader->moveToElement();
+                }
+
+                $props    = array(
+                    "empty"    => $reader->isEmptyElement,
+                    "isChunk"  => false,
+                    "lang"     => $reader->xmlLang,
+                    "ns"       => $reader->namespaceURI,
+                	"sibling"  => $lastdepth >= $depth ? $STACK[$depth] : "",
+                    "depth"    => $depth,
+                );
+				
+                $STACK[$depth] = $name;
+                $map = $this->getElementMap();
+
+                if (isset($map[$name]) === false) {
+                    $parsed .= $this->UNDEF($open, $name, $attrs, $props);
+                    continue;
+                }
+
+                $tag = $map[$name];
+                while (is_array($tag)) {
+                    if (isset($STACK[--$depth]) && isset($tag[$STACK[--$depth]])) {
+        		        $tag = $tag[$STACK[$depth]];
+		            } else {
+			 			$tag = $tag[0];
+    		        }
+                }
+
+				if ($tag === false) {
+                    $parsed .= $this->UNDEF($open, $name, $attrs, $props);
+                    continue;
+                }
+
+                if (strncmp($tag, "format_", 7) !== 0) {
+                    $data = $retval = $this->transformFromMap($open, $tag, $name, $attrs, $props);
+                } else {
+                    $data = $retval = $this->{$tag}($open, $name, $attrs, $props);
+                }
+                $parsed .= $data;
+
+                $lastdepth = $depth;
+                break;
+                    /* }}} */
+
+                case XMLReader::TEXT: /* {{{ */
+                case XMLReader::WHITESPACE:
+                case XMLReader::SIGNIFICANT_WHITESPACE:
+                case XMLReader::CDATA:
+                	$parsed .= $reader->value;
+                break;
+                     /* }}} */
+
+            }
+        }
+        $reader->close();
+        return $parsed;
+    }
+    
     final public static function autogen($text, $lang) {
         if (isset(self::$autogen[$lang])) {
             if (isset(self::$autogen[$lang][$text])) {

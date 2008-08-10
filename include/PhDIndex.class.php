@@ -58,7 +58,7 @@ class PhDIndex extends PhDFormat {
 
             'title'                 => 'format_ldesc',
             'refpurpose'            => 'format_ldesc',
-            'refname'               => 'format_refname',
+            'refname'               => 'format_sdesc',
             'titleabbrev'           => 'format_sdesc',
     );
     private $mytextmap = array(
@@ -300,13 +300,15 @@ SQL;
 
         }
     }
-    public function format_refname($open, $name, $attrs, $props) {
+    
+    /*public function format_refname($open, $name, $attrs, $props) {
         if ($open) {
             $s = $this->getReader()->readInnerXml();
             $s = str_replace(array("_", "::", "->"), array("-", "-", "-"), $s);
             $this->nfo[$this->currentid]["sdesc"][] = strtolower($s);
         }
-    }
+    }*/
+    
     public function commit() {
         if (isset($this->commit) && $this->commit) {
             var_dump($this->db->exec('BEGIN TRANSACTION; '.$this->commit.' COMMIT'));
