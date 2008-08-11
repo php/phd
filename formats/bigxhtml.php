@@ -41,7 +41,11 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
         parent::registerFormatName($this->simpleName);
     }
     public function appendData($data) {
-        $id = "BIGHTML ID";
+        if ($this->appendToBuffer) {
+            $this->buffer .= $data;
+            return;
+        }
+    	$id = "BIGHTML ID";
         if ($this->flags & PhDRender::CLOSE) {
             fwrite($this->bigfp, $data);
 
@@ -75,6 +79,8 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>PHP Manual</title>
 </head>
 <body>
 ');
@@ -110,27 +116,26 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
             if ($val) {
                 if (!is_resource($this->bigfp)) {
                     $this->open();
-                    v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
                 }
             } else {
                 $this->close();
             }
             break;
+        case PhDRender::VERBOSE:
+            v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+            break;
         }
     }
     public function createLink($for, &$desc = null, $type = self::SDESC) {
         $retval = '#' . $for;
-        if ($desc !== null) {
-            $result = $this->sqlite->query("SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
-            $retval = '#' . $for;
-
+        if (isset($this->idx[$for])) {
+            $result = $this->idx[$for];
             if ($type === self::SDESC) {
                 $desc = $result["sdesc"] ?: $result["ldesc"];
             } else {
                 $desc = $result["ldesc"] ?: $result["sdesc"];
-            }
+            }            
         }
-
         return $retval;
     }
 

@@ -399,7 +399,6 @@ class PhDXHTMLFormat extends PhDFormat {
     protected $ext = "html";
     protected $fp = array();
     protected $outputdir = __DIR__;
-
     public function __construct() {
         parent::__construct();
         parent::registerFormatName($this->simpleName);
@@ -411,13 +410,16 @@ class PhDXHTMLFormat extends PhDFormat {
                 $id = $attrs[PhDReader::XMLNS_XML]["id"];
                 $idstr = ' id="' .$id. '" name="' .$id. '"';
             }
-            return '<' .$tag. ' class="' .$name. '"' . ($props["empty"] ? '/' : "") . $idstr. '>';
+            return '<' .$tag. ' class="' .$name. '"' . $idstr . ($props["empty"] ? '/' : "") . '>';
         }
         return '</' .$tag. '>';
     }
 
     public function appendData($data) {
-        if ($this->flags & PhDRender::CLOSE) {
+    	if ($this->appendToBuffer) {
+    		$this->buffer .= $data;
+    		return;
+    	} elseif ($this->flags & PhDRender::CLOSE) {
             $fp = array_pop($this->fp);
             fwrite($fp, $data);
             $this->writeChunk($this->CURRENT_CHUNK, $fp);
@@ -458,7 +460,7 @@ class PhDXHTMLFormat extends PhDFormat {
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' .$lang. '" lang="' .$lang. '">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>PHP: '.$title.'</title>
 </head>
 <body>
@@ -500,40 +502,16 @@ class PhDXHTMLFormat extends PhDFormat {
             $desc = $rsl["sdesc"] ?: $rsl["ldesc"];
         }
         return $retval;
-
-        if ($desc === null) {
-            $rsl = $this->sqlite->query("SELECT docbook_id, filename FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
-
-            if (!is_array($rsl)) {
-                return false;
-            }
-
-            $retval = $rsl["filename"] . '.' . $this->ext . '#' . $rsl["docbook_id"];
-        } else {
-            $rsl = $this->sqlite->query($q = "SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
-
-            if (!is_array($rsl)) {
-                var_dump($q);
-                return false;
-            }
-
-            $retval = $rsl["filename"] . '.' . $this->ext . '#' . $rsl["docbook_id"];
-
-            if ($type === self::SDESC) {
-                $desc = $rsl["sdesc"] ?: $rsl["ldesc"];
-            } else {
-                $desc = $rsl["ldesc"] ?: $rsl["sdesc"];
-            }
-        }
-
-        return $retval;
     }
+
     protected function createTOC(SQLite3Result $result, $lang) {
-        $toc = '<h2>' . $this->autogen('toc', $lang) . '</h2><ol>';
+        $empty = true;
+    	$toc = '<h2>' . $this->autogen('toc', $lang) . '</h2><ol>';
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $empty = false;
         	$long = $this->parse($row["ldesc"]);
             $short = $row["sdesc"];
-            $link = $row["filename"] . "." . $this->ext . '#' . $row["docbook_id"];
+            $link = $this->createLink($row["docbook_id"]);
             
             $list = "";
             if ($this->cchunk["name"] === "book" || $this->cchunk["name"] === "set") {
@@ -541,28 +519,29 @@ class PhDXHTMLFormat extends PhDFormat {
                 if ($childrens) {
                     $list = "<ol>";
                     while ($child = $childrens->fetchArray(SQLITE3_ASSOC)) {
-                    	$childLong = $this->parse($child["ldesc"]);
-                    	$childShort = $child["sdesc"];
+                        $childLong = $this->parse($child["ldesc"]);
+                        $childShort = $child["sdesc"];
                     	
-			            $href = $child["filename"] . "." . $this->ext . '#' . $child["docbook_id"];
-			            if ($childLong && $childShort && $childLong != $childShort) {
-			                $list .= '<li><a href="' . $href . '">' . $childShort . '</a> — ' . $childLong . "</li>\n";
-			            } else {
-			                $list .= '<li><a href="' . $href . '">' . ($childLong ?: $childShort) . '</a>' . "</li>\n";
-			            }
+                        $href = $this->createLink($child["docbook_id"]);
+                        if ($childLong && $childShort && $childLong != $childShort) {
+                            $list .= '<li><a href="' . $href . '">' . $childShort . '</a> — ' . $childLong . "</li>\n";
+                        } else {
+                            $list .= '<li><a href="' . $href . '">' . ($childLong ?: $childShort) . '</a>' . "</li>\n";
+                        }
                     }
                     $list .="</ol>";
                 }
             }
-        	if ($long && $short && $long != $short) {
+            if ($long && $short && $long != $short) {
                 $toc .= '<li><a href="' . $link . '">' . $short . '</a> — ' . $long . $list . "</li>\n";
             } else {
                 $toc .= '<li><a href="' . $link . '">' . ($long ?: $short) . '</a>' . $list .  "</li>\n";
             }
         }
         $toc .= "</ol>\n";
-
-        return $toc;
+        if ($empty)
+            return "";
+        else return $toc;
     }
 
     protected function createNavBar($id) {
@@ -669,7 +648,6 @@ ul.toc li a:hover {
             break;
 
         case PhDRender::INIT:
-            v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
             $this->outputdir = $tmp = PhDConfig::output_dir() . strtolower($this->getFormatName()) . '/';
             if (file_exists($tmp)) {
                 if (!is_dir($tmp)) {
@@ -681,6 +659,9 @@ ul.toc li a:hover {
                 }
             }
             break;
+        case PhDRender::VERBOSE:
+        	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+        	break;
         }
     }
 
@@ -1044,8 +1025,10 @@ ul.toc li a:hover {
 
         return $content;
     }
-    public function format_methodparam_parameter($open, $name, $attrs) {
-        if ($open) {
+    public function format_methodparam_parameter($open, $name, $attrs, $props) {
+        if ($props["empty"])
+            return;
+    	if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
                 return ' <tt class="parameter reference">&$';
             }
@@ -1059,8 +1042,10 @@ ul.toc li a:hover {
         }
         return '</span>';
     }
-    public function format_parameter($open, $name, $attrs) {
-        if ($open) {
+    public function format_parameter($open, $name, $attrs, $props) {
+        if ($props["empty"])
+            return;
+    	if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
                 return '<i><tt class="parameter reference">&';
             }

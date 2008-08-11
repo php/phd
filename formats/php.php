@@ -138,6 +138,9 @@ manual_header();
         case PhDRender::INIT:
             parent::update($event, $val);
             break;
+        case PhDRender::VERBOSE:
+            parent::update($event, $val);
+            break;
         }
     }
     public function format_suppressed_text($value, $tag) {

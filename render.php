@@ -46,8 +46,6 @@ $reader = new PhDReader();
 
 // Indexing & registering formats
 foreach(range(0, 0) as $i) {
-    //var_dump(date(DATE_RSS));
-
     if (PhDIndex::requireIndexing()) {
         v("Indexing...", VERBOSE_INDEXING);
         // Create indexer
@@ -61,7 +59,6 @@ foreach(range(0, 0) as $i) {
         $render->detach($format);
 
         v("Indexing done", VERBOSE_INDEXING);
-        //var_dump(date(DATE_RSS));
     } else {
         v("Skipping indexing", VERBOSE_INDEXING);
     }
@@ -101,7 +98,10 @@ $render->attach($bightml);
 
 // Rendering formats
 foreach(range(0, 0) as $i) {
-    $reader->open(PhDConfig::xml_file());
+	$reader->open(PhDConfig::xml_file());
+    foreach($render as $format) {
+        $format->notify(PhDRender::VERBOSE, true);
+    }
     $render->render($reader);
 }
 

@@ -6,6 +6,7 @@ class PhDRender extends PhDObjectStorage {
     const STANDALONE   = 0x008;
     const INIT         = 0x010;
     const FINALIZE     = 0x020;
+    const VERBOSE      = 0x040;
 
     private   $STACK      = array();
 
@@ -76,6 +77,9 @@ class PhDRender extends PhDObjectStorage {
 
                 $this->STACK[$depth] = $name;
 
+                if ($name == "notatag")
+                    continue;
+                
                 foreach($this as $format) {
                     $map = $this[$format][XMLReader::ELEMENT];
 
