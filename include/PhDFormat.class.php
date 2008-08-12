@@ -9,6 +9,10 @@ abstract class PhDFormat extends PhDObjectStorage {
     private $formatname = "UNKNOWN";
     protected $sqlite;
 
+    /* Indexing maps */
+    protected $indexes = array();
+    protected $childrens = array();
+
     private static $autogen = array();
 
     public function __construct() {
@@ -27,11 +31,14 @@ abstract class PhDFormat extends PhDObjectStorage {
     abstract public function update($event, $value = null);
 
     public function sortIDs() {
-        $this->sqlite->createAggregate("idx", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 8);
-        $this->sqlite->query('SELECT idx(docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) FROM ids');
+        $this->sqlite->createAggregate("indexes", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 8);
+        $this->sqlite->createAggregate("childrens", array($this, "SQLiteChildrens"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->query('SELECT indexes(docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) FROM ids');
+        $this->sqlite->query('SELECT childrens(docbook_id, parent_id) FROM ids');
     }
+
     public function SQLiteIndex(&$context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next) {
-        $this->idx[$id] = array(
+        $this->indexes[$id] = array(
             "docbook_id" => $id,
             "filename"   => $filename,
             "parent_id"  => $parent,
@@ -46,6 +53,14 @@ abstract class PhDFormat extends PhDObjectStorage {
         }
 
     }
+
+    public function SQLiteChildrens(&$context, $index, $id, $parent) {
+        if (!isset($this->childrens[$parent]) || !is_array($this->childrens[$parent])) {
+            $this->childrens[$parent] = array();
+        }
+        $this->childrens[$parent][] = $id;
+    }
+
     public static function SQLiteFinal(&$context) {
         return $context;
     }
@@ -82,28 +97,28 @@ abstract class PhDFormat extends PhDObjectStorage {
     public function getFormatName() {
         return $this->formatname;
     }
-	
+
 	/* Buffer where append data instead of the standard stream (see format's appendData()) */
     protected $appendToBuffer = false;
 	protected $buffer = "";
-    
+
     final public function parse($xml) {
         $parsed = "";
         $reader = new PhDReader();
         $render = new PhDRender();
-        
+
         $reader->XML("<notatag>" . $xml . "</notatag>");
-        
+
         $this->appendToBuffer = true;
         $render->attach($this);
         $render->render($reader);
         $this->appendToBuffer = false;
         $parsed = $this->buffer;
         $this->buffer = "";
-        
+
         return $parsed;
     }
-    
+
     final public static function autogen($text, $lang) {
         if (isset(self::$autogen[$lang])) {
             if (isset(self::$autogen[$lang][$text])) {
@@ -144,52 +159,40 @@ abstract class PhDFormat extends PhDObjectStorage {
 
 /* {{{ TOC helper functions */
     final public function getFilename($id) {
-        $row = $this->sqlite->query($q = "SELECT filename FROM ids WHERE docbook_id='$id'")->fetchArray(SQLITE3_ASSOC);
-        if (!is_array($row)) {
-            var_dump($q);
-            return false;
-        }
-        return $row["filename"];
+        return $this->indexes[$id]["filename"];
     }
     final public function getPrevious($id) {
-        $row = $this->sqlite->query($q = "SELECT previous FROM ids WHERE docbook_id='$id'")->fetchArray(SQLITE3_ASSOC);
-        if (!is_array($row)) {
-            var_dump($q);
-            return false;
-        }
-        return $row["previous"];
+        return $this->indexes[$id]["previous"];
     }
     final public function getNext($id) {
-        $row = $this->sqlite->query($q = "SELECT next FROM ids WHERE docbook_id='$id'")->fetchArray(SQLITE3_ASSOC);
-        if (!is_array($row)) {
-            var_dump($q);
-            return false;
-        }
-        return $row["next"];
+        return $this->indexes[$id]["next"];
     }
     final public function getParent($id) {
-        $row = $this->sqlite->query($q = "SELECT parent_id FROM ids WHERE docbook_id='$id'")->fetchArray(SQLITE3_ASSOC);
-        if (!is_array($row)) {
-            var_dump($q);
-            return false;
-        }
-        return $row["parent_id"];
+        return $this->indexes[$id]["parent_id"];
     }
-    final public function getLongDescription($for) {
-        $row = $this->sqlite->query($q = "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
-        if (!is_array($row)) {
-            var_dump($q);
-            return false;
+    final public function getLongDescription($id, &$isLDesc = null) {
+        if ($this->indexes[$id]["ldesc"]) {
+            $isLDesc = true;
+            return $this->indexes[$id]["ldesc"];
+        } else {
+            $isLDesc = false;
+            return $this->indexes[$id]["sdesc"];
         }
-        return $row["ldesc"] ?: $row["sdesc"];
     }
-    final public function getShortDescription($for) {
-        $row = $this->sqlite->query($q = "SELECT sdesc, ldesc FROM ids WHERE docbook_id='$for'")->fetchArray(SQLITE3_ASSOC);
-        if (!is_array($row)) {
-            var_dump($q);
-            return false;
+    final public function getShortDescription($id, &$isSDesc = null) {
+        if ($this->indexes[$id]["sdesc"]) {
+            $isSDesc = true;
+            return $this->indexes[$id]["sdesc"];
+        } else {
+            $isSDesc = false;
+            return $this->indexes[$id]["ldesc"];
         }
-        return $row["sdesc"] ?: $row["ldesc"];
+    }
+    final public function getChildrens($id) {
+        if (!isset($this->childrens[$id]) || !is_array($this->childrens[$id]) || count($this->childrens[$id]) == 0) {
+            return null;
+        }
+        return $this->childrens[$id];
     }
 /* }}} */
 

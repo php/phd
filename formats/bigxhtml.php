@@ -1,6 +1,6 @@
 <?php
 class PhDBigXHTMLFormat extends PhDXHTMLFormat {
-    private $simpleName = "Big-XHTML";
+    private $formatname = "Big-XHTML";
     private $myelementmap = array(
         'link'                  => 'format_link',
         'xref'                  => 'format_xref',
@@ -28,7 +28,7 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
             'questions'         => 'format_phd_question', // From the PhD namespace
         ),
 
- 
+
     );
     private $mytextmap = array(
     );
@@ -38,7 +38,7 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
 
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->simpleName);
+        parent::registerFormatName($this->formatname);
     }
     public function appendData($data) {
         if ($this->appendToBuffer) {
@@ -74,7 +74,7 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
         $i++;
         $this->bigfp = fopen(PhDConfig::output_dir() . "bightml$i.html", "w+");
         // FIXME: Use correct lang attribute and insert <title> of the DB file
-        fwrite($this->bigfp, 
+        fwrite($this->bigfp,
 '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -128,13 +128,13 @@ class PhDBigXHTMLFormat extends PhDXHTMLFormat {
     }
     public function createLink($for, &$desc = null, $type = self::SDESC) {
         $retval = '#' . $for;
-        if (isset($this->idx[$for])) {
-            $result = $this->idx[$for];
+        if (isset($this->indexes[$for])) {
+            $result = $this->indexes[$for];
             if ($type === self::SDESC) {
                 $desc = $result["sdesc"] ?: $result["ldesc"];
             } else {
                 $desc = $result["ldesc"] ?: $result["sdesc"];
-            }            
+            }
         }
         return $retval;
     }

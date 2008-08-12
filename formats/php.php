@@ -1,6 +1,6 @@
 <?php
 class PhDPHPFormat extends PhDXHTMLFormat {
-    private $simpleName = "PHP";
+    private $formatname = "PHP";
     private $myelementmap = array(
         'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
@@ -77,7 +77,7 @@ class PhDPHPFormat extends PhDXHTMLFormat {
 
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->simpleName);
+        parent::registerFormatName($this->formatname);
         $this->versions = self::generateVersionInfo(PhDConfig::phpweb_version_filename());
         $this->acronyms = self::generateAcronymInfo(PhDConfig::phpweb_acronym_filename());
 

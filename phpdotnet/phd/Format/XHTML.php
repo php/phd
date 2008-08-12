@@ -1,7 +1,7 @@
 <?php
 /*  $Id$ */
 class PhDXHTMLFormat extends PhDFormat {
-    private $simpleName = "XHTML";
+    private $formatname = "XHTML";
     private $myelementmap = array( /* {{{ */
         'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
         'abbrev'                => 'abbr',
@@ -401,7 +401,7 @@ class PhDXHTMLFormat extends PhDFormat {
     protected $outputdir = __DIR__;
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->simpleName);
+        parent::registerFormatName($this->formatname);
     }
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
         if ($open) {
@@ -441,7 +441,7 @@ class PhDXHTMLFormat extends PhDFormat {
         $lang = $this->CURRENT_LANG;
 
         $prev = $next = $parent = array("href" => null, "desc" => null);
-        
+
         if ($parentId = $this->getParent($id)) {
             $parent = array("href" => $this->getFilename($parentId) . '.' .$this->ext,
                 "desc" => $this->getShortDescription($parentId));
@@ -496,52 +496,54 @@ class PhDXHTMLFormat extends PhDFormat {
     }
     public function createLink($for, &$desc = null, $type = PhDFormat::SDESC) {
         $retval = null;
-        if (isset($this->idx[$for])) {
-            $rsl = $this->idx[$for];
+        if (isset($this->indexes[$for])) {
+            $rsl = $this->indexes[$for];
             $retval = $rsl["filename"] . "." . $this->ext . '#' . $rsl["docbook_id"];
             $desc = $rsl["sdesc"] ?: $rsl["ldesc"];
         }
         return $retval;
     }
 
-    protected function createTOC(SQLite3Result $result, $lang) {
-        $empty = true;
-    	$toc = '<h2>' . $this->autogen('toc', $lang) . '</h2><ol>';
-        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            $empty = false;
-        	$long = $this->parse($row["ldesc"]);
-            $short = $row["sdesc"];
-            $link = $this->createLink($row["docbook_id"]);
-            
+    protected function createTOC($id, $lang) {
+        if (!$this->getChildrens($id)) {
+            return "";
+        }
+        $toc = '<h2>' . $this->autogen('toc', $lang) . '</h2><ol>';
+        foreach ($this->getChildrens($id) as $child) {
+            $isLDesc = null;
+            $isSDesc = null;
+            $long = $this->parse($this->getLongDescription($child, $isLDesc));
+            $short = $this->getShortDescription($child, $isSDesc);
+            $link = $this->createLink($child);
+
             $list = "";
             if ($this->cchunk["name"] === "book" || $this->cchunk["name"] === "set") {
-                $childrens = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='{$row["docbook_id"]}' AND filename=docbook_id");
-                if ($childrens) {
+                if ($this->getChildrens($child)) {
                     $list = "<ol>";
-                    while ($child = $childrens->fetchArray(SQLITE3_ASSOC)) {
-                        $childLong = $this->parse($child["ldesc"]);
-                        $childShort = $child["sdesc"];
-                    	
-                        $href = $this->createLink($child["docbook_id"]);
-                        if ($childLong && $childShort && $childLong != $childShort) {
-                            $list .= '<li><a href="' . $href . '">' . $childShort . '</a> — ' . $childLong . "</li>\n";
+                    foreach ($this->getChildrens($child) as $subChild) {
+                        $isSubLDesc = null;
+                        $isSubSDesc = null;
+                        $subLong = $this->parse($this->getLongDescription($subChild, $isLDesc));
+                        $subShort = $this->getShortDescription($subChild, $isSubSDesc);
+
+                        $href = $this->createLink($subChild);
+                        if ($isSubLDesc && $isSubSDesc) {
+                            $list .= '<li><a href="' . $href . '">' . $subShort . '</a> — ' . $subLong . "</li>\n";
                         } else {
-                            $list .= '<li><a href="' . $href . '">' . ($childLong ?: $childShort) . '</a>' . "</li>\n";
+                            $list .= '<li><a href="' . $href . '">' . ($subLong ?: $subShort) . '</a>' . "</li>\n";
                         }
                     }
                     $list .="</ol>";
                 }
             }
-            if ($long && $short && $long != $short) {
+            if ($isLDesc && $isSDesc) {
                 $toc .= '<li><a href="' . $link . '">' . $short . '</a> — ' . $long . $list . "</li>\n";
             } else {
                 $toc .= '<li><a href="' . $link . '">' . ($long ?: $short) . '</a>' . $list .  "</li>\n";
             }
         }
         $toc .= "</ol>\n";
-        if ($empty)
-            return "";
-        else return $toc;
+        return $toc;
     }
 
     protected function createNavBar($id) {
@@ -597,11 +599,10 @@ ul.toc li a:hover {
         }
         // Fetch siblings of the current node
         $parent = $this->getParent($id);
-        $childrens = $this->sqlite->query("SELECT docbook_id FROM ids WHERE parent_id='$parent'");
-        while ($child = $childrens->fetchArray(SQLITE3_ASSOC)) {
+        foreach ($this->getChildrens($parent) as $child) {
             $desc = "";
-            $link = $this->createLink($child["docbook_id"], $desc);
-            $active = ($id === $child["docbook_id"]);
+            $link = $this->createLink($child, $desc);
+            $active = ($id === $child);
             $navBar .= "  <li" .($active ? " class=\"active\"" : ""). "><a href=\"$link\">$desc</a></li>\n";
         }
         return $navBar . " </ul>\n";
@@ -797,10 +798,6 @@ ul.toc li a:hover {
         }
 
         if ($open) {
-       		if (!NO_SQLITE) {
-                $this->CHILDRENS = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id' AND filename=docbook_id");
-            }
-            
             $this->CURRENT_CHUNK = $id;
             $this->notify(PhDRender::CHUNK, PhDRender::OPEN);
 
@@ -809,12 +806,11 @@ ul.toc li a:hover {
 
         $this->CURRENT_CHUNK = $id;
         $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
-
         $toc = "";
-        if (!NO_SQLITE && !in_array($id, $this->TOC_WRITTEN)) {
-            $result = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id'");
-            $toc = $this->createTOC($result, $props["lang"]);
+        if (!in_array($id, $this->TOC_WRITTEN)) {
+            $toc = $this->createTOC($id, $props["lang"]);
         }
+
         return $toc."</div>";
     }
     public function format_container_chunk_top_title($open, $name, $attrs, $props) {
@@ -823,13 +819,9 @@ ul.toc li a:hover {
         }
 
         $id = $this->CURRENT_CHUNK;
-        if (!NO_SQLITE) {
-            $this->CHILDRENS = $result = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id'");
-            $toc = $this->createTOC($result, $props["lang"]);
-        } else {
-            $this->CHILDRENS = array();
-            $toc = "";
-        }
+
+        $toc = $this->createTOC($id, $props["lang"]);
+
         $this->TOC_WRITTEN[] = $id;
 
         return '</h1>'.$toc;
@@ -853,10 +845,8 @@ ul.toc li a:hover {
 
         $toc = '<ol>';
         $desc = "";
-        $rsl = $this->CHILDRENS;
-    	if (!NO_SQLITE && !in_array($id, $this->TOC_WRITTEN)) {
-            $result = $this->sqlite->query("SELECT docbook_id, filename, sdesc, ldesc FROM ids WHERE parent_id='$id'");
-            $toc = $this->createTOC($result, $props["lang"]);
+    	if (!in_array($id, $this->TOC_WRITTEN)) {
+            $toc = $this->createTOC($id, $props["lang"]);
         }
         $toc .= "</ol>\n";
 
