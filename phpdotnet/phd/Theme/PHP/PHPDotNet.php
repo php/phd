@@ -456,7 +456,7 @@ abstract class phpdotnet extends PhDTheme {
             }
             $content .= "</li>";
         }
-        $content .= "</ul>";
+        $content .= "</ul></div>";
 
         return $content;
     }
