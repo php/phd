@@ -28,32 +28,40 @@ require $ROOT. "/include/PhDTheme.class.php";
 /* {{{ Build the .ser file names to allow multiple sources for PHD. */
 $OPTIONS['index_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.index_' . basename($OPTIONS['xml_file'], '.xml') . '.ser';
 $OPTIONS['refnames_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.refnames_' . basename($OPTIONS['xml_file'], '.xml') . '.ser';
+$OPTIONS['classes_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.classes_' . basename($OPTIONS['xml_file'], '.xml') . '.ser';
+$OPTIONS['vars_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.vars_' . basename($OPTIONS['xml_file'], '.xml') . '.ser';
 /* }}} */
 
 /* {{{ Index the DocBook file or load from .ser cache files
        NOTE: There are two cache files (where * is the basename of the XML source file):
         - index_*.ser     (containing the ID infos)
         - refnames_*.ser  (containing <refname> => File ID) */
-if (!$OPTIONS["index"] && (file_exists($OPTIONS['index_location']) && file_exists($OPTIONS['refnames_location']))) {
+if (!$OPTIONS["index"] && (file_exists($OPTIONS['index_location']) && file_exists($OPTIONS['refnames_location']) && file_exists($OPTIONS['classes_location']) && file_exists($OPTIONS['vars_location']))) {
     /* FIXME: Load from sqlite db? */
     v("Unserializing cached index files...", VERBOSE_INDEXING);
 
     $IDs = unserialize(file_get_contents($OPTIONS['index_location']));
     $REFS = unserialize(file_get_contents($OPTIONS['refnames_location']));
+    $CLASSES = unserialize(file_get_contents($OPTIONS['classes_location']));
+    $VARS    = unserialize(file_get_contents($OPTIONS['vars_location']));
 
     v("Unserialization done", VERBOSE_INDEXING);
 } else {
     v("Indexing...", VERBOSE_INDEXING);
 
-    /* This file will "return" an $IDs & $REFS array */
+    /* This file will "return" an $IDs, $REFS, $CLASSES, $VARS array */
     require $ROOT. "/mktoc.php";
 
     file_put_contents($OPTIONS['index_location'], $ids = serialize($IDs));
     file_put_contents($OPTIONS['refnames_location'], $refs = serialize($REFS));
+    file_put_contents($OPTIONS['classes_location'], $classes = serialize($CLASSES));
+    file_put_contents($OPTIONS['vars_location'], $vars = serialize($VARS));
 
     $IDs2 = unserialize($ids);
     $REFS2 = unserialize($refs);
-    if ($IDs !== $IDs2 || $REFS !== $REFS2) {
+    $CLASSES2 = unserialize($classes);
+    $VARS2    = unserialize($vars);
+    if ($IDs !== $IDs2 || $REFS !== $REFS2 || $CLASSES !== $CLASSES2 || $VARS !== $VARS2) {
         trigger_error("Serialized representation does not match", E_USER_WARNING);
     }
 
@@ -79,7 +87,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
 
     // {{{ Initialize the output format and fetch the methodmaps
     require $ROOT. "/formats/$output_format.php";
-    $format = new $classname(array($IDs, $REFS));
+    $format = new $classname(array($IDs, $REFS, $CLASSES, $VARS));
     $formatmap = $format->getElementMap();
     $formattextmap = $format->getTextMap();
     /* }}} */
@@ -96,7 +104,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
             switch($theme) {
                 // FIXME: This is stupid and definetly does not belong in here.
                 case "php":
-                    $themes[$themename] = new $themename(array($IDs, $REFS),
+                    $themes[$themename] = new $themename(array($IDs, $REFS, $CLASSES, $VARS),
                         array(
                             "version" => $OPTIONS["version_info"],
                             "acronym" => $OPTIONS["acronyms_file"],
@@ -104,7 +112,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                     );
                     break;
                 default:
-                    $themes[$themename] = new $themename(array($IDs, $REFS));
+                    $themes[$themename] = new $themename(array($IDs, $REFS, $CLASSES, $VARS));
             }
             
             // FIXME: this needs to go away when we add support for

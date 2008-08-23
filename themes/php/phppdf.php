@@ -1,4 +1,5 @@
 <?php
+/*  $Id$ */
 
 class phppdf extends PhDTheme {
    
@@ -31,10 +32,12 @@ class phppdf extends PhDTheme {
         ),
         'legalnotice'           => 'format_tocnode_newpage',
         'part'                  => 'format_tocnode_newpage',
-        'phpdoc:exception'      => 'format_tocnode_exception',
+        'phpdoc:exceptionref'   => 'format_tocnode_exception',
+        'phpdoc:classref'       => 'format_tocnode_class',
         'preface'               => 'format_tocnode_newpage',
         'refentry'              => 'format_tocnode_newpage',
         'reference'             => 'format_tocnode_newpage',
+        'phpdoc:varentry'       => 'format_tocnode_newpage',
         'sect1'                 => 'format_tocnode',
         'sect2'                 => 'format_tocnode',
         'sect3'                 => 'format_tocnode',
@@ -68,6 +71,12 @@ class phppdf extends PhDTheme {
                 'classsynopsis' => false,
             ),
         ),
+        'titleabbrev'           => array(
+            /* DEFAULT */          'format_suppressed_tags',
+            'phpdoc:classref'   => 'format_grep_classname_text',
+            'phpdoc:exceptionref'  => 'format_grep_classname_text',
+        ),
+
 
     );
     
@@ -82,6 +91,7 @@ class phppdf extends PhDTheme {
     protected $cchunk          = array();
     /* Default Chunk settings */
     protected $dchunk          = array(
+        "phpdoc:classref"           => null,
         "bookname"                  => null,
         "setname"                   => null,
         "toc-root"                  => null,
@@ -180,6 +190,14 @@ class phppdf extends PhDTheme {
     public function format_tocnode_exception($open, $name, $attrs, $props) {
         return $this->format_tocnode($open, "reference", $attrs, $props, true);
     }    
+
+    public function format_tocnode_class($open, $name, $attrs, $props) {
+        return $this->format_tocnode($open, "reference", $attrs, $props, true);
+    }
+
+    public function format_grep_classname_text($value, $tag) {
+        $this->cchunk["phpdoc:classref"] = strtolower($value);
+    }
     
     // Convert the book name to a Unix valid filename
     protected function toValidName($functionName) {
@@ -267,5 +285,10 @@ class phppdf extends PhDTheme {
                 $this->setIdToPage($id);
         }
         return false;
+    }
+
+    public function format_suppressed_tags($open, $name) {
+      /* Ignore it */
+      return "";
     }
 }

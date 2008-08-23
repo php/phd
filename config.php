@@ -152,7 +152,9 @@ $OPTIONS = array (
   ),
   'chunk_extra' => array(
     "legalnotice" => true,
-    "phpdoc:exception" => true,
+    "phpdoc:exceptionref" => true,
+    "phpdoc:classref" => true,
+    "phpdoc:varentry" => true,
   ),
   'index' => true,
   'xml_root' => '.',

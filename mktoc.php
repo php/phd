@@ -1,7 +1,7 @@
 <?php
 /*  $Id$ */
 $r = new PhDReader($OPTIONS);
-$REFS = $FILENAMES = array();
+$VARS = $CLASSES = $REFS = $FILENAMES = array();
 $CURRENT_FILENAME = $LAST_CHUNK = "";
 
 #FIXME: This is a workaround for the <legalnotice> element in the PHP manual
@@ -16,16 +16,22 @@ while($r->read()) {
                 $IDs[$lastid]["sdesc"] = $refname = trim($r->readContent($name));
                 $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $refname));
                 $REFS[$ref] = $lastid;
+                $VARS[$refname] = $lastid;
                 continue;
             }
             elseif($name == "titleabbrev") {
-                $IDs[$lastid]["sdesc"] = trim($r->readContent($name));
+                $IDs[$lastid]["sdesc"] = $class = trim($r->readContent($name));
+                $elm = $r->getParentTagName();
+                if ($elm == "phpdoc:classref" || $elm == "phpdoc:exceptionref") {
+                    $CLASSES[strtolower($class)] = $lastid;
+                }
                 continue;
             }
         } elseif($name == "refname") {
             $refname = trim($r->readContent($name));
             $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $refname));
             $REFS[$ref] = $lastid;
+            $VARS[$refname] = $lastid;
         }
         if (empty($IDs[$lastid]["ldesc"])) {
             if ($name == "title" || $name == "refpurpose") {

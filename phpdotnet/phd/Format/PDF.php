@@ -153,6 +153,8 @@ class PDFPhDFormat extends PhDFormat {
         'type'                  => 'format_suppressed_tags',
         'userinput'             => 'format_bold',
         'variablelist'          => 'format_suppressed_tags',
+        /* hack for phpdoc:varentry */
+        'phpdoc:varentry'       => 'format_suppressed_tags',
         'varlistentry'          => 'format_newline',
         'varname'               => 'format_italic',
         'warning'               => 'format_admonition',
