@@ -390,7 +390,7 @@ abstract class phpdotnet extends PhDTheme {
             }
             return '<var><a href="#'.$filename. '" class="classname">'.$value.'</a></var>';
         }
-        return '<var class="varname">' .$value. '</varname>';
+        return '<var class="varname">' .$value. '</var>';
 
     }
     public function format_container_chunk($open, $name, $attrs, $props) {
