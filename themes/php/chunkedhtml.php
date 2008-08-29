@@ -13,7 +13,7 @@ class chunkedhtml extends phpweb {
     }
     public function header($id) {
         $title = PhDHelper::getDescription($id, true);
-        $header = <<< HEADER
+        $header = <<<HEADER
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
@@ -31,7 +31,7 @@ HEADER;
             $up = array($parent.".html", PhDHelper::getDescription($parent, false));
         }
 
-        $nav = <<< NAV
+        $nav = <<<NAV
 <div class="manualnavbar" style="text-align: center;">
  <div class="prev" style="float: left;"><a href="{$prev[0]}">{$prev[1]}</a></div>
  <div class="next" style="float: right;"><a href="{$next[0]}">{$next[1]}</a></div>

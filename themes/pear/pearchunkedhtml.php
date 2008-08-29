@@ -41,7 +41,7 @@ $header .= ' </head>
  <body>
 ';
         
-        $nav = <<< NAV
+        $nav = <<<NAV
 <table style="background-color: #E0E0E0; width: 100%; font-size: 75%; white-space: nowrap; border-collapse:collapse; border-spacing:0pt;" align="center">
  <tbody>
  <tr valign="top">
