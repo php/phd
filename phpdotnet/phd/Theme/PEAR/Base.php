@@ -592,7 +592,7 @@ abstract class peartheme extends PhDTheme {
 
     public function format_funcprototype($open, $name, $attrs, $props) {
         if ($open) {
-            return '<p><code class="$name">';
+            return '<p><code class="' . $name . '">';
         }
         else return ")</code></p>";
     }
