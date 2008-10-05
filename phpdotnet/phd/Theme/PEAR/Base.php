@@ -32,7 +32,7 @@ abstract class peartheme extends PhDTheme {
         'firstname'             => 'format_suppressed_tags',
         'funcdef'               => 'format_funcdef',
         'funcprototype'         => 'format_funcprototype',
-        
+
         'funcsynopsisinfo'      => 'format_programlisting',
         'funcsynopsis'          => 'div',
         'function'              => 'b',
@@ -154,7 +154,7 @@ abstract class peartheme extends PhDTheme {
                 )))
             ),
             'table'             => 'format_table_title',
-            'warning'           => 'format_warning_title',        
+            'warning'           => 'format_warning_title',
         ),
         'tbody'                 => 'tbody',
         'term'                  => 'dt',
@@ -185,7 +185,7 @@ abstract class peartheme extends PhDTheme {
         'refname'               => 'format_refname_text',
         'year'                  => 'format_year',
     );
-    
+
     public $role        = false;
     protected $chunked = true;
     protected $lang = "en";
@@ -214,6 +214,7 @@ abstract class peartheme extends PhDTheme {
     }
 
     public function format_chunk($open, $name, $attrs, $props) {
+        $id = null;
         if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
             $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
         }
@@ -275,7 +276,7 @@ abstract class peartheme extends PhDTheme {
     public function format_exception_chunk($open, $name, $attrs, $props) {
         return $this->format_container_chunk($open, "reference", $attrs, $props);
     }
-    
+
     public function format_root_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
         if ($open) {
@@ -306,7 +307,7 @@ abstract class peartheme extends PhDTheme {
 
         return $content;
     }
-    
+
     public function format_link($open, $name, $attrs, $props) {
         if ($open) {
             $content = $fragment = "";
@@ -361,8 +362,8 @@ abstract class peartheme extends PhDTheme {
             }
         }
         return "</a>";
-    }    
-    
+    }
+
     public function format_container_chunk_title($open, $name, $attrs) {
         if ($open) {
             return "<h1>";
@@ -374,7 +375,7 @@ abstract class peartheme extends PhDTheme {
         }
         return "</h1>\n" .$ret;
     }
-    
+
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
         if ($open) {
             $idstr = "";
@@ -386,7 +387,7 @@ abstract class peartheme extends PhDTheme {
         }
         return '</' .$tag. '>';
     }
-    
+
     public function format_programlisting($open, $name, $attrs) {
         if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
@@ -400,50 +401,50 @@ abstract class peartheme extends PhDTheme {
         $this->role = false;
         return "</pre></td></tr></table>\n";
     }
-    
+
     public function format_programlisting_text($value, $tag) {
         switch($this->role) {
         case "php":
             if ( strrpos($value, "<?php") || strrpos($value, "?>") )
-                return highlight_string(trim($value), 1);  
-            else return highlight_string("<?php\n" . trim($value) . "\n?>", 1); 
+                return highlight_string(trim($value), 1);
+            else return highlight_string("<?php\n" . trim($value) . "\n?>", 1);
             break;
         default:
             return htmlspecialchars($value, ENT_QUOTES, "UTF-8");
         }
     }
-    
+
     public function format_screen($open, $name, $attrs) {
         if ($open) {
             return '<table class="EXAMPLE-CODE" bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td><pre class="screen">';
         }
         return "</pre></td></tr></table>\n";
     }
-    
+
     public function CDATA($str) {
         if (!$this->role)
             return str_replace(array("\n", " "), array("<br/>", "&nbsp;"), htmlspecialchars($str, ENT_QUOTES, "UTF-8"));
         switch($this->role) {
         case "php":
             if ( strrpos($str, "<?php") || strrpos($str, "?>") )
-                return (highlight_string(trim($str), 1));  
-            else return (highlight_string("<?php\n" . trim($str) . "\n?>", 1)); 
+                return (highlight_string(trim($str), 1));
+            else return (highlight_string("<?php\n" . trim($str) . "\n?>", 1));
             break;
         default:
             return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
         }
     }
-    
+
     public function format_suppressed_tags($open, $name, $attrs) {
         /* Ignore it */
         return "";
     }
-    
+
     public function format_suppressed_text($value, $tag) {
         /* Suppress any content */
         return "";
     }
-    
+
     public function format_subtitle($open, $name, $attrs) {
         if ($open)
             return '<p><font color="red">';
@@ -453,9 +454,9 @@ abstract class peartheme extends PhDTheme {
     public function format_editedby($open, $name, $attrs, $props) {
         if ($open)
             return "<h2 class=\"EDITEDBY\">" . $this->autogen("editedby", $props["lang"]) . "</h2>";
-        
+
     }
-    
+
     public function format_copyright($open, $name, $attrs) {
         if ($open) {
             if ($this->chunked) {
@@ -466,44 +467,44 @@ abstract class peartheme extends PhDTheme {
         }
         return '</p>';
     }
-    
+
     public function format_comment($open, $name, $attrs) {
         if ($open) {
             return '<!-- ';
         }
         return '-->';
     }
-    
+
     public function format_holder($open, $name, $attrs, $props) {
         if ($open)
             return $this->autogen("by", $props["lang"]) . " ";
     }
-    
+
     public function format_year($value) {
         return $value . ", ";
     }
-    
+
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
             return '<p><div class="' . $name . '"><blockquote class="' . $name . '"><p><b>'.$this->autogen($name, $props["lang"]). ': </b>';
         }
         return "</p></blockquote></div></p>";
     }
-    
+
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
             return '<p><div class="'.$name.'"><table border="1" class="CALSTABLE">';
         }
         return "</table></div></p>";
     }
-    
+
     public function format_entry($open, $name, $attrs, $props) {
         if ($open) {
             return '<td align="left" valign="middle">';
         }
         return "</td>";
     }
-    
+
     public function format_table_title($open, $name, $attrs, $props) {
         if ($props["empty"])
             return "";
@@ -512,35 +513,35 @@ abstract class peartheme extends PhDTheme {
         }
         return '</b></p>';
     }
-        
+
     public function format_userinput($open, $name, $attrs, $props) {
         if ($open) {
             return '<tt class="'.$name.'"><b>';
         }
         return "</b></tt>";
     }
-    
+
     function format_replaceable($open, $name, $attrs, $props) {
         if ($open) {
             return '<tt class="'.$name.'"><i>';
         }
         return "</i></tt>";
     }
-    
+
     public function format_warning($open, $name, $attrs, $props) {
         if ($open) {
             return '<div class="warning"><table class="warning" border="1" width="100%"><tbody>';
         }
         return "</td></tr></tbody></table></div>";
     }
-    
+
     public function format_warning_title($open, $name, $attrs, $props) {
         if ($open) {
             return '<tr><td align="center"><b>';
         }
         return "</b></td></tr>";
     }
-    
+
     public function format_warning_para($open, $name, $attrs, $props) {
         if ($open) {
             if (!$props["sibling"])
@@ -549,17 +550,17 @@ abstract class peartheme extends PhDTheme {
         }
         return "</p></td></tr>";
     }
-    
+
     public function format_refname_function_text($value) {
         $this->cchunk["refname"][] = '<b class="function">' . $this->format->TEXT($value . '()') . '</b>';
         return false;
     }
-    
+
     public function format_refname_classname_text($value) {
         $this->cchunk["refname"][] = '<b class="classname">' . $this->format->TEXT($value) . '</b>';
         return false;
     }
-    
+
     public function format_refpurpose($open, $tag, $attrs) {
         if ($open) {
             $refnames = implode(' ', $this->cchunk["refname"]);
@@ -571,44 +572,44 @@ abstract class peartheme extends PhDTheme {
         $this->cchunk["refname"][] = $this->format->TEXT($value);
         return false;
     }
-    
+
     public function format_function_text($value) {
         return $this->format->TEXT($value."()");
     }
-    
+
     public function format_paramdef($open, $name, $attrs, $props) {
         if ($open && $props["sibling"] == 'paramdef')
             return ' , ';
         return false;
     }
-    
+
     public function format_funcdef($open, $name, $attrs, $props) {
         if (!$open)
             return ' ( ';
         return false;
     }
-    
+
     public function format_funcprototype($open, $name, $attrs, $props) {
         if ($open) {
             return "<p><code class=$name>";
         }
         else return ")</code></p>";
     }
-    
+
     public function format_uri($open, $name, $attrs, $props) {
         if ($open) {
             return '<font color="red">';
         }
         else return "</font>";
     }
-    
+
     public function format_refsynopsisdiv($open, $name, $attrs, $props) {
         if ($open) {
             return '<h2 class="refsynopsisdiv">Synopsis</h2><p>';
         }
         return '</p>';
     }
-    
+
     public function format_guimenu($open, $name, $attrs, $props) {
         if ($open) {
             if ($props["sibling"])
@@ -617,7 +618,7 @@ abstract class peartheme extends PhDTheme {
         }
         return '</i></span>';
     }
-    
+
     /* FIXME: This function is a crazy performance killer */
     public function qandaset($stream) {
         $xml = stream_get_contents($stream);
@@ -662,7 +663,7 @@ abstract class peartheme extends PhDTheme {
         }
         return '</strong></dt>';
     }
-    
+
     public function format_emphasis($open, $name, $attrs) {
         if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "bold")
             $role = "b";
@@ -671,8 +672,8 @@ abstract class peartheme extends PhDTheme {
             return '<' . $role . ' class="' . $name . '">';
         }
         return "</{$role}>";
-    }  
-      
+    }
+
     public function format_glossterm($open, $name, $attrs) {
         if ($open) {
             return '<dt><b>';
@@ -685,8 +686,8 @@ abstract class peartheme extends PhDTheme {
             return '<dd><p>';
         }
         return "</p></dd>";
-    }    
-    
+    }
+
     public function format_calloutlist($open, $name, $attrs) {
         if ($open) {
             $this->cchunk["callouts"] = 0;
