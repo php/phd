@@ -5,7 +5,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
 {
     public $docbook = false;
     public $verbose = 0;
-    
+
     public function getOptionList()
     {
         return array(
@@ -23,7 +23,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
             "help"      => "h",         // Print out help
         );
     }
-    
+
     public function option_f($k, $v)
     {
         $this->option_format($k, $v);
@@ -46,7 +46,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         }
         PhDConfig::set_output_format($formats);
     }
-    
+
     public function option_t($k, $v)
     {
         $this->option_theme($k, $v);
@@ -57,6 +57,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         $themes = PhDConfig::output_theme();
         $themes['xhtml']['php'] = array();
         $themes['manpage']['php'] = array();
+        $themes['xhtml']['pear'] = array();
 
         foreach((array)$v as $i => $val) {
             switch($val) {
@@ -102,7 +103,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         }
         PhDConfig::set_output_theme($themes);
     }
-    
+
     public function option_i($k, $v)
     {
         $this->option_index($k, $v);
@@ -119,7 +120,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
     }
-    
+
     public function option_d($k, $v)
     {
         $this->option_docbook($k, $v);
@@ -136,7 +137,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         PhDConfig::set_xml_file($v);
         $this->docbook = true;
     }
-    
+
     public function option_o($k, $v)
     {
         $this->option_output($k, $v);
@@ -152,7 +153,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         }
         PhDConfig::set_output_dir($v);
     }
-    
+
     public function option_p($k, $v)
     {
         $this->option_partial($k, $v);
@@ -174,7 +175,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         }
         PhDConfig::set_render_ids($render_ids);
     }
-    
+
     public function option_s($k, $v)
     {
         $this->option_skip($k, $v);
@@ -196,14 +197,14 @@ class PhDBuildOptionsParser extends PhDOptionParser
         }
         PhDConfig::set_skip_ids($skip_ids);
     }
-    
+
     public function option_v($k, $v)
     {
         if ($k[0] === 'V') {
             $this->option_version($k, $v);
             return;
         }
-        
+
         if (is_array($v)) {
             foreach($v as $i => $val) {
                 $this->verbose |= pow(2, $i);
@@ -214,7 +215,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         PhDConfig::set_verbose($this->verbose);
         error_reporting($GLOBALS['olderrrep'] | $this->verbose);
     }
-    
+
     public function option_verbose($k, $v)
     {
         foreach((array)$v as $i => $val) {
@@ -231,7 +232,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         PhDConfig::set_verbose($this->verbose);
         error_reporting($GLOBALS['olderrrep'] | $this->verbose);
     }
-    
+
     public function option_l($k, $v)
     {
         $this->option_list($k, $v);
@@ -240,7 +241,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
     {
         static $formatList = NULL;
         static $themeList = NULL;
-        
+
         if (is_null($formatList)) {
             $formatList = array();
             foreach (glob($GLOBALS['ROOT'] . "/formats/*.php") as $item) {
@@ -260,11 +261,11 @@ class PhDBuildOptionsParser extends PhDOptionParser
                 }
             }
         }
-        
+
         if ($v === false) {
             $v = array('f', 't');
         }
-        
+
         foreach((array)$v as $val) {
             switch($val) {
                 case "f":
@@ -291,7 +292,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         }
         exit(0);
     }
-    
+
     public function option_c($k, $v)
     {
         $this->option_color($k, $v);
@@ -316,14 +317,14 @@ class PhDBuildOptionsParser extends PhDOptionParser
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
     }
-    
+
     public function option_version($k, $v)
     {
         printf("PhD version: %s\n", PHD_VERSION);
         printf("Copyright (c) 2008 The PHP Documentation Group\n");
         exit(0);
     }
-    
+
     public function option_h($k, $v)
     {
         $this->option_help($k, $v);
