@@ -4,7 +4,7 @@ require_once $ROOT . '/themes/pear/pearchunkedhtml.php';
 class pearchm extends pearchunkedhtml {
     const DEFAULT_FONT = "Arial,10,0";
     const DEFAULT_TITLE = "PEAR Manual";
-    
+
     // Array to manual code -> HTML Help Code conversion
 	// Code list: http://www.helpware.net/htmlhelp/hh_info.htm
 	// Charset list: http://www.microsoft.com/globaldev/nlsweb/default.asp
@@ -168,7 +168,7 @@ class pearchm extends pearchunkedhtml {
 					   "preferred_font" => "simsun,10,0"
 				   )
 	);
-    
+
     // HTML Help Workshop project file
     protected $hhpStream;
     // CHM Table of contents
@@ -180,7 +180,7 @@ class pearchm extends pearchunkedhtml {
     protected $hhkStream;
 	// Project files Output directory
 	protected $chmdir;
-	
+
     public function __construct(array $IDs, $ext = "html", $dir = "chm") {
         parent::__construct($IDs, $ext);
         $this->chmdir = PhDConfig::output_dir() . $dir . DIRECTORY_SEPARATOR;
@@ -189,31 +189,34 @@ class pearchm extends pearchunkedhtml {
         $this->outputdir = PhDConfig::output_dir() . $dir . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
 		if(!file_exists($this->outputdir) || is_file($this->outputdir))
 			mkdir($this->outputdir) or die("Can't create the cache directory");
-		
+
 		$lang = PhDConfig::language();
 		$this->hhpStream = fopen($this->chmdir . "pear_manual_{$lang}.hhp", "w");
 		$this->hhcStream = fopen($this->chmdir . "pear_manual_{$lang}.hhc", "w");
 		$this->hhkStream = fopen($this->chmdir . "pear_manual_{$lang}.hhk", "w");
-		
-		foreach(array("reset-fonts", "style", "manual") as $name)
-			file_put_contents($this->outputdir . "$name.css", $this->fetchStylesheet($name));
-		
+
+        foreach(array("reset-fonts", "style", "manual") as $name) {
+            if (!file_exists($this->outputdir . "$name.css")) {
+                file_put_contents($this->outputdir . "$name.css", $this->fetchStylesheet($name));
+            }
+        }
+
 		self::headerChm();
     }
-    
+
     public function __destruct() {
         self::footerChm();
-        
+
         fclose($this->hhpStream);
         fclose($this->hhcStream);
         fclose($this->hhkStream);
-        
+
         parent::__destruct();
     }
-    
+
 	protected function appendChm($name, $ref, $isChunk, $hasChild) {
 		switch ($isChunk) {
-			case PhDReader::OPEN_CHUNK :				
+			case PhDReader::OPEN_CHUNK :
 				$this->currentTocDepth++;
 				fwrite($this->hhpStream, "{$ref}\n");
 				fwrite($this->hhcStream, "{$this->offset(1)}<li><object type=\"text/sitemap\">\n" .
@@ -234,7 +237,7 @@ class pearchm extends pearchunkedhtml {
 				break;
 		}
 	}
-	
+
     protected function headerChm() {
 		$lang = PhDConfig::language();
 		fwrite($this->hhpStream, '[OPTIONS]
@@ -283,7 +286,7 @@ res\manual.css
     <ul>
 ');
     }
-    
+
     protected function footerChm() {
         fwrite($this->hhcStream, "    </ul>\n" .
 			"  </body>\n" .
@@ -292,30 +295,30 @@ res\manual.css
 			"  </body>\n" .
 			"</html>\n");
     }
-    
+
     public function appendData($data, $isChunk) {
         if ($this->lastContent)
-			$this->appendChm($this->lastContent["name"], $this->lastContent["reference"], 
+			$this->appendChm($this->lastContent["name"], $this->lastContent["reference"],
 				$isChunk, $this->lastContent["hasChild"]);
         $this->lastContent = null;
         return parent::appendData($data, $isChunk);
     }
-    
+
     public function format_chunk($open, $name, $attrs, $props) {
 		$this->collectContent($attrs);
 		return parent::format_chunk($open, $name, $attrs, $props);
     }
-    
+
     public function format_container_chunk($open, $name, $attrs, $props) {
 		$this->collectContent($attrs);
 		return parent::format_container_chunk($open, $name, $attrs, $props);
     }
-    
+
     public function format_root_chunk($open, $name, $attrs, $props) {
 		$this->collectContent($attrs);
 		return parent::format_root_chunk($open, $name, $attrs, $props);
     }
-    
+
     public function header($id) {
         $header = parent::header($id);
         // Add CSS link to <head>
@@ -327,7 +330,7 @@ res\manual.css
     }
 
 
-    
+
     private function collectContent($attrs) {
 		if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
 			$id = $attrs[PhDReader::XMLNS_XML]["id"];
@@ -339,7 +342,7 @@ res\manual.css
 			);
 		}
     }
-    
+
     private function fetchStylesheet($name) {
 		$stylesheet = file_get_contents("http://pear.php.net/css/$name.css");
 		if ($stylesheet) return $stylesheet;
@@ -348,12 +351,12 @@ res\manual.css
 			return "";
 		}
     }
-    
+
     private function offset($offset) {
 		$spaces = "";
 		for ($i = 0; $i < $offset + 2 * $this->currentTocDepth; $i++)
 			$spaces .= "  ";
 		return $spaces;
     }
-    
+
 }
