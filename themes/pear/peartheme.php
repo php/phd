@@ -102,6 +102,7 @@ abstract class peartheme extends PhDTheme {
         'refname'               => 'h1',
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
+        'refsection'            => 'format_container_chunk',
         'refsynopsisdiv'        => 'format_refsynopsisdiv',
         'row'                   => 'tr',
         'screen'                => 'format_screen',
@@ -591,7 +592,7 @@ abstract class peartheme extends PhDTheme {
 
     public function format_funcprototype($open, $name, $attrs, $props) {
         if ($open) {
-            return "<p><code class=$name>";
+            return '<p><code class="$name">';
         }
         else return ")</code></p>";
     }
