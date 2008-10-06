@@ -46,6 +46,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+    Fixed bug#46094 (and then from now on italic). (Hannes)
   </notes>
 
   <contents>
