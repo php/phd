@@ -35,26 +35,17 @@
     <active>yes</active>
   </developer>
 
-  <date>2008-08-23</date>
+  <date>2008-11-01</date>
   <version>
-    <release>0.3.1</release>
-    <api>0.3.1</api>
+    <release>0.3.2</release>
+    <api>0.3.2</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added PDF output format. (Rudy)
-    - Added support for phpdoc:classref. (Hannes)
-    - Added support for phpdoc:varentry. (Hannes)
-    - Added support for the phpdoc howto. (Hannes)
-    - Renamed phpdoc:exception to phpdoc:exceptionref. (Hannes)
-    - Fixed bug#45627 (Unix manpages using non-standard folder name). (Rudy)
-    - Fixed bug#45626 (Unix manpages should be gzipped). (Rudy)
-    - Fixed bug#45618 (Bad filenames in man pages). (Rudy)
-    - Fixed unclosed div element on set pages. (Hannes)
   </notes>
 
   <contents>
@@ -348,6 +339,30 @@
         - Added KDevelop (Index &amp; Table of contents) output theme. (Rudy)
         - Added Man page output format. (Rudy)
         - Added support for phpdoc:exception. (Hannes)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>0.3.1</release>
+        <api>0.3.1</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2008-08-23</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added PDF output format. (Rudy)
+        - Added support for phpdoc:classref. (Hannes)
+        - Added support for phpdoc:varentry. (Hannes)
+        - Added support for the phpdoc howto. (Hannes)
+        - Renamed phpdoc:exception to phpdoc:exceptionref. (Hannes)
+        - Fixed bug#45627 (Unix manpages using non-standard folder name). (Rudy)
+        - Fixed bug#45626 (Unix manpages should be gzipped). (Rudy)
+        - Fixed bug#45618 (Bad filenames in man pages). (Rudy)
+        - Fixed unclosed div element on set pages. (Hannes)
       </notes>
     </release>
 
