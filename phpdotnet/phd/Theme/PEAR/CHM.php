@@ -35,6 +35,7 @@ class pearchm extends pearchunkedhtml {
 					   "preferred_charset" => "Windows-1252",
 					   "mime_charset_name" => "Windows-1252",
 					   "preferred_font" => self::DEFAULT_FONT,
+					   "title" => "PHP Manualen"
 				   ),
 		"de"    => array(
 					   "langcode" => "0x407 German (Germany)",
