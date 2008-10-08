@@ -126,7 +126,10 @@ class XHTMLPhDFormat extends PhDFormat {
         'indexdiv'              => 'dl',
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
-        'itemizedlist'          => 'ul',
+        'itemizedlist'          => array(
+            /* DEFAULT */          'ul',
+            'para'              => 'format_para_itemizedlist',
+         ),
         'legalnotice'           => 'format_legalnotice_chunk',
         'listitem'              => array(
             /* DEFAULT */          'li',
@@ -154,7 +157,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'classsynopsisinfo'    => 'format_classsynopsisinfo_oointerface',
         ),
         'interfacename'         => 'span',
-        'option'                => 'span',    
+        'option'                => 'span',
         'orderedlist'           => 'ol',
         'para'                  => array(
             /* DEFAULT */          'p',
@@ -261,7 +264,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'segmentedlist'     => 'strong',
             'table'             => 'format_table_title',
             'variablelist'      => 'strong',
-        ), 
+        ),
         'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => 'span',
         'userinput'             => 'format_userinput',
@@ -367,7 +370,7 @@ class XHTMLPhDFormat extends PhDFormat {
         "tablefootnotes"           => array(
         ),
     );
-    
+
     public function __construct(array $IDs) {
         parent::__construct($IDs);
     }
@@ -412,7 +415,7 @@ class XHTMLPhDFormat extends PhDFormat {
         /* Suppress any content */
         return "";
     }
-    
+
     public function format_literal($open, $name, $attrs) {
         if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
@@ -439,7 +442,7 @@ class XHTMLPhDFormat extends PhDFormat {
                 return $this->TEXT($value);
         }
     }
-    
+
     public function format_copyright($open, $name, $attrs) {
         if ($open) {
             return '<div class="'.$name.'">&copy; ';
@@ -599,12 +602,12 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</div>";
     }
-    
+
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
         $this->cchunk["classsynopsis"]["classname"] = $value;
         return $this->TEXT($value);
     }
-    
+
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
         $value = $this->TEXT($value);
         if ($this->cchunk["classsynopsis"]["classname"] === false) {
@@ -624,7 +627,7 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return $method;
     }
-    
+
     public function format_fieldsynopsis($open, $name, $attrs) {
         $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
         if ($open) {
@@ -813,6 +816,12 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<span class="'.$name.'">(';
         }
         return ")</span>";
+    }
+    public function format_para_itemizedlist($open, $name, $attrs) {
+        if ($open) {
+            return "</p>\n<ul>\n";
+        }
+        return "</ul>\n<p class=\"para\">";
     }
     public function format_segmentedlist($open, $name, $attrs) {
         $this->cchunk["segmentedlist"] = $this->dchunk["segmentedlist"];
@@ -1044,9 +1053,9 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_tgroup($open, $name, $attrs) {
         if ($open) {
             PhDFormat::tgroup($attrs[PhDReader::XMLNS_DOCBOOK]);
-            return "<colgroup>\n";
+            return '';
         }
-        return "</colgroup>\n";
+        return '';
     }
     private function parse_table_entry_attributes($attrs) {
         $retval = 'align="' .$attrs["align"]. '"';
@@ -1097,7 +1106,11 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_th_entry($open, $name, $attrs) {
         if ($open) {
             $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
-            return '<th colspan="' .((int)$colspan). '">';
+            if ($colspan == 1) {
+                return '<th>';
+            } else {
+                return '<th colspan="' .((int)$colspan). '">';
+            }
         }
         return '</th>';
     }
@@ -1116,7 +1129,7 @@ class XHTMLPhDFormat extends PhDFormat {
             }
 
             /*
-             * "colspan" is *not* an standard prop, only used to overwrite the 
+             * "colspan" is *not* an standard prop, only used to overwrite the
              * colspan for <footnote>s in tables
              */
             if (isset($props["colspan"])) {
@@ -1127,7 +1140,10 @@ class XHTMLPhDFormat extends PhDFormat {
 
             $rowspan = PhDFormat::rowspan($dbattrs);
             $moreattrs = self::parse_table_entry_attributes($dbattrs);
-            return $retval. '<td colspan="' .((int)$colspan). '" rowspan="' .((int)$rowspan). '" ' .$moreattrs. '>';
+
+            $sColspan = $colspan == 1 ? '' : ' colspan="' .((int)$colspan) . '"';
+            $sRowspan = $rowspan == 1 ? '' : ' rowspan="' .((int)$rowspan). '"';
+            return $retval. '<td' . $sColspan . $sRowspan . ' ' . $moreattrs. '>';
         }
         return "</td>";
     }
@@ -1135,14 +1151,14 @@ class XHTMLPhDFormat extends PhDFormat {
     public function admonition_title($title, $lang) {
         return '<b class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</b>';
     }
-    
+
     public function format_citation($open, $name, $attrs, $props) {
         if ($open) {
             return '[<span class="citation">';
         }
         return '</span>]';
     }
-    
+
     public function format_email_text($value) {
         return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
     }
