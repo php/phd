@@ -60,12 +60,14 @@ $header .= ' </head>
  </table>
  <hr/>
 </div>
+
 NAV;
-        $header .= $nav . "<div id=\"doc3\"><div id=\"body\">";
+        $header .= $nav . "<div id=\"body\">\n";
         return $header;
     }
 
     public function footer($id) {
+        //FIXME: don't print empty links
         $nav = <<<NAV
 <div class="navfooter">
  <hr />
@@ -82,8 +84,9 @@ NAV;
   </tr>
  </table>
 </div>
+
 NAV;
-        return "</div></div>$nav</body></html>\n";
+        return "</div>\n$nav</body></html>\n";
     }
     public function __destruct() {
         if (file_exists($this->outputdir . "guide.html") && !file_exists($this->outputdir . 'index.html')) {

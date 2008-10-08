@@ -24,7 +24,6 @@ abstract class peartheme extends PhDTheme {
         'colophon'              => 'format_chunk',
         'constant'              => 'b',
         'emphasis'              => 'format_emphasis',
-        'entry'                 => 'format_entry',
         'filename'              => array(
             /* DEFAULT */          'tt',
             'titleabbrev'       => 'format_suppressed_tags',
@@ -53,8 +52,9 @@ abstract class peartheme extends PhDTheme {
         'important'             => 'format_admonition',
         'info'                  => array(
             /* DEFAULT */          false,
-            'chapter'           => 'format_comment',
+//             'chapter'           => 'format_comment',
             'refsynopsisdiv'    => 'format_comment',
+            'warning'           => 'format_suppressed_tags',
         ),
         'index'                 => array(
             /* DEFAULT */          false,
@@ -63,8 +63,10 @@ abstract class peartheme extends PhDTheme {
             'part'              => 'format_chunk',
         ),
         'informalexample'       => 'div',
-        'informaltable'         => 'format_table',
-        'itemizedlist'          => 'ul',
+        'informaltable'         => array(
+            /* DEFAULT */          'format_table',
+            'para'              => 'format_para_informaltable',
+        ),
         'legalnotice'           => 'format_chunk',
         'link'					=> 'format_link',
         'listitem'              => array(
@@ -104,7 +106,6 @@ abstract class peartheme extends PhDTheme {
         'refpurpose'            => 'format_refpurpose',
         'refsection'            => 'format_container_chunk',
         'refsynopsisdiv'        => 'format_refsynopsisdiv',
-        'row'                   => 'tr',
         'screen'                => 'format_screen',
         'sect1'                 => 'format_chunk',
         'sect2'                 => 'format_chunk',
@@ -139,6 +140,7 @@ abstract class peartheme extends PhDTheme {
                 'chapter'       => 'format_container_chunk_title',
                 //'example'       => 'format_example_title',
                 'part'          => 'format_container_chunk_title',
+                'warning'       => 'format_warning_title',
             ),
             'refsect1'          => 'h2',
             'refsect2'          => 'h3',
@@ -242,36 +244,39 @@ abstract class peartheme extends PhDTheme {
     }
 
     public function format_container_chunk($open, $name, $attrs, $props) {
-        if (!isset($attrs[PhDReader::XMLNS_XML]["id"]))
+        if (!isset($attrs[PhDReader::XMLNS_XML]['id'])) {
             return "<div class=\"{$name}\">";
+        }
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
-        if ($open) {
-            if ($props["isChunk"]) {
-                $this->cchunk = $this->dchunk;
+
+        if (!$open) {
+            return "</div>\n";
+        }
+
+        if ($props["isChunk"]) {
+            $this->cchunk = $this->dchunk;
+        }
+        $chunks = PhDHelper::getChildren($id);
+        if (count($chunks)) {
+            $content = "<div class=\"TOC\">\n <dl>\n  <dt><b>" . $this->autogen("toc", $props["lang"]) . "</b></dt>\n";
+            foreach ($chunks as $chunkid => $junk) {
+                $long = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
+                $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
+                if ($long && $short && $long != $short) {
+                    $desc = $short. '</a> -- ' .$long;
+                } else {
+                    $desc = ($long ? $long : $short). '</a>';
+                }
+                if ($this->chunked) {
+                    $content .= "  <dt><a href=\"{$chunkid}.{$this->ext}\">" . $desc . "</dt>\n";
+                } else {
+                    $content .= "  <dt><a href=\"#{$chunkid}\">" . $this->format->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a></dt>\n";
+                }
             }
-            $chunks = PhDHelper::getChildren($id);
-            if (count($chunks)) {
-	            $content = "<div class=\"TOC\">\n <dl>\n  <dt><b>" . $this->autogen("toc", $props["lang"]) . "</b></dt>\n";
-	            foreach($chunks as $chunkid => $junk) {
-	                $long = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
-                    $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
-                    if ($long && $short && $long != $short) {
-                        $desc = $short. '</a> -- ' .$long;
-                    } else {
-                        $desc = ($long ? $long : $short). '</a>';
-                    }
-                    if ($this->chunked) {
-	                    $content .= "  <dt><a href=\"{$chunkid}.{$this->ext}\">" . $desc . "</dt>\n";
-	                } else {
-	                    $content .= "  <dt><a href=\"#{$chunkid}\">" . $this->format->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a></dt>\n";
-	                }
-	            }
             $content .= " </dl>\n</div>\n";
             $this->cchunk["container_chunk"] = $content;
-            }
-            return "<div class=\"{$name}\" id=\"{$id}\">";
         }
-        return "</div>\n";
+        return "<div class=\"{$name}\" id=\"{$id}\">";
     }
 
     public function format_exception_chunk($open, $name, $attrs, $props) {
@@ -285,26 +290,30 @@ abstract class peartheme extends PhDTheme {
         }
 
         $chunks = PhDHelper::getChildren($id);
-        $content = '<p><b>' . $this->autogen("toc", $props["lang"]) . '</b></p><ul class="chunklist chunklist_'.$name.'">';
-        foreach($chunks as $chunkid => $junk) {
-            $href = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
-            $long = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
-            $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
-            $content .= '<li><a href="' .$href. '">' .($long ? $long : $short). '</a>';
-            $children = PhDHelper::getChildren($chunkid);
-            if (count($children)) {
-                $content .= '<ul class="chunklist chunklist_'.$name.' chunklist_children">';
-                foreach(PhDHelper::getChildren($chunkid) as $childid => $junk) {
-                    $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
-                    $long = $this->format->TEXT(PhDHelper::getDescription($childid, true));
-                    $short = $this->format->TEXT(PhDHelper::getDescription($childid, false));
-                    $content .= '<li><a href="' .$href. '">' .($long ? $long : $short). '</a></li>';
+        $content = '<p><b>' . $this->autogen("toc", $props["lang"]) . "</b></p>\n";
+        if (count($chunks)) {
+            $content .= '<ul class="chunklist chunklist_'.$name.'">' . "\n";
+            foreach ($chunks as $chunkid => $junk) {
+                $href = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
+                $long = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
+                $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
+                $content .= ' <li><a href="' .$href. '">' .($long ? $long : $short). '</a>';
+                $children = PhDHelper::getChildren($chunkid);
+                if (count($children)) {
+                    $content .= "\n" . '  <ul class="chunklist chunklist_'.$name.' chunklist_children">' . "\n";
+                    foreach (PhDHelper::getChildren($chunkid) as $childid => $junk) {
+                        $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
+                        $long = $this->format->TEXT(PhDHelper::getDescription($childid, true));
+                        $short = $this->format->TEXT(PhDHelper::getDescription($childid, false));
+                        $content .= '   <li><a href="' .$href. '">' .($long ? $long : $short). "</a></li>\n";
+                    }
+                    $content .= "  </ul>\n ";
                 }
-                $content .="</ul>";
+                $content .= "</li>\n";
             }
-            $content .= "</li>";
+            $content .= "</ul>\n";
         }
-        $content .= "</ul>";
+        $content .= "</div>\n";
 
         return $content;
     }
@@ -387,6 +396,13 @@ abstract class peartheme extends PhDTheme {
             return '<' .$tag. ' class="' .$name. '"' . $idstr. '>' . ($props["empty"] ? "</{$tag}>" : "");
         }
         return '</' .$tag. '>';
+    }
+
+    public function format_para_informaltable($open, $name, $attrs, $props) {
+        if ($open) {
+            return '</p>' . $this->format_table($open, $name, $attrs, $props);
+        }
+        return $this->format_table($open, $name, $attrs, $props) . '<p>';
     }
 
     public function format_programlisting($open, $name, $attrs) {
@@ -487,23 +503,34 @@ abstract class peartheme extends PhDTheme {
 
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
-            return '<p><div class="' . $name . '"><blockquote class="' . $name . '"><p><b>'.$this->autogen($name, $props["lang"]). ': </b>';
+            return '<blockquote class="' . $name . '"><p><b>'.$this->autogen($name, $props["lang"]). ': </b>';
         }
-        return "</p></blockquote></div></p>";
+        return "</p></blockquote>\n";
     }
 
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
-            return '<p><div class="'.$name.'"><table border="1" class="CALSTABLE">';
+            return '<table border="1" class="'.$name.'">';
         }
-        return "</table></div></p>";
+        return "</table>\n";
     }
 
     public function format_entry($open, $name, $attrs, $props) {
         if ($open) {
-            return '<td align="left" valign="middle">';
+            if ($props['empty']) {
+                return '<td></td>';
+            }
+            return '<td>';
         }
         return "</td>";
+    }
+
+    public function format_th_entry($open, $name, $attrs) {
+        if ($open) {
+            $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
+            return '<th colspan="' .((int)$colspan). '">';
+        }
+        return '</th>';
     }
 
     public function format_table_title($open, $name, $attrs, $props) {
@@ -531,25 +558,27 @@ abstract class peartheme extends PhDTheme {
 
     public function format_warning($open, $name, $attrs, $props) {
         if ($open) {
-            return '<div class="warning"><table class="warning" border="1" width="100%"><tbody>';
+            return '<div class="warning" style="border: 3px double black; padding: 5px">' . "\n";
         }
-        return "</td></tr></tbody></table></div>";
+        return "</div>\n";
     }
 
     public function format_warning_title($open, $name, $attrs, $props) {
         if ($open) {
-            return '<tr><td align="center"><b>';
+            return '<strong class="warning_title" style="display:block; text-align: center; width:100%">';
         }
-        return "</b></td></tr>";
+        return "</strong>\n";
     }
 
     public function format_warning_para($open, $name, $attrs, $props) {
         if ($open) {
-            if (!$props["sibling"])
-                return '<tr align="center"><td><b>' . $this->autogen("warning", $props["lang"]) . "</b></td></tr>" . '<tr><td align="left"><p>';
-            return '<tr><td align="left"><p>';
+            if (!$props['sibling']) {
+                return '<strong>' . $this->autogen("warning", $props["lang"]) . "</strong>\n"
+                    . '<p>';
+            }
+            return '<p>';
         }
-        return "</p></td></tr>";
+        return "</p>\n";
     }
 
     public function format_refname_function_text($value) {
