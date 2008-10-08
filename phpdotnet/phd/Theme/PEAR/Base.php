@@ -140,6 +140,19 @@ abstract class peartheme extends PhDTheme {
                 'chapter'       => 'format_container_chunk_title',
                 //'example'       => 'format_example_title',
                 'part'          => 'format_container_chunk_title',
+                'section'       => array(
+                    /* DEFAULT */  'format_container_chunk_title',
+                    'section'   => array(
+                                   'h2',
+                      'section' => array(
+                                   'h3',
+                       'section'=> array(
+                                   'h4',
+                       'section'=> 'h5'
+                       ),
+                      ),
+                    ),
+                ),
                 'warning'       => 'format_warning_title',
             ),
             'refsect1'          => 'h2',
@@ -150,11 +163,13 @@ abstract class peartheme extends PhDTheme {
                 'section'       => array(
                     /* DEFAULT */  'h2',
                     'section'   => array(
-                    /* DEFAULT */  'h3',
-                    'section'   => array(
-                    /* DEFAULT */  'h4',
-                    'section'   => 'h5'
-                )))
+                     /* DEFAULT */ 'h3',
+                     'section'  => array(
+                      /* DEFAULT */'h4',
+                      'section' => 'h5'
+                     ),
+                    ),
+                ),
             ),
             'table'             => 'format_table_title',
             'warning'           => 'format_warning_title',
@@ -245,7 +260,11 @@ abstract class peartheme extends PhDTheme {
 
     public function format_container_chunk($open, $name, $attrs, $props) {
         if (!isset($attrs[PhDReader::XMLNS_XML]['id'])) {
-            return "<div class=\"{$name}\">";
+            if ($open) {
+                return "<div class=\"{$name}\">";
+            } else {
+                return "</div>\n";
+            }
         }
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
 
