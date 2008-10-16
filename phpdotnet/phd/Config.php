@@ -324,6 +324,7 @@ foreach($args as $k => $v) {
                 echo "Supported formats:\n";
                 echo "\txhtml\n";
                 echo "\tmanpage\n";
+                echo "\tpdf:\n";
                 break;
 
             case "t":
@@ -337,6 +338,10 @@ foreach($args as $k => $v) {
                 echo "\t\tchmsource\n";
                 echo "\t\tphpkdevelop\n";
                 echo "\t\thowto\n";
+                echo "\t\tpearweb\n";
+                echo "\t\tpearbightml\n";
+                echo "\t\tpearchunkedhtml\n";
+                echo "\t\tpearchm\n";
                 echo "\tmanpage:\n";
                 echo "\t\tphpfunctions\n";
                 echo "\tpdf:\n";
@@ -361,6 +366,10 @@ foreach($args as $k => $v) {
                 echo "\t\tchmsource\n";
                 echo "\t\tphpkdevelop\n";
                 echo "\t\thowto\n";
+                echo "\t\tpearweb\n";
+                echo "\t\tpearbightml\n";
+                echo "\t\tpearchunkedhtml\n";
+                echo "\t\tpearchm\n";
                 echo "\tmanpage:\n";
                 echo "\t\tphpfunctions\n";
                 echo "\tpdf:\n";
@@ -414,7 +423,8 @@ foreach($args as $k => $v) {
     case "theme":
         /* Remove the default themes */
         $OPTIONS["output_theme"]["xhtml"]["php"] = array();
-
+        $OPTIONS["output_theme"]["manpage"]["php"] = array();
+        $OPTIONS["output_theme"]["xhtml"]["pear"] = array();
         foreach((array)$v as $i => $val) {
             switch($val) {
             case "phpweb":
@@ -436,6 +446,22 @@ foreach($args as $k => $v) {
             case "phpbigpdf":
                 if (!in_array($val, $OPTIONS["output_theme"]["pdf"]["php"])) {
                     $OPTIONS["output_theme"]["pdf"]["php"][] = $val;
+                }
+                break;
+            case "pear":
+                $OPTIONS["output_theme"]["xhtml"]["pear"] = array(
+                    'pearweb',
+                    'pearchunkedhtml',
+                    'pearbightml',
+                    'pearchm'
+                );
+                break;
+            case "pearweb":
+            case "pearchunkedhtml":
+            case "pearbightml":
+            case "pearchm":
+                if (!in_array($val, $OPTIONS["output_theme"]["xhtml"]["pear"])) {
+                    $OPTIONS["output_theme"]["xhtml"]["pear"][] = $val;
                 }
                 break;
             default:
