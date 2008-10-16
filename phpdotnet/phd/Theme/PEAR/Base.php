@@ -6,7 +6,10 @@ abstract class peartheme extends PhDTheme {
         'article'               => 'format_container_chunk',
         'answer'                => 'format_answer',
         'appendix'              => 'format_container_chunk',
-        'author'                => 'format_suppressed_tags',
+        'author'                => array(
+            /* DEFAULT */          'format_editedby',
+            'authorgroup'       => 'format_suppressed_tags',
+        ),
         'authorgroup'           => 'format_editedby',
         'bibliography'          => array(
             /* DEFAULT */          false,
@@ -122,7 +125,7 @@ abstract class peartheme extends PhDTheme {
             'warning'           => 'format_warning_para',
         ),
         'subtitle'              => 'format_subtitle',
-        'surname'               => 'format_suppressed_tags',
+        'surname'               => 'format_surname',
         'synopsis'              => 'format_programlisting',
         'table'                 => 'format_table',
         'title'                 => array(
@@ -479,6 +482,11 @@ abstract class peartheme extends PhDTheme {
     public function format_suppressed_text($value, $tag) {
         /* Suppress any content */
         return "";
+    }
+
+    public function format_surname($open, $name, $attrs) {
+        /* Add a space before it, so firstname and surname are separated */
+        return ' ';
     }
 
     public function format_subtitle($open, $name, $attrs) {
