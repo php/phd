@@ -68,9 +68,9 @@ class pearweb extends peartheme {
     public function header($id) {
         $ext = "." . $this->ext;
         $parent = PhDHelper::getParent($id);
-        
+
         if (!$parent || $parent == "ROOT")
-        	return '<?php 
+        	return '<?php
 sendManualHeaders("UTF-8","en");
 setupNavigation(array(
   "home" => array("index.php", "PEAR Manual"),
@@ -82,14 +82,14 @@ setupNavigation(array(
 manualHeader("PEAR Manual","index.php");
 ?>
 ';
-       
+
         // Fetch the siblings information
         $toc = array();
         $siblings = PhDHelper::getChildren($parent);
         foreach($siblings as $sibling => $array) {
             $toc[] = array($sibling.$ext, empty($array["sdesc"]) ? $array["ldesc"] : $array["sdesc"]);
         }
-        
+
         // Build the PEAR navigation table
         $nav = array(
             'home' => array('index' . $ext, 'PEAR Manual'),
@@ -104,22 +104,22 @@ manualHeader("PEAR Manual","index.php");
 			'manualHeader("' . $this->getFilename($id).$ext . '", "' . PhDHelper::getDescription($id, true) . '");' . "\n" .
 			"?>\n";
     }
-    
+
     public function footer($id) {
     	$ext = $this->ext . ".";
         $parent = PhDHelper::getParent($id);
-        
+
         return '<?php manualFooter("' . $this->getFilename($id).$ext . '", "' . PhDHelper::getDescription($id, true) . '"); ?>\n';
     }
-    
+
     protected function createPrev($id, $parent, $siblings) {
-        $ext = '.' .$this->ext;
-        if (!isset($siblings[$id])) {
+        if (!isset($siblings[$id]) || $parent == 'ROOT') {
             return array(null, null);
         }
+        $ext = '.' .$this->ext;
 
         // Seek to $id
-        while(list($tmp,) = each($siblings)) {
+        while (list($tmp,) = each($siblings)) {
             if ($tmp == $id) {
                 // Set the internal pointer back to $id
                 prev($siblings);
@@ -182,7 +182,7 @@ manualHeader("PEAR Manual","index.php");
             copy($this->outputdir . "guide.php", $this->outputdir . "index.php");
         }
     }
-    
+
     public function format_qandaset($open, $name, $attrs) {
         if ($open) {
             $this->cchunk["qandaentry"] = array();
@@ -194,5 +194,5 @@ manualHeader("PEAR Manual","index.php");
         rewind($stream);
         return parent::qandaset($stream);
     }
-    
+
 }

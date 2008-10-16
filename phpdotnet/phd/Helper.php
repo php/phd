@@ -78,6 +78,20 @@ class PhDHelper
     }
 
     /**
+    * Returns the toc entry of the given ID.
+    *
+    * @param string $id ID of an element
+    *
+    * @return array toc entry array
+    *
+    * @see $IDs
+    */
+    final public function getSelf($id)
+    {
+        return $this->IDs[$id];
+    }
+
+    /**
     * Returns ID of the first parental block tag with an ID.
     *
     * @param string $id ID of an element

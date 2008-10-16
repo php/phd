@@ -39,17 +39,21 @@ class pearchunkedhtml extends pearweb
         $this->next = $this->prev = $this->up = array(null, null);
         $strNext = $strPrev = '';
 
-        if ($parent && $parent != "ROOT") {
-            $siblings = PhDHelper::getChildren($parent);
-            $this->prev = pearweb::createPrev($id, $parent, $siblings);
+        if ($parent) {
+            if ($parent != 'ROOT') {
+                $siblings = PhDHelper::getChildren($parent);
+            } else {
+                $siblings = array($id => PhDHelper::getSelf($id));
+            }
+            $this->prev = parent::createPrev($id, $parent, $siblings);
             if ($this->prev[0] == 'index') {
                 $this->prev = array(null, null);
             }
-            $this->next = pearweb::createNext($id, $parent, $siblings);
+            $this->next = parent::createNext($id, $parent, $siblings);
             if ($this->next[0] == 'index') {
                 $this->next = array(null, null);
             }
-            if ($parent != 'index') {
+            if ($parent != 'index' && $parent != 'ROOT') {
                 $this->up = array($parent.".html", PhDHelper::getDescription($parent, false));
             }
         }
