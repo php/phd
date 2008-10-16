@@ -40,20 +40,20 @@ class pearchunkedhtml extends pearweb
         $strNext = $strPrev = '';
 
         if ($parent) {
-            if ($parent != 'ROOT') {
+            if ($parent !== 'ROOT') {
                 $siblings = PhDHelper::getChildren($parent);
             } else {
                 $siblings = array($id => PhDHelper::getSelf($id));
             }
             $this->prev = parent::createPrev($id, $parent, $siblings);
-            if ($this->prev[0] == 'index') {
+            if ($this->prev[0] === 'index') {
                 $this->prev = array(null, null);
             }
             $this->next = parent::createNext($id, $parent, $siblings);
-            if ($this->next[0] == 'index') {
+            if ($this->next[0] === 'index') {
                 $this->next = array(null, null);
             }
-            if ($parent != 'index' && $parent != 'ROOT') {
+            if ($parent !== 'index' && $parent !== 'ROOT') {
                 $this->up = array($parent.".html", PhDHelper::getDescription($parent, false));
             }
         }
@@ -124,6 +124,8 @@ NAV;
         if ($this->next[0]) {
             $strNext = '<a accesskey="n" href="' . $this->next[0] . '">Next</a>';
         }
+        $strHome = $id !== 'index' ? '<a accesskey="h" href="index.html">PEAR Manual</a>' : '';
+
         $nav = <<<NAV
 <div class="navfooter">
  <hr />
@@ -135,7 +137,7 @@ NAV;
   </tr>
   <tr>
    <td width="40%" align="left" valign="top">{$this->prev[1]}</td>
-   <td width="20%" align="center"><a accesskey="h" href="index.html">PEAR Manual</a></td>
+   <td width="20%" align="center">{$strHome}</td>
    <td width="40%" align="right" valign="top">{$this->next[1]}</td>
   </tr>
  </table>
