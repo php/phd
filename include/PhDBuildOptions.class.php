@@ -11,7 +11,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         return array(
             "format:"   => "f:",        // The format to render (xhtml, pdf...)
             "theme:"    => "t:",        // The theme to render (phpweb, bightml..)
-            "index:"    => "i:",        // Re-index or load from cache
+            "noindex"   => "I",         // Re-index or load from cache
             "docbook:"  => "d:",        // The Docbook XML file to render from (.manual.xml)
             "output:"   => "o:",        // The output directory
             "partial:"  => "p:",        // The ID to render (optionally ignoring its children)
@@ -106,19 +106,11 @@ class PhDBuildOptionsParser extends PhDOptionParser
 
     public function option_i($k, $v)
     {
-        $this->option_index($k, $v);
+        $this->option_noindex($k, 'true');
     }
-    public function option_index($k, $v)
+    public function option_noindex($k, $v)
     {
-        if (is_array($v)) {
-            trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
-        }
-        $val = phd_bool($v);
-        if (is_bool($val)) {
-            PhDConfig::set_index($val);
-        } else {
-            trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
-        }
+        PhDConfig::set_index(false);
     }
 
     public function option_d($k, $v)
@@ -339,8 +331,8 @@ class PhDBuildOptionsParser extends PhDOptionParser
   --format <formatname>      The build format to use
   -t <themename>
   --theme <themename>        The theme to use
-  -i <bool>
-  --index <bool>             Index before rendering (default) or load from cache (false)
+  -I
+  --noindex                  Do not index before rendering but load from cache (false)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -p <id[=bool]>
