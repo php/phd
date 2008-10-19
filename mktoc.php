@@ -38,7 +38,7 @@ while($r->read()) {
                 $IDs[$lastid]["ldesc"] = trim($r->readContent($name));
             }
         }
-        
+
         continue;
     }
     switch($r->isChunk) {
@@ -62,7 +62,7 @@ while($r->read()) {
 
     $IDs[$id] = array(
         "filename" => $CURRENT_FILENAME,
-        "parent"   => $r->isChunk ? $PARENTS[$r->depth-1] : $CURRENT_FILENAME,
+        "parent"   => $r->isChunk ? (isset($PARENTS[$r->depth-1]) ? $PARENTS[$r->depth-1] : $PARENTS[$r->depth-2]) : $CURRENT_FILENAME,
         "sdesc"    => null,
         "ldesc"    => null,
         "children" => array(),

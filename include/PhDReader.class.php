@@ -129,7 +129,7 @@ class PhDReader extends XMLReader {
                     $this->PREVIOUS_SIBLING = $this->STACK[$depth];
                 }
                 $this->STACK[$depth] = $name;
-                $isChunk = $this->isChunk($name);
+                $isChunk = $this->isChunk($name, $this->getID());
                 if ($isChunk) {
                     $this->isChunk = PhDReader::OPEN_CHUNK;
                     $this->chunkDepths[] = $this->lastChunkDepth = $depth;
@@ -150,7 +150,7 @@ class PhDReader extends XMLReader {
         }
         return false;
     } /* }}} */
-   
+
     /* Get the attribute value by name, if exists. */
     public function readAttribute($attr) { /* {{{ */
         $retval = XMLReader::moveToAttribute($attr) ? $this->value : "";
@@ -199,9 +199,11 @@ class PhDReader extends XMLReader {
         return XMLReader::read() && !($this->nodeType === XMLReader::END_ELEMENT && $this->name == $nodeName);
     } /* }}} */
 
-  
-    public function isChunk($tag) { /* {{{ */
-        if (isset($this->CHUNK_ME[$tag])) {
+
+    public function isChunk($tag, $id) { /* {{{ */
+        if (!$id) {
+            return false;
+        } else if (isset($this->CHUNK_ME[$tag])) {
             $isChunk = $this->CHUNK_ME[$tag];
             if (is_array($isChunk)) {
                 $isChunk = $this->notXPath($isChunk);
@@ -225,7 +227,7 @@ class PhDReader extends XMLReader {
             "sect1", "preface", "chapter", "appendix", "article", "part", "reference", "refentry",
             "index", "bibliography", "glossary", "colopone", "book", "set", "setindex", "legalnotice",
        );
-        
+
         $nodeDepth = $this->depth;
         $i = 1;
         do {
