@@ -67,8 +67,9 @@
       * qandadiv
     - Improved &lt;email&gt; support (now creates mailto: links). (Christian)
     - Chunks without xml:id are no longer chunked. (Christian)
-    - Fixed bug#46094 (and then from now on italic). (Hannes)
     - Fixed bug#46252 (Class properties links to a function if theres one with the same name). (Hannes)
+    - Fixed bug#46094 (and then from now on italic). (Hannes)
+    - Fixed bug#45071 (Links to require/include(_once) not rendered). (Hannes)
     - Fixed a bug where it was only possible to pass one parameter to phd.bat. (Kalle)
     - Fixed a bug where it wasn't possible to have paths with spaces in when using phd.bat. (Kalle)
     - Fixed xhtml validation issue for itemizedlist. (Christian)

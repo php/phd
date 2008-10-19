@@ -150,6 +150,13 @@ abstract class phpdotnet extends PhDTheme {
     );
 
     public function __construct(array $IDs, array $filenames, $ext = "php", $chunked = true) {
+        /* See bug#45071 */
+        $IDs[1]["include"]      = "function.include";
+        $IDs[1]["include-once"] = "function.include-once";
+        $IDs[1]["require"]      = "function.require";
+        $IDs[1]["require-once"] = "function.require-once";
+        $IDs[1]["return"]       = "function.return";
+
         parent::__construct($IDs, $ext);
         $this->ext = $ext;
         if (isset($filenames["version"], $filenames["acronym"])) {
