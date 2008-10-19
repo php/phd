@@ -81,6 +81,7 @@ class phpfunctions extends PhDTheme {
             gzwrite($gzfile, $this->header($index));
             gzwrite($gzfile, $content);
             gzclose($gzfile);
+
             v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);
         }
     }

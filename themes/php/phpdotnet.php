@@ -5,6 +5,7 @@ abstract class phpdotnet extends PhDTheme {
     protected $elementmap = array(
         'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
+        'classname'             => 'format_suppressed_tags',
         'link'                  => 'format_link',
         'refpurpose'            => 'format_refpurpose',
         'title'                 => array(
@@ -33,7 +34,7 @@ abstract class phpdotnet extends PhDTheme {
             'methodsynopsis'    => false,
         ),
         'varname'               => array(
-            /* DEFAULT */          false,
+            /* DEFAULT */          'format_suppressed_tags',
             'fieldsynopsis'     => 'format_fieldsynopsis_varname',
         ),
         'xref'                  => 'format_link',
@@ -67,8 +68,10 @@ abstract class phpdotnet extends PhDTheme {
         'part'                  => 'format_container_chunk',
         'preface'               => 'format_chunk',
         'refentry'              => 'format_chunk',
+        'phpdoc:varentry'       => 'format_varentry_chunk',
         'reference'             => 'format_container_chunk',
-        'phpdoc:exception'      => 'format_exception_chunk',
+        'phpdoc:exceptionref'   => 'format_exception_chunk',
+        'phpdoc:classref'       => 'format_class_chunk',
         'sect1'                 => 'format_chunk',
         'sect2'                 => 'format_chunk',
         'sect3'                 => 'format_chunk',
@@ -85,6 +88,11 @@ abstract class phpdotnet extends PhDTheme {
     protected $textmap =        array(
         'acronym'               => 'format_acronym_text',
         'function'              => 'format_function_text',
+        'classname'             => 'format_classname_text',
+        'varname'               => array(
+            /* DEFAULT */          'format_varname_text',
+            'fieldsynopsis'     => false,
+        ),
         'methodname'            => array(
             /* DEFAULT */          'format_function_text',
             'constructorsynopsis' => array(
@@ -112,7 +120,11 @@ abstract class phpdotnet extends PhDTheme {
         ),
         'refname'               => 'format_refname_text',
 
-        'titleabbrev'           => 'format_suppressed_tags',
+        'titleabbrev'           => array(
+            /* DEFAULT */          'format_suppressed_tags',
+            'phpdoc:classref'   => 'format_grep_classname_text',
+            'phpdoc:exceptionref'  => 'format_grep_classname_text',
+        ),
     );
     private   $versions = array();
     private   $acronyms = array();
@@ -125,6 +137,7 @@ abstract class phpdotnet extends PhDTheme {
     protected $cchunk          = array();
     /* Default Chunk settings */
     protected $dchunk          = array(
+        "phpdoc:classref"              => null,
         "fieldsynopsis"                => array(
             "modifier"                          => "public",
         ),
@@ -363,6 +376,23 @@ abstract class phpdotnet extends PhDTheme {
         }
         return false;
     }
+    public function format_varentry_chunk($open, $name, $attrs, $props) {
+        return $this->format_chunk($open, "refentry", $attrs, $props);
+    }
+    public function format_varname_text($value, $tag) {
+        $var = $value;
+        if (($pos = strpos($value, "[")) !== false) {
+            $var = substr($value, 0, $pos);
+        }
+        if (($filename = $this->getVarnameLink($var)) !== null && !in_array($var, $this->cchunk["refname"])) {
+            if ($this->chunked) {
+                return '<var class="varname"><a href="'.$filename. '.' .$this->ext. '" class="classname">' .$value. '</a></var>';
+            }
+            return '<var><a href="#'.$filename. '" class="classname">'.$value.'</a></var>';
+        }
+        return '<var class="varname">' .$value. '</var>';
+
+    }
     public function format_container_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
         if ($open) {
@@ -408,6 +438,9 @@ abstract class phpdotnet extends PhDTheme {
         return $content;
     }
     public function format_exception_chunk($open, $name, $attrs, $props) {
+        return $this->format_container_chunk($open, "reference", $attrs, $props);
+    }
+    public function format_class_chunk($open, $name, $attrs, $props) {
         return $this->format_container_chunk($open, "reference", $attrs, $props);
     }
 
@@ -456,7 +489,7 @@ abstract class phpdotnet extends PhDTheme {
             }
             $content .= "</li>";
         }
-        $content .= "</ul>";
+        $content .= "</ul></div>";
 
         return $content;
     }
@@ -489,6 +522,20 @@ abstract class phpdotnet extends PhDTheme {
         }
         return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
     }
+
+    public function format_grep_classname_text($value, $tag) {
+        $this->cchunk["phpdoc:classref"] = strtolower($value);
+    }
+    public function format_classname_text($value, $tag) {
+        if (($filename = $this->getClassnameLink(strtolower($value))) !== null && $this->cchunk["phpdoc:classref"] !== strtolower($value)) {
+            if ($this->chunked) {
+                return '<a href="'.$filename. '.' .$this->ext. '" class="classname">' .$value. '</a>';
+            }
+            return '<a href="#'.$filename. '" class="classname">'.$value.'</a>';
+        }
+        return '<b class="classname">' .$value. '</b>';
+    }
+
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
         if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
             return false;
