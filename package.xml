@@ -37,8 +37,8 @@
 
   <date>2008-11-01</date>
   <version>
-    <release>0.3.2</release>
-    <api>0.3.2</api>
+    <release>0.4.0</release>
+    <api>0.4.0</api>
   </version>
   <stability>
     <release>snapshot</release>
@@ -47,9 +47,9 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     Fixed bug #46094 (and then from now on italic). (Hannes)
-    Fixed a bug where it was only possible to pass one parameter to phd.bat (Kalle)
-    Fixed a bug where it wasn't possible to have paths with spaces in when using phd.bat (Kalle)
-    Added PEAR XHTML output (Rudy)
+    Fixed a bug where it was only possible to pass one parameter to phd.bat. (Kalle)
+    Fixed a bug where it wasn't possible to have paths with spaces in when using phd.bat. (Kalle)
+    Added PEAR XHTML output. (Rudy)
   </notes>
 
   <contents>
