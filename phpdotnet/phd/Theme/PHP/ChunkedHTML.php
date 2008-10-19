@@ -7,13 +7,13 @@ class chunkedhtml extends phpweb {
 
     public function __construct(array $IDs, $filename, $ext = "html") {
         phpdotnet::__construct($IDs, $filename, $ext, true);
-	$this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $this->ext . DIRECTORY_SEPARATOR;
+        $this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $this->ext . DIRECTORY_SEPARATOR;
         if(!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory");
         elseif (file_exists($this->outputdir . 'index.html')) unlink($this->outputdir . 'index.html'); // preserve back-compat
     }
     public function header($id) {
         $title = PhDHelper::getDescription($id, true);
-        $header = <<< HEADER
+        $header = <<<HEADER
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
@@ -31,8 +31,8 @@ HEADER;
             $up = array($parent.".html", PhDHelper::getDescription($parent, false));
         }
 
-        $nav = <<< NAV
-<div style="text-align: center;">
+        $nav = <<<NAV
+<div class="manualnavbar" style="text-align: center;">
  <div class="prev" style="text-align: left; float: left;"><a href="{$prev[0]}">{$prev[1]}</a></div>
  <div class="next" style="text-align: right; float: right;"><a href="{$next[0]}">{$next[1]}</a></div>
  <div class="up"><a href="{$up[0]}">{$up[1]}</a></div>

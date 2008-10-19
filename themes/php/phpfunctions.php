@@ -77,9 +77,11 @@ class phpfunctions extends PhDTheme {
                 $this->cchunk["funcname"][$index], stream_get_contents($stream), 1); 
             
             $gzfile = gzopen($this->outputdir . $filename, "w9");
+
             gzwrite($gzfile, $this->header($index));
             gzwrite($gzfile, $content);
             gzclose($gzfile);
+
             v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);
         }
     }

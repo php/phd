@@ -35,7 +35,7 @@ class chmsource extends chunkedhtml {
 					   "langcode" => "0x406 Danish",
 					   "preferred_charset" => "Windows-1252",
 					   "mime_charset_name" => "Windows-1252",
-					   "preferred_font" => self::DEFAULT_FONT,
+					   "preferred_font" => self::DEFAULT_FONT, 
 					   "title" => "PHP Manualen"
 				   ),
 		"de"    => array(
