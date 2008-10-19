@@ -276,8 +276,11 @@ foreach($OPTIONS["output_format"] as $output_format) {
 
         case XMLReader::CDATA: /* {{{ */
             $value = $reader->value;
-            $retval = $format->CDATA($value);
             foreach($themes as $name => $theme) {
+                if (method_exists($theme, "CDATA"))
+                    $retval = $theme->CDATA($value);
+                else
+                    $retval = $format->CDATA($value);
                 $theme->appendData($retval, false);
             }
             break;
