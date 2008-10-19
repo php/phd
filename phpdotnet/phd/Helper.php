@@ -24,6 +24,9 @@ class PhDHelper
     */
     private $refs = array();
 
+    private $classes        = array();
+    private $vars           = array();
+
     /* abstract */ protected $elementmap  = array();
     /* abstract */ protected $textmap     = array();
     private static $autogen         = array();
@@ -39,6 +42,8 @@ class PhDHelper
     public function __construct(array $a) {
         $this->IDs = $a[0];
         $this->refs = $a[1];
+        $this->classes = $a[2];
+        $this->vars    = $a[3];
     }
 
     /**
@@ -117,6 +122,13 @@ class PhDHelper
     public function getRefnameLink($ref)
     {
         return isset($this->refs[$ref]) ? $this->refs[$ref] : null;
+    }
+
+    public function getClassnameLink($class) {
+        return isset($this->classes[$class]) ? $this->classes[$class] : null;
+    }
+    public function getVarnameLink($var) {
+        return isset($this->vars[$var]) ? $this->vars[$var] : null;
     }
 
     final public function getElementMap() {

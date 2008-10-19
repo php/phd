@@ -38,7 +38,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'funcdef'               => 'format_suppressed_tags',
         'funcsynopsis'          => 'div',
         'funcsynopsisinfo'      => 'pre',
-        'function'				=> 'span',
+        'function'              => 'span',
         'funcprototype'         => 'code',
         'surname'               => 'format_name',
         'othername'             => 'format_name',
@@ -189,6 +189,8 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'proptype'              => 'span',
         'pubdate'               => 'div', /* Docbook-XSL prints "published" */
+        /* hack for phpdoc:varentry */
+        'phpdoc:varentry'       => 'format_varentry_chunk',
         'refentry'              => 'format_chunk',
         'refentrytitle'         => 'span',
         'reference'             => 'format_container_chunk',
@@ -525,6 +527,9 @@ class XHTMLPhDFormat extends PhDFormat {
         $this->cchunk["footnote"] = $this->dchunk["footnote"];
 
         return $str. "</div>";
+    }
+    public function format_varentry_chunk($open, $name, $attrs, $props) {
+        return $this->format_chunk($open, "refentry", $attrs, $props);
     }
     public function format_refsect1_para($open, $name, $attrs, $props) {
         if ($open) {
