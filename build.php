@@ -68,32 +68,39 @@ require $ROOT. "/include/PhDTheme.class.php";
 /* {{{ Build the .ser file names to allow multiple sources for PHD. */
 PhDConfig::set_index_location(PhDConfig::xml_root() . DIRECTORY_SEPARATOR . '.index_' . basename(PhDConfig::xml_file(), '.xml') . '.ser');
 PhDConfig::set_refnames_location(PhDConfig::xml_root() . DIRECTORY_SEPARATOR . '.refnames_' . basename(PhDConfig::xml_file(), '.xml') . '.ser');
+PhDConfig::set_classes_location(PhDConfig::xml_root() . DIRECTORY_SEPARATOR . '.classes_' . basename(PhDConfig::xml_file(), '.xml') . '.ser');
+PhDConfig::set_vars_location(PhDConfig::xml_root() . DIRECTORY_SEPARATOR . '.vars_' . basename(PhDConfig::xml_file(), '.xml') . '.ser');
 /* }}} */
 
 /* {{{ Index the DocBook file or load from .ser cache files
        NOTE: There are two cache files (where * is the basename of the XML source file):
         - index_*.ser     (containing the ID infos)
         - refnames_*.ser  (containing <refname> => File ID) */
-if (!PhDConfig::index() && (file_exists(PhDConfig::index_location()) && file_exists(PhDConfig::refnames_location()))) {
+if (!PhDConfig::index() && (file_exists(PhDConfig::index_location()) && file_exists(PhDConfig::refnames_location()) && file_exists(PhDConfig::classes_location()) && file_exists(PhDConfig::vars_location()))) {
     /* FIXME: Load from sqlite db? */
     v("Unserializing cached index files...", VERBOSE_INDEXING);
 
     $IDs = unserialize(file_get_contents(PhDConfig::index_location()));
     $REFS = unserialize(file_get_contents(PhDConfig::refnames_location()));
+    $CLASSES = unserialize(file_get_contents(PhDConfig::classes_location()));
+    $VARS    = unserialize(file_get_contents(PhDConfig::vars_location()));
 
     v("Unserialization done", VERBOSE_INDEXING);
 } else {
     v("Indexing...", VERBOSE_INDEXING);
 
-    /* This file will "return" an $IDs & $REFS array */
+    /* This file will "return" an $IDs, $REFS, $CLASSES, $VARS array */
     require $ROOT. "/mktoc.php";
-
     file_put_contents(PhDConfig::index_location(), $ids = serialize($IDs));
     file_put_contents(PhDConfig::refnames_location(), $refs = serialize($REFS));
+    file_put_contents(PhDConfig::classes_location(), $classes = serialize($CLASSES));
+    file_put_contents(PhDConfig::vars_location(), $vars = serialize($VARS));
 
     $IDs2 = unserialize($ids);
     $REFS2 = unserialize($refs);
-    if ($IDs !== $IDs2 || $REFS !== $REFS2) {
+    $CLASSES2 = unserialize($classes);
+    $VARS2    = unserialize($vars);
+    if ($IDs !== $IDs2 || $REFS !== $REFS2 || $CLASSES !== $CLASSES2 || $VARS !== $VARS2) {
         trigger_error("Serialized representation does not match", E_USER_WARNING);
     }
 
@@ -116,9 +123,10 @@ foreach(PhDConfig::output_format() as $output_format) {
         break;
     }
 
+
     // {{{ Initialize the output format and fetch the methodmaps
     require $ROOT. "/formats/$output_format.php";
-    $format = new $classname(array($IDs, $REFS));
+    $format = new $classname(array($IDs, $REFS, $CLASSES, $VARS));
     $formatmap = $format->getElementMap();
     $formattextmap = $format->getTextMap();
     /* }}} */
@@ -135,7 +143,7 @@ foreach(PhDConfig::output_format() as $output_format) {
             switch($theme) {
                 // FIXME: This is stupid and definetly does not belong in here.
                 case "php":
-                    $themes[$themename] = new $themename(array($IDs, $REFS),
+                    $themes[$themename] = new $themename(array($IDs, $REFS, $CLASSES, $VARS),
                         array(
                             "version" => PhDConfig::version_info(),
                             "acronym" => PhDConfig::acronyms_file(),
@@ -143,7 +151,7 @@ foreach(PhDConfig::output_format() as $output_format) {
                     );
                     break;
                 default:
-                    $themes[$themename] = new $themename(array($IDs, $REFS));
+                    $themes[$themename] = new $themename(array($IDs, $REFS, $CLASSES, $VARS));
             }
 
             // FIXME: this needs to go away when we add support for
@@ -205,6 +213,7 @@ foreach(PhDConfig::output_format() as $output_format) {
                 "ns"    => $reader->namespaceURI,
                 "sibling" => $reader->getPreviousSiblingTagName(),
             );
+
             $skip = array();
             foreach($elementmaps as $theme => $map) {
                 if (isset($map[$nodename])) {
