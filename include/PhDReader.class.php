@@ -113,6 +113,9 @@ class PhDReader extends XMLReader {
     public function getParentTagName() { /* {{{ */
         return $this->STACK[$this->depth-1];
     } /* }}} */
+    public function getTagNameByDepth($depth) { /* {{{ */
+        return $this->STACK[$depth];
+    } /* }}} */
     public function getPreviousSiblingTagName() { /* {{{ */
         return $this->PREVIOUS_SIBLING;
     } /* }}} */

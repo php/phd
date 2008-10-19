@@ -48,9 +48,12 @@ while ($r->read()) {
         if (empty($IDs[$lastid]["sdesc"])) {
             if ($name == "refname") {
                 $IDs[$lastid]["sdesc"] = $refname = trim($r->readContent($name));
-                $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $refname));
-                $REFS[$ref] = $lastid;
-                $VARS[$refname] = $lastid;
+                if ($r->getTagNameByDepth($r->depth-2) == "phpdoc:varentry") {
+                    $VARS[$refname] = $lastid;
+                } else {
+                    $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $refname));
+                    $REFS[$ref] = $lastid;
+                }
                 continue;
             }
             else if ($name == "titleabbrev") {
@@ -64,8 +67,11 @@ while ($r->read()) {
         } else if ($name == "refname") {
             $refname = trim($r->readContent($name));
             $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $refname));
-            $REFS[$ref] = $lastid;
-            $VARS[$refname] = $lastid;
+            if ($r->getTagNameByDepth($r->depth-2) == "phpdoc:varentry") {
+                $VARS[$refname] = $lastid;
+            } else {
+                $REFS[$ref] = $lastid;
+            }
         }
         if (empty($IDs[$lastid]["ldesc"])) {
             if ($name == "title" || $name == "refpurpose") {
