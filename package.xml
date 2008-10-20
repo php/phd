@@ -41,13 +41,13 @@
     <active>yes</active>
   </developer>
 
-  <date>2008-11-01</date>
+  <date>2008-10-20</date>
   <version>
     <release>0.4.0</release>
     <api>0.4.0</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
@@ -101,6 +101,7 @@
       <file baseinstalldir="phd" name="themes/php/bightml.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/chmsource.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/chunkedhtml.php" role="php"/>
+      <file baseinstalldir="phd" name="themes/php/howto.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpdotnet.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpweb.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpkdevelop.php" role="php"/>
