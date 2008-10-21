@@ -3,7 +3,7 @@
 
 require $ROOT . "/include/PhDErrors.php";
 
-define("PHD_VERSION", "0.4.0-dev");
+define("PHD_VERSION", "phd-from-cvs");
 
 class PhDConfig
 {
@@ -55,7 +55,7 @@ class PhDConfig
         'phd_info_output' => NULL,
         'phd_info_color' => false,
     );
-    
+
     public static function __callStatic($name, $params)
     {
         $name = strtolower($name); // FC if this becomes case-sensitive
@@ -120,7 +120,7 @@ function phd_bool($val) {
 abstract class PhDOptionParser
 {
     abstract public function getOptionList();
-    
+
     public function handlerForOption($opt)
     {
         if (method_exists($this, "option_{$opt}")) {
@@ -129,7 +129,7 @@ abstract class PhDOptionParser
             return NULL;
         }
     }
-    
+
     public function getopt()
     {
         $opts = $this->getOptionList();
