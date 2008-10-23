@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- $Revision: 1.1 $ -->
+<!-- EN-Revision: 1.4.4.1 Maintainer: nilgun Status: ready -->
+<!-- Last translator: Nilgün Belma Bugüner -->
+<section xml:id="autogen" xml:lang="en">
+ <title>Üretilmiş metin</title>
+ <variablelist>
+  <varlistentry>
+   <term>toc</term>
+   <listitem>
+    <simpara>İçindekiler</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>warning</term>
+   <listitem>
+    <simpara>Uyarı</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>note</term>
+   <listitem>
+    <simpara>Not</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>caution</term>
+   <listitem>
+    <simpara>Dikkat</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>tip</term>
+   <listitem>
+    <simpara>İpucu</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>important</term>
+   <listitem>
+    <simpara>Önemli</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>by</term>
+   <listitem>
+    <simpara>Yazan</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>editedby</term>
+   <listitem>
+    <simpara>Düzenleyen</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>example</term>
+   <listitem>
+    <simpara>Örnek </simpara>
+   </listitem>
+  </varlistentry>
+ </variablelist>
+</section>
+ 
