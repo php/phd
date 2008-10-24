@@ -296,7 +296,7 @@ res/style.css
     public function appendData($data, $isChunk) {
         if ($this->lastContent)
             $this->appendChm($this->lastContent["name"], $this->lastContent["reference"],
-                    $isChunk, $this->lastContent["hasChild"]);
+                $isChunk, $this->lastContent["hasChild"]);
         $this->lastContent = null;
         return parent::appendData($data, $isChunk);
     }
@@ -316,7 +316,15 @@ res/style.css
         return parent::format_root_chunk($open, $name, $attrs);
     }
 
-
+    public function format_varlistentry($open, $name, $attrs) {
+        $this->collectContent($attrs);
+        fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
+            "          <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
+            "          <param name=\"Name\" value=\"" . htmlentities($this->lastContent["name"], ENT_QUOTES, 'UTF-8') . "\">\n" .
+            "        </object>\n    </li>\n");
+        return false;
+    }
+    
     public function header($id) {
         $header = parent::header($id);
         // Add CSS link to <head>

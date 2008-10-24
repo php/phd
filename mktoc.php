@@ -74,7 +74,7 @@ while ($r->read()) {
             }
         }
         if (empty($IDs[$lastid]["ldesc"])) {
-            if ($name == "title" || $name == "refpurpose") {
+            if ($name == "title" || $name == "refpurpose" || $name == "parameter") {
                 $IDs[$lastid]["ldesc"] = trim($r->readContent($name));
             }
         }

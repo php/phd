@@ -65,6 +65,7 @@ abstract class phpdotnet extends PhDTheme {
             'part'              => 'format_chunk',
         ),
         'legalnotice'           => 'format_chunk',
+        'varlistentry'          => 'format_varlistentry',
         'part'                  => 'format_container_chunk',
         'preface'               => 'format_chunk',
         'refentry'              => 'format_chunk',
@@ -647,7 +648,9 @@ abstract class phpdotnet extends PhDTheme {
         }
         return '</strong></dt>';
     }
-
+    public function format_varlistentry($open, $name, $attrs) {
+        return false;
+    }
 }
 
 /*
