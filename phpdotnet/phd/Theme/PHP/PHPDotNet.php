@@ -84,6 +84,7 @@ abstract class phpdotnet extends PhDTheme {
         'qandaentry'            => 'format_qandaentry',
         'question'              => 'format_question',
         'answer'                => 'format_answer',
+        'varlistentry'          => 'format_varlistentry',
     );
     protected $textmap =        array(
         'acronym'               => 'format_acronym_text',
@@ -646,6 +647,9 @@ abstract class phpdotnet extends PhDTheme {
             return '<dt><strong>';
         }
         return '</strong></dt>';
+    }
+    public function format_varlistentry($open, $name, $attrs) {
+        return false;
     }
 
 }

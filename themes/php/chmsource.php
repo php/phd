@@ -309,7 +309,15 @@ res/style.css
 		$this->collectContent($attrs);
 		return parent::format_container_chunk($open, $name, $attrs, $props);
     }
-    
+
+    public function format_varlistentry($open, $name, $attrs) {
+        $this->collectContent($attrs);
+        fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
+            "          <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
+            "          <param name=\"Name\" value=\"" . htmlentities($this->lastContent["name"], ENT_QUOTES, 'UTF-8') . "\">\n" .
+            "        </object>\n    </li>\n");
+        return false;
+    }
     public function format_root_chunk($open, $name, $attrs) {
 		$this->collectContent($attrs);
 		return parent::format_root_chunk($open, $name, $attrs);
