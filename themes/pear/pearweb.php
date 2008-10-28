@@ -131,7 +131,10 @@ manualHeader("PEAR Manual","index.php");
             while (!empty($tmp["children"])) {
                 $tmp = end($tmp["children"]);
             }
-            return array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
+            return array(
+                $tmp["filename"].$ext,
+                htmlspecialchars(empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"])
+            );
             break;
         }
 
@@ -143,7 +146,10 @@ manualHeader("PEAR Manual","index.php");
         // {{{ Create the "next" link
         if (!empty($siblings[$id]["children"])) {
             $tmp = reset($siblings[$id]["children"]);
-            return array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
+            return array(
+                $tmp["filename"].$ext,
+                htmlspecialchars(empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"])
+            );
         }
         do {
             if (!isset($siblings[$id])) {
@@ -160,7 +166,10 @@ manualHeader("PEAR Manual","index.php");
             $tmp = current($siblings);
             prev($siblings); // Reset the internal pointer to previous pos
             if ($tmp) {
-                $next = array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
+                $next = array(
+                    $tmp["filename"].$ext,
+                    htmlspecialchars(empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"])
+                );
                 break;
             }
 
