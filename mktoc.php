@@ -90,6 +90,7 @@ while ($r->read()) {
     case PhDReader::CLOSE_CHUNK:
         $LAST_CHUNK = array_pop($FILENAMES);
         $CURRENT_FILENAME = end($FILENAMES);
+        unset($PARENTS[$r->depth]);
 
         $IDs[$CURRENT_FILENAME]["children"][$LAST_CHUNK] = $IDs[$LAST_CHUNK];
 
@@ -106,7 +107,10 @@ while ($r->read()) {
         "parent"   => $r->isChunk
                         ? (isset($PARENTS[$r->depth-1])
                             ? $PARENTS[$r->depth-1]
-                            : $PARENTS[$r->depth-2]
+                            : (isset($PARENTS[$r->depth-2])
+                                ? $PARENTS[$r->depth-2]
+                                : $PARENTS[$r->depth-3]
+                            )
                         )
                         : $CURRENT_FILENAME,
         "sdesc"    => null,
