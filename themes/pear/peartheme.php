@@ -234,6 +234,29 @@ abstract class peartheme extends PhDTheme {
         $this->chunked = $chunked;
     }
 
+    /**
+    * Determines if the second level of a TOC should be displayed
+    *
+    * @param string $id       xml:id value
+    * @param string $name     Tag name
+    * @param array  $children Array of children items (mktoc)
+    *
+    * @return boolean true if the second level should be displayed.
+    */
+    protected function displayTocSecondLevel($id, $name, $children)
+    {
+        return $id == 'index';
+
+        //we currently don't need that
+        if (count($children) == 0) {
+            return false;
+        }
+        if ($name == 'set' && substr($id, 0, 8) == 'package.' || $id == 'packages') {
+            return false;
+        }
+        return true;
+    }
+
     public function format_chunk($open, $name, $attrs, $props) {
         $id = null;
         if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
@@ -316,18 +339,19 @@ abstract class peartheme extends PhDTheme {
         if (count($chunks)) {
             $content .= '<ul class="chunklist chunklist_'.$name.'">' . "\n";
             foreach ($chunks as $chunkid => $junk) {
-                $href = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
-                $long = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
-                $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
-                $content .= ' <li><a href="' .$href. '">' .($long ? $long : $short). '</a>';
+                $href     = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
+                $long     = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
+                $short    = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
+                $title    = $long ? ' title="' . htmlspecialchars($long) . '"': '';
+                $content .= ' <li><a href="' .$href. '"' . $title . '>' . $short . '</a>';
                 $children = PhDHelper::getChildren($chunkid);
-                if (count($children)) {
+                if ($this->displayTocSecondLevel($id, $name, $children)) {
                     $content .= "\n" . '  <ul class="chunklist chunklist_'.$name.' chunklist_children">' . "\n";
                     foreach (PhDHelper::getChildren($chunkid) as $childid => $junk) {
                         $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
                         $long = $this->format->TEXT(PhDHelper::getDescription($childid, true));
                         $short = $this->format->TEXT(PhDHelper::getDescription($childid, false));
-                        $content .= '   <li><a href="' .$href. '">' .($long ? $long : $short). "</a></li>\n";
+                        $content .= '   <li><a href="' .$href. '">' . $short . "</a></li>\n";
                     }
                     $content .= "  </ul>\n ";
                 }

@@ -34,7 +34,7 @@ class pearchunkedhtml extends pearweb
     */
     public function header($id)
     {
-        $title = PhDHelper::getDescription($id, true);
+        $title  = PhDHelper::getDescription($id);
         $parent = PhDHelper::getParent($id);
         $this->next = $this->prev = $this->up = array(null, null);
         $strNext = $strPrev = '';
