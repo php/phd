@@ -8,6 +8,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'acronym'               => 'acronym',
         'affiliation'           => 'format_suppressed_tags',
         'alt'                   => 'format_suppressed_tags',
+        'arg'                   => 'format_suppressed_tags',
         'article'               => 'format_container_chunk',
         'author'                => array(
             /* DEFAULT */          'format_author',
@@ -26,6 +27,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'book'                  => 'format_container_chunk',
         'chapter'               => 'format_container_chunk',
         'citetitle'             => 'i',
+        'cmdsynopsis'           => 'format_cmdsynopsis',
         'co'                    => 'format_co',
         'colophon'              => 'format_chunk',
         'copyright'             => 'format_copyright',
@@ -631,6 +633,14 @@ class XHTMLPhDFormat extends PhDFormat {
             return $value;
         }
         return $method;
+    }
+
+    public function format_cmdsynopsis($open, $name, $attrs)
+    {
+        if ($open) {
+            return '<span style="background-color:#eee">';
+        }
+        return '</span>';
     }
 
     public function format_fieldsynopsis($open, $name, $attrs) {

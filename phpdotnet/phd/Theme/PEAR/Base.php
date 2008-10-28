@@ -142,6 +142,7 @@ abstract class peartheme extends PhDTheme {
                 'appendix'      => 'format_container_chunk_title',
                 'chapter'       => 'format_container_chunk_title',
                 //'example'       => 'format_example_title',
+                'informaltable' => 'format_table_title',
                 'part'          => 'format_container_chunk_title',
                 'section'       => array(
                     /* DEFAULT */  'format_container_chunk_title',
@@ -156,6 +157,7 @@ abstract class peartheme extends PhDTheme {
                       ),
                     ),
                 ),
+                'table'         => 'format_table_title',
                 'warning'       => 'format_warning_title',
             ),
             'refsect1'          => 'h2',
@@ -588,9 +590,9 @@ abstract class peartheme extends PhDTheme {
         if ($props["empty"])
             return "";
         if ($open) {
-            return '<p><b>';
+            return '<caption><b>';
         }
-        return '</b></p>';
+        return '</b></caption>';
     }
 
     public function format_userinput($open, $name, $attrs, $props) {
