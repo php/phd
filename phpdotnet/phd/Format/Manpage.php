@@ -208,7 +208,7 @@ class ManpagePhDFormat extends PhDFormat {
     }
     
     public function CDATA($str) {
-        return trim($str);
+        return str_replace("\\", "\\\\", trim($str)); // Replace \ with \\ after trimming
     }
     
     public function TEXT($str) {
