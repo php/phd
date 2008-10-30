@@ -241,22 +241,61 @@ abstract class peartheme extends PhDTheme {
     *
     * @param string $id       xml:id value
     * @param string $name     Tag name
-    * @param array  $children Array of children items (mktoc)
     *
     * @return boolean true if the second level should be displayed.
     */
-    protected function displayTocSecondLevel($id, $name, $children)
+    protected function displayTocSecondLevel($id, $name)
     {
         return $id == 'index';
+    }
 
-        //we currently don't need that
-        if (count($children) == 0) {
-            return false;
+    /**
+    * Creates a table of contents for the given id.
+    * Also creates nested TOCs if that's wanted ($depth)
+    *
+    * @param string  $id     ID of section for which to generate TOC
+    * @param string  $name   Tag name (for ul class)
+    * @param array   $props  Build properties (?? FIXME)
+    * @param integer $depth  Depth of TOC
+    * @param boolean $header If the header shall be shown ("Table of contents")
+    *
+    * @return string HTML code for TOC
+    */
+    protected function createToc($id, $name, $props, $depth = 1, $header = true)
+    {
+        $chunks = PhDHelper::getChildren($id);
+        if ($depth == 0 || !count($chunks)) {
+            return '';
         }
-        if ($name == 'set' && substr($id, 0, 8) == 'package.' || $id == 'packages') {
-            return false;
+
+        $content = '';
+        if ($header) {
+            $content .= " <strong>" . $this->autogen("toc", $props["lang"]) . "</strong>\n";
         }
-        return true;
+        $content .= " <ul class=\"chunklist chunklist_$name\">\n";
+        foreach ($chunks as $chunkid => $junk) {
+            $long  = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
+            $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
+            if ($long && $short && $long != $short) {
+                $desc = $short . '</a> -- ' . $long;
+            } else {
+                $desc = ($long ? $long : $short) . '</a>';
+            }
+            if ($this->chunked) {
+                $content .= "  <li><a href=\"{$chunkid}.{$this->ext}\">" . $desc;
+            } else {
+                $content .= "  <li><a href=\"#{$chunkid}\">" . $this->format->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a>";
+            }
+            if ($depth > 1) {
+                $content .= $this->createToc($chunkid, $name, $props, $depth - 1, false);
+            }
+
+            $content .= "</li>\n";;
+        }
+
+        $content .= " </ul>\n";
+
+        return $content;
     }
 
     public function format_chunk($open, $name, $attrs, $props) {
@@ -303,26 +342,13 @@ abstract class peartheme extends PhDTheme {
         if ($props["isChunk"]) {
             $this->cchunk = $this->dchunk;
         }
-        $chunks = PhDHelper::getChildren($id);
-        if (count($chunks)) {
-            $content = "<div class=\"TOC\">\n <dl>\n  <dt><b>" . $this->autogen("toc", $props["lang"]) . "</b></dt>\n";
-            foreach ($chunks as $chunkid => $junk) {
-                $long = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
-                $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
-                if ($long && $short && $long != $short) {
-                    $desc = $short. '</a> -- ' .$long;
-                } else {
-                    $desc = ($long ? $long : $short). '</a>';
-                }
-                if ($this->chunked) {
-                    $content .= "  <dt><a href=\"{$chunkid}.{$this->ext}\">" . $desc . "</dt>\n";
-                } else {
-                    $content .= "  <dt><a href=\"#{$chunkid}\">" . $this->format->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a></dt>\n";
-                }
-            }
-            $content .= " </dl>\n</div>\n";
-            $this->cchunk["container_chunk"] = $content;
+
+        $toc = $this->createToc($id, $name, $props);
+        if ($toc) {
+            $toc = "<div class=\"TOC\">\n" . $toc . "</div>\n";
         }
+        $this->cchunk["container_chunk"] = $toc;
+
         return "<div class=\"{$name}\" id=\"{$id}\">";
     }
 
@@ -336,31 +362,11 @@ abstract class peartheme extends PhDTheme {
             return "<div class=\"{$name}\">";
         }
 
-        $chunks = PhDHelper::getChildren($id);
-        $content = '<p><b>' . $this->autogen("toc", $props["lang"]) . "</b></p>\n";
-        if (count($chunks)) {
-            $content .= '<ul class="chunklist chunklist_'.$name.'">' . "\n";
-            foreach ($chunks as $chunkid => $junk) {
-                $href     = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
-                $long     = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
-                $short    = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
-                $title    = $long ? ' title="' . htmlspecialchars($long) . '"': '';
-                $content .= ' <li><a href="' .$href. '"' . $title . '>' . $short . '</a>';
-                $children = PhDHelper::getChildren($chunkid);
-                if ($this->displayTocSecondLevel($id, $name, $children)) {
-                    $content .= "\n" . '  <ul class="chunklist chunklist_'.$name.' chunklist_children">' . "\n";
-                    foreach (PhDHelper::getChildren($chunkid) as $childid => $junk) {
-                        $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
-                        $long = $this->format->TEXT(PhDHelper::getDescription($childid, true));
-                        $short = $this->format->TEXT(PhDHelper::getDescription($childid, false));
-                        $content .= '   <li><a href="' .$href. '">' . $short . "</a></li>\n";
-                    }
-                    $content .= "  </ul>\n ";
-                }
-                $content .= "</li>\n";
-            }
-            $content .= "</ul>\n";
-        }
+        $content = $this->createToc(
+            $id, $name, $props,
+            $this->displayTocSecondLevel($id, $name) ? 2 : 1
+        );
+
         $content .= "</div>\n";
 
         return $content;
