@@ -237,19 +237,6 @@ abstract class peartheme extends PhDTheme {
     }
 
     /**
-    * Determines if the second level of a TOC should be displayed
-    *
-    * @param string $id       xml:id value
-    * @param string $name     Tag name
-    *
-    * @return boolean true if the second level should be displayed.
-    */
-    protected function displayTocSecondLevel($id, $name)
-    {
-        return $id == 'index';
-    }
-
-    /**
     * Creates a table of contents for the given id.
     * Also creates nested TOCs if that's wanted ($depth)
     *
@@ -343,7 +330,11 @@ abstract class peartheme extends PhDTheme {
             $this->cchunk = $this->dchunk;
         }
 
-        $toc = $this->createToc($id, $name, $props);
+        $toc = $this->createToc(
+            $id, $name, $props,
+            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
+        );
         if ($toc) {
             $toc = "<div class=\"TOC\">\n" . $toc . "</div>\n";
         }
@@ -364,7 +355,8 @@ abstract class peartheme extends PhDTheme {
 
         $content = $this->createToc(
             $id, $name, $props,
-            $this->displayTocSecondLevel($id, $name) ? 2 : 1
+            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
         );
 
         $content .= "</div>\n";
