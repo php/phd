@@ -235,7 +235,7 @@ class PhDReader extends XMLReader {
         return false;
     } /* }}} */
     public function isSectionChunk($tag) { /* {{{ */
-        if ($this->PREVIOUS_SIBLING == $tag && $this->checkSectionDepth()) {
+        if ($this->checkSectionDepth()) {
             return true;
         }
         return false;
