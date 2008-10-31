@@ -103,6 +103,7 @@ abstract class peartheme extends PhDTheme {
         'replaceable'           => 'format_replaceable',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
+        'phd:toc'               => 'format_phd_toc',
         'phpdoc:exception'      => 'format_exception_chunk',
         'refname'               => 'h1',
         'refnamediv'            => 'format_suppressed_tags',
@@ -135,6 +136,7 @@ abstract class peartheme extends PhDTheme {
             'chapter'           => 'format_container_chunk_title',
             //'example'           => 'format_example_title',
             'part'              => 'format_container_chunk_title',
+            'phd:toc'           => 'strong',
             'preface'           => 'format_container_chunk_title',
             'info'              => array(
                 /* DEFAULT */      false,
@@ -449,6 +451,20 @@ abstract class peartheme extends PhDTheme {
             return '</p>' . $this->format_table($open, $name, $attrs, $props);
         }
         return $this->format_table($open, $name, $attrs, $props) . '<p>';
+    }
+
+    public function format_phd_toc($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<div class="phd-toc">';
+        }
+        return $this->createToc(
+            $attrs[PhDReader::XMLNS_PHD]['element'],
+            'phd-toc',
+            $props,
+            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1,
+            false
+        ) . "</div>\n";
     }
 
     public function format_programlisting($open, $name, $attrs) {
