@@ -103,7 +103,6 @@ abstract class peartheme extends PhDTheme {
         'replaceable'           => 'format_replaceable',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
-        'phd:toc'               => 'format_phd_toc',
         'phpdoc:exception'      => 'format_exception_chunk',
         'refname'               => 'h1',
         'refnamediv'            => 'format_suppressed_tags',
@@ -136,7 +135,6 @@ abstract class peartheme extends PhDTheme {
             'chapter'           => 'format_container_chunk_title',
             //'example'           => 'format_example_title',
             'part'              => 'format_container_chunk_title',
-            'phd:toc'           => 'strong',
             'preface'           => 'format_container_chunk_title',
             'info'              => array(
                 /* DEFAULT */      false,
@@ -211,8 +209,9 @@ abstract class peartheme extends PhDTheme {
         'year'                  => 'format_year',
     );
 
-    public $role        = false;
-    protected $chunked = true;
+    public $role    = false;
+    public $chunked = true;
+    public $ext     = null;
     protected $lang = "en";
 
     protected $CURRENT_ID = "";
@@ -236,55 +235,6 @@ abstract class peartheme extends PhDTheme {
         parent::__construct($IDs, $ext);
         $this->ext = $ext;
         $this->chunked = $chunked;
-    }
-
-    /**
-    * Creates a table of contents for the given id.
-    * Also creates nested TOCs if that's wanted ($depth)
-    *
-    * @param string  $id     ID of section for which to generate TOC
-    * @param string  $name   Tag name (for ul class)
-    * @param array   $props  Build properties (?? FIXME)
-    * @param integer $depth  Depth of TOC
-    * @param boolean $header If the header shall be shown ("Table of contents")
-    *
-    * @return string HTML code for TOC
-    */
-    protected function createToc($id, $name, $props, $depth = 1, $header = true)
-    {
-        $chunks = PhDHelper::getChildren($id);
-        if ($depth == 0 || !count($chunks)) {
-            return '';
-        }
-
-        $content = '';
-        if ($header) {
-            $content .= " <strong>" . $this->autogen("toc", $props["lang"]) . "</strong>\n";
-        }
-        $content .= " <ul class=\"chunklist chunklist_$name\">\n";
-        foreach ($chunks as $chunkid => $junk) {
-            $long  = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
-            $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
-            if ($long && $short && $long != $short) {
-                $desc = $short . '</a> -- ' . $long;
-            } else {
-                $desc = ($long ? $long : $short) . '</a>';
-            }
-            if ($this->chunked) {
-                $content .= "  <li><a href=\"{$chunkid}.{$this->ext}\">" . $desc;
-            } else {
-                $content .= "  <li><a href=\"#{$chunkid}\">" . $this->format->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a>";
-            }
-            if ($depth > 1) {
-                $content .= $this->createToc($chunkid, $name, $props, $depth - 1, false);
-            }
-
-            $content .= "</li>\n";;
-        }
-
-        $content .= " </ul>\n";
-
-        return $content;
     }
 
     public function format_chunk($open, $name, $attrs, $props) {
@@ -332,7 +282,7 @@ abstract class peartheme extends PhDTheme {
             $this->cchunk = $this->dchunk;
         }
 
-        $toc = $this->createToc(
+        $toc = $this->format->createToc(
             $id, $name, $props,
             isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
                 ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
@@ -355,7 +305,7 @@ abstract class peartheme extends PhDTheme {
             return "<div class=\"{$name}\">";
         }
 
-        $content = $this->createToc(
+        $content = $this->format->createToc(
             $id, $name, $props,
             isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
                 ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
@@ -451,20 +401,6 @@ abstract class peartheme extends PhDTheme {
             return '</p>' . $this->format_table($open, $name, $attrs, $props);
         }
         return $this->format_table($open, $name, $attrs, $props) . '<p>';
-    }
-
-    public function format_phd_toc($open, $name, $attrs, $props) {
-        if ($open) {
-            return '<div class="phd-toc">';
-        }
-        return $this->createToc(
-            $attrs[PhDReader::XMLNS_PHD]['element'],
-            'phd-toc',
-            $props,
-            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
-                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1,
-            false
-        ) . "</div>\n";
     }
 
     public function format_programlisting($open, $name, $attrs) {

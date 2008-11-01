@@ -2,13 +2,23 @@
 /*  $Id$ */
 
 abstract class PhDFormat extends PhDHelper {
-    private $TABLE          = array();
-    
+    private $TABLE   = array();
+
+    /**
+    * @var PhDTheme
+    */
+    protected $theme = null;
+
     /* abstract functions */
     abstract public function transformFromMap($open, $tag, $name, $attrs, $props);
     abstract public function CDATA($data);
     abstract public function TEXT($data);
     abstract public function __call($func, $args);
+
+    public function registerTheme(PhDTheme $theme)
+    {
+        $this->theme = $theme;
+    }
 
     /* Table helper functions */
     public function tgroup($attrs) {

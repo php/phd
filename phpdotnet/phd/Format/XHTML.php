@@ -177,6 +177,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'partintro'             => 'div',
         'personname'            => 'format_personname',
         'personblurb'           => 'div',
+        'phd:toc'               => 'format_phd_toc',
         'phrase'                => 'span',
         'preface'               => 'format_chunk',
         'primaryie'             => 'format_suppressed_tags',
@@ -256,6 +257,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'indexdiv'          => 'dt',
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
+            'phd:toc'           => 'strong',
             'procedure'         => 'b',
             'refsect1'          => 'h3',
             'refsect2'          => 'h4',
@@ -411,6 +413,57 @@ class XHTMLPhDFormat extends PhDFormat {
     public function getChunkInfo() {
         return $this->cchunk;
     }
+
+    /**
+    * Creates a table of contents for the given id.
+    * Also creates nested TOCs if that's wanted ($depth)
+    *
+    * @param string  $id     ID of section for which to generate TOC
+    * @param string  $name   Tag name (for ul class)
+    * @param array   $props  Build properties (?? FIXME)
+    * @param integer $depth  Depth of TOC
+    * @param boolean $header If the header shall be shown ("Table of contents")
+    *
+    * @return string HTML code for TOC
+    */
+    public function createToc($id, $name, $props, $depth = 1, $header = true)
+    {
+        $chunks = PhDHelper::getChildren($id);
+        if ($depth == 0 || !count($chunks)) {
+            return '';
+        }
+
+        $content = '';
+        if ($header) {
+            $content .= " <strong>" . $this->autogen("toc", $props["lang"]) . "</strong>\n";
+        }
+        $content .= " <ul class=\"chunklist chunklist_$name\">\n";
+        foreach ($chunks as $chunkid => $junk) {
+            $long  = $this->TEXT(PhDHelper::getDescription($chunkid, true));
+            $short = $this->TEXT(PhDHelper::getDescription($chunkid, false));
+            if ($long && $short && $long != $short) {
+                $desc = $short . '</a> -- ' . $long;
+            } else {
+                $desc = ($long ? $long : $short) . '</a>';
+            }
+            //FIXME
+            if ($this->theme->chunked) {
+                $content .= "  <li><a href=\"{$chunkid}.{$this->theme->ext}\">" . $desc;
+            } else {
+                $content .= "  <li><a href=\"#{$chunkid}\">" . $this->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a>";
+            }
+            if ($depth > 1) {
+                $content .= $this->createToc($chunkid, $name, $props, $depth - 1, false);
+            }
+
+            $content .= "</li>\n";;
+        }
+
+        $content .= " </ul>\n";
+
+        return $content;
+    }
+
     public function format_suppressed_tags($open, $name, $attrs) {
         /* Ignore it */
         return "";
@@ -838,6 +891,21 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</ul>\n<p class=\"para\">";
     }
+
+    public function format_phd_toc($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<div class="phd-toc">';
+        }
+        return $this->createToc(
+            $attrs[PhDReader::XMLNS_PHD]['element'],
+            'phd-toc',
+            $props,
+            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1,
+            false
+        ) . "</div>\n";
+    }
+
     public function format_segmentedlist($open, $name, $attrs) {
         $this->cchunk["segmentedlist"] = $this->dchunk["segmentedlist"];
         if ($open) {

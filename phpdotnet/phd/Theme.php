@@ -5,6 +5,7 @@ abstract class PhDTheme extends PhDHelper implements iPhDTheme {
     protected $format;
     public function registerFormat($format) {
         $this->format = $format;
+        $this->format->registerTheme($this);
     }
 }
 
