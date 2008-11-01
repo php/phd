@@ -34,7 +34,7 @@ class pearchm extends pearchunkedhtml {
 					   "langcode" => "0x406 Danish",
 					   "preferred_charset" => "Windows-1252",
 					   "mime_charset_name" => "Windows-1252",
-					   "preferred_font" => self::DEFAULT_FONT, 
+					   "preferred_font" => self::DEFAULT_FONT,
 					   "title" => "PEAR Manualen"
 				   ),
 		"de"    => array(
@@ -247,7 +247,7 @@ Compiled file=pear_manual_' . $lang . '.chm
 Contents file=pear_manual_' . $lang . '.hhc
 Index file=pear_manual_' . $lang . '.hhk
 Default Window=doc
-Default topic=res\guide.html
+Default topic=res\index.html
 Display compile progress=Yes
 Full-text search=Yes
 Language=' . $this->LANGUAGES[$lang]["langcode"] . '
@@ -255,7 +255,7 @@ Title=' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] :
 Default Font=' . ($this->LANGUAGES[$lang]["preferred_font"] ? $this->LANGUAGES[$lang]["preferred_font"] : self::DEFAULT_FONT). '
 
 [WINDOWS]
-doc="' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","pear_manual_' . $lang . '.hhc","pear_manual_' . $lang . '.hhk","res\guide.html","res\guide.html",,,,,0x23520,,0x386e,,,,,,,,0
+doc="' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","pear_manual_' . $lang . '.hhc","pear_manual_' . $lang . '.hhk","res\index.html","res\index.html",,,,,0x23520,,0x386e,,,,,,,,0
 
 [FILES]
 res\reset-fonts.css
