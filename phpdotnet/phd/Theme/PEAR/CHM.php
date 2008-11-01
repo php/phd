@@ -227,7 +227,7 @@ class pearchm extends pearchunkedhtml {
 				if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
 				fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
 					"          <param name=\"Local\" value=\"{$ref}\">\n" .
-					"          <param name=\"Name\" value=\"" . htmlentities($name) . "\">\n" .
+					"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name)) . "\">\n" .
 					"        </object>\n    </li>\n");
 				break;
 			case PhDReader::CLOSE_CHUNK :
@@ -238,6 +238,25 @@ class pearchm extends pearchunkedhtml {
 				break;
 		}
 	}
+
+
+
+    /**
+    * Clean up the index name.
+    * Newlines and double spaces don't look that good in some chm viewer apps.
+    *
+    * @param string $value Value to fix
+    *
+    * @return string Fixed/cleaned value
+    */
+    protected static function cleanIndexName($value)
+    {
+        return str_replace(
+            array("\n", "\r", '  '),
+            array('', '', ' '),
+            $value
+        );
+    }
 
     protected function headerChm() {
 		$lang = PhDConfig::language();
