@@ -48,7 +48,7 @@ abstract class peartheme extends PhDTheme {
         ),
         'glossentry'            => 'format_suppressed_tags',
         'glossdef'              => 'format_glossdef',
-        'glosslist'             => 'dl',
+        'glosslist'             => 'format_dl',
         'glossterm'             => 'format_glossterm',
         'guimenu'               => 'format_guimenu',
         'holder'                => 'format_holder',
@@ -78,12 +78,12 @@ abstract class peartheme extends PhDTheme {
             'itemizedlist'      => 'li',
         ),
         'literal'               => 'tt',
-        'literallayout'         => 'p',
+        'literallayout'         => 'format_literallayout',
         'menuchoice'            => 'format_suppressed_tags',
         'methodname'            => 'tt',
         'note'                  => 'format_admonition',
         'para'                  => array(
-            /* DEFAULT */          'format_para',
+            /* DEFAULT */          false,
             'warning'           => 'format_warning_para',
             'important'         => 'format_suppressed_tags',
         ),
@@ -184,7 +184,7 @@ abstract class peartheme extends PhDTheme {
         'uri'                   => 'format_uri',
         'userinput'             => 'format_userinput',
         'variablelist'          => 'format_div',
-        'varlistentry'          => 'dl',
+        'varlistentry'          => 'format_dl',
         'varname'               => 'tt',
         'warning'               => 'format_warning',
         'xref'                  => 'format_link',
@@ -233,23 +233,6 @@ abstract class peartheme extends PhDTheme {
     protected $lang = "en";
 
     /**
-    * Determines if we are in a paragraph or not, and if, in which level.
-    * Useful to know for HTML tags that may not be in a <p> tag.
-    *
-    * @see format_para()
-    *
-    * @var integer
-    */
-    public $openPara = 0;
-
-    /**
-    * Which para levels we already escaped
-    *
-    * @var array
-    */
-    public $escapedPara = array();
-
-    /**
     * If whitespace should be trimmed.
     * Helpful for programlistings that are encapsulated in <pre> tags
     *
@@ -280,52 +263,6 @@ abstract class peartheme extends PhDTheme {
         parent::__construct($IDs, $ext);
         $this->ext = $ext;
         $this->chunked = $chunked;
-    }
-
-    /**
-    * Closes a para tag when we are already in a paragraph.
-    *
-    * @return string HTML code
-    *
-    * @see $openPara
-    * @see restorePara()
-    */
-    public function escapePara()
-    {
-        if (!$this->openPara) {
-            return '';
-        }
-
-        if (!isset($this->escapedPara[$this->openPara])) {
-            $this->escapedPara[$this->openPara] = 1;
-            return '</p>';
-        } else {
-            ++$this->escapedPara[$this->openPara];
-            return '';
-        }
-    }
-
-    /**
-    * Opens a para tag again when we escaped one before.
-    *
-    * @return string HTML code
-    *
-    * @see $openPara
-    * @see escapePara()
-    */
-    public function restorePara()
-    {
-        if (!$this->openPara || !isset($this->escapedPara[$this->openPara])) {
-            return '';
-        }
-
-        if ($this->escapedPara[$this->openPara] == 1) {
-            unset($this->escapedPara[$this->openPara]);
-            return '<p>';
-        } else {
-            --$this->escapedPara[$this->openPara];
-            return '';
-        }
     }
 
     public function format_chunk($open, $name, $attrs, $props) {
@@ -388,11 +325,7 @@ abstract class peartheme extends PhDTheme {
 
     public function format_div($open, $name, $attrs, $props)
     {
-        if ($open) {
-            return $this->escapePara()
-                . '<div class="' . $name . '">';
-        }
-        return '</div>' . $this->restorePara();
+        return $this->format->format_div($open, $name, $attrs, $props);
     }
 
     public function format_exception_chunk($open, $name, $attrs, $props) {
@@ -496,30 +429,12 @@ abstract class peartheme extends PhDTheme {
         return '</' .$tag. '>';
     }
 
-    /**
-    * Additionally to generating a <p>, the internal $openPara variable gets
-    * in-/decremented
-    *
-    * @return string HTML code
-    *
-    * @see $openPara
-    */
-    public function format_para($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            ++$this->openPara;
-            return '<p>';
-        }
-        --$this->openPara;
-        return '</p>';
-    }
-
     public function format_para_informaltable($open, $name, $attrs, $props) {
         if ($open) {
-            return $this->escapePara()
+            return $this->format->escapePara()
                 . $this->format_table($open, $name, $attrs, $props);
         }
-        return $this->format_table($open, $name, $attrs, $props) . $this->restorePara();
+        return $this->format_table($open, $name, $attrs, $props) . $this->format->restorePara();
     }
 
     public function format_programlisting($open, $name, $attrs) {
@@ -531,12 +446,12 @@ abstract class peartheme extends PhDTheme {
                 $this->role = "default";
             }
 
-            return $this->escapePara()
+            return $this->format->escapePara()
                 . '<pre class="'. ($this->role ? $this->role : 'programlisting') .'" style="background-color:#EEE; width: 100%">';
         }
         $this->role = false;
         $this->trim = false;
-        return "</pre>\n" . $this->restorePara();
+        return "</pre>\n" . $this->format->restorePara();
     }
 
     public function format_programlisting_text($value, $tag) {
@@ -553,10 +468,20 @@ abstract class peartheme extends PhDTheme {
 
     public function format_screen($open, $name, $attrs) {
         if ($open) {
-            return $this->escapePara()
+            return $this->format->escapePara()
                 . '<pre class="screen" style="background-color:#EEE; width: 100%">';
         }
-        return "</pre>\n" . $this->restorePara();
+        return "</pre>\n" . $this->format->restorePara();
+    }
+
+    public function format_literallayout($open, $name, $attrs)
+    {
+        //FIXME: add support for attributes like class, continuation etc
+        if ($open) {
+            return $this->format->escapePara()
+                . '<p class="literallayout">';
+        }
+        return "</p>\n" . $this->format->restorePara();
     }
 
     /**
@@ -654,17 +579,17 @@ abstract class peartheme extends PhDTheme {
 
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
-            return $this->escapePara()
+            return $this->format->escapePara()
                 . '<blockquote class="' . $name . '"><b>'.$this->autogen($name, $props["lang"]). ': </b>';
         }
-        return "</blockquote>\n" . $this->restorePara();
+        return "</blockquote>\n" . $this->format->restorePara();
     }
 
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
-            return $this->escapePara() . '<table border="1" class="'.$name.'">';
+            return $this->format->escapePara() . '<table border="1" class="'.$name.'">';
         }
-        return "</table>\n" . $this->restorePara();
+        return "</table>\n" . $this->format->restorePara();
     }
 
     public function format_entry($open, $name, $attrs, $props) {
@@ -710,9 +635,10 @@ abstract class peartheme extends PhDTheme {
 
     public function format_warning($open, $name, $attrs, $props) {
         if ($open) {
-            return '<div class="warning" style="border: 3px double black; padding: 5px">' . "\n";
+            return $this->format->escapePara()
+                . '<div class="warning" style="border: 3px double black; padding: 5px">' . "\n";
         }
-        return "</div>\n";
+        return "</div>\n" . $this->format->restorePara();
     }
 
     public function format_warning_title($open, $name, $attrs, $props) {
@@ -787,9 +713,9 @@ abstract class peartheme extends PhDTheme {
 
     public function format_refsynopsisdiv($open, $name, $attrs, $props) {
         if ($open) {
-            return '<h2 class="refsynopsisdiv">Synopsis</h2><p>';
+            return '<h2 class="refsynopsisdiv">Synopsis</h2>';
         }
-        return '</p>';
+        return '';
     }
 
     public function format_guimenu($open, $name, $attrs, $props) {
@@ -799,6 +725,11 @@ abstract class peartheme extends PhDTheme {
             return '<span class="guimenu"><i>';
         }
         return '</i></span>';
+    }
+
+    public function format_dl($open, $name, $attrs, $props)
+    {
+        return $this->format->format_dl($open, $name, $attrs, $props);
     }
 
     /* FIXME: This function is a crazy performance killer */
@@ -873,9 +804,9 @@ abstract class peartheme extends PhDTheme {
     public function format_calloutlist($open, $name, $attrs) {
         if ($open) {
             $this->cchunk["callouts"] = 0;
-            return $this->escapePara() . '<table>';
+            return $this->format->escapePara() . '<table>';
         }
-        return '</table>' . $this->restorePara();
+        return '</table>' . $this->format->restorePara();
     }
     public function format_callout($open, $name, $attrs) {
         if ($open) {
