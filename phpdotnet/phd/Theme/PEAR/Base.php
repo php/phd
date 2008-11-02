@@ -36,9 +36,9 @@ abstract class peartheme extends PhDTheme {
         'funcprototype'         => 'format_funcprototype',
 
         'funcsynopsisinfo'      => 'format_programlisting',
-        'funcsynopsis'          => 'div',
+        'funcsynopsis'          => 'format_div',
         'function'              => 'b',
-        'editor'                => 'div',
+        'editor'                => 'format_div',
         'email'                 => 'tt',
         'glossary'              => array(
             /* DEFAULT */          false,
@@ -65,7 +65,7 @@ abstract class peartheme extends PhDTheme {
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
-        'informalexample'       => 'div',
+        'informalexample'       => 'format_div',
         'informaltable'         => array(
             /* DEFAULT */          'format_table',
             'para'              => 'format_para_informaltable',
@@ -83,7 +83,7 @@ abstract class peartheme extends PhDTheme {
         'methodname'            => 'tt',
         'note'                  => 'format_admonition',
         'para'                  => array(
-            /* DEFAULT */          false,
+            /* DEFAULT */          'format_para',
             'warning'           => 'format_warning_para',
             'important'         => 'format_suppressed_tags',
         ),
@@ -183,7 +183,7 @@ abstract class peartheme extends PhDTheme {
         'term'                  => 'dt',
         'uri'                   => 'format_uri',
         'userinput'             => 'format_userinput',
-        'variablelist'          => 'div',
+        'variablelist'          => 'format_div',
         'varlistentry'          => 'dl',
         'varname'               => 'tt',
         'warning'               => 'format_warning',
@@ -209,10 +209,55 @@ abstract class peartheme extends PhDTheme {
         'year'                  => 'format_year',
     );
 
+    /**
+    * Programlisting role. Necessary to highlight the code properly.
+    * String when role is set, false if not.
+    *
+    * @var string
+    *
+    * @see format_programlisting()
+    * @see CDATA()
+    */
     public $role    = false;
+
     public $chunked = true;
+
+    /**
+    * File extension string
+    * e.g. ".php" or ".htm"
+    *
+    * @var string
+    */
     public $ext     = null;
+
     protected $lang = "en";
+
+    /**
+    * Determines if we are in a paragraph or not, and if, in which level.
+    * Useful to know for HTML tags that may not be in a <p> tag.
+    *
+    * @see format_para()
+    *
+    * @var integer
+    */
+    public $openPara = 0;
+
+    /**
+    * Which para levels we already escaped
+    *
+    * @var array
+    */
+    public $escapedPara = array();
+
+    /**
+    * If whitespace should be trimmed.
+    * Helpful for programlistings that are encapsulated in <pre> tags
+    *
+    * @var boolean
+    *
+    * @see CDATA()
+    */
+    public $trim    = false;
 
     protected $CURRENT_ID = "";
 
@@ -235,6 +280,52 @@ abstract class peartheme extends PhDTheme {
         parent::__construct($IDs, $ext);
         $this->ext = $ext;
         $this->chunked = $chunked;
+    }
+
+    /**
+    * Closes a para tag when we are already in a paragraph.
+    *
+    * @return string HTML code
+    *
+    * @see $openPara
+    * @see restorePara()
+    */
+    public function escapePara()
+    {
+        if (!$this->openPara) {
+            return '';
+        }
+
+        if (!isset($this->escapedPara[$this->openPara])) {
+            $this->escapedPara[$this->openPara] = 1;
+            return '</p>';
+        } else {
+            ++$this->escapedPara[$this->openPara];
+            return '';
+        }
+    }
+
+    /**
+    * Opens a para tag again when we escaped one before.
+    *
+    * @return string HTML code
+    *
+    * @see $openPara
+    * @see escapePara()
+    */
+    public function restorePara()
+    {
+        if (!$this->openPara || !isset($this->escapedPara[$this->openPara])) {
+            return '';
+        }
+
+        if ($this->escapedPara[$this->openPara] == 1) {
+            unset($this->escapedPara[$this->openPara]);
+            return '<p>';
+        } else {
+            --$this->escapedPara[$this->openPara];
+            return '';
+        }
     }
 
     public function format_chunk($open, $name, $attrs, $props) {
@@ -295,6 +386,15 @@ abstract class peartheme extends PhDTheme {
         return "<div class=\"{$name}\" id=\"{$id}\">";
     }
 
+    public function format_div($open, $name, $attrs, $props)
+    {
+        if ($open) {
+            return $this->escapePara()
+                . '<div class="' . $name . '">';
+        }
+        return '</div>' . $this->restorePara();
+    }
+
     public function format_exception_chunk($open, $name, $attrs, $props) {
         return $this->format_container_chunk($open, "reference", $attrs, $props);
     }
@@ -346,7 +446,7 @@ abstract class peartheme extends PhDTheme {
                         $link .= $href;
                     }
                 }
-                return '<a href="' .$link. '" class="' .$class. '">' .($content.PhDHelper::getDescription($id, false)). '</a>';
+                return '<a href="' . htmlspecialchars($link). '" class="' .$class. '">' .($content.PhDHelper::getDescription($id, false)). '</a>';
             } elseif ($props["empty"]) {
                 if ($this->chunked) {
                     $link = "";
@@ -366,7 +466,7 @@ abstract class peartheme extends PhDTheme {
                 } else {
                     $link = $href;
                 }
-                return '<a href="' .$link. '" class="' .$class. '">' .$content;
+                return '<a href="' .htmlspecialchars($link). '" class="' .$class. '">' .$content;
             }
         }
         return "</a>";
@@ -396,25 +496,47 @@ abstract class peartheme extends PhDTheme {
         return '</' .$tag. '>';
     }
 
+    /**
+    * Additionally to generating a <p>, the internal $openPara variable gets
+    * in-/decremented
+    *
+    * @return string HTML code
+    *
+    * @see $openPara
+    */
+    public function format_para($open, $name, $attrs, $props)
+    {
+        if ($open) {
+            ++$this->openPara;
+            return '<p>';
+        }
+        --$this->openPara;
+        return '</p>';
+    }
+
     public function format_para_informaltable($open, $name, $attrs, $props) {
         if ($open) {
-            return '</p>' . $this->format_table($open, $name, $attrs, $props);
+            return $this->escapePara()
+                . $this->format_table($open, $name, $attrs, $props);
         }
-        return $this->format_table($open, $name, $attrs, $props) . '<p>';
+        return $this->format_table($open, $name, $attrs, $props) . $this->restorePara();
     }
 
     public function format_programlisting($open, $name, $attrs) {
         if ($open) {
+            $this->trim = true;
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
                 $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
             } else {
                 $this->role = "default";
             }
 
-            return '<table class="EXAMPLE-CODE" bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td><pre class="'. ($this->role ? $this->role : 'programlisting') .'">';
+            return $this->escapePara()
+                . '<pre class="'. ($this->role ? $this->role : 'programlisting') .'" style="background-color:#EEE; width: 100%">';
         }
         $this->role = false;
-        return "</pre></td></tr></table>\n";
+        $this->trim = false;
+        return "</pre>\n" . $this->restorePara();
     }
 
     public function format_programlisting_text($value, $tag) {
@@ -431,23 +553,49 @@ abstract class peartheme extends PhDTheme {
 
     public function format_screen($open, $name, $attrs) {
         if ($open) {
-            return '<table class="EXAMPLE-CODE" bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td><pre class="screen">';
+            return $this->escapePara()
+                . '<pre class="screen" style="background-color:#EEE; width: 100%">';
         }
-        return "</pre></td></tr></table>\n";
+        return "</pre>\n" . $this->restorePara();
     }
 
-    public function CDATA($str) {
-        if (!$this->role)
-            return str_replace(array("\n", " "), array("<br/>", "&nbsp;"), htmlspecialchars($str, ENT_QUOTES, "UTF-8"));
-        switch($this->role) {
-        case "php":
-            if ( strrpos($str, "<?php") || strrpos($str, "?>") )
-                return (highlight_string(trim($str), 1));
-            else return (highlight_string("<?php\n" . trim($str) . "\n?>", 1));
-            break;
-        default:
-            return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
+    /**
+    * Format a CDATA section. Automatically trims and highlights
+    * the text when necessary.
+    *
+    * @param string $str CDATA content
+    *
+    * @return string Formatted string
+    *
+    * @see $trim
+    * @see $role
+    */
+    public function CDATA($str)
+    {
+        if ($this->trim) {
+            $str = rtrim($str);
         }
+        if (!$this->role) {
+            return str_replace(
+                array("\n", " "), array("<br/>", "&nbsp;"),
+                htmlspecialchars($str, ENT_QUOTES, "UTF-8")
+            );
+        }
+
+        switch ($this->role) {
+            case 'php':
+                if (strrpos($str, '<?php') || strrpos($str, '?>')) {
+                    $str = highlight_string(trim($str), 1);
+                } else {
+                    $str = highlight_string("<?php\n" . trim($str) . "\n?>", 1);
+                }
+                break;
+            default:
+                $str = htmlspecialchars($str, ENT_QUOTES, "UTF-8");
+                break;
+        }
+
+        return $str;
     }
 
     public function format_suppressed_tags($open, $name, $attrs) {
@@ -506,16 +654,17 @@ abstract class peartheme extends PhDTheme {
 
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
-            return '<blockquote class="' . $name . '"><p><b>'.$this->autogen($name, $props["lang"]). ': </b>';
+            return $this->escapePara()
+                . '<blockquote class="' . $name . '"><b>'.$this->autogen($name, $props["lang"]). ': </b>';
         }
-        return "</p></blockquote>\n";
+        return "</blockquote>\n" . $this->restorePara();
     }
 
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
-            return '<table border="1" class="'.$name.'">';
+            return $this->escapePara() . '<table border="1" class="'.$name.'">';
         }
-        return "</table>\n";
+        return "</table>\n" . $this->restorePara();
     }
 
     public function format_entry($open, $name, $attrs, $props) {
@@ -724,9 +873,9 @@ abstract class peartheme extends PhDTheme {
     public function format_calloutlist($open, $name, $attrs) {
         if ($open) {
             $this->cchunk["callouts"] = 0;
-            return '<table>';
+            return $this->escapePara() . '<table>';
         }
-        return '</table>';
+        return '</table>' . $this->restorePara();
     }
     public function format_callout($open, $name, $attrs) {
         if ($open) {
