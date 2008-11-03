@@ -34,10 +34,12 @@ class pearweb extends peartheme {
         } else {
             $filename = $id;
         }
-	$filename .= '.' . $this->ext;
+        $filename .= '.' . $this->ext;
+
+        $contents = $this->cleanHtml(stream_get_contents($stream));
 
         file_put_contents($this->outputdir . $filename, $this->header($id));
-        file_put_contents($this->outputdir . $filename, $stream, FILE_APPEND);
+        file_put_contents($this->outputdir . $filename, $contents, FILE_APPEND);
         file_put_contents($this->outputdir . $filename, $this->footer($id), FILE_APPEND);
 
         v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);

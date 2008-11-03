@@ -265,6 +265,18 @@ abstract class peartheme extends PhDTheme {
         $this->chunked = $chunked;
     }
 
+    /**
+    * Clean up HTML from empty paragraph tags (<p>).
+    *
+    * @param string $str String to clean up
+    *
+    * @return string Cleaned up string.
+    */
+    protected function cleanHtml($str)
+    {
+        return preg_replace('#<p>\\s*</p>#s', '', $str);
+    }
+
     public function format_chunk($open, $name, $attrs, $props) {
         $id = null;
         if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
