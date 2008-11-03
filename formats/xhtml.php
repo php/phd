@@ -128,10 +128,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'indexdiv'              => 'format_dl',
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
-        'itemizedlist'          => array(
-            /* DEFAULT */          'format_itemizedlist',
-            'para'              => 'format_para_itemizedlist',
-         ),
+        'itemizedlist'          => 'format_itemizedlist',
         'legalnotice'           => 'format_legalnotice_chunk',
         'listitem'              => array(
             /* DEFAULT */          'li',
@@ -222,7 +219,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'shortaffil'            => 'format_suppressed_tags',
         'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
         'simpara'               => array(
-            /* DEFAULT */          'p',
+            /* DEFAULT */          'format_para',
             'note'              => 'span',
             'listitem'          => 'span',
             'entry'             => 'span',
@@ -989,13 +986,6 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         --$this->openPara;
         return '</p>';
-    }
-
-    public function format_para_itemizedlist($open, $name, $attrs) {
-        if ($open) {
-            return "</p>\n<ul>\n";
-        }
-        return "</ul>\n<p class=\"para\">";
     }
 
     public function format_phd_toc($open, $name, $attrs, $props) {
