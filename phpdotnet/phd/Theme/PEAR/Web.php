@@ -101,7 +101,7 @@ manualHeader("PEAR Manual","index.php");
             'toc'  => $toc
         );
 		return "<?php \n" .
-			"sendManualHeaders(\"UTF-8\", {$this->lang});\n" .
+			"sendManualHeaders(\"UTF-8\", \"{$this->lang}\");\n" .
 			"setupNavigation(" . var_export($nav, true) . ");\n" .
 			'manualHeader("' . $this->getFilename($id).$ext . '", "' . PhDHelper::getDescription($id, true) . '");' . "\n" .
 			"?>\n";
