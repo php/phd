@@ -80,8 +80,8 @@ class phpweb extends phpdotnet {
         if ($parent && $parent != "ROOT") {
             $siblings = PhDHelper::getChildren($parent);
             /* TODO:
-             *   Maybe this isn't worth it.. but this, in theory, allows you 
-             * to easily add new pages without needing to rebuild the entire 
+             *   Maybe this isn't worth it.. but this, in theory, allows you
+             * to easily add new pages without needing to rebuild the entire
              * section.
              */
             if (!file_exists($this->outputdir . $filename)) {
@@ -151,7 +151,9 @@ manual_header();
         while(list($tmp,) = each($siblings)) {
             if ($tmp == $id) {
                 // Set the internal pointer back to $id
-                prev($siblings);
+                if (prev($siblings) === false) {
+                    end($siblings);
+                }
                 break;
             }
         }

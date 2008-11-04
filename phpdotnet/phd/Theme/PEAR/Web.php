@@ -124,7 +124,9 @@ manualHeader("PEAR Manual","index.php");
         while (list($tmp,) = each($siblings)) {
             if ($tmp == $id) {
                 // Set the internal pointer back to $id
-                prev($siblings);
+                if (prev($siblings) === false) {
+                    end($siblings);
+                }
                 break;
             }
         }
