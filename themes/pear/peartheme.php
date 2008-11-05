@@ -23,9 +23,9 @@ abstract class peartheme extends PhDTheme {
         'copyright'             => 'format_copyright',
         'coref'                 => 'format_suppressed_tags',
         'chapter'               => 'format_container_chunk',
-        'classname'             => 'b',
+        'classname'             => 'strong',
         'colophon'              => 'format_chunk',
-        'constant'              => 'b',
+        'constant'              => 'strong',
         'emphasis'              => 'format_emphasis',
         'filename'              => array(
             /* DEFAULT */          'tt',
@@ -37,7 +37,7 @@ abstract class peartheme extends PhDTheme {
 
         'funcsynopsisinfo'      => 'format_programlisting',
         'funcsynopsis'          => 'format_div',
-        'function'              => 'b',
+        'function'              => 'strong',
         'editor'                => 'format_div',
         'email'                 => 'tt',
         'glossary'              => array(
@@ -561,7 +561,7 @@ abstract class peartheme extends PhDTheme {
         }
         if (!$this->role) {
             return str_replace(
-                array("\n", ' '), array('<br />', '&nbsp;'),
+                array("\n", ' '), array('<br/>', '&nbsp;'),
                 htmlspecialchars($str, ENT_QUOTES, 'UTF-8')
             );
         }
@@ -650,7 +650,7 @@ abstract class peartheme extends PhDTheme {
     {
         if ($open) {
             return $this->format->escapePara()
-                . '<blockquote class="' . $name . '"><b>'.$this->autogen($name, $props['lang']). ': </b>';
+                . '<blockquote class="' . $name . '"><strong>'.$this->autogen($name, $props['lang']). ': </strong>';
         }
         return "</blockquote>\n" . $this->format->restorePara();
     }
@@ -688,25 +688,25 @@ abstract class peartheme extends PhDTheme {
         if ($props['empty'])
             return '';
         if ($open) {
-            return '<caption><b>';
+            return '<caption><strong>';
         }
-        return '</b></caption>';
+        return '</strong></caption>';
     }
 
     public function format_userinput($open, $name, $attrs, $props)
     {
         if ($open) {
-            return '<tt class="'.$name.'"><b>';
+            return '<tt class="'.$name.'"><strong>';
         }
-        return '</b></tt>';
+        return '</strong></tt>';
     }
 
     public function format_replaceable($open, $name, $attrs, $props)
     {
         if ($open) {
-            return '<tt class="'.$name.'"><i>';
+            return '<tt class="'.$name.'"><em>';
         }
-        return '</i></tt>';
+        return '</em></tt>';
     }
 
     public function format_warning($open, $name, $attrs, $props)
@@ -754,7 +754,7 @@ abstract class peartheme extends PhDTheme {
     {
         if ($open) {
             $refnames = implode(' ', $this->cchunk['refname']);
-            return '<div class="refnamediv">'. $refnames. ' -- ';
+            return '<div class="refnamediv">'. $refnames. ' &ndash; ';
         }
         return "</div>\n";
     }
@@ -767,7 +767,7 @@ abstract class peartheme extends PhDTheme {
 
     public function format_function_text($value)
     {
-        return $this->format->TEXT($value."()");
+        return $this->format->TEXT($value.'()');
     }
 
     public function format_paramdef($open, $name, $attrs, $props)
@@ -848,7 +848,7 @@ abstract class peartheme extends PhDTheme {
         libxml_use_internal_errors($old);
 
         $xpath = new DOMXPath($doc);
-        $nlist = $xpath->query("//div/dl/dt/strong");
+        $nlist = $xpath->query('//div/dl/dt/strong');
         $ret = '<div class="qandaset"><ol class="qandaset_questions">';
         $i = 0;
         foreach ($nlist as $node) {
@@ -861,7 +861,7 @@ abstract class peartheme extends PhDTheme {
     public function format_qandaentry($open, $name, $attrs)
     {
         if ($open) {
-            $this->cchunk['qandaentry'][] = $this->CURRENT_ID . ".entry" . count($this->cchunk['qandaentry']);
+            $this->cchunk['qandaentry'][] = $this->CURRENT_ID . '.entry' . count($this->cchunk['qandaentry']);
             return '<dl>';
         }
         return '</dl>';
@@ -897,9 +897,9 @@ abstract class peartheme extends PhDTheme {
     public function format_glossterm($open, $name, $attrs)
     {
         if ($open) {
-            return '<dt><b>';
+            return '<dt><strong>';
         }
-        return '</b></dt>';
+        return '</strong></dt>';
     }
 
     public function format_glossdef($open, $name, $attrs)
