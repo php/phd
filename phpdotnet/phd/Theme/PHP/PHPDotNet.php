@@ -65,7 +65,6 @@ abstract class phpdotnet extends PhDTheme {
             'part'              => 'format_chunk',
         ),
         'legalnotice'           => 'format_chunk',
-        'varlistentry'          => 'format_varlistentry',
         'part'                  => 'format_container_chunk',
         'preface'               => 'format_chunk',
         'refentry'              => 'format_chunk',
@@ -85,6 +84,7 @@ abstract class phpdotnet extends PhDTheme {
         'qandaentry'            => 'format_qandaentry',
         'question'              => 'format_question',
         'answer'                => 'format_answer',
+        'varlistentry'          => 'format_varlistentry',
     );
     protected $textmap =        array(
         'acronym'               => 'format_acronym_text',
@@ -651,6 +651,7 @@ abstract class phpdotnet extends PhDTheme {
     public function format_varlistentry($open, $name, $attrs) {
         return false;
     }
+
 }
 
 /*
