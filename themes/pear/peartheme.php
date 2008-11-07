@@ -23,9 +23,9 @@ abstract class peartheme extends PhDTheme {
         'copyright'             => 'format_copyright',
         'coref'                 => 'format_suppressed_tags',
         'chapter'               => 'format_container_chunk',
-        'classname'             => 'b',
+        'classname'             => 'strong',
         'colophon'              => 'format_chunk',
-        'constant'              => 'b',
+        'constant'              => 'strong',
         'emphasis'              => 'format_emphasis',
         'filename'              => array(
             /* DEFAULT */          'tt',
@@ -36,9 +36,9 @@ abstract class peartheme extends PhDTheme {
         'funcprototype'         => 'format_funcprototype',
 
         'funcsynopsisinfo'      => 'format_programlisting',
-        'funcsynopsis'          => 'div',
-        'function'              => 'b',
-        'editor'                => 'div',
+        'funcsynopsis'          => 'format_div',
+        'function'              => 'strong',
+        'editor'                => 'format_div',
         'email'                 => 'tt',
         'glossary'              => array(
             /* DEFAULT */          false,
@@ -48,7 +48,7 @@ abstract class peartheme extends PhDTheme {
         ),
         'glossentry'            => 'format_suppressed_tags',
         'glossdef'              => 'format_glossdef',
-        'glosslist'             => 'dl',
+        'glosslist'             => 'format_dl',
         'glossterm'             => 'format_glossterm',
         'guimenu'               => 'format_guimenu',
         'holder'                => 'format_holder',
@@ -65,7 +65,7 @@ abstract class peartheme extends PhDTheme {
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
-        'informalexample'       => 'div',
+        'informalexample'       => 'format_div',
         'informaltable'         => array(
             /* DEFAULT */          'format_table',
             'para'              => 'format_para_informaltable',
@@ -78,7 +78,7 @@ abstract class peartheme extends PhDTheme {
             'itemizedlist'      => 'li',
         ),
         'literal'               => 'tt',
-        'literallayout'         => 'p',
+        'literallayout'         => 'format_literallayout',
         'menuchoice'            => 'format_suppressed_tags',
         'methodname'            => 'tt',
         'note'                  => 'format_admonition',
@@ -93,6 +93,7 @@ abstract class peartheme extends PhDTheme {
             'paramdef'           => 'format_suppressed_tags',
         ),
         'part'                  => 'format_container_chunk',
+        'phd:pearapi'           => 'format_phd_pearapi',
         'preface'               => 'format_container_chunk',
         'programlisting'        => 'format_programlisting',
         'prompt'                => 'tt',
@@ -142,6 +143,7 @@ abstract class peartheme extends PhDTheme {
                 'appendix'      => 'format_container_chunk_title',
                 'chapter'       => 'format_container_chunk_title',
                 //'example'       => 'format_example_title',
+                'informaltable' => 'format_table_title',
                 'part'          => 'format_container_chunk_title',
                 'section'       => array(
                     /* DEFAULT */  'format_container_chunk_title',
@@ -156,6 +158,7 @@ abstract class peartheme extends PhDTheme {
                       ),
                     ),
                 ),
+                'table'         => 'format_table_title',
                 'warning'       => 'format_warning_title',
             ),
             'refsect1'          => 'h2',
@@ -181,8 +184,8 @@ abstract class peartheme extends PhDTheme {
         'term'                  => 'dt',
         'uri'                   => 'format_uri',
         'userinput'             => 'format_userinput',
-        'variablelist'          => 'div',
-        'varlistentry'          => 'dl',
+        'variablelist'          => 'format_div',
+        'varlistentry'          => 'format_dl',
         'varname'               => 'tt',
         'warning'               => 'format_warning',
         'xref'                  => 'format_link',
@@ -202,14 +205,51 @@ abstract class peartheme extends PhDTheme {
             'funcdef'           => false,
             'refname'           => 'format_refname_function_text',
         ),
+        'phd:pearapi'           => 'format_phd_pearapi_text',
         'programlisting'        => 'format_programlisting_text',
         'refname'               => 'format_refname_text',
         'year'                  => 'format_year',
     );
 
-    public $role        = false;
-    protected $chunked = true;
-    protected $lang = "en";
+    /**
+    * Programlisting role. Necessary to highlight the code properly.
+    * String when role is set, false if not.
+    *
+    * @var string
+    *
+    * @see format_programlisting()
+    * @see CDATA()
+    */
+    public $role    = false;
+
+    public $chunked = true;
+
+    /**
+    * File extension string
+    * e.g. ".php" or ".htm"
+    *
+    * @var string
+    */
+    public $ext     = null;
+
+    protected $lang = 'en';
+
+    /**
+    * If whitespace should be trimmed.
+    * Helpful for programlistings that are encapsulated in <pre> tags
+    *
+    * @var boolean
+    *
+    * @see CDATA()
+    */
+    public $trim    = false;
+
+    /**
+    * URL prefix for all API doc link generated with <phd:pearapi>
+    *
+    * @var string
+    */
+    public $phd_pearapi_urlprefix = 'http://pear.php.net/package/';
 
     protected $CURRENT_ID = "";
 
@@ -217,51 +257,73 @@ abstract class peartheme extends PhDTheme {
     protected $cchunk          = array();
     /* Default Chunk settings */
     protected $dchunk          = array(
-        "fieldsynopsis"                => array(
-            "modifier"                          => "public",
+        'fieldsynopsis'                => array(
+            'modifier'                          => 'public',
         ),
-        "container_chunk"              => null,
-        "qandaentry"                   => array(
+        'container_chunk'              => null,
+        'qandaentry'                   => array(
         ),
-        "examples"                     => 0,
-        "verinfo"                      => false,
-        "refname"                      => array(),
+        'examples'                     => 0,
+        'verinfo'                      => false,
+        'refname'                      => array(),
     );
 
-    public function __construct(array $IDs, $ext = "php", $chunked = true) {
+    /**
+     * Constructor
+     *
+     * @param array  $IDs     Array of elements
+     * @param string $ext     Filename extension to use
+     * @param bool   $chunked whether or not to chunk the output
+     */
+    public function __construct(array $IDs, $ext = 'php', $chunked = true)
+    {
         parent::__construct($IDs, $ext);
         $this->ext = $ext;
         $this->chunked = $chunked;
     }
 
-    public function format_chunk($open, $name, $attrs, $props) {
+    /**
+    * Clean up HTML from empty paragraph tags (<p>).
+    *
+    * @param string $str String to clean up
+    *
+    * @return string Cleaned up string.
+    */
+    protected function cleanHtml($str)
+    {
+        return preg_replace('#<p>\\s*</p>#s', '', $str);
+    }
+
+    public function format_chunk($open, $name, $attrs, $props)
+    {
         $id = null;
-        if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-            $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        if (isset($attrs[PhDReader::XMLNS_XML]['id'])) {
+            $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]['id'];
         }
-        if ($props["isChunk"]) {
+        if ($props['isChunk']) {
             $this->cchunk = $this->dchunk;
         }
-        if (isset($props["lang"])) {
-            $this->lang = $props["lang"];
+        if (isset($props['lang'])) {
+            $this->lang = $props['lang'];
         }
-        if ($name == "refentry") {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                $this->cchunk["verinfo"] = !($attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "noversion");
+        if ($name == 'refentry') {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]['role'])) {
+                $this->cchunk['verinfo'] = !($attrs[PhDReader::XMLNS_DOCBOOK]['role'] == 'noversion');
             } else {
-                $this->cchunk["verinfo"] = true;
+                $this->cchunk['verinfo'] = true;
             }
         }
-        if ($name == "legalnotice") {
+        if ($name == 'legalnotice') {
             if ($open) {
-                return '<div class="' . $name . '" ' . ($id ? "id=\"{$id}\"" : "") . '">';
+                return '<div class="' . $name . '" ' . ($id ? "id=\"{$id}\"" : '') . '">';
             }
             return "</div>\n";
         }
         return false;
     }
 
-    public function format_container_chunk($open, $name, $attrs, $props) {
+    public function format_container_chunk($open, $name, $attrs, $props)
+    {
         if (!isset($attrs[PhDReader::XMLNS_XML]['id'])) {
             if ($open) {
                 return "<div class=\"{$name}\">";
@@ -269,119 +331,120 @@ abstract class peartheme extends PhDTheme {
                 return "</div>\n";
             }
         }
-        $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]['id'];
 
         if (!$open) {
             return "</div>\n";
         }
 
-        if ($props["isChunk"]) {
+        if ($props['isChunk']) {
             $this->cchunk = $this->dchunk;
         }
-        $chunks = PhDHelper::getChildren($id);
-        if (count($chunks)) {
-            $content = "<div class=\"TOC\">\n <dl>\n  <dt><b>" . $this->autogen("toc", $props["lang"]) . "</b></dt>\n";
-            foreach ($chunks as $chunkid => $junk) {
-                $long = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
-                $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
-                if ($long && $short && $long != $short) {
-                    $desc = $short. '</a> -- ' .$long;
-                } else {
-                    $desc = ($long ? $long : $short). '</a>';
-                }
-                if ($this->chunked) {
-                    $content .= "  <dt><a href=\"{$chunkid}.{$this->ext}\">" . $desc . "</dt>\n";
-                } else {
-                    $content .= "  <dt><a href=\"#{$chunkid}\">" . $this->format->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a></dt>\n";
-                }
-            }
-            $content .= " </dl>\n</div>\n";
-            $this->cchunk["container_chunk"] = $content;
+
+        $toc = $this->format->createToc(
+            $id, $name, $props,
+            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
+        );
+        if ($toc) {
+            $toc = "<div class=\"TOC\">\n" . $toc . "</div>\n";
         }
+        $this->cchunk['container_chunk'] = $toc;
+
         return "<div class=\"{$name}\" id=\"{$id}\">";
     }
 
-    public function format_exception_chunk($open, $name, $attrs, $props) {
-        return $this->format_container_chunk($open, "reference", $attrs, $props);
+    public function format_div($open, $name, $attrs, $props)
+    {
+        return $this->format->format_div($open, $name, $attrs, $props);
     }
 
-    public function format_root_chunk($open, $name, $attrs, $props) {
-        $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+    public function format_exception_chunk($open, $name, $attrs, $props)
+    {
+        return $this->format_container_chunk($open, 'reference', $attrs, $props);
+    }
+
+    /**
+     * Formatting for the root element of a chunk.
+     *
+     * @param bool   $open  Whether we should open or close this element.
+     * @param string $name  Name of the element
+     * @param array  $attrs Attributes present for the element. Array keys are the attribute namespaces.
+     * @param array  $props Associative array of additional properties
+     *
+     * @return string
+     */
+    public function format_root_chunk($open, $name, $attrs, $props)
+    {
+        $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]['id'];
         if ($open) {
             return "<div class=\"{$name}\">";
         }
 
-        $chunks = PhDHelper::getChildren($id);
-        $content = '<p><b>' . $this->autogen("toc", $props["lang"]) . "</b></p>\n";
-        if (count($chunks)) {
-            $content .= '<ul class="chunklist chunklist_'.$name.'">' . "\n";
-            foreach ($chunks as $chunkid => $junk) {
-                $href = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
-                $long = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
-                $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
-                $content .= ' <li><a href="' .$href. '">' .($long ? $long : $short). '</a>';
-                $children = PhDHelper::getChildren($chunkid);
-                if (count($children)) {
-                    $content .= "\n" . '  <ul class="chunklist chunklist_'.$name.' chunklist_children">' . "\n";
-                    foreach (PhDHelper::getChildren($chunkid) as $childid => $junk) {
-                        $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
-                        $long = $this->format->TEXT(PhDHelper::getDescription($childid, true));
-                        $short = $this->format->TEXT(PhDHelper::getDescription($childid, false));
-                        $content .= '   <li><a href="' .$href. '">' .($long ? $long : $short). "</a></li>\n";
-                    }
-                    $content .= "  </ul>\n ";
-                }
-                $content .= "</li>\n";
-            }
-            $content .= "</ul>\n";
-        }
+        $content = $this->format->createToc(
+            $id, $name, $props,
+            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
+        );
+
         $content .= "</div>\n";
 
         return $content;
     }
 
-    public function format_link($open, $name, $attrs, $props) {
+    /**
+     * Format a link for an element
+     *
+     * @param bool   $open  If the link should be opened.
+     * @param string $name  Name of the element.
+     * @param array  $attrs Attributes present for the element. Array keys are the attribute namespaces.
+     * @param array  $props Properties
+     *
+     * @return string
+     */
+    public function format_link($open, $name, $attrs, $props)
+    {
         if ($open) {
-            $content = $fragment = "";
+            $content = $fragment = '';
             $class = $name;
 
-            if(isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
-                $linkto = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]['linkend'])) {
+                $linkto = $attrs[PhDReader::XMLNS_DOCBOOK]['linkend'];
                 $id = $href = PhDHelper::getFilename($linkto);
 
                 if ($id != $linkto) {
                     $fragment = "#$linkto";
                 }
                 if ($this->chunked) {
-                    $href .= ".".$this->ext;
+                    $href .= '.'.$this->ext;
                 }
-            } elseif(isset($attrs[PhDReader::XMLNS_XLINK]["href"])) {
-                $href = $attrs[PhDReader::XMLNS_XLINK]["href"];
-                $class .= " external";
+            } elseif (isset($attrs[PhDReader::XMLNS_XLINK]['href'])) {
+                $href = $attrs[PhDReader::XMLNS_XLINK]['href'];
+                $class .= ' external';
             }
-            if ($name == "xref") {
+            if ($name == 'xref') {
                 if ($this->chunked) {
                     $link = $href;
                 } else {
-                    $link = "#";
+                    $link = '#';
                     if (isset($linkto)) {
                         $link .= $linkto;
                     } else {
                         $link .= $href;
                     }
                 }
-                return '<a href="' .$link. '" class="' .$class. '">' .($content.PhDHelper::getDescription($id, false)). '</a>';
-            } elseif ($props["empty"]) {
+                return '<a href="' . htmlspecialchars($link). '" class="' .$class. '">' .($content.PhDHelper::getDescription($id, false)). '</a>';
+            } elseif ($props['empty']) {
                 if ($this->chunked) {
-                    $link = "";
+                    $link = '';
                 } else {
-                    $link = "#";
+                    $link = '#';
                 }
                 return '<a href="' .$link.$href.$fragment. '" class="' .$class. '">' .$content.$href.$fragment. '</a>';
             } else {
                 if ($this->chunked) {
                     $link = $href.$fragment;
-                } elseif(isset($linkto)) {
+                } elseif (isset($linkto)) {
                     if ($fragment) {
                         $link = $fragment;
                     } else {
@@ -390,118 +453,242 @@ abstract class peartheme extends PhDTheme {
                 } else {
                     $link = $href;
                 }
-                return '<a href="' .$link. '" class="' .$class. '">' .$content;
+                return '<a href="' .htmlspecialchars($link). '" class="' .$class. '">' .$content;
             }
         }
-        return "</a>";
+        return '</a>';
     }
 
-    public function format_container_chunk_title($open, $name, $attrs) {
+    public function format_container_chunk_title($open, $name, $attrs)
+    {
         if ($open) {
-            return "<h1>";
+            return '<h1>';
         }
-        $ret = "";
-        if ($this->cchunk["container_chunk"]) {
-            $ret = $this->cchunk["container_chunk"];
-            $this->cchunk["container_chunk"] = null;
+        $ret = '';
+        if ($this->cchunk['container_chunk']) {
+            $ret = $this->cchunk['container_chunk'];
+            $this->cchunk['container_chunk'] = null;
         }
         return "</h1>\n" .$ret;
     }
 
-    public function transformFromMap($open, $tag, $name, $attrs, $props) {
+    public function transformFromMap($open, $tag, $name, $attrs, $props)
+    {
         if ($open) {
-            $idstr = "";
-            if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-                $id = $attrs[PhDReader::XMLNS_XML]["id"];
+            $idstr = '';
+            if (isset($attrs[PhDReader::XMLNS_XML]['id'])) {
+                $id = $attrs[PhDReader::XMLNS_XML]['id'];
                 $idstr = ' id="' .$id. '" name="' .$id. '"';
             }
-            return '<' .$tag. ' class="' .$name. '"' . $idstr. '>' . ($props["empty"] ? "</{$tag}>" : "");
+            return '<' .$tag. ' class="' .$name. '"' . $idstr. '>' . ($props['empty'] ? "</{$tag}>" : '');
         }
         return '</' .$tag. '>';
     }
 
-    public function format_para_informaltable($open, $name, $attrs, $props) {
+    public function format_para_informaltable($open, $name, $attrs, $props)
+    {
         if ($open) {
-            return '</p>' . $this->format_table($open, $name, $attrs, $props);
+            return $this->format->escapePara()
+                . $this->format_table($open, $name, $attrs, $props);
         }
-        return $this->format_table($open, $name, $attrs, $props) . '<p>';
+        return $this->format_table($open, $name, $attrs, $props) . $this->format->restorePara();
     }
 
-    public function format_programlisting($open, $name, $attrs) {
-        if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+    /**
+    * Creates a link to the PEAR API documentation.
+    * Uses the tag text as well as the optional attributes package, class,
+    * method and var.
+    */
+    public function format_phd_pearapi($open, $name, $attrs, $props)
+    {
+        if ($open && !$props['empty']) {
+            return '';
+        }
+
+        $text      = $props['empty'] ? '' : $this->phd_pearapi_text;
+        $package   = $attrs[PhDReader::XMLNS_PHD]['package'];
+        $linkend   = isset($attrs[PhDReader::XMLNS_PHD]['linkend'])
+                   ? $attrs[PhDReader::XMLNS_PHD]['linkend'] : null;
+        $arLinkend = explode('::', $linkend);
+        $class     = null;
+        $method    = null;
+        $variable  = null;
+
+        if ($linkend === null) {
+            //link to package
+            if ($props['empty']) {
+                $text    = $package;
+            }
+            $linktpl = '{$package}/docs/latest/li_{$package}.html';
+        } else {
+            $class = $arLinkend[0];
+            if ($props['empty']) {
+                $text = $linkend;
+            }
+            if (count($arLinkend) == 1) {
+                //link to class
+                $linktpl = '{$package}/docs/latest/{$package}/{$class}.html';
+            } else if ($arLinkend[1]{0} == '$') {
+                //link to class variable
+                $variable = $arLinkend[1];
+                $linktpl = '{$package}/docs/latest/{$package}/{$class}.html#var{$variable}';
             } else {
-                $this->role = "default";
+                //link to method
+                if ($props['empty']) {
+                    $text   .= '()';
+                }
+                $method  = $arLinkend[1];
+                $linktpl = '{$package}/docs/latest/{$package}/{$class}.html#method{$method}';
+            }
+        }
+
+        $uri = $this->phd_pearapi_urlprefix . str_replace(
+            array('{$package}', '{$class}', '{$method}', '{$variable}'),
+            array($package, $class, $method, $variable),
+            $linktpl
+        );
+
+        return '<a href="' . htmlspecialchars($uri) . '"'
+            . ' class="apidoclink">' . $text . '</a>';
+    }
+
+    public function format_phd_pearapi_text($value, $tag)
+    {
+        $this->phd_pearapi_text = $value;
+    }
+
+    public function format_programlisting($open, $name, $attrs)
+    {
+        if ($open) {
+            $this->trim = true;
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]['role'])) {
+                $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]['role'];
+            } else {
+                $this->role = 'default';
             }
 
-            return '<table class="EXAMPLE-CODE" bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td><pre class="'. ($this->role ? $this->role : 'programlisting') .'">';
+            return $this->format->escapePara()
+                . '<pre class="'. ($this->role ? $this->role : 'programlisting') .'" style="background-color:#EEE; width: 100%">';
         }
         $this->role = false;
-        return "</pre></td></tr></table>\n";
+        $this->trim = false;
+        return "</pre>\n" . $this->format->restorePara();
     }
 
-    public function format_programlisting_text($value, $tag) {
+    /**
+     * Format the text within a program listing section.
+     *
+     * @param string $value Value of the text to format.
+     * @param unknown_type $tag
+     *
+     * @return string
+     */
+    public function format_programlisting_text($value, $tag)
+    {
         switch($this->role) {
-        case "php":
-            if ( strrpos($value, "<?php") || strrpos($value, "?>") )
+        case 'php':
+            if ( strrpos($value, '<?php') || strrpos($value, '?>') )
                 return highlight_string(trim($value), 1);
             else return highlight_string("<?php\n" . trim($value) . "\n?>", 1);
             break;
         default:
-            return htmlspecialchars($value, ENT_QUOTES, "UTF-8");
+            return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
         }
     }
 
-    public function format_screen($open, $name, $attrs) {
+    public function format_screen($open, $name, $attrs)
+    {
         if ($open) {
-            return '<table class="EXAMPLE-CODE" bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td><pre class="screen">';
+            return $this->format->escapePara()
+                . '<pre class="screen" style="background-color:#EEE; width: 100%">';
         }
-        return "</pre></td></tr></table>\n";
+        return "</pre>\n" . $this->format->restorePara();
     }
 
-    public function CDATA($str) {
-        if (!$this->role)
-            return str_replace(array("\n", " "), array("<br/>", "&nbsp;"), htmlspecialchars($str, ENT_QUOTES, "UTF-8"));
-        switch($this->role) {
-        case "php":
-            if ( strrpos($str, "<?php") || strrpos($str, "?>") )
-                return (highlight_string(trim($str), 1));
-            else return (highlight_string("<?php\n" . trim($str) . "\n?>", 1));
+    public function format_literallayout($open, $name, $attrs)
+    {
+        //FIXME: add support for attributes like class, continuation etc
+        if ($open) {
+            return $this->format->escapePara()
+                . '<p class="literallayout">';
+        }
+        return "</p>\n" . $this->format->restorePara();
+    }
+
+    /**
+    * Format a CDATA section. Automatically trims and highlights
+    * the text when necessary.
+    *
+    * @param string $str CDATA content
+    *
+    * @return string Formatted string
+    *
+    * @see $trim
+    * @see $role
+    */
+    public function CDATA($str)
+    {
+        if ($this->trim) {
+            $str = rtrim($str);
+        }
+        if (!$this->role) {
+            return str_replace(
+                array("\n", ' '), array('<br/>', '&nbsp;'),
+                htmlspecialchars($str, ENT_QUOTES, 'UTF-8')
+            );
+        }
+
+        switch ($this->role) {
+        case 'php':
+            if (strrpos($str, '<?php') || strrpos($str, '?>')) {
+                $str = highlight_string(trim($str), 1);
+            } else {
+                $str = highlight_string("<?php\n" . trim($str) . "\n?>", 1);
+            }
             break;
         default:
-            return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
+            $str = htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+            break;
         }
+
+        return $str;
     }
 
-    public function format_suppressed_tags($open, $name, $attrs) {
+    public function format_suppressed_tags($open, $name, $attrs)
+    {
         /* Ignore it */
-        return "";
+        return '';
     }
 
-    public function format_suppressed_text($value, $tag) {
+    public function format_suppressed_text($value, $tag)
+    {
         /* Suppress any content */
-        return "";
+        return '';
     }
 
-    public function format_surname($open, $name, $attrs) {
+    public function format_surname($open, $name, $attrs)
+    {
         /* Add a space before it, so firstname and surname are separated */
         return ' ';
     }
 
-    public function format_subtitle($open, $name, $attrs) {
+    public function format_subtitle($open, $name, $attrs)
+    {
         if ($open)
             return '<p><font color="red">';
         return '</font></p>';
     }
 
-    public function format_editedby($open, $name, $attrs, $props) {
-        if ($open)
-            return "<h2 class=\"EDITEDBY\">" . $this->autogen("editedby", $props["lang"]) . "</h2>";
+    public function format_editedby($open, $name, $attrs, $props)
+    {
+        if ($open) {
+            return '<h2 class="EDITEDBY">' . $this->autogen('editedby', $props['lang']) . '</h2>';
+        }
 
     }
 
-    public function format_copyright($open, $name, $attrs) {
+    public function format_copyright($open, $name, $attrs)
+    {
         if ($open) {
             if ($this->chunked) {
                 return '<p class="'.$name.'"><a href="copyright.' . $this->ext . '">Copyright</a> &copy; ';
@@ -512,47 +699,55 @@ abstract class peartheme extends PhDTheme {
         return '</p>';
     }
 
-    public function format_comment($open, $name, $attrs) {
+    public function format_comment($open, $name, $attrs)
+    {
         if ($open) {
             return '<!-- ';
         }
         return '-->';
     }
 
-    public function format_holder($open, $name, $attrs, $props) {
+    public function format_holder($open, $name, $attrs, $props)
+    {
         if ($open)
-            return $this->autogen("by", $props["lang"]) . " ";
+            return $this->autogen('by', $props['lang']) . " ";
     }
 
-    public function format_year($value) {
-        return $value . ", ";
+    public function format_year($value)
+    {
+        return $value . ', ';
     }
 
-    public function format_admonition($open, $name, $attrs, $props) {
+    public function format_admonition($open, $name, $attrs, $props)
+    {
         if ($open) {
-            return '<blockquote class="' . $name . '"><p><b>'.$this->autogen($name, $props["lang"]). ': </b>';
+            return $this->format->escapePara()
+                . '<blockquote class="' . $name . '"><strong>'.$this->autogen($name, $props['lang']). ': </strong>';
         }
-        return "</p></blockquote>\n";
+        return "</blockquote>\n" . $this->format->restorePara();
     }
 
-    public function format_table($open, $name, $attrs, $props) {
+    public function format_table($open, $name, $attrs, $props)
+    {
         if ($open) {
-            return '<table border="1" class="'.$name.'">';
+            return $this->format->escapePara() . '<table border="1" class="'.$name.'">';
         }
-        return "</table>\n";
+        return "</table>\n" . $this->format->restorePara();
     }
 
-    public function format_entry($open, $name, $attrs, $props) {
+    public function format_entry($open, $name, $attrs, $props)
+    {
         if ($open) {
             if ($props['empty']) {
                 return '<td></td>';
             }
             return '<td>';
         }
-        return "</td>";
+        return '</td>';
     }
 
-    public function format_th_entry($open, $name, $attrs) {
+    public function format_th_entry($open, $name, $attrs)
+    {
         if ($open) {
             $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
             return '<th colspan="' .((int)$colspan). '">';
@@ -560,47 +755,54 @@ abstract class peartheme extends PhDTheme {
         return '</th>';
     }
 
-    public function format_table_title($open, $name, $attrs, $props) {
-        if ($props["empty"])
-            return "";
+    public function format_table_title($open, $name, $attrs, $props)
+    {
+        if ($props['empty'])
+            return '';
         if ($open) {
-            return '<p><b>';
+            return '<caption><strong>';
         }
-        return '</b></p>';
+        return '</strong></caption>';
     }
 
-    public function format_userinput($open, $name, $attrs, $props) {
+    public function format_userinput($open, $name, $attrs, $props)
+    {
         if ($open) {
-            return '<tt class="'.$name.'"><b>';
+            return '<tt class="'.$name.'"><strong>';
         }
-        return "</b></tt>";
+        return '</strong></tt>';
     }
 
-    function format_replaceable($open, $name, $attrs, $props) {
+    public function format_replaceable($open, $name, $attrs, $props)
+    {
         if ($open) {
-            return '<tt class="'.$name.'"><i>';
+            return '<tt class="'.$name.'"><em>';
         }
-        return "</i></tt>";
+        return '</em></tt>';
     }
 
-    public function format_warning($open, $name, $attrs, $props) {
+    public function format_warning($open, $name, $attrs, $props)
+    {
         if ($open) {
-            return '<div class="warning" style="border: 3px double black; padding: 5px">' . "\n";
+            return $this->format->escapePara()
+                . '<div class="warning" style="border: 3px double black; padding: 5px">' . "\n";
         }
-        return "</div>\n";
+        return "</div>\n" . $this->format->restorePara();
     }
 
-    public function format_warning_title($open, $name, $attrs, $props) {
+    public function format_warning_title($open, $name, $attrs, $props)
+    {
         if ($open) {
             return '<strong class="warning_title" style="display:block; text-align: center; width:100%">';
         }
         return "</strong>\n";
     }
 
-    public function format_warning_para($open, $name, $attrs, $props) {
+    public function format_warning_para($open, $name, $attrs, $props)
+    {
         if ($open) {
             if (!$props['sibling']) {
-                return '<strong>' . $this->autogen("warning", $props["lang"]) . "</strong>\n"
+                return '<strong>' . $this->autogen('warning', $props['lang']) . "</strong>\n"
                     . '<p>';
             }
             return '<p>';
@@ -608,82 +810,108 @@ abstract class peartheme extends PhDTheme {
         return "</p>\n";
     }
 
-    public function format_refname_function_text($value) {
-        $this->cchunk["refname"][] = '<b class="function">' . $this->format->TEXT($value . '()') . '</b>';
+    public function format_refname_function_text($value)
+    {
+        $this->cchunk['refname'][] = '<b class="function">' . $this->format->TEXT($value . '()') . '</b>';
         return false;
     }
 
-    public function format_refname_classname_text($value) {
-        $this->cchunk["refname"][] = '<b class="classname">' . $this->format->TEXT($value) . '</b>';
+    public function format_refname_classname_text($value)
+    {
+        $this->cchunk['refname'][] = '<b class="classname">' . $this->format->TEXT($value) . '</b>';
         return false;
     }
 
-    public function format_refpurpose($open, $tag, $attrs) {
+    public function format_refpurpose($open, $tag, $attrs)
+    {
         if ($open) {
-            $refnames = implode(' ', $this->cchunk["refname"]);
-            return '<div class="refnamediv">'. $refnames. ' -- ';
+            $refnames = implode(' ', $this->cchunk['refname']);
+            return '<div class="refnamediv">'. $refnames. ' &ndash; ';
         }
         return "</div>\n";
     }
-    public function format_refname_text($value, $tag) {
-        $this->cchunk["refname"][] = $this->format->TEXT($value);
+
+    public function format_refname_text($value, $tag)
+    {
+        $this->cchunk['refname'][] = $this->format->TEXT($value);
         return false;
     }
 
-    public function format_function_text($value) {
-        return $this->format->TEXT($value."()");
+    public function format_function_text($value)
+    {
+        return $this->format->TEXT($value.'()');
     }
 
-    public function format_paramdef($open, $name, $attrs, $props) {
-        if ($open && $props["sibling"] == 'paramdef')
+    public function format_paramdef($open, $name, $attrs, $props)
+    {
+        if ($open && $props['sibling'] == 'paramdef') {
             return ' , ';
+        }
         return false;
     }
 
-    public function format_funcdef($open, $name, $attrs, $props) {
-        if (!$open)
+    public function format_funcdef($open, $name, $attrs, $props)
+    {
+        if (!$open) {
             return ' ( ';
+        }
         return false;
     }
 
-    public function format_funcprototype($open, $name, $attrs, $props) {
+    public function format_funcprototype($open, $name, $attrs, $props)
+    {
         if ($open) {
             return '<p><code class="' . $name . '">';
         }
-        else return ")</code></p>";
+        return ')</code></p>';
     }
 
-    public function format_uri($open, $name, $attrs, $props) {
+    public function format_uri($open, $name, $attrs, $props)
+    {
         if ($open) {
             return '<font color="red">';
         }
-        else return "</font>";
+        return '</font>';
     }
 
-    public function format_refsynopsisdiv($open, $name, $attrs, $props) {
+    public function format_refsynopsisdiv($open, $name, $attrs, $props)
+    {
         if ($open) {
-            return '<h2 class="refsynopsisdiv">Synopsis</h2><p>';
+            return '<h2 class="refsynopsisdiv">Synopsis</h2>';
         }
-        return '</p>';
+        return '';
     }
 
-    public function format_guimenu($open, $name, $attrs, $props) {
+    public function format_guimenu($open, $name, $attrs, $props)
+    {
         if ($open) {
-            if ($props["sibling"])
+            if ($props['sibling'])
                 return '-&gt;<span class="guimenu"><i>';
             return '<span class="guimenu"><i>';
         }
         return '</i></span>';
     }
 
-    /* FIXME: This function is a crazy performance killer */
-    public function qandaset($stream) {
+    public function format_dl($open, $name, $attrs, $props)
+    {
+        return $this->format->format_dl($open, $name, $attrs, $props);
+    }
+
+    /**
+     * FIXME: This function is a crazy performance killer
+     *
+     * @param resource $stream Stream containing the contents of a Q&A section
+     *
+     * @return string
+     */
+    public function qandaset($stream)
+    {
         $xml = stream_get_contents($stream);
 
         $old = libxml_use_internal_errors(true);
-        $doc = new DOMDocument("1.0", "UTF-8");
+        $doc = new DOMDocument('1.0', 'UTF-8');
         $doc->preserveWhitespace = false;
-        $doc->loadXML(html_entity_decode(str_replace("&", "&amp;amp;", "<div>$xml</div>"), ENT_QUOTES, "UTF-8"));
+        $doc->loadXML(html_entity_decode(str_replace('&', '&amp;amp;', "<div>$xml</div>"), ENT_QUOTES, 'UTF-8'));
         if ($err = libxml_get_errors()) {
             print_r($err);
             libxml_clear_errors();
@@ -692,37 +920,44 @@ abstract class peartheme extends PhDTheme {
         libxml_use_internal_errors($old);
 
         $xpath = new DOMXPath($doc);
-        $nlist = $xpath->query("//div/dl/dt/strong");
+        $nlist = $xpath->query('//div/dl/dt/strong');
         $ret = '<div class="qandaset"><ol class="qandaset_questions">';
         $i = 0;
-        foreach($nlist as $node) {
-            $ret .= '<li><a href="#' .($this->cchunk["qandaentry"][$i++]). '">' .($node->textContent). '</a></li>';
+        foreach ($nlist as $node) {
+            $ret .= '<li><a href="#' .($this->cchunk['qandaentry'][$i++]). '">' .($node->textContent). '</a></li>';
         }
 
         return $ret.'</ol>'.$xml.'</div>';
     }
-    public function format_qandaentry($open, $name, $attrs) {
+
+    public function format_qandaentry($open, $name, $attrs)
+    {
         if ($open) {
-            $this->cchunk["qandaentry"][] = $this->CURRENT_ID . ".entry" . count($this->cchunk["qandaentry"]);
+            $this->cchunk['qandaentry'][] = $this->CURRENT_ID . '.entry' . count($this->cchunk['qandaentry']);
             return '<dl>';
         }
         return '</dl>';
     }
-    public function format_answer($open, $name, $attrs) {
+
+    public function format_answer($open, $name, $attrs)
+    {
         if ($open) {
-            return '<dd><a name="' .end($this->cchunk["qandaentry"]).'"></a>';
+            return '<dd><a name="' .end($this->cchunk['qandaentry']).'"></a>';
         }
-        return "</dd>";
+        return '</dd>';
     }
-    public function format_question($open, $name, $attrs) {
+
+    public function format_question($open, $name, $attrs)
+    {
         if ($open) {
             return '<dt><strong>';
         }
         return '</strong></dt>';
     }
 
-    public function format_emphasis($open, $name, $attrs) {
-        if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "bold")
+    public function format_emphasis($open, $name, $attrs)
+    {
+        if (isset($attrs[PhDReader::XMLNS_DOCBOOK]['role']) && $attrs[PhDReader::XMLNS_DOCBOOK]['role'] == "bold")
             $role = "b";
         else $role = "i";
         if ($open) {
@@ -731,30 +966,35 @@ abstract class peartheme extends PhDTheme {
         return "</{$role}>";
     }
 
-    public function format_glossterm($open, $name, $attrs) {
+    public function format_glossterm($open, $name, $attrs)
+    {
         if ($open) {
-            return '<dt><b>';
+            return '<dt><strong>';
         }
-        return "</b></dt>";
+        return '</strong></dt>';
     }
 
-    public function format_glossdef($open, $name, $attrs) {
+    public function format_glossdef($open, $name, $attrs)
+    {
         if ($open) {
             return '<dd><p>';
         }
-        return "</p></dd>";
+        return '</p></dd>';
     }
 
-    public function format_calloutlist($open, $name, $attrs) {
+    public function format_calloutlist($open, $name, $attrs)
+    {
         if ($open) {
-            $this->cchunk["callouts"] = 0;
-            return '<table>';
+            $this->cchunk['callouts'] = 0;
+            return $this->format->escapePara() . '<table>';
         }
-        return '</table>';
+        return '</table>' . $this->format->restorePara();
     }
-    public function format_callout($open, $name, $attrs) {
+
+    public function format_callout($open, $name, $attrs)
+    {
         if ($open) {
-            return '<tr><td><a href="#'.$attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"].'">(' .++$this->cchunk["callouts"]. ')</a></td><td>';
+            return '<tr><td><a href="#'.$attrs[PhDReader::XMLNS_DOCBOOK]['arearefs'].'">(' .++$this->cchunk['callouts']. ')</a></td><td>';
         }
         return "</td></tr>\n";
     }
