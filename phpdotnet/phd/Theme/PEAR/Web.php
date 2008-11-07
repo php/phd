@@ -1,13 +1,39 @@
 <?php
-
 require_once $ROOT . '/themes/pear/peartheme.php';
-class pearweb extends peartheme {
+
+/**
+* PEAR theme for the many php files used for pearweb
+*
+* @package PhD
+* @version CVS: $Id$
+*/
+class pearweb extends peartheme
+{
     protected $streams = array();
+    
     protected $writeit = false;
+    
     protected $outputdir = '';
 
+    /**
+    * URL prefix for all API doc link generated with <phd:pearapi>.
+    * On pearweb, the manual is at "/manual/$lang/". This means that
+    *  we can use a relative URI here to make the links work on mirrors, too.
+    *
+    * @var string
+    */
+    public $phd_pearapi_urlprefix = '../../package/';
 
-    public function __construct($IDs, $ext = "php", $chunked = true) {
+
+    /**
+     * Constructor
+     *
+     * @param array  $IDs     Array of IDs to build
+     * @param string $ext     Filename extension to use
+     * @param bool   $chunked Whether to chunk the output into individual files
+     */
+    public function __construct($IDs, $ext = "php", $chunked = true)
+    {
         parent::__construct($IDs, $ext, $chunked);
         $this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $this->ext . DIRECTORY_SEPARATOR;
         if (!file_exists($this->outputdir) || is_file($this->outputdir)) {
@@ -18,14 +44,24 @@ class pearweb extends peartheme {
             }
         }
     }
-    public function writeChunk($id, $stream) {
+    
+    /**
+     * Write an individual chunk of the manual
+     *
+     * @param string   $id     ID of the chunk
+     * @param resource $stream Stream containing the contents of the chunk
+     * 
+     * @return void
+     */
+    public function writeChunk($id, $stream)
+    {
         rewind($stream);
 
         // Create random filename when the chunk doesn't have an ID
         if ($id === null) {
-            $filename = tempnam($this->outputdir, 'phd');
+            $filename    = tempnam($this->outputdir, 'phd');
             $newfilename = $this->outputdir . basename($filename, '.tmp') . '.' . $this->ext;
-            if(rename($filename, $newfilename)) {
+            if (rename($filename, $newfilename)) {
                 $filename = basename($filename, '.tmp');
             } else {
                 throw new Exception("Cannot rename $filename to $newfilename");
@@ -34,15 +70,27 @@ class pearweb extends peartheme {
         } else {
             $filename = $id;
         }
-	$filename .= '.' . $this->ext;
+        $filename .= '.' . $this->ext;
+
+        $contents = $this->cleanHtml(stream_get_contents($stream));
 
         file_put_contents($this->outputdir . $filename, $this->header($id));
-        file_put_contents($this->outputdir . $filename, $stream, FILE_APPEND);
+        file_put_contents($this->outputdir . $filename, $contents, FILE_APPEND);
         file_put_contents($this->outputdir . $filename, $this->footer($id), FILE_APPEND);
 
         v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);
     }
-    public function appendData($data, $isChunk) {
+    
+    /**
+     * Append data to the streams.
+     *
+     * @param string                                       $data    Data to write
+     * @param PhDReader::CLOSE_CHUNK|PhDReader::OPEN_CHUNK $isChunk constant
+     * 
+     * @return int|false
+     */
+    public function appendData($data, $isChunk)
+    {
         switch($isChunk) {
         case PhDReader::CLOSE_CHUNK:
             $id = $this->CURRENT_ID;
@@ -65,12 +113,22 @@ class pearweb extends peartheme {
             return $retval;
         }
     }
-    public function header($id) {
+    
+    /**
+     * Add the header to this file.
+     *
+     * @param string $id The id of this chunk
+     * 
+     * @return string
+     */
+    public function header($id)
+    {
         $ext = "." . $this->ext;
+        
         $parent = PhDHelper::getParent($id);
 
         if (!$parent || $parent == "ROOT")
-        	return '<?php
+            return '<?php
 sendManualHeaders("UTF-8","en");
 setupNavigation(array(
   "home" => array("index.php", "PEAR Manual"),
@@ -86,7 +144,7 @@ manualHeader("PEAR Manual","index.php");
         // Fetch the siblings information
         $toc = array();
         $siblings = PhDHelper::getChildren($parent);
-        foreach($siblings as $sibling => $array) {
+        foreach ($siblings as $sibling => $array) {
             $toc[] = array($sibling.$ext, empty($array["sdesc"]) ? $array["ldesc"] : $array["sdesc"]);
         }
 
@@ -98,21 +156,41 @@ manualHeader("PEAR Manual","index.php");
             'up'   => array($this->getFilename($parent).$ext, PhDHelper::getDescription($parent, true)),
             'toc'  => $toc
         );
-		return "<?php \n" .
-			"sendManualHeaders(\"UTF-8\", {$this->lang});\n" .
-			"setupNavigation(" . var_export($nav, true) . ");\n" .
-			'manualHeader("' . $this->getFilename($id).$ext . '", "' . PhDHelper::getDescription($id, true) . '");' . "\n" .
-			"?>\n";
+        return "<?php \n" .
+            "sendManualHeaders(\"UTF-8\", \"{$this->lang}\");\n" .
+            "setupNavigation(" . var_export($nav, true) . ");\n" .
+            'manualHeader("' . $this->getFilename($id).$ext . '", "' . PhDHelper::getDescription($id, true) . '");' . "\n" .
+            "?>\n";
     }
 
-    public function footer($id) {
-    	$ext = $this->ext . ".";
+    /**
+     * Create the footer for the given page id and return it.
+     * 
+     * In this instance, we return raw php with the pearweb manual footer call.
+     * 
+     * @param string $id Page ID
+     *
+     * @return string Footer code
+     */
+    public function footer($id)
+    {
+        $ext = $this->ext . ".";
         $parent = PhDHelper::getParent($id);
 
-        return '<?php manualFooter("' . $this->getFilename($id).$ext . '", "' . PhDHelper::getDescription($id, true) . '"); ?>\n';
+        return '<?php manualFooter("' . $this->getFilename($id).$ext . '", "' . PhDHelper::getDescription($id, true) . '"); ?>';
     }
 
-    protected function createPrev($id, $parent, $siblings) {
+    /**
+     * Create the previous page link information
+     *
+     * @param string $id       ID of the page
+     * @param string $parent   ID of the parent element
+     * @param array  $siblings array of siblings
+     * 
+     * @return array(0=>filename,1=>description)
+     */
+    protected function createPrev($id, $parent, $siblings)
+    {
         if (!isset($siblings[$id]) || $parent == 'ROOT') {
             return array(null, null);
         }
@@ -122,7 +200,9 @@ manualHeader("PEAR Manual","index.php");
         while (list($tmp,) = each($siblings)) {
             if ($tmp == $id) {
                 // Set the internal pointer back to $id
-                prev($siblings);
+                if (prev($siblings) === false) {
+                    end($siblings);
+                }
                 break;
             }
         }
@@ -131,19 +211,36 @@ manualHeader("PEAR Manual","index.php");
             while (!empty($tmp["children"])) {
                 $tmp = end($tmp["children"]);
             }
-            return array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
+            return array(
+                $tmp["filename"].$ext,
+                htmlspecialchars(empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"])
+            );
             break;
         }
 
         return array(PhDHelper::getFilename($parent).$ext, PhDHelper::getDescription($parent, false));
     }
-    protected function createNext($id, $parent, $siblings) {
+    
+    /**
+     * Create the next page link information
+     *
+     * @param string $id       ID of the page
+     * @param string $parent   ID of the parent element
+     * @param array  $siblings array of siblings
+     * 
+     * @return array(0=>filename,1=>description)
+     */
+    protected function createNext($id, $parent, $siblings)
+    {
         $ext = '.' .$this->ext;
         $next = array(null, null);
         // {{{ Create the "next" link
         if (!empty($siblings[$id]["children"])) {
             $tmp = reset($siblings[$id]["children"]);
-            return array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
+            return array(
+                $tmp["filename"].$ext,
+                htmlspecialchars(empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"])
+            );
         }
         do {
             if (!isset($siblings[$id])) {
@@ -151,7 +248,7 @@ manualHeader("PEAR Manual","index.php");
             }
 
             // Seek to $id
-            while(list($tmp,) = each($siblings)) {
+            while (list($tmp,) = each($siblings)) {
                 if ($tmp == $id) {
                     break;
                 }
@@ -160,7 +257,10 @@ manualHeader("PEAR Manual","index.php");
             $tmp = current($siblings);
             prev($siblings); // Reset the internal pointer to previous pos
             if ($tmp) {
-                $next = array($tmp["filename"].$ext, (empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"]));
+                $next = array(
+                    $tmp["filename"].$ext,
+                    htmlspecialchars(empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"])
+                );
                 break;
             }
 
@@ -171,19 +271,34 @@ manualHeader("PEAR Manual","index.php");
                 break;
             }
 
-            $siblings  = PhDHelper::getChildren($grandpa);
-            $id = $parent;
-            $parent = $grandpa;
-        } while(true);
+            $siblings = PhDHelper::getChildren($grandpa);
+            $id       = $parent;
+            $parent   = $grandpa;
+        } while (true);
         return $next;
     }
-    public function __destruct() {
+    
+    /**
+     * Destructor - if guide.php exists, this must be the index file copy it over.
+     */
+    public function __destruct()
+    {
         if (file_exists($this->outputdir . "guide.php") && !file_exists($this->outputdir . "index.php")) {
             copy($this->outputdir . "guide.php", $this->outputdir . "index.php");
         }
     }
 
-    public function format_qandaset($open, $name, $attrs) {
+    /**
+     * use for formatting a Q&A set - is this even used?
+     *
+     * @param bool         $open  if a chunk is open we should append to
+     * @param unknown_type $name  The name
+     * @param unknown_type $attrs attributes
+     * 
+     * @return string
+     */
+    public function format_qandaset($open, $name, $attrs)
+    {
         if ($open) {
             $this->cchunk["qandaentry"] = array();
             $this->appendData(null, PhDReader::OPEN_CHUNK);
