@@ -3,22 +3,23 @@
 
 class XHTMLPhDFormat extends PhDFormat {
     protected $elementmap = array( /* {{{ */
-        'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
+        'abstract'              => 'format_div', /* Docbook-xsl prints "abstract"... */
         'abbrev'                => 'abbr',
         'acronym'               => 'acronym',
         'affiliation'           => 'format_suppressed_tags',
         'alt'                   => 'format_suppressed_tags',
+        'arg'                   => 'format_suppressed_tags',
         'article'               => 'format_container_chunk',
         'author'                => array(
             /* DEFAULT */          'format_author',
             'authorgroup'       => 'format_authorgroup_author',
         ),
-        'authorgroup'           => 'div',
+        'authorgroup'           => 'format_div',
         'appendix'              => 'format_container_chunk',
         'application'           => 'span',
         'blockquote'            => 'blockquote',
         'bibliography'          => array(
-            /* DEFAULT */          'div',
+            /* DEFAULT */          'format_div',
             'article'           => 'format_chunk',
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
@@ -26,6 +27,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'book'                  => 'format_container_chunk',
         'chapter'               => 'format_container_chunk',
         'citetitle'             => 'i',
+        'cmdsynopsis'           => 'format_cmdsynopsis',
         'co'                    => 'format_co',
         'colophon'              => 'format_chunk',
         'copyright'             => 'format_copyright',
@@ -36,7 +38,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'footnote'              => 'format_footnote',
         'footnoteref'           => 'format_footnoteref',
         'funcdef'               => 'format_suppressed_tags',
-        'funcsynopsis'          => 'div',
+        'funcsynopsis'          => 'format_div',
         'funcsynopsisinfo'      => 'pre',
         'function'              => 'span',
         'funcprototype'         => 'code',
@@ -45,7 +47,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'optional'              => 'span',
         'honorific'             => 'span',
         'glossary'              => array(
-            /* DEFAULT */          'div',
+            /* DEFAULT */          'format_div',
             'article'           => 'format_chunk',
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
@@ -95,41 +97,38 @@ class XHTMLPhDFormat extends PhDFormat {
         'envar'                 => 'span',
         'errortype'             => 'span',
         'errorcode'             => 'span',
-        'example'               => 'div',
+        'example'               => 'format_div',
         'formalpara'            => 'p',
         'fieldsynopsis'         => array(
             /* DEFAULT */          'format_fieldsynopsis',
-            'entry'             => 'div',
+            'entry'             => 'format_div',
         ),
-        'figure'                => 'div',
+        'figure'                => 'format_div',
         'filename'              => 'var',
         'glossentry'            => 'li',
         'glossdef'              => 'p',
-        'glosslist'             => 'ul',
+        'glosslist'             => 'format_itemizedlist',
         'glossterm'             => 'span',
         'holder'                => 'span',
-        'imageobject'           => 'div',
+        'imageobject'           => 'format_div',
         'imagedata'             => 'format_imagedata',
         'important'             => 'format_admonition',
         'index'                 => array(
-            /* DEFAULT */          'div',
+            /* DEFAULT */          'format_div',
             'article'           => 'format_chunk',
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
         'info'                  => array(
-            /* DEFAULT */         'div',
+            /* DEFAULT */         'format_div',
             'note'              => 'span',
         ),
-        'informalexample'       => 'div',
+        'informalexample'       => 'format_div',
         'informaltable'         => 'table',
-        'indexdiv'              => 'dl',
+        'indexdiv'              => 'format_dl',
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
-        'itemizedlist'          => array(
-            /* DEFAULT */          'ul',
-            'para'              => 'format_para_itemizedlist',
-         ),
+        'itemizedlist'          => 'format_itemizedlist',
         'legalnotice'           => 'format_legalnotice_chunk',
         'listitem'              => array(
             /* DEFAULT */          'li',
@@ -147,10 +146,10 @@ class XHTMLPhDFormat extends PhDFormat {
         'modifier'              => 'span',
         'note'                  => 'format_note',
         'orgname'               => 'span',
-        'othercredit'           => 'div',
+        'othercredit'           => 'format_div',
         'ooclass'               => array(
             /* DEFAULT */          'span',
-            'classsynopsis'     => 'div',
+            'classsynopsis'     => 'format_div',
         ),
         'oointerface'           => array(
             /* DEFAULT */          'span',
@@ -158,9 +157,9 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         'interfacename'         => 'span',
         'option'                => 'span',
-        'orderedlist'           => 'ol',
+        'orderedlist'           => 'format_orderedlist',
         'para'                  => array(
-            /* DEFAULT */          'p',
+            /* DEFAULT */          'format_para',
             'example'           => 'format_example_content',
             'note'              => 'format_note_content',
             'footnote'          => 'format_footnote_para',
@@ -172,9 +171,10 @@ class XHTMLPhDFormat extends PhDFormat {
             'methodparam'       => 'format_methodparam_parameter',
         ),
         'part'                  => 'format_container_chunk',
-        'partintro'             => 'div',
+        'partintro'             => 'format_div',
         'personname'            => 'format_personname',
-        'personblurb'           => 'div',
+        'personblurb'           => 'format_div',
+        'phd:toc'               => 'format_phd_toc',
         'phrase'                => 'span',
         'preface'               => 'format_chunk',
         'primaryie'             => 'format_suppressed_tags',
@@ -188,7 +188,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'classsynopsisinfo' => 'format_varname',
         ),
         'proptype'              => 'span',
-        'pubdate'               => 'div', /* Docbook-XSL prints "published" */
+        'pubdate'               => 'format_div', /* Docbook-XSL prints "published" */
         /* hack for phpdoc:varentry */
         'phpdoc:varentry'       => 'format_varentry_chunk',
         'refentry'              => 'format_chunk',
@@ -197,10 +197,10 @@ class XHTMLPhDFormat extends PhDFormat {
         'refsect1'              => 'format_refsect',
         'refsect2'              => 'format_refsect',
         'refsect3'              => 'format_refsect',
-        'refsynopsisdiv'        => 'div',
+        'refsynopsisdiv'        => 'format_div',
         'refname'               => 'h1',
-        'refnamediv'            => 'div',
-        'releaseinfo'           => 'div',
+        'refnamediv'            => 'format_div',
+        'releaseinfo'           => 'format_div',
         'replaceable'           => 'span',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
@@ -217,9 +217,9 @@ class XHTMLPhDFormat extends PhDFormat {
         'set'                   => 'format_chunk',
         'setindex'              => 'format_chunk',
         'shortaffil'            => 'format_suppressed_tags',
-        'simplelist'            => 'ul', /* FIXME: simplelists has few attributes that need to be implemented */
+        'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
         'simpara'               => array(
-            /* DEFAULT */          'p',
+            /* DEFAULT */          'format_para',
             'note'              => 'span',
             'listitem'          => 'span',
             'entry'             => 'span',
@@ -254,6 +254,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'indexdiv'          => 'dt',
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
+            'phd:toc'           => 'strong',
             'procedure'         => 'b',
             'refsect1'          => 'h3',
             'refsect2'          => 'h4',
@@ -281,9 +282,9 @@ class XHTMLPhDFormat extends PhDFormat {
         'xref'                  => 'a',
         'year'                  => 'span',
         'quote'                 => 'format_quote',
-        'qandadiv'              => 'div',
-        'qandaset'              => 'div',
-        'qandaentry'            => 'dl',
+        'qandadiv'              => 'format_div',
+        'qandaset'              => 'format_div',
+        'qandaentry'            => 'format_dl',
         'question'              => 'dt',
         'answer'                => 'dd',
     ); /* }}} */
@@ -338,7 +339,32 @@ class XHTMLPhDFormat extends PhDFormat {
 
     );
 
+    /**
+    * Determines if we are in a paragraph or not, and if, in which level.
+    * Useful to know for HTML tags that may not be in a <p> tag.
+    *
+    * @see format_para()
+    *
+    * @var integer
+    */
+    public $openPara = 0;
 
+    /**
+    * Which para levels we already escaped
+    *
+    * @var array
+    */
+    public $escapedPara = array();
+
+    /**
+    * Programlisting role. Necessary to highlight the code properly.
+    * String when role is set, false if not.
+    *
+    * @var string
+    *
+    * @see format_programlisting()
+    * @see CDATA()
+    */
     public $role        = false;
     /* Current Chunk variables */
     protected $cchunk      = array();
@@ -409,6 +435,103 @@ class XHTMLPhDFormat extends PhDFormat {
     public function getChunkInfo() {
         return $this->cchunk;
     }
+
+    /**
+    * Creates a table of contents for the given id.
+    * Also creates nested TOCs if that's wanted ($depth)
+    *
+    * @param string  $id     ID of section for which to generate TOC
+    * @param string  $name   Tag name (for ul class)
+    * @param array   $props  Build properties (?? FIXME)
+    * @param integer $depth  Depth of TOC
+    * @param boolean $header If the header shall be shown ("Table of contents")
+    *
+    * @return string HTML code for TOC
+    */
+    public function createToc($id, $name, $props, $depth = 1, $header = true)
+    {
+        $chunks = PhDHelper::getChildren($id);
+        if ($depth == 0 || !count($chunks)) {
+            return '';
+        }
+
+        $content = '';
+        if ($header) {
+            $content .= " <strong>" . $this->autogen("toc", $props["lang"]) . "</strong>\n";
+        }
+        $content .= " <ul class=\"chunklist chunklist_$name\">\n";
+        foreach ($chunks as $chunkid => $junk) {
+            $long  = $this->TEXT(PhDHelper::getDescription($chunkid, true));
+            $short = $this->TEXT(PhDHelper::getDescription($chunkid, false));
+            if ($long && $short && $long != $short) {
+                $desc = $short . '</a> -- ' . $long;
+            } else {
+                $desc = ($long ? $long : $short) . '</a>';
+            }
+            //FIXME
+            if ($this->theme->chunked) {
+                $content .= "  <li><a href=\"{$chunkid}.{$this->theme->ext}\">" . $desc;
+            } else {
+                $content .= "  <li><a href=\"#{$chunkid}\">" . $this->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a>";
+            }
+            if ($depth > 1) {
+                $content .= $this->createToc($chunkid, $name, $props, $depth - 1, false);
+            }
+
+            $content .= "</li>\n";;
+        }
+
+        $content .= " </ul>\n";
+
+        return $content;
+    }
+
+    /**
+    * Closes a para tag when we are already in a paragraph.
+    *
+    * @return string HTML code
+    *
+    * @see $openPara
+    * @see restorePara()
+    */
+    public function escapePara()
+    {
+        if (!$this->openPara) {
+            return '';
+        }
+
+        if (!isset($this->escapedPara[$this->openPara])) {
+            $this->escapedPara[$this->openPara] = 1;
+            return '</p>';
+        } else {
+            ++$this->escapedPara[$this->openPara];
+            return '';
+        }
+    }
+
+    /**
+    * Opens a para tag again when we escaped one before.
+    *
+    * @return string HTML code
+    *
+    * @see $openPara
+    * @see escapePara()
+    */
+    public function restorePara()
+    {
+        if (!$this->openPara || !isset($this->escapedPara[$this->openPara])) {
+            return '';
+        }
+
+        if ($this->escapedPara[$this->openPara] == 1) {
+            unset($this->escapedPara[$this->openPara]);
+            return '<p>';
+        } else {
+            --$this->escapedPara[$this->openPara];
+            return '';
+        }
+    }
+
     public function format_suppressed_tags($open, $name, $attrs) {
         /* Ignore it */
         return "";
@@ -633,6 +756,14 @@ class XHTMLPhDFormat extends PhDFormat {
         return $method;
     }
 
+    public function format_cmdsynopsis($open, $name, $attrs)
+    {
+        if ($open) {
+            return '<span style="background-color:#eee">';
+        }
+        return '</span>';
+    }
+
     public function format_fieldsynopsis($open, $name, $attrs) {
         $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
         if ($open) {
@@ -822,12 +953,55 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return ")</span>";
     }
-    public function format_para_itemizedlist($open, $name, $attrs) {
+
+    /**
+    * Displays a <div> tag with the proper class name.
+    * Closes and re-openes <p> tags if necessary.
+    */
+    public function format_div($open, $name, $attrs, $props)
+    {
         if ($open) {
-            return "</p>\n<ul>\n";
+            return $this->escapePara()
+                . '<div class="' . $name . '">';
         }
-        return "</ul>\n<p class=\"para\">";
+        return '</div>' . $this->restorePara();
     }
+
+    /**
+    * Additionally to generating a <p>, the internal $openPara variable gets
+    * in-/decremented
+    *
+    * @return string HTML code
+    *
+    * @see $openPara
+    */
+    public function format_para($open, $name, $attrs, $props)
+    {
+        if ($props['empty']) {
+            return '';
+        }
+        if ($open) {
+            ++$this->openPara;
+            return '<p class="' . $name . '">';
+        }
+        --$this->openPara;
+        return '</p>';
+    }
+
+    public function format_phd_toc($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<div class="phd-toc">';
+        }
+        return $this->createToc(
+            $attrs[PhDReader::XMLNS_PHD]['element'],
+            'phd-toc',
+            $props,
+            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1,
+            false
+        ) . "</div>\n";
+    }
+
     public function format_segmentedlist($open, $name, $attrs) {
         $this->cchunk["segmentedlist"] = $this->dchunk["segmentedlist"];
         if ($open) {
@@ -873,9 +1047,9 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_variablelist($open, $name, $attrs) {
         if ($open) {
-            return "<dl>\n";
+            return $this->escapePara() . "<dl>\n";
         }
-        return "</dl>\n";
+        return "</dl>\n" . $this->restorePara();
     }
     public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
@@ -1026,6 +1200,30 @@ class XHTMLPhDFormat extends PhDFormat {
         return '<img src="' .$attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]. '" />';
     }
 
+    public function format_dl($open, $name, $attrs, $props)
+    {
+        if ($open) {
+            return $this->escapePara() . '<dl class="' . $name . '">';
+        }
+        return '</dl>' . $this->restorePara();
+    }
+
+    public function format_itemizedlist($open, $name, $attrs, $props)
+    {
+        if ($open) {
+            return $this->escapePara() . '<ul class="' . $name . '">';
+        }
+        return '</ul>' . $this->restorePara();
+    }
+
+    public function format_orderedlist($open, $name, $attrs, $props)
+    {
+        if ($open) {
+            return $this->escapePara() . '<ol>';
+        }
+        return '</ol>' . $this->restorePara();
+    }
+
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["table"] = true;
@@ -1108,7 +1306,10 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</tr>\n";
     }
-    public function format_th_entry($open, $name, $attrs) {
+    public function format_th_entry($open, $name, $attrs, $props) {
+        if ($props["empty"]) {
+            return '<th class="empty">&nbsp;</th>';
+        }
         if ($open) {
             $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
             if ($colspan == 1) {
