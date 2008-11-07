@@ -110,6 +110,21 @@ class PhDReader extends XMLReader {
         return "";
     } /* }}} */
 
+    /**
+     * Check if the element wants to be chunked.
+     * Reads the element's 'phd:chunk="true"' attribute
+     *
+     * @return boolean true if the element shall be chunked
+     */
+    public function getWantsToBeChunked() { /* {{{ */
+        if ($this->hasAttributes && XMLReader::moveToAttributeNs("chunk", self::XMLNS_PHD)) {
+            $isChunk = $this->value == 'true';
+            XMLReader::moveToElement();
+            return $isChunk;
+        }
+        return false;
+    } /* }}} */
+
     public function getParentTagName() { /* {{{ */
         return $this->STACK[$this->depth-1];
     } /* }}} */
@@ -206,6 +221,8 @@ class PhDReader extends XMLReader {
     public function isChunk($tag, $id) { /* {{{ */
         if (!$id) {
             return false;
+        } else if ($this->getWantsToBeChunked()) {
+            return true;
         } else if (isset($this->CHUNK_ME[$tag])) {
             $isChunk = $this->CHUNK_ME[$tag];
             if (is_array($isChunk)) {
@@ -219,7 +236,7 @@ class PhDReader extends XMLReader {
         return false;
     } /* }}} */
     public function isSectionChunk($tag) { /* {{{ */
-        if ($this->PREVIOUS_SIBLING == $tag && $this->checkSectionDepth()) {
+        if ($this->checkSectionDepth()) {
             return true;
         }
         return false;
