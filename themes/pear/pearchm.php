@@ -34,7 +34,7 @@ class pearchm extends pearchunkedhtml {
 					   "langcode" => "0x406 Danish",
 					   "preferred_charset" => "Windows-1252",
 					   "mime_charset_name" => "Windows-1252",
-					   "preferred_font" => self::DEFAULT_FONT, 
+					   "preferred_font" => self::DEFAULT_FONT,
 					   "title" => "PEAR Manualen"
 				   ),
 		"de"    => array(
@@ -227,7 +227,7 @@ class pearchm extends pearchunkedhtml {
 				if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
 				fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
 					"          <param name=\"Local\" value=\"{$ref}\">\n" .
-					"          <param name=\"Name\" value=\"" . htmlentities($name) . "\">\n" .
+					"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name)) . "\">\n" .
 					"        </object>\n    </li>\n");
 				break;
 			case PhDReader::CLOSE_CHUNK :
@@ -239,6 +239,25 @@ class pearchm extends pearchunkedhtml {
 		}
 	}
 
+
+
+    /**
+    * Clean up the index name.
+    * Newlines and double spaces don't look that good in some chm viewer apps.
+    *
+    * @param string $value Value to fix
+    *
+    * @return string Fixed/cleaned value
+    */
+    protected static function cleanIndexName($value)
+    {
+        return str_replace(
+            array("\n", "\r", '  '),
+            array('', '', ' '),
+            $value
+        );
+    }
+
     protected function headerChm() {
 		$lang = $GLOBALS['OPTIONS']['language'];
 		fwrite($this->hhpStream, '[OPTIONS]
@@ -247,7 +266,7 @@ Compiled file=pear_manual_' . $lang . '.chm
 Contents file=pear_manual_' . $lang . '.hhc
 Index file=pear_manual_' . $lang . '.hhk
 Default Window=doc
-Default topic=res\guide.html
+Default topic=res\index.html
 Display compile progress=Yes
 Full-text search=Yes
 Language=' . $this->LANGUAGES[$lang]["langcode"] . '
@@ -255,7 +274,7 @@ Title=' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] :
 Default Font=' . ($this->LANGUAGES[$lang]["preferred_font"] ? $this->LANGUAGES[$lang]["preferred_font"] : self::DEFAULT_FONT). '
 
 [WINDOWS]
-doc="' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","pear_manual_' . $lang . '.hhc","pear_manual_' . $lang . '.hhk","res\guide.html","res\guide.html",,,,,0x23520,,0x386e,,,,,,,,0
+doc="' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","pear_manual_' . $lang . '.hhc","pear_manual_' . $lang . '.hhk","res\index.html","res\index.html",,,,,0x23520,,0x386e,,,,,,,,0
 
 [FILES]
 res\reset-fonts.css
