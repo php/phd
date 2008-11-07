@@ -11,6 +11,15 @@ class pearchunkedhtml extends pearweb
 {
     private $nav = "";
 
+    /**
+    * URL prefix for all API doc link generated with <phd:pearapi>
+    *
+    * @var string
+    */
+    public $phd_pearapi_urlprefix = 'http://pear.php.net/package/';
+
+
+
     public function __construct(array $IDs, $ext = "html")
     {
         parent::__construct($IDs, $ext, true);

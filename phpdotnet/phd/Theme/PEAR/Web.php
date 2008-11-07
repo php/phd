@@ -15,6 +15,15 @@ class pearweb extends peartheme
     
     protected $outputdir = '';
 
+    /**
+    * URL prefix for all API doc link generated with <phd:pearapi>.
+    * On pearweb, the manual is at "/manual/$lang/". This means that
+    *  we can use a relative URI here to make the links work on mirrors, too.
+    *
+    * @var string
+    */
+    public $phd_pearapi_urlprefix = '../../package/';
+
 
     /**
      * Constructor

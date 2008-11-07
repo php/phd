@@ -93,6 +93,7 @@ abstract class peartheme extends PhDTheme {
             'paramdef'           => 'format_suppressed_tags',
         ),
         'part'                  => 'format_container_chunk',
+        'phd:pearapi'           => 'format_phd_pearapi',
         'preface'               => 'format_container_chunk',
         'programlisting'        => 'format_programlisting',
         'prompt'                => 'tt',
@@ -204,6 +205,7 @@ abstract class peartheme extends PhDTheme {
             'funcdef'           => false,
             'refname'           => 'format_refname_function_text',
         ),
+        'phd:pearapi'           => 'format_phd_pearapi_text',
         'programlisting'        => 'format_programlisting_text',
         'refname'               => 'format_refname_text',
         'year'                  => 'format_year',
@@ -242,7 +244,14 @@ abstract class peartheme extends PhDTheme {
     */
     public $trim    = false;
 
-    protected $CURRENT_ID = '';
+    /**
+    * URL prefix for all API doc link generated with <phd:pearapi>
+    *
+    * @var string
+    */
+    public $phd_pearapi_urlprefix = 'http://pear.php.net/package/';
+
+    protected $CURRENT_ID = "";
 
     /* Current Chunk settings */
     protected $cchunk          = array();
@@ -362,7 +371,7 @@ abstract class peartheme extends PhDTheme {
      * @param string $name  Name of the element
      * @param array  $attrs Attributes present for the element. Array keys are the attribute namespaces.
      * @param array  $props Associative array of additional properties
-     * 
+     *
      * @return string
      */
     public function format_root_chunk($open, $name, $attrs, $props)
@@ -390,7 +399,7 @@ abstract class peartheme extends PhDTheme {
      * @param string $name  Name of the element.
      * @param array  $attrs Attributes present for the element. Array keys are the attribute namespaces.
      * @param array  $props Properties
-     * 
+     *
      * @return string
      */
     public function format_link($open, $name, $attrs, $props)
@@ -485,6 +494,69 @@ abstract class peartheme extends PhDTheme {
         return $this->format_table($open, $name, $attrs, $props) . $this->format->restorePara();
     }
 
+    /**
+    * Creates a link to the PEAR API documentation.
+    * Uses the tag text as well as the optional attributes package, class,
+    * method and var.
+    */
+    public function format_phd_pearapi($open, $name, $attrs, $props)
+    {
+        if ($open && !$props['empty']) {
+            return '';
+        }
+
+        $text      = $props['empty'] ? '' : $this->phd_pearapi_text;
+        $package   = $attrs[PhDReader::XMLNS_PHD]['package'];
+        $linkend   = isset($attrs[PhDReader::XMLNS_PHD]['linkend'])
+                   ? $attrs[PhDReader::XMLNS_PHD]['linkend'] : null;
+        $arLinkend = explode('::', $linkend);
+        $class     = null;
+        $method    = null;
+        $variable  = null;
+
+        if ($linkend === null) {
+            //link to package
+            if ($props['empty']) {
+                $text    = $package;
+            }
+            $linktpl = '{$package}/docs/latest/li_{$package}.html';
+        } else {
+            $class = $arLinkend[0];
+            if ($props['empty']) {
+                $text = $linkend;
+            }
+            if (count($arLinkend) == 1) {
+                //link to class
+                $linktpl = '{$package}/docs/latest/{$package}/{$class}.html';
+            } else if ($arLinkend[1]{0} == '$') {
+                //link to class variable
+                $variable = $arLinkend[1];
+                $linktpl = '{$package}/docs/latest/{$package}/{$class}.html#var{$variable}';
+            } else {
+                //link to method
+                if ($props['empty']) {
+                    $text   .= '()';
+                }
+                $method  = $arLinkend[1];
+                $linktpl = '{$package}/docs/latest/{$package}/{$class}.html#method{$method}';
+            }
+        }
+
+        $uri = $this->phd_pearapi_urlprefix . str_replace(
+            array('{$package}', '{$class}', '{$method}', '{$variable}'),
+            array($package, $class, $method, $variable),
+            $linktpl
+        );
+
+        return '<a href="' . htmlspecialchars($uri) . '"'
+            . ' class="apidoclink">' . $text . '</a>';
+    }
+
+    public function format_phd_pearapi_text($value, $tag)
+    {
+        $this->phd_pearapi_text = $value;
+    }
+
     public function format_programlisting($open, $name, $attrs)
     {
         if ($open) {
@@ -508,7 +580,7 @@ abstract class peartheme extends PhDTheme {
      *
      * @param string $value Value of the text to format.
      * @param unknown_type $tag
-     * 
+     *
      * @return string
      */
     public function format_programlisting_text($value, $tag)
@@ -827,9 +899,9 @@ abstract class peartheme extends PhDTheme {
 
     /**
      * FIXME: This function is a crazy performance killer
-     * 
+     *
      * @param resource $stream Stream containing the contents of a Q&A section
-     * 
+     *
      * @return string
      */
     public function qandaset($stream)
@@ -866,7 +938,7 @@ abstract class peartheme extends PhDTheme {
         }
         return '</dl>';
     }
-    
+
     public function format_answer($open, $name, $attrs)
     {
         if ($open) {
