@@ -11,6 +11,15 @@ class pearchunkedhtml extends pearweb
 {
     private $nav = "";
 
+    /**
+    * URL prefix for all API doc link generated with <phd:pearapi>
+    *
+    * @var string
+    */
+    public $phd_pearapi_urlprefix = 'http://pear.php.net/package/';
+
+
+
     public function __construct(array $IDs, $ext = "html")
     {
         parent::__construct($IDs, $ext, true);
@@ -34,7 +43,7 @@ class pearchunkedhtml extends pearweb
     */
     public function header($id)
     {
-        $title = PhDHelper::getDescription($id, true);
+        $title  = htmlspecialchars(PhDHelper::getDescription($id));
         $parent = PhDHelper::getParent($id);
         $this->next = $this->prev = $this->up = array(null, null);
         $strNext = $strPrev = '';
@@ -54,7 +63,10 @@ class pearchunkedhtml extends pearweb
                 $this->next = array(null, null);
             }
             if ($parent !== 'index' && $parent !== 'ROOT') {
-                $this->up = array($parent.".html", PhDHelper::getDescription($parent, false));
+                $this->up = array(
+                    $parent.".html",
+                    htmlspecialchars(PhDHelper::getDescription($parent, false))
+                );
             }
         }
 
@@ -71,12 +83,12 @@ class pearchunkedhtml extends pearweb
 ';
         }
         if ($this->prev[0]) {
-            $strPrev = '<a href="' . $this->prev[0] . '">Prev</a>';
+            $strPrev = '<a href="' . $this->prev[0] . '" title="' . $this->prev[1] . '">Prev</a>';
             $header .= '  <link rel="prev" href="' . $this->prev[0] . '" title="' . $this->prev[1] . '" />
 ';
         }
         if ($this->next[0]) {
-            $strNext = '<a href="' . $this->next[0] . '">Next</a>';
+            $strNext = '<a href="' . $this->next[0] . '" title="' . $this->next[1] . '">Next</a>';
             $header .= '  <link rel="next" href="' . $this->next[0] . '" title="' . $this->next[1] . '" />
 ';
         }
