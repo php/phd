@@ -88,8 +88,8 @@
       <file baseinstalldir="phd" name="themes/php/howto.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpdotnet.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpweb.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/phpkdevelop.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpfunctions.php" role="php"/>
+      <file baseinstalldir="phd" name="themes/php/phpkdevelop.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phppdf.php" role="php"/>
       <file baseinstalldir="phd" name="themes/php/phpbigpdf.php" role="php"/>
       <file baseinstalldir="phd" name="themes/pear/pearbightml.php" role="php"/>
@@ -97,7 +97,6 @@
       <file baseinstalldir="phd" name="themes/pear/pearchunkedhtml.php" role="php"/>
       <file baseinstalldir="phd" name="themes/pear/peartheme.php" role="php"/>
       <file baseinstalldir="phd" name="themes/pear/pearweb.php" role="php"/>
-      
       <file baseinstalldir="" name="build.php" role="script">
         <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
         <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
@@ -106,7 +105,9 @@
         <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
         <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config"/>
       </file>
-      <file baseinstalldir="phd" name="config.php" role="php"/>
+      <file baseinstalldir="phd" name="config.php" role="php">
+        <tasks:replace from="phd-from-cvs" to="version" type="package-info" />
+      </file>
       <file baseinstalldir="phd" name="LICENSE" role="php"/>
       <file baseinstalldir="phd" name="mktoc.php" role="php"/>
       <file baseinstalldir="phd" name="README" role="php"/>
@@ -132,6 +133,11 @@
         <name>dom</name>
       </extension>
     </required>
+    <optional>
+      <extension>
+        <name>posix</name>
+      </extension>
+    </optional>
   </dependencies>
 
   <phprelease>
@@ -420,7 +426,7 @@
       </notes>
     </release>
 
-   </changelog>
+  </changelog>
 
 </package>
 <!--
