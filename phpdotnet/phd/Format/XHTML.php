@@ -1127,10 +1127,12 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
             $idstr = '';
-            if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-                $idstr = '<a name="'. $attrs[PhDReader::XMLNS_XML]["id"]. '" id="' . $attrs[PhDReader::XMLNS_XML]["id"]. '"'.  " />\n ";
+            if (isset($attrs[PhDReader::XMLNS_XML]['id'])) {
+                $idstr = '<a name="' . $attrs[PhDReader::XMLNS_XML]['id']
+                    . '" id="' . $attrs[PhDReader::XMLNS_XML]['id'] . '"' .  " />\n ";
             }
-            return $idstr. '<div class="'. $name. '">'. $this->admonition_title($name, $props["lang"]);
+            return $idstr . '<div class="'. $name. '">'
+                . $this->admonition_title($name, $props['lang']);
         }
         return "</div>";
     }
