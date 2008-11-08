@@ -113,7 +113,8 @@ class PhDReader extends XMLReader {
      * Check if the element wants to be chunked.
      * Reads the element's 'phd:chunk="true"' attribute
      *
-     * @return boolean true if the element shall be chunked
+     * @return boolean true if the element shall be chunked, false if not,
+               null if there has no decision made
      */
     public function getWantsToBeChunked() { /* {{{ */
         if ($this->hasAttributes && XMLReader::moveToAttributeNs("chunk", self::XMLNS_PHD)) {
@@ -121,7 +122,7 @@ class PhDReader extends XMLReader {
             XMLReader::moveToElement();
             return $isChunk;
         }
-        return false;
+        return null;
     } /* }}} */
 
     public function getParentTagName() { /* {{{ */
@@ -220,8 +221,8 @@ class PhDReader extends XMLReader {
     public function isChunk($tag, $id) { /* {{{ */
         if (!$id) {
             return false;
-        } else if ($this->getWantsToBeChunked()) {
-            return true;
+        } else if (null !== $isChunk = $this->getWantsToBeChunked()) {
+            return $isChunk;
         } else if (isset($this->CHUNK_ME[$tag])) {
             $isChunk = $this->CHUNK_ME[$tag];
             if (is_array($isChunk)) {
