@@ -1128,10 +1128,9 @@ class XHTMLPhDFormat extends PhDFormat {
         if ($open) {
             $idstr = '';
             if (isset($attrs[PhDReader::XMLNS_XML]['id'])) {
-                $idstr = '<a name="' . $attrs[PhDReader::XMLNS_XML]['id']
-                    . '" id="' . $attrs[PhDReader::XMLNS_XML]['id'] . '"' .  " />\n ";
+                $idstr = 'id="'. $attrs[PhDReader::XMLNS_XML]['id']. '" ';
             }
-            return $idstr . '<div class="'. $name. '">'
+            return '<div '. $idstr. 'class="'. $name. '">'
                 . $this->admonition_title($name, $props['lang']);
         }
         return "</div>";
