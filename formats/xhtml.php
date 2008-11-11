@@ -1224,7 +1224,24 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_orderedlist($open, $name, $attrs, $props)
     {
         if ($open) {
-            return $this->escapePara() . '<ol>';
+            $numeration = "1";
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["numeration"])) {
+                switch($attrs[PhDReader::XMLNS_DOCBOOK]["numeration"]) {
+                case "upperalpha":
+                    $numeration = "A";
+                    break;
+                case "loweralpha":
+                    $numeration = "a";
+                    break;
+                case "upperroman":
+                    $numeration = "I";
+                    break;
+                case "lowerroman":
+                    $numeration = "i";
+                    break;
+                }
+            }
+            return $this->escapePara(). '<ol type="' .$numeration. '">';
         }
         return '</ol>' . $this->restorePara();
     }
