@@ -6,6 +6,7 @@ abstract class phpdotnet extends PhDTheme {
         'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
         'classname'             => 'format_suppressed_tags',
+        'interfacename'         => 'format_suppressed_tags',
         'link'                  => 'format_link',
         'refpurpose'            => 'format_refpurpose',
         'title'                 => array(
@@ -90,6 +91,7 @@ abstract class phpdotnet extends PhDTheme {
         'acronym'               => 'format_acronym_text',
         'function'              => 'format_function_text',
         'classname'             => 'format_classname_text',
+        'interfacename'         => 'format_classname_text',
         'varname'               => array(
             /* DEFAULT */          'format_varname_text',
             'fieldsynopsis'     => false,
@@ -537,11 +539,11 @@ abstract class phpdotnet extends PhDTheme {
     public function format_classname_text($value, $tag) {
         if (($filename = $this->getClassnameLink(strtolower($value))) !== null && $this->cchunk["phpdoc:classref"] !== strtolower($value)) {
             if ($this->chunked) {
-                return '<a href="'.$filename. '.' .$this->ext. '" class="classname">' .$value. '</a>';
+                return '<a href="'.$filename. '.' .$this->ext. '" class="' .$tag. '">' .$value. '</a>';
             }
-            return '<a href="#'.$filename. '" class="classname">'.$value.'</a>';
+            return '<a href="#'.$filename. '" class="' .$tag. '">'.$value.'</a>';
         }
-        return '<b class="classname">' .$value. '</b>';
+        return '<b class="' .$tag. '">' .$value. '</b>';
     }
 
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
