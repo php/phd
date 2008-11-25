@@ -79,11 +79,15 @@ PhDConfig::set_user_error_output(STDERR);
 PhDConfig::set_phd_info_output(STDOUT);
 
 /* {{{ Workaround/fix for Windows prior to PHP5.3 */
-if (!function_exists("getopt")) {
+if (!function_exists('getopt')) {
+    //Use PEAR's PHP_Compat package
+    @include_once('PHP/Compat/Function/getopt.php');
+}
+if (!function_exists('getopt')) {
     function getopt($short, $long) {
         global $argv;
         printf("I'm sorry, you are running an operating system that does not support getopt()\n");
-        printf("Please either upgrade to PHP5.3 or try '%s /path/to/your/docbook.xml'\n", $argv[0]);
+        printf("Please install PEAR's PHP_Compat package.");
 
         return array();
     }
