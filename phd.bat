@@ -1,3 +1,4 @@
-REM $Id: phd.bat,v 1.2 2008-10-07 07:01:20 kalle Exp $
+@echo off
+REM $Id: phd.bat,v 1.3 2008-12-02 21:27:09 kalle Exp $
 
 @"@php_bin@" "@bin_dir@\build.php" %*
