@@ -192,6 +192,7 @@ $opts = array(
     "skip:"    => "s:", // The ID to skip (optionally skipping its children too)
     "verbose:" => "v",  // Adjust the verbosity level
     "list::"   => "l::", // List supported themes/formats
+    "lang:"    => "L:",  // Language hint (used by the CHM)
     "color::"  => "c::", // Use color output if possible
     "version"  => "V",  // Print out version information
     "help"     => "h",  // Print out help
@@ -503,6 +504,16 @@ foreach($args as $k => $v) {
         break;
     /* }}} */
 
+    /* {{{ Language hint */
+    case "l":
+    case "lang":
+        if (is_array($v)) {
+            trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
+        }
+        $OPTIONS["language"] = $v;
+        break;
+    /* }}} */
+
     /* {{{ Color output */
     case "c":
     case "color":
@@ -563,6 +574,8 @@ foreach($args as $k => $v) {
   --list <formats/themes>    Print out the supported formats/themes (default: both)
   -o <directory>
   --output <directory>       The output directory (default: .)
+  -L <language>
+  --lang <language>          The language of the source file (used by the CHM theme). (default: en)
   -c <color>
   --color <color>            Enable color output when output is to a terminal, optionally specify numerical color value (default: false)
   -V
