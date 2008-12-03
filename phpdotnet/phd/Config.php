@@ -505,7 +505,7 @@ foreach($args as $k => $v) {
     /* }}} */
 
     /* {{{ Language hint */
-    case "l":
+    case "L":
     case "lang":
         if (is_array($v)) {
             trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
