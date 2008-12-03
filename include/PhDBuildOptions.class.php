@@ -18,6 +18,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
             "skip:"     => "s:",        // The ID to skip (optionally skipping its children too)
             "verbose:"  => "v",         // Adjust the verbosity level
             "list::"    => "l::",       // List supported themes/formats
+            "lang::"    => "L:",        // Language hint (used by the CHM)
             "color:"    => "c:",        // Use color output if possible
             "version"   => "V",         // Print out version information
             "help"      => "h",         // Print out help
@@ -227,6 +228,9 @@ class PhDBuildOptionsParser extends PhDOptionParser
 
     public function option_l($k, $v)
     {
+        if ($k == "L") {
+            return $this->option_lang($k, $v);
+        }
         $this->option_list($k, $v);
     }
     public function option_list($k, $v)
@@ -285,6 +289,10 @@ class PhDBuildOptionsParser extends PhDOptionParser
         exit(0);
     }
 
+    public function option_lang($k, $v)
+    {
+        PhDConfig::set_language($v);
+    }
     public function option_c($k, $v)
     {
         $this->option_color($k, $v);
@@ -343,6 +351,8 @@ class PhDBuildOptionsParser extends PhDOptionParser
   --list <formats/themes>    Print out the supported formats/themes (default: both)
   -o <directory>
   --output <directory>       The output directory (default: .)
+  -L <language>
+  --lang <language>          The language of the source file (used by the CHM theme). (default: en
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal (default: false)
   -V
