@@ -248,11 +248,11 @@ Default topic=res/index.html
 Display compile progress=Yes
 Full-text search=Yes
 Language=' . $this->LANGUAGES[$lang]["langcode"] . '
-Title=' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '
+Title=' . (isset($this->LANGUAGES[$lang]["title"]) ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '
 Default Font=' . ($this->LANGUAGES[$lang]["preferred_font"] ? $this->LANGUAGES[$lang]["preferred_font"] : self::DEFAULT_FONT). '
 
 [WINDOWS]
-doc="' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","res/index.html","res/index.html",,,,,0x23520,,0x10386e,,,,,,,,0
+doc="' . (isset($this->LANGUAGES[$lang]["title"]) ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","res/index.html","res/index.html",,,,,0x23520,,0x10386e,,,,,,,,0
 
 [FILES]
 res/style.css
