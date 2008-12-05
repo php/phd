@@ -635,7 +635,13 @@ $OPTIONS["output_dir"] = realpath($OPTIONS["output_dir"]) . DIRECTORY_SEPARATOR;
 $OPTIONS["version_info"] = $OPTIONS["xml_root"]."/phpbook/phpbook-xsl/version.xml";
 $OPTIONS["acronyms_file"] = $OPTIONS["xml_root"]."/entities/acronyms.xml";
 
+// Use a phpdoc configure.php generated file if it exists
+if (file_exists($OPTIONS["xml_root"] . "/version.xml")) {
+    $OPTIONS["version_info"] = $OPTIONS["xml_root"] . "/version.xml";
+}
+
 /*
 * vim600: sw=4 ts=4 syntax=php et
 * vim<600: sw=4 ts=4
 */
+

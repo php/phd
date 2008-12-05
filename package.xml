@@ -55,6 +55,8 @@
    - Added option (-L/--lang language) to use for CHM headers. (Hannes)
    - Added support for orderedlist numeration. (Hannes)
    - &lt;interfacename&gt; now automagically links to interfaces. (Hannes)
+   - Automatically use the phpdoc configure.php generated version
+     information file if it exists. (Hannes)
   </notes>
 
   <contents>
