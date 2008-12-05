@@ -22,7 +22,7 @@
     <active>yes</active>
   </lead>
 
-  <date>2008-10-30</date>
+  <date>2008-12-06</date>
   <version>
     <release>1.0.1</release>
     <api>1.0.1</api>
@@ -33,7 +33,8 @@
   </stability>
   <license uri="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0</license>
   <notes>
-   - Fixed bug #46413 Weird examples in Unix manual pages (Rudy)
+   - Fixed bug #46413 Weird examples in Unix manual pages. (Rudy)
+   - Fixed installation on case-insensitive file-systems. (Hannes)
   </notes>
 
   <contents>
@@ -633,7 +634,6 @@
       <file baseinstalldir="php.net" name="man3/DomDocumentType.public_id.3.gz" role="doc" />
       <file baseinstalldir="php.net" name="man3/DomDocumentType.system_id.3.gz" role="doc" />
       <file baseinstalldir="php.net" name="man3/DOMDocument.validate.3.gz" role="doc" />
-      <file baseinstalldir="php.net" name="man3/DomDocument.xinclude.3.gz" role="doc" />
       <file baseinstalldir="php.net" name="man3/DOMDocument.xinclude.3.gz" role="doc" />
       <file baseinstalldir="php.net" name="man3/DOMElement.__construct.3.gz" role="doc" />
       <file baseinstalldir="php.net" name="man3/DomElement.get_attribute.3.gz" role="doc" />
