@@ -52,6 +52,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+   - Language support (for CHM by Nilgun)
    - Added option (-L/--lang language) to use for CHM headers. (Hannes)
    - Added support for orderedlist numeration. (Hannes)
    - &lt;interfacename&gt; now automagically links to interfaces. (Hannes)
