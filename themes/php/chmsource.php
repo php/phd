@@ -163,6 +163,12 @@ class chmsource extends chunkedhtml {
             "mime_charset_name" => "Windows-1252",
             "preferred_font" => self::DEFAULT_FONT
         ),
+        "tr"    => array(
+            "langcode" => "0x41f Turkish",
+            "preferred_charset" => "Windows-1254",
+            "mime_charset_name" => "Windows-1254",
+            "preferred_font" => self::DEFAULT_FONT
+        ),
         "zh"    => array(
             "langcode" => "0x804 Simplified Chinese",
             "preferred_charset" => "CP936",
