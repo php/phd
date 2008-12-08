@@ -58,6 +58,7 @@
    - &lt;interfacename&gt; now automagically links to interfaces. (Hannes)
    - Automatically use the phpdoc configure.php generated version
      information file if it exists. (Hannes)
+   - Allow phd:chunk="false" (cweiske)
   </notes>
 
   <contents>
