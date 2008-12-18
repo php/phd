@@ -43,25 +43,15 @@
 
   <date>2008-12-18</date>
   <version>
-    <release>0.4.2</release>
-    <api>0.4.2</api>
+    <release>0.4.3</release>
+    <api>0.4.3</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-   - Added support for phd:chunk="false" attribute on chunks. (Christian)
-   - Added Turkish support for CHM. (Nilgun)
-   - Added option (-L/--lang language) to use for CHM headers. (Hannes)
-   - Added support for orderedlist numeration. (Hannes)
-   - Added fallback to PHP_Compat getopt() on Windows. (Christian)
-   - Added anchors for tips, warnings, important and notes. (Nilgun)
-   - &lt;interfacename&gt; now automagically links to interfaces. (Hannes)
-   - Automatically use the phpdoc configure.php generated version
-     information file if it exists. (Hannes)
-   - Removed default border for formal tables. (Philip)
   </notes>
 
   <contents>
@@ -461,6 +451,31 @@
         - Make "Prev" links work correctly on last pages (e.g. last in chapter) (Christian)
         - Change double quotes to single ones, gives speedup for pear builds (Brett)
         - Docblock enhancements and Coding Standards fixes (Brett)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>0.4.2</release>
+        <api>0.4.2</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2008-12-18</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added support for phd:chunk="false" attribute on chunks. (Christian)
+        - Added Turkish support for CHM. (Nilgun)
+        - Added option (-L/--lang language) to use for CHM headers. (Hannes)
+        - Added support for orderedlist numeration. (Hannes)
+        - Added fallback to PHP_Compat getopt() on Windows. (Christian)
+        - Added anchors for tips, warnings, important and notes. (Nilgun)
+        - &lt;interfacename&gt; now automagically links to interfaces. (Hannes)
+        - Automatically use the phpdoc configure.php generated version
+          information file if it exists. (Hannes)
+        - Removed default border for formal tables. (Philip)
       </notes>
     </release>
 
