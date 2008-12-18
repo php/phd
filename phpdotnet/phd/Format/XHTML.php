@@ -1249,7 +1249,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["table"] = true;
-            return '<table border="5">';
+            return '<table class="doctable">';
         }
         $this->cchunk["table"] = false;
         $str = "";
