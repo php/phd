@@ -59,6 +59,7 @@
    - Automatically use the phpdoc configure.php generated version
      information file if it exists. (Hannes)
    - Allow phd:chunk="false" (cweiske)
+   - Removed default border for formal tables. (Philip)
   </notes>
 
   <contents>

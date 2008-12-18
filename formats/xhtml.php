@@ -930,7 +930,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_calloutlist($open, $name, $attrs) {
         if ($open) {
             $this->cchunk["callouts"] = 0;
-            return '<table>';
+            return '<table class="callout">';
         }
         return '</table>';
     }
@@ -1249,7 +1249,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["table"] = true;
-            return '<table border="5">';
+            return '<table class="doctable formaltable">';
         }
         $this->cchunk["table"] = false;
         $str = "";
