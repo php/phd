@@ -41,10 +41,10 @@
     <active>yes</active>
   </developer>
 
-  <date>2008-11-08</date>
+  <date>2008-12-18</date>
   <version>
     <release>0.4.2</release>
-    <api>0.4.1</api>
+    <api>0.4.2</api>
   </version>
   <stability>
     <release>snapshot</release>
@@ -52,13 +52,15 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-   - Language support (for CHM by Nilgun)
+   - Added support for phd:chunk="false" attribute on chunks. (Christian)
+   - Added Turkish support for CHM. (Nilgun)
    - Added option (-L/--lang language) to use for CHM headers. (Hannes)
    - Added support for orderedlist numeration. (Hannes)
+   - Added fallback to PHP_Compat getopt() on Windows. (Christian)
+   - Added anchors for tips, warnings, important and notes. (Nilgun)
    - &lt;interfacename&gt; now automagically links to interfaces. (Hannes)
    - Automatically use the phpdoc configure.php generated version
      information file if it exists. (Hannes)
-   - Allow phd:chunk="false" (cweiske)
    - Removed default border for formal tables. (Philip)
   </notes>
 
