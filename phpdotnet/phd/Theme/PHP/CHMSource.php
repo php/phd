@@ -334,8 +334,10 @@ res/style.css
     public function header($id) {
         $header = parent::header($id);
         // Add CSS link to <head>
-        $header = ereg_replace('( *)</head>','\\1 <link media="all" rel="stylesheet" type="text/css" href="style.css"/>
-    \\1</head>', $header);
+				$pattern = '/(.*)(\r|\n|\r\n|\n\r)(.*)<\/head>/';
+				$replacement = '$1  <link media="all" rel="stylesheet" type="text/css" href="style.css"/>$2$3</head>';
+				
+				$header = preg_replace($pattern, $replacement, $header);        
         return $header;
     }
 
