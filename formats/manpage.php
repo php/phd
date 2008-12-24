@@ -212,7 +212,7 @@ class ManpagePhDFormat extends PhDFormat {
     }
     
     public function TEXT($str) {
-        $ret = trim(ereg_replace( "[ \n\t]+", ' ', $str));
+        $ret = trim(preg_replace( '/[ \n\t]+/', ' ', $str));
         // No newline if current line begins with ',', ';', ':', '.'
         if (strncmp($ret, ",", 1) && strncmp($ret, ";", 1) && strncmp($ret, ":", 1) && strncmp($ret, ".", 1))
             $ret = "\n" . $ret;
@@ -443,7 +443,7 @@ class ManpagePhDFormat extends PhDFormat {
     
     // Returns the unformatted value without whitespaces (nor new lines) 
     public function format_text($value, $tag) {
-        return trim(ereg_replace("[ \n\t]+", ' ', $value));
+        return trim(preg_replace('/[ \n\t]+/', ' ', $value));
     }
     
     public function format_tgroup($open, $name, $attrs, $props) {
