@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*  $Id$ */
 
 require_once $ROOT . '/themes/php/phpweb.php';
