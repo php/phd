@@ -70,6 +70,8 @@
    - Make "Prev" links work correctly on last pages (e.g. last in chapter) (Christian)
    - Change double quotes to single ones, gives speedup for pear builds (Brett)
    - Docblock enhancements and Coding Standards fixes (Brett)
+   - Fix bug #46931: wrong order of the META tag in the HEAD element (Chen Gang)
+   - Fix bug #46714: change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace (Chen Gang)
   </notes>
 
   <contents>
@@ -439,6 +441,9 @@
         - Fixed a bug where it was only possible to pass one parameter to phd.bat. (Kalle)
         - Fixed a bug where it wasn't possible to have paths with spaces in when using phd.bat. (Kalle)
         - Fixed xhtml validation issue for itemizedlist. (Christian)
+        - Fix bug #46931: wrong order of the META tag in the HEAD element (Chen Gang)
+        - Fix bug #46714: change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace (Chen Gang)
+        
       </notes>
     </release>
 
