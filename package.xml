@@ -419,6 +419,8 @@
         - Fixed a bug where it was only possible to pass one parameter to phd.bat. (Kalle)
         - Fixed a bug where it wasn't possible to have paths with spaces in when using phd.bat. (Kalle)
         - Fixed xhtml validation issue for itemizedlist. (Christian)
+        - Fix bug #46931: wrong order of the META tag in the HEAD element (Chen Gang)
+        - Fix bug #46714: change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace (Chen Gang)       
       </notes>
     </release>
 
@@ -476,6 +478,8 @@
         - Automatically use the phpdoc configure.php generated version
           information file if it exists. (Hannes)
         - Removed default border for formal tables. (Philip)
+        - Fix bug #46931: wrong order of the META tag in the HEAD element (Chen Gang)
+        - Fix bug #46714: change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace (Chen Gang)        
       </notes>
     </release>
 
