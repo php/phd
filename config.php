@@ -18,8 +18,9 @@ define('VERBOSE_PARTIAL_CHILD_READING',  VERBOSE_PARTIAL_READING       << 1);
 define('VERBOSE_TOC_WRITING',            VERBOSE_PARTIAL_CHILD_READING << 1);
 define('VERBOSE_CHUNK_WRITING',          VERBOSE_TOC_WRITING           << 1);
 define('VERBOSE_NOVERSION',              VERBOSE_CHUNK_WRITING         << 1);
+define('VERBOSE_BROKEN_LINKS',           VERBOSE_NOVERSION             << 1);
 
-define('VERBOSE_ALL',                    (VERBOSE_NOVERSION        << 1)-1);
+define('VERBOSE_ALL',                    (VERBOSE_BROKEN_LINKS         << 1)-1);
 
 
 /* {{{ Print info messages: v("printf-format-text" [, $arg1, ...], $verbose-level) */
@@ -58,6 +59,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         VERBOSE_TOC_WRITING           => 'VERBOSE_TOC_WRITING',
         VERBOSE_CHUNK_WRITING         => 'VERBOSE_CHUNK_WRITING',
         VERBOSE_NOVERSION             => 'VERBOSE_NOVERSION',
+        VERBOSE_BROKEN_LINKS          => 'VERBOSE_BROKEN_LINKS',
     );
     static $recursive = false;
 
@@ -84,6 +86,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
     case VERBOSE_TOC_WRITING:
     case VERBOSE_CHUNK_WRITING:
     case VERBOSE_NOVERSION:
+    case VERBOSE_BROKEN_LINKS:
         $cl1 = $OPTIONS['color_output'] ? "\033[01;{$OPTIONS['color_output']}m" : '';
         $cr = $OPTIONS['color_output'] ? "\033[m" : '';
         fprintf($OPTIONS["phd_info_output"], "{$cl1}[%s - %s]{$cr} %s\n", $time, $err[$errno], $msg);
