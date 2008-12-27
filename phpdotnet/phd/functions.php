@@ -18,8 +18,9 @@ define('VERBOSE_PARTIAL_CHILD_READING',  VERBOSE_PARTIAL_READING       << 1);
 define('VERBOSE_TOC_WRITING',            VERBOSE_PARTIAL_CHILD_READING << 1);
 define('VERBOSE_CHUNK_WRITING',          VERBOSE_TOC_WRITING           << 1);
 define('VERBOSE_NOVERSION',              VERBOSE_CHUNK_WRITING         << 1);
+define('VERBOSE_BROKEN_LINKS',           VERBOSE_NOVERSION             << 1);
 
-define('VERBOSE_ALL',                    (VERBOSE_NOVERSION            << 1)-1);
+define('VERBOSE_ALL',                    (VERBOSE_BROKEN_LINKS         << 1)-1);
 define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION)));
 
 $olderrrep = error_reporting();
@@ -67,6 +68,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         VERBOSE_TOC_WRITING           => 'VERBOSE_TOC_WRITING',
         VERBOSE_CHUNK_WRITING         => 'VERBOSE_CHUNK_WRITING',
         VERBOSE_NOVERSION             => 'VERBOSE_NOVERSION',
+        VERBOSE_BROKEN_LINKS          => 'VERBOSE_BROKEN_LINKS',
     );
     static $recursive = false;
 
@@ -93,6 +95,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         case VERBOSE_TOC_WRITING:
         case VERBOSE_CHUNK_WRITING:
         case VERBOSE_NOVERSION:
+        case VERBOSE_BROKEN_LINKS:
             $color = PhDConfig::phd_info_color();
             $output = PhDConfig::phd_info_output();
             $data = $msg;

@@ -524,12 +524,17 @@ abstract class phpdotnet extends PhDTheme {
         }
         
         $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
-        if (($filename = $this->getRefnameLink($ref)) !== null && $this->CURRENT_ID !== $filename) {
-            if ($this->chunked) {
-                return '<a href="'.$filename. '.' .$this->ext. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+        if (($filename = $this->getRefnameLink($ref)) !== null) {
+            if ($this->CURRENT_ID !== $filename) {
+                if ($this->chunked) {
+                    return '<a href="'.$filename. '.' .$this->ext. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+                }
+                return '<a href="#'.$filename. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
             }
-            return '<a href="#'.$filename. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+        } elseif ($this->CURRENT_ID !== $filename) {
+            v("No link found for $value", VERBOSE_BROKEN_LINKS);
         }
+
         return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
     }
 
