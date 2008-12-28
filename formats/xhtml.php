@@ -397,6 +397,7 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
         "tablefootnotes"           => array(
         ),
+        "chunk_id"                 => null,
     );
 
     public function __construct(array $IDs) {
@@ -636,6 +637,7 @@ class XHTMLPhDFormat extends PhDFormat {
                 if ($name === "refentry") {
                     //$class .= " -rel-posting";
                 }
+                $this->cchunk["chunk_id"] = $attrs[PhDReader::XMLNS_XML]["id"];
                 return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$class. '">';
             }
             return '<div class="' .$name. '">';
@@ -676,7 +678,7 @@ class XHTMLPhDFormat extends PhDFormat {
                 $attrs[PhDReader::XMLNS_DOCBOOK]["role"] = "unknown";
             }
             $this->role = $role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
-            return '<div class="' .$name.' ' .$role. '">';
+            return '<a name="' .$this->cchunk["chunk_id"]. '.' .$role. '"></a><div class="' .$name.' ' .$role. '">';
         }
         $this->role = null;
         return "</div>\n";
