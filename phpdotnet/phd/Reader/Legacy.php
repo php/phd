@@ -245,7 +245,7 @@ class PhDReader extends XMLReader {
     protected function checkSectionDepth() { /* {{{ */
         static $allowedParents = array("section", "sect2", "sect3", "sect4", "sect5");
         static $chunkers       = array(
-            "sect1", "preface", "chapter", "appendix", "article", "part", "reference", "refentry",
+            "sect1", "chapter", "appendix", "article", "part", "reference", "refentry",
             "index", "bibliography", "glossary", "colopone", "book", "set", "setindex", "legalnotice",
        );
 
