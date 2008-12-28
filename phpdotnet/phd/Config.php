@@ -167,7 +167,7 @@ $OPTIONS = array (
   'enforce_revisions' => false,
   'compatibility_mode' => true,
   'build_log_file' => 'none',
-  'verbose' => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION),
+  'verbose' => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION|VERBOSE_BROKEN_LINKS),
   'date_format' => "H:i:s",
   'render_ids' => array(
   ),
