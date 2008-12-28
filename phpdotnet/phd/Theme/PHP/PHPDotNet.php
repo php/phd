@@ -518,18 +518,20 @@ abstract class phpdotnet extends PhDTheme {
         if ($display_value === null) {
             $display_value = $value;
         }
-        $rel = "";
-        if ($this->format->role == "seealso") {
-            $rel = ' rel="rdfs-seeAlso"';
-        }
         
         $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
         if (($filename = $this->getRefnameLink($ref)) !== null) {
             if ($this->CURRENT_ID !== $filename) {
-                if ($this->chunked) {
-                    return '<a href="'.$filename. '.' .$this->ext. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+                $rel = $desc = "";
+                if ($this->format->role == "seealso") {
+                    $rel  = ' rel="rdfs-seeAlso"';
+                    $desc = " - " . PhDHelper::getDescription($filename, true);
                 }
-                return '<a href="#'.$filename. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>';
+
+                if ($this->chunked) {
+                    return '<a href="'.$filename. '.' .$this->ext. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>'.$desc;
+                }
+                return '<a href="#'.$filename. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>'.$desc;
             }
         } elseif ($this->CURRENT_ID !== $filename) {
             v("No link found for $value", VERBOSE_BROKEN_LINKS);
