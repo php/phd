@@ -21,7 +21,7 @@ define('VERBOSE_NOVERSION',              VERBOSE_CHUNK_WRITING         << 1);
 define('VERBOSE_BROKEN_LINKS',           VERBOSE_NOVERSION             << 1);
 
 define('VERBOSE_ALL',                    (VERBOSE_BROKEN_LINKS         << 1)-1);
-define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION)));
+define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION|VERBOSE_BROKEN_LINKS)));
 
 $olderrrep = error_reporting();
 error_reporting($olderrrep | VERBOSE_DEFAULT);
