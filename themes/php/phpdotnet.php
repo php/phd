@@ -5,6 +5,7 @@ abstract class phpdotnet extends PhDTheme {
     protected $elementmap = array(
         'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
+        'methodname'            => 'format_suppressed_tags',
         'classname'             => 'format_suppressed_tags',
         'interfacename'         => 'format_suppressed_tags',
         'link'                  => 'format_link',
