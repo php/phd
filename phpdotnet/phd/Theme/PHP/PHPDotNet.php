@@ -92,6 +92,14 @@ abstract class phpdotnet extends PhDTheme {
         'acronym'               => 'format_acronym_text',
         'function'              => 'format_function_text',
         'classname'             => 'format_classname_text',
+        'classname'            => array(
+            /* DEFAULT */         'format_classname_text',
+            'ooclass'          => array(
+                /* DEFAULT */     'format_classname_text',
+                'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
+            ),
+        ),
+
         'interfacename'         => 'format_classname_text',
         'varname'               => array(
             /* DEFAULT */          'format_varname_text',
@@ -549,6 +557,9 @@ abstract class phpdotnet extends PhDTheme {
 
     public function format_grep_classname_text($value, $tag) {
         $this->cchunk["phpdoc:classref"] = strtolower($value);
+    }
+    public function format_classsynopsis_ooclass_classname_text($value, $tag) {
+        return $this->format_classname_text($this->format->format_classsynopsis_ooclass_classname_text($value, $tag), $tag);
     }
     public function format_classname_text($value, $tag) {
         if (($filename = $this->getClassnameLink(strtolower($value))) !== null && $this->cchunk["phpdoc:classref"] !== strtolower($value)) {
