@@ -5,7 +5,7 @@ abstract class phpdotnet extends PhDTheme {
     protected $elementmap = array(
         'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
-        'methodname'            => 'format_suppressed_tags',
+        'methodname'            => 'format_methodname',
         'classname'             => 'format_suppressed_tags',
         'interfacename'         => 'format_suppressed_tags',
         'link'                  => 'format_link',
@@ -312,6 +312,12 @@ abstract class phpdotnet extends PhDTheme {
             return '</a></var>';
         }
         return '</var>';
+    }
+    function format_methodname($open, $tag) {
+        if ($open) {
+            return ' <span class="' . $tag. '">';
+        }
+        return "</span>";
     }
 
 
