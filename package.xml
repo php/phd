@@ -55,6 +55,7 @@
     - Automatically add anchors for refsect roles. (Hannes)
     - Added description for seealso links. (Hannes)
     - Fixed a bug where prefaces had unlisted childrens. (Hannes)
+    - Compressed methodnames in classsynopsis again. (Hannes)
     - Fixed bug#46941 (FR: Find broken links). (Hannes)
     - Fixed bug#46931 (wrong order of the META tag in the HEAD element). (Chen Gang)
     - Fixed bug#46714 (change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace). (Chen Gang)        
