@@ -398,6 +398,9 @@ class XHTMLPhDFormat extends PhDFormat {
         "tablefootnotes"           => array(
         ),
         "chunk_id"                 => null,
+        "varlistentry"             => array(
+            "listitems"                     => array(),
+        ),
     );
 
     public function __construct(array $IDs) {
@@ -662,14 +665,17 @@ class XHTMLPhDFormat extends PhDFormat {
             case "methodsynopsis":
             case "constructorsynopsis":
             case "destructorsynopsis":
+                ++$this->openPara;
                 return '<p class="'.$name.' rdfs-comment">';
                 break;
 
             default:
+                ++$this->openPara;
                 return '<p class="'.$name.'">';
             }
 
         }
+        --$this->openPara;
         return '</p>';
     }
     public function format_refsect($open, $name, $attrs) {
@@ -986,6 +992,7 @@ class XHTMLPhDFormat extends PhDFormat {
             ++$this->openPara;
             return '<p class="' . $name . '">';
         }
+
         --$this->openPara;
         return '</p>';
     }
@@ -1055,13 +1062,19 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
-            return isset($attrs[PhDReader::XMLNS_XML]["id"]) ? '<dt id="'.$attrs[PhDReader::XMLNS_XML]["id"]. '">' : "<dt>\n";
+            return isset($attrs[PhDReader::XMLNS_XML]["id"]) ? '<dt id="'.$attrs[PhDReader::XMLNS_XML]["id"]. '" class="varlistentry">' : "<dt class=\"varlistentry\">\n";
+        }
+
+        // Listitems close the the dt themselfs
+        if ($this->cchunk["varlistentry"]["listitems"] && array_pop($this->cchunk["varlistentry"]["listitems"])) {
+            return "";
         }
         return "</dt>\n";
     }
     public function format_varlistentry_listitem($open, $name, $attrs) {
         if ($open) {
-            return "<dd>\n";
+            $this->cchunk["varlistentry"]["listitems"][] = 1;
+            return "</dt><dd class=\"listitem\">\n";
         }
         return "</dd>\n";
     }
