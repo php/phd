@@ -1128,7 +1128,7 @@ class XHTMLPhDFormat extends PhDFormat {
         return "</div>\n" . $this->restorePara();
     }
     public function format_programlisting_text($value, $tag) {
-        return $this->CDATA($value);
+        return nl2br($value);
     }
     public function format_screen($open, $name, $attrs) {
         if ($open) {
