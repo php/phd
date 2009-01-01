@@ -124,7 +124,7 @@ class XHTMLPhDFormat extends PhDFormat {
             'note'              => 'span',
         ),
         'informalexample'       => 'format_div',
-        'informaltable'         => 'table',
+        'informaltable'         => 'format_table',
         'indexdiv'              => 'format_dl',
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
@@ -801,7 +801,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_methodparam_parameter($open, $name, $attrs) {
         if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                return ' <tt class="parameter reference">&$';
+                return ' <tt class="parameter reference">&amp;$';
             }
             return ' <tt class="parameter">$';
         }
@@ -816,7 +816,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_parameter($open, $name, $attrs) {
         if ($open) {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                return '<i><tt class="parameter reference">&';
+                return '<i><tt class="parameter reference">&amp;';
             }
             return '<i><tt class="parameter">';
         }
@@ -1107,9 +1107,9 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_example_content($open, $name, $attrs) {
         if ($open) {
-            return '<div class="example-contents"><p>';
+            return $this->escapePara() . '<div class="example-contents"><p>';
         }
-        return "</p></div>";
+        return "</p></div>" . $this->restorePara();
     }
     public function format_programlisting($open, $name, $attrs) {
         if ($open) {
@@ -1119,23 +1119,23 @@ class XHTMLPhDFormat extends PhDFormat {
                 $this->role = false;
             }
 
-            return '<div class="example-contents">';
+            return $this->escapePara() . '<div class="example-contents">';
         }
         $this->role = false;
-        return "</div>\n";
+        return "</div>\n" . $this->restorePara();
     }
     public function format_programlisting_text($value, $tag) {
         return $this->CDATA($value);
     }
     public function format_screen($open, $name, $attrs) {
         if ($open) {
-            return '<div class="example-contents"><pre>';
+            return '<div class="example-contents screen">';
         }
-        return '</pre></div>';
+        return '</div>';
     }
     public function format_constant($open, $name, $attrs) {
         if ($open) {
-            return "<b><tt>";
+            return "<b><tt class=\"constant\">";
         }
         return "</tt></b>";
     }
@@ -1264,7 +1264,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["table"] = true;
-            return '<table class="doctable formaltable">';
+            return $this->escapePara() . '<table class="doctable '.$name. '">';
         }
         $this->cchunk["table"] = false;
         $str = "";
@@ -1288,7 +1288,7 @@ class XHTMLPhDFormat extends PhDFormat {
 
             $this->cchunk["tablefootnotes"] = $this->dchunk["tablefootnotes"];
         }
-        return "$str</table>\n";
+        return "$str</table>\n" . $this->restorePara();
     }
     public function format_tgroup($open, $name, $attrs) {
         if ($open) {
