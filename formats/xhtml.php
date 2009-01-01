@@ -1318,7 +1318,31 @@ class XHTMLPhDFormat extends PhDFormat {
             $retval .= ' valign="' .$attrs["valign"]. '"';
         }
         if (isset($attrs["colwidth"])) {
-            $retval .= ' width="' .((int)$attrs["colwidth"]). '"';
+            $width = $attrs["colwidth"];
+            if (is_numeric($width)) {
+                $retval .= ' width="' .((int)$width). '"';
+            }
+            // N*
+            elseif(($pos = strpos($width, "*")) !== false) {
+                $cols = $this->getColCount();
+                $length = 100/$cols;
+                if (substr($width, -1) !== "*") {
+                    trigger_error("Mixing proportion and fixed measure not implemented", E_USER_WARNING);
+                }
+                // Standard length
+                elseif($width == "*" || $width == "1*") {
+                }
+                else {
+                    $width = (int)substr($width, 0, $pos);
+                    $length *= $width;
+                }
+                $retval = ' width="' .$length. '%"';
+
+            }
+            // Npt or Npx or other weird format
+            else {
+                $retval .= ' width="' .htmlentities($attrs["colwidth"], ENT_QUOTES, "UTF-8"). '"';
+            }
         }
         return $retval;
     }
