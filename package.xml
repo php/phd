@@ -58,6 +58,7 @@
     - Compressed methodnames in classsynopsis again. (Hannes)
     - Fixed bug#46941 (FR: Find broken links). (Hannes)
     - Fixed bug#46931 (wrong order of the META tag in the HEAD element). (Chen Gang)
+    - Fixed bug#46924 (parameter elements force incorrect line breaks). (Hannes)
     - Fixed bug#46726 (Incorrect HTML output). (Hannes)
     - Fixed bug#46714 (change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace). (Chen Gang)        
     - Fixed bug#44598 (Much space on 'expected output' section). (Hannes)
