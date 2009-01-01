@@ -1107,8 +1107,11 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_example_content($open, $name, $attrs) {
         if ($open) {
-            return $this->escapePara() . '<div class="example-contents"><p>';
+            $retval = $this->escapePara() . '<div class="example-contents"><p>';
+            ++$this->openPara;
+            return $retval;
         }
+        --$this->openPara;
         return "</p></div>" . $this->restorePara();
     }
     public function format_programlisting($open, $name, $attrs) {
@@ -1167,9 +1170,13 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_note($open, $name, $attrs, $props) {
         if ($open) {
-            return '<blockquote><p>'.$this->admonition_title("note", $props["lang"]). ': ';
+            $retval = $this->escapePara() . '<blockquote><p>'.$this->admonition_title("note", $props["lang"]). ': ';
+            ++$this->openPara;
+            return $retval;
         }
-        return "</p></blockquote>";
+
+        --$this->openPara;
+        return "</p></blockquote>" . $this->restorePara();
     }
     public function format_note_title($open, $name, $attrs) {
         if ($open) {
@@ -1189,8 +1196,10 @@ class XHTMLPhDFormat extends PhDFormat {
             return "";
         }
         if ($open) {
+            ++$this->openPara;
             return "<p><b>";
         }
+        --$this->openPara;
         return "</b></p>";
     }
     public function format_table_title($open, $name, $attrs, $props) {
