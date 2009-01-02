@@ -295,6 +295,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'shortaffil'           => 'format_suppressed_text',
         'titleabbrev'          => 'format_suppressed_text',
         'programlisting'       => 'format_programlisting_text',
+        'screen'               => 'format_screen_text',
         'alt'                  => 'format_alt_text',
         'modifier'             => array(
             /* DEFAULT */         false,
@@ -1135,6 +1136,9 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<div class="example-contents screen">';
         }
         return '</div>';
+    }
+    public function format_screen_text($value, $tag) {
+        return nl2br($value);
     }
     public function format_constant($open, $name, $attrs) {
         if ($open) {
