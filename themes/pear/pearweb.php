@@ -137,7 +137,7 @@ setupNavigation(array(
   "up"   => array("#", ""),
   "toc"  => array(
     array("#", ""))));
-manualHeader("PEAR Manual","index.php");
+manualHeader("index.php", "PEAR Manual");
 ?>
 ';
 
