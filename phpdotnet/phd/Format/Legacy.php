@@ -31,17 +31,28 @@ abstract class PhDFormat extends PhDHelper {
         $this->TABLE["colspec"] = array();
     }
     public function colspec(array $attrs) {
-        $colspec = self::getColSpec($attrs);
+        $colspec = self::getColspec($attrs, false);
         $this->TABLE["colspec"][$colspec["colnum"]] = $colspec;
         return $colspec;
     }
-    public function getColspec(array $attrs) {
+    public function getColspec(array $attrs, $forRow = true) {
         /* defaults */
-        $defaults["colname"] = count($this->TABLE["colspec"])+1;
-        $defaults["colnum"]  = count($this->TABLE["colspec"])+1;
-        $defaults["align"]   = "left";
+        $defaults = array(
+            "colname" => count($this->TABLE["colspec"])+1,
+            "colnum"  => count($this->TABLE["colspec"])+1,
+            "align"   => "left",
+        );
 
-        return array_merge($defaults, $this->TABLE["defaults"], $attrs);
+        $retval = array_merge($defaults, $this->TABLE["defaults"], $attrs);
+        if ($forRow) {
+            foreach($this->TABLE["colspec"] as $colspec) {
+                if ($colspec["colname"] == $retval["colname"]) {
+                    $retval = array_merge($retval, $colspec);
+                    break;
+                }
+            }
+        }
+        return $retval;
     }
     public function getColCount() {
         return $this->TABLE["cols"];
