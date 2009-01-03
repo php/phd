@@ -1374,9 +1374,13 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_row($open, $name, $attrs) {
         if ($open) {
+            $idstr = '';
+            if (isset($attrs[PhDReader::XMLNS_XML]['id'])) {
+                $idstr = ' id="'. $attrs[PhDReader::XMLNS_XML]['id']. '"';
+            }
             PhDFormat::initRow();
             $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
-            return '<tr valign="' .$valign. '">';
+            return '<tr'.$idstr.' valign="' .$valign. '">';
         }
         return "</tr>\n";
     }
