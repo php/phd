@@ -248,20 +248,21 @@ class chmsource extends chunkedhtml {
 Compatibility=1.1 or later
 Compiled file=php_manual_' . $lang . '.chm
 Contents file=php_manual_' . $lang . '.hhc
-Index file=php_manual_' . $lang . '.hhk
+Default Font=' . ($this->LANGUAGES[$lang]["preferred_font"] ? $this->LANGUAGES[$lang]["preferred_font"] : self::DEFAULT_FONT). '
+Default topic=res' . DIRECTORY_SEPARATOR . 'index.html
 Default Window=doc
-Default topic=res/index.html
 Display compile progress=Yes
+Enhanced decompilation=Yes
 Full-text search=Yes
+Index file=php_manual_' . $lang . '.hhk
 Language=' . $this->LANGUAGES[$lang]["langcode"] . '
 Title=' . (isset($this->LANGUAGES[$lang]["title"]) ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '
-Default Font=' . ($this->LANGUAGES[$lang]["preferred_font"] ? $this->LANGUAGES[$lang]["preferred_font"] : self::DEFAULT_FONT). '
 
 [WINDOWS]
-doc="' . (isset($this->LANGUAGES[$lang]["title"]) ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","res/index.html","res/index.html",,,,,0x23520,,0x10386e,,,,,,,,0
+doc="' . (isset($this->LANGUAGES[$lang]["title"]) ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","php_manual_' . $lang . '.hhc","php_manual_' . $lang . '.hhk","res/index.html","res/index.html",,,,,0x33520,,0x70386e,,,,,,,,0
 
 [FILES]
-res/style.css
+res' . DIRECTORY_SEPARATOR . 'style.css
 ');
         fwrite($this->hhcStream, '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html>
