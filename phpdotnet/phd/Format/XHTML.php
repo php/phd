@@ -1108,7 +1108,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_example_content($open, $name, $attrs) {
         if ($open) {
-            $retval = $this->escapePara() . '<div class="example-contents"><p>';
+            $retval = $this->escapePara() . '<div class="example-contents ' .$name. '"><p>';
             ++$this->openPara;
             return $retval;
         }
@@ -1123,22 +1123,22 @@ class XHTMLPhDFormat extends PhDFormat {
                 $this->role = false;
             }
 
-            return $this->escapePara() . '<div class="example-contents">';
+            return $this->escapePara() . '<div class="example-contents ' .$name. '">';
         }
         $this->role = false;
         return "</div>\n" . $this->restorePara();
     }
     public function format_programlisting_text($value, $tag) {
-        return nl2br($value);
+        return nl2br($this->TEXT($value));
     }
     public function format_screen($open, $name, $attrs) {
         if ($open) {
-            return '<div class="example-contents screen">';
+            return '<div class="example-contents ' .$name. '">';
         }
         return '</div>';
     }
     public function format_screen_text($value, $tag) {
-        return nl2br($value);
+        return nl2br($this->TEXT($value));
     }
     public function format_constant($open, $name, $attrs) {
         if ($open) {
