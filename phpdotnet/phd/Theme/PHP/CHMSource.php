@@ -245,6 +245,7 @@ class chmsource extends chunkedhtml {
     protected function headerChm() {
         $lang = $GLOBALS['OPTIONS']['language'];
         fwrite($this->hhpStream, '[OPTIONS]
+Binary TOC=Yes
 Compatibility=1.1 or later
 Compiled file=php_manual_' . $lang . '.chm
 Contents file=php_manual_' . $lang . '.hhc
