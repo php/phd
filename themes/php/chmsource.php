@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*  $Id$ */
 
 require_once $ROOT . '/themes/php/chunkedhtml.php';
@@ -246,6 +246,7 @@ class chmsource extends chunkedhtml {
     protected function headerChm() {
         $lang = PhDConfig::language();
         fwrite($this->hhpStream, '[OPTIONS]
+Binary TOC=Yes
 Compatibility=1.1 or later
 Compiled file=php_manual_' . $lang . '.chm
 Contents file=php_manual_' . $lang . '.hhc
