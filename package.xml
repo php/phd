@@ -41,13 +41,13 @@
     <active>yes</active>
   </developer>
 
-  <date>2008-12-18</date>
+  <date>2009-01-17</date>
   <version>
     <release>0.4.3</release>
     <api>0.4.3</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
