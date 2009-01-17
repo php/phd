@@ -43,28 +43,16 @@
 
   <date>2009-01-17</date>
   <version>
-    <release>0.4.3</release>
-    <api>0.4.3</api>
+    <release>0.4.4</release>
+    <api>0.4.4</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Automatically add anchors for refsect roles. (Hannes)
-    - Added description for seealso links. (Hannes)
-    - Fixed a bug where prefaces had unlisted childrens. (Hannes)
-    - Compressed methodnames in classsynopsis again. (Hannes)
-    - Added Next/Prev and Image Zoom buttons to CHM build (Richard Quadling)
-    - Fixed bug#46941 (FR: Find broken links). (Hannes)
-    - Fixed bug#46931 (wrong order of the META tag in the HEAD element). (Chen Gang)
-    - Fixed bug#46924 (parameter elements force incorrect line breaks). (Hannes)
-    - Fixed bug#46726 (Incorrect HTML output). (Hannes)
-    - Fixed bug#46714 (change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace). (Chen Gang)        
-    - Fixed bug#45570 (PhD doesn't use the colspec "align" attribute in xhtml output). (Hannes)
-    - Fixed bug#45318 (table colspec rendering issues). (Hannes)
-    - Fixed bug#44598 (Much space on 'expected output' section). (Hannes)
+    ....
   </notes>
 
   <contents>
@@ -489,6 +477,34 @@
         - Automatically use the phpdoc configure.php generated version
           information file if it exists. (Hannes)
         - Removed default border for formal tables. (Philip)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>0.4.3</release>
+        <api>0.4.3</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2009-01-17</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Automatically add anchors for refsect roles. (Hannes)
+        - Added description for seealso links. (Hannes)
+        - Fixed a bug where prefaces had unlisted childrens. (Hannes)
+        - Compressed methodnames in classsynopsis again. (Hannes)
+        - Added Next/Prev and Image Zoom buttons to CHM build (Richard Quadling)
+        - Fixed bug#46941 (FR: Find broken links). (Hannes)
+        - Fixed bug#46931 (wrong order of the META tag in the HEAD element). (Chen Gang)
+        - Fixed bug#46924 (parameter elements force incorrect line breaks). (Hannes)
+        - Fixed bug#46726 (Incorrect HTML output). (Hannes)
+        - Fixed bug#46714 (change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace). (Chen Gang)        
+        - Fixed bug#45570 (PhD doesn't use the colspec "align" attribute in xhtml output). (Hannes)
+        - Fixed bug#45318 (table colspec rendering issues). (Hannes)
+        - Fixed bug#44598 (Much space on 'expected output' section). (Hannes)
       </notes>
     </release>
 
