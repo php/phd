@@ -82,6 +82,7 @@ abstract class peartheme extends PhDTheme {
         'menuchoice'            => 'format_suppressed_tags',
         'methodname'            => 'tt',
         'note'                  => 'format_admonition',
+        'package'               => 'strong',
         'para'                  => array(
             /* DEFAULT */          false,
             'warning'           => 'format_warning_para',
