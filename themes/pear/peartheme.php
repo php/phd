@@ -580,7 +580,7 @@ abstract class peartheme extends PhDTheme {
      * Format the text within a program listing section.
      *
      * @param string $value Value of the text to format.
-     * @param unknown_type $tag
+     * @param string $tag   Tag name
      *
      * @return string
      */
@@ -588,12 +588,14 @@ abstract class peartheme extends PhDTheme {
     {
         switch($this->role) {
         case 'php':
-            if ( strrpos($value, '<?php') || strrpos($value, '?>') )
-                return highlight_string(trim($value), 1);
-            else return highlight_string("<?php\n" . trim($value) . "\n?>", 1);
+            if (strrpos($value, '<?php') || strrpos($value, '?>')) {
+                return $this->highlight(trim($value), 'php', 'xhtml');
+            } else {
+                return $this->highlight("<?php\n" . trim($value) . "\n?>", 'php', 'xhtml');
+            }
             break;
         default:
-            return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+            return $this->highlight(trim($value), $this->role, 'xhtml');
         }
     }
 
@@ -642,13 +644,16 @@ abstract class peartheme extends PhDTheme {
         switch ($this->role) {
         case 'php':
             if (strrpos($str, '<?php') || strrpos($str, '?>')) {
-                $str = highlight_string(trim($str), 1);
+                $str = $this->highlight(trim($str), $this->role, 'xhtml');
             } else {
-                $str = highlight_string("<?php\n" . trim($str) . "\n?>", 1);
+                $str = $this->highlight("<?php\n" . trim($str) . "\n?>", $this->role, 'xhtml');
             }
             break;
-        default:
+        case '':
             $str = htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+            break;
+        default:
+            $str = $this->highlight($str, $this->role, 'xhtml');
             break;
         }
 

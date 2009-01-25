@@ -41,7 +41,7 @@
     <active>yes</active>
   </developer>
 
-  <date>2009-01-17</date>
+  <date>2009-01-25</date>
   <version>
     <release>0.4.4</release>
     <api>0.4.4</api>
@@ -54,6 +54,7 @@
   <notes>
    - Add support for &lt;package&gt; in pear theme (Christian)
    - Replace ereg_replace with preg_replace
+   - Implement request #47201: Allow custom source code highlighter (e.g. Geshi) (Christian)
   </notes>
 
   <contents>

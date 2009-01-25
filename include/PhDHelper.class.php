@@ -32,6 +32,16 @@ class PhDHelper
     private static $autogen         = array();
 
     /**
+    * Array of highlighter objects
+    * Key is the format, value the object
+    *
+    * @var array
+    */
+    private static $highlighters = array();
+
+
+
+    /**
     * Creates the helper object.
     *
     * @param array $a Array with ID array as first value, ref array as second.
@@ -182,6 +192,50 @@ class PhDHelper
         PhDHelper::$autogen[$lang] = $autogen;
         return PhDHelper::$autogen[$lang][$text];
     }
+
+    /**
+    * Highlight (color) the given piece of source code
+    *
+    * @param string $text   Text to highlight
+    * @param string $role   Source code role to use (php, xml, html, ...)
+    * @param string $format Format to highlight (pdf, html, man, ...)
+    *
+    * @return string Highlighted code
+    */
+    public function highlight($text, $role = 'php', $format = 'xhtml')
+    {
+        global $OPTIONS;
+
+        if (!isset(self::$highlighters[$format])) {
+            $class = $OPTIONS['highlighter'];
+
+            if (!class_exists($class, true)) {
+                if ($class == 'PhDHighlighter') {
+                    //hard coded path for phdhighlighter, since phd doesn't follow
+                    // pear file conventions
+                    require_once dirname(__FILE__) . '/PhDHighlighter.class.php';
+                } else {
+                    //simple autoload replacement for pear-style classes
+                    require_once str_replace('_', '/', $class) . '.php';
+                }
+
+                if (!class_exists($class, false)) {
+                    trigger_error(
+                        'Highlighter class ' . $class . ' is not available',
+                        E_USER_ERROR
+                    );
+                }
+            }
+            self::$highlighters[$format] = call_user_func(
+                array($class, 'factory'), $format
+            );
+
+        }
+
+        return self::$highlighters[$format]->highlight(
+            $text, $role, $format
+        );
+    }//public function highlight(..)
 }
 
 /*

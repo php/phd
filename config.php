@@ -178,6 +178,7 @@ $OPTIONS = array (
   'php_error_output' => STDERR,
   'user_error_output' => STDERR,
   'phd_info_output' => STDOUT,
+  'highlighter'    => 'PhDHighlighter',
 );
 /* }}} */
 
@@ -186,19 +187,20 @@ error_reporting($olderr | $OPTIONS["verbose"]);
 
 /* {{{ getopt() options */
 $opts = array(
-    "format:"  => "f:", // The format to render (xhtml, pdf...)
-    "theme:"   => "t:", // The theme to render (phpweb, bightml..)
-    "index:"   => "i:", // Re-index or load from cache
-    "docbook:" => "d:", // The Docbook XML file to render from (.manual.xml)
-    "output:"  => "o:", // The output directory
-    "partial:" => "p:", // The ID to render (optionally ignoring its children)
-    "skip:"    => "s:", // The ID to skip (optionally skipping its children too)
-    "verbose:" => "v",  // Adjust the verbosity level
-    "list::"   => "l::", // List supported themes/formats
-    "lang:"    => "L:",  // Language hint (used by the CHM)
-    "color::"  => "c::", // Use color output if possible
-    "version"  => "V",  // Print out version information
-    "help"     => "h",  // Print out help
+    "format:"      => "f:",  // The format to render (xhtml, pdf...)
+    "theme:"       => "t:",  // The theme to render (phpweb, bightml..)
+    "index:"       => "i:",  // Re-index or load from cache
+    "docbook:"     => "d:",  // The Docbook XML file to render from (.manual.xml)
+    "output:"      => "o:",  // The output directory
+    "partial:"     => "p:",  // The ID to render (optionally ignoring its children)
+    "skip:"        => "s:",  // The ID to skip (optionally skipping its children too)
+    "verbose:"     => "v",   // Adjust the verbosity level
+    "list::"       => "l::", // List supported themes/formats
+    "lang:"        => "L:",  // Language hint (used by the CHM)
+    "color::"      => "c::", // Use color output if possible
+    'highlighter:' => 'h:',  // Class used as source code highlighter
+    "version"      => "V",   // Print out version information
+    "help"         => "h",   // Print out help
 );
 /* }}} */
 
@@ -545,6 +547,13 @@ foreach($args as $k => $v) {
         break;
     /* }}} */
 
+    /* {{{ Souce code highlighter */
+    case 'h':
+    case 'highlighter':
+        $OPTIONS['highlighter'] = (string)$v;
+        break;
+    /* }}} */
+
     /* {{{ Version info */
     case "V":
     case "version":
@@ -581,6 +590,8 @@ foreach($args as $k => $v) {
   --lang <language>          The language of the source file (used by the CHM theme). (default: en)
   -c <color>
   --color <color>            Enable color output when output is to a terminal, optionally specify numerical color value (default: false)
+  -h <classname>
+  --highlighter <classname>  Use custom source code highlighting php class
   -V
   --version                  Print the PhD version information
   -h

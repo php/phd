@@ -3,7 +3,7 @@
 /*  $Id$ */
 
 /* {{{ Find the $ROOT directory of PhD
-       @php_dir@ will be replaced by the pear package manager 
+       @php_dir@ will be replaced by the pear package manager
        If @php_dir@ however hasn't been replaced by anything,
        fallback to the dir containing this file */
 $ROOT = "@php_dir@/phd";
@@ -12,7 +12,7 @@ if ($ROOT == "@php_dir"."@/phd") {
 }
 /* }}} */
 
-(@include $ROOT."/config.php")
+(include $ROOT."/config.php")
     && isset($OPTIONS)
     && is_array($OPTIONS)
     && isset($OPTIONS["output_format"], $OPTIONS["output_theme"])
@@ -97,7 +97,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
     foreach($OPTIONS["output_theme"][$output_format] as $theme => $array) {
         is_dir($ROOT. "/themes/$theme") or die("Can't find the '$theme' theme");
         v("Using the %s theme (%s)", $theme, join(", ", $array), VERBOSE_THEME_RENDERING);
-        
+
         foreach($array as $themename) {
             $themename = basename($themename);
             require_once $ROOT. "/themes/$theme/$themename.php";
@@ -114,11 +114,11 @@ foreach($OPTIONS["output_format"] as $output_format) {
                 default:
                     $themes[$themename] = new $themename(array($IDs, $REFS, $CLASSES, $VARS));
             }
-            
+
             // FIXME: this needs to go away when we add support for
             // things other than xhtml
             $themes[$themename]->registerFormat($format);
-            
+
 
             // If the theme returns empty callback map there is no need to include it
             $tmp = $themes[$themename]->getElementMap();

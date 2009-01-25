@@ -427,11 +427,14 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function CDATA($str) {
         switch($this->role) {
-        case "php":
-            return '<div class="phpcode">' .(highlight_string(trim($str), 1)). '</div>';
-            break;
+        case '':
+            return '<div class="cdata"><pre>'
+                . htmlspecialchars($str, ENT_QUOTES, "UTF-8")
+                . '</pre></div>';
         default:
-            return '<div class="cdata"><pre>' .(htmlspecialchars($str, ENT_QUOTES, "UTF-8")). '</pre></div>';
+            return '<div class="' . $this->role . 'code">'
+                . $this->highlight(trim($str), $this->role, 'xhtml')
+                . '</div>';
         }
     }
     public function TEXT($str) {
