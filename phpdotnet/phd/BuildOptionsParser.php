@@ -9,19 +9,20 @@ class PhDBuildOptionsParser extends PhDOptionParser
     public function getOptionList()
     {
         return array(
-            "format:"   => "f:",        // The format to render (xhtml, pdf...)
-            "theme:"    => "t:",        // The theme to render (phpweb, bightml..)
-            "noindex"   => "I",         // Re-index or load from cache
-            "docbook:"  => "d:",        // The Docbook XML file to render from (.manual.xml)
-            "output:"   => "o:",        // The output directory
-            "partial:"  => "p:",        // The ID to render (optionally ignoring its children)
-            "skip:"     => "s:",        // The ID to skip (optionally skipping its children too)
-            "verbose:"  => "v",         // Adjust the verbosity level
-            "list::"    => "l::",       // List supported themes/formats
-            "lang::"    => "L:",        // Language hint (used by the CHM)
-            "color:"    => "c:",        // Use color output if possible
-            "version"   => "V",         // Print out version information
-            "help"      => "h",         // Print out help
+            "format:"      => "f:",        // The format to render (xhtml, pdf...)
+            "theme:"       => "t:",        // The theme to render (phpweb, bightml..)
+            "noindex"      => "I",         // Re-index or load from cache
+            "docbook:"     => "d:",        // The Docbook XML file to render from (.manual.xml)
+            "output:"      => "o:",        // The output directory
+            "partial:"     => "p:",        // The ID to render (optionally ignoring its children)
+            "skip:"        => "s:",        // The ID to skip (optionally skipping its children too)
+            "verbose:"     => "v",         // Adjust the verbosity level
+            "list::"       => "l::",       // List supported themes/formats
+            "lang::"       => "L:",        // Language hint (used by the CHM)
+            "color:"       => "c:",        // Use color output if possible
+            'highlighter:' => 'h:',        // Class used as source code highlighter
+            "version"      => "V",         // Print out version information
+            "help"         => "h",         // Print out help
         );
     }
 
@@ -46,6 +47,15 @@ class PhDBuildOptionsParser extends PhDOptionParser
             }
         }
         PhDConfig::set_output_format($formats);
+    }
+
+    public function option_h($k, $v)
+    {
+        $this->option_highlighter($k, $v);
+    }
+    public function option_highlighter($k, $v)
+    {
+        PhDConfig::setHighlighter($v);
     }
 
     public function option_t($k, $v)
@@ -355,6 +365,8 @@ class PhDBuildOptionsParser extends PhDOptionParser
   --lang <language>          The language of the source file (used by the CHM theme). (default: en
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal (default: false)
+  -h <classname>
+  --highlighter <classname>  Use custom source code highlighting php class
   -V
   --version                  Print the PhD version information
   -h

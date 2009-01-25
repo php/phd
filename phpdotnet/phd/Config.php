@@ -54,6 +54,7 @@ class PhDConfig
         'user_error_color' => false,
         'phd_info_output' => NULL,
         'phd_info_color' => false,
+        'highlighter'    => 'PhDHighlighter',
     );
 
     public static function __callStatic($name, $params)
