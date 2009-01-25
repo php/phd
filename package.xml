@@ -52,7 +52,8 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    ....
+   - Add support for &lt;package&gt; in pear theme (Christian)
+   - Replace ereg_replace with preg_replace
   </notes>
 
   <contents>
@@ -501,7 +502,7 @@
         - Fixed bug#46931 (wrong order of the META tag in the HEAD element). (Chen Gang)
         - Fixed bug#46924 (parameter elements force incorrect line breaks). (Hannes)
         - Fixed bug#46726 (Incorrect HTML output). (Hannes)
-        - Fixed bug#46714 (change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace). (Chen Gang)        
+        - Fixed bug#46714 (change deprecated ereg_replace(Since PHP 5.3.0) to preg_replace). (Chen Gang)
         - Fixed bug#45570 (PhD doesn't use the colspec "align" attribute in xhtml output). (Hannes)
         - Fixed bug#45318 (table colspec rendering issues). (Hannes)
         - Fixed bug#44598 (Much space on 'expected output' section). (Hannes)

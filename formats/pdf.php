@@ -334,7 +334,7 @@ class PDFPhDFormat extends PhDFormat {
             return "";
         }
 
-        $ret = utf8_decode(trim(ereg_replace( "[ \n\t]+", ' ', $str)));
+        $ret = utf8_decode(trim(preg_replace('/[ \n\t]+/', ' ', $str)));
         // No whitespace if current text value begins with ',', ';', ':', '.'
         if (strncmp($ret, ",", 1) && strncmp($ret, ";", 1) && strncmp($ret, ":", 1) && strncmp($ret, ".", 1))
             $this->pdfDoc->appendText(" " . $ret);
@@ -572,7 +572,7 @@ class PDFPhDFormat extends PhDFormat {
     }
 
     public function format_link_text($value, $tag) {
-        $value = trim(ereg_replace( "[ \n\t]+", ' ', $value));
+        $value = trim(preg_replace('/[ \n\t]+/', ' ', $value));
         if (isset($this->cchunk["href"]) && $this->cchunk["href"]) {
             $this->pdfDoc->add(PdfWriter::URL_ANNOTATION, array(chr(187) . chr(160) . $value, $this->cchunk["href"])); // links with >> symbol
         } elseif (isset($this->cchunk["linkend"]) && $linkend = $this->cchunk["linkend"]) {
@@ -586,7 +586,7 @@ class PDFPhDFormat extends PhDFormat {
     }
 
     public function format_function_text($value, $tag, $display_value = null) {
-        $value = trim(ereg_replace( "[ \n\t]+", ' ', $value));
+        $value = trim(preg_replace('/[ \n\t]+/', ' ', $value));
         if ($display_value === null) {
             $display_value = $value;
         }
@@ -1076,14 +1076,14 @@ class PDFPhDFormat extends PhDFormat {
     // }}} Footnotes & Callouts
 
     public function format_quote_text($value, $tag) {
-        $value = trim(ereg_replace( "[ \n\t]+", ' ', $value));
+        $value = trim(preg_replace('/[ \n\t]+/', ' ', $value));
         $this->pdfDoc->appendText(' "'.$value.'"');
         return "";
     }
 
     public function format_refname_text($value, $tag) {
         $this->cchunk["refname"][] = $value;
-        $this->pdfDoc->appendText(trim(ereg_replace( "[ \n\t]+", ' ', $value)));
+        $this->pdfDoc->appendText(trim(preg_replace('/[ \n\t]+/', ' ', $value)));
         return "";
     }
 

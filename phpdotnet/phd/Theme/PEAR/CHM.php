@@ -339,17 +339,27 @@ res\manual.css
 		return parent::format_root_chunk($open, $name, $attrs, $props);
     }
 
-    public function header($id) {
+    /**
+    * Generate the HTML header.
+    * Uses parent::header() and adds some additional stylesheets.
+    *
+    * @param string $id Page ID
+    *
+    * @return string Header HTML
+    */
+    public function header($id)
+    {
         $header = parent::header($id);
         // Add CSS link to <head>
-        $header = ereg_replace('( *)</head>','\\1 <link media="all" rel="stylesheet" type="text/css" href="reset-fonts.css"/>
- <link media="all" rel="stylesheet" type="text/css" href="style.css"/>
- <link media="all" rel="stylesheet" href="manual.css"/>
-\\1</head>', $header);
+        $header = preg_replace('#( *)</head>#',
+            '$1 <link media="all" rel="stylesheet" type="text/css" href="reset-fonts.css"/>
+$1 <link media="all" rel="stylesheet" type="text/css" href="style.css"/>
+$1 <link media="all" rel="stylesheet" href="manual.css"/>
+$1</head>',
+            $header
+        );
         return $header;
     }
-
-
 
     private function collectContent($attrs) {
 		if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
