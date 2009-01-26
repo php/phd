@@ -20,7 +20,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
             "list::"       => "l::",       // List supported themes/formats
             "lang::"       => "L:",        // Language hint (used by the CHM)
             "color:"       => "c:",        // Use color output if possible
-            'highlighter:' => 'h:',        // Class used as source code highlighter
+            'highlighter:' => 'g:',        // Class used as source code highlighter
             "version"      => "V",         // Print out version information
             "help"         => "h",         // Print out help
         );
@@ -49,7 +49,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         PhDConfig::set_output_format($formats);
     }
 
-    public function option_h($k, $v)
+    public function option_g($k, $v)
     {
         $this->option_highlighter($k, $v);
     }
@@ -365,7 +365,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
   --lang <language>          The language of the source file (used by the CHM theme). (default: en
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal (default: false)
-  -h <classname>
+  -g <classname>
   --highlighter <classname>  Use custom source code highlighting php class
   -V
   --version                  Print the PhD version information
