@@ -204,10 +204,8 @@ class PhDHelper
     */
     public function highlight($text, $role = 'php', $format = 'xhtml')
     {
-        global $OPTIONS;
-
         if (!isset(self::$highlighters[$format])) {
-            $class = $OPTIONS['highlighter'];
+            $class = $GLOBALS['OPTIONS']['highlighter'];
 
             if (!class_exists($class, true)) {
                 if ($class == 'PhDHighlighter') {
