@@ -143,6 +143,11 @@ abstract class phpdotnet extends PhDTheme {
     protected $chunked = true;
     protected $lang = "en";
 
+    /**
+    * Name of the ID currently being processed
+    *
+    * @var string
+    */
     protected $CURRENT_ID = "";
 
     /* Current Chunk settings */
@@ -630,7 +635,7 @@ abstract class phpdotnet extends PhDTheme {
         }
         return "</b></p>";
     }
- 
+
     /* FIXME: This function is a crazy performance killer */
     public function qandaset($stream) {
         $xml = stream_get_contents($stream);
@@ -640,6 +645,7 @@ abstract class phpdotnet extends PhDTheme {
         $doc->preserveWhitespace = false;
         $doc->loadXML(html_entity_decode(str_replace("&", "&amp;amp;", "<div>$xml</div>"), ENT_QUOTES, "UTF-8"));
         if ($err = libxml_get_errors()) {
+            echo 'qandaset xml problem in ' . $this->CURRENT_ID . "\n";
             print_r($err);
             libxml_clear_errors();
         }
