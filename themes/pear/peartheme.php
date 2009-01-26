@@ -558,6 +558,16 @@ abstract class peartheme extends PhDTheme {
         $this->phd_pearapi_text = $value;
     }
 
+    /**
+    * Format a &lt;programlisting&gt; tag.
+    * Highlighting an such is done in format_programlisting_text()
+    *
+    * @param string $value Value of the text to format.
+    * @param string $tag   Tag name
+    * @param array  $attrs Array of attributes
+    *
+    * @return string Generated programlisting html
+    */
     public function format_programlisting($open, $name, $attrs)
     {
         if ($open) {
@@ -565,25 +575,29 @@ abstract class peartheme extends PhDTheme {
             if (isset($attrs[PhDReader::XMLNS_DOCBOOK]['role'])) {
                 $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]['role'];
             } else {
-                $this->role = 'default';
+                $this->role = '';
             }
 
             return $this->format->escapePara()
-                . '<pre class="'. ($this->role ? $this->role : 'programlisting') .'" style="background-color:#EEE; width: 100%">';
+                . '<div class="'. ($this->role ? $this->role . 'code' : 'programlisting')
+                . '" style="background-color:#EEE; width: 100%">';
         }
         $this->role = false;
         $this->trim = false;
-        return "</pre>\n" . $this->format->restorePara();
+
+        return '</div>' . $this->format->restorePara();
     }
 
     /**
-     * Format the text within a program listing section.
-     *
-     * @param string $value Value of the text to format.
-     * @param string $tag   Tag name
-     *
-     * @return string
-     */
+    * Format the text within a program listing section.
+    * Highlighting is done via the external highlighter.
+    * programlisting without php tags get them appended
+    *
+    * @param string $value Value of the text to format.
+    * @param string $tag   Tag name
+    *
+    * @return string Highlighted text.
+    */
     public function format_programlisting_text($value, $tag)
     {
         switch($this->role) {

@@ -35,17 +35,19 @@ class PhDHighlighter
     */
     public function highlight($text, $role, $format)
     {
-        if ($format == 'xhtml') {
-            if ($role == 'php') {
-                return highlight_string($text, 1);
-            } else {
-                return '<pre>'
-                    . htmlspecialchars($text, ENT_QUOTES, 'UTF-8')
-                    . '</pre>';
-            }
+        if ($format != 'xhtml') {
+            return $text;
         }
 
-        return $text;
+        if ($role == 'php') {
+            return highlight_string($text, 1);
+        } else {
+            return '<pre class="'. ($role ? $role . 'code' : 'programlisting') .'">'
+                . htmlspecialchars($text, ENT_QUOTES, 'UTF-8')
+                . "</pre>\n";
+        }
+
+        return $retval;
     }//public function highlight(..)
 
 }
