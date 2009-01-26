@@ -252,6 +252,11 @@ abstract class peartheme extends PhDTheme {
     */
     public $phd_pearapi_urlprefix = 'http://pear.php.net/package/';
 
+    /**
+    * Name of the ID currently being processed
+    *
+    * @var string
+    */
     protected $CURRENT_ID = "";
 
     /* Current Chunk settings */
@@ -933,6 +938,7 @@ abstract class peartheme extends PhDTheme {
         $doc->preserveWhitespace = false;
         $doc->loadXML(html_entity_decode(str_replace('&', '&amp;amp;', "<div>$xml</div>"), ENT_QUOTES, 'UTF-8'));
         if ($err = libxml_get_errors()) {
+            echo 'qandaset xml problem in ' . $this->CURRENT_ID . "\n";
             print_r($err);
             libxml_clear_errors();
         }
