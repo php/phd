@@ -198,7 +198,7 @@ $opts = array(
     "list::"       => "l::", // List supported themes/formats
     "lang:"        => "L:",  // Language hint (used by the CHM)
     "color::"      => "c::", // Use color output if possible
-    'highlighter:' => 'h:',  // Class used as source code highlighter
+    'highlighter:' => 'g:',  // Class used as source code highlighter
     "version"      => "V",   // Print out version information
     "help"         => "h",   // Print out help
 );
@@ -547,8 +547,8 @@ foreach($args as $k => $v) {
         break;
     /* }}} */
 
-    /* {{{ Souce code highlighter */
-    case 'h':
+    /* {{{ Source code highlighter */
+    case 'g':
     case 'highlighter':
         $OPTIONS['highlighter'] = (string)$v;
         break;
@@ -590,7 +590,7 @@ foreach($args as $k => $v) {
   --lang <language>          The language of the source file (used by the CHM theme). (default: en)
   -c <color>
   --color <color>            Enable color output when output is to a terminal, optionally specify numerical color value (default: false)
-  -h <classname>
+  -g <classname>
   --highlighter <classname>  Use custom source code highlighting php class
   -V
   --version                  Print the PhD version information
