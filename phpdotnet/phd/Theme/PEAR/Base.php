@@ -85,6 +85,7 @@ abstract class peartheme extends PhDTheme {
         'package'               => 'strong',
         'para'                  => array(
             /* DEFAULT */          false,
+            'question'          => 'span',//can't ignore it since it's defined in format
             'warning'           => 'format_warning_para',
             'important'         => 'format_suppressed_tags',
         ),
@@ -146,6 +147,7 @@ abstract class peartheme extends PhDTheme {
                 //'example'       => 'format_example_title',
                 'informaltable' => 'format_table_title',
                 'part'          => 'format_container_chunk_title',
+                'refsection'    => 'format_container_chunk_title',
                 'section'       => array(
                     /* DEFAULT */  'format_container_chunk_title',
                     'section'   => array(

@@ -664,6 +664,9 @@ class XHTMLPhDFormat extends PhDFormat {
         return $this->format_chunk($open, "refentry", $attrs, $props);
     }
     public function format_refsect1_para($open, $name, $attrs, $props) {
+        if ($props['empty']) {
+            return '';
+        }
         if ($open) {
             switch ($props["sibling"]) {
             case "methodsynopsis":
@@ -1109,7 +1112,10 @@ class XHTMLPhDFormat extends PhDFormat {
         }
         return "</code>\n";
     }
-    public function format_example_content($open, $name, $attrs) {
+    public function format_example_content($open, $name, $attrs, $props) {
+        if ($props['empty']) {
+            return '';
+        }
         if ($open) {
             $retval = $this->escapePara() . '<div class="example-contents ' .$name. '"><p>';
             ++$this->openPara;
