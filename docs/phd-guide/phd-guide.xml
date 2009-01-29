@@ -6,21 +6,21 @@
       xmlns:mml="http://www.w3.org/1998/Math/MathML"
       xmlns:html="http://www.w3.org/1999/xhtml"
       xmlns:db="http://docbook.org/ns/docbook">
-  <title>PhD: The definitive guide to PHP's Docbook Rendering System</title>
+  <title>PhD: The definitive guide to PHP's DocBook Rendering System</title>
 
   <preface>
     <title>About PhD</title>
 
-    <para>PhD is PHP's very own Docbook 5 rendering system. It is used to
+    <para>PhD is PHP's very own DocBook 5 rendering system. It is used to
     convert the PHP Manual and PEAR Documentation into different output
     formats like XHTML, PDF, Man pages and CHM.</para>
 
-    <para>The goal of PhD is to become a fast, general Docbook rendering
+    <para>The goal of PhD is to become a fast, general DocBook rendering
     system. At the moment of writing, PhD is already very fast: I can create
     the chunked version of PEAR's manual (some 3.000 files) in less than a
     minute on a 2GHz system. It also renders the PHP and PEAR manual
-    flawlessly. It does not support every Docbook 5 tag yet, and using it to
-    render own docbook files may need some tweaks.</para>
+    flawlessly. It does not support every DocBook 5 tag yet, and using it to
+    render own DocBook files may need some tweaks.</para>
   </preface>
 
   <chapter>
@@ -37,7 +37,9 @@
         <title>Installation via PEAR</title>
 
         <note>
-          <para>You need a working PEAR installation.</para>
+          <para>You need a working <link
+          xlink:href="http://pear.php.net/manual/en/installation.php">PEAR
+          installation</link>.</para>
         </note>
 
         <para>Discover the channel:</para>
@@ -62,7 +64,7 @@ Copyright (c) 2008 The PHP Documentation Group</screen>
         <title>Installation from CVS</title>
 
         <para>To get the latest and greatest features that have not been
-        released yet, you can use phd from CVS.</para>
+        released yet, you can use PhD from CVS.</para>
 
         <screen>$ cvs -d :pserver:cvsread@cvs.php.net:/repository checkout phd
 ... ouput
@@ -83,13 +85,19 @@ Copyright (c) 2008 The PHP Documentation Group</screen>
   </chapter>
 
   <chapter>
-    <title>Docbook extensions</title>
+    <title>Using PhD to render documentation</title>
+
+    <para>FIXME</para>
+  </chapter>
+
+  <chapter>
+    <title>DocBook extensions</title>
 
     <para>PhD has been tailored for PHP and PEAR manual. To make writing
     documentation as easy as possible, some own tags have been added to the
     DTD.</para>
 
-    <para>All extensions live in their own xml namespace
+    <para>All extensions live in their own XML namespace
     "<literal>phd:</literal>" which resolves to
     <uri>http://www.php.net/ns/phd</uri>. When using one of the attributes or
     tags described here, remember to set the namespace:</para>
@@ -97,9 +105,10 @@ Copyright (c) 2008 The PHP Documentation Group</screen>
     <programlisting>xmlns:phd="http://www.php.net/ns/phd"</programlisting>
 
     <section>
-      <title>General extensions</title>
+      <title>General DocBook extensions</title>
 
-      <para></para>
+      <para>The extensions listed here are available in all PhD themes and
+      formats.</para>
 
       <section>
         <title>Manual chunking with "phd:chunk" (Attribute)</title>
@@ -108,6 +117,179 @@ Copyright (c) 2008 The PHP Documentation Group</screen>
         get their own file (chunk) when using a chunked theme. Sometimes the
         result of this automatism is not optimal and you want to fine-tune it.
         The attribute "phd:chunk" is offered as solution by PhD.</para>
+
+        <section>
+          <title>Allowed values</title>
+
+          <para><literal>phd:chunk</literal> may have values
+          <literal>true</literal> and <literal>false</literal>. They force the
+          element to be chunked or not.</para>
+        </section>
+
+        <section>
+          <title>Allowed in</title>
+
+          <para><literal>phd:chunk</literal> may be used in every tag that
+          accepts <link
+          xlink:href="http://www.docbook.org/tdg5/en/html/ref-elements.html#common.attributes">db.common.attributes</link>.</para>
+        </section>
+
+        <section>
+          <title>Example</title>
+
+          <programlisting role="xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;preface xmlns="http://docbook.org/ns/docbook"
+ xmlns:phd="http://www.php.net/ns/phd"
+ xml:id="preface"
+ phd:chunk="false"
+&gt;
+ &lt;info&gt;
+  &lt;title&gt;Preface&lt;/title&gt;
+ ..
+ &lt;/info&gt;
+ ..
+&lt;/preface&gt;</programlisting>
+        </section>
+      </section>
+
+      <section>
+        <title>Generating Table Of Contents: &lt;phd:toc&gt; (Tag)</title>
+
+        <para>To manually insert a Table Of Contents (TOC) that creates a list
+        of links to children elements of a specified tag.</para>
+
+        <para>phd:toc-depth</para>
+
+        <section>
+          <title>Allowed in</title>
+
+          <para><literal>&lt;phd:toc&gt;</literal> is can be used everywhere
+          <literal>&lt;para&gt;</literal> is allowed.</para>
+        </section>
+
+        <section>
+          <title>Children</title>
+
+          <para>You can add a title with
+          <literal>&lt;title&gt;</literal>.</para>
+        </section>
+
+        <section>
+          <title>Attributes</title>
+
+          <table>
+            <title>Attributes for &lt;phd:toc&gt;</title>
+
+            <tgroup cols="3">
+              <thead>
+                <row>
+                  <entry>Attribute name</entry>
+
+                  <entry>Description</entry>
+
+                  <entry>Default value</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry>phd:element</entry>
+
+                  <entry>ID of the element whose children shall be
+                  linked</entry>
+
+                  <entry><emphasis>none</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry>phd:toc-depth</entry>
+
+                  <entry>Depth of the TOC/Number of levels</entry>
+
+                  <entry><literal>1</literal></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </section>
+      </section>
+    </section>
+
+    <section>
+      <title>PEAR specific DocBook extensions</title>
+
+      <para>The DocBook extensions listed here are only available when using a
+      PEAR theme.</para>
+
+      <section>
+        <title>Linking to PEAR API documentation: &lt;phd:pearapi&gt;
+        (Tag)</title>
+
+        <para>A large part of the PEAR manual is about packages and how to use
+        them. Package authors often find they need to link to the API
+        documentation of a specific method, variable or class of their
+        package. To ease the linking process, the
+        <literal>&lt;phd:pearapi&gt;</literal> tag was introduced.</para>
+
+        <para>You can let PhD automatically create the link text by just
+        closing the tag, or specify the tag text via the tag's content.</para>
+
+        <section>
+          <title>Package links</title>
+
+          <para><literal>phd:package</literal> name is put into the attribute,
+          any text:</para>
+
+          <programlisting role="xml">&lt;phd:pearapi phd:package="HTML_QuickForm"/&gt;
+&lt;phd:pearapi phd:package="HTML_QuickForm"&gt;some text&lt;/phd:pearapi&gt;</programlisting>
+
+          <screen><link
+              xlink:href="http://pear.php.net/package/HTML_QuickForm/docs/latest/li_HTML_QuickForm.html">HTML_QuickForm</link>
+<link xlink:href="http://pear.php.net/package/HTML_QuickForm/docs/latest/li_HTML_QuickForm.html">some text</link></screen>
+        </section>
+
+        <section>
+          <title>Class links</title>
+
+          <para>Class name as <literal>phd:linkend</literal> attribute
+          value.</para>
+
+          <programlisting role="xml">&lt;phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element"/&gt;
+&lt;phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element"&gt;some text&lt;/phd:pearapi&gt;</programlisting>
+
+          <screen><link
+              xlink:href="http://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html">HTML_QuickForm_element</link>
+<link xlink:href="http://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html">some text</link></screen>
+        </section>
+
+        <section>
+          <title>Class method links</title>
+
+          <para>Class and method name as <literal>phd:linkend</literal> text,
+          separated by a double colon.</para>
+
+          <programlisting role="xml">&lt;phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element::setName"/&gt;
+&lt;phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element::setName"&gt;some text&lt;/phd:pearapi&gt;</programlisting>
+
+          <screen><link
+              xlink:href="http://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html#methodsetName">HTML_QuickForm_element::setName()</link>
+<link xlink:href="http://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html#methodsetName">some text</link></screen>
+        </section>
+
+        <section>
+          <title>Class variable links</title>
+
+          <para>Class and variable name as <literal>phd:linkend</literal>
+          text, separated by a double colon and a dollar sign before the
+          variable name.</para>
+
+          <programlisting role="xml">&lt;phd:pearapi phd:package="Net_Geo" phd:linkend="Net_Geo::$cache_ttl"/&gt;
+&lt;phd:pearapi phd:package="Net_Geo" phd:linkend="Net_Geo::$cache_ttl"&gt;some text&lt;/phd:pearapi&gt;</programlisting>
+
+          <screen><link
+              xlink:href="http://pear.php.net/package/Net_Geo/docs/latest/Net_Geo/Net_Geo.html#var$cache_ttl">Net_Geo::$cache_ttl</link>
+<link xlink:href="http://pear.php.net/package/Net_Geo/docs/latest/Net_Geo/Net_Geo.html#var$cache_ttl">some text</link></screen>
+        </section>
       </section>
     </section>
   </chapter>
