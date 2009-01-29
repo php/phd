@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book version="5.0" xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns:mml="http://www.w3.org/1998/Math/MathML"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:db="http://docbook.org/ns/docbook">
+  <title>PhD: The definitive guide to PHP's Docbook Rendering System</title>
+
+  <preface>
+    <title>About PhD</title>
+
+    <para>PhD is PHP's very own Docbook 5 rendering system. It is used to
+    convert the PHP Manual and PEAR Documentation into different output
+    formats like XHTML, PDF, Man pages and CHM.</para>
+
+    <para>The goal of PhD is to become a fast, general Docbook rendering
+    system. At the moment of writing, PhD is already very fast: I can create
+    the chunked version of PEAR's manual (some 3.000 files) in less than a
+    minute on a 2GHz system. It also renders the PHP and PEAR manual
+    flawlessly. It does not support every Docbook 5 tag yet, and using it to
+    render own docbook files may need some tweaks.</para>
+  </preface>
+
+  <chapter>
+    <title>Using PhD</title>
+
+    <section>
+      <title>Installation</title>
+
+      <para>PhD is distributed via an own PEAR channel,
+      <uri>doc.php.net</uri>. Using it is also the most easy way to get
+      it.</para>
+
+      <section>
+        <title>Installation via PEAR</title>
+
+        <note>
+          <para>You need a working PEAR installation.</para>
+        </note>
+
+        <para>Discover the channel:</para>
+
+        <screen>$ pear channel-discover doc.php.net
+Adding Channel "doc.php.net" succeeded</screen>
+
+        <para>Now we're ready to install the latest version:</para>
+
+        <screen>$ pear install doc.php.net/phd-beta
+
+... installation of package "PhD" in channel "doc.php.net"
+
+$ phd --version
+PhD version: 0.4.2
+Copyright (c) 2008 The PHP Documentation Group</screen>
+
+        <para>That's it!</para>
+      </section>
+
+      <section>
+        <title>Installation from CVS</title>
+
+        <para>To get the latest and greatest features that have not been
+        released yet, you can use phd from CVS.</para>
+
+        <screen>$ cvs -d :pserver:cvsread@cvs.php.net:/repository checkout phd
+... ouput
+
+$ pear channel-discover doc.php.net
+Adding Channel "doc.php.net" succeeded
+
+$ pear install package.xml
+... installation of package "PhD" in channel "doc.php.net"
+
+$ phd --version
+PhD version: phd-from-cvs
+Copyright (c) 2008 The PHP Documentation Group</screen>
+
+        <para>And now you're done.</para>
+      </section>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Docbook extensions</title>
+
+    <para>PhD has been tailored for PHP and PEAR manual. To make writing
+    documentation as easy as possible, some own tags have been added to the
+    DTD.</para>
+
+    <para>All extensions live in their own xml namespace
+    "<literal>phd:</literal>" which resolves to
+    <uri>http://www.php.net/ns/phd</uri>. When using one of the attributes or
+    tags described here, remember to set the namespace:</para>
+
+    <programlisting>xmlns:phd="http://www.php.net/ns/phd"</programlisting>
+
+    <section>
+      <title>General extensions</title>
+
+      <para></para>
+
+      <section>
+        <title>Manual chunking with "phd:chunk" (Attribute)</title>
+
+        <para>PhD automatically chooses which sections, chapters or other tags
+        get their own file (chunk) when using a chunked theme. Sometimes the
+        result of this automatism is not optimal and you want to fine-tune it.
+        The attribute "phd:chunk" is offered as solution by PhD.</para>
+      </section>
+    </section>
+  </chapter>
+</book>
