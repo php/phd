@@ -271,6 +271,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => 'span',
         'userinput'             => 'format_userinput',
+        'uri'                   => 'tt',
         'variablelist'          => 'format_variablelist',
         'varlistentry'          => 'format_varlistentry',
         'varname'               => array(

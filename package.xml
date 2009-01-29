@@ -56,6 +56,7 @@
    - Replace ereg_replace with preg_replace
    - Implement request #47201: Allow custom source code highlighter (e.g. Geshi) (Christian)
    - Fix HTML problems with empty paragraphs in examples and qandaset questions (Christian)
+   - Support &lt;uri&gt; (Christian)
   </notes>
 
   <contents>
