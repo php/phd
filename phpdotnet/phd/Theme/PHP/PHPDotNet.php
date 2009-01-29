@@ -86,6 +86,7 @@ abstract class phpdotnet extends PhDTheme {
         'qandaentry'            => 'format_qandaentry',
         'question'              => 'format_question',
         'answer'                => 'format_answer',
+        'uri'                   => 'tt',
         'varlistentry'          => 'format_varlistentry',
     );
     protected $textmap =        array(

@@ -185,7 +185,7 @@ abstract class peartheme extends PhDTheme {
         ),
         'tbody'                 => 'tbody',
         'term'                  => 'dt',
-        'uri'                   => 'format_uri',
+        'uri'                   => 'tt',
         'userinput'             => 'format_userinput',
         'variablelist'          => 'format_div',
         'varlistentry'          => 'format_dl',
@@ -891,14 +891,6 @@ abstract class peartheme extends PhDTheme {
             return '<p><code class="' . $name . '">';
         }
         return ')</code></p>';
-    }
-
-    public function format_uri($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            return '<font color="red">';
-        }
-        return '</font>';
     }
 
     public function format_refsynopsisdiv($open, $name, $attrs, $props)
