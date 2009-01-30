@@ -185,7 +185,6 @@ abstract class peartheme extends PhDTheme {
         ),
         'tbody'                 => 'tbody',
         'term'                  => 'dt',
-        'uri'                   => 'tt',
         'userinput'             => 'format_userinput',
         'variablelist'          => 'format_div',
         'varlistentry'          => 'format_dl',
