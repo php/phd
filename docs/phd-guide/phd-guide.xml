@@ -17,7 +17,7 @@
 
     <para>The goal of PhD is to become a fast, general DocBook rendering
     system. At the moment of writing, PhD is already very fast: It can create
-    the chunked version of PEAR's manual (some 3.000 files) in less than a
+    the chunked version of PEAR's manual (some 3000 files) in less than a
     minute on a 2GHz system. It also renders the PHP and PEAR manual
     flawlessly. It does not support every DocBook 5 tag yet, and using it to
     render own DocBook files may need some tweaks.</para>
