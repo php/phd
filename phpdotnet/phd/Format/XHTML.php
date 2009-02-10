@@ -1,5 +1,6 @@
 <?php
 /*  $Id$ */
+require $ROOT. "/include/PhDMediaManager.class.php";
 
 class XHTMLPhDFormat extends PhDFormat {
     protected $elementmap = array( /* {{{ */
@@ -204,6 +205,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'replaceable'           => 'span',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
+        'screenshot'            => 'div',
         'sect1'                 => 'format_chunk',
         'sect2'                 => 'format_chunk',
         'sect3'                 => 'format_chunk',
@@ -368,6 +370,14 @@ class XHTMLPhDFormat extends PhDFormat {
     * @see CDATA()
     */
     public $role        = false;
+
+    /**
+    * Media manager object
+    *
+    * @var PhDMediaManager
+    */
+    public $mediamanager = null;
+
     /* Current Chunk variables */
     protected $cchunk      = array();
     /* Default Chunk variables */
@@ -405,9 +415,18 @@ class XHTMLPhDFormat extends PhDFormat {
         ),
     );
 
-    public function __construct(array $IDs) {
+    public function __construct(array $IDs)
+    {
         parent::__construct($IDs);
+        $this->mediamanager = new PhDMediaManager();
     }
+
+    public function registerTheme(PhDTheme $theme)
+    {
+        parent::registerTheme($theme);
+        $this->mediamanager->output_dir = $theme->outputdir;
+    }
+
     public function __call($func, $args) {
         if ($args[0]) {
             trigger_error("No mapper found for '{$func}'", E_USER_WARNING);
@@ -1237,10 +1256,13 @@ class XHTMLPhDFormat extends PhDFormat {
         $this->cchunk["mediaobject"]["alt"] = $value;
     }
     public function format_imagedata($open, $name, $attrs) {
+        $file    = $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"];
+        $newpath = $this->mediamanager->handleFile($file);
+
         if ($this->cchunk["mediaobject"]["alt"] !== false) {
-            return '<img src="' .$attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]. '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
+            return '<img src="' . $newpath . '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
         }
-        return '<img src="' .$attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]. '" />';
+        return '<img src="' . $newpath . '" />';
     }
 
     public function format_dl($open, $name, $attrs, $props)

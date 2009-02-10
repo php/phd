@@ -5,7 +5,7 @@ require_once $ROOT . '/themes/php/phpdotnet.php';
 class phpweb extends phpdotnet {
     protected $streams = array();
     protected $writeit = false;
-    protected $outputdir = '';
+    public $outputdir = '';
 
 
     public function __construct($IDs, $filename, $ext = "php", $chunked = true) {
