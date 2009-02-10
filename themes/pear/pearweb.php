@@ -12,8 +12,8 @@ class pearweb extends peartheme
     protected $streams = array();
     
     protected $writeit = false;
-    
-    protected $outputdir = '';
+
+    public $outputdir = '';
 
     /**
     * URL prefix for all API doc link generated with <phd:pearapi>.
