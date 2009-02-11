@@ -18,6 +18,14 @@ class PhDMediaManager
     public $output_dir = null;
 
     /**
+    * Path the media files are referenced relative to in html.
+    * Trailing slash required.
+    *
+    * @var string
+    */
+    public $relative_path = '';
+
+    /**
     * If the image media directory exists
     *
     * @var boolean
@@ -45,7 +53,7 @@ class PhDMediaManager
 
         $this->copyOver($filename, $newpath);
 
-        return $newpath;
+        return $this->relative_path . $newpath;
     }//public function handleFile(..)
 
 

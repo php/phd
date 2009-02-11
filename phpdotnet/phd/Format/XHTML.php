@@ -424,7 +424,12 @@ class XHTMLPhDFormat extends PhDFormat {
     public function registerTheme(PhDTheme $theme)
     {
         parent::registerTheme($theme);
-        $this->mediamanager->output_dir = $theme->outputdir;
+        if (isset($theme->outputdir)) {
+            $this->mediamanager->output_dir = $theme->outputdir;
+        } else {
+            $this->mediamanager->output_dir    = $theme->outputfile . '-data/';
+            $this->mediamanager->relative_path = basename($this->mediamanager->output_dir) . '/';
+        }
     }
 
     public function __call($func, $args) {

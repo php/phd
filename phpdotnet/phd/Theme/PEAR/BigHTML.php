@@ -2,9 +2,17 @@
 
 require_once $ROOT . '/themes/pear/peartheme.php';
 class pearbightml extends peartheme {
+    /**
+    * File to write the html to
+    *
+    * @var string
+    */
+    public $outputfile = null;
+
     public function __construct(array $IDs, $ext = "html") {
         parent::__construct($IDs, $ext, false);
-        $this->stream = fopen($GLOBALS['OPTIONS']['output_dir'] . "pear_manual_{$this->lang}.html", "w");
+        $this->outputfile = $GLOBALS['OPTIONS']['output_dir'] . "pear_manual_{$this->lang}.html";
+        $this->stream = fopen($this->outputfile, "w");
         self::header();
     }
     public function appendData($data, $isChunk) {

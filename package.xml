@@ -41,7 +41,7 @@
     <active>yes</active>
   </developer>
 
-  <date>2009-02-10</date>
+  <date>2009-02-11</date>
   <version>
     <release>0.4.4</release>
     <api>0.4.4</api>
@@ -57,7 +57,7 @@
    - Implement request #47201: Allow custom source code highlighter (e.g. Geshi) (Christian)
    - Fix HTML problems with empty paragraphs in examples and qandaset questions (Christian)
    - Support &lt;uri&gt; and &lt;screenshot&gt; (Christian)
-   - Copy images automatically (Christian)
+   - Copy images automatically using MediaManager (Christian)
   </notes>
 
   <contents>

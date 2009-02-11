@@ -3,9 +3,17 @@
 
 require_once $ROOT . '/themes/php/phpdotnet.php';
 class bightml extends phpdotnet {
+    /**
+    * File to write the html to
+    *
+    * @var string
+    */
+    public $outputfile = null;
+
     public function __construct(array $IDs, $filename, $ext = "html") {
         parent::__construct($IDs, $filename, $ext, false);
-        $this->stream = fopen($GLOBALS['OPTIONS']['output_dir'] . "bightml.html", "w");
+        $this->outputfile = $GLOBALS['OPTIONS']['output_dir']  . 'bightml.html';
+        $this->stream = fopen($this->outputfile, "w");
         self::header();
     }
     public function appendData($data, $isChunk) {
