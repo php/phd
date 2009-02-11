@@ -10,7 +10,7 @@ require_once $ROOT . '/themes/pear/peartheme.php';
 class pearweb extends peartheme
 {
     protected $streams = array();
-    
+
     protected $writeit = false;
 
     public $outputdir = '';
@@ -44,13 +44,13 @@ class pearweb extends peartheme
             }
         }
     }
-    
+
     /**
      * Write an individual chunk of the manual
      *
      * @param string   $id     ID of the chunk
      * @param resource $stream Stream containing the contents of the chunk
-     * 
+     *
      * @return void
      */
     public function writeChunk($id, $stream)
@@ -80,13 +80,13 @@ class pearweb extends peartheme
 
         v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);
     }
-    
+
     /**
      * Append data to the streams.
      *
      * @param string                                       $data    Data to write
      * @param PhDReader::CLOSE_CHUNK|PhDReader::OPEN_CHUNK $isChunk constant
-     * 
+     *
      * @return int|false
      */
     public function appendData($data, $isChunk)
@@ -113,18 +113,18 @@ class pearweb extends peartheme
             return $retval;
         }
     }
-    
+
     /**
      * Add the header to this file.
      *
      * @param string $id The id of this chunk
-     * 
+     *
      * @return string
      */
     public function header($id)
     {
         $ext = "." . $this->ext;
-        
+
         $parent = PhDHelper::getParent($id);
 
         if (!$parent || $parent == "ROOT")
@@ -165,9 +165,9 @@ manualHeader("index.php", "PEAR Manual");
 
     /**
      * Create the footer for the given page id and return it.
-     * 
+     *
      * In this instance, we return raw php with the pearweb manual footer call.
-     * 
+     *
      * @param string $id Page ID
      *
      * @return string Footer code
@@ -186,7 +186,7 @@ manualHeader("index.php", "PEAR Manual");
      * @param string $id       ID of the page
      * @param string $parent   ID of the parent element
      * @param array  $siblings array of siblings
-     * 
+     *
      * @return array(0=>filename,1=>description)
      */
     protected function createPrev($id, $parent, $siblings)
@@ -220,14 +220,14 @@ manualHeader("index.php", "PEAR Manual");
 
         return array(PhDHelper::getFilename($parent).$ext, PhDHelper::getDescription($parent, false));
     }
-    
+
     /**
      * Create the next page link information
      *
      * @param string $id       ID of the page
      * @param string $parent   ID of the parent element
      * @param array  $siblings array of siblings
-     * 
+     *
      * @return array(0=>filename,1=>description)
      */
     protected function createNext($id, $parent, $siblings)
@@ -277,7 +277,7 @@ manualHeader("index.php", "PEAR Manual");
         } while (true);
         return $next;
     }
-    
+
     /**
      * Destructor - if guide.php exists, this must be the index file copy it over.
      */
@@ -294,7 +294,7 @@ manualHeader("index.php", "PEAR Manual");
      * @param bool         $open  if a chunk is open we should append to
      * @param unknown_type $name  The name
      * @param unknown_type $attrs attributes
-     * 
+     *
      * @return string
      */
     public function format_qandaset($open, $name, $attrs)

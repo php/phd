@@ -33,7 +33,7 @@ class pearbightml extends peartheme {
     public function footer() {
         fwrite($this->stream, "</div></div></body></html>");
     }
-    
+
     public function format_qandaset($open, $name, $attrs) {
         if ($open) {
             $this->cchunk["qandaentry"] = array();

@@ -152,7 +152,7 @@ String for Post meridian.
 D_T_FMT
 </td>
 <td colspan="1" rowspan="1" align="left">
-String that can be used as the format string for 
+String that can be used as the format string for
 <a href="function.strftime.html">strftime</a>
  to represent time and date.
 </td>
@@ -163,7 +163,7 @@ String that can be used as the format string for
 D_FMT
 </td>
 <td colspan="1" rowspan="1" align="left">
-String that can be used as the format string for 
+String that can be used as the format string for
 <a href="function.strftime.html">strftime</a>
  to represent date.
 </td>
@@ -174,7 +174,7 @@ String that can be used as the format string for
 T_FMT
 </td>
 <td colspan="1" rowspan="1" align="left">
-String that can be used as the format string for 
+String that can be used as the format string for
 <a href="function.strftime.html">strftime</a>
  to represent time.
 </td>
@@ -185,7 +185,7 @@ String that can be used as the format string for
 T_FMT_AMPM
 </td>
 <td colspan="1" rowspan="1" align="left">
-String that can be used as the format string for 
+String that can be used as the format string for
 <a href="function.strftime.html">strftime</a>
  to represent time in 12-hour format with ante/post meridian.
 </td>
@@ -214,7 +214,7 @@ Year in alternate era format.
 ERA_D_T_FMT
 </td>
 <td colspan="1" rowspan="1" align="left">
-Date and time in alternate era format (string can be used in 
+Date and time in alternate era format (string can be used in
 <a href="function.strftime.html">strftime</a>
 ).
 </td>
@@ -225,7 +225,7 @@ Date and time in alternate era format (string can be used in
 ERA_D_FMT
 </td>
 <td colspan="1" rowspan="1" align="left">
-Date in alternate era format (string can be used in 
+Date in alternate era format (string can be used in
 <a href="function.strftime.html">strftime</a>
 ).
 </td>
@@ -236,7 +236,7 @@ Date in alternate era format (string can be used in
 ERA_T_FMT
 </td>
 <td colspan="1" rowspan="1" align="left">
-Time in alternate era format (string can be used in 
+Time in alternate era format (string can be used in
 <a href="function.strftime.html">strftime</a>
 ).
 </td>
@@ -386,35 +386,35 @@ P_SIGN_POSN
 <p class="simpara">
 
           Returns 0 if parentheses surround the quantity and currency_symbol.
-        
+
 </p>
 </li>
 <li class="listitem">
 <p class="simpara">
 
          Returns 1 if the sign string precedes the quantity and currency_symbol.
-        
+
 </p>
 </li>
 <li class="listitem">
 <p class="simpara">
 
          Returns 2 if the sign string follows the quantity and currency_symbol.
-        
+
 </p>
 </li>
 <li class="listitem">
 <p class="simpara">
 
          Returns 3 if the sign string immediately precedes the currency_symbol.
-        
+
 </p>
 </li>
 <li class="listitem">
 <p class="simpara">
 
          Returns 4 if the sign string immediately follows the currency_symbol.
-        
+
 </p>
 </li>
 </ul>

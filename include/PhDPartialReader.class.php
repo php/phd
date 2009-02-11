@@ -7,7 +7,7 @@ class PhDPartialReader extends PhDReader {
 
     public function __construct($encoding = "UTF-8", $xml_opts = NULL) {
         parent::__construct($encoding, $xml_opts);
-        
+
         $render_ids = PhDConfig::render_ids();
         if ($render_ids !== NULL) {
             if (is_array($render_ids)) {
