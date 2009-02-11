@@ -5,6 +5,7 @@ TODO:
 	- Sort the methods like the elementmaps
 	- Move all PHP/PHP.net specific stuff into themes/php/
 	- Implement generic theme
+	- Implement CHM format which should generate the CHM indexing files
 	- Implement "mktoc.php" caching using SQLite
 	- Write more tests
 	- Implement method to generate markup for the default attributes

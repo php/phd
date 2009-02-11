@@ -2,7 +2,7 @@
 /*  $Id$ */
 
 class phppdf extends PhDTheme {
-   
+
     protected $elementmap = array(
         'article'               => 'format_tocnode_newpage',
         'appendix'              => 'format_tocnode_newpage',
@@ -79,14 +79,14 @@ class phppdf extends PhDTheme {
 
 
     );
-    
-    
+
+
     private   $acronyms = array();
-    
+
     /* Common properties for all functions pages */
     protected $bookName = "";
     protected $outputdir = "";
-    
+
     /* Current Chunk settings */
     protected $cchunk          = array();
     /* Default Chunk settings */
@@ -99,7 +99,7 @@ class phppdf extends PhDTheme {
         "id-to-page"                => array(),
         "root-outline"              => null,
     );
-    
+
     public function __construct(array $IDs, array $filenames, $format = "pdf", $chunked = true) {
         parent::__construct($IDs);
         $this->format = $format;
@@ -107,17 +107,17 @@ class phppdf extends PhDTheme {
         $this->outputdir = $GLOBALS['OPTIONS']['output_dir'] . $this->format . DIRECTORY_SEPARATOR;
         if(!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory.\n");
     }
-    
+
     public function __destruct() {}
-        
-    
+
+
     // Do nothing
     public function appendData($data, $isChunk) {}
-    
+
     // To override
     public function format_root_set($open, $name, $attrs, $props) {}
     public function format_set($open, $name, $attrs, $props) {}
-    
+
     public function format_book($open, $name, $attrs, $props) {
         if ($open) {
             $this->format->newChunk();
@@ -125,15 +125,15 @@ class phppdf extends PhDTheme {
             $pdfDoc = new PdfWriter();
             try {
                 $pdfDoc->setCompressionMode(HaruDoc::COMP_ALL);
-            } catch (HaruException $e) { 
+            } catch (HaruException $e) {
                 v("PDF Compression failed, you need to compile libharu with Zlib...", E_USER_WARNING);
             }
             $this->format->setPdfDoc($pdfDoc);
             if (isset($attrs[PhDReader::XMLNS_XML]["base"]) && $base = $attrs[PhDReader::XMLNS_XML]["base"])
                 $this->format->setChunkInfo("xml-base", $base);
-                
+
             $id = $attrs[PhDReader::XMLNS_XML]["id"];
-            $this->cchunk["root-outline"] = $this->cchunk["id-to-outline"][$id] = 
+            $this->cchunk["root-outline"] = $this->cchunk["id-to-outline"][$id] =
                 $pdfDoc->createOutline(PhDHelper::getDescription($id), null, true);
             $this->setIdToPage($id);
         } else {
@@ -145,28 +145,28 @@ class phppdf extends PhDTheme {
         }
         return false;
     }
-    
+
     public function format_bookname($value, $tag) {
         $this->cchunk["bookname"] = trim($value);
         $this->format->getPdfDoc()->setCurrentBookName($this->cchunk["bookname"]);
         return false;
     }
-    
+
     public function format_setname($value, $tag) {
         $this->cchunk["setname"] = trim($value);
         return false;
     }
-    
+
     public function format_tocnode($open, $name, $attrs, $props, $newpage = false) {
         if ($open) {
             if ($newpage)
                 $this->format->getPdfDoc()->add(PdfWriter::PAGE);
-            else 
+            else
                 $this->format->getPdfDoc()->add(PdfWriter::LINE_JUMP);
-            
+
             if (isset($attrs[PhDReader::XMLNS_XML]["base"]) && $base = $attrs[PhDReader::XMLNS_XML]["base"])
                 $this->format->setChunkInfo("xml-base", $base);
-                
+
             if (isset($attrs[PhDReader::XMLNS_XML]["id"]) && $id = $attrs[PhDReader::XMLNS_XML]["id"]) {
                 $parentId = PhDHelper::getParent($id);
                 if (isset($this->cchunk["id-to-outline"][$parentId])) {
@@ -182,14 +182,14 @@ class phppdf extends PhDTheme {
         }
         return "";
     }
-    
+
     public function format_tocnode_newpage($open, $name, $attrs, $props) {
         return $this->format_tocnode($open, $name, $attrs, $props, true);
-    }   
-    
+    }
+
     public function format_tocnode_exception($open, $name, $attrs, $props) {
         return $this->format_tocnode($open, "reference", $attrs, $props, true);
-    }    
+    }
 
     public function format_tocnode_class($open, $name, $attrs, $props) {
         return $this->format_tocnode($open, "reference", $attrs, $props, true);
@@ -198,18 +198,18 @@ class phppdf extends PhDTheme {
     public function format_grep_classname_text($value, $tag) {
         $this->cchunk["phpdoc:classref"] = strtolower($value);
     }
-    
+
     // Convert the book name to a Unix valid filename
     protected function toValidName($functionName) {
         return str_replace(array(":", "::", "->", "/", "\\", " "), array(".", ".", ".", "-", "-", "-"), $functionName);
-    } 
-    
+    }
+
     protected function setIdToPage($id) {
         if (isset($this->cchunk["id-to-page"]) && is_array($this->cchunk["id-to-page"])) {
             $this->cchunk["id-to-page"][$id] = $this->format->getPdfDoc()->getCurrentPage();
         }
     }
-    
+
     protected function resolveLinks($name) {
         v("Resolving Internal Links... (%s)", $name, VERBOSE_TOC_WRITING);
         $linksToResolve = $this->format->getChunkInfo("links-to-resolve");
@@ -223,10 +223,10 @@ class phppdf extends PhDTheme {
                 }
             }
         }
-    }    
-    
+    }
+
     public function format_type_text($type, $tagname) {
-        $type = trim(ereg_replace( "[ \n\t]+", ' ', $type));
+        $type = trim(preg_replace('/[ \n\t]+/', ' ', $type));
         $t = strtolower($type);
         $href = $fragment = "";
 
@@ -272,14 +272,14 @@ class phppdf extends PhDTheme {
         $this->format->getPdfDoc()->revertFont();
         return '';
     }
-    
+
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
         if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
             return false;
         }
         return self::format_type_text($type, $tagname);
     }
-    
+
     public function format_collect_id($open, $name, $attrs, $props, $newpage = false) {
         if ($open && isset($attrs[PhDReader::XMLNS_XML]["id"]) && $id = $attrs[PhDReader::XMLNS_XML]["id"]) {
                 $this->setIdToPage($id);

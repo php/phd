@@ -5,7 +5,7 @@ require_once $ROOT . '/themes/php/chunkedhtml.php';
 class chmsource extends chunkedhtml {
     const DEFAULT_FONT = "Arial,10,0";
     const DEFAULT_TITLE = "PHP Manual";
-    
+
     // Array to manual code -> HTML Help Code conversion
     // Code list: http://www.helpware.net/htmlhelp/hh_info.htm
     // Charset list: http://www.microsoft.com/globaldev/nlsweb/default.asp
@@ -176,7 +176,7 @@ class chmsource extends chunkedhtml {
             "preferred_font" => "simsun,10,0"
         )
     );
-    
+
     // HTML Help Workshop project file
     protected $hhpStream;
     // CHM Table of contents
@@ -188,7 +188,7 @@ class chmsource extends chunkedhtml {
     protected $hhkStream;
     // Project files Output directory
     protected $chmdir;
-	
+
     public function __construct(array $IDs, $filename, $ext = "html", $dir = "chm") {
         chunkedhtml::__construct($IDs, $filename, $ext);
         $this->chmdir = $GLOBALS['OPTIONS']['output_dir'] . $dir . DIRECTORY_SEPARATOR;
@@ -207,17 +207,17 @@ class chmsource extends chunkedhtml {
 
         self::headerChm();
     }
-    
+
     public function __destruct() {
         self::footerChm();
-        
+
         fclose($this->hhpStream);
         fclose($this->hhcStream);
         fclose($this->hhkStream);
-        
+
         chunkedhtml::__destruct();
     }
-    
+
     protected function appendChm($name, $ref, $isChunk, $hasChild) {
         switch ($isChunk) {
             case PhDReader::OPEN_CHUNK :
@@ -241,7 +241,7 @@ class chmsource extends chunkedhtml {
                 break;
         }
     }
-	
+
     protected function headerChm() {
         $lang = $GLOBALS['OPTIONS']['language'];
         fwrite($this->hhpStream, '[OPTIONS]
@@ -331,14 +331,14 @@ res' . DIRECTORY_SEPARATOR . 'style.css
             "        </object>\n    </li>\n");
         return false;
     }
-    
+
     public function header($id) {
         $header = parent::header($id);
         // Add CSS link to <head>
 				$pattern = '/(.*)(\r|\n|\r\n|\n\r)(.*)<\/head>/';
 				$replacement = '$1  <link media="all" rel="stylesheet" type="text/css" href="style.css"/>$2$3</head>';
-				
-				$header = preg_replace($pattern, $replacement, $header);        
+
+				$header = preg_replace($pattern, $replacement, $header);
         return $header;
     }
 
@@ -371,5 +371,5 @@ res' . DIRECTORY_SEPARATOR . 'style.css
             $spaces .= "  ";
         return $spaces;
     }
-    
+
 }

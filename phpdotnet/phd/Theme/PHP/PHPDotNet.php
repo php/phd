@@ -311,7 +311,7 @@ abstract class phpdotnet extends PhDTheme {
                 }
                 $href = '<a href="' .$href. '">';
             }
-            
+
             if (
                 $this->cchunk["fieldsynopsis"]["modifier"] == "const" ||
                 (
@@ -465,7 +465,7 @@ abstract class phpdotnet extends PhDTheme {
             }
         }
         $content .= "</div>\n";
-        
+
         return $content;
     }
     public function format_exception_chunk($open, $name, $attrs, $props) {
@@ -529,17 +529,17 @@ abstract class phpdotnet extends PhDTheme {
         /* ignore it */
         return "";
     }
-    
+
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
         $display_value = $this->format->format_classsynopsis_methodsynopsis_methodname_text($value, $tag);
         return $this->format_function_text($value, $tag, $display_value);
     }
-    
+
     public function format_function_text($value, $tag, $display_value = null) {
         if ($display_value === null) {
             $display_value = $value;
         }
-        
+
         $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
         if (($filename = $this->getRefnameLink($ref)) !== null) {
             if ($this->CURRENT_ID !== $filename) {

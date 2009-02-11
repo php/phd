@@ -125,7 +125,7 @@ class ManpagePhDFormat extends PhDFormat {
         'row'                   => 'format_row',
         'entry'                 => 'format_entry',
     ); /* }}} */
-    
+
     protected $textmap = array(
         'classname'             => array(
             /* DEFAULT */          false,
@@ -184,14 +184,14 @@ class ManpagePhDFormat extends PhDFormat {
         "segtitle"              => array(),
         "segindex"              => 0,
     );
-    
+
     /* If a chunk is being processed */
     protected $chunkOpen = false;
-    
+
     public function __construct(array $IDs) {
         parent::__construct($IDs);
     }
-    
+
     public function __call($func, $args) {
         if ($args[0] && $this->chunkOpen) {
             trigger_error("No mapper found for '{$func}'", E_USER_WARNING);
@@ -206,11 +206,11 @@ class ManpagePhDFormat extends PhDFormat {
         }
         return ($isMacro ? "" : "\\fP");
     }
-    
+
     public function CDATA($str) {
         return str_replace("\\", "\\\\", trim($str)); // Replace \ with \\ after trimming
     }
-    
+
     public function TEXT($str) {
         $ret = trim(preg_replace( '/[ \n\t]+/', ' ', $str));
         // No newline if current line begins with ',', ';', ':', '.'
@@ -218,28 +218,28 @@ class ManpagePhDFormat extends PhDFormat {
             $ret = "\n" . $ret;
         return $ret;
     }
-    
+
     public function getChunkInfo() {
         return $this->cchunk;
     }
-    
+
     public function format_suppressed_tags($open, $name, $attrs) {
         /* Ignore it */
         return "";
     }
-    
+
     public function format_suppressed_text($value, $tag) {
         /* Suppress any content */
         return "";
     }
-    
+
     public function format_refsect_text($value, $tag) {
         if ($this->cchunk["appendlater"] && isset($this->cchunk["buffer"]))
             array_push($this->cchunk["buffer"], strtoupper('"'.$value.'"'));
         else
             return strtoupper('"'.$value.'"');
     }
-    
+
     public function format_refsect_title($open, $name, $attrs, $props) {
         if ($open) {
             if ($this->cchunk["appendlater"] && isset($this->cchunk["buffer"]))
@@ -248,7 +248,7 @@ class ManpagePhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_refpurpose($open, $name, $attrs, $props) {
         if ($open) {
             return " \- ";
@@ -258,21 +258,21 @@ class ManpagePhDFormat extends PhDFormat {
     public function format_function_text($value, $tag) {
         return "\n\\fB" . $this->toValidName($value) . "\\fP(3)";
     }
-        
+
     public function format_parameter_text($value, $tag) {
         return "\n\\fI$" . $value . "\\fP";
     }
-    
+
     public function format_parameter_term_text($value, $tag) {
         return "\n\\fI$" . $value . "\\fP\n\-";
     }
-    
+
     public function format_term($open, $name, $attrs, $props) {
         if ($open)
             return "";
         return "\n\-";
     }
-      
+
     public function format_simplelist($open, $name, $attrs, $props) {
         if (isset($this->cchunk["role"]) && $this->cchunk["role"] == "seealso") {
             if ($open) {
@@ -288,7 +288,7 @@ class ManpagePhDFormat extends PhDFormat {
             return "\n.RE\n.PP\n";
         }
     }
-    
+
     public function format_member($open, $name, $attrs, $props) {
         if ($open) {
             if (isset($this->cchunk["role"]) && $this->cchunk["role"] == "seealso") {
@@ -306,31 +306,31 @@ class ManpagePhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
             return "\n.PP\n\\fB" . $this->autogen($name, $props["lang"]) . "\\fR\n.RS";
         }
         return "\n.RE\n.PP";
     }
-    
+
     public function format_example($open, $name, $attrs, $props) {
         if ($open && isset($this->cchunk["examplenumber"])) {
             return "\n.PP\n\\fB" . $this->autogen($name, $props["lang"]) . ++$this->cchunk["examplenumber"] . "\\fR\n.RS";
         }
         return "\n.RE";
     }
-    
+
     public function format_itemizedlist($open, $name, $attrs, $props) {
         if ($open) {
             return "\n.PP\n.RS";
         }
         return "\n.RE\n.PP";
     }
-    
+
     public function format_methodparam($open, $name, $attrs, $props) {
         if ($open) {
-            $opt = isset($attrs[PhDReader::XMLNS_DOCBOOK]["choice"]) && 
+            $opt = isset($attrs[PhDReader::XMLNS_DOCBOOK]["choice"]) &&
                 $attrs[PhDReader::XMLNS_DOCBOOK]["choice"] == "opt";
             $this->cchunk["methodsynopsis"]["params"][] = array(
                 "optional" => $opt,
@@ -340,7 +340,7 @@ class ManpagePhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_void($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["methodsynopsis"]["params"][] = array(
@@ -351,24 +351,24 @@ class ManpagePhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_type_method_text($value, $tag) {
         $this->cchunk['methodsynopsis']['params'][count($this->cchunk['methodsynopsis']['params'])-1]['type'] = $value;
         return "";
     }
-    
+
     public function format_parameter_method_text($value, $tag) {
         $this->cchunk['methodsynopsis']['params'][count($this->cchunk['methodsynopsis']['params'])-1]['name'] = $value;
         return "";
     }
-    
+
     public function format_initializer_method_text($value, $tag) {
         $this->cchunk['methodsynopsis']['params'][count($this->cchunk['methodsynopsis']['params'])-1]['initializer'] = $value;
         return "";
     }
-    
+
     public function format_refsynopsisdiv($open, $name, $attrs, $props) {
-        if ($open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"]) 
+        if ($open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"])
             && $this->cchunk["methodsynopsis"]["firstsynopsis"]) {
             return "\n.SH SYNOPSIS\n";
         }
@@ -376,9 +376,9 @@ class ManpagePhDFormat extends PhDFormat {
             $this->cchunk["methodsynopsis"]["firstsynopsis"] = false;
         return "";
     }
-    
+
     public function format_methodsynopsis($open, $name, $attrs, $props) {
-        if ($open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"]) 
+        if ($open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"])
             && $this->cchunk["methodsynopsis"]["firstsynopsis"] && $this->cchunk["appendlater"]) {
             $this->cchunk["appendlater"] = false;
             return "\n.SH SYNOPSIS\n";
@@ -388,11 +388,11 @@ class ManpagePhDFormat extends PhDFormat {
         $params = array();
         // write the formatted synopsis
         foreach ($this->cchunk['methodsynopsis']['params'] as $parameter)
-            array_push( $params, ($parameter['optional'] ? "[" : "") . $parameter['type'] . 
+            array_push( $params, ($parameter['optional'] ? "[" : "") . $parameter['type'] .
                 ($parameter['name'] ? " \\fI$" . $parameter['name'] . "\\fP" : "") . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "") . ($parameter['optional'] ? "]" : "") );
         $ret = "\n(" . join($params, ", ") . ")";
         $this->cchunk['methodsynopsis']['params'] = array();
-        
+
         // finally write what is in the buffer
         if (isset($this->cchunk["buffer"])) {
             $ret .= implode("", $this->cchunk["buffer"]);
@@ -402,33 +402,33 @@ class ManpagePhDFormat extends PhDFormat {
             $this->cchunk["methodsynopsis"]["firstsynopsis"] = false;
         return $ret;
     }
-    
+
     public function newChunk() {
         $this->cchunk = $this->dchunk;
         $this->chunkOpen = true;
     }
-    
+
     public function closeChunk() {
         $this->chunkOpen = false;
     }
-    
+
     public function format_xref($open, $name, $attrs, $props) {
         if ($props['empty'])
             return "\n\"" . PhDHelper::getDescription($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"]) . "\"";
         return "";
     }
-    
+
     public function format_verbatim($open, $name, $attrs, $props) {
         if ($open) {
             return "\n.PP\n.nf";
         }
         return "\n.fi";
     }
-    
+
     public function format_verbatim_text($value, $tag) {
         return "\n" . trim($value) . "\n";
     }
-    
+
     public function format_refsect($open, $name, $attrs, $props) {
         if ($open && isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
             $this->cchunk["role"] = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
@@ -438,14 +438,14 @@ class ManpagePhDFormat extends PhDFormat {
         }
         if (!$open)
             $this->cchunk["role"] = null;
-        return "";  
+        return "";
     }
-    
-    // Returns the unformatted value without whitespaces (nor new lines) 
+
+    // Returns the unformatted value without whitespaces (nor new lines)
     public function format_text($value, $tag) {
         return trim(preg_replace('/[ \n\t]+/', ' ', $value));
     }
-    
+
     public function format_tgroup($open, $name, $attrs, $props) {
         if ($open) {
             $nbCols = $attrs[PhDReader::XMLNS_DOCBOOK]["cols"];
@@ -457,14 +457,14 @@ class ManpagePhDFormat extends PhDFormat {
         }
         return "\n.TE\n.PP";
     }
-    
+
     public function format_thead($open, $name, $attrs, $props) {
         if ($open) {
             return "";
         }
         return "\n=";
     }
-    
+
     public function format_row($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["firstitem"] = true;
@@ -472,7 +472,7 @@ class ManpagePhDFormat extends PhDFormat {
         }
         return "";
     }
-    
+
     public function format_entry($open, $name, $attrs, $props) {
         if ($open) {
             if ($this->cchunk["firstitem"]) {
@@ -483,7 +483,7 @@ class ManpagePhDFormat extends PhDFormat {
         }
         return "\nT}";
     }
-    
+
     public function format_segmentedlist($open, $name, $attrs, $props) {
         if ($open) {
             return "\n.P";
@@ -491,13 +491,13 @@ class ManpagePhDFormat extends PhDFormat {
         $this->cchunk["segtitle"] = array();
         return "\n";
     }
-    
+
     public function format_seglistitem($open, $name, $attrs, $props) {
         if ($open && isset($this->cchunk["segindex"]))
             $this->cchunk["segindex"] = 0;
         return "";
     }
-    
+
     public function format_seg($open, $name, $attrs, $props) {
         if (! (isset($this->cchunk["segtitle"]) && isset($this->cchunk["segtitle"][$this->cchunk["segindex"]])) )
             return "";
@@ -507,35 +507,35 @@ class ManpagePhDFormat extends PhDFormat {
         $this->cchunk["segindex"]++;
         return "";
     }
-    
+
     public function format_segtitle_text($value, $tag) {
         if (isset($this->cchunk["segtitle"]))
             $this->cchunk["segtitle"][] = $value;
         return "";
     }
-    
+
     public function format_manvolnum($open, $name, $attrs, $props) {
         if ($open) {
             return "(";
         }
         return ")";
     }
-    
+
     public function format_ooclass_name_text($value, $tag) {
         return "\n.br\n\\fI" . $value . "\\fP";
     }
-    
+
     public function format_indent($open, $name, $attrs, $props) {
         if ($open) {
             return "\n.PP\n.RS";
         }
         return "\n.RE\n.PP";
     }
-    
+
     public function format_tag_text($value, $tag) {
         return "\n<" . $value . ">";
     }
-    
+
     // Convert the function name to a Unix valid filename
     public function toValidName($functionName) {
         return str_replace(array("::", "->", "()"), array(".", ".", ""), $functionName);
