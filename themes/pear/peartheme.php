@@ -466,10 +466,10 @@ abstract class peartheme extends PhDTheme {
         return '</a>';
     }
 
-    public function format_container_chunk_title($open, $name, $attrs)
+    public function format_container_chunk_title($open, $name, $attrs, $props)
     {
         if ($open) {
-            return '<h1>';
+            return $props["empty"] ? '' : '<h1>';
         }
         $ret = '';
         if ($this->cchunk['container_chunk']) {

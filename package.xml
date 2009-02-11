@@ -58,6 +58,7 @@
    - Fix HTML problems with empty paragraphs in examples and qandaset questions (Christian)
    - Support &lt;uri&gt; and &lt;screenshot&gt; (Christian)
    - Copy images automatically using MediaManager (Christian)
+   - Fix bug #47362: &lt;h1&gt; tag gets omitted in bightml (Christian)
   </notes>
 
   <contents>
