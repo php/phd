@@ -475,9 +475,9 @@ abstract class phpdotnet extends PhDTheme {
         return $this->format_container_chunk($open, "reference", $attrs, $props);
     }
 
-    public function format_container_chunk_title($open, $name, $attrs) {
+    public function format_container_chunk_title($open, $name, $attrs, $props) {
         if ($open) {
-            return "<h1>";
+            return $props["empty"] ? '' : '<h1>';
         }
         $ret = "";
         if ($this->cchunk["container_chunk"]) {
