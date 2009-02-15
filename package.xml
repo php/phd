@@ -58,8 +58,9 @@
    - Fix HTML problems with empty paragraphs in examples and qandaset questions (Christian)
    - Support &lt;uri&gt; and &lt;screenshot&gt; (Christian)
    - Copy images automatically using MediaManager (Christian)
-   - Fix bug #47362: &lt;h1&gt; tag gets omitted in bightml (Christian)
-   - Fix bug #47196: improve render of initializer tag (Laurent)
+   - Fixed bug#47362: &lt;h1&gt; tag gets omitted in bightml (Christian)
+   - Fixed bug#47196: improve render of initializer tag (Laurent)
+   - Fixed encoding issues in the Polish CHM builds. (Jarosław Głowacki)
    - Generate syntactically correct php files for pearweb when description or
      title have a quote in it. (Christian)
   </notes>
