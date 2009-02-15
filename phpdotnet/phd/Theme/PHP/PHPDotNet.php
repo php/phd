@@ -339,8 +339,8 @@ abstract class phpdotnet extends PhDTheme {
 
     public function versionInfo($funcname) {
         $funcname = str_replace(
-                array("::", "->", "__", "_", '$', '()'),
-                array("-",  "-",  "-",  "-", "",  ''),
+                array("::", "-&gt;", "->", "__", "_", '$', '()'),
+                array("-",  "-",     "-",  "-",  "-", "",  ''),
                 strtolower($funcname));
         if(isset($this->versions[$funcname])) {
            return $this->versions[$funcname];
