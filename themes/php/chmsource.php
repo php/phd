@@ -124,7 +124,8 @@ class chmsource extends chunkedhtml {
             "langcode" => "0x415 Polish",
             "preferred_charset" => "Windows-1250",
             "mime_charset_name" => "Windows-1250",
-            "preferred_font" => self::DEFAULT_FONT
+            "preferred_font" => self::DEFAULT_FONT,
+            "title" => "Podręcznik PHP",
         ),
         "pt_BR" => array(
             "langcode" => "0x416 Portuguese (Brazil)",
@@ -221,17 +222,20 @@ class chmsource extends chunkedhtml {
 
     protected function appendChm($name, $ref, $isChunk, $hasChild) {
         switch ($isChunk) {
-            case PhDReader::OPEN_CHUNK :
+            case PhDReader::OPEN_CHUNK:
+                $charset = $this->LANGUAGES[PhDConfig::language()]["preferred_charset"];
+                $name = htmlspecialchars(iconv('UTF-8', $charset, $name), ENT_QUOTES);
+
                 $this->currentTocDepth++;
                 fwrite($this->hhpStream, "{$ref}\n");
                 fwrite($this->hhcStream, "{$this->offset(1)}<li><object type=\"text/sitemap\">\n" .
-                    "{$this->offset(3)}<param name=\"Name\" value=\"" .htmlentities($name, ENT_QUOTES, 'UTF-8') . "\">\n" .
+                    "{$this->offset(3)}<param name=\"Name\" value=\"" . $name . "\">\n" .
                     "{$this->offset(3)}<param name=\"Local\" value=\"{$ref}\">\n" .
                     "{$this->offset(2)}</object>\n");
                 if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
                 fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
                     "          <param name=\"Local\" value=\"{$ref}\">\n" .
-                    "          <param name=\"Name\" value=\"" . htmlentities($name, ENT_QUOTES, 'UTF-8') . "\">\n" .
+                    "          <param name=\"Name\" value=\"" . $name . "\">\n" .
                     "        </object>\n    </li>\n");
                 break;
             case PhDReader::CLOSE_CHUNK :
@@ -326,9 +330,12 @@ res' . DIRECTORY_SEPARATOR . 'style.css
 
     public function format_varlistentry($open, $name, $attrs) {
         $this->collectContent($attrs);
+        $charset = $this->LANGUAGES[PhDConfig::language()]["preferred_charset"];
+        $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
+
         fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
             "          <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
-            "          <param name=\"Name\" value=\"" . htmlentities($this->lastContent["name"], ENT_QUOTES, 'UTF-8') . "\">\n" .
+            "          <param name=\"Name\" value=\"" . $content . "\">\n" .
             "        </object>\n    </li>\n");
         return false;
     }
