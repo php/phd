@@ -159,7 +159,10 @@ manualHeader("index.php", "PEAR Manual");
         return "<?php \n" .
             "sendManualHeaders(\"UTF-8\", \"{$this->lang}\");\n" .
             "setupNavigation(" . var_export($nav, true) . ");\n" .
-            'manualHeader("' . $this->getFilename($id).$ext . '", "' . PhDHelper::getDescription($id, true) . '");' . "\n" .
+            'manualHeader("'
+                . $this->getFilename($id).$ext . '", '
+                . var_export(PhDHelper::getDescription($id, true), true)
+            . ');' . "\n" .
             "?>\n";
     }
 
@@ -177,7 +180,10 @@ manualHeader("index.php", "PEAR Manual");
         $ext = $this->ext . ".";
         $parent = PhDHelper::getParent($id);
 
-        return '<?php manualFooter("' . $this->getFilename($id).$ext . '", "' . PhDHelper::getDescription($id, true) . '"); ?>';
+        return '<?php manualFooter("'
+            . $this->getFilename($id).$ext . '", '
+            . var_export(PhDHelper::getDescription($id, true), true)
+            . '); ?>';
     }
 
     /**
