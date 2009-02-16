@@ -44,14 +44,15 @@
   <date>2009-02-16</date>
   <version>
     <release>0.4.5</release>
-    <api>0.4.4</api>
+    <api>0.4.5</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+   - Fix bug #47408: Same image directory used for each theme
   </notes>
 
   <contents>

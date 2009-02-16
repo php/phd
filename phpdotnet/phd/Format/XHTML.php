@@ -1,6 +1,5 @@
 <?php
 /*  $Id$ */
-require $ROOT. "/include/PhDMediaManager.class.php";
 
 class XHTMLPhDFormat extends PhDFormat {
     protected $elementmap = array( /* {{{ */
@@ -371,13 +370,6 @@ class XHTMLPhDFormat extends PhDFormat {
     */
     public $role        = false;
 
-    /**
-    * Media manager object
-    *
-    * @var PhDMediaManager
-    */
-    public $mediamanager = null;
-
     /* Current Chunk variables */
     protected $cchunk      = array();
     /* Default Chunk variables */
@@ -414,23 +406,6 @@ class XHTMLPhDFormat extends PhDFormat {
             "listitems"                     => array(),
         ),
     );
-
-    public function __construct(array $IDs)
-    {
-        parent::__construct($IDs);
-        $this->mediamanager = new PhDMediaManager();
-    }
-
-    public function registerTheme(PhDTheme $theme)
-    {
-        parent::registerTheme($theme);
-        if (isset($theme->outputdir)) {
-            $this->mediamanager->output_dir = $theme->outputdir;
-        } else {
-            $this->mediamanager->output_dir    = $theme->outputfile . '-data/';
-            $this->mediamanager->relative_path = basename($this->mediamanager->output_dir) . '/';
-        }
-    }
 
     public function __call($func, $args) {
         if ($args[0]) {
@@ -1262,7 +1237,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_imagedata($open, $name, $attrs) {
         $file    = $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"];
-        $newpath = $this->mediamanager->handleFile($file);
+        $newpath = $this->theme->mediamanager->handleFile($file);
 
         if ($this->cchunk["mediaobject"]["alt"] !== false) {
             return '<img src="' . $newpath . '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';

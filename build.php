@@ -115,8 +115,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                     $themes[$themename] = new $themename(array($IDs, $REFS, $CLASSES, $VARS));
             }
 
-            // FIXME: this needs to go away when we add support for
-            // things other than xhtml
+            $themes[$themename]->postConstruct();
             $themes[$themename]->registerFormat($format);
 
 
