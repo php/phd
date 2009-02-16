@@ -331,7 +331,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
     public function option_version($k, $v)
     {
         printf("PhD version: %s\n", PHD_VERSION);
-        printf("Copyright (c) 2008 The PHP Documentation Group\n");
+        printf("Copyright (c) 2007-2009 The PHP Documentation Group\n");
         exit(0);
     }
 
@@ -342,7 +342,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
     public function option_help($k, $v)
     {
         echo "PhD version: " .PHD_VERSION;
-        echo "\nCopyright (c) 2008 The PHP Documentation Group\n
+        echo "\nCopyright (c) 2007-2009 The PHP Documentation Group\n
   -v
   --verbose <int>            Adjusts the verbosity level
   -f <formatname>
