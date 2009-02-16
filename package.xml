@@ -43,7 +43,7 @@
 
   <date>2009-02-16</date>
   <version>
-    <release>0.4.4</release>
+    <release>0.4.5</release>
     <api>0.4.4</api>
   </version>
   <stability>
@@ -52,19 +52,6 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-   - Add support for &lt;package&gt; in pear theme (Christian)
-   - Replace ereg_replace with preg_replace
-   - Implement request #47201: Allow custom source code highlighter (e.g. Geshi) (Christian)
-   - Fix HTML problems with empty paragraphs in examples and qandaset questions (Christian)
-   - Support &lt;uri&gt; and &lt;screenshot&gt; (Christian)
-   - Copy images automatically using MediaManager (Christian)
-   - Fixed bug#47362: &lt;h1&gt; tag gets omitted in bightml (Christian)
-   - Fixed bug#47196: improve render of initializer tag (Laurent)
-   - Fixed encoding issues in the Polish CHM builds. (Jarosław Głowacki)
-   - Update polish phd translation (Jarosław Głowacki)
-   - Generate syntactically correct php files for pearweb when description or
-     title have a quote in it. (Christian)
-   - Improve object orientated version info support (Hannes)
   </notes>
 
   <contents>
