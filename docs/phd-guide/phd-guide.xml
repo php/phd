@@ -55,7 +55,7 @@ Adding Channel "doc.php.net" succeeded</screen>
 
 $ phd --version
 PhD version: 0.4.2
-Copyright (c) 2008 The PHP Documentation Group</screen>
+Copyright (c) 2008-2009 The PHP Documentation Group</screen>
 
         <para>That's it!</para>
       </section>
@@ -67,7 +67,7 @@ Copyright (c) 2008 The PHP Documentation Group</screen>
         released yet, you can use PhD from CVS.</para>
 
         <screen>$ cvs -d :pserver:cvsread@cvs.php.net:/repository checkout phd
-... ouput
+... output
 
 $ pear channel-discover doc.php.net
 Adding Channel "doc.php.net" succeeded
@@ -77,7 +77,7 @@ $ pear install package.xml
 
 $ phd --version
 PhD version: phd-from-cvs
-Copyright (c) 2008 The PHP Documentation Group</screen>
+Copyright (c) 2008-2009 The PHP Documentation Group</screen>
 
         <para>And now you're done.</para>
       </section>
@@ -87,13 +87,127 @@ Copyright (c) 2008 The PHP Documentation Group</screen>
   <chapter>
     <title>Using PhD to render documentation</title>
 
-    <para>FIXME</para>
+    <section>
+      <title>Rendering the PHP Documentation Sources</title>
+
+      <sidebar>
+        <title>Getting the PHP Documentation Sources</title>
+
+        <para>To get the PHP documentation sources, simply check them out from
+        CVS with the following command.</para>
+
+        <screen>$ cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc
+... output</screen>
+
+        <para>To prepare the documentation, <command>cd</command> to the
+        phpdoc directory, and run configure.php.</para>
+
+        <screen>$ php configure.php</screen>
+
+        <para>This process will generate a .manual.xml file in the current
+        directory, which is what we need for building the docs. Now we're
+        ready to proceed with running PhD to generate the PHP docs.</para>
+      </sidebar>
+
+      <para>To quickly become familiar with using PhD, you can download the
+      PHP documentation sources and render those.Running PhD to render the
+      docs is surprisingly simple, so we'll start with that.</para>
+
+      <screen>$ phd -d .manual.xml
+... status messages</screen>
+
+      <para>After a running for a few moments, PhD will generate PHP-web and
+      HTML output into <literal>build/en/</literal>. The HTML output includes
+      an <filename>html</filename> directory and
+      <literal>bightml.html</literal>, which is the documentation rendered as
+      one very large HTML file. The PHP-web sources are the documentation
+      prepared for use on php.net or a mirror.</para>
+
+      <para>So now that you've seen the fruits of your labor, let's take a
+      closer look at PhD and see what capabilities are available to us.</para>
+
+      <screen>$ phd --help
+PhD version: phd-from-cvs
+Copyright (c) 2008-2009 The PHP Documentation Group
+
+  -v
+  --verbose &lt;int&gt;            Adjusts the verbosity level
+  -f &lt;formatname&gt;
+  --format &lt;formatname&gt;      The build format to use
+  -t &lt;themename&gt;
+  --theme &lt;themename&gt;        The theme to use
+  -I
+  --noindex                  Do not index before rendering but load from cache (false)
+  -d &lt;filename&gt;
+  --docbook &lt;filename&gt;       The Docbook file to render from
+  -p &lt;id[=bool]&gt;
+  --partial &lt;id[=bool]&gt;      The ID to render, optionally skipping its children chunks (default to true; render children)
+  -s &lt;id[=bool]&gt;
+  --skip &lt;id[=bool]&gt;         The ID to skip, optionally skipping its children chunks (default to true; skip children)
+  -l &lt;formats/themes&gt;
+  --list &lt;formats/themes&gt;    Print out the supported formats/themes (default: both)
+  -o &lt;directory&gt;
+  --output &lt;directory&gt;       The output directory (default: .)
+  -L &lt;language&gt;
+  --lang &lt;language&gt;          The language of the source file (used by the CHM theme). (default: en
+  -c &lt;bool&gt;
+  --color &lt;bool&gt;             Enable color output when output is to a terminal (default: false)
+  -g &lt;classname&gt;
+  --highlighter &lt;classname&gt;  Use custom source code highlighting php class
+  -V
+  --version                  Print the PhD version information
+  -h
+  --help                     This help
+
+Most options can be passed multiple times for greater affect.
+NOTE: Long options are only supported using PHP5.3</screen>
+
+      <para>As you can see, there are plenty of options to look into in PhD.
+      The most important options are those which allow you to select a format
+      and theme to output your documentation to.</para>
+
+      <screen>$ phd --list
+Supported formats:
+    xhtml
+    manpage
+    pdf
+Supported themes:
+    xhtml:
+        phpweb
+        chunkedhtml
+        bightml
+        chmsource
+        phpkdevelop
+        howto
+        pearweb
+        pearbightml
+        pearchunkedhtml
+        pearchm
+    manpage:
+        phpfunctions
+    pdf:
+        phppdf
+        phpbigpdf</screen>
+
+      <para>You can tell by the output of the <literal>--list</literal> option
+      that PhD can also be used to render the docs as a PDF file, or as Unix
+      Man Pages.</para>
+
+      <para>To select a format and theme, you must use the <literal>-f
+      [formatName]</literal> and <literal>-t [themeName]</literal> options.
+      Both options are required if one of them is used.</para>
+
+      <screen>$ phd -f manpage -t phpfunctions -d .manual.xml</screen>
+
+      <para>This command will output the documentation for PHP functions in
+      the Unix Man page format.</para>
+    </section>
   </chapter>
 
   <chapter>
     <title>DocBook extensions</title>
 
-    <para>PhD has been tailored for PHP and PEAR manual. To make writing
+    <para>PhD has been tailored for PHP and PEAR manuals. To make writing
     documentation as easy as possible, some own tags have been added to the
     DTD.</para>
 
