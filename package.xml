@@ -53,6 +53,7 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
    - Fix bug #47408: Same image directory used for each theme
+   - Change copyright year to 2007-2009
   </notes>
 
   <contents>

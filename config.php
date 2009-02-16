@@ -558,7 +558,7 @@ foreach($args as $k => $v) {
     case "V":
     case "version":
         printf("PhD version: %s\n", PHD_VERSION);
-        printf("Copyright (c) 2008 The PHP Documentation Group\n");
+        printf("Copyright (c) 2007-2009 The PHP Documentation Group\n");
         exit(0);
     /* }}} */
 
@@ -567,7 +567,7 @@ foreach($args as $k => $v) {
     case "help":
     case "h":
         echo "PhD version: " .PHD_VERSION;
-        echo "\nCopyright (c) 2008 The PHP Documentation Group\n
+        echo "\nCopyright (c) 2007-2009 The PHP Documentation Group\n
   -v
   --verbose <int>            Adjusts the verbosity level
   -f <formatname>
