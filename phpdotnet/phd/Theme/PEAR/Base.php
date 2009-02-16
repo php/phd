@@ -214,7 +214,8 @@ abstract class peartheme extends PhDTheme {
     );
 
     /**
-    * Programlisting role. Necessary to highlight the code properly.
+    * Programlisting role/type (php, xml, ..).
+    * Necessary to highlight the code properly.
     * String when role is set, false if not.
     *
     * @var string
