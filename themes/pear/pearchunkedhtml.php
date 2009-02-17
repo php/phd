@@ -100,7 +100,7 @@ class pearchunkedhtml extends pearweb
         $nav = <<<NAV
 <div class="navheader">
  <table width="100%" summary="Navigation header">
-  <tr><th colspan="3" align="center">{$title}</th></tr>
+  <tr><th colspan="3" style="text-align: center">{$title}</th></tr>
   <tr>
    <td width="40%" align="left">{$strPrev}</td>
    <td width="20%"></td>

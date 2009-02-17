@@ -56,6 +56,7 @@
    - Fix bug #47413: pear themes don't work when rendered together at once (Christian)
    - Change copyright year to 2007-2009 (Christian)
    - Fix PEAR chm manual title for french (Laurent)
+   - Fix PEAR chm navbar alignment (Laurent)
   </notes>
 
   <contents>
