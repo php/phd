@@ -354,7 +354,7 @@ res\manual.css
         $header = preg_replace('#( *)</head>#',
             '$1 <link media="all" rel="stylesheet" type="text/css" href="reset-fonts.css"/>
 $1 <link media="all" rel="stylesheet" type="text/css" href="style.css"/>
-$1 <link media="all" rel="stylesheet" href="manual.css"/>
+$1 <link media="all" rel="stylesheet" type="text/css" href="manual.css"/>
 $1</head>',
             $header
         );
