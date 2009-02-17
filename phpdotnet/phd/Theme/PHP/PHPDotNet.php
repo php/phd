@@ -1,7 +1,7 @@
 <?php
 /*  $Id$ */
 
-abstract class phpdotnet extends PhDTheme {
+abstract class phpdotnet extends PhDThemeXhtml {
     protected $elementmap = array(
         'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
@@ -60,6 +60,7 @@ abstract class phpdotnet extends PhDTheme {
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
+        'imagedata'             => 'format_imagedata',
         'index'                 => array(
             /* DEFAULT */          false,
             'article'           => 'format_chunk',
@@ -72,6 +73,7 @@ abstract class phpdotnet extends PhDTheme {
         'refentry'              => 'format_chunk',
         'phpdoc:varentry'       => 'format_varentry_chunk',
         'reference'             => 'format_container_chunk',
+        'phd:toc'               => 'format_phd_toc',
         'phpdoc:exceptionref'   => 'format_exception_chunk',
         'phpdoc:classref'       => 'format_class_chunk',
         'sect1'                 => 'format_chunk',
@@ -141,8 +143,6 @@ abstract class phpdotnet extends PhDTheme {
     );
     private   $versions = array();
     private   $acronyms = array();
-    protected $chunked = true;
-    protected $lang = "en";
 
     /**
     * Name of the ID currently being processed

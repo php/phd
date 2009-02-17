@@ -24,6 +24,12 @@ class phpfunctions extends PhDTheme {
     );
 
     public $role        = false;
+
+    /**
+    * We do generate multiple chunks
+    *
+    * @var boolean
+    */
     protected $chunked = true;
 
     protected $CURRENT_ID = "";

@@ -111,7 +111,6 @@ class XHTMLPhDFormat extends PhDFormat {
         'glossterm'             => 'span',
         'holder'                => 'span',
         'imageobject'           => 'format_div',
-        'imagedata'             => 'format_imagedata',
         'important'             => 'format_admonition',
         'index'                 => array(
             /* DEFAULT */          'format_div',
@@ -174,7 +173,6 @@ class XHTMLPhDFormat extends PhDFormat {
         'partintro'             => 'format_div',
         'personname'            => 'format_personname',
         'personblurb'           => 'format_div',
-        'phd:toc'               => 'format_phd_toc',
         'phrase'                => 'span',
         'preface'               => 'format_chunk',
         'primaryie'             => 'format_suppressed_tags',
@@ -371,7 +369,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public $role        = false;
 
     /* Current Chunk variables */
-    protected $cchunk      = array();
+    public $cchunk      = array();
     /* Default Chunk variables */
     protected $dchunk      = array(
         "classsynopsis"            => array(
@@ -442,56 +440,6 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function getChunkInfo() {
         return $this->cchunk;
-    }
-
-    /**
-    * Creates a table of contents for the given id.
-    * Also creates nested TOCs if that's wanted ($depth)
-    *
-    * @param string  $id     ID of section for which to generate TOC
-    * @param string  $name   Tag name (for ul class)
-    * @param array   $props  Build properties (?? FIXME)
-    * @param integer $depth  Depth of TOC
-    * @param boolean $header If the header shall be shown ("Table of contents")
-    *
-    * @return string HTML code for TOC
-    */
-    public function createToc($id, $name, $props, $depth = 1, $header = true)
-    {
-        $chunks = PhDHelper::getChildren($id);
-        if ($depth == 0 || !count($chunks)) {
-            return '';
-        }
-
-        $content = '';
-        if ($header) {
-            $content .= " <strong>" . $this->autogen("toc", $props["lang"]) . "</strong>\n";
-        }
-        $content .= " <ul class=\"chunklist chunklist_$name\">\n";
-        foreach ($chunks as $chunkid => $junk) {
-            $long  = $this->TEXT(PhDHelper::getDescription($chunkid, true));
-            $short = $this->TEXT(PhDHelper::getDescription($chunkid, false));
-            if ($long && $short && $long != $short) {
-                $desc = $short . '</a> -- ' . $long;
-            } else {
-                $desc = ($long ? $long : $short) . '</a>';
-            }
-            //FIXME
-            if ($this->theme->chunked) {
-                $content .= "  <li><a href=\"{$chunkid}.{$this->theme->ext}\">" . $desc;
-            } else {
-                $content .= "  <li><a href=\"#{$chunkid}\">" . $this->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a>";
-            }
-            if ($depth > 1) {
-                $content .= $this->createToc($chunkid, $name, $props, $depth - 1, false);
-            }
-
-            $content .= "</li>\n";;
-        }
-
-        $content .= " </ul>\n";
-
-        return $content;
     }
 
     /**
@@ -1004,20 +952,6 @@ class XHTMLPhDFormat extends PhDFormat {
         return '</p>';
     }
 
-    public function format_phd_toc($open, $name, $attrs, $props) {
-        if ($open) {
-            return '<div class="phd-toc">';
-        }
-        return $this->createToc(
-            $attrs[PhDReader::XMLNS_PHD]['element'],
-            'phd-toc',
-            $props,
-            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
-                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1,
-            false
-        ) . "</div>\n";
-    }
-
     public function format_segmentedlist($open, $name, $attrs) {
         $this->cchunk["segmentedlist"] = $this->dchunk["segmentedlist"];
         if ($open) {
@@ -1234,15 +1168,6 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_alt_text($value, $tag) {
         $this->cchunk["mediaobject"]["alt"] = $value;
-    }
-    public function format_imagedata($open, $name, $attrs) {
-        $file    = $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"];
-        $newpath = $this->theme->mediamanager->handleFile($file);
-
-        if ($this->cchunk["mediaobject"]["alt"] !== false) {
-            return '<img src="' . $newpath . '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
-        }
-        return '<img src="' . $newpath . '" />';
     }
 
     public function format_dl($open, $name, $attrs, $props)

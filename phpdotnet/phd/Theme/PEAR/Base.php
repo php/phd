@@ -1,6 +1,6 @@
 <?php
 
-abstract class peartheme extends PhDTheme {
+abstract class peartheme extends PhDThemeXhtml {
     protected $elementmap = array(
         'acronym'               => 'span',
         'article'               => 'format_container_chunk',
@@ -52,6 +52,7 @@ abstract class peartheme extends PhDTheme {
         'glossterm'             => 'format_glossterm',
         'guimenu'               => 'format_guimenu',
         'holder'                => 'format_holder',
+        'imagedata'             => 'format_imagedata',
         'important'             => 'format_admonition',
         'info'                  => array(
             /* DEFAULT */          false,
@@ -106,6 +107,7 @@ abstract class peartheme extends PhDTheme {
         'replaceable'           => 'format_replaceable',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
+        'phd:toc'               => 'format_phd_toc',
         'phpdoc:exception'      => 'format_exception_chunk',
         'refname'               => 'h1',
         'refnamediv'            => 'format_suppressed_tags',
@@ -225,8 +227,6 @@ abstract class peartheme extends PhDTheme {
     */
     public $role    = false;
 
-    public $chunked = true;
-
     /**
     * File extension string
     * e.g. ".php" or ".htm"
@@ -234,8 +234,6 @@ abstract class peartheme extends PhDTheme {
     * @var string
     */
     public $ext     = null;
-
-    protected $lang = 'en';
 
     /**
     * If whitespace should be trimmed.
@@ -349,7 +347,7 @@ abstract class peartheme extends PhDTheme {
             $this->cchunk = $this->dchunk;
         }
 
-        $toc = $this->format->createToc(
+        $toc = $this->createToc(
             $id, $name, $props,
             isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
                 ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
@@ -389,7 +387,7 @@ abstract class peartheme extends PhDTheme {
             return "<div class=\"{$name}\">";
         }
 
-        $content = $this->format->createToc(
+        $content = $this->createToc(
             $id, $name, $props,
             isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
                 ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
@@ -473,7 +471,7 @@ abstract class peartheme extends PhDTheme {
             return $props["empty"] ? '' : '<h1>';
         }
         $ret = '';
-        if ($this->cchunk['container_chunk']) {
+        if (isset($this->cchunk['container_chunk']) && $this->cchunk['container_chunk']) {
             $ret = $this->cchunk['container_chunk'];
             $this->cchunk['container_chunk'] = null;
         }

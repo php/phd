@@ -9,6 +9,13 @@ class pearbightml extends peartheme {
     */
     public $outputfile = null;
 
+    /**
+    * We do not generate multiple chunks
+    *
+    * @var boolean
+    */
+    public $chunked = false;
+
     public function __construct(array $IDs, $ext = "html") {
         parent::__construct($IDs, $ext, false);
         $this->outputfile = PhDConfig::output_dir() . "pear_manual_{$this->lang}.html";
