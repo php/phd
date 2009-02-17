@@ -24,6 +24,7 @@ require $ROOT. "/include/PhDPartialReader.class.php";
 require $ROOT. "/include/PhDHelper.class.php";
 require $ROOT. "/include/PhDFormat.class.php";
 require $ROOT. "/include/PhDTheme.class.php";
+require $ROOT. "/include/PhDThemeXhtml.class.php";
 
 /* {{{ Build the .ser file names to allow multiple sources for PHD. */
 $OPTIONS['index_location'] = $OPTIONS['xml_root'] . DIRECTORY_SEPARATOR . '.index_' . basename($OPTIONS['xml_file'], '.xml') . '.ser';

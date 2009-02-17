@@ -5,13 +5,6 @@ require $ROOT. "/include/PhDMediaManager.class.php";
 abstract class PhDTheme extends PhDHelper implements iPhDTheme {
     protected $format;
 
-    /**
-    * Media manager object
-    *
-    * @var PhDMediaManager
-    */
-    public $mediamanager = null;
-
 
 
     /**
@@ -27,34 +20,16 @@ abstract class PhDTheme extends PhDHelper implements iPhDTheme {
 
 
     /**
-    * Called after the constructor finished.
-    * This is needed since themes set their outputdir and outputfile
-    * in the constructor. That file/dir is used for mediamanager.
-    * That means we cannot instantiate and complete the manager in our
-    * constructor centrally.
+    * Overwritten in xhtml themes only.
     *
-    * Each theme needs its own media manager, since the manager contains
-    * the output path.
-    *
-    * @return void
+    * @see PhDThemeXhtml::postConstruct()
     */
-    public function postConstruct()
-    {
-        $this->mediamanager = new PhDMediaManager();
-
-        if (isset($this->outputdir)) {
-            $this->mediamanager->output_dir = $this->outputdir;
-        } else {
-            $this->mediamanager->output_dir    = $this->outputfile . '-data/';
-            $this->mediamanager->relative_path = basename($this->mediamanager->output_dir) . '/';
-        }
-    }//public function postConstruct()
+    public function postConstruct() {}
 
 
 
     public function registerFormat($format) {
         $this->format = $format;
-        $this->format->registerTheme($this);
     }
 }
 

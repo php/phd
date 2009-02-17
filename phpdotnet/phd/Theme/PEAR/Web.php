@@ -9,6 +9,11 @@ require_once $ROOT . '/themes/pear/peartheme.php';
 */
 class pearweb extends peartheme
 {
+    /**
+    * Array of file resources
+    *
+    * @var array
+    */
     protected $streams = array();
 
     protected $writeit = false;

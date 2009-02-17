@@ -10,6 +10,13 @@ class bightml extends phpdotnet {
     */
     public $outputfile = null;
 
+    /**
+    * We do not generate multiple chunks
+    *
+    * @var boolean
+    */
+    protected $chunked = false;
+
     public function __construct(array $IDs, $filename, $ext = "html") {
         parent::__construct($IDs, $filename, $ext, false);
         $this->outputfile = $GLOBALS['OPTIONS']['output_dir']  . 'bightml.html';
