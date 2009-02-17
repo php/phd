@@ -41,7 +41,7 @@
     <active>yes</active>
   </developer>
 
-  <date>2009-02-16</date>
+  <date>2009-02-17</date>
   <version>
     <release>0.4.5</release>
     <api>0.4.5</api>
@@ -52,8 +52,9 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-   - Fix bug #47408: Same image directory used for each theme
-   - Change copyright year to 2007-2009
+   - Fix bug #47408: Same image directory used for each theme (Christian)
+   - Change copyright year to 2007-2009 (Christian)
+   - Fix PEAR chm manual title for french (Laurent)
   </notes>
 
   <contents>
