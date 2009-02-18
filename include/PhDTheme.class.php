@@ -24,7 +24,7 @@ abstract class PhDTheme extends PhDHelper implements iPhDTheme {
     *
     * @see PhDThemeXhtml::postConstruct()
     */
-    public function postConstruct() {}
+    public function postConstruct($relative_path) {}
 
 
 

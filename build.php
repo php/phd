@@ -116,7 +116,7 @@ foreach($OPTIONS["output_format"] as $output_format) {
                     $themes[$themename] = new $themename(array($IDs, $REFS, $CLASSES, $VARS));
             }
 
-            $themes[$themename]->postConstruct();
+            $themes[$themename]->postConstruct($OPTIONS["xml_root"]);
             $themes[$themename]->registerFormat($format);
 
 
