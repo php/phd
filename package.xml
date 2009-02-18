@@ -41,7 +41,7 @@
     <active>yes</active>
   </developer>
 
-  <date>2009-02-17</date>
+  <date>2009-02-18</date>
   <version>
     <release>0.4.5</release>
     <api>0.4.5</api>
@@ -67,6 +67,7 @@
       <file baseinstalldir="phd" name="include/PhDFormat.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDHighlighter.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDTheme.class.php" role="php"/>
+      <file baseinstalldir="phd" name="include/PhDThemeXhtml.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDHelper.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDMediaManager.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDReader.class.php" role="php"/>
