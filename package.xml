@@ -62,6 +62,7 @@
       <file baseinstalldir="phd" name="include/PhDFormat.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDHighlighter.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDTheme.class.php" role="php"/>
+      <file baseinstalldir="phd" name="include/PhDThemeXhtml.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDHelper.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDMediaManager.class.php" role="php"/>
       <file baseinstalldir="phd" name="include/PhDReader.class.php" role="php"/>
