@@ -37,11 +37,9 @@ abstract class PhDThemeXhtml extends PhDTheme
     * Each theme needs its own media manager, since the manager contains
     * the output path.
     *
-    * @param string $relative_path Path the media files are referenced relative to in xml.
-    *
     * @return void
     */
-    public function postConstruct($relative_path)
+    public function postConstruct()
     {
         $this->mediamanager = new PhDMediaManager();
 
@@ -49,8 +47,8 @@ abstract class PhDThemeXhtml extends PhDTheme
             $this->mediamanager->output_dir = $this->outputdir;
         } else {
             $this->mediamanager->output_dir    = $this->outputfile . '-data/';
+            $this->mediamanager->relative_path = basename($this->mediamanager->output_dir) . '/';
         }
-        $this->mediamanager->relative_path = $relative_path . '/';
     }//public function postConstruct()
 
 

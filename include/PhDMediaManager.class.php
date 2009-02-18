@@ -18,7 +18,7 @@ class PhDMediaManager
     public $output_dir = null;
 
     /**
-    * Path the media files are referenced relative to in xml.
+    * Path the media files are referenced relative to in html.
     * Trailing slash required.
     *
     * @var string
@@ -48,13 +48,12 @@ class PhDMediaManager
     {
         $basename = basename($filename);
         $newname  = md5(substr($filename, 0, -strlen($basename))) . '-' . $basename;
-
         //FIXME: make images dynamic according to file type (e.g. video)
         $newpath  = 'images/' . $newname;
 
-        $this->copyOver($this->relative_path . $filename, $newpath);
+        $this->copyOver($filename, $newpath);
 
-        return $newpath;
+        return $this->relative_path . $newpath;
     }//public function handleFile(..)
 
 
