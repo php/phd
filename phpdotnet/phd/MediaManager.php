@@ -23,7 +23,15 @@ class PhDMediaManager
     *
     * @var string
     */
-    public $relative_path = '';
+    public $relative_ref_path = '';
+
+    /**
+    * Path the media files are referenced relative to in the xml file.
+    * This is nearly always the directory the xml file is located in.
+    *
+    * @var string
+    */
+    public $relative_source_path = '';
 
     /**
     * If the image media directory exists
@@ -31,6 +39,13 @@ class PhDMediaManager
     * @var boolean
     */
     protected $media_dir_exists = false;
+
+
+
+    public function __construct($relative_source_path)
+    {
+        $this->relative_source_path = rtrim($relative_source_path, '/\\') . '/';
+    }//public function __construct(..)
 
 
 
@@ -53,7 +68,7 @@ class PhDMediaManager
 
         $this->copyOver($filename, $newpath);
 
-        return $this->relative_path . $newpath;
+        return $this->relative_ref_path . $newpath;
     }//public function handleFile(..)
 
 
@@ -70,14 +85,15 @@ class PhDMediaManager
     protected function copyOver($filename, $newpath)
     {
         $fullpath = $this->output_dir . '/' . $newpath;
+        $fullfilename = $this->relative_source_path . $filename;
 
         if (file_exists($fullpath)) {
             //no need to copy over again
             return;
         }
 
-        if (!file_exists($filename)) {
-            trigger_error('Image does not exist: ' . $filename, E_USER_WARNING);
+        if (!file_exists($fullfilename)) {
+            trigger_error('Image does not exist: ' . $fullfilename, E_USER_WARNING);
             return;
         }
 
@@ -89,7 +105,7 @@ class PhDMediaManager
             $this->media_dir_exists = true;
         }
 
-        copy($filename, $fullpath);
+        copy($fullfilename, $fullpath);
     }//protected function copyOver(..)
 
 }//class PhDMediaManager
