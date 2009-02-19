@@ -41,13 +41,13 @@ abstract class PhDThemeXhtml extends PhDTheme
     */
     public function postConstruct()
     {
-        $this->mediamanager = new PhDMediaManager();
+        $this->mediamanager = new PhDMediaManager(PhDConfig::xml_root());
 
         if (isset($this->outputdir) && $this->outputdir) {
             $this->mediamanager->output_dir = $this->outputdir;
         } else {
-            $this->mediamanager->output_dir    = $this->outputfile . '-data/';
-            $this->mediamanager->relative_path = basename($this->mediamanager->output_dir) . '/';
+            $this->mediamanager->output_dir        = $this->outputfile . '-data/';
+            $this->mediamanager->relative_ref_path = basename($this->mediamanager->output_dir) . '/';
         }
     }//public function postConstruct()
 
