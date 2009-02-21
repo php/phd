@@ -5,15 +5,16 @@
       xmlns:svg="http://www.w3.org/2000/svg"
       xmlns:mml="http://www.w3.org/1998/Math/MathML"
       xmlns:html="http://www.w3.org/1999/xhtml"
-      xmlns:db="http://docbook.org/ns/docbook">
+      xmlns:db="http://docbook.org/ns/docbook"
+      xml:id="phd-guide">
   <title>PhD: The definitive guide to PHP's DocBook Rendering System</title>
 
-  <preface>
+  <preface xml:id="preface">
     <title>About PhD</title>
 
     <para>PhD is PHP's very own DocBook 5 rendering system. It is used to
-    convert the PHP Manual and PEAR Documentation into different output
-    formats like XHTML, PDF, Man pages and CHM.</para>
+    convert the <acronym>PHP</acronym> Manual and PEAR Documentation into
+    different output formats like XHTML, PDF, Man pages and CHM.</para>
 
     <para>The goal of PhD is to become a fast, general DocBook rendering
     system. At the moment of writing, PhD is already very fast: It can create
@@ -23,17 +24,20 @@
     render own DocBook files may need some tweaks.</para>
   </preface>
 
-  <chapter>
-    <title>Using PhD</title>
+  <chapter xml:id="getting-phd">
+    <title>Getting PhD</title>
 
-    <section>
+    <para>You might find some other tutorials in the <link
+    linkend="links">links</link> section.</para>
+
+    <section xml:id="installation">
       <title>Installation</title>
 
       <para>PhD is distributed via an own PEAR channel,
       <uri>doc.php.net</uri>. Using it is also the most easy way to get
       it.</para>
 
-      <section>
+      <section xml:id="installation-pear">
         <title>Installation via PEAR</title>
 
         <note>
@@ -60,7 +64,7 @@ Copyright (c) 2008-2009 The PHP Documentation Group</screen>
         <para>That's it!</para>
       </section>
 
-      <section>
+      <section xml:base="" xml:id="installation-cvs">
         <title>Installation from CVS</title>
 
         <para>To get the latest and greatest features that have not been
@@ -84,10 +88,10 @@ Copyright (c) 2008-2009 The PHP Documentation Group</screen>
     </section>
   </chapter>
 
-  <chapter>
+  <chapter xml:id="using-phd">
     <title>Using PhD to render documentation</title>
 
-    <section>
+    <section xml:id="render-phpdoc">
       <title>Rendering the PHP Documentation Sources</title>
 
       <sidebar>
@@ -203,10 +207,34 @@ Supported themes:
       <para>This command will output the documentation for PHP functions in
       the Unix Man page format.</para>
     </section>
+
+    <section xml:id="render-phd-guide">
+      <title>Compile the PhD guide</title>
+
+      <para>The PhD guide is this manual you are reading currently. It lives
+      in <acronym>PhD</acronym>'s CVS repository under
+      <filename>docs/phd-guide/phd-guide.xml</filename>. If you installed PhD
+      from CVS, you already have it. Otherwise, get it:</para>
+
+      <screen>$ cvs -d :pserver:cvsread@cvs.php.net:/repository checkout phd/docs/phd-guide
+cvs checkout: Updating phd/docs/phd-guide
+U phd/docs/phd-guide/phd-guide.xml</screen>
+
+      <para>Now you have everything you need. Just type</para>
+
+      <screen>$ cd phd/docs/phd-guide/
+$ phd -f xhtml -t pearbightml phd-guide.xml</screen>
+
+      <para>There should be an .html file in the directory now. View it with a
+      browser!</para>
+
+      <para>That's all to say. This way you can render your own docbook files,
+      too.</para>
+    </section>
   </chapter>
 
   <chapter>
-    <title>DocBook extensions</title>
+    <title xml:id="docbook-extensions">DocBook extensions</title>
 
     <para>PhD has been tailored for PHP and PEAR manuals. To make writing
     documentation as easy as possible, some own tags have been added to the
@@ -225,7 +253,7 @@ Supported themes:
       <para>The extensions listed here are available in all PhD themes and
       formats.</para>
 
-      <section>
+      <section xml:id="ext-phd-chunk">
         <title>Manual chunking with "phd:chunk" (Attribute)</title>
 
         <para>PhD automatically chooses which sections, chapters or other tags
@@ -267,7 +295,7 @@ Supported themes:
         </section>
       </section>
 
-      <section>
+      <section xml:id="ext-phd-toc">
         <title>Generating Table Of Contents: &lt;phd:toc&gt; (Tag)</title>
 
         <para>To manually insert a Table Of Contents (TOC) that creates a list
@@ -330,13 +358,13 @@ Supported themes:
       </section>
     </section>
 
-    <section>
+    <section xml:id="ext-pear">
       <title>PEAR specific DocBook extensions</title>
 
       <para>The DocBook extensions listed here are only available when using a
       PEAR theme.</para>
 
-      <section>
+      <section xml:id="ext-phd-pearapi" xml:lang="">
         <title>Linking to PEAR API documentation: &lt;phd:pearapi&gt;
         (Tag)</title>
 
@@ -408,4 +436,24 @@ Supported themes:
       </section>
     </section>
   </chapter>
+
+  <appendix>
+    <title xml:id="links">Links</title>
+
+    <para>Some other articles for further reading. Latest are on top.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link
+        xlink:href="http://elizabethmariesmith.com/2009/02/setting-up-phd-on-windows/">Setting
+        up PhD on Windows</link> by Elizabeth Marie Smith (PhD 0.4.5)</para>
+      </listitem>
+
+      <listitem>
+        <para><link
+        xlink:href="http://bjori.blogspot.com/2007/10/phd-php-based-docbook-renderer-rc1.html">PhD
+        0.1RC1 released</link> by Hannes Magnusson (PhD 0.1RC1)</para>
+      </listitem>
+    </itemizedlist>
+  </appendix>
 </book>
