@@ -359,7 +359,7 @@ abstract class phpdotnet extends PhDThemeXhtml {
         }
         return '<acronym>'.$value.'</acronym>';
     }
-    public function format_refpurpose($open, $tag, $attrs) {
+    public function format_refpurpose($open, $tag, $attrs, $props) {
         if ($open) {
             $retval = "";
             if ($this->cchunk["verinfo"]) {
@@ -372,7 +372,7 @@ abstract class phpdotnet extends PhDThemeXhtml {
                     }
                 }
                 if (!$verinfo) {
-                    $verinfo = "No version information available, might be only in CVS";
+                    $verinfo = $this->autogen("unknownversion", $props["lang"]);
                 }
 
                 $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
