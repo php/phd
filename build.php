@@ -56,7 +56,7 @@ while (!is_dir(PhDConfig::xml_root()) || !is_file(PhDConfig::xml_file())) {
 PhDConfig::set_output_dir(realpath(PhDConfig::output_dir()) . DIRECTORY_SEPARATOR);
 
 // These files really should be moved into phd/
-PhDConfig::set_version_info(PhDConfig::xml_root()."/phpbook/phpbook-xsl/version.xml");
+PhDConfig::set_version_info(PhDConfig::xml_root()."/version.xml");
 PhDConfig::set_acronyms_file(PhDConfig::xml_root()."/entities/acronyms.xml");
 
 require $ROOT. "/include/PhDReader.class.php";
