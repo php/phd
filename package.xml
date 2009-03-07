@@ -43,18 +43,15 @@
 
   <date>2009-03-07</date>
   <version>
-    <release>0.4.6</release>
+    <release>0.4.7</release>
     <api>0.4.6</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added language support with unknownversion into phpdotnet theme. (Philip)
-    - phpbook/phpbook-xsl/version.xml is no longer used (Hannes)
-    - Fix PEAR bug #15967: Wrong ID passed to pearweb manualFooter() (Christian)
   </notes>
 
   <contents>
@@ -585,4 +582,3 @@
 <!--
 vim: et sw=2 ts=2
 -->
-
