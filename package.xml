@@ -41,18 +41,19 @@
     <active>yes</active>
   </developer>
 
-  <date>2009-02-19</date>
+  <date>2009-03-07</date>
   <version>
     <release>0.4.6</release>
     <api>0.4.5</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-   - Added language support with unknownversion into phpdotnet theme. (philip)
+    - Fix PEAR bug #15967: Wrong ID passed to pearweb manualFooter()
+      (Christian)
   </notes>
 
   <contents>
@@ -556,6 +557,23 @@
         - Change copyright year to 2007-2009 (Christian)
         - Fix PEAR chm manual title for french (Laurent)
         - Fix PEAR chm navbar alignment (Laurent)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>0.4.6</release>
+        <api>0.4.5</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2009-03-07</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Fix PEAR bug #15967: Wrong ID passed to pearweb manualFooter()
+          (Christian)
       </notes>
     </release>
 

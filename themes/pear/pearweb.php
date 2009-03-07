@@ -182,11 +182,11 @@ manualHeader("index.php", "PEAR Manual");
      */
     public function footer($id)
     {
-        $ext = $this->ext . ".";
+        $ext = '.' . $this->ext;
         $parent = PhDHelper::getParent($id);
 
         return '<?php manualFooter("'
-            . $this->getFilename($id).$ext . '", '
+            . $this->getFilename($id) . $ext . '", '
             . var_export(PhDHelper::getDescription($id, true), true)
             . '); ?>';
     }
