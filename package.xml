@@ -44,7 +44,7 @@
   <date>2009-03-07</date>
   <version>
     <release>0.4.6</release>
-    <api>0.4.5</api>
+    <api>0.4.6</api>
   </version>
   <stability>
     <release>beta</release>
@@ -52,8 +52,9 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Fix PEAR bug #15967: Wrong ID passed to pearweb manualFooter()
-      (Christian)
+    - Added language support with unknownversion into phpdotnet theme. (Philip)
+    - phpbook/phpbook-xsl/version.xml is no longer used (Hannes)
+    - Fix PEAR bug #15967: Wrong ID passed to pearweb manualFooter() (Christian)
   </notes>
 
   <contents>
@@ -563,7 +564,7 @@
     <release>
       <version>
         <release>0.4.6</release>
-        <api>0.4.5</api>
+        <api>0.4.6</api>
       </version>
       <stability>
         <release>beta</release>
@@ -572,8 +573,9 @@
       <date>2009-03-07</date>
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
-        - Fix PEAR bug #15967: Wrong ID passed to pearweb manualFooter()
-          (Christian)
+        - Added language support with unknownversion into phpdotnet theme. (Philip)
+        - phpbook/phpbook-xsl/version.xml is no longer used (Hannes)
+        - Fix PEAR bug #15967: Wrong ID passed to pearweb manualFooter() (Christian)
       </notes>
     </release>
 
