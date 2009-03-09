@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!-- $Revision: 1.3 $ -->
+<!-- $Revision: 1.4 $ -->
 <!--  EN-Revision: 1.4 Maintainer: Kalle Status: ready -->
 
 <section xml:id="autogen" xml:lang="en">
@@ -36,6 +36,12 @@
    </listitem>
   </varlistentry>
   <varlistentry>
+   <term>important</term>
+   <listitem>
+    <simpara>Vigtigt</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
    <term>by</term>
    <listitem>
     <simpara>af</simpara>
@@ -51,6 +57,12 @@
    <term>example</term>
    <listitem>
     <simpara>Eksempel #</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>unknownversion</term>
+   <listitem>
+    <simpara>Ingen versions oplysninger tilgængelige, findes måske kun i CVS</simpara>
    </listitem>
   </varlistentry>
  </variablelist>
