@@ -1,62 +1,62 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!-- $Revision: 1.3.6.3 $ -->
-<!--  EN-Revision: 1.5 Maintainer: kalle Status: ready -->
-
-<section xml:id="autogen" xml:lang="da">
- <title>Autogenereret tekst</title>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- $Revision: 1.3.4.2 $ -->
+<!-- EN-Revision: 1.5 Maintainer: nilgun Status: ready -->
+<!-- Last translator: Nilgün Belma Bugüner -->
+<section xml:id="autogen" xml:lang="tr">
+ <title>Üretilmiş metin</title>
  <variablelist>
   <varlistentry>
    <term>toc</term>
    <listitem>
-    <simpara>Indholds Fortegnelse</simpara>
+    <simpara>İçindekiler</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
    <term>warning</term>
    <listitem>
-    <simpara>Advarsel</simpara>
+    <simpara>Uyarı</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
    <term>note</term>
    <listitem>
-    <simpara>Note</simpara>
+    <simpara>Bilginize</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
    <term>caution</term>
    <listitem>
-    <simpara>Advarsel</simpara>
+    <simpara>Dikkat</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
    <term>tip</term>
    <listitem>
-    <simpara>Tip</simpara>
+    <simpara>İpucu</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
    <term>important</term>
    <listitem>
-    <simpara>Vigtigt</simpara>
+    <simpara>Önemli</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
    <term>by</term>
    <listitem>
-    <simpara>af</simpara>
+    <simpara>Yazan</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
    <term>editedby</term>
    <listitem>
-    <simpara>�ndret af</simpara>
+    <simpara>Düzenleyen</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
    <term>example</term>
    <listitem>
-    <simpara>Eksempel #</simpara>
+    <simpara>Örnek </simpara>
    </listitem>
   </varlistentry>
  </variablelist>
