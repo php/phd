@@ -132,8 +132,9 @@ Copyright (c) 2008-2009 The PHP Documentation Group</screen>
       closer look at PhD and see what capabilities are available to us.</para>
 
       <screen>$ phd --help
-PhD version: phd-from-cvs
-Copyright (c) 2008-2009 The PHP Documentation Group
+
+PhD version: 0.4.5
+Copyright (c) 2007-2009 The PHP Documentation Group
 
   -v
   --verbose &lt;int&gt;            Adjusts the verbosity level
@@ -141,12 +142,12 @@ Copyright (c) 2008-2009 The PHP Documentation Group
   --format &lt;formatname&gt;      The build format to use
   -t &lt;themename&gt;
   --theme &lt;themename&gt;        The theme to use
-  -I
-  --noindex                  Do not index before rendering but load from cache (false)
+  -i &lt;bool&gt;
+  --index &lt;bool&gt;             Index before rendering (default) or load from cache (false)
   -d &lt;filename&gt;
   --docbook &lt;filename&gt;       The Docbook file to render from
   -p &lt;id[=bool]&gt;
-  --partial &lt;id[=bool]&gt;      The ID to render, optionally skipping its children chunks (default to true; render children)
+  --partial &lt;id[=bool]&gt;      The ID to render, optionally skipping its childrenchunks (default to true; render children)
   -s &lt;id[=bool]&gt;
   --skip &lt;id[=bool]&gt;         The ID to skip, optionally skipping its children chunks (default to true; skip children)
   -l &lt;formats/themes&gt;
@@ -154,9 +155,9 @@ Copyright (c) 2008-2009 The PHP Documentation Group
   -o &lt;directory&gt;
   --output &lt;directory&gt;       The output directory (default: .)
   -L &lt;language&gt;
-  --lang &lt;language&gt;          The language of the source file (used by the CHM theme). (default: en
-  -c &lt;bool&gt;
-  --color &lt;bool&gt;             Enable color output when output is to a terminal (default: false)
+  --lang &lt;language&gt;          The language of the source file (used by the CHM theme). (default: en)
+  -c &lt;color&gt;
+  --color &lt;color&gt;            Enable color output when output is to a terminal, optionally specify numerical color value (default: false)
   -g &lt;classname&gt;
   --highlighter &lt;classname&gt;  Use custom source code highlighting php class
   -V
