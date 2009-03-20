@@ -575,21 +575,28 @@ foreach($args as $k => $v) {
   -t <themename>
   --theme <themename>        The theme to use
   -i <bool>
-  --index <bool>             Index before rendering (default) or load from cache (false)
+  --index <bool>             Index before rendering or load from cache
+                             (default: true, to index)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -p <id[=bool]>
-  --partial <id[=bool]>      The ID to render, optionally skipping its children chunks (default to true; render children)
+  --partial <id[=bool]>      The ID to render, optionally skipping its children
+                             chunks (default to true; render children)
   -s <id[=bool]>
-  --skip <id[=bool]>         The ID to skip, optionally skipping its children chunks (default to true; skip children)
+  --skip <id[=bool]>         The ID to skip, optionally skipping its children
+                             chunks (default to true; skip children)
   -l <formats/themes>
-  --list <formats/themes>    Print out the supported formats/themes (default: both)
+  --list <formats/themes>    Print out the supported formats/themes
+                             (default: both)
   -o <directory>
   --output <directory>       The output directory (default: .)
   -L <language>
-  --lang <language>          The language of the source file (used by the CHM theme). (default: en)
+  --lang <language>          The language of the source file (used by the CHM
+                             theme). (default: en)
   -c <color>
-  --color <color>            Enable color output when output is to a terminal, optionally specify numerical color value (default: false)
+  --color <color>            Enable color output when output is to a terminal,
+                             optionally specify numerical color value
+                             (default: false)
   -g <classname>
   --highlighter <classname>  Use custom source code highlighting php class
   -V
