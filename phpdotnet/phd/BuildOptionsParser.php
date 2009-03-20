@@ -350,21 +350,27 @@ class PhDBuildOptionsParser extends PhDOptionParser
   -t <themename>
   --theme <themename>        The theme to use
   -I
-  --noindex                  Do not index before rendering but load from cache (false)
+  --noindex                  Do not index before rendering but load from cache
+                             (default: false)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -p <id[=bool]>
-  --partial <id[=bool]>      The ID to render, optionally skipping its children chunks (default to true; render children)
+  --partial <id[=bool]>      The ID to render, optionally skipping its children
+                             chunks (default to true; render children)
   -s <id[=bool]>
-  --skip <id[=bool]>         The ID to skip, optionally skipping its children chunks (default to true; skip children)
+  --skip <id[=bool]>         The ID to skip, optionally skipping its children
+                             chunks (default to true; skip children)
   -l <formats/themes>
-  --list <formats/themes>    Print out the supported formats/themes (default: both)
+  --list <formats/themes>    Print out the supported formats/themes
+                             (default: both)
   -o <directory>
   --output <directory>       The output directory (default: .)
   -L <language>
-  --lang <language>          The language of the source file (used by the CHM theme). (default: en
+  --lang <language>          The language of the source file (used by the CHM
+                             theme). (default: en)
   -c <bool>
-  --color <bool>             Enable color output when output is to a terminal (default: false)
+  --color <bool>             Enable color output when output is to a terminal
+                             (default: false)
   -g <classname>
   --highlighter <classname>  Use custom source code highlighting php class
   -V
