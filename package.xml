@@ -136,6 +136,10 @@
       <extension>
         <name>posix</name>
       </extension>
+      <extension>
+        <name>haru</name>
+      </extension>
+    </optional>
     </optional>
   </dependencies>
 
