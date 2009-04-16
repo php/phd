@@ -92,6 +92,7 @@ class ManpagePhDFormat extends PhDFormat {
             'listitem'          => '',
         ),
         'simplelist'            => 'format_simplelist',
+        'simplesect'            => 'format_suppressed_tags',
         'subscript'             => 'format_suppressed_tags',
         'synopsis'              => 'format_suppressed_tags',
         'systemitem'            => '\\fB',
