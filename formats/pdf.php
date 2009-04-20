@@ -111,6 +111,7 @@ class PDFPhDFormat extends PhDFormat {
             'step'              => 'format_suppressed_tags',
         ),
         'simplelist'            => 'format_shifted_para',
+        'simplesect'            => 'format_suppressed_tags',
         'subscript'             => 'format_indice',
         'superscript'           => 'format_indice',
         'surname'               => 'format_suppressed_tags',
