@@ -999,7 +999,11 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_variablelist($open, $name, $attrs) {
         if ($open) {
-            return $this->escapePara() . "<dl>\n";
+            $idstr = '';
+            if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+                $idstr = ' id="'. $attrs[PhDReader::XMLNS_XML]['id']. '"';
+            }
+            return $this->escapePara() . "<dl" . $idstr . ">\n";
         }
         return "</dl>\n" . $this->restorePara();
     }
