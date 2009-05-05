@@ -41,7 +41,7 @@
     <active>yes</active>
   </developer>
 
-  <date>2009-03-07</date>
+  <date>2009-05-05</date>
   <version>
     <release>0.4.7</release>
     <api>0.4.6</api>
@@ -56,6 +56,7 @@
       * Danish
       * Swedish
     - Support &lt;token&gt; (Christian)
+    - Properly support &lt;tag&gt; classes (Christian)
   </notes>
 
   <contents>
