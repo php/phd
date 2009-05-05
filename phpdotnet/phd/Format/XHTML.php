@@ -232,7 +232,7 @@ class XHTMLPhDFormat extends PhDFormat {
         'systemitem'            => 'format_systemitem',
         'symbol'                => 'span',
         'synopsis'              => 'pre',
-        'tag'                   => 'code',
+        'tag'                   => 'format_tag',
         'table'                 => 'format_table',
         'term'                  => 'format_term',
         'tfoot'                 => 'format_th',
@@ -1164,6 +1164,45 @@ class XHTMLPhDFormat extends PhDFormat {
             return "<caption><b>";
         }
         return "</b></caption>";
+    }
+
+    /**
+    * Renders  a <tag class=""> tag.
+    *
+    * @return string HTML code
+    */
+    public function format_tag($open, $name, $attrs, $props)
+    {
+        static $arFixes = array(
+            'attribute'     => array('', ''),
+            'attvalue'      => array('"', '"'),
+            'comment'       => array('&lt;!--', '--&gt;'),
+            'element'       => array('', ''),
+            'emptytag'      => array('&lt;', '/&gt;'),
+            'endtag'        => array('&lt;/', '&gt;'),
+            'genentity'     => array('&amp;', ';'),
+            'localname'     => array('', ''),
+            'namespace'     => array('', ''),
+            'numcharref'    => array('&amp;#', ';'),
+            'paramentity'   => array('%', ';'),
+            'pi'            => array('&lt;?', '?&gt;'),
+            'prefix'        => array('', ''),
+            'starttag'      => array('&lt;', '&gt;'),
+            'xmlpi'         => array('&lt;?', '?&gt;'),
+        );
+        if ($props['empty']) {
+            return '';
+        }
+        $class = $attrs['class'];
+        if (!isset($arFixes[$class])) {
+            trigger_error('Unknown tag class "' . $class . '"', E_USER_WARNING);
+            $class = 'starttag';
+        }
+        if (!$open) {
+            return $arFixes[$class][1] . '</code>';
+        }
+
+        return '<code>' . $arFixes[$class][0];
     }
 
     public function format_mediaobject($open, $name, $attrs) {
