@@ -23,40 +23,43 @@
     <active>yes</active>
   </lead>
   <developer>
-    <name>Gwynne Raskind</name>
-    <user>gwynne</user>
-    <email>gwynne@php.net</email>
-    <active>yes</active>
-  </developer>
-  <developer>
-    <name>Rudy Nappee</name>
-    <user>loudi</user>
-    <email>loudi@php.net</email>
-    <active>yes</active>
-  </developer>
-  <developer>
     <name>Christian Weiske</name>
     <user>cweiske</user>
     <email>cweiske@php.net</email>
     <active>yes</active>
   </developer>
+  <developer>
+    <name>Gwynne Raskind</name>
+    <user>gwynne</user>
+    <email>gwynne@php.net</email>
+    <active>no</active>
+  </developer>
+  <developer>
+    <name>Rudy Nappee</name>
+    <user>loudi</user>
+    <email>loudi@php.net</email>
+    <active>no</active>
+  </developer>
 
-  <date>2009-05-05</date>
+  <date>2009-05-07</date>
   <version>
     <release>0.4.7</release>
     <api>0.4.6</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Updated translations: (Kalle)
-      * Danish
-      * Swedish
-    - Support &lt;token&gt; (Christian)
-    - Properly support &lt;tag&gt; classes (Christian)
+    - Added support for &lt;token&gt; (Christian)
+    - Added support for &lt;simplesect&gt; (Richard Q, Nilgun)
+    - Improved support for &lt;tag&gt; classes (Christian)
+    - Improved support for &lt;variablelist&gt; (Nilgun)
+    - Updated translations:
+      * Danish (Kalle)
+      * Swedish (Kalle)
+      * Turkish (Nilgun)
   </notes>
 
   <contents>
