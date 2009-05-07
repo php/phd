@@ -1193,7 +1193,12 @@ class XHTMLPhDFormat extends PhDFormat {
         if ($props['empty']) {
             return '';
         }
-        $class = $attrs['class'];
+
+        $class = 'starttag';
+        if (isset($attrs['class'])) {
+            $class = $attrs['class'];
+        }
+
         if (!isset($arFixes[$class])) {
             trigger_error('Unknown tag class "' . $class . '"', E_USER_WARNING);
             $class = 'starttag';
