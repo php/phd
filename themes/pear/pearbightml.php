@@ -18,7 +18,7 @@ class pearbightml extends peartheme {
 
     public function __construct(array $IDs, $ext = "html") {
         parent::__construct($IDs, $ext, false);
-        $this->outputfile = PhDConfig::output_dir() . "pear_manual_{$this->lang}.html";
+        $this->outputfile = PhDConfig::output_dir() . 'pear_manual_' . PhDConfig::language() . '.html';
         $this->stream = fopen($this->outputfile, "w");
         self::header();
     }
@@ -37,7 +37,7 @@ class pearbightml extends peartheme {
 <html>
  <head>
   <title>PEAR Manual</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
  </head>
  <body>
   <div id="doc3">
