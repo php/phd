@@ -37,6 +37,7 @@ class PhDConfig
         'user_error_color' => false,
         'phd_info_output' => NULL,
         'phd_info_color' => false,
+        'package' => 'PHP',
     );
 
     public static function init(array $a) {
