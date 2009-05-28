@@ -11,9 +11,11 @@ require $ROOT . "/include/PhDRender.class.php";
 require $ROOT . "/include/PhDFormat.class.php";
 require $ROOT . "/include/PhDIndex.class.php";
 
-require $ROOT . "/formats/xhtml.php";
-require $ROOT . "/formats/bigxhtml.php";
-require $ROOT . "/formats/php.php";
+//require $ROOT . "/formats/xhtml.php";
+//require $ROOT . "/formats/bigxhtml.php";
+//require $ROOT . "/formats/php.php";
+
+require $ROOT . "/include/PhDFormatFactory.php";
 
 //$INDEX    = "/Users/loudi/Travail/phpdoc/.manual.xml";
 //$FILENAME = "/Users/loudi/Travail/phpdoc/.manual.xml";
@@ -37,12 +39,13 @@ PhDConfig::init(array(
     "verbose"                 => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING),
     "lang_dir"                => $ROOT . DIRECTORY_SEPARATOR . "include" . DIRECTORY_SEPARATOR . "langs" . DIRECTORY_SEPARATOR,
 
-    "phpweb_version_filename" => PhDConfig::xml_root() . DIRECTORY_SEPARATOR . 'phpbook' . DIRECTORY_SEPARATOR . 'phpbook-xsl' . DIRECTORY_SEPARATOR . 'version.xml',
+    "phpweb_version_filename" => PhDConfig::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
     "phpweb_acronym_filename" => PhDConfig::xml_root() . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
     ));
 
 $render = new PhDRender();
 $reader = new PhDReader();
+$factory = PhDFormatFactory::createFactory();
 
 // Indexing & registering formats
 foreach(range(0, 0) as $i) {
@@ -66,13 +69,13 @@ foreach(range(0, 0) as $i) {
     foreach (PhDConfig::output_format() as $format) {
         switch($format) {
             case "xhtml": // Standalone Chunked xHTML Format
-            $render->attach(new PhDXHTMLFormat());
+            $render->attach($factory->createXhtmlFormat());
             break;
             case "php": // Standalone phpweb Format
-            $render->attach(new PhDPHPFormat());
+            $render->attach($factory->createPHPFormat());
             break;
             case "bigxhtml": // Standalone Big xHTML Format
-            $render->attach(new PhDBigXHTMLFormat());
+            $render->attach($factory->createBigXhtmlFormat());
             break;
         }
     }
