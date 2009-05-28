@@ -20,6 +20,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
             "color:"    => "c:",        // Use color output if possible
             "version"   => "V",         // Print out version information
             "help"      => "h",         // Print out help
+            "package:"  => "P:",        // The package of formats
         );
     }
     
@@ -99,6 +100,9 @@ class PhDBuildOptionsParser extends PhDOptionParser
     
     public function option_p($k, $v)
     {
+        if ($k == "P") {
+            return $this->option_package($k, $v);
+        }
         $this->option_partial($k, $v);
     }
     public function option_partial($k, $v)
@@ -119,6 +123,25 @@ class PhDBuildOptionsParser extends PhDOptionParser
         PhDConfig::set_render_ids($render_ids);
     }
     
+    public function option_package($k, $v) {
+        static $packageList = NULL;
+        
+        if (is_null($packageList)) {
+            $packageList = array();
+            foreach (glob($GLOBALS['ROOT'] . "/packages/*") as $item) {
+                if (is_dir($item) && !($item == "." || $item == "..")) {
+                    $packageList[] = basename($item);
+                }
+            }
+        }
+        
+        if (in_array($v, $packageList)) {
+            PhDConfig::set_package($v);
+        } else {
+            trigger_error("Invalid Package", E_USER_ERROR);
+        }
+    }
+
     public function option_s($k, $v)
     {
         $this->option_skip($k, $v);
@@ -193,7 +216,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         
         echo "Supported formats:\n";
         echo "\t" . implode("\n\t", $formatList) . "\n";
-        break;
+        //break;
       
         exit(0);
     }
