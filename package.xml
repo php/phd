@@ -23,28 +23,28 @@
     <active>yes</active>
   </lead>
   <developer>
-    <name>Gwynne Raskind</name>
-    <user>gwynne</user>
-    <email>gwynne@php.net</email>
-    <active>yes</active>
-  </developer>
-  <developer>
-    <name>Rudy Nappee</name>
-    <user>loudi</user>
-    <email>loudi@php.net</email>
-    <active>yes</active>
-  </developer>
-  <developer>
     <name>Christian Weiske</name>
     <user>cweiske</user>
     <email>cweiske@php.net</email>
     <active>yes</active>
   </developer>
+  <developer>
+    <name>Gwynne Raskind</name>
+    <user>gwynne</user>
+    <email>gwynne@php.net</email>
+    <active>no</active>
+  </developer>
+  <developer>
+    <name>Rudy Nappee</name>
+    <user>loudi</user>
+    <email>loudi@php.net</email>
+    <active>no</active>
+  </developer>
 
-  <date>2009-02-16</date>
+  <date>2009-05-07</date>
   <version>
-    <release>0.4.5</release>
-    <api>0.4.4</api>
+    <release>0.4.8</release>
+    <api>0.4.8</api>
   </version>
   <stability>
     <release>snapshot</release>
@@ -139,7 +139,6 @@
       <extension>
         <name>haru</name>
       </extension>
-    </optional>
     </optional>
   </dependencies>
 
@@ -542,10 +541,70 @@
       </notes>
     </release>
 
+    <release>
+      <version>
+        <release>0.4.5</release>
+        <api>0.4.5</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2009-02-19</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Fix bug #47408: Same image directory used for each theme (Christian)
+        - Fix bug #47413: pear themes don't work when rendered together at once (Christian)
+        - Change copyright year to 2007-2009 (Christian)
+        - Fix PEAR chm manual title for french (Laurent)
+        - Fix PEAR chm navbar alignment (Laurent)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>0.4.6</release>
+        <api>0.4.6</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2009-03-07</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added language support with unknownversion into phpdotnet theme. (Philip)
+        - phpbook/phpbook-xsl/version.xml is no longer used (Hannes)
+        - Fix PEAR bug #15967: Wrong ID passed to pearweb manualFooter() (Christian)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>0.4.7</release>
+        <api>0.4.7</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2009-05-07</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added support for &lt;token&gt; (Christian)
+        - Added support for &lt;simplesect&gt; (Richard Q, Nilgun)
+        - Improved support for &lt;tag&gt; classes (Christian)
+        - Improved support for &lt;variablelist&gt; (Nilgun)
+        - Updated translations:
+          * Danish (Kalle)
+          * Swedish (Kalle)
+          * Turkish (Nilgun)
+      </notes>
+    </release>
+
   </changelog>
 
 </package>
 <!--
 vim: et sw=2 ts=2
 -->
-
