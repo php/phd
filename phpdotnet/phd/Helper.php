@@ -198,7 +198,7 @@ class PhDHelper
     *
     * @param string $text   Text to highlight
     * @param string $role   Source code role to use (php, xml, html, ...)
-    * @param string $format Format to highlight (pdf, html, man, ...)
+    * @param string $format Format to highlight (pdf, xhtml, troff, ...)
     *
     * @return string Highlighted code
     */

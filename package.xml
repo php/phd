@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://pear.php.net/dtd/package-2.0"
     xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -41,7 +41,7 @@
     <active>no</active>
   </developer>
 
-  <date>2009-05-07</date>
+  <date>2009-05-28</date>
   <version>
     <release>0.4.8</release>
     <api>0.4.8</api>
@@ -52,6 +52,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+    - Add support for external troff highlighter in man pages (Christian).
   </notes>
 
   <contents>
