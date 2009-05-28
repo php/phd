@@ -2,6 +2,8 @@
 
 /**
 * Source code highlighting class for phd.
+*
+* @author Christian Weiske <cweiske@php.net>
 */
 class PhDHighlighter
 {
@@ -11,7 +13,7 @@ class PhDHighlighter
     * We use a factory so you can return different objects/classes
     * per format.
     *
-    * @param string $format Format to highlight (pdf, html, man, ...)
+    * @param string $format Output format (pdf, xhtml, troff, ...)
     *
     * @return PhDHighlighter Highlighter object
     */
@@ -29,13 +31,17 @@ class PhDHighlighter
     *
     * @param string $text   Text to highlight
     * @param string $role   Source code role to use (php, xml, html, ...)
-    * @param string $format Format to highlight (pdf, html, man, ...)
+    * @param string $format Output format (pdf, xhtml, troff, ...)
     *
     * @return string Highlighted code
     */
     public function highlight($text, $role, $format)
     {
-        if ($format != 'xhtml') {
+        if ($format == 'troff') {
+            return "\n.PP\n.nf\n"
+                . str_replace("\\", "\\\\", trim($text))
+                . "\n.fi";
+        } else if ($format != 'xhtml') {
             return $text;
         }
 

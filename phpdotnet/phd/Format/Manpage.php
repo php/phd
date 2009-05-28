@@ -189,6 +189,18 @@ class ManpagePhDFormat extends PhDFormat {
     /* If a chunk is being processed */
     protected $chunkOpen = false;
 
+    /**
+    * Programlisting role. Necessary to highlight the code properly.
+    * String when role is set, false if not.
+    *
+    * @var string
+    *
+    * @see format_programlisting()
+    * @see CDATA()
+    */
+    public $role = false;
+
+                                        
     public function __construct(array $IDs) {
         parent::__construct($IDs);
     }
@@ -209,7 +221,7 @@ class ManpagePhDFormat extends PhDFormat {
     }
 
     public function CDATA($str) {
-        return str_replace("\\", "\\\\", trim($str)); // Replace \ with \\ after trimming
+        return $this->highlight(trim($str), $this->role, 'troff');
     }
 
     public function TEXT($str) {
@@ -421,6 +433,12 @@ class ManpagePhDFormat extends PhDFormat {
 
     public function format_verbatim($open, $name, $attrs, $props) {
         if ($open) {
+            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+            } else {
+                $this->role = false;
+            }
+
             return "\n.PP\n.nf";
         }
         return "\n.fi";
