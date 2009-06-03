@@ -128,8 +128,8 @@ class PhDBuildOptionsParser extends PhDOptionParser
         
         if (is_null($packageList)) {
             $packageList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/packages/*") as $item) {
-                if (is_dir($item) && !($item == "." || $item == "..")) {
+            foreach (glob($GLOBALS['ROOT'] . "/packages/*", GLOB_ONLYDIR) as $item) {
+                if (!in_array(basename($item), array('CVS', '.', '..'))) {
                     $packageList[] = basename($item);
                 }
             }
@@ -205,18 +205,27 @@ class PhDBuildOptionsParser extends PhDOptionParser
     }
     public function option_list($k, $v)
     {
-        static $formatList = NULL;
+        static $packageList = NULL;
         
-        if (is_null($formatList)) {
-            $formatList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/formats/*.php") as $item) {
-                $formatList[] = substr(basename($item), 0, -4);
+        if (is_null($packageList)) {
+            $packageList = array();
+            foreach (glob($GLOBALS['ROOT'] . "/packages/*", GLOB_ONLYDIR) as $item) {
+                if (!in_array(basename($item), array('CVS', '.', '..'))) {
+                    $formats = array();
+                    foreach (glob($item . "/*.php") as $subitem) {
+                        if (substr(basename($subitem), -17) != "Factory.class.php") {
+                            $formats[] = substr(basename($subitem), 0, -4);               
+                        }
+                    }
+                    $packageList[basename($item)] = $formats;
+                }
             }
         }
         
-        echo "Supported formats:\n";
-        echo "\t" . implode("\n\t", $formatList) . "\n";
-        //break;
+        echo "Supported packages:\n";
+        foreach ($packageList as $package => $formats) {
+            echo "\t" . $package . "\n\t\t" . implode("\n\t\t", $formats) . "\n";
+        }
       
         exit(0);
     }
