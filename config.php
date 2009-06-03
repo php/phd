@@ -12,6 +12,8 @@ class PhDConfig
             'xhtml',
             'php',
             'bigxhtml',
+            'manpage',
+            'pdf',
         ),
         'chunk_extra' => array(
             "legalnotice" => true,
