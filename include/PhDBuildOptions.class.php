@@ -10,19 +10,20 @@ class PhDBuildOptionsParser extends PhDOptionParser
     {
         return array(
             "format:"      => "f:",        // The format to render (xhtml, pdf...)
-            "theme:"       => "t:",        // The theme to render (phpweb, bightml..)
+            //"theme:"       => "t:",        // The theme to render (phpweb, bightml..)
             "noindex"      => "I",         // Re-index or load from cache
             "docbook:"     => "d:",        // The Docbook XML file to render from (.manual.xml)
             "output:"      => "o:",        // The output directory
             "partial:"     => "p:",        // The ID to render (optionally ignoring its children)
             "skip:"        => "s:",        // The ID to skip (optionally skipping its children too)
             "verbose:"     => "v",         // Adjust the verbosity level
-            "list::"       => "l::",       // List supported themes/formats
+            "list::"       => "l::",       // List supported packages/formats
             "lang::"       => "L:",        // Language hint (used by the CHM)
             "color:"       => "c:",        // Use color output if possible
             'highlighter:' => 'g:',        // Class used as source code highlighter
             "version"      => "V",         // Print out version information
             "help"         => "h",         // Print out help
+            "package:"     => "P:",        // The package of formats            
         );
     }
 
@@ -36,6 +37,8 @@ class PhDBuildOptionsParser extends PhDOptionParser
         foreach((array)$v as $i => $val) {
             switch($val) {
                 case "xhtml":
+                case "bigxhtml":
+                case "php":
                 case "manpage":
                 case "pdf":
                     if (!in_array($val, $formats)) {
@@ -43,7 +46,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
                     }
                     break;
                 default:
-                    trigger_error("Only xhtml, pdf and manpage are supported at this time", E_USER_ERROR);
+                    trigger_error("Format not supported at this time", E_USER_ERROR);
             }
         }
         PhDConfig::set_output_format($formats);
@@ -57,64 +60,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
     {
         PhDConfig::setHighlighter($v);
     }
-
-    public function option_t($k, $v)
-    {
-        $this->option_theme($k, $v);
-    }
-    public function option_theme($k, $v)
-    {
-        /* Remove the default themes */
-        $themes = PhDConfig::output_theme();
-        $themes['xhtml']['php'] = array();
-        $themes['manpage']['php'] = array();
-        $themes['xhtml']['pear'] = array();
-
-        foreach((array)$v as $i => $val) {
-            switch($val) {
-                case "phpweb":
-                case "chunkedhtml":
-                case "bightml":
-                case "chmsource":
-                case "phpkdevelop":
-                    if (!in_array($val, $themes["xhtml"]["php"])) {
-                        $themes["xhtml"]["php"][] = $val;
-                    }
-                    break;
-                case "phpfunctions":
-                    if (!in_array($val, $themes["manpage"]["php"])) {
-                        $themes["manpage"]["php"][] = $val;
-                    }
-                    break;
-                case "phppdf":
-                case "phpbigpdf":
-                    if (!in_array($val, $themes["pdf"]["php"])) {
-                        $themes["pdf"]["php"][] = $val;
-                    }
-                    break;
-                case "pear":
-                    $themes["xhtml"]["pear"] = array(
-                        'pearweb',
-                        'pearchunkedhtml',
-                        'pearbightml',
-                        'pearchm'
-                    );
-                    break;
-                case "pearweb":
-                case "pearchunkedhtml":
-                case "pearbightml":
-                case "pearchm":
-                    if (!in_array($val, $themes["xhtml"]["pear"])) {
-                        $themes["xhtml"]["pear"][] = $val;
-                    }
-                    break;
-                default:
-                    trigger_error(sprintf("Unknown theme '%s'", $val), E_USER_ERROR);
-            }
-        }
-        PhDConfig::set_output_theme($themes);
-    }
-
+   
     public function option_i($k, $v)
     {
         $this->option_noindex($k, 'true');
@@ -154,11 +100,15 @@ class PhDBuildOptionsParser extends PhDOptionParser
         if (!is_dir($v) || !is_readable($v)) {
             trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
         }
+        $v = (substr($v, strlen($v) - strlen(DIRECTORY_SEPARATOR)) == DIRECTORY_SEPARATOR) ? $v : ($v . DIRECTORY_SEPARATOR);
         PhDConfig::set_output_dir($v);
     }
 
     public function option_p($k, $v)
     {
+        if ($k == "P") {
+            return $this->option_package($k, $v);
+        }
         $this->option_partial($k, $v);
     }
     public function option_partial($k, $v)
@@ -177,6 +127,25 @@ class PhDBuildOptionsParser extends PhDOptionParser
             $render_ids[$val] = $recursive;
         }
         PhDConfig::set_render_ids($render_ids);
+    }
+
+    public function option_package($k, $v) {
+        static $packageList = NULL;
+        
+        if (is_null($packageList)) {
+            $packageList = array();
+            foreach (glob($GLOBALS['ROOT'] . "/packages/*", GLOB_ONLYDIR) as $item) {
+                if (!in_array(basename($item), array('CVS', '.', '..'))) {
+                    $packageList[] = basename($item);
+                }
+            }
+        }
+        
+        if (in_array($v, $packageList)) {
+            PhDConfig::set_package($v);
+        } else {
+            trigger_error("Invalid Package", E_USER_ERROR);
+        }
     }
 
     public function option_s($k, $v)
@@ -245,57 +214,28 @@ class PhDBuildOptionsParser extends PhDOptionParser
     }
     public function option_list($k, $v)
     {
-        static $formatList = NULL;
-        static $themeList = NULL;
-
-        if (is_null($formatList)) {
-            $formatList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/formats/*.php") as $item) {
-                $formatList[] = substr(basename($item), 0, -4);
-            }
-        }
-        if (is_null($themeList)) {
-            $themeList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/themes/*", GLOB_ONLYDIR) as $item) {
+        static $packageList = NULL;
+        
+        if (is_null($packageList)) {
+            $packageList = array();
+            foreach (glob($GLOBALS['ROOT'] . "/packages/*", GLOB_ONLYDIR) as $item) {
                 if (!in_array(basename($item), array('CVS', '.', '..'))) {
-                    $maintheme = basename($item);
-                    $subthemes = array();
+                    $formats = array();
                     foreach (glob($item . "/*.php") as $subitem) {
-                        $subthemes[] = substr(basename($subitem), 0, -4);
+                        if (substr(basename($subitem), -17) != "Factory.class.php") {
+                            $formats[] = substr(basename($subitem), 0, -4);               
+                        }
                     }
-                    $themeList[$maintheme] = $subthemes;
+                    $packageList[basename($item)] = $formats;
                 }
             }
         }
-
-        if ($v === false) {
-            $v = array('f', 't');
+        
+        echo "Supported packages:\n";
+        foreach ($packageList as $package => $formats) {
+            echo "\t" . $package . "\n\t\t" . implode("\n\t\t", $formats) . "\n";
         }
-
-        foreach((array)$v as $val) {
-            switch($val) {
-                case "f":
-                case "format":
-                case "formats": {
-                    echo "Supported formats:\n";
-                    echo "\t" . implode("\n\t", $formatList) . "\n";
-                    break;
-                }
-
-                case "t":
-                case "theme":
-                case "themes":
-                    echo "Supported themes:\n";
-                    foreach ($themeList as $theme => $subthemes) {
-                        echo "\t" . $theme . "\n\t\t" . implode("\n\t\t", $subthemes) . "\n";
-                    }
-                    break;
-
-                default:
-                    echo "Unknown list type '$val'\n";
-                    break;
-            }
-        }
+      
         exit(0);
     }
 
@@ -330,8 +270,15 @@ class PhDBuildOptionsParser extends PhDOptionParser
 
     public function option_version($k, $v)
     {
-        printf("PhD version: %s\n", PHD_VERSION);
-        printf("Copyright (c) 2007-2009 The PHP Documentation Group\n");
+        $color = PhDConfig::phd_info_color();
+        $output = PhDConfig::phd_info_output();
+        if (isset($GLOBALS['base_revision'])) {
+            $rev = preg_replace('/\$Re[v](?:ision)?(: ([\d.]+) ?)?\$$/e', "'\\1' == '' ? '??' : '\\2'", $GLOBALS['base_revision']);
+            fprintf($output, "%s\n", term_color("PhD Version: " . PHD_VERSION . " (" . $rev . ")", $color));
+        } else {
+            fprintf($output, "%s\n", term_color("PhD Version: " . PHD_VERSION, $color));
+        }
+        fprintf($output, "%s\n", term_color("Copyright(c) 2007-2009 The PHP Documentation Group", $color));
         exit(0);
     }
 
@@ -347,8 +294,8 @@ class PhDBuildOptionsParser extends PhDOptionParser
   --verbose <int>            Adjusts the verbosity level
   -f <formatname>
   --format <formatname>      The build format to use
-  -t <themename>
-  --theme <themename>        The theme to use
+  -P <packagename>
+  --package <packagename>    The package to use
   -I
   --noindex                  Do not index before rendering but load from cache
                              (default: false)
@@ -360,8 +307,8 @@ class PhDBuildOptionsParser extends PhDOptionParser
   -s <id[=bool]>
   --skip <id[=bool]>         The ID to skip, optionally skipping its children
                              chunks (default to true; skip children)
-  -l <formats/themes>
-  --list <formats/themes>    Print out the supported formats/themes
+  -l <packages/formats>
+  --list <packages/formats>  Print out the supported packages/formats
                              (default: both)
   -o <directory>
   --output <directory>       The output directory (default: .)
