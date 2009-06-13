@@ -31,7 +31,7 @@ class PhDConfig
         'skip_ids' => array(
         ),
         'color_output' => false,
-        'output_dir' => '.',
+        'output_dir' => './output/',
         'intermediate_output_dir' => '.',
         'php_error_output' => NULL,
         'php_error_color' => false,
