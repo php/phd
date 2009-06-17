@@ -381,4 +381,13 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         return $spaces;
     }
 
+    public function format_link($open, $name, $attrs, $props) {
+        $link = parent::format_link($open, $name, $attrs, $props);
+        // Add title attribute so address can be seen in CHM files.
+        $search = '`<a href="([^"]++)" class="link external">`';
+        $replacement = '`<a href="\1" class="link external" title="Link : \1">`';
+        $link = preg_replace($search, $replacement, $link);
+        return $link;
+    }
+
 }
