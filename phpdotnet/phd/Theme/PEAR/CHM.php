@@ -1,7 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-require_once $ROOT . '/themes/pear/pearchunkedhtml.php';
-class pearchm extends pearchunkedhtml {
+class Theme_PEAR_CHM extends Theme_PEAR_ChunkedHTML
+{
     const DEFAULT_FONT = "Arial,10,0";
     const DEFAULT_TITLE = "PEAR Manual";
 
@@ -184,14 +185,14 @@ class pearchm extends pearchunkedhtml {
 
     public function __construct(array $IDs, $ext = "html", $dir = "chm") {
         parent::__construct($IDs, $ext);
-        $this->chmdir = PhDConfig::output_dir() . $dir . DIRECTORY_SEPARATOR;
+        $this->chmdir = Config::output_dir() . $dir . DIRECTORY_SEPARATOR;
 		if(!file_exists($this->chmdir) || is_file($this->chmdir))
 			mkdir($this->chmdir) or die("Can't create the CHM project directory");
-        $this->outputdir = PhDConfig::output_dir() . $dir . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
+        $this->outputdir = Config::output_dir() . $dir . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
 		if(!file_exists($this->outputdir) || is_file($this->outputdir))
 			mkdir($this->outputdir) or die("Can't create the cache directory");
 
-		$lang = PhDConfig::language();
+		$lang = Config::language();
 		$this->hhpStream = fopen($this->chmdir . "pear_manual_{$lang}.hhp", "w");
 		$this->hhcStream = fopen($this->chmdir . "pear_manual_{$lang}.hhc", "w");
 		$this->hhkStream = fopen($this->chmdir . "pear_manual_{$lang}.hhk", "w");
@@ -217,7 +218,7 @@ class pearchm extends pearchunkedhtml {
 
 	protected function appendChm($name, $ref, $isChunk, $hasChild) {
 		switch ($isChunk) {
-			case PhDReader::OPEN_CHUNK :
+			case Reader_Legacy::OPEN_CHUNK :
 				$this->currentTocDepth++;
 				fwrite($this->hhpStream, "{$ref}\n");
 				fwrite($this->hhcStream, "{$this->offset(1)}<li><object type=\"text/sitemap\">\n" .
@@ -230,7 +231,7 @@ class pearchm extends pearchunkedhtml {
 					"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name)) . "\">\n" .
 					"        </object>\n    </li>\n");
 				break;
-			case PhDReader::CLOSE_CHUNK :
+			case Reader_Legacy::CLOSE_CHUNK :
 				if ($hasChild) {
 					fwrite($this->hhcStream, "{$this->offset(2)}</ul>\n");
 				}
@@ -259,7 +260,7 @@ class pearchm extends pearchunkedhtml {
     }
 
     protected function headerChm() {
-		$lang = PhDConfig::language();
+		$lang = Config::language();
 		fwrite($this->hhpStream, '[OPTIONS]
 Compatibility=1.1 or later
 Compiled file=pear_manual_' . $lang . '.chm
@@ -362,13 +363,13 @@ $1</head>',
     }
 
     private function collectContent($attrs) {
-		if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-			$id = $attrs[PhDReader::XMLNS_XML]["id"];
+		if (isset($attrs[Reader_Legacy::XMLNS_XML]["id"])) {
+			$id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
 			$this->lastContent = array(
-				"name" => PhDHelper::getDescription($id),
+				"name" => Helper::getDescription($id),
 				"reference" => "res\\" .
-					(PhDHelper::getFilename($id) ? PhDHelper::getFilename($id) : $id) . "." . $this->ext,
-				"hasChild" => (count(PhDHelper::getChildren($id)) > 0)
+					(Helper::getFilename($id) ? Helper::getFilename($id) : $id) . "." . $this->ext,
+				"hasChild" => (count(Helper::getChildren($id)) > 0)
 			);
 		}
     }

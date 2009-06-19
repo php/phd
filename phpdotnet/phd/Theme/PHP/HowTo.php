@@ -1,26 +1,28 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-require_once $ROOT . '/themes/php/phpweb.php';
-class howto extends phpweb {
+
+class Theme_PHP_HowTo extends Theme_PHP_Web
+{
     private $tmp = "";
     public function __construct(array $IDs, $filename, $ext = "php") {
         phpdotnet::__construct($IDs, array(), $ext, true);
-        $this->outputdir = PhDConfig::output_dir() . 'howto' . DIRECTORY_SEPARATOR;
+        $this->outputdir = Config::output_dir() . 'howto' . DIRECTORY_SEPARATOR;
         if(!file_exists($this->outputdir) || is_file($this->outputdir)) {
             mkdir($this->outputdir) or die("Can't create the cache directory");
         }
     }
 
     public function header($id) {
-        $title = PhDHelper::getDescription($id, true);
-        $parent = PhDHelper::getParent($id);
+        $title = Helper::getDescription($id, true);
+        $parent = Helper::getParent($id);
         $next = $prev = $up = array(null, null);
         if ($parent && $parent != "ROOT") {
-            $siblings = PhDHelper::getChildren($parent);
-            $prev = phpweb::createPrev($id, $parent, $siblings);
-            $next = phpweb::createNext($id, $parent, $siblings);
-            $up = array($parent.".php", PhDHelper::getDescription($parent, false));
+            $siblings = Helper::getChildren($parent);
+            $prev = parent::createPrev($id, $parent, $siblings);
+            $next = parent::createNext($id, $parent, $siblings);
+            $up = array($parent.".php", Helper::getDescription($parent, false));
         }
 
         $this->tmp = <<< NAV

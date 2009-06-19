@@ -1,8 +1,9 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-require_once $ROOT . '/themes/php/phpdotnet.php';
-class bightml extends phpdotnet {
+class Theme_PHP_BigHTML extends Theme_PHP_PHPDotNet
+{
     /**
     * File to write the html to
     *
@@ -19,7 +20,7 @@ class bightml extends phpdotnet {
 
     public function __construct(array $IDs, $filename, $ext = "html") {
         parent::__construct($IDs, $filename, $ext, false);
-        $this->outputfile = PhDConfig::output_dir() . 'bightml.html';
+        $this->outputfile = Config::output_dir() . 'bightml.html';
         $this->stream = fopen($this->outputfile, "w");
         self::header();
     }

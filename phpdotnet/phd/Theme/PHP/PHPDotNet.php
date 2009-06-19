@@ -1,7 +1,9 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-abstract class phpdotnet extends PhDThemeXhtml {
+abstract class Theme_PHP_PHPDotNet extends Theme_XHTML
+{
     protected $elementmap = array(
         'acronym'               => 'format_suppressed_tags',
         'function'              => 'format_suppressed_tags',
@@ -242,9 +244,9 @@ abstract class phpdotnet extends PhDThemeXhtml {
             $content = $fragment = "";
             $class = $name;
 
-            if(isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
-                $linkto = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
-                $id = $href = PhDHelper::getFilename($linkto);
+            if(isset($attrs[Reader_Legacy::XMLNS_DOCBOOK]["linkend"])) {
+                $linkto = $attrs[Reader_Legacy::XMLNS_DOCBOOK]["linkend"];
+                $id = $href = Helper::getFilename($linkto);
 
                 if ($id != $linkto) {
                     $fragment = "#$linkto";
@@ -252,8 +254,8 @@ abstract class phpdotnet extends PhDThemeXhtml {
                 if ($this->chunked) {
                     $href .= ".".$this->ext;
                 }
-            } elseif(isset($attrs[PhDReader::XMLNS_XLINK]["href"])) {
-                $href = $attrs[PhDReader::XMLNS_XLINK]["href"];
+            } elseif(isset($attrs[Reader_Legacy::XMLNS_XLINK]["href"])) {
+                $href = $attrs[Reader_Legacy::XMLNS_XLINK]["href"];
                 $content = "&raquo; ";
                 $class .= " external";
             }
@@ -268,7 +270,7 @@ abstract class phpdotnet extends PhDThemeXhtml {
                         $link .= $href;
                     }
                 }
-                return '<a href="' .$link. '" class="' .$class. '">' .($content.PhDHelper::getDescription($id, false)). '</a>';
+                return '<a href="' .$link. '" class="' .$class. '">' .($content.Helper::getDescription($id, false)). '</a>';
             } elseif ($props["empty"]) {
                 if ($this->chunked) {
                     $link = "";
@@ -296,9 +298,9 @@ abstract class phpdotnet extends PhDThemeXhtml {
     public function format_fieldsynopsis_varname($open, $name, $attrs) {
         if ($open) {
             $href = "";
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
-                $linkto = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
-                $href = PhDHelper::getFilename($linkto);
+            if (isset($attrs[Reader_Legacy::XMLNS_DOCBOOK]["linkend"])) {
+                $linkto = $attrs[Reader_Legacy::XMLNS_DOCBOOK]["linkend"];
+                $href = Helper::getFilename($linkto);
 
                 if ($this->chunked) {
                     if ($href != $linkto) {
@@ -322,7 +324,7 @@ abstract class phpdotnet extends PhDThemeXhtml {
             }
             return ' <var class="'.$name.'">'.$href.'$';
         }
-        if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
+        if (isset($attrs[Reader_Legacy::XMLNS_DOCBOOK]["linkend"])) {
             return '</a></var>';
         }
         return '</var>';
@@ -389,8 +391,8 @@ abstract class phpdotnet extends PhDThemeXhtml {
         return false;
     }
     public function format_chunk($open, $name, $attrs, $props) {
-        if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-            $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        if (isset($attrs[Reader_Legacy::XMLNS_XML]["id"])) {
+            $this->CURRENT_ID = $id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
         }
         if ($props["isChunk"]) {
             $this->cchunk = $this->dchunk;
@@ -399,8 +401,8 @@ abstract class phpdotnet extends PhDThemeXhtml {
             $this->lang = $props["lang"];
         }
         if ($name == "refentry") {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                $this->cchunk["verinfo"] = !($attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "noversion");
+            if (isset($attrs[Reader_Legacy::XMLNS_DOCBOOK]["role"])) {
+                $this->cchunk["verinfo"] = !($attrs[Reader_Legacy::XMLNS_DOCBOOK]["role"] == "noversion");
             } else {
                 $this->cchunk["verinfo"] = true;
             }
@@ -425,22 +427,22 @@ abstract class phpdotnet extends PhDThemeXhtml {
 
     }
     public function format_container_chunk($open, $name, $attrs, $props) {
-        $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        $this->CURRENT_ID = $id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
         if ($open) {
             if ($props["isChunk"]) {
                 $this->cchunk = $this->dchunk;
             }
             if ($name != "reference") {
-                $chunks = PhDHelper::getChildren($id);
+                $chunks = Helper::getChildren($id);
                 if (!count($chunks)) {
                     return "<div>";
                 }
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_'.$name.'">';
                 foreach($chunks as $chunkid => $junk) {
                     if ($this->chunked) {
-                        $content .= '<li><a href="'.$chunkid. '.' .$this->ext. '">' .(PhDHelper::getDescription($chunkid, true)). '</a></li>';
+                        $content .= '<li><a href="'.$chunkid. '.' .$this->ext. '">' .(Helper::getDescription($chunkid, true)). '</a></li>';
                     } else {
-                        $content .= '<li><a href="#'.$chunkid. '">' .(PhDHelper::getDescription($chunkid, true)). '</a></li>';
+                        $content .= '<li><a href="#'.$chunkid. '">' .(Helper::getDescription($chunkid, true)). '</a></li>';
                     }
                 }
                 $content .= "</ul>\n";
@@ -451,14 +453,14 @@ abstract class phpdotnet extends PhDThemeXhtml {
 
         $content = "";
         if ($name == "reference") {
-            $chunks = PhDHelper::getChildren($id);
+            $chunks = Helper::getChildren($id);
             if (count($chunks)) {
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_reference">';
                 foreach($chunks as $chunkid => $junk) {
                     if ($this->chunked) {
-                        $content .= '<li><a href="'.$chunkid. '.' .$this->ext. '">' .(PhDHelper::getDescription($chunkid, false)). '</a> — ' .(PhDHelper::getDescription($chunkid, true)). '</li>';
+                        $content .= '<li><a href="'.$chunkid. '.' .$this->ext. '">' .(Helper::getDescription($chunkid, false)). '</a> — ' .(Helper::getDescription($chunkid, true)). '</li>';
                     } else {
-                        $content .= '<li><a href="#'.$chunkid.'">' .(PhDHelper::getDescription($chunkid, false)). '</a> — ' .(PhDHelper::getDescription($chunkid, true)). '</li>';
+                        $content .= '<li><a href="#'.$chunkid.'">' .(Helper::getDescription($chunkid, false)). '</a> — ' .(Helper::getDescription($chunkid, true)). '</li>';
                     }
                 }
                 $content .= "</ul>\n";
@@ -487,29 +489,29 @@ abstract class phpdotnet extends PhDThemeXhtml {
         return "</h1>\n" .$ret;
     }
     public function format_root_chunk($open, $name, $attrs) {
-        $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        $this->CURRENT_ID = $id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
         if ($open) {
             return "<div>";
         }
 
-        $chunks = PhDHelper::getChildren($id);
+        $chunks = Helper::getChildren($id);
         $content = '<ul class="chunklist chunklist_'.$name.'">';
         foreach($chunks as $chunkid => $junk) {
             $href = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
-            $long = PhDHelper::getDescription($chunkid, true);
-            $short = PhDHelper::getDescription($chunkid, false);
+            $long = Helper::getDescription($chunkid, true);
+            $short = Helper::getDescription($chunkid, false);
             if ($long && $short && $long != $short) {
                 $content .= '<li><a href="' .$href. '">' .$short. '</a> — ' .$long;
             } else {
                 $content .= '<li><a href="' .$href. '">' .($long ? $long : $short). '</a>';
             }
-            $children = PhDHelper::getChildren($chunkid);
+            $children = Helper::getChildren($chunkid);
             if (count($children)) {
                 $content .= '<ul class="chunklist chunklist_'.$name.' chunklist_children">';
-                foreach(PhDHelper::getChildren($chunkid) as $childid => $junk) {
+                foreach(Helper::getChildren($chunkid) as $childid => $junk) {
                     $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
-                    $long = PhDHelper::getDescription($childid, true);
-                    $short = PhDHelper::getDescription($childid, false);
+                    $long = Helper::getDescription($childid, true);
+                    $short = Helper::getDescription($childid, false);
                     if ($long && $short && $long != $short) {
                         $content .= '<li><a href="' .$href. '">' .$short. '</a> — ' .$long. '</li>';
                     } else {
@@ -546,7 +548,7 @@ abstract class phpdotnet extends PhDThemeXhtml {
                 $rel = $desc = "";
                 if ($this->format->role == "seealso") {
                     $rel  = ' rel="rdfs-seeAlso"';
-                    $desc = " - " . PhDHelper::getDescription($filename, true);
+                    $desc = " - " . Helper::getDescription($filename, true);
                 }
 
                 if ($this->chunked) {
@@ -615,7 +617,7 @@ abstract class phpdotnet extends PhDThemeXhtml {
             break;
         default:
             /* Check if its a classname. */
-            $href = PhDTheme::getFilename("class.$t");
+            $href = Theme::getFilename("class.$t");
         }
 
         if ($href && $this->chunked) {
@@ -665,7 +667,7 @@ abstract class phpdotnet extends PhDThemeXhtml {
     }
     public function format_qandaentry($open, $name, $attrs) {
         if ($open) {
-            $this->cchunk["qandaentry"][] = $attrs[PhDReader::XMLNS_XML]["id"];
+            $this->cchunk["qandaentry"][] = $attrs[Reader_Legacy::XMLNS_XML]["id"];
             return '<dl>';
         }
         return '</dl>';

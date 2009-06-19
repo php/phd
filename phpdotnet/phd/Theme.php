@@ -1,8 +1,10 @@
 <?php
-/*  $Id$ */
-require $ROOT. "/include/PhDMediaManager.class.php";
+namespace phpdotnet\phd;
 
-abstract class PhDTheme extends PhDHelper implements iPhDTheme {
+/*  $Id$ */
+
+abstract class Theme extends Helper implements iTheme
+{
     protected $format;
 
 
@@ -22,7 +24,7 @@ abstract class PhDTheme extends PhDHelper implements iPhDTheme {
     /**
     * Overwritten in xhtml themes only.
     *
-    * @see PhDThemeXhtml::postConstruct()
+    * @see Theme_XHTML::postConstruct()
     */
     public function postConstruct() {}
 
@@ -33,7 +35,7 @@ abstract class PhDTheme extends PhDHelper implements iPhDTheme {
     }
 }
 
-interface iPhDTheme {
+interface iTheme {
     public function appendData($data, $isChunk);
 }
 

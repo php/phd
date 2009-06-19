@@ -1,6 +1,7 @@
 <?php
+namespace phpdotnet\phd;
 
-abstract class PhDEnterpriseFormat extends PhDObjectStorage {
+abstract class EnterpriseFormat extends ObjectStorage {
     const SDESC = 1;
     const LDESC = 2;
 
@@ -16,8 +17,8 @@ abstract class PhDEnterpriseFormat extends PhDObjectStorage {
     private static $autogen = array();
 
     public function __construct() {
-        if (file_exists(PhDConfig::output_dir() . "index.sqlite")) {
-            $this->sqlite = new SQLite3(PhDConfig::output_dir() . 'index.sqlite');
+        if (file_exists(Config::output_dir() . "index.sqlite")) {
+            $this->sqlite = new SQLite3(Config::output_dir() . 'index.sqlite');
             $this->sortIDs();
         }
     }
@@ -26,7 +27,7 @@ abstract class PhDEnterpriseFormat extends PhDObjectStorage {
     abstract public function UNDEF($open, $name, $attrs, $props);
     abstract public function TEXT($value);
     abstract public function CDATA($value);
-    abstract public function createLink($for, &$desc = null, $type = PhDEnterpriseFormat::SDESC);
+    abstract public function createLink($for, &$desc = null, $type = EnterpriseFormat::SDESC);
     abstract public function appendData($data);
     abstract public function update($event, $value = null);
 
@@ -82,7 +83,7 @@ abstract class PhDEnterpriseFormat extends PhDObjectStorage {
         if (!($obj instanceof $this) && get_class($obj) != get_class($this)) {
             throw new InvalidArgumentException(get_class($this) . " themes *MUST* _inherit_ " .get_class($this). ", got " . get_class($obj));
         }
-        $obj->notify(PhDRender::STANDALONE, false);
+        $obj->notify(Render::STANDALONE, false);
         return parent::attach($obj, $inf);
     }
     final public function getElementMap() {
@@ -104,8 +105,8 @@ abstract class PhDEnterpriseFormat extends PhDObjectStorage {
 
     final public function parse($xml) {
         $parsed = "";
-        $reader = new PhDEnterpriseReader();
-        $render = new PhDRender();
+        $reader = new EnterpriseReader();
+        $render = new Render();
 
         $reader->XML("<notatag>" . $xml . "</notatag>");
 
@@ -124,20 +125,20 @@ abstract class PhDEnterpriseFormat extends PhDObjectStorage {
             if (isset(self::$autogen[$lang][$text])) {
                 return self::$autogen[$lang][$text];
             }
-            if ($lang == PhDConfig::fallback_language()) {
+            if ($lang == Config::fallback_language()) {
                 throw new InvalidArgumentException("Cannot autogenerate text for '$text'");
             }
-            return self::autogen($text, PhDConfig::fallback_language());
+            return self::autogen($text, Config::fallback_language());
         }
 
-        $filename = PhDConfig::lang_dir() . $lang . ".xml";
+        $filename = Config::lang_dir() . $lang . ".xml";
 
         $r = new XMLReader;
         if (!file_exists($filename) || !$r->open($filename)) {
-            if ($lang == PhDConfig::fallback_language()) {
+            if ($lang == Config::fallback_language()) {
                 throw new Exception("Cannot open $filename");
             }
-            return self::autogen($text, PhDConfig::fallback_language());
+            return self::autogen($text, Config::fallback_language());
         }
         $autogen = array();
         while ($r->read()) {

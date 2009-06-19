@@ -1,6 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-class phpfunctions extends PhDTheme {
+class Theme_PHP_Functions extends Theme
+{
     const OPEN_CHUNK = 0x01;
     const CLOSE_CHUNK = 0x02;
     const OPENED_CHUNK = 0x03;
@@ -53,7 +55,7 @@ class phpfunctions extends PhDTheme {
     public function __construct(array $IDs, array $filenames, $format = "man3", $chunked = true) {
         parent::__construct($IDs);
         $this->format = $format;
-        $this->outputdir = PhDConfig::output_dir() . $this->format . DIRECTORY_SEPARATOR;
+        $this->outputdir = Config::output_dir() . $this->format . DIRECTORY_SEPARATOR;
         if(!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory");
     }
 
@@ -132,7 +134,7 @@ class phpfunctions extends PhDTheme {
     }
 
     public function format_set($open, $name, $attrs, $props) {
-        if (isset($attrs[PhDReader::XMLNS_XML]["id"]) && $attrs[PhDReader::XMLNS_XML]["id"] == "funcref") {
+        if (isset($attrs[Reader_Legacy::XMLNS_XML]["id"]) && $attrs[Reader_Legacy::XMLNS_XML]["id"] == "funcref") {
             $this->isFunctionRefSet = $open;
         }
         return false;

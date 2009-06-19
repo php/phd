@@ -1,11 +1,10 @@
 <?php
+namespace phpdotnet\phd;
 /* $Id$ */
-
-require $ROOT . "/include/PhDErrors.php";
 
 define("PHD_VERSION", "phd-from-cvs");
 
-class PhDConfig
+class Config
 {
     private static $optionArray = array(
         'output_format' => array(
@@ -39,7 +38,7 @@ class PhDConfig
         'user_error_color' => false,
         'phd_info_output' => NULL,
         'phd_info_color' => false,
-        'highlighter'    => 'PhDHighlighter',
+        'highlighter'    => '\phpdotnet\phd\Highlighter',
         'package' => 'PHP',
     );
 
@@ -64,9 +63,9 @@ class PhDConfig
     }
 }
 
-PhDConfig::set_php_error_output(STDERR);
-PhDConfig::set_user_error_output(STDERR);
-PhDConfig::set_phd_info_output(STDOUT);
+Config::set_php_error_output(STDERR);
+Config::set_user_error_output(STDERR);
+Config::set_phd_info_output(STDOUT);
 
 /* {{{ Workaround/fix for Windows prior to PHP5.3 */
 if (!function_exists('getopt')) {
@@ -111,7 +110,7 @@ function phd_bool($val) {
 }
 /* }}} */
 
-abstract class PhDOptionParser
+abstract class OptionParser
 {
     abstract public function getOptionList();
 

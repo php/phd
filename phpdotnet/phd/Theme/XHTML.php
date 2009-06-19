@@ -1,10 +1,11 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
 /**
 * Base class for XHTML themes
 */
-abstract class PhDThemeXhtml extends PhDTheme
+abstract class Theme_XHTML extends Theme
 {
     /**
     * If we are a theme generating chunks or not
@@ -16,7 +17,7 @@ abstract class PhDThemeXhtml extends PhDTheme
     /**
     * Media manager object
     *
-    * @var PhDMediaManager
+    * @var MediaManager
     */
     public $mediamanager = null;
 
@@ -41,7 +42,7 @@ abstract class PhDThemeXhtml extends PhDTheme
     */
     public function postConstruct()
     {
-        $this->mediamanager = new PhDMediaManager(PhDConfig::xml_root());
+        $this->mediamanager = new MediaManager(Config::xml_root());
 
         if (isset($this->outputdir) && $this->outputdir) {
             $this->mediamanager->output_dir = $this->outputdir;
@@ -67,7 +68,7 @@ abstract class PhDThemeXhtml extends PhDTheme
     */
     public function createToc($id, $name, $props, $depth = 1, $header = true)
     {
-        $chunks = PhDHelper::getChildren($id);
+        $chunks = Helper::getChildren($id);
         if ($depth == 0 || !count($chunks)) {
             return '';
         }
@@ -78,8 +79,8 @@ abstract class PhDThemeXhtml extends PhDTheme
         }
         $content .= " <ul class=\"chunklist chunklist_$name\">\n";
         foreach ($chunks as $chunkid => $junk) {
-            $long  = $this->format->TEXT(PhDHelper::getDescription($chunkid, true));
-            $short = $this->format->TEXT(PhDHelper::getDescription($chunkid, false));
+            $long  = $this->format->TEXT(Helper::getDescription($chunkid, true));
+            $short = $this->format->TEXT(Helper::getDescription($chunkid, false));
             if ($long && $short && $long != $short) {
                 $desc = $short . '</a> -- ' . $long;
             } else {
@@ -89,7 +90,7 @@ abstract class PhDThemeXhtml extends PhDTheme
             if ($this->chunked) {
                 $content .= "  <li><a href=\"{$chunkid}.{$this->ext}\">" . $desc;
             } else {
-                $content .= "  <li><a href=\"#{$chunkid}\">" . $this->format->TEXT(PhDHelper::getDescription($chunkid, false)) . "</a>";
+                $content .= "  <li><a href=\"#{$chunkid}\">" . $this->format->TEXT(Helper::getDescription($chunkid, false)) . "</a>";
             }
             if ($depth > 1) {
                 $content .= $this->createToc($chunkid, $name, $props, $depth - 1, false);
@@ -109,7 +110,7 @@ abstract class PhDThemeXhtml extends PhDTheme
     * Handle an image.
     */
     public function format_imagedata($open, $name, $attrs) {
-        $file    = $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"];
+        $file    = $attrs[Reader_Legacy::XMLNS_DOCBOOK]["fileref"];
         $newpath = $this->mediamanager->handleFile($file);
 
         if ($this->format->cchunk["mediaobject"]["alt"] !== false) {
@@ -128,11 +129,11 @@ abstract class PhDThemeXhtml extends PhDTheme
             return '<div class="phd-toc">';
         }
         return $this->createToc(
-            $attrs[PhDReader::XMLNS_PHD]['element'],
+            $attrs[Reader_Legacy::XMLNS_PHD]['element'],
             'phd-toc',
             $props,
-            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
-                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1,
+            isset($attrs[Reader_Legacy::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[Reader_Legacy::XMLNS_PHD]['toc-depth'] : 1,
             false
         ) . "</div>\n";
     }

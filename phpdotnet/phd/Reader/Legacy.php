@@ -1,8 +1,9 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 //6271
 
-class PhDReader extends XMLReader {
+class Reader_Legacy extends \XMLReader {
 
     /* {{{ Class constants */
     const XMLNS_XML   = "http://www.w3.org/XML/1998/namespace";
@@ -64,10 +65,10 @@ class PhDReader extends XMLReader {
     public $isChunk = false;
 
     public function __construct($encoding = "UTF-8", $xml_opts = NULL) { /* {{{ */
-        if (!XMLReader::open(PhDConfig::xml_file(), $encoding, $xml_opts)) {
-            throw new Exception("Cannot open " . PhDConfig::xml_file());
+        if (!XMLReader::open(Config::xml_file(), $encoding, $xml_opts)) {
+            throw new Exception("Cannot open " . Config::xml_file());
         }
-        $ce = PhDConfig::chunk_extra();
+        $ce = Config::chunk_extra();
         if (is_array($ce)) {
             foreach($ce as $el => $v) {
                 $this->CHUNK_ME[$el] = $v;
@@ -149,7 +150,7 @@ class PhDReader extends XMLReader {
                 $this->STACK[$depth] = $name;
                 $isChunk = $this->isChunk($name, $this->getID());
                 if ($isChunk) {
-                    $this->isChunk = PhDReader::OPEN_CHUNK;
+                    $this->isChunk = self::OPEN_CHUNK;
                     $this->chunkDepths[] = $this->lastChunkDepth = $depth;
                 }
                 break;
@@ -159,7 +160,7 @@ class PhDReader extends XMLReader {
                 if ($this->lastChunkDepth == $depth) {
                     array_pop($this->chunkDepths);
                     $this->lastChunkDepth = end($this->chunkDepths);
-                    $this->isChunk = PhDReader::CLOSE_CHUNK;
+                    $this->isChunk = self::CLOSE_CHUNK;
                 }
                 $this->LAST_DEPTH = $depth;
                 break;
@@ -182,12 +183,12 @@ class PhDReader extends XMLReader {
     } /* }}} */
     /* Get all attributes of current node */
     public function getAttributes() { /* {{{ */
-        $attrs = array(PhDReader::XMLNS_DOCBOOK => array(), PhDReader::XMLNS_XML => array());
+        $attrs = array(self::XMLNS_DOCBOOK => array(), self::XMLNS_XML => array());
         if ($this->hasAttributes) {
             XMLReader::moveToFirstAttribute();
             do {
                 $k = $this->namespaceURI;
-                $attrs[!empty($k) ? $k : PhDReader::XMLNS_DOCBOOK][$this->localName] = $this->value;
+                $attrs[!empty($k) ? $k : self::XMLNS_DOCBOOK][$this->localName] = $this->value;
                 $attrs[$this->name] = $this->value;
             } while (XMLReader::moveToNextAttribute());
             XMLReader::moveToElement();
@@ -207,7 +208,7 @@ class PhDReader extends XMLReader {
             $node = $this->name;
         }
         $retval = "";
-        while (PhDReader::readNode($node)) {
+        while (self::readNode($node)) {
             $retval .= $this->value;
         }
         return $retval;

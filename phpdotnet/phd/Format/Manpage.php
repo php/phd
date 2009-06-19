@@ -1,6 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-class ManpagePhDFormat extends PhDFormat {
+class Format_Manpage extends Format
+{
     protected $elementmap = array( /* {{{ */
         'acronym'               => 'format_suppressed_tags',
         'abbrev'                => 'format_suppressed_tags',
@@ -343,8 +345,8 @@ class ManpagePhDFormat extends PhDFormat {
 
     public function format_methodparam($open, $name, $attrs, $props) {
         if ($open) {
-            $opt = isset($attrs[PhDReader::XMLNS_DOCBOOK]["choice"]) &&
-                $attrs[PhDReader::XMLNS_DOCBOOK]["choice"] == "opt";
+            $opt = isset($attrs[Reader::XMLNS_DOCBOOK]["choice"]) &&
+                $attrs[Reader::XMLNS_DOCBOOK]["choice"] == "opt";
             $this->cchunk["methodsynopsis"]["params"][] = array(
                 "optional" => $opt,
                 "type" => "",
@@ -427,14 +429,14 @@ class ManpagePhDFormat extends PhDFormat {
 
     public function format_xref($open, $name, $attrs, $props) {
         if ($props['empty'])
-            return "\n\"" . PhDHelper::getDescription($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"]) . "\"";
+            return "\n\"" . Helper::getDescription($attrs[Reader::XMLNS_DOCBOOK]["linkend"]) . "\"";
         return "";
     }
 
     public function format_verbatim($open, $name, $attrs, $props) {
         if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             } else {
                 $this->role = false;
             }
@@ -449,8 +451,8 @@ class ManpagePhDFormat extends PhDFormat {
     }
 
     public function format_refsect($open, $name, $attrs, $props) {
-        if ($open && isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-            $this->cchunk["role"] = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+        if ($open && isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+            $this->cchunk["role"] = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             if ($this->cchunk["role"] == "description") {
                 $this->cchunk["appendlater"] = true;
             }
@@ -467,7 +469,7 @@ class ManpagePhDFormat extends PhDFormat {
 
     public function format_tgroup($open, $name, $attrs, $props) {
         if ($open) {
-            $nbCols = $attrs[PhDReader::XMLNS_DOCBOOK]["cols"];
+            $nbCols = $attrs[Reader::XMLNS_DOCBOOK]["cols"];
             $ret = "\n.TS\nbox, tab (|);\n";
             for ($i = 0; $i < $nbCols; $i++)
                 $ret .= "c | ";

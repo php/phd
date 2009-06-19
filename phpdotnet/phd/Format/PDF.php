@@ -1,6 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-class PDFPhDFormat extends PhDFormat {
+class Format_PDF extends Format
+{
     protected $elementmap = array( /* {{{ */
         'abstract'              => 'format_suppressed_tags',
         'abbrev'                => 'format_suppressed_tags',
@@ -552,16 +554,16 @@ class PDFPhDFormat extends PhDFormat {
     public function format_link($open, $name, $attrs, $props) {
         if ($open && ! $props["empty"]) {
             $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0, 0, 1)); // blue
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])) {
-                $this->cchunk["linkend"] = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
-            } elseif(isset($attrs[PhDReader::XMLNS_XLINK]["href"])) {
-                $this->cchunk["href"] = $attrs[PhDReader::XMLNS_XLINK]["href"];
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["linkend"])) {
+                $this->cchunk["linkend"] = $attrs[Reader::XMLNS_DOCBOOK]["linkend"];
+            } elseif(isset($attrs[Reader::XMLNS_XLINK]["href"])) {
+                $this->cchunk["href"] = $attrs[Reader::XMLNS_XLINK]["href"];
             }
-        } elseif ($open && $name == "xref" && isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkend"])
-            && $linkend = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"]) {
+        } elseif ($open && $name == "xref" && isset($attrs[Reader::XMLNS_DOCBOOK]["linkend"])
+            && $linkend = $attrs[Reader::XMLNS_DOCBOOK]["linkend"]) {
             $this->cchunk["linkend"] = $linkend;
             $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0, 0, 1)); // blue
-            $this->format_link_text(PhDHelper::getDescription($linkend), $name);
+            $this->format_link_text(Helper::getDescription($linkend), $name);
             $this->pdfDoc->revertFont();
             $this->cchunk["linkend"] = "";
         } elseif (!$open) {
@@ -726,13 +728,13 @@ class PDFPhDFormat extends PhDFormat {
 
     public function format_colspec($open, $name, $attrs) {
         if ($open) {
-            PhDFormat::colspec($attrs[PhDReader::XMLNS_DOCBOOK]);
+            Format::colspec($attrs[Reader::XMLNS_DOCBOOK]);
         }
         return "";
     }
     public function format_thead($open, $name, $attrs) {
         if ($open) {
-            $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
             $this->pdfDoc->setFont(PdfWriter::FONT_BOLD);
         } else {
             $this->pdfDoc->revertFont();
@@ -741,15 +743,15 @@ class PDFPhDFormat extends PhDFormat {
     }
     public function format_tbody($open, $name, $attrs) {
         if ($open) {
-            $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
         }
         return "";
     }
     public function format_row($open, $name, $attrs) {
         if ($open) {
-            PhDFormat::initRow();
-            $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
-            $colCount = PhDFormat::getColCount();
+            Format::initRow();
+            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
+            $colCount = Format::getColCount();
             $this->pdfDoc->add(PdfWriter::TABLE_ROW, array($colCount, $valign));
         } else {
             $this->pdfDoc->add(PdfWriter::TABLE_END_ROW);
@@ -763,9 +765,9 @@ class PDFPhDFormat extends PhDFormat {
             $this->pdfDoc->add(PdfWriter::TABLE_END_ENTRY);
         }
         if ($open) {
-            $dbattrs = PhDFormat::getColspec($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $dbattrs = Format::getColspec($attrs[Reader::XMLNS_DOCBOOK]);
             $align = (isset($dbattrs["align"]) ? $dbattrs["align"] : $align);
-            $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $colspan = Format::colspan($attrs[Reader::XMLNS_DOCBOOK]);
             $this->pdfDoc->add(PdfWriter::TABLE_ENTRY, array($colspan, 1, $align));
         } else {
             $this->pdfDoc->add(PdfWriter::TABLE_END_ENTRY);
@@ -780,11 +782,11 @@ class PDFPhDFormat extends PhDFormat {
             return;
         }
         if ($open) {
-            $dbattrs = PhDFormat::getColspec($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $dbattrs = Format::getColspec($attrs[Reader::XMLNS_DOCBOOK]);
             $align = (isset($dbattrs["align"]) ? $dbattrs["align"] : $align);
             $retval = "";
             if (isset($dbattrs["colname"])) {
-                for($i=PhDFormat::getEntryOffset($dbattrs); $i>0; --$i) {
+                for($i=Format::getEntryOffset($dbattrs); $i>0; --$i) {
                     $this->pdfDoc->add(PdfWriter::TABLE_ENTRY, array(1, 1, $align));
                     $this->pdfDoc->add(PdfWriter::TABLE_END_ENTRY);
                 }
@@ -797,10 +799,10 @@ class PDFPhDFormat extends PhDFormat {
             if (isset($props["colspan"])) {
                 $colspan = $props["colspan"];
             } else {
-                $colspan = PhDFormat::colspan($dbattrs);
+                $colspan = Format::colspan($dbattrs);
             }
 
-            $rowspan = PhDFormat::rowspan($dbattrs);
+            $rowspan = Format::rowspan($dbattrs);
             $this->pdfDoc->add(PdfWriter::TABLE_ENTRY, array($colspan, $rowspan, $align));
         } else {
             $this->pdfDoc->add(PdfWriter::TABLE_END_ENTRY);
@@ -810,9 +812,9 @@ class PDFPhDFormat extends PhDFormat {
 
     public function format_tgroup($open, $name, $attrs, $props) {
         if ($open) {
-            PhDFormat::tgroup($attrs[PhDReader::XMLNS_DOCBOOK]);
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["cols"]))
-                $this->pdfDoc->add(PdfWriter::TABLE, $attrs[PhDReader::XMLNS_DOCBOOK]["cols"]);
+            Format::tgroup($attrs[Reader::XMLNS_DOCBOOK]);
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["cols"]))
+                $this->pdfDoc->add(PdfWriter::TABLE, $attrs[Reader::XMLNS_DOCBOOK]["cols"]);
         } else {
         }
         return "";
@@ -862,7 +864,7 @@ class PDFPhDFormat extends PhDFormat {
     public function format_methodparam_parameter($open, $name, $attrs, $props) {
         if ($props["empty"]) return '';
         if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM, 10);
                 $this->pdfDoc->appendText(" &$");
                 return '';
@@ -878,7 +880,7 @@ class PDFPhDFormat extends PhDFormat {
     public function format_parameter($open, $name, $attrs, $props) {
         if ($props["empty"]) return '';
         if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM_ITALIC, 10);
                 $this->pdfDoc->appendText(" &");
                 return '';
@@ -896,7 +898,7 @@ class PDFPhDFormat extends PhDFormat {
                 if ($this->params["count"] == 0) {
                     $content .= " (";
                 }
-                if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["choice"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["choice"] == "opt") {
+                if (isset($attrs[Reader::XMLNS_DOCBOOK]["choice"]) && $attrs[Reader::XMLNS_DOCBOOK]["choice"] == "opt") {
                     $this->params["opt"]++;
                     $content .= " [";
                 } else if($this->params["opt"]) {
@@ -922,7 +924,7 @@ class PDFPhDFormat extends PhDFormat {
     public function format_classsynopsisinfo($open, $name, $attrs, $props) {
         $this->cchunk["classsynopsisinfo"] = $this->dchunk["classsynopsisinfo"];
         if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
                 $this->format_para($open, $name, $attrs, $props);
                 $this->pdfDoc->appendText("/* ");
                 return '';
@@ -930,7 +932,7 @@ class PDFPhDFormat extends PhDFormat {
             return $this->format_para($open, $name, $attrs, $props);
         }
 
-        if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
             $this->pdfDoc->appendText(" */");
             return $this->format_para($open, $name, $attrs, $props);
         }
@@ -993,7 +995,7 @@ class PDFPhDFormat extends PhDFormat {
     // Footnotes & Callouts {{{
     public function format_footnoteref($open, $name, $attrs, $props) {
         if ($open) {
-            $linkend = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
+            $linkend = $attrs[Reader::XMLNS_DOCBOOK]["linkend"];
             $found = false;
             foreach($this->cchunk["footnote"] as $k => $note) {
                 if ($note["id"] === $linkend) {
@@ -1009,7 +1011,7 @@ class PDFPhDFormat extends PhDFormat {
     public function format_footnote($open, $name, $attrs, $props) {
         if ($open) {
             $count = count($this->cchunk["footnote"]);
-            $noteid = isset($attrs[PhDReader::XMLNS_XML]["id"]) ? $attrs[PhDReader::XMLNS_XML]["id"] : $count + 1;
+            $noteid = isset($attrs[Reader::XMLNS_XML]["id"]) ? $attrs[Reader::XMLNS_XML]["id"] : $count + 1;
             $note = array("id" => $noteid, "str" => "");
             $this->cchunk["footnote"][$count] = $note;
             if ($this->cchunk["table"]) {
@@ -1030,10 +1032,10 @@ class PDFPhDFormat extends PhDFormat {
     }
 
     public function format_co($open, $name, $attrs, $props) {
-        if (($open || $props["empty"]) && isset($attrs[PhDReader::XMLNS_XML]["id"]) && $id = $attrs[PhDReader::XMLNS_XML]["id"]) {
+        if (($open || $props["empty"]) && isset($attrs[Reader::XMLNS_XML]["id"]) && $id = $attrs[Reader::XMLNS_XML]["id"]) {
             $co = ++$this->cchunk["co"];
             $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0,0,1));
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["linkends"]) && $linkends = $attrs[PhDReader::XMLNS_DOCBOOK]["linkends"]) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["linkends"]) && $linkends = $attrs[Reader::XMLNS_DOCBOOK]["linkends"]) {
                 $linkAreas = $this->pdfDoc->add(PdfWriter::LINK_ANNOTATION, "[{$co}]");
                 if (!isset($this->cchunk["links-to-resolve"][$linkends]))
                     $this->cchunk["links-to-resolve"][$linkends] = array();
@@ -1061,7 +1063,7 @@ class PDFPhDFormat extends PhDFormat {
         if ($open) {
             $co = ++$this->cchunk["co"];
             $this->pdfDoc->setFont(PdfWriter::FONT_BOLD, 12, array(0,0,1));
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"]) && $ref = $attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"]) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["arearefs"]) && $ref = $attrs[Reader::XMLNS_DOCBOOK]["arearefs"]) {
                 $linkAreas = $this->pdfDoc->add(PdfWriter::LINK_ANNOTATION, "[{$co}]");
                 if (!isset($this->cchunk["links-to-resolve"][$ref]))
                     $this->cchunk["links-to-resolve"][$ref] = array();
@@ -1129,8 +1131,8 @@ class PDFPhDFormat extends PhDFormat {
 
     public function format_imagedata($open, $name, $attrs, $props) {
         if ($props["empty"] && isset($this->cchunk["xml-base"]) && ($base = $this->cchunk["xml-base"]) &&
-            isset($attrs[PhDReader::XMLNS_DOCBOOK]["fileref"]) && ($fileref = $attrs[PhDReader::XMLNS_DOCBOOK]["fileref"])) {
-            $imagePath = PhDConfig::xml_root() . DIRECTORY_SEPARATOR . $base . $fileref;
+            isset($attrs[Reader::XMLNS_DOCBOOK]["fileref"]) && ($fileref = $attrs[Reader::XMLNS_DOCBOOK]["fileref"])) {
+            $imagePath = Config::xml_root() . DIRECTORY_SEPARATOR . $base . $fileref;
             if (file_exists($imagePath))
                 $this->pdfDoc->add(PdfWriter::IMAGE, $imagePath);
 

@@ -1,7 +1,9 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-class XHTMLPhDFormat extends PhDFormat {
+class Format_XHTML extends Format
+{
     protected $elementmap = array( /* {{{ */
         'abstract'              => 'format_div', /* Docbook-xsl prints "abstract"... */
         'abbrev'                => 'abbr',
@@ -418,8 +420,8 @@ class XHTMLPhDFormat extends PhDFormat {
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
         if ($open) {
             $idstr = "";
-            if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-                $id = $attrs[PhDReader::XMLNS_XML]["id"];
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader::XMLNS_XML]["id"];
                 $idstr = ' id="' .$id. '" name="' .$id. '"';
             }
             return '<' .$tag. ' class="' .$name. '"' . ($props["empty"] ? '/' : "") . $idstr. '>';
@@ -502,8 +504,8 @@ class XHTMLPhDFormat extends PhDFormat {
 
     public function format_literal($open, $name, $attrs) {
         if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             } else {
                 $this->role = false;
             }
@@ -558,9 +560,9 @@ class XHTMLPhDFormat extends PhDFormat {
                 break;
 
             case "othername":
-                if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+                if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                     /* We maight want to add support for other roles */
-                    switch($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) {
+                    switch($attrs[Reader::XMLNS_DOCBOOK]["role"]) {
                     case "nickname":
                         $class = " nickname";
                         break;
@@ -577,7 +579,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_container_chunk($open, $name, $attrs) {
         $this->cchunk = $this->dchunk;
         if ($open) {
-            return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
+            return '<div id="' .$attrs[Reader::XMLNS_XML]["id"]. '" class="' .$name. '">';
         }
         return "</div>";
     }
@@ -590,13 +592,13 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_chunk($open, $name, $attrs) {
         if ($open) {
             $this->cchunk = $this->dchunk;
-            if(isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+            if(isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $class = $name;
                 if ($name === "refentry") {
                     //$class .= " -rel-posting";
                 }
-                $this->cchunk["chunk_id"] = $attrs[PhDReader::XMLNS_XML]["id"];
-                return '<div id="' .$attrs[PhDReader::XMLNS_XML]["id"]. '" class="' .$class. '">';
+                $this->cchunk["chunk_id"] = $attrs[Reader::XMLNS_XML]["id"];
+                return '<div id="' .$attrs[Reader::XMLNS_XML]["id"]. '" class="' .$class. '">';
             }
             return '<div class="' .$name. '">';
         }
@@ -638,10 +640,10 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_refsect($open, $name, $attrs) {
         if ($open) {
-            if(!isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                $attrs[PhDReader::XMLNS_DOCBOOK]["role"] = "unknown";
+            if(!isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $attrs[Reader::XMLNS_DOCBOOK]["role"] = "unknown";
             }
-            $this->role = $role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+            $this->role = $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             return '<a name="' .$this->cchunk["chunk_id"]. '.' .$role. '"></a><div class="' .$name.' ' .$role. '">';
         }
         $this->role = null;
@@ -672,13 +674,13 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_classsynopsisinfo($open, $name, $attrs) {
         $this->cchunk["classsynopsisinfo"] = $this->dchunk["classsynopsisinfo"];
         if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
                 return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
             }
             return '<div class="'.$name.'">';
         }
 
-        if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "comment") {
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
             return ' */</div>';
         }
         $this->cchunk["classsynopsis"]["close"] = true;
@@ -758,7 +760,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_methodparam_parameter($open, $name, $attrs) {
         if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 return ' <tt class="parameter reference">&amp;$';
             }
             return ' <tt class="parameter">$';
@@ -773,7 +775,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_parameter($open, $name, $attrs) {
         if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 return '<i><tt class="parameter reference">&amp;';
             }
             return '<i><tt class="parameter">';
@@ -790,7 +792,7 @@ class XHTMLPhDFormat extends PhDFormat {
                 if ($this->params["count"] == 0) {
                     $content .= " (";
                 }
-                if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["choice"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["choice"] == "opt") {
+                if (isset($attrs[Reader::XMLNS_DOCBOOK]["choice"]) && $attrs[Reader::XMLNS_DOCBOOK]["choice"] == "opt") {
                     $this->params["opt"]++;
                     $content .= "[";
                 } else if($this->params["opt"]) {
@@ -831,7 +833,7 @@ class XHTMLPhDFormat extends PhDFormat {
 
     public function format_footnoteref($open, $name, $attrs, $props) {
         if ($open) {
-            $linkend = $attrs[PhDReader::XMLNS_DOCBOOK]["linkend"];
+            $linkend = $attrs[Reader::XMLNS_DOCBOOK]["linkend"];
             $found = false;
             foreach($this->cchunk["footnote"] as $k => $note) {
                 if ($note["id"] === $linkend) {
@@ -845,7 +847,7 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_footnote($open, $name, $attrs, $props) {
         if ($open) {
             $count = count($this->cchunk["footnote"]);
-            $noteid = isset($attrs[PhDReader::XMLNS_XML]["id"]) ? $attrs[PhDReader::XMLNS_XML]["id"] : $count + 1;
+            $noteid = isset($attrs[Reader::XMLNS_XML]["id"]) ? $attrs[Reader::XMLNS_XML]["id"] : $count + 1;
             $note = array("id" => $noteid, "str" => "");
             $this->cchunk["footnote"][$count] = $note;
             if ($this->cchunk["table"]) {
@@ -886,9 +888,9 @@ class XHTMLPhDFormat extends PhDFormat {
     /* }}} */
 
     public function format_co($open, $name, $attrs, $props) {
-        if (($open || $props["empty"]) && isset($attrs[PhDReader::XMLNS_XML]["id"])) {
+        if (($open || $props["empty"]) && isset($attrs[Reader::XMLNS_XML]["id"])) {
             $co = ++$this->cchunk["co"];
-            return '<a name="'.$attrs[PhDReader::XMLNS_XML]["id"].'" id="'.$attrs[PhDReader::XMLNS_XML]["id"].'">' .str_repeat("*", $co) .'</a>';
+            return '<a name="'.$attrs[Reader::XMLNS_XML]["id"].'" id="'.$attrs[Reader::XMLNS_XML]["id"].'">' .str_repeat("*", $co) .'</a>';
         }
         /* Suppress closing tag if any */
         return "";
@@ -902,7 +904,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_callout($open, $name, $attrs) {
         if ($open) {
-            return '<tr><td><a href="#'.$attrs[PhDReader::XMLNS_DOCBOOK]["arearefs"].'">' .str_repeat("*", ++$this->cchunk["callouts"]). '</a></td><td>';
+            return '<tr><td><a href="#'.$attrs[Reader::XMLNS_DOCBOOK]["arearefs"].'">' .str_repeat("*", ++$this->cchunk["callouts"]). '</a></td><td>';
         }
         return "</td></tr>\n";
     }
@@ -1001,8 +1003,8 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_variablelist($open, $name, $attrs) {
         if ($open) {
             $idstr = '';
-            if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-                $idstr = ' id="'. $attrs[PhDReader::XMLNS_XML]['id']. '"';
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $idstr = ' id="'. $attrs[Reader::XMLNS_XML]['id']. '"';
             }
             return $this->escapePara() . "<dl" . $idstr . ">\n";
         }
@@ -1010,7 +1012,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
-            return isset($attrs[PhDReader::XMLNS_XML]["id"]) ? '<dt id="'.$attrs[PhDReader::XMLNS_XML]["id"]. '" class="varlistentry">' : "<dt class=\"varlistentry\">\n";
+            return isset($attrs[Reader::XMLNS_XML]["id"]) ? '<dt id="'.$attrs[Reader::XMLNS_XML]["id"]. '" class="varlistentry">' : "<dt class=\"varlistentry\">\n";
         }
 
         // Listitems close the the dt themselfs
@@ -1043,7 +1045,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_systemitem($open, $name, $attrs) {
         if ($open) {
-            $val = isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) ? $attrs[PhDReader::XMLNS_DOCBOOK]["role"] : null;
+            $val = isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) ? $attrs[Reader::XMLNS_DOCBOOK]["role"] : null;
             switch($val) {
             case "directive":
             /* FIXME: Different roles should probably be handled differently */
@@ -1067,8 +1069,8 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_programlisting($open, $name, $attrs) {
         if ($open) {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]["role"];
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             } else {
                 $this->role = false;
             }
@@ -1099,8 +1101,8 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
             $idstr = '';
-            if (isset($attrs[PhDReader::XMLNS_XML]['id'])) {
-                $idstr = 'id="'. $attrs[PhDReader::XMLNS_XML]['id']. '" ';
+            if (isset($attrs[Reader::XMLNS_XML]['id'])) {
+                $idstr = 'id="'. $attrs[Reader::XMLNS_XML]['id']. '" ';
             }
             return '<div '. $idstr. 'class="'. $name. '">'
                 . $this->admonition_title($name, $props['lang']);
@@ -1236,8 +1238,8 @@ class XHTMLPhDFormat extends PhDFormat {
     {
         if ($open) {
             $numeration = "1";
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]["numeration"])) {
-                switch($attrs[PhDReader::XMLNS_DOCBOOK]["numeration"]) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["numeration"])) {
+                switch($attrs[Reader::XMLNS_DOCBOOK]["numeration"]) {
                 case "upperalpha":
                     $numeration = "A";
                     break;
@@ -1265,7 +1267,7 @@ class XHTMLPhDFormat extends PhDFormat {
         $this->cchunk["table"] = false;
         $str = "";
         if ($this->cchunk["tablefootnotes"]) {
-            $opts = array(PhDReader::XMLNS_DOCBOOK => array());
+            $opts = array(Reader::XMLNS_DOCBOOK => array());
 
             $str =  $this->format_tbody(true, "footnote", $opts, $props);
             $str .= $this->format_row(true, "footnote", $opts, $props);
@@ -1288,7 +1290,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_tgroup($open, $name, $attrs) {
         if ($open) {
-            PhDFormat::tgroup($attrs[PhDReader::XMLNS_DOCBOOK]);
+            Format::tgroup($attrs[Reader::XMLNS_DOCBOOK]);
             return '';
         }
         return '';
@@ -1335,7 +1337,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_colspec($open, $name, $attrs) {
         if ($open) {
-            $str = self::parse_table_entry_attributes(PhDFormat::colspec($attrs[PhDReader::XMLNS_DOCBOOK]));
+            $str = self::parse_table_entry_attributes(Format::colspec($attrs[Reader::XMLNS_DOCBOOK]));
 
             return '<col '.$str. ' />';
         }
@@ -1343,14 +1345,14 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_th($open, $name, $attrs) {
         if ($open) {
-            $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
             return '<' .$name. ' valign="' .$valign. '">';
         }
         return "</$name>\n";
     }
     public function format_tbody($open, $name, $attrs) {
         if ($open) {
-            $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
             return '<tbody valign="' .$valign. '" class="' .$name. '">';
         }
         return "</tbody>";
@@ -1358,11 +1360,11 @@ class XHTMLPhDFormat extends PhDFormat {
     public function format_row($open, $name, $attrs) {
         if ($open) {
             $idstr = '';
-            if (isset($attrs[PhDReader::XMLNS_XML]['id'])) {
-                $idstr = ' id="'. $attrs[PhDReader::XMLNS_XML]['id']. '"';
+            if (isset($attrs[Reader::XMLNS_XML]['id'])) {
+                $idstr = ' id="'. $attrs[Reader::XMLNS_XML]['id']. '"';
             }
-            PhDFormat::initRow();
-            $valign = PhDFormat::valign($attrs[PhDReader::XMLNS_DOCBOOK]);
+            Format::initRow();
+            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
             return '<tr'.$idstr.' valign="' .$valign. '">';
         }
         return "</tr>\n";
@@ -1372,7 +1374,7 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<th class="empty">&nbsp;</th>';
         }
         if ($open) {
-            $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $colspan = Format::colspan($attrs[Reader::XMLNS_DOCBOOK]);
             if ($colspan == 1) {
                 return '<th>';
             } else {
@@ -1386,11 +1388,11 @@ class XHTMLPhDFormat extends PhDFormat {
             return '<td class="empty">&nbsp;</td>';
         }
         if ($open) {
-            $dbattrs = PhDFormat::getColspec($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $dbattrs = Format::getColspec($attrs[Reader::XMLNS_DOCBOOK]);
 
             $retval = "";
             if (isset($dbattrs["colname"])) {
-                for($i=PhDFormat::getEntryOffset($dbattrs); $i>0; --$i) {
+                for($i=Format::getEntryOffset($dbattrs); $i>0; --$i) {
                     $retval .= '<td class="empty">&nbsp;</td>';
                 }
             }
@@ -1402,10 +1404,10 @@ class XHTMLPhDFormat extends PhDFormat {
             if (isset($props["colspan"])) {
                 $colspan = $props["colspan"];
             } else {
-                $colspan = PhDFormat::colspan($dbattrs);
+                $colspan = Format::colspan($dbattrs);
             }
 
-            $rowspan = PhDFormat::rowspan($dbattrs);
+            $rowspan = Format::rowspan($dbattrs);
             $moreattrs = self::parse_table_entry_attributes($dbattrs);
 
             $sColspan = $colspan == 1 ? '' : ' colspan="' .((int)$colspan) . '"';

@@ -1,10 +1,15 @@
 <?php
-class PhDObjectStorage extends SplObjectStorage {
+namespace phpdotnet\phd;
+
+class ObjectStorage extends \SplObjectStorage
+{
 	protected static $r = array();
 
 	public function attach($obj, $inf = array()) {
-		if (!($obj instanceof PhDEnterpriseFormat)) {
-			throw new InvalidArgumentException("Only classess inheriting PhDEnterpriseFormat supported");
+		if (!($obj instanceof Format_Enterprise)) {
+			throw new InvalidArgumentException(
+                'Only classess inheriting ' . __NAMESPACE__ . '\\Format_Enterprise supported'
+            );
 		}
 		if (empty($inf)) {
 			$inf = array(
@@ -14,7 +19,7 @@ class PhDObjectStorage extends SplObjectStorage {
 		}
 		parent::attach($obj, $inf);
 	}
-	final protected static function setReader(PhDEnterpriseReader $r) {
+	final protected static function setReader(Reader_Enterprise $r) {
 		self::$r[] = $r;
 	}
 	final protected function getReader() {

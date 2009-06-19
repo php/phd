@@ -1,6 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-abstract class PhDFormatFactory {
+abstract class Format_Factory
+{
     public function createXhtmlFormat() {
         trigger_error("This format is not supported by this package", E_USER_ERROR);
     }
@@ -11,15 +13,16 @@ abstract class PhDFormatFactory {
         trigger_error("This format is not supported by this package", E_USER_ERROR);
     }
 
-    public static final function createFactory() {
+    public static final function createFactory()
+    {
         global $ROOT;
-        $package = PhDConfig::package();
+        $package = Config::package();
         $classname = "{$package}Factory";
                 
         require_once $ROOT . "/packages/$package/$classname.class.php";
 
         $factory = new $classname();
-        if (!($factory instanceof PhDFormatFactory)) {
+        if (!($factory instanceof Format_Factory)) {
             throw new Exception("All Factories must inherit PhDFormatFactory");
         }
         return $factory;

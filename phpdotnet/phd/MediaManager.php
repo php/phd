@@ -1,4 +1,5 @@
 <?php
+namespace phpdotnet\phd;
 /* $Id$ */
 
 /**
@@ -8,7 +9,7 @@
 *
 * @author Christian Weiske <cweiske@php.net>
 */
-class PhDMediaManager
+class MediaManager
 {
     /**
     * Directory where files are put
@@ -108,6 +109,6 @@ class PhDMediaManager
         copy($fullfilename, $fullpath);
     }//protected function copyOver(..)
 
-}//class PhDMediaManager
+}//class MediaManager
 
 ?>

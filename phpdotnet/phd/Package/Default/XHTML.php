@@ -1,6 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-class DefaultXHTMLFormat extends AbstractXHTMLFormat {
+class Format_Default_XHTML extends Format_Abstract_XHTML
+{
     private $formatname = "XHTML"; 
     private $myelementmap = array( /* {{{ */
         'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
@@ -383,12 +385,12 @@ class DefaultXHTMLFormat extends AbstractXHTMLFormat {
             $parent = array("href" => $this->getFilename($parentId) . '.' .$this->ext,
                 "desc" => $this->getShortDescription($parentId));
         }
-        if ($prevId = PhDEnterpriseFormat::getPrevious($id)) {
-            $prev = array("href" => PhDEnterpriseFormat::getFilename($prevId) . '.' .$this->ext,
+        if ($prevId = Format::getPrevious($id)) {
+            $prev = array("href" => Format::getFilename($prevId) . '.' .$this->ext,
                 "desc" => $this->getShortDescription($prevId));
         }
-        if ($nextId = PhDEnterpriseFormat::getNext($id)) {
-            $next = array("href" => PhDEnterpriseFormat::getFilename($nextId) . '.' .$this->ext,
+        if ($nextId = Format::getNext($id)) {
+            $next = array("href" => Format::getFilename($nextId) . '.' .$this->ext,
                 "desc" => $this->getShortDescription($nextId));
         }
         $navBar = $this->createNavBar($id);
@@ -498,11 +500,11 @@ ul.toc li a:hover {
         if ($open) {
             $link = $class = $content = "";
 
-            if (isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["linkend"])) {
-                $link = $this->createLink($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["linkend"]);
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["linkend"])) {
+                $link = $this->createLink($attrs[Reader::XMLNS_DOCBOOK]["linkend"]);
             }
-            elseif (isset($attrs[PhDEnterpriseReader::XMLNS_XLINK]["href"])) {
-                $link = $attrs[PhDEnterpriseReader::XMLNS_XLINK]["href"];
+            elseif (isset($attrs[Reader::XMLNS_XLINK]["href"])) {
+                $link = $attrs[Reader::XMLNS_XLINK]["href"];
                 $class = " external";
                 $content = "&raquo; ";
             }
@@ -518,7 +520,7 @@ ul.toc li a:hover {
     public function format_xref($open, $name, $attrs, $props) {
         if ($open) {
             $desc = "";
-            $link = $this->createLink($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["linkend"], $desc);
+            $link = $this->createLink($attrs[Reader::XMLNS_DOCBOOK]["linkend"], $desc);
 
             $ret = '<a href="' .$link. '" class="' .$name. '">' .$desc;
 
@@ -532,8 +534,8 @@ ul.toc li a:hover {
 
     public function format_literal($open, $name, $attrs) {
         if ($open) {
-            if (isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"];
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             } else {
                 $this->role = false;
             }
@@ -589,9 +591,9 @@ ul.toc li a:hover {
                 break;
 
             case "othername":
-                if (isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"])) {
+                if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                     /* We might want to add support for other roles */
-                    switch($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"]) {
+                    switch($attrs[Reader::XMLNS_DOCBOOK]["role"]) {
                     case "nickname":
                         $class = " nickname";
                         break;
@@ -608,21 +610,21 @@ ul.toc li a:hover {
     public function format_container_chunk_top($open, $name, $attrs, $props) {
         $this->cchunk = $this->dchunk;
         $this->cchunk["name"] = $name;
-        if(isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
-            $id = $attrs[PhDEnterpriseReader::XMLNS_XML]["id"];
+        if(isset($attrs[Reader::XMLNS_XML]["id"])) {
+            $id = $attrs[Reader::XMLNS_XML]["id"];
         } else {
             $id = uniqid("phd");
         }
 
         if ($open) {
             $this->CURRENT_CHUNK = $id;
-            $this->notify(PhDRender::CHUNK, PhDRender::OPEN);
+            $this->notify(Render::CHUNK, Render::OPEN);
 
             return '<div id="' .$id. '" class="' .$name. '">';
         }
 
         $this->CURRENT_CHUNK = $id;
-        $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
+        $this->notify(Render::CHUNK, Render::CLOSE);
         $toc = "";
         if (!in_array($id, $this->TOC_WRITTEN)) {
             $toc = $this->createTOC($id, $props["lang"]);
@@ -646,8 +648,8 @@ ul.toc li a:hover {
     public function format_container_chunk_below($open, $name, $attrs, $props) {
         $this->cchunk = $this->dchunk;
         $this->cchunk["name"] = $name;
-        if(isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
-            $id = $attrs[PhDEnterpriseReader::XMLNS_XML]["id"];
+        if(isset($attrs[Reader::XMLNS_XML]["id"])) {
+            $id = $attrs[Reader::XMLNS_XML]["id"];
         } else {
             /* FIXME: This will obviously not exist in the db.. */
             $id = uniqid("phd");
@@ -655,9 +657,9 @@ ul.toc li a:hover {
 
         if ($open) {
             $this->CURRENT_CHUNK = $id;
-            $this->notify(PhDRender::CHUNK, PhDRender::OPEN);
+            $this->notify(Render::CHUNK, Render::OPEN);
 
-            return '<div id="' .$attrs[PhDEnterpriseReader::XMLNS_XML]["id"]. '" class="' .$name. '">';
+            return '<div id="' .$attrs[Reader::XMLNS_XML]["id"]. '" class="' .$name. '">';
         }
 
         $toc = '<ol>';
@@ -668,7 +670,7 @@ ul.toc li a:hover {
         $toc .= "</ol>\n";
 
         $this->CURRENT_CHUNK = $id;
-        $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
+        $this->notify(Render::CHUNK, Render::CLOSE);
         return $toc . '</div>';
     }
     public function format_exception_chunk($open, $name, $attrs, $props) {
@@ -693,8 +695,8 @@ ul.toc li a:hover {
     public function format_chunk($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk = $this->dchunk;
-            if(isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
-                $id = $attrs[PhDEnterpriseReader::XMLNS_XML]["id"];
+            if(isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader::XMLNS_XML]["id"];
             } else {
                 $id = uniqid("phd");
             }
@@ -707,10 +709,10 @@ ul.toc li a:hover {
             $this->CURRENT_CHUNK = $id;
             $this->CURRENT_LANG  = $props["lang"];
 
-            $this->notify(PhDRender::CHUNK, PhDRender::OPEN);
+            $this->notify(Render::CHUNK, Render::OPEN);
             return '<div id="' .$id. '" class="' .$class. '">';
         }
-        $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
+        $this->notify(Render::CHUNK, Render::CLOSE);
 
         $str = "";
         foreach ($this->cchunk["footnote"] as $k => $note) {
@@ -741,10 +743,10 @@ ul.toc li a:hover {
     }
     public function format_refsect($open, $name, $attrs) {
         if ($open) {
-            if(!isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"])) {
-                $attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"] = "unknown";
+            if(!isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $attrs[Reader::XMLNS_DOCBOOK]["role"] = "unknown";
             }
-            $this->role = $role = $attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"];
+            $this->role = $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             return '<div class="' .$name.' ' .$role. '">';
         }
         $this->role = null;
@@ -775,13 +777,13 @@ ul.toc li a:hover {
     public function format_classsynopsisinfo($open, $name, $attrs) {
         $this->cchunk["classsynopsisinfo"] = $this->dchunk["classsynopsisinfo"];
         if ($open) {
-            if (isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"] == "comment") {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
                 return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
             }
             return '<div class="'.$name.'">';
         }
 
-        if (isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"] == "comment") {
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
             return ' */</div>';
         }
         $this->cchunk["classsynopsis"]["close"] = true;
@@ -836,7 +838,7 @@ ul.toc li a:hover {
         if ($props["empty"])
             return;
     	if ($open) {
-            if (isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"])) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 return ' <tt class="parameter reference">&$';
             }
             return ' <tt class="parameter">$';
@@ -853,7 +855,7 @@ ul.toc li a:hover {
         if ($props["empty"])
             return;
     	if ($open) {
-            if (isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"])) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 return '<i><tt class="parameter reference">&';
             }
             return '<i><tt class="parameter">';
@@ -870,7 +872,7 @@ ul.toc li a:hover {
                 if ($this->params["count"] == 0) {
                     $content .= " (";
                 }
-                if (isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["choice"]) && $attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["choice"] == "opt") {
+                if (isset($attrs[Reader::XMLNS_DOCBOOK]["choice"]) && $attrs[Reader::XMLNS_DOCBOOK]["choice"] == "opt") {
                     $this->params["opt"]++;
                     $content .= "[";
                 } else if($this->params["opt"]) {
@@ -911,7 +913,7 @@ ul.toc li a:hover {
 
     public function format_footnoteref($open, $name, $attrs, $props) {
         if ($open) {
-            $linkend = $attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["linkend"];
+            $linkend = $attrs[Reader::XMLNS_DOCBOOK]["linkend"];
             $found = false;
             foreach($this->cchunk["footnote"] as $k => $note) {
                 if ($note["id"] === $linkend) {
@@ -925,7 +927,7 @@ ul.toc li a:hover {
     public function format_footnote($open, $name, $attrs, $props) {
         if ($open) {
             $count = count($this->cchunk["footnote"]);
-            $noteid = isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"]) ? $attrs[PhDEnterpriseReader::XMLNS_XML]["id"] : $count + 1;
+            $noteid = isset($attrs[Reader::XMLNS_XML]["id"]) ? $attrs[Reader::XMLNS_XML]["id"] : $count + 1;
             $note = array("id" => $noteid, "str" => "");
             $this->cchunk["footnote"][$count] = $note;
             if ($this->cchunk["table"]) {
@@ -966,9 +968,9 @@ ul.toc li a:hover {
     /* }}} */
 
     public function format_co($open, $name, $attrs, $props) {
-        if (($open || $props["empty"]) && isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
+        if (($open || $props["empty"]) && isset($attrs[Reader::XMLNS_XML]["id"])) {
             $co = ++$this->cchunk["co"];
-            return '<a name="'.$attrs[PhDEnterpriseReader::XMLNS_XML]["id"].'" id="'.$attrs[PhDEnterpriseReader::XMLNS_XML]["id"].'">' .str_repeat("*", $co) .'</a>';
+            return '<a name="'.$attrs[Reader::XMLNS_XML]["id"].'" id="'.$attrs[Reader::XMLNS_XML]["id"].'">' .str_repeat("*", $co) .'</a>';
         }
         /* Suppress closing tag if any */
         return "";
@@ -982,7 +984,7 @@ ul.toc li a:hover {
     }
     public function format_callout($open, $name, $attrs) {
         if ($open) {
-            return '<tr><td><a href="#'.$attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["arearefs"].'">' .str_repeat("*", ++$this->cchunk["callouts"]). '</a></td><td>';
+            return '<tr><td><a href="#'.$attrs[Reader::XMLNS_DOCBOOK]["arearefs"].'">' .str_repeat("*", ++$this->cchunk["callouts"]). '</a></td><td>';
         }
         return "</td></tr>\n";
     }
@@ -1050,7 +1052,7 @@ ul.toc li a:hover {
     }
     public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
-            return isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"]) ? '<dt id="'.$attrs[PhDEnterpriseReader::XMLNS_XML]["id"]. '">' : "<dt>\n";
+            return isset($attrs[Reader::XMLNS_XML]["id"]) ? '<dt id="'.$attrs[Reader::XMLNS_XML]["id"]. '">' : "<dt>\n";
         }
         return "</dt>\n";
     }
@@ -1077,7 +1079,7 @@ ul.toc li a:hover {
     }
     public function format_systemitem($open, $name, $attrs) {
         if ($open) {
-            $val = isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"]) ? $attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"] : null;
+            $val = isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) ? $attrs[Reader::XMLNS_DOCBOOK]["role"] : null;
             switch($val) {
             case "directive":
             /* FIXME: Different roles should probably be handled differently */
@@ -1095,8 +1097,8 @@ ul.toc li a:hover {
     }
     public function format_programlisting($open, $name, $attrs) {
         if ($open) {
-            if (isset($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["role"];
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             } else {
                 $this->role = false;
             }
@@ -1195,9 +1197,9 @@ ul.toc li a:hover {
     }
     public function format_imagedata($open, $name, $attrs) {
         if ($this->cchunk["mediaobject"]["alt"] !== false) {
-            return '<img src="' .$attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["fileref"]. '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
+            return '<img src="' .$attrs[Reader::XMLNS_DOCBOOK]["fileref"]. '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
         }
-        return '<img src="' .$attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]["fileref"]. '" />';
+        return '<img src="' .$attrs[Reader::XMLNS_DOCBOOK]["fileref"]. '" />';
     }
 
     public function format_table($open, $name, $attrs, $props) {
@@ -1208,7 +1210,7 @@ ul.toc li a:hover {
         $this->cchunk["table"] = false;
         $str = "";
         if ($this->cchunk["tablefootnotes"]) {
-            $opts = array(PhDEnterpriseReader::XMLNS_DOCBOOK => array());
+            $opts = array(Reader::XMLNS_DOCBOOK => array());
 
             $str =  $this->format_tbody(true, "footnote", $opts, $props);
             $str .= $this->format_row(true, "footnote", $opts, $props);
@@ -1231,7 +1233,7 @@ ul.toc li a:hover {
     }
     public function format_tgroup($open, $name, $attrs) {
         if ($open) {
-            PhDEnterpriseFormat::tgroup($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]);
+            Format::tgroup($attrs[Reader::XMLNS_DOCBOOK]);
             return "<colgroup>\n";
         }
         return "</colgroup>\n";
@@ -1254,7 +1256,7 @@ ul.toc li a:hover {
     }
     public function format_colspec($open, $name, $attrs) {
         if ($open) {
-            $str = self::parse_table_entry_attributes(PhDEnterpriseFormat::colspec($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]));
+            $str = self::parse_table_entry_attributes(Format::colspec($attrs[Reader::XMLNS_DOCBOOK]));
 
             return '<col '.$str. ' />';
         }
@@ -1262,29 +1264,29 @@ ul.toc li a:hover {
     }
     public function format_th($open, $name, $attrs) {
         if ($open) {
-            $valign = PhDEnterpriseFormat::valign($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]);
+            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
             return '<' .$name. ' valign="' .$valign. '">';
         }
         return "</$name>\n";
     }
     public function format_tbody($open, $name, $attrs) {
         if ($open) {
-            $valign = PhDEnterpriseFormat::valign($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]);
+            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
             return '<tbody valign="' .$valign. '" class="' .$name. '">';
         }
         return "</tbody>";
     }
     public function format_row($open, $name, $attrs) {
         if ($open) {
-            PhDEnterpriseFormat::initRow();
-            $valign = PhDEnterpriseFormat::valign($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]);
+            Format::initRow();
+            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
             return '<tr valign="' .$valign. '">';
         }
         return "</tr>\n";
     }
     public function format_th_entry($open, $name, $attrs) {
         if ($open) {
-            $colspan = PhDEnterpriseFormat::colspan($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]);
+            $colspan = Format::colspan($attrs[Reader::XMLNS_DOCBOOK]);
             return '<th colspan="' .((int)$colspan). '">';
         }
         return '</th>';
@@ -1294,11 +1296,11 @@ ul.toc li a:hover {
             return '<td class="empty">&nbsp;</td>';
         }
         if ($open) {
-            $dbattrs = PhDEnterpriseFormat::getColspec($attrs[PhDEnterpriseReader::XMLNS_DOCBOOK]);
+            $dbattrs = Format::getColspec($attrs[Reader::XMLNS_DOCBOOK]);
 
             $retval = "";
             if (isset($dbattrs["colname"])) {
-                for($i=PhDEnterpriseFormat::getEntryOffset($dbattrs); $i>0; --$i) {
+                for($i=Format::getEntryOffset($dbattrs); $i>0; --$i) {
                     $retval .= '<td class="empty">&nbsp;</td>';
                 }
             }
@@ -1310,10 +1312,10 @@ ul.toc li a:hover {
             if (isset($props["colspan"])) {
                 $colspan = $props["colspan"];
             } else {
-                $colspan = PhDEnterpriseFormat::colspan($dbattrs);
+                $colspan = Format::colspan($dbattrs);
             }
 
-            $rowspan = PhDEnterpriseFormat::rowspan($dbattrs);
+            $rowspan = Format::rowspan($dbattrs);
             $moreattrs = self::parse_table_entry_attributes($dbattrs);
             return $retval. '<td colspan="' .((int)$colspan). '" rowspan="' .((int)$rowspan). '" ' .$moreattrs. '>';
         }
@@ -1326,13 +1328,13 @@ ul.toc li a:hover {
             $doc->appendChild($node);
 
             $xp = new DOMXPath($doc);
-            $xp->registerNamespace("db", PhDEnterpriseReader::XMLNS_DOCBOOK);
+            $xp->registerNamespace("db", Reader::XMLNS_DOCBOOK);
 
             $questions = $xp->query("//db:qandaentry/db:question");
 
-            $xml = '<questions xmlns="' .PhDEnterpriseReader::XMLNS_PHD. '">';
+            $xml = '<questions xmlns="' .Reader::XMLNS_PHD. '">';
             foreach($questions as $node) {
-                $id = $xp->evaluate("ancestor::db:qandaentry", $node)->item(0)->getAttributeNs(PhDEnterpriseReader::XMLNS_XML, "id");
+                $id = $xp->evaluate("ancestor::db:qandaentry", $node)->item(0)->getAttributeNs(Reader::XMLNS_XML, "id");
 
                 /* FIXME: No ID? How can we create an anchor for it then? */
                 if (!$id) {
@@ -1344,10 +1346,10 @@ ul.toc li a:hover {
             }
             $xml .= "</questions>";
 
-            $r = new PhDEnterpriseReader();
+            $r = new Reader();
             $r->XML($xml);
 
-            $render = new PhDRender;
+            $render = new Render;
             $render->attach($this);
             $render->render($r);
         }
@@ -1360,7 +1362,7 @@ ul.toc li a:hover {
     }
     public function format_phd_question($open, $name, $attrs, $props) {
         if ($open) {
-            $href = $this->createLink($attrs[PhDEnterpriseReader::XMLNS_XML]["id"]);
+            $href = $this->createLink($attrs[Reader::XMLNS_XML]["id"]);
             return '<li><a href="' .$href. '">';
         }
         return '</a></li>';

@@ -1,6 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-abstract class peartheme extends PhDThemeXhtml {
+abstract class Theme_PEAR_Base extends Theme_XHTML
+{
     protected $elementmap = array(
         'acronym'               => 'span',
         'article'               => 'format_container_chunk',
@@ -303,8 +305,8 @@ abstract class peartheme extends PhDThemeXhtml {
     public function format_chunk($open, $name, $attrs, $props)
     {
         $id = null;
-        if (isset($attrs[PhDReader::XMLNS_XML]['id'])) {
-            $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]['id'];
+        if (isset($attrs[Reader_Legacy::XMLNS_XML]['id'])) {
+            $this->CURRENT_ID = $id = $attrs[Reader_Legacy::XMLNS_XML]['id'];
         }
         if ($props['isChunk']) {
             $this->cchunk = $this->dchunk;
@@ -313,8 +315,8 @@ abstract class peartheme extends PhDThemeXhtml {
             $this->lang = $props['lang'];
         }
         if ($name == 'refentry') {
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]['role'])) {
-                $this->cchunk['verinfo'] = !($attrs[PhDReader::XMLNS_DOCBOOK]['role'] == 'noversion');
+            if (isset($attrs[Reader_Legacy::XMLNS_DOCBOOK]['role'])) {
+                $this->cchunk['verinfo'] = !($attrs[Reader_Legacy::XMLNS_DOCBOOK]['role'] == 'noversion');
             } else {
                 $this->cchunk['verinfo'] = true;
             }
@@ -330,14 +332,14 @@ abstract class peartheme extends PhDThemeXhtml {
 
     public function format_container_chunk($open, $name, $attrs, $props)
     {
-        if (!isset($attrs[PhDReader::XMLNS_XML]['id'])) {
+        if (!isset($attrs[Reader_Legacy::XMLNS_XML]['id'])) {
             if ($open) {
                 return "<div class=\"{$name}\">";
             } else {
                 return "</div>\n";
             }
         }
-        $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]['id'];
+        $this->CURRENT_ID = $id = $attrs[Reader_Legacy::XMLNS_XML]['id'];
 
         if (!$open) {
             return "</div>\n";
@@ -349,8 +351,8 @@ abstract class peartheme extends PhDThemeXhtml {
 
         $toc = $this->createToc(
             $id, $name, $props,
-            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
-                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
+            isset($attrs[Reader_Legacy::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[Reader_Legacy::XMLNS_PHD]['toc-depth'] : 1
         );
         if ($toc) {
             $toc = "<div class=\"TOC\">\n" . $toc . "</div>\n";
@@ -382,15 +384,15 @@ abstract class peartheme extends PhDThemeXhtml {
      */
     public function format_root_chunk($open, $name, $attrs, $props)
     {
-        $this->CURRENT_ID = $id = $attrs[PhDReader::XMLNS_XML]['id'];
+        $this->CURRENT_ID = $id = $attrs[Reader_Legacy::XMLNS_XML]['id'];
         if ($open) {
             return "<div class=\"{$name}\">";
         }
 
         $content = $this->createToc(
             $id, $name, $props,
-            isset($attrs[PhDReader::XMLNS_PHD]['toc-depth'])
-                ? (int)$attrs[PhDReader::XMLNS_PHD]['toc-depth'] : 1
+            isset($attrs[Reader_Legacy::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[Reader_Legacy::XMLNS_PHD]['toc-depth'] : 1
         );
 
         $content .= "</div>\n";
@@ -414,9 +416,9 @@ abstract class peartheme extends PhDThemeXhtml {
             $content = $fragment = '';
             $class = $name;
 
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]['linkend'])) {
-                $linkto = $attrs[PhDReader::XMLNS_DOCBOOK]['linkend'];
-                $id = $href = PhDHelper::getFilename($linkto);
+            if (isset($attrs[Reader_Legacy::XMLNS_DOCBOOK]['linkend'])) {
+                $linkto = $attrs[Reader_Legacy::XMLNS_DOCBOOK]['linkend'];
+                $id = $href = Helper::getFilename($linkto);
 
                 if ($id != $linkto) {
                     $fragment = "#$linkto";
@@ -424,8 +426,8 @@ abstract class peartheme extends PhDThemeXhtml {
                 if ($this->chunked) {
                     $href .= '.'.$this->ext;
                 }
-            } elseif (isset($attrs[PhDReader::XMLNS_XLINK]['href'])) {
-                $href = $attrs[PhDReader::XMLNS_XLINK]['href'];
+            } elseif (isset($attrs[Reader_Legacy::XMLNS_XLINK]['href'])) {
+                $href = $attrs[Reader_Legacy::XMLNS_XLINK]['href'];
                 $class .= ' external';
             }
             if ($name == 'xref') {
@@ -439,7 +441,7 @@ abstract class peartheme extends PhDThemeXhtml {
                         $link .= $href;
                     }
                 }
-                return '<a href="' . htmlspecialchars($link). '" class="' .$class. '">' .($content.PhDHelper::getDescription($id, false)). '</a>';
+                return '<a href="' . htmlspecialchars($link). '" class="' .$class. '">' .($content.Helper::getDescription($id, false)). '</a>';
             } elseif ($props['empty']) {
                 if ($this->chunked) {
                     $link = '';
@@ -482,8 +484,8 @@ abstract class peartheme extends PhDThemeXhtml {
     {
         if ($open) {
             $idstr = '';
-            if (isset($attrs[PhDReader::XMLNS_XML]['id'])) {
-                $id = $attrs[PhDReader::XMLNS_XML]['id'];
+            if (isset($attrs[Reader_Legacy::XMLNS_XML]['id'])) {
+                $id = $attrs[Reader_Legacy::XMLNS_XML]['id'];
                 $idstr = ' id="' .$id. '" name="' .$id. '"';
             }
             return '<' .$tag. ' class="' .$name. '"' . $idstr. '>' . ($props['empty'] ? "</{$tag}>" : '');
@@ -512,9 +514,9 @@ abstract class peartheme extends PhDThemeXhtml {
         }
 
         $text      = $props['empty'] ? '' : $this->phd_pearapi_text;
-        $package   = $attrs[PhDReader::XMLNS_PHD]['package'];
-        $linkend   = isset($attrs[PhDReader::XMLNS_PHD]['linkend'])
-                   ? $attrs[PhDReader::XMLNS_PHD]['linkend'] : null;
+        $package   = $attrs[Reader_Legacy::XMLNS_PHD]['package'];
+        $linkend   = isset($attrs[Reader_Legacy::XMLNS_PHD]['linkend'])
+                   ? $attrs[Reader_Legacy::XMLNS_PHD]['linkend'] : null;
         $arLinkend = explode('::', $linkend);
         $class     = null;
         $method    = null;
@@ -577,8 +579,8 @@ abstract class peartheme extends PhDThemeXhtml {
     {
         if ($open) {
             $this->trim = true;
-            if (isset($attrs[PhDReader::XMLNS_DOCBOOK]['role'])) {
-                $this->role = $attrs[PhDReader::XMLNS_DOCBOOK]['role'];
+            if (isset($attrs[Reader_Legacy::XMLNS_DOCBOOK]['role'])) {
+                $this->role = $attrs[Reader_Legacy::XMLNS_DOCBOOK]['role'];
             } else {
                 $this->role = '';
             }
@@ -774,7 +776,7 @@ abstract class peartheme extends PhDThemeXhtml {
     public function format_th_entry($open, $name, $attrs)
     {
         if ($open) {
-            $colspan = PhDFormat::colspan($attrs[PhDReader::XMLNS_DOCBOOK]);
+            $colspan = Format::colspan($attrs[Reader_Legacy::XMLNS_DOCBOOK]);
             return '<th colspan="' .((int)$colspan). '">';
         }
         return '</th>';
@@ -975,7 +977,7 @@ abstract class peartheme extends PhDThemeXhtml {
 
     public function format_emphasis($open, $name, $attrs)
     {
-        if (isset($attrs[PhDReader::XMLNS_DOCBOOK]['role']) && $attrs[PhDReader::XMLNS_DOCBOOK]['role'] == "bold")
+        if (isset($attrs[Reader_Legacy::XMLNS_DOCBOOK]['role']) && $attrs[Reader_Legacy::XMLNS_DOCBOOK]['role'] == "bold")
             $role = "b";
         else $role = "i";
         if ($open) {
@@ -1012,7 +1014,7 @@ abstract class peartheme extends PhDThemeXhtml {
     public function format_callout($open, $name, $attrs)
     {
         if ($open) {
-            return '<tr><td><a href="#'.$attrs[PhDReader::XMLNS_DOCBOOK]['arearefs'].'">(' .++$this->cchunk['callouts']. ')</a></td><td>';
+            return '<tr><td><a href="#'.$attrs[Reader_Legacy::XMLNS_DOCBOOK]['arearefs'].'">(' .++$this->cchunk['callouts']. ')</a></td><td>';
         }
         return "</td></tr>\n";
     }

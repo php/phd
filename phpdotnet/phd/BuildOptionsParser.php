@@ -1,7 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 /* $Id$ */
 
-class PhDBuildOptionsParser extends PhDOptionParser
+class BuildOptionsParser extends OptionParser
 {
     public $docbook = false;
     public $verbose = 0;
@@ -49,7 +50,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
                     trigger_error("Format not supported at this time", E_USER_ERROR);
             }
         }
-        PhDConfig::set_output_format($formats);
+        Config::set_output_format($formats);
     }
 
     public function option_g($k, $v)
@@ -58,7 +59,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
     }
     public function option_highlighter($k, $v)
     {
-        PhDConfig::setHighlighter($v);
+        Config::setHighlighter($v);
     }
    
     public function option_i($k, $v)
@@ -67,7 +68,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
     }
     public function option_noindex($k, $v)
     {
-        PhDConfig::set_index(false);
+        Config::set_index(false);
     }
 
     public function option_d($k, $v)
@@ -82,8 +83,8 @@ class PhDBuildOptionsParser extends PhDOptionParser
         if (!file_exists($v) || is_dir($v) || !is_readable($v)) {
             trigger_error(sprintf("'%s' is not a readable docbook file", $v), E_USER_ERROR);
         }
-        PhDConfig::set_xml_root(dirname($v));
-        PhDConfig::set_xml_file($v);
+        Config::set_xml_root(dirname($v));
+        Config::set_xml_file($v);
         $this->docbook = true;
     }
 
@@ -101,7 +102,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
             trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
         }
         $v = (substr($v, strlen($v) - strlen(DIRECTORY_SEPARATOR)) == DIRECTORY_SEPARATOR) ? $v : ($v . DIRECTORY_SEPARATOR);
-        PhDConfig::set_output_dir($v);
+        Config::set_output_dir($v);
     }
 
     public function option_p($k, $v)
@@ -113,7 +114,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
     }
     public function option_partial($k, $v)
     {
-        $render_ids = PhDConfig::render_ids();
+        $render_ids = Config::render_ids();
         foreach((array)$v as $i => $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
@@ -126,7 +127,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
             }
             $render_ids[$val] = $recursive;
         }
-        PhDConfig::set_render_ids($render_ids);
+        Config::set_render_ids($render_ids);
     }
 
     public function option_package($k, $v) {
@@ -142,7 +143,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         }
         
         if (in_array($v, $packageList)) {
-            PhDConfig::set_package($v);
+            Config::set_package($v);
         } else {
             trigger_error("Invalid Package", E_USER_ERROR);
         }
@@ -154,7 +155,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
     }
     public function option_skip($k, $v)
     {
-        $skip_ids = PhDConfig::skip_ids();
+        $skip_ids = Config::skip_ids();
         foreach((array)$v as $i => $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
@@ -167,7 +168,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
             }
             $skip_ids[$val] = $recursive;
         }
-        PhDConfig::set_skip_ids($skip_ids);
+        Config::set_skip_ids($skip_ids);
     }
 
     public function option_v($k, $v)
@@ -184,7 +185,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
         } else {
             $this->verbose |= 1;
         }
-        PhDConfig::set_verbose($this->verbose);
+        Config::set_verbose($this->verbose);
         error_reporting($GLOBALS['olderrrep'] | $this->verbose);
     }
 
@@ -201,7 +202,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
                 }
             }
         }
-        PhDConfig::set_verbose($this->verbose);
+        Config::set_verbose($this->verbose);
         error_reporting($GLOBALS['olderrrep'] | $this->verbose);
     }
 
@@ -241,7 +242,7 @@ class PhDBuildOptionsParser extends PhDOptionParser
 
     public function option_lang($k, $v)
     {
-        PhDConfig::set_language($v);
+        Config::set_language($v);
     }
     public function option_c($k, $v)
     {
@@ -255,13 +256,13 @@ class PhDBuildOptionsParser extends PhDOptionParser
         $val = phd_bool($v);
         if (is_bool($val)) {
             if ($val && function_exists('posix_isatty')) {
-                PhDConfig::set_phd_info_color(posix_isatty(PhDConfig::phd_info_output()) ? '01;32' : false);         // Bright (bold) green
-                PhDConfig::set_user_error_color(posix_isatty(PhDConfig::user_error_output()) ? '01;33' : false);     // Bright (bold) yellow
-                PhDConfig::set_php_error_color(posix_isatty(PhDConfig::php_error_output()) ? '01;31' : false);       // Bright (bold) red
+                Config::set_phd_info_color(posix_isatty(Config::phd_info_output()) ? '01;32' : false);         // Bright (bold) green
+                Config::set_user_error_color(posix_isatty(Config::user_error_output()) ? '01;33' : false);     // Bright (bold) yellow
+                Config::set_php_error_color(posix_isatty(Config::php_error_output()) ? '01;31' : false);       // Bright (bold) red
             } else {
-                PhDConfig::set_phd_info_color(false);
-                PhDConfig::set_user_error_color(false);
-                PhDConfig::set_php_error_color(false);
+                Config::set_phd_info_color(false);
+                Config::set_user_error_color(false);
+                Config::set_php_error_color(false);
             }
         } else {
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
@@ -270,8 +271,8 @@ class PhDBuildOptionsParser extends PhDOptionParser
 
     public function option_version($k, $v)
     {
-        $color = PhDConfig::phd_info_color();
-        $output = PhDConfig::phd_info_output();
+        $color = Config::phd_info_color();
+        $output = Config::phd_info_output();
         if (isset($GLOBALS['base_revision'])) {
             $rev = preg_replace('/\$Re[v](?:ision)?(: ([\d.]+) ?)?\$$/e', "'\\1' == '' ? '??' : '\\2'", $GLOBALS['base_revision']);
             fprintf($output, "%s\n", term_color("PhD Version: " . PHD_VERSION . " (" . $rev . ")", $color));
@@ -331,7 +332,7 @@ NOTE: Long options are only supported using PHP5.3\n";
     }
 }
 
-$optParser = new PhDBuildOptionsParser;
+$optParser = new BuildOptionsParser;
 $optParser->getopt();
 
 ?>

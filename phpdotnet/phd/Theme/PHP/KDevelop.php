@@ -1,7 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-require_once $ROOT . '/themes/php/chunkedhtml.php';
-class phpkdevelop extends PhDTheme {
+class Theme_PHP_KDevelop extends Theme
+{
     const DEFAULT_TITLE = "PHP Manual";
     const DEFAULT_HREF = "http://www.php.net/manual/en/";
 
@@ -78,7 +79,7 @@ class phpkdevelop extends PhDTheme {
 
     public function __construct(array $IDs, $filename, $ext = "php") {
         parent::__construct($IDs, $ext);
-        $this->tocDir = PhDConfig::output_dir();
+        $this->tocDir = Config::output_dir();
 
         $this->ext = $ext;
 
@@ -113,12 +114,12 @@ class phpkdevelop extends PhDTheme {
     }
 
     public function format_tocsect1($open, $name, $attrs) {
-        if (!isset($attrs[PhDReader::XMLNS_XML]["id"])) return "";
-        $id = $attrs[PhDReader::XMLNS_XML]["id"];
-        $hasChild = (count(PhDHelper::getChildren($id)) > 0);
+        if (!isset($attrs[Reader_Legacy::XMLNS_XML]["id"])) return "";
+        $id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
+        $hasChild = (count(Helper::getChildren($id)) > 0);
         if ($open) {
-            $name = htmlspecialchars(PhDHelper::getDescription($id), ENT_QUOTES, 'UTF-8');
-            $url = (PhDHelper::getFilename($id) ? PhDHelper::getFilename($id) : $id) . "." . $this->ext;
+            $name = htmlspecialchars(Helper::getDescription($id), ENT_QUOTES, 'UTF-8');
+            $url = (Helper::getFilename($id) ? Helper::getFilename($id) : $id) . "." . $this->ext;
             fwrite($this->tocStream, "<tocsect1 name=\"{$name}\" url=\"{$url}\"" . ($hasChild ? "" : "/") . ">\n");
         } else {
             if ($hasChild)
@@ -128,25 +129,25 @@ class phpkdevelop extends PhDTheme {
     }
 
     public function format_tocsect2($open, $name, $attrs) {
-        if (!isset($attrs[PhDReader::XMLNS_XML]["id"])) return "";
-        $id = $attrs[PhDReader::XMLNS_XML]["id"];
-        $hasChild = (count(PhDHelper::getChildren($id)) > 0);
+        if (!isset($attrs[Reader_Legacy::XMLNS_XML]["id"])) return "";
+        $id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
+        $hasChild = (count(Helper::getChildren($id)) > 0);
         if ($open) {
-            $name = htmlspecialchars(PhDHelper::getDescription($id), ENT_QUOTES, 'UTF-8');
-            $url = (PhDHelper::getFilename($id) ? PhDHelper::getFilename($id) : $id) . "." . $this->ext;
+            $name = htmlspecialchars(Helper::getDescription($id), ENT_QUOTES, 'UTF-8');
+            $url = (Helper::getFilename($id) ? Helper::getFilename($id) : $id) . "." . $this->ext;
             fwrite($this->tocStream, "    <tocsect2 name=\"{$name}\" url=\"{$url}\"/>\n");
         }
         return "";
     }
 
     public function format_refentry($open, $name, $attrs) {
-        if (!isset($attrs[PhDReader::XMLNS_XML]["id"])) return "";
-        $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        if (!isset($attrs[Reader_Legacy::XMLNS_XML]["id"])) return "";
+        $id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
         if ($open) {
             $this->currentEntryName = null;
         }
         if (!$open && $this->currentEntryName) {
-            $url = (PhDHelper::getFilename($id) ? PhDHelper::getFilename($id) : $id) . "." . $this->ext;
+            $url = (Helper::getFilename($id) ? Helper::getFilename($id) : $id) . "." . $this->ext;
             $this->index[$this->currentEntryName] = $url;
         }
         return "";

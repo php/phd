@@ -1,8 +1,10 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 //6271
 
-class PhDEnterpriseReader extends XMLReader {
+class Reader extends \XMLReader
+{
     const XMLNS_XML     = "http://www.w3.org/XML/1998/namespace";
     const XMLNS_XLINK   = "http://www.w3.org/1999/xlink";
     const XMLNS_PHD     = "http://www.php.net/ns/phd";

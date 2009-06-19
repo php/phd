@@ -1,6 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-abstract class AbstractXHTMLFormat extends PhDEnterpriseFormat {
+abstract class Format_Abstract_XHTML extends Format
+{
     private $formatname = "XHTML";
     
     protected $title; 
@@ -55,8 +57,8 @@ abstract class AbstractXHTMLFormat extends PhDEnterpriseFormat {
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
         if ($open) {
             $idstr = "";
-            if (isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
-                $id = $attrs[PhDEnterpriseReader::XMLNS_XML]["id"];
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader::XMLNS_XML]["id"];
                 $idstr = ' id="' .$id. '" name="' .$id. '"';
             }
             return '<' .$tag. ' class="' .$name. '"' . $idstr . ($props["empty"] ? '/' : "") . '>';
@@ -68,18 +70,18 @@ abstract class AbstractXHTMLFormat extends PhDEnterpriseFormat {
     	if ($this->appendToBuffer) {
     		$this->buffer .= $data;
     		return;
-    	} elseif ($this->flags & PhDRender::CLOSE) {
+    	} elseif ($this->flags & Render::CLOSE) {
             $fp = array_pop($this->fp);
             fwrite($fp, $data);
             $this->writeChunk($this->CURRENT_CHUNK, $fp);
             fclose($fp);
 
-            $this->flags ^= PhDRender::CLOSE;
-        } elseif ($this->flags & PhDRender::OPEN) {
+            $this->flags ^= Render::CLOSE;
+        } elseif ($this->flags & Render::OPEN) {
             $this->fp[] = $fp = fopen("php://temp/maxmemory", "r+");
             fwrite($fp, $data);
 
-            $this->flags ^= PhDRender::OPEN;
+            $this->flags ^= Render::OPEN;
         } else {
             $fp = end($this->fp);
             fwrite($fp, $data);
@@ -101,7 +103,7 @@ abstract class AbstractXHTMLFormat extends PhDEnterpriseFormat {
         }
     }
 
-    public function createLink($for, &$desc = null, $type = PhDEnterpriseFormat::SDESC) {
+    public function createLink($for, &$desc = null, $type = Format::SDESC) {
         $retval = null;
         if (isset($this->indexes[$for])) {
             $rsl = $this->indexes[$for];
@@ -176,19 +178,19 @@ abstract class AbstractXHTMLFormat extends PhDEnterpriseFormat {
 
     public function update($event, $val = null) {
         switch($event) {
-        case PhDRender::CHUNK:
+        case Render::CHUNK:
             $this->flags = $val;
             break;
 
-        case PhDRender::STANDALONE:
+        case Render::STANDALONE:
             if ($val) {
                 $this->registerElementMap(static::getDefaultElementMap());
                 $this->registerTextMap(static::getDefaultTextMap());
             }
             break;
 
-        case PhDRender::INIT:
-            $this->outputdir = $tmp = PhDConfig::output_dir() . strtolower($this->getFormatName()) . '/';
+        case Render::INIT:
+            $this->outputdir = $tmp = Config::output_dir() . strtolower($this->getFormatName()) . '/';
             if (file_exists($tmp)) {
                 if (!is_dir($tmp)) {
                     v("Output directory is a file?", E_USER_ERROR);
@@ -199,7 +201,7 @@ abstract class AbstractXHTMLFormat extends PhDEnterpriseFormat {
                 }
             }
             break;
-        case PhDRender::VERBOSE:
+        case Render::VERBOSE:
         	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
         	break;
         }

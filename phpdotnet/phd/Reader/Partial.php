@@ -1,21 +1,23 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-class PhDPartialReader extends PhDReader {
+class Reader_Partial extends Reader_Legacy
+{
     protected $partial = array();
     protected $skip    = array();
 
     public function __construct($encoding = "UTF-8", $xml_opts = NULL) {
         parent::__construct($encoding, $xml_opts);
 
-        $render_ids = PhDConfig::render_ids();
+        $render_ids = Config::render_ids();
         if ($render_ids !== NULL) {
             if (is_array($render_ids)) {
                 $this->partial = $render_ids;
             } else {
                 $this->partial[$render_ids] = 1;
             }
-            $skip_ids = PhDConfig::skip_ids();
+            $skip_ids = Config::skip_ids();
             if ($skip_ids !== NULL) {
                 if (is_array($skip_ids)) {
                     $this->skip = $skip_ids;
@@ -36,9 +38,9 @@ class PhDPartialReader extends PhDReader {
 
         while($ret = parent::read()) {
             if ($this->isChunk) {
-                $id = $this->getAttributeNs("id", PhDReader::XMLNS_XML);
+                $id = $this->getAttributeNs("id", self::XMLNS_XML);
                 if (isset($this->partial[$id])) {
-                    if ($this->isChunk == PhDReader::CLOSE_CHUNK) {
+                    if ($this->isChunk == self::CLOSE_CHUNK) {
                         v("%s done", $id, VERBOSE_PARTIAL_READING);
 
                         unset($this->partial[$id]);
@@ -52,7 +54,7 @@ class PhDPartialReader extends PhDReader {
                     }
                     return $ret;
                 } elseif (isset($this->skip[$id])) {
-                    if ($this->isChunk == PhDReader::CLOSE_CHUNK) {
+                    if ($this->isChunk == self::CLOSE_CHUNK) {
                         v("%s done", $id, VERBOSE_PARTIAL_READING);
 
                         unset($this->skip[$id]);
@@ -65,7 +67,7 @@ class PhDPartialReader extends PhDReader {
                         $ignore = true;
                     }
                 } elseif ($currently_skipping && $this->skip[$currently_skipping]) {
-                    if ($this->isChunk == PhDReader::OPEN_CHUNK) {
+                    if ($this->isChunk == self::OPEN_CHUNK) {
                         v("Skipping child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
                     } else {
                         v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
@@ -73,7 +75,7 @@ class PhDPartialReader extends PhDReader {
 
                     $ignore = true;
                 } elseif ($currently_reading && $this->partial[$currently_reading]) {
-                    if ($this->isChunk == PhDReader::OPEN_CHUNK) {
+                    if ($this->isChunk == self::OPEN_CHUNK) {
                         v("Rendering child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
                     } else {
                         v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);

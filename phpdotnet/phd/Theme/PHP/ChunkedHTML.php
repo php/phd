@@ -1,18 +1,19 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-require_once $ROOT . '/themes/php/phpweb.php';
-class chunkedhtml extends phpweb {
+class Theme_PHP_ChunkedHTML extends Theme_PHP_Web
+{
     private $nav = "";
 
     public function __construct(array $IDs, $filename, $ext = "html") {
         phpdotnet::__construct($IDs, $filename, $ext, true);
-        $this->outputdir = PhDConfig::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
+        $this->outputdir = Config::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
         if(!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory");
         elseif (file_exists($this->outputdir . 'index.html')) unlink($this->outputdir . 'index.html'); // preserve back-compat
     }
     public function header($id) {
-        $title = PhDHelper::getDescription($id, true);
+        $title = Helper::getDescription($id, true);
         $header = <<<HEADER
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -22,13 +23,13 @@ class chunkedhtml extends phpweb {
  </head>
  <body>
 HEADER;
-        $parent = PhDHelper::getParent($id);
+        $parent = Helper::getParent($id);
         $next = $prev = $up = array(null, null);
         if ($parent && $parent != "ROOT") {
-            $siblings = PhDHelper::getChildren($parent);
-            $prev = phpweb::createPrev($id, $parent, $siblings);
-            $next = phpweb::createNext($id, $parent, $siblings);
-            $up = array($parent.".html", PhDHelper::getDescription($parent, false));
+            $siblings = Helper::getChildren($parent);
+            $prev = parent::createPrev($id, $parent, $siblings);
+            $next = parent::createNext($id, $parent, $siblings);
+            $up = array($parent.".html", Helper::getDescription($parent, false));
         }
 
         $nav = <<<NAV

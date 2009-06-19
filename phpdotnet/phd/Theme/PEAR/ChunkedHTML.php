@@ -1,5 +1,5 @@
 <?php
-require_once $ROOT . '/themes/pear/pearweb.php';
+namespace phpdotnet\phd;
 
 /**
 * PEAR theme for the normal-html-in-many-files version
@@ -7,7 +7,7 @@ require_once $ROOT . '/themes/pear/pearweb.php';
 * @package PhD
 * @version CVS: $Id$
 */
-class pearchunkedhtml extends pearweb
+class Theme_PEAR_ChunkedHTML extends Theme_PEAR_Web
 {
     private $nav = "";
 
@@ -23,7 +23,7 @@ class pearchunkedhtml extends pearweb
     public function __construct(array $IDs, $ext = "html")
     {
         parent::__construct($IDs, $ext, true);
-        $this->outputdir = PhDConfig::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
+        $this->outputdir = Config::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
         if (!file_exists($this->outputdir) || is_file($this->outputdir)) {
             mkdir($this->outputdir) or die("Can't create the cache directory");
         } else if (file_exists($this->outputdir . 'index.html')) {
@@ -43,16 +43,16 @@ class pearchunkedhtml extends pearweb
     */
     public function header($id)
     {
-        $title  = htmlspecialchars(PhDHelper::getDescription($id));
-        $parent = PhDHelper::getParent($id);
+        $title  = htmlspecialchars(Helper::getDescription($id));
+        $parent = Helper::getParent($id);
         $this->next = $this->prev = $this->up = array(null, null);
         $strNext = $strPrev = '';
 
         if ($parent) {
             if ($parent !== 'ROOT') {
-                $siblings = PhDHelper::getChildren($parent);
+                $siblings = Helper::getChildren($parent);
             } else {
-                $siblings = array($id => PhDHelper::getSelf($id));
+                $siblings = array($id => Helper::getSelf($id));
             }
             $this->prev = parent::createPrev($id, $parent, $siblings);
             if ($this->prev[0] === 'index') {
@@ -65,7 +65,7 @@ class pearchunkedhtml extends pearweb
             if ($parent !== 'index' && $parent !== 'ROOT') {
                 $this->up = array(
                     $parent.".html",
-                    htmlspecialchars(PhDHelper::getDescription($parent, false))
+                    htmlspecialchars(Helper::getDescription($parent, false))
                 );
             }
         }

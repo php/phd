@@ -1,12 +1,10 @@
 <?php
+namespace phpdotnet\phd;
 
-require $ROOT . "/packages/Default/xhtml.php";
-//require $ROOT . "/packages/Default/bigxhtml.php";
-//require $ROOT . "/packages/Default/php.php";
-
-class DefaultFactory extends PhDFormatFactory {
+class Package_Default_Factory extends Format_Factory
+{
     public function createXhtmlFormat() {
-        return new DefaultXHTMLFormat();
+        return new Format_Default_XHTML();
     }
 /*    
     public function createBigXhtmlFormat() {

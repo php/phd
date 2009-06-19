@@ -1,5 +1,8 @@
 <?php
-class PhDRender extends PhDObjectStorage {
+namespace phpdotnet\phd;
+
+class Render extends ObjectStorage
+{
     const CHUNK        = 0x001;
     const OPEN         = 0x002;
     const CLOSE        = 0x004;
@@ -25,19 +28,21 @@ class PhDRender extends PhDObjectStorage {
     } /* }}} */
 
     public function attach($obj, $inf = array()) { /* {{{ */
-        if (!($obj instanceof PhDEnterpriseFormat)) {
-            throw new InvalidArgumentException("All formats *MUST* inherit PhDEnterpriseFormat");
+        if (!($obj instanceof Format)) {
+            throw new InvalidArgumentException(
+                'All formats *MUST* inherit ' . __NAMESPACE__ . '\\Format'
+            );
         }
-        $obj->notify(PhDRender::STANDALONE, true);
+        $obj->notify(Render::STANDALONE, true);
 
         return parent::attach($obj, $inf);
     } /* }}} */
 
-    public function render(PhDEnterpriseReader $r) { /* {{{ */
-        PhDObjectStorage::setReader($r);
+    public function render(Reader $r) { /* {{{ */
+        ObjectStorage::setReader($r);
 
         foreach($this as $format) {
-            $format->notify(PhDRender::INIT, true);
+            $format->notify(Render::INIT, true);
         }
 
         $lastdepth = -1;
@@ -53,15 +58,15 @@ class PhDRender extends PhDObjectStorage {
                 $name  = $r->name;
                 $depth = $r->depth;
                 $attrs = array(
-                    PhDEnterpriseReader::XMLNS_DOCBOOK => array(),
-                    PhDEnterpriseReader::XMLNS_XML     => array(),
+                    Reader::XMLNS_DOCBOOK => array(),
+                    Reader::XMLNS_XML     => array(),
                 );
 
                 if ($r->hasAttributes) {
                     $r->moveToFirstAttribute();
                     do {
                         $k = $r->namespaceURI;
-                        $attrs[!empty($k) ? $k : PhDEnterpriseReader::XMLNS_DOCBOOK][$r->localName] = $r->value;
+                        $attrs[!empty($k) ? $k : Reader::XMLNS_DOCBOOK][$r->localName] = $r->value;
                     } while ($r->moveToNextAttribute());
                     $r->moveToElement();
                 }
@@ -214,11 +219,11 @@ class PhDRender extends PhDObjectStorage {
 
         /* Closing time */
         foreach($this as $format) {
-            $format->notify(PhDRender::FINALIZE, true);
+            $format->notify(Render::FINALIZE, true);
         }
         $r->close();
 
-        PhDObjectStorage::popReader();
+        ObjectStorage::popReader();
 
     } /* }}} */
 

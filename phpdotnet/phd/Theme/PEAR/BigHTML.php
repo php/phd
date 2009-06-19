@@ -1,7 +1,8 @@
 <?php
+namespace phpdotnet\phd;
 
-require_once $ROOT . '/themes/pear/peartheme.php';
-class pearbightml extends peartheme {
+class Theme_PEAR_BigHTML extends Theme_PEAR
+{
     /**
     * File to write the html to
     *
@@ -18,7 +19,7 @@ class pearbightml extends peartheme {
 
     public function __construct(array $IDs, $ext = "html") {
         parent::__construct($IDs, $ext, false);
-        $this->outputfile = PhDConfig::output_dir() . 'pear_manual_' . PhDConfig::language() . '.html';
+        $this->outputfile = Config::output_dir() . 'pear_manual_' . Config::language() . '.html';
         $this->stream = fopen($this->outputfile, "w");
         self::header();
     }

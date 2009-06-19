@@ -1,4 +1,5 @@
 <?php
+namespace phpdotnet\phd;
 /* $Id$ */
 
 /* {{{ PhD error & message handler */
@@ -84,7 +85,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
     }
     $recursive = true;
 
-    $time = date(PhDConfig::date_format());
+    $time = date(Config::date_format());
     switch($errno) {
         case VERBOSE_INDEXING:
         case VERBOSE_FORMAT_RENDERING:
@@ -96,8 +97,8 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         case VERBOSE_CHUNK_WRITING:
         case VERBOSE_NOVERSION:
         case VERBOSE_BROKEN_LINKS:
-            $color = PhDConfig::phd_info_color();
-            $output = PhDConfig::phd_info_output();
+            $color = Config::phd_info_color();
+            $output = Config::phd_info_output();
             $data = $msg;
             break;
 
@@ -105,8 +106,8 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         case E_USER_ERROR:
         case E_USER_WARNING:
         case E_USER_NOTICE:
-            $color = PhDConfig::user_error_color();
-            $output = PhDConfig::user_error_output();
+            $color = Config::user_error_color();
+            $output = Config::user_error_output();
             $data = sprintf("%s:%d\n\t%s", $file, $line, $msg);
             break;
 
@@ -116,8 +117,8 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         case E_STRICT:
         case E_WARNING:
         case E_NOTICE:
-            $color = PhDConfig::php_error_color();
-            $output = PhDConfig::php_error_output();
+            $color = Config::php_error_color();
+            $output = Config::php_error_output();
             $data = sprintf("%s:%d\n\t%s", $file, $line, $msg);
             break;
 
@@ -138,7 +139,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
     return true;
 }
 /* }}} */
-set_error_handler("errh");
+set_error_handler(__NAMESPACE__ . '\\errh');
 /* }}} */
 
 ?>

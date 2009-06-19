@@ -1,8 +1,10 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-require_once $ROOT . '/themes/php/phpdotnet.php';
-class phpweb extends phpdotnet {
+
+class Theme_PHP_Web extends Theme_PHP_PHPDotNet
+{
     protected $streams = array();
     protected $writeit = false;
     public $outputdir = '';
@@ -10,7 +12,7 @@ class phpweb extends phpdotnet {
 
     public function __construct($IDs, $filename, $ext = "php", $chunked = true) {
         parent::__construct($IDs, $filename, $ext, $chunked);
-        $this->outputdir = PhDConfig::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
+        $this->outputdir = Config::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
         if (!file_exists($this->outputdir) || is_file($this->outputdir)) {
             mkdir($this->outputdir) or die("Can't create the cache directory");
         } else {
@@ -48,7 +50,7 @@ class phpweb extends phpdotnet {
     }
     public function appendData($data, $isChunk) {
         switch($isChunk) {
-        case PhDReader::CLOSE_CHUNK:
+        case Reader_Legacy::CLOSE_CHUNK:
             $id = $this->CURRENT_ID;
 
             $stream = array_pop($this->streams);
@@ -60,7 +62,7 @@ class phpweb extends phpdotnet {
             return $retval;
             break;
 
-        case PhDReader::OPEN_CHUNK:
+        case Reader_Legacy::OPEN_CHUNK:
             $this->streams[] = fopen("php://temp/maxmemory", "r+");
 
         default:
@@ -71,14 +73,14 @@ class phpweb extends phpdotnet {
     }
     public function header($id) {
         $ext = '.' .$this->ext;
-        $parent = PhDHelper::getParent($id);
+        $parent = Helper::getParent($id);
         $filename = "toc" . DIRECTORY_SEPARATOR . $parent . ".inc";
         $up = array(null, null);
         $incl = '';
 
         $next = $prev = array(null, null);
         if ($parent && $parent != "ROOT") {
-            $siblings = PhDHelper::getChildren($parent);
+            $siblings = Helper::getChildren($parent);
             /* TODO:
              *   Maybe this isn't worth it.. but this, in theory, allows you
              * to easily add new pages without needing to rebuild the entire
@@ -93,8 +95,8 @@ class phpweb extends phpdotnet {
 
                 $parents = array();
                 $p = $parent;
-                while (($p = PhDHelper::getParent($p)) && $p != "ROOT") {
-                    $parents[] = array($p.$ext, PhDHelper::getDescription($p, true));
+                while (($p = Helper::getParent($p)) && $p != "ROOT") {
+                    $parents[] = array($p.$ext, Helper::getDescription($p, true));
                 }
 
                 $content = '<?php
@@ -107,7 +109,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
             }
 
             $incl = 'include_once dirname(__FILE__) ."/toc/' .$parent. '.inc";';
-            $up = array($this->getFilename($parent).$ext, PhDHelper::getDescription($parent, true));
+            $up = array($this->getFilename($parent).$ext, Helper::getDescription($parent, true));
 
             $prev = $this->createPrev($id, $parent, $siblings);
             $next = $this->createNext($id, $parent, $siblings);
@@ -116,7 +118,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
         $setup = array(
             "home" => array('index'.$ext, "PHP Manual"),
             "head" => array("UTF-8", $this->lang),
-            "this" => array($id.$ext, PhDHelper::getDescription($id)),
+            "this" => array($id.$ext, Helper::getDescription($id)),
             "up"   => $up,
             "prev" => $prev,
             "next" => $next,
@@ -166,7 +168,7 @@ manual_header();
             break;
         }
 
-        return array(PhDHelper::getFilename($parent).$ext, PhDHelper::getDescription($parent, false));
+        return array(Helper::getFilename($parent).$ext, Helper::getDescription($parent, false));
     }
     protected function createNext($id, $parent, $siblings) {
         $ext = '.' .$this->ext;
@@ -196,13 +198,13 @@ manual_header();
             }
 
             // We are the end element in this chapter
-            $grandpa = PhDHelper::getParent($parent);
+            $grandpa = Helper::getParent($parent);
             if (!$grandpa || $grandpa == "ROOT") {
                 // There is no next relative
                 break;
             }
 
-            $siblings  = PhDHelper::getChildren($grandpa);
+            $siblings  = Helper::getChildren($grandpa);
             $id = $parent;
             $parent = $grandpa;
         } while(true);
@@ -216,7 +218,7 @@ manual_header();
     public function format_qandaset($open, $name, $attrs) {
         if ($open) {
             $this->cchunk["qandaentry"] = array();
-            $this->appendData(null, PhDReader::OPEN_CHUNK);
+            $this->appendData(null, Reader_Legacy::OPEN_CHUNK);
             return '';
         }
 

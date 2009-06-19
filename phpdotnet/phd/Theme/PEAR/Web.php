@@ -1,5 +1,5 @@
 <?php
-require_once $ROOT . '/themes/pear/peartheme.php';
+namespace phpdotnet\phd;
 
 /**
 * PEAR theme for the many php files used for pearweb
@@ -7,7 +7,7 @@ require_once $ROOT . '/themes/pear/peartheme.php';
 * @package PhD
 * @version CVS: $Id$
 */
-class pearweb extends peartheme
+class Theme_PEAR_Web extends Theme_PEAR_Base
 {
     /**
     * Array of file resources
@@ -40,7 +40,7 @@ class pearweb extends peartheme
     public function __construct($IDs, $ext = "php", $chunked = true)
     {
         parent::__construct($IDs, $ext, $chunked);
-        $this->outputdir = PhDConfig::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
+        $this->outputdir = Config::output_dir() . $this->ext . DIRECTORY_SEPARATOR;
         if (!file_exists($this->outputdir) || is_file($this->outputdir)) {
             mkdir($this->outputdir) or die("Can't create the cache directory");
         } else {
@@ -90,14 +90,14 @@ class pearweb extends peartheme
      * Append data to the streams.
      *
      * @param string                                       $data    Data to write
-     * @param PhDReader::CLOSE_CHUNK|PhDReader::OPEN_CHUNK $isChunk constant
+     * @param Reader_Legacy::CLOSE_CHUNK|Reader_Legacy::OPEN_CHUNK $isChunk constant
      *
      * @return int|false
      */
     public function appendData($data, $isChunk)
     {
         switch($isChunk) {
-        case PhDReader::CLOSE_CHUNK:
+        case Reader_Legacy::CLOSE_CHUNK:
             $id = $this->CURRENT_ID;
 
             $stream = array_pop($this->streams);
@@ -109,7 +109,7 @@ class pearweb extends peartheme
             return $retval;
             break;
 
-        case PhDReader::OPEN_CHUNK:
+        case Reader_Legacy::OPEN_CHUNK:
             $this->streams[] = fopen("php://temp/maxmemory", "r+");
 
         default:
@@ -130,7 +130,7 @@ class pearweb extends peartheme
     {
         $ext = "." . $this->ext;
 
-        $parent = PhDHelper::getParent($id);
+        $parent = Helper::getParent($id);
 
         if (!$parent || $parent == "ROOT")
             return '<?php
@@ -148,7 +148,7 @@ manualHeader("index.php", "PEAR Manual");
 
         // Fetch the siblings information
         $toc = array();
-        $siblings = PhDHelper::getChildren($parent);
+        $siblings = Helper::getChildren($parent);
         foreach ($siblings as $sibling => $array) {
             $toc[] = array($sibling.$ext, empty($array["sdesc"]) ? $array["ldesc"] : $array["sdesc"]);
         }
@@ -158,7 +158,7 @@ manualHeader("index.php", "PEAR Manual");
             'home' => array('index' . $ext, 'PEAR Manual'),
             'prev' => $this->createPrev($id, $parent, $siblings),
             'next' => $this->createNext($id, $parent, $siblings),
-            'up'   => array($this->getFilename($parent).$ext, PhDHelper::getDescription($parent, true)),
+            'up'   => array($this->getFilename($parent).$ext, Helper::getDescription($parent, true)),
             'toc'  => $toc
         );
         return "<?php \n" .
@@ -166,7 +166,7 @@ manualHeader("index.php", "PEAR Manual");
             "setupNavigation(" . var_export($nav, true) . ");\n" .
             'manualHeader("'
                 . $this->getFilename($id).$ext . '", '
-                . var_export(PhDHelper::getDescription($id, true), true)
+                . var_export(Helper::getDescription($id, true), true)
             . ');' . "\n" .
             "?>\n";
     }
@@ -183,11 +183,11 @@ manualHeader("index.php", "PEAR Manual");
     public function footer($id)
     {
         $ext = '.' . $this->ext;
-        $parent = PhDHelper::getParent($id);
+        $parent = Helper::getParent($id);
 
         return '<?php manualFooter("'
             . $this->getFilename($id) . $ext . '", '
-            . var_export(PhDHelper::getDescription($id, true), true)
+            . var_export(Helper::getDescription($id, true), true)
             . '); ?>';
     }
 
@@ -229,7 +229,7 @@ manualHeader("index.php", "PEAR Manual");
             break;
         }
 
-        return array(PhDHelper::getFilename($parent).$ext, PhDHelper::getDescription($parent, false));
+        return array(Helper::getFilename($parent).$ext, Helper::getDescription($parent, false));
     }
 
     /**
@@ -276,13 +276,13 @@ manualHeader("index.php", "PEAR Manual");
             }
 
             // We are the end element in this chapter
-            $grandpa = PhDHelper::getParent($parent);
+            $grandpa = Helper::getParent($parent);
             if (!$grandpa || $grandpa == "ROOT") {
                 // There is no next relative
                 break;
             }
 
-            $siblings = PhDHelper::getChildren($grandpa);
+            $siblings = Helper::getChildren($grandpa);
             $id       = $parent;
             $parent   = $grandpa;
         } while (true);
@@ -312,7 +312,7 @@ manualHeader("index.php", "PEAR Manual");
     {
         if ($open) {
             $this->cchunk["qandaentry"] = array();
-            $this->appendData(null, PhDReader::OPEN_CHUNK);
+            $this->appendData(null, Reader_Legacy::OPEN_CHUNK);
             return '';
         }
 

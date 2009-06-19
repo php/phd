@@ -1,10 +1,11 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
 /**
-* Base class for PhDTheme
+* Base class for Theme
 */
-class PhDHelper
+class Helper
 {
     /**
     * Array of all ids as key and their "attributes" (not xml-atts)
@@ -163,8 +164,8 @@ class PhDHelper
     */
     final public function autogen($text, $lang)
     {
-        if (isset(PhDHelper::$autogen[$lang])) {
-            return PhDHelper::$autogen[$lang][$text];
+        if (isset(Helper::$autogen[$lang])) {
+            return Helper::$autogen[$lang][$text];
         }
 
         $filename = dirname(__FILE__) ."/langs/$lang.xml";
@@ -189,8 +190,8 @@ class PhDHelper
                 $autogen[$k] = $r->value;
             }
         }
-        PhDHelper::$autogen[$lang] = $autogen;
-        return PhDHelper::$autogen[$lang][$text];
+        Helper::$autogen[$lang] = $autogen;
+        return Helper::$autogen[$lang][$text];
     }
 
     /**
@@ -205,13 +206,13 @@ class PhDHelper
     public function highlight($text, $role = 'php', $format = 'xhtml')
     {
         if (!isset(self::$highlighters[$format])) {
-            $class = PhdConfig::highlighter();
+            $class = Config::highlighter();
 
             if (!class_exists($class, true)) {
-                if ($class == 'PhDHighlighter') {
+                if ($class == 'Highlighter') {
                     //hard coded path for phdhighlighter, since phd doesn't follow
                     // pear file conventions
-                    require_once dirname(__FILE__) . '/PhDHighlighter.class.php';
+                    require_once dirname(__FILE__) . '/Highlighter.class.php';
                 } else {
                     //simple autoload replacement for pear-style classes
                     require_once str_replace('_', '/', $class) . '.php';

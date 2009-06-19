@@ -1,7 +1,9 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-abstract class PhDFormat extends PhDHelper {
+abstract class Format_Legacy extends Helper
+{
     private $TABLE   = array();
 
     /* abstract functions */
@@ -97,4 +99,4 @@ abstract class PhDFormat extends PhDHelper {
  * vim600: sw=4 ts=4 fdm=syntax syntax=php et
  * vim<600: sw=4 ts=4
  */
-
+?>

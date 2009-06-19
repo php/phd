@@ -1,5 +1,8 @@
 <?php
-class PhDIndex extends PhDEnterpriseFormat {
+namespace phpdotnet\phd;
+
+class Index extends Format_Enterprise
+{
     private $myelementmap = array(
     'article'               => 'format_container_chunk',
     'appendix'              => 'format_container_chunk',
@@ -72,19 +75,19 @@ class PhDIndex extends PhDEnterpriseFormat {
     }
     public function CDATA($value) {
     }
-    public function createLink($for, &$desc = null, $type = PhDEnterpriseFormat::SDESC) {
+    public function createLink($for, &$desc = null, $type = Format_Enterprise::SDESC) {
     }
     public function appendData($data) {
     }
     // Require indexing if --index=true, if no indexing has been successfully done before
     // or if xml input file has changed since the last indexing
     final static public function requireIndexing() {
-        if (!PhDConfig::index() && file_exists(PhDConfig::output_dir() . "index.sqlite")) {
-            $db = new SQLite3(PhDConfig::output_dir() . 'index.sqlite');
+        if (!Config::index() && file_exists(Config::output_dir() . "index.sqlite")) {
+            $db = new SQLite3(Config::output_dir() . 'index.sqlite');
             $indexingCount = $db->query('SELECT COUNT(time) FROM indexing')->fetchArray(SQLITE3_NUM);
             if ($indexingCount[0] > 0) {
                 $indexing = $db->query('SELECT time FROM indexing')->fetchArray(SQLITE3_ASSOC);
-                $xmlLastModification = filemtime(PhDConfig::xml_file());
+                $xmlLastModification = filemtime(Config::xml_file());
                 if ($indexing["time"] > $xmlLastModification) {
                     return false;
                 }
@@ -94,24 +97,24 @@ class PhDIndex extends PhDEnterpriseFormat {
     }
     public function update($event, $value = null) {
         switch($event) {
-            case PhDRender::CHUNK:
+            case Render::CHUNK:
                 $this->flags = $value;
                 break;
 
-            case PhDRender::STANDALONE:
+            case Render::STANDALONE:
                 if ($value) {
                     $this->registerElementMap(static::getDefaultElementMap());
                     $this->registerTextMap(static::getDefaultTextMap());
                 }
                 break;
-            case PhDRender::INIT:
+            case Render::INIT:
                 if ($value) {
-                    if (file_exists(PhDConfig::output_dir() . "index.sqlite")) {
-                        $db = new SQLite3(PhDConfig::output_dir() . 'index.sqlite');
+                    if (file_exists(Config::output_dir() . "index.sqlite")) {
+                        $db = new SQLite3(Config::output_dir() . 'index.sqlite');
                         $db->exec('DELETE FROM ids');
                         $db->exec('DELETE FROM indexing');
                     } else {
-                        $db = new SQLite3(PhDConfig::output_dir() . 'index.sqlite');
+                        $db = new SQLite3(Config::output_dir() . 'index.sqlite');
                         $create = <<<SQL
 CREATE TABLE ids (
     docbook_id TEXT PRIMARY KEY,
@@ -139,7 +142,7 @@ SQL;
                     print_r($this->chunks);
                 }
                 break;
-            case PhDRender::FINALIZE:
+            case Render::FINALIZE:
                 $this->db->exec("INSERT INTO indexing (time) VALUES ('" . time() . "')");
                 break;
         }
@@ -152,14 +155,14 @@ SQL;
     }
     public function UNDEF($open, $name, $attrs, $props) {
         /*if ($open) {
-            if(isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
-                $id = $attrs[PhDEnterpriseReader::XMLNS_XML]["id"];
+            if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader_Enterprise::XMLNS_XML]["id"];
                 $this->storeInfo($name, $id, $this->currentchunk);
             }
             return false;
         }
 
-        if(isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
+        if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
             $this->appendID();
         }*/
         return false;
@@ -235,8 +238,8 @@ SQL;
             if ($props["sibling"] === $name) {
                 return $this->format_chunk($open, $name, $attrs, $props);
             }
-            if(isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
-                $id = $attrs[PhDEnterpriseReader::XMLNS_XML]["id"];
+            if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader_Enterprise::XMLNS_XML]["id"];
                 return $this->storeInfo($name, $id, $this->currentchunk, false);
             }
             return $this->UNDEF($open, $name, $attrs, $props);
@@ -246,8 +249,8 @@ SQL;
             return $this->format_chunk($open, $name, $attrs, $props);
         }
         $sectionChunks[] = $x;
-        if(isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
-            $id = $attrs[PhDEnterpriseReader::XMLNS_XML]["id"];
+        if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
+            $id = $attrs[Reader_Enterprise::XMLNS_XML]["id"];
             return $this->appendID(false);
         }
         return $this->UNDEF($open, $name, $attrs, $props);
@@ -257,8 +260,8 @@ SQL;
     }
     public function format_chunk($open, $name, $attrs, $props) {
         if ($open) {
-            if(isset($attrs[PhDEnterpriseReader::XMLNS_XML]["id"])) {
-                $id = $attrs[PhDEnterpriseReader::XMLNS_XML]["id"];
+            if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader_Enterprise::XMLNS_XML]["id"];
             } else {
                 $id = uniqid("phd");
             }
@@ -266,14 +269,14 @@ SQL;
             $this->currentchunk = $id;
             $this->storeInfo($name, $id, $id);
 
-            $this->notify(PhDRender::CHUNK, PhDRender::OPEN);
+            $this->notify(Render::CHUNK, Render::OPEN);
 
             return false;
         }
         array_pop($this->chunks);
         $this->currentchunk = end($this->chunks);
 
-        $this->notify(PhDRender::CHUNK, PhDRender::CLOSE);
+        $this->notify(Render::CHUNK, Render::CLOSE);
 
         $this->appendID();
         return false;

@@ -1,10 +1,12 @@
 <?php
-require_once $ROOT . '/themes/php/phppdf.php';
-class phpbigpdf extends phppdf {
+namespace phpdotnet\phd;
+
+class Theme_PHP_BigPDF extends Theme_PHP_PDF
+{
 
     public function __construct(array $IDs, array $filenames, $format = "pdf", $chunked = true) {
         parent::__construct($IDs, $filenames, $format, $chunked);
-        $this->outputdir = PhDConfig::output_dir();
+        $this->outputdir = Config::output_dir();
     }
 
     // Do nothing
@@ -22,11 +24,11 @@ class phpbigpdf extends phppdf {
             }
             $this->format->setPdfDoc($pdfDoc);
 
-            if (isset($attrs[PhDReader::XMLNS_XML]["base"]) && $base = $attrs[PhDReader::XMLNS_XML]["base"])
+            if (isset($attrs[Reader_Legacy::XMLNS_XML]["base"]) && $base = $attrs[Reader_Legacy::XMLNS_XML]["base"])
                 $this->format->setChunkInfo("xml-base", $base);
-            $id = $attrs[PhDReader::XMLNS_XML]["id"];
+            $id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
             $this->cchunk["root-outline"] = $this->cchunk["id-to-outline"][$id] =
-                $pdfDoc->createOutline(PhDHelper::getDescription($id), null, true);
+                $pdfDoc->createOutline(Helper::getDescription($id), null, true);
             $this->setIdToPage($id);
         } else {
             $this->resolveLinks($this->cchunk["setname"]);

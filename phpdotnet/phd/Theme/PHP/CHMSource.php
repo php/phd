@@ -1,8 +1,9 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-require_once $ROOT . '/themes/php/chunkedhtml.php';
-class chmsource extends chunkedhtml {
+class Theme_PHP_CHMSource extends Theme_PHP_ChunkedHTML
+{
     const DEFAULT_FONT = "Arial,10,0";
     const DEFAULT_TITLE = "PHP Manual";
 
@@ -192,15 +193,15 @@ class chmsource extends chunkedhtml {
 
     public function __construct(array $IDs, $filename, $ext = "html", $dir = "chm") {
         chunkedhtml::__construct($IDs, $filename, $ext);
-        $this->chmdir = PhDConfig::output_dir() . $dir . DIRECTORY_SEPARATOR;
+        $this->chmdir = Config::output_dir() . $dir . DIRECTORY_SEPARATOR;
             if(!file_exists($this->chmdir) || is_file($this->chmdir))
                 mkdir($this->chmdir) or die("Can't create the CHM project directory");
-        $this->outputdir = PhDConfig::output_dir() . $dir . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
+        $this->outputdir = Config::output_dir() . $dir . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
 
         if(!file_exists($this->outputdir) || is_file($this->outputdir))
                 mkdir($this->outputdir) or die("Can't create the cache directory");
 
-        $lang = PhDConfig::language();
+        $lang = Config::language();
         $this->hhpStream = fopen($this->chmdir . "php_manual_{$lang}.hhp", "w");
         $this->hhcStream = fopen($this->chmdir . "php_manual_{$lang}.hhc", "w");
         $this->hhkStream = fopen($this->chmdir . "php_manual_{$lang}.hhk", "w");
@@ -222,8 +223,8 @@ class chmsource extends chunkedhtml {
 
     protected function appendChm($name, $ref, $isChunk, $hasChild) {
         switch ($isChunk) {
-            case PhDReader::OPEN_CHUNK:
-                $charset = $this->LANGUAGES[PhDConfig::language()]["preferred_charset"];
+            case Reader_Legacy::OPEN_CHUNK:
+                $charset = $this->LANGUAGES[Config::language()]["preferred_charset"];
                 $name = htmlspecialchars(iconv('UTF-8', $charset, $name), ENT_QUOTES);
 
                 $this->currentTocDepth++;
@@ -238,7 +239,7 @@ class chmsource extends chunkedhtml {
                     "          <param name=\"Name\" value=\"" . $name . "\">\n" .
                     "        </object>\n    </li>\n");
                 break;
-            case PhDReader::CLOSE_CHUNK :
+            case Reader_Legacy::CLOSE_CHUNK :
                 if ($hasChild) {
                     fwrite($this->hhcStream, "{$this->offset(2)}</ul>\n");
                 }
@@ -248,7 +249,7 @@ class chmsource extends chunkedhtml {
     }
 
     protected function headerChm() {
-        $lang = PhDConfig::language();
+        $lang = Config::language();
         fwrite($this->hhpStream, '[OPTIONS]
 Binary TOC=Yes
 Compatibility=1.1 or later
@@ -330,7 +331,7 @@ res' . DIRECTORY_SEPARATOR . 'style.css
 
     public function format_varlistentry($open, $name, $attrs) {
         $this->collectContent($attrs);
-        $charset = $this->LANGUAGES[PhDConfig::language()]["preferred_charset"];
+        $charset = $this->LANGUAGES[Config::language()]["preferred_charset"];
         $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
 
         fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
@@ -353,13 +354,13 @@ res' . DIRECTORY_SEPARATOR . 'style.css
 
 
     private function collectContent($attrs) {
-        if (isset($attrs[PhDReader::XMLNS_XML]["id"])) {
-            $id = $attrs[PhDReader::XMLNS_XML]["id"];
+        if (isset($attrs[Reader_Legacy::XMLNS_XML]["id"])) {
+            $id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
             $this->lastContent = array(
-                "name" => PhDHelper::getDescription($id),
+                "name" => Helper::getDescription($id),
                 "reference" => "res" . DIRECTORY_SEPARATOR .
-                    (PhDHelper::getFilename($id) ? PhDHelper::getFilename($id) : $id) . "." . $this->ext,
-                "hasChild" => (count(PhDHelper::getChildren($id)) > 0)
+                    (Helper::getFilename($id) ? Helper::getFilename($id) : $id) . "." . $this->ext,
+                "hasChild" => (count(Helper::getChildren($id)) > 0)
             );
         }
     }

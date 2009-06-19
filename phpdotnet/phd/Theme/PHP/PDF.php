@@ -1,7 +1,9 @@
 <?php
+namespace phpdotnet\phd;
 /*  $Id$ */
 
-class phppdf extends PhDTheme {
+class Theme_PHP_PDF extends Theme
+{
 
     protected $elementmap = array(
         'article'               => 'format_tocnode_newpage',
@@ -104,7 +106,7 @@ class phppdf extends PhDTheme {
         parent::__construct($IDs);
         $this->format = $format;
         if (!class_exists("HaruDoc")) die ("PDF output needs libharu & haru/pecl extensions... Please install them and start PhD again.\n");
-        $this->outputdir = PhDConfig::output_dir() . $this->format . DIRECTORY_SEPARATOR;
+        $this->outputdir = Config::output_dir() . $this->format . DIRECTORY_SEPARATOR;
         if(!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory.\n");
     }
 
@@ -129,12 +131,12 @@ class phppdf extends PhDTheme {
                 v("PDF Compression failed, you need to compile libharu with Zlib...", E_USER_WARNING);
             }
             $this->format->setPdfDoc($pdfDoc);
-            if (isset($attrs[PhDReader::XMLNS_XML]["base"]) && $base = $attrs[PhDReader::XMLNS_XML]["base"])
+            if (isset($attrs[Reader_Legacy::XMLNS_XML]["base"]) && $base = $attrs[Reader_Legacy::XMLNS_XML]["base"])
                 $this->format->setChunkInfo("xml-base", $base);
 
-            $id = $attrs[PhDReader::XMLNS_XML]["id"];
+            $id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
             $this->cchunk["root-outline"] = $this->cchunk["id-to-outline"][$id] =
-                $pdfDoc->createOutline(PhDHelper::getDescription($id), null, true);
+                $pdfDoc->createOutline(Helper::getDescription($id), null, true);
             $this->setIdToPage($id);
         } else {
             $this->resolveLinks($this->cchunk["bookname"]);
@@ -164,17 +166,17 @@ class phppdf extends PhDTheme {
             else
                 $this->format->getPdfDoc()->add(PdfWriter::LINE_JUMP);
 
-            if (isset($attrs[PhDReader::XMLNS_XML]["base"]) && $base = $attrs[PhDReader::XMLNS_XML]["base"])
+            if (isset($attrs[Reader_Legacy::XMLNS_XML]["base"]) && $base = $attrs[Reader_Legacy::XMLNS_XML]["base"])
                 $this->format->setChunkInfo("xml-base", $base);
 
-            if (isset($attrs[PhDReader::XMLNS_XML]["id"]) && $id = $attrs[PhDReader::XMLNS_XML]["id"]) {
-                $parentId = PhDHelper::getParent($id);
+            if (isset($attrs[Reader_Legacy::XMLNS_XML]["id"]) && $id = $attrs[Reader_Legacy::XMLNS_XML]["id"]) {
+                $parentId = Helper::getParent($id);
                 if (isset($this->cchunk["id-to-outline"][$parentId])) {
                     $this->cchunk["id-to-outline"][$id] = $this->format->getPdfDoc()->createOutline
-                        (PhDHelper::getDescription($id), $this->cchunk["id-to-outline"][$parentId], false);
+                        (Helper::getDescription($id), $this->cchunk["id-to-outline"][$parentId], false);
                 } else {
                     $this->cchunk["id-to-outline"][$id] = $this->format->getPdfDoc()->createOutline
-                        (PhDHelper::getDescription($id), $this->cchunk["root-outline"], false);
+                        (Helper::getDescription($id), $this->cchunk["root-outline"], false);
                 }
                 $this->setIdToPage($id);
             }
@@ -258,7 +260,7 @@ class phppdf extends PhDTheme {
             break;
         default:
             /* Check if its a classname. */
-            $href = PhDTheme::getFilename("class.$t");
+            $href = Theme::getFilename("class.$t");
         }
 
         $this->format->getPdfDoc()->setFont(PdfWriter::FONT_NORMAL, 12, array(0, 0, 1)); // blue
@@ -281,7 +283,7 @@ class phppdf extends PhDTheme {
     }
 
     public function format_collect_id($open, $name, $attrs, $props, $newpage = false) {
-        if ($open && isset($attrs[PhDReader::XMLNS_XML]["id"]) && $id = $attrs[PhDReader::XMLNS_XML]["id"]) {
+        if ($open && isset($attrs[Reader_Legacy::XMLNS_XML]["id"]) && $id = $attrs[Reader_Legacy::XMLNS_XML]["id"]) {
                 $this->setIdToPage($id);
         }
         return false;
