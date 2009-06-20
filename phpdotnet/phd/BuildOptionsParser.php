@@ -135,7 +135,7 @@ class BuildOptionsParser extends OptionParser
         
         if (is_null($packageList)) {
             $packageList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/packages/*", GLOB_ONLYDIR) as $item) {
+            foreach (glob($GLOBALS['ROOT'] . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
                 if (!in_array(basename($item), array('CVS', '.', '..'))) {
                     $packageList[] = basename($item);
                 }
@@ -219,11 +219,11 @@ class BuildOptionsParser extends OptionParser
         
         if (is_null($packageList)) {
             $packageList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/packages/*", GLOB_ONLYDIR) as $item) {
+            foreach (glob($GLOBALS['ROOT'] . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
                 if (!in_array(basename($item), array('CVS', '.', '..'))) {
                     $formats = array();
                     foreach (glob($item . "/*.php") as $subitem) {
-                        if (substr(basename($subitem), -17) != "Factory.class.php") {
+                        if (strcmp(basename($subitem), "Factory.php") != 0) {
                             $formats[] = substr(basename($subitem), 0, -4);               
                         }
                     }
