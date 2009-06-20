@@ -51,10 +51,10 @@ class Render extends ObjectStorage
             $data = $retval = $name = $open = false;
 
             switch($type) {
-                case XMLReader::ELEMENT: /* {{{ */
+                case \XMLReader::ELEMENT: /* {{{ */
                 $open  = true;
                     /* break intentionally omitted */
-                case XMLReader::END_ELEMENT:
+                case \XMLReader::END_ELEMENT:
                 $name  = $r->name;
                 $depth = $r->depth;
                 $attrs = array(
@@ -86,7 +86,7 @@ class Render extends ObjectStorage
                     continue;
                 
                 foreach($this as $format) {
-                    $map = $this[$format][XMLReader::ELEMENT];
+                    $map = $this[$format][\XMLReader::ELEMENT];
 
                     if (isset($map[$name]) === false) {
                         $data = $format->UNDEF($open, $name, $attrs, $props);
@@ -113,7 +113,7 @@ class Render extends ObjectStorage
                     $format->appendData($data);
 
                     foreach($format as $theme) {
-                        $map = $format[$theme][XMLReader::ELEMENT];
+                        $map = $format[$theme][\XMLReader::ELEMENT];
                         if (isset($map[$name])) {
                             $tag = $map[$name];
 
@@ -137,13 +137,13 @@ class Render extends ObjectStorage
                 break;
                     /* }}} */
 
-                case XMLReader::TEXT: /* {{{ */
+                case \XMLReader::TEXT: /* {{{ */
                 $value = $r->value;
                 $eldepth = $r->depth - 1;
                 $name  = $this->STACK[$eldepth];
 
                 foreach($this as $format) {
-                    $map = $this[$format][XMLReader::TEXT];
+                    $map = $this[$format][\XMLReader::TEXT];
                     if (isset($map[$name])) {
                         $tag = $map[$name];
 
@@ -167,7 +167,7 @@ class Render extends ObjectStorage
                     }
 
                     foreach($format as $theme) {
-                        $map = $format[$theme][XMLReader::TEXT];
+                        $map = $format[$theme][\XMLReader::TEXT];
                         if (isset($map[$name])) {
                             $tag = $map[$name];
 
@@ -188,7 +188,7 @@ class Render extends ObjectStorage
                 break;
                     /* }}} */
 
-                case XMLReader::CDATA: /* {{{ */
+                case \XMLReader::CDATA: /* {{{ */
                             /* Different formats may want to escape the CDATA sections differently */
                 $value  = $r->value;
                 foreach($this as $format) {
@@ -201,8 +201,8 @@ class Render extends ObjectStorage
                 break;
                     /* }}} */
 
-                case XMLReader::WHITESPACE: /* {{{ */
-                case XMLReader::SIGNIFICANT_WHITESPACE:
+                case \XMLReader::WHITESPACE: /* {{{ */
+                case \XMLReader::SIGNIFICANT_WHITESPACE:
                             /* WS is always WS */
                 $retval  = $r->value;
                 foreach($this as $format) {

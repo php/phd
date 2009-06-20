@@ -14,103 +14,103 @@ class Reader extends \XMLReader
     }
 
     public function close() {
-        return XMLReader::close();
+        return parent::close();
     }
 
     public function getAttribute($name) {
-        return XMLReader::getAttribute($name);
+        return parent::getAttribute($name);
     }
 
     public function getAttributeNo($index) {
-        return XMLReader::getAttributeNo($index);
+        return parent::getAttributeNo($index);
     }
 
     public function getAttributeNs($name, $namespaceURI) {
-        return XMLReader::getAttributeNs($name, $namespaceURI);
+        return parent::getAttributeNs($name, $namespaceURI);
     }
 
     public function getParserProperty($property) {
-        return XMLReader::getParserProperty($property);
+        return parent::getParserProperty($property);
     }
 
     public function isValid() {
-        return XMLReader::isValid();
+        return parent::isValid();
     }
 
     public function lookupNamespace($prefix) {
-        return XMLReader::lookupNamespace($prefix);
+        return parent::lookupNamespace($prefix);
     }
 
     public function moveToAttributeNo($index) {
-        return XMLReader::moveToAttributeNo($index);
+        return parent::moveToAttributeNo($index);
     }
 
     public function moveToAttribute($name) {
-        return XMLReader::moveToAttribute($name);
+        return parent::moveToAttribute($name);
     }
 
     public function moveToAttributeNs($name, $namespaceURI) {
-        return XMLReader::moveToAttributeNs($name, $namespaceURI);
+        return parent::moveToAttributeNs($name, $namespaceURI);
     }
 
     public function moveToElement() {
-        return XMLReader::moveToElement();
+        return parent::moveToElement();
     }
 
     public function moveToFirstAttribute() {
-        return XMLReader::moveToFirstAttribute();
+        return parent::moveToFirstAttribute();
     }
 
     public function moveToNextAttribute() {
-        return XMLReader::moveToNextAttribute();
+        return parent::moveToNextAttribute();
     }
 
     public function open($URI, $encoding = null, $options = null) {
-        return XMLReader::open($URI, $encoding, $options);
+        return parent::open($URI, $encoding, $options);
     }
 
     public function read() {
-        return XMLReader::read();
+        return parent::read();
     }
 
     public function next($localname = null) {
-        return XMLReader::next($localname);
+        return parent::next($localname);
     }
 
     public function readInnerXml() {
-        return XMLReader::readInnerXml();
+        return parent::readInnerXml();
     }
 
     public function readOuterXml() {
-        return XMLReader::readOuterXml();
+        return parent::readOuterXml();
     }
 
     public function readString() {
-        return XMLReader::readString();
+        return parent::readString();
     }
 
     public function setSchema($filename) {
-        return XMLReader::setSchema($filename);
+        return parent::setSchema($filename);
     }
 
     public function setParserProperty($property, $value) {
-        return XMLReader::setParserProperty($property, $value);
+        return parent::setParserProperty($property, $value);
     }
 
     public function setRelaxNGSchema($filename) {
-        return XMLReader::setRelaxNGSchema($filename);
+        return parent::setRelaxNGSchema($filename);
     }
 
     public function setRelaxNGSchemaSource($source) {
-        return XMLReader::setRelaxNGSchemaSource($source);
+        return parent::setRelaxNGSchemaSource($source);
     }
 
     public function XML($source, $encoding = null, $options = null) {
-        return XMLReader::XML($source, $encoding, $options);
+        return parent::XML($source, $encoding, $options);
     }
 
     public function expand() {
-        return XMLReader::expand();
+        return parent::expand();
     }
 
 }

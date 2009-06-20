@@ -9,9 +9,9 @@ function autoload($name)
 spl_autoload_register(__NAMESPACE__ . '\\autoload');
 require_once 'phpdotnet/phd/functions.php';
 
-//$INDEX    = "/Users/loudi/Travail/phpdoc/.manual.xml";
-//$FILENAME = "/Users/loudi/Travail/phpdoc/.manual.xml";
-//$INDEX = $FILENAME = "/home/bjori/php/cleandocs/json.xml";
+$optparser = new BuildOptionsParser();
+$optparser->getopt();
+
 define("NO_SQLITE", false);
 
 /* If no docbook file was passed, die */
@@ -36,8 +36,8 @@ Config::init(array(
     ));
 
 $render = new Render();
-$reader = new EnterpriseReader();
-$factory = FormatFactory::createFactory();
+$reader = new Reader();
+$factory = Format_Factory::createFactory();
 
 // Indexing & registering formats
 foreach(range(0, 0) as $i) {

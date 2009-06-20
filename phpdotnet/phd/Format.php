@@ -1,7 +1,7 @@
 <?php
 namespace phpdotnet\phd;
 
-abstract class EnterpriseFormat extends ObjectStorage {
+abstract class Format extends ObjectStorage {
     const SDESC = 1;
     const LDESC = 2;
 
@@ -18,7 +18,7 @@ abstract class EnterpriseFormat extends ObjectStorage {
 
     public function __construct() {
         if (file_exists(Config::output_dir() . "index.sqlite")) {
-            $this->sqlite = new SQLite3(Config::output_dir() . 'index.sqlite');
+            $this->sqlite = new \SQLite3(Config::output_dir() . 'index.sqlite');
             $this->sortIDs();
         }
     }
@@ -27,7 +27,7 @@ abstract class EnterpriseFormat extends ObjectStorage {
     abstract public function UNDEF($open, $name, $attrs, $props);
     abstract public function TEXT($value);
     abstract public function CDATA($value);
-    abstract public function createLink($for, &$desc = null, $type = EnterpriseFormat::SDESC);
+    abstract public function createLink($for, &$desc = null, $type = Format::SDESC);
     abstract public function appendData($data);
     abstract public function update($event, $value = null);
 
@@ -81,7 +81,7 @@ abstract class EnterpriseFormat extends ObjectStorage {
     }
     final public function attach($obj, $inf = array()) {
         if (!($obj instanceof $this) && get_class($obj) != get_class($this)) {
-            throw new InvalidArgumentException(get_class($this) . " themes *MUST* _inherit_ " .get_class($this). ", got " . get_class($obj));
+            throw new \InvalidArgumentException(get_class($this) . " themes *MUST* _inherit_ " .get_class($this). ", got " . get_class($obj));
         }
         $obj->notify(Render::STANDALONE, false);
         return parent::attach($obj, $inf);
@@ -105,7 +105,7 @@ abstract class EnterpriseFormat extends ObjectStorage {
 
     final public function parse($xml) {
         $parsed = "";
-        $reader = new EnterpriseReader();
+        $reader = new Reader();
         $render = new Render();
 
         $reader->XML("<notatag>" . $xml . "</notatag>");
@@ -121,28 +121,31 @@ abstract class EnterpriseFormat extends ObjectStorage {
     }
 
     final public static function autogen($text, $lang) {
+        if ($lang === NULL) {
+            $lang = Config::language();
+        }
         if (isset(self::$autogen[$lang])) {
             if (isset(self::$autogen[$lang][$text])) {
                 return self::$autogen[$lang][$text];
             }
             if ($lang == Config::fallback_language()) {
-                throw new InvalidArgumentException("Cannot autogenerate text for '$text'");
+                throw new \InvalidArgumentException("Cannot autogenerate text for '$text'");
             }
             return self::autogen($text, Config::fallback_language());
         }
 
         $filename = Config::lang_dir() . $lang . ".xml";
 
-        $r = new XMLReader;
+        $r = new \XMLReader();
         if (!file_exists($filename) || !$r->open($filename)) {
             if ($lang == Config::fallback_language()) {
-                throw new Exception("Cannot open $filename");
+                throw new \Exception("Cannot open $filename");
             }
             return self::autogen($text, Config::fallback_language());
         }
         $autogen = array();
         while ($r->read()) {
-            if ($r->nodeType != XMLReader::ELEMENT) {
+            if ($r->nodeType != \XMLReader::ELEMENT) {
                 continue;
             }
             if ($r->name == "term") {

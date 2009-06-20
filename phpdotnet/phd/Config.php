@@ -67,22 +67,6 @@ Config::set_php_error_output(STDERR);
 Config::set_user_error_output(STDERR);
 Config::set_phd_info_output(STDOUT);
 
-/* {{{ Workaround/fix for Windows prior to PHP5.3 */
-if (!function_exists('getopt')) {
-    //Use PEAR's PHP_Compat package
-    @include_once('PHP/Compat/Function/getopt.php');
-}
-if (!function_exists('getopt')) {
-    function getopt($short, $long) {
-        global $argv;
-        printf("I'm sorry, you are running an operating system that does not support getopt()\n");
-        printf("Please install PEAR's PHP_Compat package.");
-
-        return array();
-    }
-}
-/* }}} */
-
 /* {{{ phd_bool($var) Returns boolean true/false on success, null on failure */
 function phd_bool($val) {
     if (!is_string($val)) {
@@ -109,39 +93,6 @@ function phd_bool($val) {
     }
 }
 /* }}} */
-
-abstract class OptionParser
-{
-    abstract public function getOptionList();
-
-    public function handlerForOption($opt)
-    {
-        if (method_exists($this, "option_{$opt}")) {
-            return array($this, "option_{$opt}");
-        } else {
-            return NULL;
-        }
-    }
-
-    public function getopt()
-    {
-        $opts = $this->getOptionList();
-        $args = getopt(implode("", array_values($opts)), array_keys($opts));
-        if ($args === false) {
-            trigger_error("Something happend with getopt(), please report a bug", E_USER_ERROR);
-        }
-
-        foreach ($args as $k => $v) {
-            $handler = $this->handlerForOption($k);
-            if (is_callable($handler)) {
-                call_user_func($handler, $k, $v);
-            } else {
-                var_dump($k, $v);
-                trigger_error("Hmh, something weird has happend, I don't know this option", E_USER_ERROR);
-            }
-        }
-    }
-}
 
 /* {{{ Can't function_call()['key'], so val(function_call(), 'key') */
 function val($a, $k)

@@ -15,15 +15,12 @@ abstract class Format_Factory
 
     public static final function createFactory()
     {
-        global $ROOT;
         $package = Config::package();
-        $classname = "{$package}Factory";
-                
-        require_once $ROOT . "/packages/$package/$classname.class.php";
+        $classname = __NAMESPACE__ . "\\Package_" . $package . "_Factory";
 
         $factory = new $classname();
         if (!($factory instanceof Format_Factory)) {
-            throw new Exception("All Factories must inherit PhDFormatFactory");
+            throw new \Exception("All Factories must inherit Format_Factory");
         }
         return $factory;
     }

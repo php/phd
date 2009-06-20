@@ -4,7 +4,7 @@ namespace phpdotnet\phd;
 class Package_Default_Factory extends Format_Factory
 {
     public function createXhtmlFormat() {
-        return new Format_Default_XHTML();
+        return new Package_Default_XHTML();
     }
 /*    
     public function createBigXhtmlFormat() {

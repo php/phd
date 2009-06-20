@@ -1,7 +1,7 @@
 <?php
 namespace phpdotnet\phd;
 
-class Index extends Format_Enterprise
+class Index extends Format
 {
     private $myelementmap = array(
     'article'               => 'format_container_chunk',
@@ -75,7 +75,7 @@ class Index extends Format_Enterprise
     }
     public function CDATA($value) {
     }
-    public function createLink($for, &$desc = null, $type = Format_Enterprise::SDESC) {
+    public function createLink($for, &$desc = null, $type = Format::SDESC) {
     }
     public function appendData($data) {
     }
@@ -83,7 +83,7 @@ class Index extends Format_Enterprise
     // or if xml input file has changed since the last indexing
     final static public function requireIndexing() {
         if (!Config::index() && file_exists(Config::output_dir() . "index.sqlite")) {
-            $db = new SQLite3(Config::output_dir() . 'index.sqlite');
+            $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
             $indexingCount = $db->query('SELECT COUNT(time) FROM indexing')->fetchArray(SQLITE3_NUM);
             if ($indexingCount[0] > 0) {
                 $indexing = $db->query('SELECT time FROM indexing')->fetchArray(SQLITE3_ASSOC);
@@ -110,11 +110,11 @@ class Index extends Format_Enterprise
             case Render::INIT:
                 if ($value) {
                     if (file_exists(Config::output_dir() . "index.sqlite")) {
-                        $db = new SQLite3(Config::output_dir() . 'index.sqlite');
+                        $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
                         $db->exec('DELETE FROM ids');
                         $db->exec('DELETE FROM indexing');
                     } else {
-                        $db = new SQLite3(Config::output_dir() . 'index.sqlite');
+                        $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
                         $create = <<<SQL
 CREATE TABLE ids (
     docbook_id TEXT PRIMARY KEY,
@@ -155,14 +155,14 @@ SQL;
     }
     public function UNDEF($open, $name, $attrs, $props) {
         /*if ($open) {
-            if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
-                $id = $attrs[Reader_Enterprise::XMLNS_XML]["id"];
+            if(isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader::XMLNS_XML]["id"];
                 $this->storeInfo($name, $id, $this->currentchunk);
             }
             return false;
         }
 
-        if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
+        if(isset($attrs[Reader::XMLNS_XML]["id"])) {
             $this->appendID();
         }*/
         return false;
@@ -238,8 +238,8 @@ SQL;
             if ($props["sibling"] === $name) {
                 return $this->format_chunk($open, $name, $attrs, $props);
             }
-            if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
-                $id = $attrs[Reader_Enterprise::XMLNS_XML]["id"];
+            if(isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader::XMLNS_XML]["id"];
                 return $this->storeInfo($name, $id, $this->currentchunk, false);
             }
             return $this->UNDEF($open, $name, $attrs, $props);
@@ -249,8 +249,8 @@ SQL;
             return $this->format_chunk($open, $name, $attrs, $props);
         }
         $sectionChunks[] = $x;
-        if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
-            $id = $attrs[Reader_Enterprise::XMLNS_XML]["id"];
+        if(isset($attrs[Reader::XMLNS_XML]["id"])) {
+            $id = $attrs[Reader::XMLNS_XML]["id"];
             return $this->appendID(false);
         }
         return $this->UNDEF($open, $name, $attrs, $props);
@@ -260,8 +260,8 @@ SQL;
     }
     public function format_chunk($open, $name, $attrs, $props) {
         if ($open) {
-            if(isset($attrs[Reader_Enterprise::XMLNS_XML]["id"])) {
-                $id = $attrs[Reader_Enterprise::XMLNS_XML]["id"];
+            if(isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader::XMLNS_XML]["id"];
             } else {
                 $id = uniqid("phd");
             }
