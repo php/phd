@@ -4,7 +4,11 @@ namespace phpdotnet\phd;
 $ROOT = __DIR__;
 function autoload($name)
 {
-    require_once str_replace(array('\\', '_'), '/', $name) . '.php';
+    $file = str_replace(array('\\', '_'), '/', $name) . '.php';
+    if (!fclose(fopen($file,'r', true))) {
+        throw new \Exception('Cannot find file for ' . $name . ': ' . $file);
+    }
+    require_once $file;
 }
 spl_autoload_register(__NAMESPACE__ . '\\autoload');
 require_once 'phpdotnet/phd/functions.php';
