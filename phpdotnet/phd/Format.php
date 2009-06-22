@@ -16,6 +16,9 @@ abstract class Format extends ObjectStorage {
 
     private static $autogen = array();
 
+    /* PhDHelper */
+    private static $highlighters = array();
+
     public function __construct() {
         if (file_exists(Config::output_dir() . "index.sqlite")) {
             $this->sqlite = new \SQLite3(Config::output_dir() . 'index.sqlite');
@@ -66,7 +69,6 @@ abstract class Format extends ObjectStorage {
         return $context;
     }
 
-
     final public function notify($event, $val = null) {
         $this->update($event, $val);
         foreach($this as $format) {
@@ -81,7 +83,7 @@ abstract class Format extends ObjectStorage {
     }
     final public function attach($obj, $inf = array()) {
         if (!($obj instanceof $this) && get_class($obj) != get_class($this)) {
-            throw new \InvalidArgumentException(get_class($this) . " themes *MUST* _inherit_ " .get_class($this). ", got " . get_class($obj));
+            throw new InvalidArgumentException(get_class($this) . " themes *MUST* _inherit_ " .get_class($this). ", got " . get_class($obj));
         }
         $obj->notify(Render::STANDALONE, false);
         return parent::attach($obj, $inf);
@@ -121,7 +123,7 @@ abstract class Format extends ObjectStorage {
     }
 
     final public static function autogen($text, $lang) {
-        if ($lang === NULL) {
+        if ($lang == NULL) {
             $lang = Config::language();
         }
         if (isset(self::$autogen[$lang])) {
@@ -136,7 +138,7 @@ abstract class Format extends ObjectStorage {
 
         $filename = Config::lang_dir() . $lang . ".xml";
 
-        $r = new \XMLReader();
+        $r = new \XMLReader;
         if (!file_exists($filename) || !$r->open($filename)) {
             if ($lang == Config::fallback_language()) {
                 throw new \Exception("Cannot open $filename");
@@ -269,6 +271,30 @@ abstract class Format extends ObjectStorage {
         return 1;
     }
 /* }}} */
+
+    /*PhDHelper functions*/
+
+    /**
+    * Highlight (color) the given piece of source code
+    *
+    * @param string $text   Text to highlight
+    * @param string $role   Source code role to use (php, xml, html, ...)
+    * @param string $format Format to highlight (pdf, xhtml, troff, ...)
+    *
+    * @return string Highlighted code
+    */
+    public function highlight($text, $role = 'php', $format = 'xhtml')
+    {
+        if (!isset(self::$highlighters[$format])) {
+            $class = Config::highlighter();            
+            self::$highlighters[$format] = $class::factory($format);
+        }
+
+        return self::$highlighters[$format]->highlight(
+            $text, $role, $format
+        );
+    }
+
 }
 
 /*

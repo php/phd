@@ -1,11 +1,12 @@
 <?php
+namespace phpdotnet\phd;
 
 /**
 * Source code highlighting class for phd.
 *
 * @author Christian Weiske <cweiske@php.net>
 */
-class PhDHighlighter
+class Highlighter
 {
     /**
     * Create a new highlighter instance for the given format.
