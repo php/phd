@@ -1,20 +1,19 @@
 <?php
 namespace phpdotnet\phd;
 
-class Package_Default_Factory extends Format_Factory
-{
+class Package_Default_Factory extends Format_Factory {
     public function createXhtmlFormat() {
-        return new Package_Default_XHTML();
-    }
-/*    
-    public function createBigXhtmlFormat() {
-        return new DefaultBigXHTMLFormat();
+        return new Package_Default_ChunkedXHTML();
     }
     
-    public function createPHPFormat() {
-        return new DefaultPHPFormat();
+    public function createBigXhtmlFormat() {
+        return new Package_Default_BigXHTML();
     }
-*/
+   
+    public function createPHPFormat() {
+        return new Package_Default_PHP();
+    }
+
 }
 
 ?>

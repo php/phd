@@ -39,7 +39,7 @@ class Config
         'phd_info_output' => NULL,
         'phd_info_color' => false,
         'highlighter'    => "phpdotnet\\phd\\Highlighter",
-        'package' => 'PHP',
+        'package' => 'Default',
     );
 
     public static function init(array $a) {

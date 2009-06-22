@@ -1,9 +1,7 @@
 <?php
 namespace phpdotnet\phd;
 
-class Package_Default_XHTML extends Format_Abstract_XHTML
-{
-    private $formatname = "XHTML"; 
+abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
     private $myelementmap = array( /* {{{ */
         'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
         'abbrev'                => 'abbr',
@@ -99,7 +97,6 @@ class Package_Default_XHTML extends Format_Abstract_XHTML
         'errortype'             => 'span',
         'errorcode'             => 'span',
         'example'               => 'div',
-        'phpdoc:exception'      => 'format_exception_chunk',
         'formalpara'            => 'p',
         'fieldsynopsis'         => array(
             /* DEFAULT */          'format_fieldsynopsis',
@@ -305,6 +302,7 @@ class Package_Default_XHTML extends Format_Abstract_XHTML
         'titleabbrev'           => 'format_suppressed_tags',
         'type'                  => 'span',
         'userinput'             => 'format_userinput',
+        'uri'                   => 'tt',
         'variablelist'          => 'format_variablelist',
         'varlistentry'          => 'format_varlistentry',
         'varname'               => array(
@@ -324,13 +322,24 @@ class Package_Default_XHTML extends Format_Abstract_XHTML
         ),
         'questions'             => 'ol', // From the PhD namespace
         'answer'                => 'dd',
+
+        //phpdoc: implement in the PHP Package
+        'phpdoc:classref'       => 'format_suppressed_tags',
+        'phpdoc:exception'      => 'format_suppressed_tags',
+        'phpdoc:exceptionref'   => 'format_suppressed_tags',
+        'phpdoc:varentry'       => 'format_suppressed_tags',
+
+        //phd
+        'phd:toc'               => 'format_phd_toc',
+
     ); /* }}} */
+
     private $mytextmap = array(
         'segtitle'             => 'format_segtitle_text',
         'affiliation'          => 'format_suppressed_text',
         'contrib'              => 'format_suppressed_text',
         'shortaffil'           => 'format_suppressed_text',
-        'titleabbrev'          => 'format_suppressed_text',
+        
         'programlisting'       => 'format_programlisting_text',
         'alt'                  => 'format_alt_text',
         'modifier'             => array(
@@ -358,10 +367,10 @@ class Package_Default_XHTML extends Format_Abstract_XHTML
         ),
         'literal'               => 'format_literal_text',
         'email'                 => 'format_email_text',
-
+        'titleabbrev'           => 'format_suppressed_text',
     );
 
-    protected $title = "PhD Default Xhtml";
+    //protected $flags;
 
     public function __construct() {
         parent::__construct();
@@ -375,116 +384,59 @@ class Package_Default_XHTML extends Format_Abstract_XHTML
         return $this->mytextmap;
     }
 
-    public function header($id) {
-        $title = $this->getLongDescription($id);
-        $lang = $this->CURRENT_LANG;
+    protected function createTOC($id, $lang) {
+        if (!$this->getChildrens($id)) {
+            return "";
+        }
+        $toc = '<strong>' . $this->autogen('toc', $lang) . '</strong><ul>';
+        foreach ($this->getChildrens($id) as $child) {
+            $isLDesc = null;
+            $isSDesc = null;
+            $long = $this->parse($this->getLongDescription($child, $isLDesc));
+            $short = $this->getShortDescription($child, $isSDesc);
+            $link = $this->createLink($child);
 
-        $prev = $next = $parent = array("href" => null, "desc" => null);
+            $list = "";
+            if ($this->cchunk["name"] === "book" || $this->cchunk["name"] === "set") {
+                if ($this->getChildrens($child)) {
+                    $list = "<ul>";
+                    foreach ($this->getChildrens($child) as $subChild) {
+                        $isSubLDesc = null;
+                        $isSubSDesc = null;
+                        $subLong = $this->parse($this->getLongDescription($subChild, $isLDesc));
+                        $subShort = $this->getShortDescription($subChild, $isSubSDesc);
 
-        if ($parentId = $this->getParent($id)) {
-            $parent = array("href" => $this->getFilename($parentId) . '.' .$this->ext,
-                "desc" => $this->getShortDescription($parentId));
+                        $href = $this->createLink($subChild);
+                        if ($isSubLDesc && $isSubSDesc) {
+                            $list .= '<li><a href="' . $href . '">' . $subShort . '</a> — ' . $subLong . "</li>\n";
+                        } else {
+                            $list .= '<li><a href="' . $href . '">' . ($subLong ?: $subShort) . '</a>' . "</li>\n";
+                        }
+                    }
+                    $list .="</ul>";
+                }
+            }
+            if ($isLDesc && $isSDesc) {
+                $toc .= '<li><a href="' . $link . '">' . $short . '</a> — ' . $long . $list . "</li>\n";
+            } else {
+                $toc .= '<li><a href="' . $link . '">' . ($long ?: $short) . '</a>' . $list .  "</li>\n";
+            }
         }
-        if ($prevId = Format::getPrevious($id)) {
-            $prev = array("href" => Format::getFilename($prevId) . '.' .$this->ext,
-                "desc" => $this->getShortDescription($prevId));
-        }
-        if ($nextId = Format::getNext($id)) {
-            $next = array("href" => Format::getFilename($nextId) . '.' .$this->ext,
-                "desc" => $this->getShortDescription($nextId));
-        }
-        $navBar = $this->createNavBar($id);
-        return
-'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' .$lang. '" lang="' .$lang. '">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>'.$this->title.': '.$title.'</title>
-</head>
-<body>
-<table width="100%">
-    <tr valign="top">
-        <td style="font-size: smaller;" width="15%">
-'.$navBar.'
-        </td>
-        <td width="85%">
-            <div style="text-align: center;">
-                '.($prevId ? '<div class="prev" style="text-align: left; float: left;"><a href="' .$prev["href"]. '">' .$prev["desc"]. '</a></div>' : '') .'
-                '.($nextId ? '<div class="next" style="text-align: right; float: right;"><a href="' .$next["href"]. '">' .$next["desc"].'</a></div>' : '') .'
-                '.($parentId ? '<div class="up"><a href="' .$parent["href"]. '">' .$parent["desc"]. '</a></div>' : '') .'
-                <div class="home"><a href="index.html">'.$this->title.'</a></div>
-            </div><hr/>
-';
+        $toc .= "</ul>\n";
+        return $toc;
     }
 
-    public function footer($id) {
-        return "\n        </td>\n    </tr>\n</table>\n</body>\n</html>\n";
+    public function createLink($for, &$desc = null, $type = Format::SDESC) {
+        $retval = null;
+        if (isset($this->indexes[$for])) {
+            $rsl = $this->indexes[$for];
+            $retval = $rsl["filename"] . "." . $this->ext . '#' . $rsl["docbook_id"];
+            $desc = $rsl["sdesc"] ?: $rsl["ldesc"];
+        }
+        return $retval;
     }
 
-    protected function createNavBar($id) {
-        $navBar =  '<style type="text/css">
-#leftbar {
-	float: left;
-	width: 186px;
-	padding: 5px;
-	font-size: smaller;
-}
-ul.toc {
-	margin: 0px 5px 5px 5px;
-	padding: 0px;
-}
-ul.toc li {
-	font-size: 85%;
-	margin: 1px 0 1px 1px;
-	padding: 1px 0 1px 11px;
-	list-style-type: none;
-	background-repeat: no-repeat;
-	background-position: center left;
-}
-ul.toc li.header {
-	font-size: 115%;
-	padding: 5px 0px 5px 11px;
-	border-bottom: 1px solid #cccccc;
-	margin-bottom: 5px;
-}
-ul.toc li.active {
-	font-weight: bold;
-}
-ul.toc li a {
-	text-decoration: none;
-}
-ul.toc li a:hover {
-	text-decoration: underline;
-}
-</style>
- <ul class="toc">
-  <li class="header home"><a href="index.'.$this->ext.'">'.$this->title.'</a></li>
-';
-        // Fetch ancestors of the current node
-        $ancestors = array();
-        $currentId = $id;
-        while (($currentId = $this->getParent($currentId)) && $currentId != "index") {
-            $desc = "";
-            $link = $this->createLink($currentId, $desc);
-            $ancestors[] = array("desc" => $desc, "link" => $link);
-        }
-        // Show them from the root to the closest parent
-        foreach (array_reverse($ancestors) as $ancestor) {
-        	$navBar .= "  <li class=\"header up\"><a href=\"{$ancestor["link"]}\">{$ancestor["desc"]}</a></li>\n";
-        }
-        // Fetch siblings of the current node
-        $parent = $this->getParent($id);
-        foreach ($this->getChildrens($parent) as $child) {
-            $desc = "";
-            $link = $this->createLink($child, $desc);
-            $active = ($id === $child);
-            $navBar .= "  <li" .($active ? " class=\"active\"" : ""). "><a href=\"$link\">$desc</a></li>\n";
-        }
-        return $navBar . " </ul>\n";
-    }
-
-    
+ 
 /* Functions format_* */     
     public function format_suppressed_tags($open, $name, $attrs, $props) {
         /* Ignore it */
@@ -566,18 +518,21 @@ ul.toc li a:hover {
         }
         return '</div>';
     }
+
     public function format_author($open, $name, $attrs, $props) {
         if ($open) {
             return '<div class="' .$name. ' vcard">';
         }
         return "</div>";
     }
+
     public function format_personname($open, $name, $attrs, $props) {
         if ($open) {
             return '<span class="' .$name. ' fn">';
         }
         return "</span>";
     }
+
     public function format_name($open, $name, $attrs) {
         if ($open) {
             $class = "";
@@ -1324,10 +1279,10 @@ ul.toc li a:hover {
     public function format_qandaset($open, $name, $attrs, $props) {
         if ($open) {
             $node = $this->getReader()->expand();
-            $doc = new DOMDocument;
+            $doc = new \DOMDocument;
             $doc->appendChild($node);
 
-            $xp = new DOMXPath($doc);
+            $xp = new \DOMXPath($doc);
             $xp->registerNamespace("db", Reader::XMLNS_DOCBOOK);
 
             $questions = $xp->query("//db:qandaentry/db:question");
@@ -1378,6 +1333,5 @@ ul.toc li a:hover {
     public function format_email_text($value) {
         return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
     }
-
 
 }
