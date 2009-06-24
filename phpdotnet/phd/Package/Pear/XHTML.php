@@ -144,7 +144,11 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         'qandadiv'              => 'format_div',
         'qandaentry'            => 'format_qandaentry',
         'qandaset'              => 'format_qandaset',
-        'question'              => 'format_question',
+        'question'              => array(
+            /* DEFAULT */          'format_question',
+            'questions'         => 'format_phd_question',
+        ),
+        'questions'             => 'ol',
         'quote'                 => 'format_quote',
         'replaceable'           => 'format_replaceable',
         'refentry'              => 'format_chunk',
@@ -416,6 +420,16 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         }
         $toc .= "</ul>\n";
         return $toc;
+    }
+
+    public function createLink($for, &$desc = null, $type = Format::SDESC) {
+        $retval = null;
+        if (isset($this->indexes[$for])) {
+            $rsl = $this->indexes[$for];
+            $retval = $rsl["filename"] . "." . $this->ext . '#' . $rsl["docbook_id"];
+            $desc = $rsl["sdesc"] ?: $rsl["ldesc"];
+        }
+        return $retval;
     }
 
     /**
@@ -1068,38 +1082,38 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return '</dl>' . $this->restorePara();
     }
 
-    /**
-     * FIXME: This function is a crazy performance killer
-     *
-     * @param resource $stream Stream containing the contents of a Q&A section
-     *
-     * @return string
-     */
-    public function qandaset($stream)
-    {
-        $xml = stream_get_contents($stream);
+    public function format_qandaset($open, $name, $attrs, $props) {
+        if ($open) {
+            $node = $this->getReader()->expand();
+            $doc = new \DOMDocument;
+            $doc->appendChild($node);
 
-        $old = libxml_use_internal_errors(true);
-        $doc = new \DOMDocument('1.0', 'UTF-8');
-        $doc->preserveWhitespace = false;
-        $doc->loadXML(html_entity_decode(str_replace('&', '&amp;amp;', "<div>$xml</div>"), ENT_QUOTES, 'UTF-8'));
-        if ($err = libxml_get_errors()) {
-            echo 'qandaset xml problem in ' . $this->CURRENT_ID . "\n";
-            print_r($err);
-            libxml_clear_errors();
+            $xp = new \DOMXPath($doc);
+            $xp->registerNamespace("db", Reader::XMLNS_DOCBOOK);
+
+            $questions = $xp->query("//db:qandaentry/db:question");
+
+            $xml = '<questions xmlns="' .Reader::XMLNS_PHD. '">';
+            foreach($questions as $node) {
+                $id = $xp->evaluate("ancestor::db:qandaentry", $node)->item(0)->getAttributeNs(Reader::XMLNS_XML, "id");
+
+                /* FIXME: No ID? How can we create an anchor for it then? */
+                if (!$id) {
+                    $id = uniqid("phd");
+                }
+
+                $node->setAttribute("xml:id", $id);
+                $xml .= $doc->saveXML($node);
+            }
+            $xml .= "</questions>";
+
+            $r = new Reader();
+            $r->XML($xml);
+
+            $render = new Render;
+            $render->attach($this);
+            $render->render($r);
         }
-        fclose($stream);
-        libxml_use_internal_errors($old);
-
-        $xpath = new \DOMXPath($doc);
-        $nlist = $xpath->query('//div/dl/dt/strong');
-        $ret = '<div class="qandaset"><ol class="qandaset_questions">';
-        $i = 0;
-        foreach ($nlist as $node) {
-            $ret .= '<li><a href="#' .($this->cchunk['qandaentry'][$i++]). '">' .($node->textContent). '</a></li>';
-        }
-
-        return $ret.'</ol>'.$xml.'</div>';
     }
 
     public function format_qandaentry($open, $name, $attrs)
@@ -1125,6 +1139,15 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
             return '<dt><strong>';
         }
         return '</strong></dt>';
+    }
+
+    public function format_phd_question($open, $name, $attrs, $props) 
+    {
+        if ($open) {
+            $href = $this->createLink($attrs[Reader::XMLNS_XML]["id"]);
+            return '<li><a href="' .$href. '">';
+        }
+        return '</a></li>';
     }
 
     public function format_emphasis($open, $name, $attrs)

@@ -99,22 +99,5 @@ HEADER;
         }
         return $retval;
     }
-
-    public function format_qandaset($open, $name, $attrs) {
-        if ($open) {
-            $this->cchunk["qandaentry"] = array();
-            $this->ostream = $this->fp;
-            $this->fp = fopen("php://temp/maxmemory", "r+");
-            return '';
-        }
-
-        $stream = $this->fp;
-        $this->fp = $this->ostream;
-        unset($this->ostream);
-        rewind($stream);
-
-        return parent::qandaset($stream);
-    }
-
 }
 
