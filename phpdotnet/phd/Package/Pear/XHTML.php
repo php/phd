@@ -380,11 +380,15 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return $this->mytextmap;
     }
 
-    protected function createTOC($id, $lang) {
-        if (!$this->getChildrens($id)) {
+    protected function createTOC($id, $name, $props, $depth = 1, $header = true) {
+        if (!$this->getChildrens($id) || $depth == 0) {
             return "";
         }
-        $toc = '<strong>' . $this->autogen('toc', $lang) . '</strong><ul>';
+        $toc = '';
+        if ($header) {
+            $toc .= '<strong>' . $this->autogen('toc', $props['lang']) . '</strong>';
+        }
+        $toc .= "<ul class=\"chunklist chunklist_$name\">\n"; 
         foreach ($this->getChildrens($id) as $child) {
             $isLDesc = null;
             $isSDesc = null;
@@ -393,24 +397,8 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
             $link = $this->createLink($child);
 
             $list = "";
-            if ($this->cchunk["name"] === "book" || $this->cchunk["name"] === "set") {
-                if ($this->getChildrens($child)) {
-                    $list = "<ul>";
-                    foreach ($this->getChildrens($child) as $subChild) {
-                        $isSubLDesc = null;
-                        $isSubSDesc = null;
-                        $subLong = $this->parse($this->getLongDescription($subChild, $isLDesc));
-                        $subShort = $this->getShortDescription($subChild, $isSubSDesc);
-
-                        $href = $this->createLink($subChild);
-                        if ($isSubLDesc && $isSubSDesc) {
-                            $list .= '<li><a href="' . $href . '">' . $subShort . '</a> — ' . $subLong . "</li>\n";
-                        } else {
-                            $list .= '<li><a href="' . $href . '">' . ($subLong ?: $subShort) . '</a>' . "</li>\n";
-                        }
-                    }
-                    $list .="</ul>";
-                }
+            if ($depth > 1 ) {
+                $list = $this->createTOC($child, $name, $props, $depth -1, false);
             }
             if ($isLDesc && $isSDesc) {
                 $toc .= '<li><a href="' . $link . '">' . $short . '</a> — ' . $long . $list . "</li>\n";
@@ -444,64 +432,6 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return preg_replace('#<p>\\s*</p>#s', '', $str);
     }
 
-    public function format_chunk($open, $name, $attrs, $props)
-    {
-        $id = null;
-        if (isset($attrs[Reader::XMLNS_XML]['id'])) {
-            $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]['id'];
-        }
-        if ($props['isChunk']) {
-            $this->cchunk = $this->dchunk;
-        }
-        if (isset($props['lang'])) {
-            $this->lang = $props['lang'];
-        }
-        if ($name == 'refentry') {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
-                $this->cchunk['verinfo'] = !($attrs[Reader::XMLNS_DOCBOOK]['role'] == 'noversion');
-            } else {
-                $this->cchunk['verinfo'] = true;
-            }
-        }
-        $this->CURRENT_CHUNK = $id;
-        $this->notify(Render::CHUNK, $open ? Render::OPEN : Render::CLOSE);
-        if ($name == 'legalnotice') {
-            if ($open) {
-                return '<div class="' . $name . '" ' . ($id ? "id=\"{$id}\"" : '') . '">';
-            }
-            return "</div>\n";
-        }
-        return false;
-    }
-
-    public function format_container_chunk($open, $name, $attrs, $props)
-    {                
-        if (!isset($attrs[Reader::XMLNS_XML]['id'])) {
-            if ($open) {
-                return "<div class=\"{$name}\">";
-            } else {
-                return "</div>\n";
-            }
-        }
-        $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]['id'];
-        $this->CURRENT_CHUNK = $id;
-        $this->notify(Render::CHUNK, $open ? Render::OPEN : Render::CLOSE);
-        if (!$open) {
-            return "</div>\n";
-        }
-
-        if ($props['isChunk']) {
-            $this->cchunk = $this->dchunk;
-        }
-        $toc = $this->createTOC($id, $props["lang"]);
-        if ($toc) {
-            $toc = "<div class=\"TOC\">\n" . $toc . "</div>\n";
-        }
-        $this->cchunk['container_chunk'] = $toc;
-
-        return "<div class=\"{$name}\" id=\"{$id}\">";        
-    }
-
     public function format_div($open, $name, $attrs, $props)
     {
        if ($open) {
@@ -516,44 +446,7 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return $this->format_container_chunk($open, 'reference', $attrs, $props);
     }
 
-    /**
-     * Formatting for the root element of a chunk.
-     *
-     * @param bool   $open  Whether we should open or close this element.
-     * @param string $name  Name of the element
-     * @param array  $attrs Attributes present for the element. Array keys are the attribute namespaces.
-     * @param array  $props Associative array of additional properties
-     *
-     * @return string
-     */
-    public function format_root_chunk($open, $name, $attrs, $props)
-    {
-        $this->cchunk = $this->dchunk;
-        $this->cchunk["name"] = $name;
-        if(isset($attrs[Reader::XMLNS_XML]["id"])) {
-            $id = $attrs[Reader::XMLNS_XML]["id"];
-        } else {
-            $id = uniqid("phd");
-        }
-
-        if ($open) {
-            $this->CURRENT_CHUNK = $id;
-            $this->notify(Render::CHUNK, Render::OPEN);
-
-            return '<div id="' .$id. '" class="' .$name. '">';
-        }
-
-        $this->CURRENT_CHUNK = $id;
-        $this->notify(Render::CHUNK, Render::CLOSE);
-        /*
-        $toc = "";
-        $toc = $this->createTOC($id, $props["lang"]);
-
-        return $toc."</div>";
-        */
-        return "</div>";
-    }
-
+    
     /**
      * Format a link for an element
      *
@@ -619,20 +512,6 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
             }
         }
         return '</a>';
-    }
-
-    public function format_container_chunk_title($open, $name, $attrs, $props)
-    {        
-        if ($open) {
-            return $props["empty"] ? '' : '<h1>';
-        }
-        $ret = '';
-        if (isset($this->cchunk['container_chunk']) && $this->cchunk['container_chunk']) {
-            $ret = $this->cchunk['container_chunk'];
-            $this->cchunk['container_chunk'] = null;
-        }
-
-        return "</h1>\n" .$ret;        
     }
 
     public function transformFromMap($open, $tag, $name, $attrs, $props)
@@ -1930,6 +1809,125 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
 
     public function format_email_text($value) {
         return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
+    }
+
+//Chunk Functions
+    
+    /**
+     * Formatting for the root element of a chunk.
+     *
+     * @param bool   $open  Whether we should open or close this element.
+     * @param string $name  Name of the element
+     * @param array  $attrs Attributes present for the element. Array keys are the attribute namespaces.
+     * @param array  $props Associative array of additional properties
+     *
+     * @return string
+     */
+    public function format_root_chunk($open, $name, $attrs, $props)
+    {
+        $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]['id'];
+        if ($open) {
+            $this->notify(Render::CHUNK, Render::OPEN);
+            return "<div class=\"{$name}\">";
+        }
+        $this->notify(Render::CHUNK, Render::CLOSE);
+
+        $content = $this->createTOC(
+            $id, $name, $props,
+            isset($attrs[Reader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[Reader::XMLNS_PHD]['toc-depth'] : 1
+        );
+
+        $content .= "</div>\n";
+
+        return $content;
+    }
+
+    public function format_chunk($open, $name, $attrs, $props)
+    {
+        $id = null;
+        if (isset($attrs[Reader::XMLNS_XML]['id'])) {
+            $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]['id'];
+        }
+
+        $isChunk = isset($attrs[Reader::XMLNS_PHD]['chunk']) 
+                    ? $attrs[Reader::XMLNS_PHD]['chunk'] == "true" : true;
+
+        if ($isChunk) {
+            $this->cchunk = $this->dchunk;
+            $this->CURRENT_CHUNK = $id;
+            $this->notify(Render::CHUNK, $open ? Render::OPEN : Render::CLOSE);
+        }
+
+        if (isset($props['lang'])) {
+            $this->lang = $props['lang'];
+        }
+        if ($name == 'refentry') {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+                $this->cchunk['verinfo'] = !($attrs[Reader::XMLNS_DOCBOOK]['role'] == 'noversion');
+            } else {
+                $this->cchunk['verinfo'] = true;
+            }
+        }
+                
+        if ($name == 'legalnotice') {
+            if ($open) {
+                return '<div class="' . $name . '" ' . ($id ? "id=\"{$id}\"" : '') . '">';
+            }
+            return "</div>\n";
+        }
+        return false;
+    }
+
+    public function format_container_chunk($open, $name, $attrs, $props)
+    {
+        if (!isset($attrs[Reader::XMLNS_XML]['id'])) {
+            if ($open) {
+                return "<div class=\"{$name}\">";
+            } else {
+                return "</div>\n";
+            }
+        }
+        $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]['id'];
+
+        $isChunk = isset($attrs[Reader::XMLNS_PHD]['chunk']) 
+                    ? $attrs[Reader::XMLNS_PHD]['chunk'] == "true": true;
+
+        if ($isChunk) {
+            $this->cchunk = $this->dchunk;
+            $this->CURRENT_CHUNK = $id;
+            $this->notify(Render::CHUNK, $open ? Render::OPEN : Render::CLOSE);
+        }
+ 
+        if (!$open) {
+            return "</div>\n";
+        }
+ 
+        $toc = $this->createTOC(
+            $id, $name, $props,
+            isset($attrs[Reader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[Reader::XMLNS_PHD]['toc-depth'] : 1
+        );
+
+        if ($toc) {
+            $toc = "<div class=\"TOC\">\n" . $toc . "</div>\n";
+        }
+        $this->cchunk['container_chunk'] = $toc;
+
+        return "<div class=\"{$name}\" id=\"{$id}\">";
+    }
+
+    public function format_container_chunk_title($open, $name, $attrs, $props)
+    {
+        if ($open) {
+            return $props["empty"] ? '' : '<h1>';
+        }
+        $ret = '';
+        if (isset($this->cchunk['container_chunk']) && $this->cchunk['container_chunk']) {
+            $ret = $this->cchunk['container_chunk'];
+            $this->cchunk['container_chunk'] = null;
+        }
+        return "</h1>\n" .$ret;
     }
 
 }
