@@ -63,10 +63,12 @@ class Index extends Format
             'refpurpose'            => 'format_ldesc',
             'refname'               => 'format_sdesc',
             'titleabbrev'           => 'format_sdesc',
+
     );
     private $mytextmap = array(
     );
     private $chunks    = array();
+    private $isChunk   = array();
     private $previousId = "";
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
@@ -195,8 +197,12 @@ SQL;
 
         $lastChunkId = array_pop($this->ids);
         $parentid = end($this->ids);
-
         $this->currentid = $parentid;
+
+        if (!$isChunk) {
+            return false;
+        }
+
         $lastChunk = $this->nfo[$lastChunkId];
         if (is_array($lastChunk["sdesc"])) {
             $array = true;
@@ -205,6 +211,7 @@ SQL;
             $array = false;
             $sdesc = $lastChunk["sdesc"];
         }
+
         $this->commit .= sprintf(
             "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '');\n",
             $this->db->escapeString($lastChunkId),
@@ -229,6 +236,7 @@ SQL;
                 );
             }
         }
+
     }
 
     public function format_section_chunk($open, $name, $attrs, $props) {
@@ -265,20 +273,24 @@ SQL;
             } else {
                 $id = uniqid("phd");
             }
-            $this->chunks[] = $id;
-            $this->currentchunk = $id;
-            $this->storeInfo($name, $id, $id);
+            $this->isChunk[] = isset($attrs[Reader::XMLNS_PHD]['chunk'])
+                    ? $attrs[Reader::XMLNS_PHD]['chunk'] == "true" : true;
 
-            $this->notify(Render::CHUNK, Render::OPEN);
-
+            if (end($this->isChunk)) {
+                $this->chunks[] = $id;
+                $this->currentchunk = $id;
+                $this->storeInfo($name, $id, $id);
+                $this->notify(Render::CHUNK, Render::OPEN);
+            }
             return false;
         }
-        array_pop($this->chunks);
-        $this->currentchunk = end($this->chunks);
-
-        $this->notify(Render::CHUNK, Render::CLOSE);
-
-        $this->appendID();
+        if (array_pop($this->isChunk)) { 
+            array_pop($this->chunks);
+            $this->currentchunk = end($this->chunks);
+            $this->appendID();
+            $this->notify(Render::CHUNK, Render::CLOSE);
+        }
+ 
         return false;
     }
     public function format_legalnotice_chunk($open, $name, $attrs, $props) {
