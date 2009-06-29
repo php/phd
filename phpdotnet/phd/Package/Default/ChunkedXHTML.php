@@ -1,7 +1,7 @@
 <?php
 namespace phpdotnet\phd;
 
-class Package_Default_ChunkedXHTML extends  Package_Default_XHTML {
+class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
     protected $formatname = "Chunked-XHTML";
     protected $title = "Index";
  

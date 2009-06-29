@@ -92,7 +92,7 @@ class Package_Default_PHP extends Package_Default_ChunkedXHTML {
         return '<?php
 include_once $_SERVER[\'DOCUMENT_ROOT\'] . \'/include/shared-manual.inc\';
 $setup = array(
-    "home"    => array("index.php", "'.$this->title.'"),
+    "home"    => array("index.php", "'.addslashes($this->title).'"),
     "head"    => array("UTF-8", "en"),
     "this"    => array(null, null),
     "up"      => array(null, null),
@@ -205,7 +205,7 @@ manual_header();
                 array("::", "->", "__", "_", '$', '()'),
                 array("-",  "-",  "-",  "-", "",  ''),
                 strtolower($funcname));
-        return isset($this->versions[$funcname]) ? $this->versions[$funcname] : "No version information available, might be only in CVS";
+        return isset($this->versions[$funcname]) ? $this->versions[$funcname] : $this->autogen("unknownversion");
     }
 
     public function acronymInfo($acronym) {

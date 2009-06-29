@@ -73,9 +73,7 @@ HEADER;
         case Render::INIT:
             if ($val) {
                 if (!is_resource($this->fp)) {
-                    static $i = 0;
-                    $i++;                    
-                    $filename = Config::output_dir() . strtolower($this->getFormatName()) . $i . '.' . $this->ext;
+                    $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->ext;
                     $this->fp = fopen($filename, "w+");
                     fwrite($this->fp, $this->header());
                 }
