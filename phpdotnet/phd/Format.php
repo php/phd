@@ -14,6 +14,10 @@ abstract class Format extends ObjectStorage {
     protected $indexes = array();
     protected $childrens = array();
 
+    protected $refs = array();
+    protected $vars = array();
+    protected $classes = array();
+
     private static $autogen = array();
 
     /* PhDHelper */
@@ -37,8 +41,14 @@ abstract class Format extends ObjectStorage {
     public function sortIDs() {
         $this->sqlite->createAggregate("indexes", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 8);
         $this->sqlite->createAggregate("childrens", array($this, "SQLiteChildrens"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->createAggregate("refname", array($this, "SQLiteRefname"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->createAggregate("varname", array($this, "SQLiteVarname"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->createAggregate("classname", array($this, "SQLiteClassname"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->query('SELECT indexes(docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) FROM ids');
         $this->sqlite->query('SELECT childrens(docbook_id, parent_id) FROM ids');
+        $this->sqlite->query('SELECT refname(docbook_id, sdesc) FROM ids WHERE element=\'refentry\'');
+        $this->sqlite->query('SELECT varname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:varentry\'');
+        $this->sqlite->query('SELECT classname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:exceptionref\' OR element=\'phpdoc:classref\'');
     }
 
     public function SQLiteIndex(&$context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next) {
@@ -52,10 +62,6 @@ abstract class Format extends ObjectStorage {
             "previous"   => $previous,
             "next"       => $next
         );
-        if ($element == "refentry") {
-            $this->refs[$sdesc] = $id;
-        }
-
     }
 
     public function SQLiteChildrens(&$context, $index, $id, $parent) {
@@ -63,6 +69,19 @@ abstract class Format extends ObjectStorage {
             $this->childrens[$parent] = array();
         }
         $this->childrens[$parent][] = $id;
+    }
+
+    public function SQLiteRefname(&$context, $index, $id, $sdesc) {
+        $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $sdesc));
+        $this->refs[$ref] = $id;
+    }
+
+    public function SQLiteVarname(&$context, $index, $id, $sdesc) {
+        $this->vars[$sdesc] = $id;
+    }
+
+    public function SQLiteClassname(&$context, $index, $id, $sdesc) {
+        $this->classes[strtolower($sdesc)] = $id;
     }
 
     public static function SQLiteFinal(&$context) {
@@ -74,6 +93,16 @@ abstract class Format extends ObjectStorage {
         foreach($this as $format) {
             $format->update($event, $val);
         }
+    }
+
+    function getRefnameLink($ref) {
+        return isset($this->refs[$ref]) ? $this->refs[$ref] : null;
+    }
+    public function getClassnameLink($class) {
+        return isset($this->classes[$class]) ? $this->classes[$class] : null;
+    }
+    public function getVarnameLink($var) {
+        return isset($this->vars[$var]) ? $this->vars[$var] : null;
     }
     final public function registerElementMap(array $map) {
         $this->elementmap = $map;
