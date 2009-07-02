@@ -31,6 +31,9 @@ class Index extends Format
     'legalnotice'           => 'format_legalnotice_chunk',
     'part'                  => 'format_container_chunk',
     'phpdoc:exception'      => 'format_container_chunk',
+    'phpdoc:exceptionref'   => 'format_container_chunk',
+    'phpdoc:classref'       => 'format_container_chunk',
+    'phpdoc:varentry'       => 'format_varentry_chunk',
     'preface'               => 'format_chunk',
     'refentry'              => 'format_chunk',
     'reference'             => 'format_container_chunk',
@@ -264,6 +267,9 @@ SQL;
         return $this->UNDEF($open, $name, $attrs, $props);
     }
     public function format_container_chunk($open, $name, $attrs, $props) {
+        return $this->format_chunk($open, $name, $attrs, $props);
+    }
+    public function format_varentry_chunk($open, $name, $attrs, $props) {
         return $this->format_chunk($open, $name, $attrs, $props);
     }
     public function format_chunk($open, $name, $attrs, $props) {
