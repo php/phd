@@ -19,40 +19,6 @@ abstract class Format_Abstract_XHTML extends Format {
     protected $mediamanager = null;
     protected $lang = 'en';
 
-    /* Current Chunk variables */
-    protected $cchunk      = array();
-    /* Default Chunk variables */
-    protected $dchunk      = array(
-        "classsynopsis"            => array(
-            "close"                         => false,
-            "classname"                     => false,
-        ),
-        "classsynopsisinfo"        => array(
-            "implements"                    => false,
-            "ooclass"                       => false,
-        ),
-        "examples"                 => 0,
-        "fieldsynopsis"            => array(
-            "modifier"                      => "public",
-        ),
-        "co"                       => 0,
-        "callouts"                 => 0,
-        "segmentedlist"            => array(
-            "seglistitem"                   => 0,
-            "segtitle"                      => array(
-            ),
-        ),
-        "table"                    => false,
-        "procedure"                => false,
-        "mediaobject"              => array(
-            "alt"                           => false,
-        ),
-        "footnote"                 => array(
-        ),
-        "tablefootnotes"           => array(
-        ),
-    );
-
     public function __construct() {
         parent::__construct();
         parent::registerFormatName($this->formatname);
@@ -92,10 +58,6 @@ abstract class Format_Abstract_XHTML extends Format {
                 . $this->highlight(trim($str), $this->role, 'xhtml')
                 . '</div>';
         }
-    }
-
-    public function getChunkInfo() {
-        return $this->cchunk;
     }
 
     /* Functions from PhDThemeXhtml */    

@@ -8,6 +8,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'acronym'               => 'acronym',
         'affiliation'           => 'format_suppressed_tags',
         'alt'                   => 'format_suppressed_tags',
+        'arg'                   => 'format_suppressed_tags',
         'article'               => 'format_container_chunk_top',
         'author'                => array(
             /* DEFAULT */          'format_author',
@@ -18,7 +19,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'application'           => 'span',
         'blockquote'            => 'blockquote',
         'bibliography'          => array(
-            /* DEFAULT */          'div',
+            /* DEFAULT */          'format_div',
             'article'           => 'format_chunk',
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
@@ -26,6 +27,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'book'                  => 'format_container_chunk_top',
         'chapter'               => 'format_container_chunk_top',
         'citetitle'             => 'i',
+        'cmdsynopsis'           => 'format_cmdsynopsis',
         'co'                    => 'format_co',
         'colophon'              => 'format_chunk',
         'copyright'             => 'format_copyright',
@@ -46,7 +48,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'optional'              => 'span',
         'honorific'             => 'span',
         'glossary'              => array(
-            /* DEFAULT */          'div',
+            /* DEFAULT */          'format_div',
             'article'           => 'format_chunk',
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
@@ -96,39 +98,39 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'envar'                 => 'span',
         'errortype'             => 'span',
         'errorcode'             => 'span',
-        'example'               => 'div',
+        'example'               => 'format_div',
         'formalpara'            => 'p',
         'fieldsynopsis'         => array(
             /* DEFAULT */          'format_fieldsynopsis',
-            'entry'             => 'div',
+            'entry'             => 'format_div',
         ),
         'figure'                => 'div',
         'filename'              => 'var',
         'glossentry'            => 'li',
         'glossdef'              => 'p',
-        'glosslist'             => 'ul',
+        'glosslist'             => 'format_itemizedlist',
         'glossterm'             => 'span',
         'holder'                => 'span',
-        'imageobject'           => 'div',
+        'imageobject'           => 'format_div',
         'imagedata'             => 'format_imagedata',
         'important'             => 'format_admonition',
         'index'                 => array(
-            /* DEFAULT */          'div',
+            /* DEFAULT */          'format_div',
             'article'           => 'format_chunk',
             'book'              => 'format_chunk',
             'part'              => 'format_chunk',
         ),
         'info'                  => array(
-            /* DEFAULT */         'div',
+            /* DEFAULT */         'format_div',
             'note'              => 'span',
         ),
-        'informalexample'       => 'div',
-        'informaltable'         => 'table',
-        'indexdiv'              => 'dl',
+        'informalexample'       => 'format_div',
+        'informaltable'         => 'format_table',
+        'indexdiv'              => 'format_dl',
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
-        'itemizedlist'          => 'ul',
-        'legalnotice'           => 'format_chunk',
+        'itemizedlist'          => 'format_itemizedlist',
+        'legalnotice'           => 'format_legalnotice_chunk',
         'listitem'              => array(
             /* DEFAULT */          'li',
             'varlistentry'      => 'format_varlistentry_listitem',
@@ -147,10 +149,10 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'modifier'              => 'span',
         'note'                  => 'format_note',
         'orgname'               => 'span',
-        'othercredit'           => 'div',
+        'othercredit'           => 'format_div',
         'ooclass'               => array(
             /* DEFAULT */          'span',
-            'classsynopsis'     => 'div',
+            'classsynopsis'     => 'format_div',
         ),
         'oointerface'           => array(
             /* DEFAULT */          'span',
@@ -158,7 +160,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         ),
         'interfacename'         => 'span',
         'option'                => 'span',
-        'orderedlist'           => 'ol',
+        'orderedlist'           => 'format_orderedlist',
         'para'                  => array(
             /* DEFAULT */          'p',
             'example'           => 'format_example_content',
@@ -173,9 +175,9 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
             'methodparam'       => 'format_methodparam_parameter',
         ),
         'part'                  => 'format_container_chunk_top',
-        'partintro'             => 'div',
+        'partintro'             => 'format_div',
         'personname'            => 'format_personname',
-        'personblurb'           => 'div',
+        'personblurb'           => 'format_div',
         'phrase'                => 'span',
         'preface'               => 'format_chunk',
         'primaryie'             => 'format_suppressed_tags',
@@ -189,7 +191,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
             'classsynopsisinfo' => 'format_varname',
         ),
         'proptype'              => 'span',
-        'pubdate'               => 'div', /* Docbook-XSL prints "published" */
+        'pubdate'               => 'format_div', /* Docbook-XSL prints "published" */
         'refentry'              => 'format_chunk',
         'refentrytitle'         => 'span',
         'refpurpose'            => 'p',
@@ -204,7 +206,8 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'replaceable'           => 'span',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
-        'sect1'                 => 'format_section_chunk',
+        'screenshot'            => 'format_div',
+        'sect1'                 => 'format_chunk',
         'sect2'                 => 'div',
         'sect3'                 => 'div',
         'sect4'                 => 'div',
@@ -235,7 +238,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'set'                   => 'format_container_chunk_top',
         'setindex'              => 'format_chunk',
         'shortaffil'            => 'format_suppressed_tags',
-        'simplelist'            => 'ul', /* FIXME: simplelists has few attributes that need to be implemented */
+        'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
         'simpara'               => array(
             /* DEFAULT */          'p',
             'note'              => 'span',
@@ -280,6 +283,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
             'indexdiv'          => 'dt',
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
+            'phd:toc'           => 'strong',
             'procedure'         => 'b',
             'refsect1'          => 'h3',
             'refsect2'          => 'h4',
@@ -300,6 +304,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
             'set'               => 'format_container_chunk_top_title',
         ),
         'titleabbrev'           => 'format_suppressed_tags',
+        'token'                 => 'tt',
         'type'                  => 'span',
         'userinput'             => 'format_userinput',
         'uri'                   => 'tt',
@@ -370,7 +375,43 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'titleabbrev'           => 'format_suppressed_text',
     );
 
-    //protected $flags;
+     /* Current Chunk variables */
+    protected $cchunk      = array();
+    /* Default Chunk variables */
+    private $dchunk      = array(
+        "classsynopsis"            => array(
+            "close"                         => false,
+            "classname"                     => false,
+        ),
+        "classsynopsisinfo"        => array(
+            "implements"                    => false,
+            "ooclass"                       => false,
+        ),
+        "examples"                 => 0,
+        "fieldsynopsis"            => array(
+            "modifier"                      => "public",
+        ),
+        "co"                       => 0,
+        "callouts"                 => 0,
+        "segmentedlist"            => array(
+            "seglistitem"                   => 0,
+            "segtitle"                      => array(
+            ),
+        ),
+        "table"                    => false,
+        "procedure"                => false,
+        "mediaobject"              => array(
+            "alt"                           => false,
+        ),
+        "footnote"                 => array(
+        ),
+        "tablefootnotes"           => array(
+        ),        
+        "chunk_id"                 => null,
+        "varlistentry"             => array(
+            "listitems"                     => array(),
+        ),
+    );
 
     public function __construct() {
         parent::__construct();
@@ -382,6 +423,14 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
 
     public function getDefaultTextMap() {
         return $this->mytextmap;
+    }
+
+    public function getChunkInfo() {
+        return $this->cchunk;
+    }
+
+    public function getDefaultChunkInfo() {
+        return $this->dchunk;
     }
 
     protected function createTOC($id, $lang) {
@@ -762,7 +811,6 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         return $this->TEXT($value);
     }
 
-
     public function format_fieldsynopsis($open, $name, $attrs) {
         $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
         if ($open) {
@@ -770,10 +818,12 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         }
         return ";</div>\n";
     }
+
     public function format_fieldsynopsis_modifier_text($value, $tag) {
         $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
         return $this->TEXT($value);
     }
+
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
             $this->params = array("count" => 0, "opt" => 0, "content" => "");
@@ -1164,7 +1214,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         }
         $this->cchunk["table"] = false;
         $str = "";
-        if ($this->cchunk["tablefootnotes"]) {
+        if (isset($this->cchunk["tablefootnotes"]) && $this->cchunk["tablefootnotes"]) {
             $opts = array(Reader::XMLNS_DOCBOOK => array());
 
             $str =  $this->format_tbody(true, "footnote", $opts, $props);
@@ -1332,6 +1382,103 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
 
     public function format_email_text($value) {
         return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
+    }
+
+   /**
+    * Functions from the old XHTMLPhDFormat
+    */
+    public function format_legalnotice_chunk($open, $name, $attrs) {
+        if ($open) {
+            return '<div id="legalnotice">';
+        }
+        return "</div>\n";
+    }
+
+    public function format_div($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<div class="' . $name . '">';
+        }
+        return '</div>';
+    }
+
+    public function format_screen_text($value, $tag) {
+        return nl2br($this->TEXT($value));
+    }
+    
+    /**
+    * Renders  a <tag class=""> tag.
+    *
+    * @return string HTML code
+    */
+    public function format_tag($open, $name, $attrs, $props) {
+        static $arFixes = array(
+            'attribute'     => array('', ''),
+            'attvalue'      => array('"', '"'),
+            'comment'       => array('&lt;!--', '--&gt;'),
+            'element'       => array('', ''),
+            'emptytag'      => array('&lt;', '/&gt;'),
+            'endtag'        => array('&lt;/', '&gt;'),
+            'genentity'     => array('&amp;', ';'),
+            'localname'     => array('', ''),
+            'namespace'     => array('', ''),
+            'numcharref'    => array('&amp;#', ';'),
+            'paramentity'   => array('%', ';'),
+            'pi'            => array('&lt;?', '?&gt;'),
+            'prefix'        => array('', ''),
+            'starttag'      => array('&lt;', '&gt;'),
+            'xmlpi'         => array('&lt;?', '?&gt;'),
+        );
+        if ($props['empty']) {
+            return '';
+        }
+        $class = $attrs['class'];
+        if (!isset($arFixes[$class])) {
+            trigger_error('Unknown tag class "' . $class . '"', E_USER_WARNING);
+            $class = 'starttag';
+        }
+        if (!$open) {
+            return $arFixes[$class][1] . '</code>';
+        }
+
+        return '<code>' . $arFixes[$class][0];
+    }
+    
+    public function format_dl($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<dl class="' . $name . '">';
+        }
+        return '</dl>';
+    }
+
+    public function format_itemizedlist($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<ul class="' . $name . '">';
+        }
+        return '</ul>';
+    }
+
+    public function format_orderedlist($open, $name, $attrs, $props) {
+        if ($open) {
+            $numeration = "1";
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["numeration"])) {
+                switch($attrs[Reader::XMLNS_DOCBOOK]["numeration"]) {
+                case "upperalpha":
+                    $numeration = "A";
+                    break;
+                case "loweralpha":
+                    $numeration = "a";
+                    break;
+                case "upperroman":
+                    $numeration = "I";
+                    break;
+                case "lowerroman":
+                    $numeration = "i";
+                    break;
+                }
+            }
+            return '<ol type="' .$numeration. '">';
+        }
+        return '</ol>';
     }
 
 }
