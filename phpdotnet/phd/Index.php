@@ -37,7 +37,7 @@ class Index extends Format
     'preface'               => 'format_chunk',
     'refentry'              => 'format_chunk',
     'reference'             => 'format_container_chunk',
-    'sect1'                 => 'format_section_chunk',
+    'sect1'                 => 'format_chunk',
     'section'               => array(
         /* DEFAULT */          false,
         'sect1'                => 'format_section_chunk',
