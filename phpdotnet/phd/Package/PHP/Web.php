@@ -78,8 +78,10 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
-            if (!file_exists($this->outputdir . "toc") || is_file($this->outputdir . "toc")) {
-                mkdir($this->outputdir . "toc") or die("Can't create the toc directory");
+            if ($this->getFormatName() == "PHP-Web") {
+                if (!file_exists($this->outputdir . "toc") || is_file($this->outputdir . "toc")) {
+                    mkdir($this->outputdir . "toc") or die("Can't create the toc directory");
+                }
             }
             break;
         case Render::VERBOSE:
@@ -129,8 +131,18 @@ $PARENTS = ' . var_export($parents, true) . ';';
             $incl = 'include_once dirname(__FILE__) ."/toc/' .$parent. '.inc";';
             $up = array(Format::getFilename($parent).$ext, Format::getShortDescription($parent));
 
-            $prev = array(Format::getPrevious($id).$ext, Format::getShortDescription($id));
-            $next = array(Format::getNext($id).$ext, Format::getShortDescription($id));
+            if ($prevId = Format::getPrevious($id)) {
+                $prev = array(
+                    Format::getFilename($prevId).$ext,
+                    Format::getShortDescription($prevId),
+                );
+            }
+            if ($nextId = Format::getNext($id)) {
+                $next = array(
+                    Format::getFilename($nextId).$ext,
+                    Format::getShortDescription($nextId),
+                );
+            }
         }
 
         $setup = array(
