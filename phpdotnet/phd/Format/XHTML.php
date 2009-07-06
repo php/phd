@@ -769,7 +769,7 @@ class Format_XHTML extends Format
     }
     public function format_initializer($open, $name, $attrs) {
         if ($open) {
-            return '<span class="'.$name.'">= ';
+            return '<span class="'.$name.'"> = ';
         }
         return '</span>';
     }

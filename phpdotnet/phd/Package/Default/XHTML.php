@@ -852,7 +852,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
     }
     public function format_initializer($open, $name, $attrs) {
         if ($open) {
-            return '<span class="'.$name.'">=';
+            return '<span class="'.$name.'"> = ';
         }
         return '</span>';
     }

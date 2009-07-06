@@ -985,7 +985,7 @@ class Format_PDF extends Format
 
     public function format_initializer($open, $name, $attrs) {
         if ($open) {
-            $this->pdfDoc->appendText(" =");
+            $this->pdfDoc->appendText(" = ");
         }
         return '';
     }
