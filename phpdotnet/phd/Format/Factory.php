@@ -12,6 +12,12 @@ abstract class Format_Factory
     public function createPHPFormat() {
         trigger_error("This format is not supported by this package", E_USER_ERROR);
     }
+    public function createHowToFormat() {
+        trigger_error("This format is not supported by this package", E_USER_ERROR);
+    }
+    public function createManpageFormat() {
+        trigger_error("This format is not supported by this package", E_USER_ERROR);
+    }
 
     public static final function createFactory()
     {
