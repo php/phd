@@ -11,6 +11,7 @@ class Config
             'xhtml',
             'php',
             'bigxhtml',
+            'howto',
             'manpage',
             'pdf',
         ),
