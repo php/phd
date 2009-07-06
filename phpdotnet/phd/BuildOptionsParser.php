@@ -39,6 +39,7 @@ class BuildOptionsParser extends OptionParser
             switch($val) {
                 case "xhtml":
                 case "bigxhtml":
+                case "howto":
                 case "php":
                 case "manpage":
                 case "pdf":
