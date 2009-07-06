@@ -983,7 +983,7 @@ class PDFPhDFormat extends PhDFormat {
 
     public function format_initializer($open, $name, $attrs) {
         if ($open) {
-            $this->pdfDoc->appendText(" =");
+            $this->pdfDoc->appendText(" = ");
         }
         return '';
     }

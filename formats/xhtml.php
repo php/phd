@@ -767,7 +767,7 @@ class XHTMLPhDFormat extends PhDFormat {
     }
     public function format_initializer($open, $name, $attrs) {
         if ($open) {
-            return '<span class="'.$name.'">= ';
+            return '<span class="'.$name.'"> = ';
         }
         return '</span>';
     }
