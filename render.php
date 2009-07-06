@@ -73,6 +73,12 @@ foreach(range(0, 0) as $i) {
             break;
             case "bigxhtml": // Standalone Big xHTML Format
             $render->attach($factory->createBigXhtmlFormat());
+            break;            
+            case "howto": // Standalone HowTo Format
+            $render->attach($factory->createHowToFormat());
+            break;            
+            case "manpage": // Standalone Manpage Format
+            $render->attach($factory->createManpageFormat());
             break;
         }
     }
