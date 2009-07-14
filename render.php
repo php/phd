@@ -79,6 +79,15 @@ foreach(range(0, 0) as $i) {
             break;            
             case "manpage": // Standalone Manpage Format
             $render->attach($factory->createManpageFormat());
+            break;            
+            case "kdevelop": // Standalone KDevelop Format
+            $render->attach($factory->createKDevelopFormat());
+            break;            
+            case "pdf": // Standalone PDF Format
+            $render->attach($factory->createPDFFormat());
+            break;
+            case "bigpdf": // Standalone BigPDF Format
+            $render->attach($factory->createBigPDFFormat());
             break;
         }
     }

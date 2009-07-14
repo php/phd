@@ -13,7 +13,9 @@ class Config
             'bigxhtml',
             'howto',
             'manpage',
+            'kdevelop',
             'pdf',
+            'bigpdf',
         ),
         'chunk_extra' => array(
             "legalnotice" => true,

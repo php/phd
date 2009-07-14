@@ -42,7 +42,9 @@ class BuildOptionsParser extends OptionParser
                 case "howto":
                 case "php":
                 case "manpage":
+                case "kdevelop":
                 case "pdf":
+                case "bigpdf":
                     if (!in_array($val, $formats)) {
                         $formats[] = $val;
                     }
