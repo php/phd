@@ -62,7 +62,7 @@
   <varlistentry>
    <term>unknownversion</term>
    <listitem>
-    <simpara>Ingen versions oplysninger tilgængelige, findes måske kun i CVS</simpara>
+    <simpara>Ingen versions oplysninger tilgængelige, findes måske kun i SVN</simpara>
    </listitem>
   </varlistentry>
  </variablelist>

@@ -60,7 +60,7 @@
   <varlistentry>
    <term>unknownversion</term>
    <listitem>
-    <simpara>Bir sürüm bilgisi bulunamadı; sadece CVS'de olabilir.</simpara>
+    <simpara>Bir sürüm bilgisi bulunamadı; sadece SVN'de olabilir.</simpara>
    </listitem>
   </varlistentry>
  </variablelist>
