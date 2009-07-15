@@ -60,7 +60,7 @@
   <varlistentry>
    <term>unknownversion</term>
    <listitem>
-    <simpara>No version information available, might only be in CVS</simpara>
+    <simpara>No version information available, might only be in SVN</simpara>
    </listitem>
   </varlistentry>
  </variablelist>
