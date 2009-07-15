@@ -85,7 +85,7 @@ class PhDMediaManager
     protected function copyOver($filename, $newpath)
     {
         $fullpath = $this->output_dir . '/' . $newpath;
-        $fullfilename = $this->relative_source_path . $filename;
+        $fullfilename = $this->relative_source_path . '../' . $filename;
 
         if (file_exists($fullpath)) {
             //no need to copy over again
