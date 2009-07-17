@@ -2,43 +2,20 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_Factory extends Format_Factory {
-
-    public function createBigXhtmlFormat() {
-        return new Package_PHP_BigXHTML();
-    }    
-
-    public function createXhtmlFormat() {
-        return new Package_PHP_ChunkedXHTML();
+    private $formats = array(
+        'xhtml'         => 'Package_PHP_ChunkedXHTML',
+        'bigxhtml'      => 'Package_PHP_BigXHTML',
+        'php'           => 'Package_PHP_Web',
+        'howto'         => 'Package_PHP_HowTo',
+        'manpage'       => 'Package_PHP_Functions',
+        'pdf'           => 'Package_PHP_PDF',
+        'bigpdf'        => 'Package_PHP_BigPDF',
+        'kdevelop'      => 'Package_PHP_KDevelop',
+    );
+    
+    public function __construct() {
+        parent::registerOutputFormats($this->formats);
     }
-
-    public function createPHPFormat() {
-        return new Package_PHP_Web();
-    }    
-
-    public function createHowToFormat() {
-        return new Package_PHP_HowTo();
-    }
-
-    public function createManpageFormat() {
-        return new Package_PHP_Functions();
-    }
-
-    public function createKDevelopFormat() {
-        return new Package_PHP_KDevelop();
-    }
-
-    public function createPDFFormat() {
-        return new Package_PHP_PDF();
-    }
-
-    public function createBigPDFFormat() {
-        return new Package_PHP_BigPDF();
-    }
-/*    
-    public function createChmFormat() {
-        return new Package_PHP_CHM();
-    }
-*/
 }
 
 ?>
