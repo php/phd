@@ -1,36 +1,34 @@
 <?php
 namespace phpdotnet\phd;
 
-abstract class Format_Factory
-{
-    public function createXhtmlFormat() {
-        trigger_error("This format is not supported by this package", E_USER_ERROR);
+abstract class Format_Factory {
+    private $formats = array();
+
+    public final function getOutputFormats() {
+        return array_keys($this->formats);
     }
-    public function createBigXhtmlFormat() {
-        trigger_error("This format is not supported by this package", E_USER_ERROR);
+
+    public final function registerOutputFormats($formats) {
+        $this->formats = $formats;
     }
-    public function createPHPFormat() {
-        trigger_error("This format is not supported by this package", E_USER_ERROR);
-    }
-    public function createHowToFormat() {
-        trigger_error("This format is not supported by this package", E_USER_ERROR);
-    }
-    public function createManpageFormat() {
-        trigger_error("This format is not supported by this package", E_USER_ERROR);
-    }
-    public function createKDevelopFormat() {
-        trigger_error("This format is not supported by this package", E_USER_ERROR);
-    }
-    public function createPDFFormat() {
-        trigger_error("This format is not supported by this package", E_USER_ERROR);
-    }
-    public function createBigPDFFormat() {
+
+    public final function createFormat($format) { 
+        if (isset($this->formats[$format]) && $this->formats[$format]) {
+            $classname = __NAMESPACE__ . "\\" . $this->formats[$format];
+
+            $obj = new $classname();
+            if (!($obj instanceof Format)) {
+                throw new \Exception("All Formats must inherit Format");
+             }
+            return $obj;
+        }
         trigger_error("This format is not supported by this package", E_USER_ERROR);
     }
 
-    public static final function createFactory()
-    {
-        $package = Config::package();
+    public static final function createFactory($package = null) {
+        if ($package === null) {
+            $package = Config::package();
+        }
         $classname = __NAMESPACE__ . "\\Package_" . $package . "_Factory";
 
         $factory = new $classname();
