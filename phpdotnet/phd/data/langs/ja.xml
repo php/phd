@@ -34,6 +34,12 @@
    </listitem>
   </varlistentry>
   <varlistentry>
+   <term>important</term>
+   <listitem>
+    <simpara>重要</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
    <term>by</term>
    <listitem>
     <simpara>著者</simpara>
@@ -49,6 +55,12 @@
    <term>example</term>
    <listitem>
     <simpara>例</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>unknownversion</term>
+   <listitem>
+    <simpara>バージョン情報なし。おそらく SVN 版にしか存在しないでしょう</simpara>
    </listitem>
   </varlistentry>
  </variablelist>
