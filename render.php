@@ -63,33 +63,12 @@ foreach(range(0, 0) as $i) {
         v("Skipping indexing", VERBOSE_INDEXING);
     }
 
+    if (count(Config::output_format()) == 0) {
+        Config::set_output_format($factory->getOutputFormats());
+    }
+ 
     foreach (Config::output_format() as $format) {
-        switch($format) {
-            case "xhtml": // Standalone Chunked xHTML Format
-            $render->attach($factory->createXhtmlFormat());
-            break;
-            case "php": // Standalone phpweb Format
-            $render->attach($factory->createPHPFormat());
-            break;
-            case "bigxhtml": // Standalone Big xHTML Format
-            $render->attach($factory->createBigXhtmlFormat());
-            break;            
-            case "howto": // Standalone HowTo Format
-            $render->attach($factory->createHowToFormat());
-            break;            
-            case "manpage": // Standalone Manpage Format
-            $render->attach($factory->createManpageFormat());
-            break;            
-            case "kdevelop": // Standalone KDevelop Format
-            $render->attach($factory->createKDevelopFormat());
-            break;            
-            case "pdf": // Standalone PDF Format
-            $render->attach($factory->createPDFFormat());
-            break;
-            case "bigpdf": // Standalone BigPDF Format
-            $render->attach($factory->createBigPDFFormat());
-            break;
-        }
+        $render->attach($factory->createFormat($format));
     }
 }
 
