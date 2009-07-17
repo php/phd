@@ -36,21 +36,8 @@ class BuildOptionsParser extends OptionParser
     {
         $formats = array();
         foreach((array)$v as $i => $val) {
-            switch($val) {
-                case "xhtml":
-                case "bigxhtml":
-                case "howto":
-                case "php":
-                case "manpage":
-                case "kdevelop":
-                case "pdf":
-                case "bigpdf":
-                    if (!in_array($val, $formats)) {
-                        $formats[] = $val;
-                    }
-                    break;
-                default:
-                    trigger_error("Format not supported at this time", E_USER_ERROR);
+            if (!in_array($val, $formats)) {
+                $formats[] = $val;
             }
         }
         Config::set_output_format($formats);
@@ -139,7 +126,7 @@ class BuildOptionsParser extends OptionParser
         if (is_null($packageList)) {
             $packageList = array();
             foreach (glob($GLOBALS['ROOT'] . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
-                if (!in_array(basename($item), array('CVS', '.', '..'))) {
+                if (!in_array(basename($item), array('.svn', '.', '..'))) {
                     $packageList[] = basename($item);
                 }
             }
@@ -223,21 +210,16 @@ class BuildOptionsParser extends OptionParser
         if (is_null($packageList)) {
             $packageList = array();
             foreach (glob($GLOBALS['ROOT'] . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
-                if (!in_array(basename($item), array('CVS', '.', '..'))) {
-                    $formats = array();
-                    foreach (glob($item . "/*.php") as $subitem) {
-                        if (strcmp(basename($subitem), "Factory.php") != 0) {
-                            $formats[] = substr(basename($subitem), 0, -4);               
-                        }
-                    }
-                    $packageList[basename($item)] = $formats;
+                if (!in_array(basename($item), array('.svn', '.', '..'))) {
+                   $packageList[] = basename($item);
                 }
             }
         }
         
         echo "Supported packages:\n";
-        foreach ($packageList as $package => $formats) {
-            echo "\t" . $package . "\n\t\t" . implode("\n\t\t", $formats) . "\n";
+        foreach ($packageList as $package) {
+            $factory = Format_Factory::createFactory($package);
+            echo "\t" . $package . "\n\t\t" . implode("\n\t\t", $factory->getOutputFormats()) . "\n";
         }
       
         exit(0);

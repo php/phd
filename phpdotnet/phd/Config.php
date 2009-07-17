@@ -7,16 +7,7 @@ define("PHD_VERSION", "phd-from-cvs");
 class Config
 {
     private static $optionArray = array(
-        'output_format' => array(
-            'xhtml',
-            'php',
-            'bigxhtml',
-            'howto',
-            'manpage',
-            'kdevelop',
-            'pdf',
-            'bigpdf',
-        ),
+        'output_format' => array(),
         'chunk_extra' => array(
             "legalnotice" => true,
             "phpdoc:exception" => true,
