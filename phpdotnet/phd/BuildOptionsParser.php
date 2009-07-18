@@ -126,8 +126,9 @@ class BuildOptionsParser extends OptionParser
         if (is_null($packageList)) {
             $packageList = array();
             foreach (glob($GLOBALS['ROOT'] . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
-                if (!in_array(basename($item), array('.svn', '.', '..'))) {
-                    $packageList[] = basename($item);
+                $baseitem = basename($item);
+                if ($baseitem[0] != '.') {
+                    $packageList[] = $baseitem;
                 }
             }
         }
@@ -210,8 +211,9 @@ class BuildOptionsParser extends OptionParser
         if (is_null($packageList)) {
             $packageList = array();
             foreach (glob($GLOBALS['ROOT'] . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
-                if (!in_array(basename($item), array('.svn', '.', '..'))) {
-                   $packageList[] = basename($item);
+                $baseitem = basename($item);
+                if ($baseitem[0] != '.') {
+                    $packageList[] = $baseitem;
                 }
             }
         }
