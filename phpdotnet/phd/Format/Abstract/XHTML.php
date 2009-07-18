@@ -2,12 +2,6 @@
 namespace phpdotnet\phd;
 
 abstract class Format_Abstract_XHTML extends Format {
-    private $formatname = "XHTML";
-    
-    protected $title; 
-    protected $ext = "html";
-    protected $outputdir;
-    protected $fp;
     public $role = false;
 
     /* XHTMLPhDFormat */
@@ -15,13 +9,11 @@ abstract class Format_Abstract_XHTML extends Format {
     protected $escapedPara = array();
 
     /* PhDThemeXhtml */
-    protected $chunked = true;
     protected $mediamanager = null;
     protected $lang = 'en';
 
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
         $this->postConstruct();
     }
 

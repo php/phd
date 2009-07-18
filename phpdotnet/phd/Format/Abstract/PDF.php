@@ -3,11 +3,7 @@ namespace phpdotnet\phd;
 
 abstract class Format_Abstract_PDF extends Format {
     protected $pdfDoc;
-    protected $formatname;
-    protected $ext;
-    protected $outputdir;
-    protected $chunked;
-    
+   
     public function getPdfDoc() {
         return $this->pdfDoc;
     }

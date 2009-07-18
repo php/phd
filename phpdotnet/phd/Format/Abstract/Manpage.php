@@ -2,11 +2,6 @@
 namespace phpdotnet\phd;
 
 abstract class Format_Abstract_Manpage extends Format {
-    protected $formatname;
-    protected $ext;
-    protected $outputdir;
-    protected $fp = array();
-    protected $chunked;
     public $role = false;
 
     /* If a chunk is being processed */
