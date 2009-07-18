@@ -10,6 +10,12 @@ abstract class Format extends ObjectStorage {
     private $formatname = "UNKNOWN";
     protected $sqlite;
 
+    protected $title;
+    protected $fp = array();
+    protected $ext;
+    protected $outputdir;
+    protected $chunked;
+
     /* Indexing maps */
     protected $indexes = array();
     protected $childrens = array();
@@ -93,9 +99,57 @@ abstract class Format extends ObjectStorage {
         foreach($this as $format) {
             $format->update($event, $val);
         }
+    }   
+
+    public function setTitle($title) {
+        $this->title = $title;
     }
 
-    function getRefnameLink($ref) {
+    public function getTitle() {
+        return $this->title;
+    }
+
+    public function setExt($ext) {
+        $this->ext = $ext;
+    }
+
+    public function getExt() {
+        return $this->ext;
+    }
+
+    public function setOutputDir($outputdir) {
+        $this->outputdir = $outputdir;
+    }
+
+    public function getOutputDir() {
+        return $this->outputdir;
+    }
+
+    public function setChunked($chunked) {
+        $this->chunked = $chunked;
+    }
+
+    public function isChunked() {
+        return $this->chunked;
+    }
+
+    public function setFileStream($stream) {
+        $this->fp = $stream;
+    }
+
+    public function getFileStream() {
+        return $this->fp;
+    }
+
+    public function pushFileStream($stream) {
+        $this->fp[] = $stream;
+    }
+
+    public function popFileStream() {
+        return array_pop($this->fp);
+    }
+
+    public function getRefnameLink($ref) {
         return isset($this->refs[$ref]) ? $this->refs[$ref] : null;
     }
     public function getClassnameLink($class) {
@@ -194,7 +248,7 @@ abstract class Format extends ObjectStorage {
 
 /* {{{ TOC helper functions */
     final public function getFilename($id) {
-        return $this->indexes[$id]["filename"];
+        return isset($this->indexes[$id]["filename"]) ? $this->indexes[$id]["filename"] : false;
     }
     final public function getPrevious($id) {
         return $this->indexes[$id]["previous"];
