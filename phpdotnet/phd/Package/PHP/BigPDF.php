@@ -2,11 +2,9 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_BigPDF extends Package_PHP_PDF {
-    protected $formatname = "PHP-BigPDF";
-
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
+        $this->registerFormatName("PHP-BigPDF");
     }
 
     public function update($event, $val = null) {
@@ -19,7 +17,7 @@ class Package_PHP_BigPDF extends Package_PHP_PDF {
             break;
 
         case Render::INIT:
-            $this->outputdir = Config::output_dir();
+            $this->setOutputDir(Config::output_dir());
             break;
 
         case Render::VERBOSE:
@@ -53,7 +51,7 @@ class Package_PHP_BigPDF extends Package_PHP_PDF {
             $this->resolveLinks($this->cchunk["setname"]);
             $pdfDoc = parent::getPdfDoc();
             v("Writing Full PDF Manual (%s)", $this->cchunk["setname"], VERBOSE_TOC_WRITING);
-            $pdfDoc->saveToFile($this->outputdir . strtolower($this->getFormatName()) . ".pdf");
+            $pdfDoc->saveToFile($this->getOutputDir() . strtolower($this->getFormatName()) . "." . $this->getExt());
             unset($pdfDoc);
         }
         return "";

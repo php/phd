@@ -6,9 +6,6 @@ class Package_PHP_Functions extends Package_Default_Manpage {
     const CLOSE_CHUNK = 0x02; 
     const OPENED_CHUNK = 0x03; 
 
-    protected $formatname = "PHP-Functions";
-    protected $title = "PHP Manual";
-
     protected $elementmap = array(
         'set'                   => 'format_set',
         'refentry'              => 'format_refentry',
@@ -45,10 +42,11 @@ class Package_PHP_Functions extends Package_Default_Manpage {
 
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
+        $this->registerFormatName("PHP-Functions");
+        $this->setTitle("PHP Manual");
+        $this->setExt("3.gz");
+        $this->setChunked(true); 
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
-        $this->ext = "3.gz";
-        $this->chunked = true; 
     }
 
     public function __destruct() {
@@ -72,13 +70,13 @@ class Package_PHP_Functions extends Package_Default_Manpage {
             break;
 
         case Render::INIT:
-            $this->outputdir = $tmp = Config::output_dir() . strtolower($this->getFormatName()) . '/';
-            if (file_exists($tmp)) {
-                if (!is_dir($tmp)) {
+            $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            if (file_exists($this->getOutputDir())) {
+                if (!is_dir($this->getOutputDir())) {
                     v("Output directory is a file?", E_USER_ERROR);
                 }
             } else {
-                if (!mkdir($tmp)) {
+                if (!mkdir($this->getOutputDir())) {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
@@ -99,33 +97,33 @@ class Package_PHP_Functions extends Package_Default_Manpage {
         $index = 0;
         rewind($stream);
 
-        $filename = $this->cchunk["funcname"][$index] . '.' .$this->ext;
-        $gzfile = gzopen($this->outputdir . $filename, "w9");
+        $filename = $this->cchunk["funcname"][$index] . '.' .$this->getExt();
+        $gzfile = gzopen($this->getOutputDir() . $filename, "w9");
 
         gzwrite($gzfile, $this->header($index));
         gzwrite($gzfile, stream_get_contents($stream));
         gzclose($gzfile);
-        v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);
+        v("Wrote %s", $this->getOutputDir() . $filename, VERBOSE_CHUNK_WRITING);
 
         while(isset($this->cchunk["funcname"][++$index])) {
-            $filename = $this->cchunk["funcname"][$index] . '.' . $this->ext;
+            $filename = $this->cchunk["funcname"][$index] . '.' . $this->getExt();
             rewind($stream);
             // Replace the default function name by the alternative one
             $content = preg_replace('/'.$this->cchunk["funcname"][0].'/',
                 $this->cchunk["funcname"][$index], stream_get_contents($stream), 1);
 
-            $gzfile = gzopen($this->outputdir . $filename, "w9");
+            $gzfile = gzopen($this->getOutputDir() . $filename, "w9");
 
             gzwrite($gzfile, $this->header($index));
             gzwrite($gzfile, $content);
             gzclose($gzfile);
 
-            v("Wrote %s", $this->outputdir . $filename, VERBOSE_CHUNK_WRITING);
+            v("Wrote %s", $this->getOutputDir() . $filename, VERBOSE_CHUNK_WRITING);
         }
     }
 
     public function close() {
-        foreach ($this->fp as $fp) {
+        foreach ($this->getFileStream() as $fp) {
             fclose($fp);
         }
     }
@@ -135,7 +133,7 @@ class Package_PHP_Functions extends Package_Default_Manpage {
             return 0;
         switch($this->isChunk) {
         case self::CLOSE_CHUNK:
-            $stream = array_pop($this->fp);
+            $stream = $this->popFileStream();
             $retval = (trim($data) === "") ? false : fwrite($stream, $data);
             $this->writeChunk($stream);
             fclose($stream);
@@ -146,13 +144,13 @@ class Package_PHP_Functions extends Package_Default_Manpage {
             break;
 
         case self::OPEN_CHUNK:
-            $this->fp[] = fopen("php://temp/maxmemory", "r+");
+            $this->pushFileStream(fopen("php://temp/maxmemory", "r+"));
             $this->isChunk = self::OPENED_CHUNK;
 
         case self::OPENED_CHUNK:
-            $stream = end($this->fp);
+            $stream = $this->getFileStream();
             // Remove whitespace nodes
-            $retval = ($data != "\n" && trim($data) === "") ? false : fwrite($stream, $data);
+            $retval = ($data != "\n" && trim($data) === "") ? false : fwrite(end($stream), $data);
             return $retval;
         default:
             return 0;

@@ -2,12 +2,11 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_HowTo extends Package_PHP_Web {
-    protected $formatname = "PHP-HowTo";
-    protected $title = "PHP Manual";
     private $nav = "";
 
     public function __construct() {
         parent::__construct();
+        $this->registerFormatName("PHP-HowTo");
     }
 
     public function __destruct() {
@@ -22,17 +21,17 @@ class Package_PHP_HowTo extends Package_PHP_Web {
             $siblings = Format::getChildrens($parent);
             if ($nextId = Format::getNext($id)) {
                 $next = array(
-                    Format::getFilename($nextId) . '.' . $this->ext,
+                    Format::getFilename($nextId) . '.' . $this->getExt(),
                     Format::getShortDescription($nextId),
                 );
             }
             if ($prevId = Format::getPrevious($id)) {
                 $prev = array(
-                    Format::getFilename($prevId) . '.' . $this->ext,
+                    Format::getFilename($prevId) . '.' . $this->getExt(),
                     Format::getShortDescription($prevId),
                 );
             }
-            $up = array($parent . '.' . $this->ext, Format::getShortDescription($parent));
+            $up = array($parent . '.' . $this->getExt(), Format::getShortDescription($parent));
         }
 
         $this->nav = <<<NAV

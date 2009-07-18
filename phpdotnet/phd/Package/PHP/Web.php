@@ -2,18 +2,16 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_Web extends Package_PHP_XHTML {
-    protected $formatname = "PHP-Web";
-    protected $title = "PHP Manual";
-
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
-        $this->chunked = true;
-        $this->ext = "php";
+        $this->registerFormatName("PHP-Web");
+        $this->setTitle("PHP Manual");
+        $this->setChunked(true);
+        $this->setExt("php");
     }
 
     public function close() {
-        foreach ($this->fp as $fp) {
+        foreach ($this->getFileStream() as $fp) {
             fclose($fp);
         }
     }
@@ -28,25 +26,26 @@ class Package_PHP_Web extends Package_PHP_XHTML {
 
     		return;
     	} elseif ($this->flags & Render::CLOSE) {
-            $fp = array_pop($this->fp);
+            $fp = $this->popFileStream();
             fwrite($fp, $data);
             $this->writeChunk($this->CURRENT_CHUNK, $fp);
             fclose($fp);
 
             $this->flags ^= Render::CLOSE;
         } elseif ($this->flags & Render::OPEN) {
-            $this->fp[] = $fp = fopen("php://temp/maxmemory", "r+");
+            $fp = fopen("php://temp/maxmemory", "r+");
             fwrite($fp, $data);
+            $this->pushFileStream($fp);
 
             $this->flags ^= Render::OPEN;
         } else {
-            $fp = end($this->fp);
-            fwrite($fp, $data);
+            $fp = $this->getFileStream();
+            fwrite(end($fp), $data);
         }
     }
 
     public function writeChunk($id, $fp) {
-        $filename = $this->outputdir . $id . '.' .$this->ext;
+        $filename = $this->getOutputDir() . $id . '.' .$this->getExt();
 
         rewind($fp);
         file_put_contents($filename, $this->header($id));
@@ -68,19 +67,19 @@ class Package_PHP_Web extends Package_PHP_XHTML {
             break;
 
         case Render::INIT:
-            $this->outputdir = $tmp = Config::output_dir() . strtolower($this->getFormatName()) . '/';
-            if (file_exists($tmp)) {
-                if (!is_dir($tmp)) {
+            $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            if (file_exists($this->getOutputDir())) {
+                if (!is_dir($this->getOutputDir())) {
                     v("Output directory is a file?", E_USER_ERROR);
                 }
             } else {
-                if (!mkdir($tmp)) {
+                if (!mkdir($this->getOutputDir())) {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
             if ($this->getFormatName() == "PHP-Web") {
-                if (!file_exists($this->outputdir . "toc") || is_file($this->outputdir . "toc")) {
-                    mkdir($this->outputdir . "toc") or die("Can't create the toc directory");
+                if (!file_exists($this->getOutputDir() . "toc") || is_file($this->getOutputDir() . "toc")) {
+                    mkdir($this->getOutputDir() . "toc") or die("Can't create the toc directory");
                 }
             }
             break;
@@ -91,7 +90,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
     }
 
     public function header($id) {
-        $ext = '.' . $this->ext;
+        $ext = '.' . $this->getExt();
         $parent = Format::getParent($id);
         $filename = "toc" . DIRECTORY_SEPARATOR . $parent . ".inc";
         $up = array("href" => null, "desc" => null);
@@ -100,7 +99,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         $next = $prev = array(null, null);
         if ($parent && $parent != "ROOT") {
             $siblings = Format::getChildrens($parent);
-            if (!file_exists($this->outputdir . $filename)) {
+            if (!file_exists($this->getOutputDir() . $filename)) {
                 $toc = array();
 
                 foreach($siblings as $sid) {
@@ -123,9 +122,9 @@ class Package_PHP_Web extends Package_PHP_XHTML {
 $TOC = ' . var_export($toc, true) . ';
 $PARENTS = ' . var_export($parents, true) . ';';
 
-                file_put_contents($this->outputdir . $filename, $content);
+                file_put_contents($this->getOutputDir() . $filename, $content);
 
-                v("Wrote TOC (%s)", $this->outputdir . $filename, VERBOSE_TOC_WRITING);
+                v("Wrote TOC (%s)", $this->getOutputDir() . $filename, VERBOSE_TOC_WRITING);
             }
 
             $incl = 'include_once dirname(__FILE__) ."/toc/' .$parent. '.inc";';
@@ -146,7 +145,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
         }
 
         $setup = array(
-            "home" => array('index'.$ext, $this->title),
+            "home" => array('index'.$ext, $this->getTitle()),
             "head" => array("UTF-8", $this->lang),
             "this" => array($id.$ext, Format::getShortDescription($id)),
             "up"   => $up,

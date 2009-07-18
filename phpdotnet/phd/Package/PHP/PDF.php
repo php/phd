@@ -2,9 +2,6 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_PDF extends Package_Default_PDF {    
-    protected $formatname = "PHP-PDF";
-    protected $title = "PHP Manual";
-
     protected $elementmap = array(
         'article'               => 'format_tocnode_newpage',
         'appendix'              => 'format_tocnode_newpage',
@@ -80,7 +77,6 @@ class Package_PHP_PDF extends Package_Default_PDF {
 
     /* Common properties for all functions pages */
     protected $bookName = "";
-    protected $outputdir = "";
 
     /* Current Chunk settings */
     protected $cchunk          = array();
@@ -97,8 +93,8 @@ class Package_PHP_PDF extends Package_Default_PDF {
 
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
-    
+        $this->registerFormatName("PHP-PDF");
+        $this->setTitle("PHP Manual");
     }
 
     public function __destruct() {}
@@ -117,8 +113,8 @@ class Package_PHP_PDF extends Package_Default_PDF {
 
         case Render::INIT:
             if (!class_exists("HaruDoc")) die ("PDF output needs libharu & haru/pecl extensions... Please install them and start PhD again.\n");
-            $this->outputdir = Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
-            if(!file_exists($this->outputdir) || is_file($this->outputdir)) mkdir($this->outputdir) or die("Can't create the cache directory.\n");
+            $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR);
+            if(!file_exists($this->getOutputDir()) || is_file($this->getOutputDir())) mkdir($this->getOutputDir()) or die("Can't create the cache directory.\n");
             break;
         case Render::VERBOSE:
         	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
@@ -163,7 +159,7 @@ class Package_PHP_PDF extends Package_Default_PDF {
             $this->resolveLinks($this->cchunk["bookname"]);
             $pdfDoc = parent::getPdfDoc();
             v("Writing PDF Manual (%s)", $this->cchunk["bookname"], VERBOSE_TOC_WRITING);
-            $pdfDoc->saveToFile($this->outputdir . $this->toValidName($this->cchunk["bookname"]) . ".pdf");
+            $pdfDoc->saveToFile($this->getOutputDir() . $this->toValidName($this->cchunk["bookname"]) . "." . $this->getExt());
             unset($pdfDoc);
         }
         return false;

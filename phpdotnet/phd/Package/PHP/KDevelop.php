@@ -2,9 +2,6 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_KDevelop extends Format {
-    protected $formatname = "PHP-KDevelop";
-    protected $title = "PHP Manual";
-
     const DEFAULT_HREF = "http://www.php.net/manual/en/";
 
     protected $elementmap = array(
@@ -58,13 +55,6 @@ class Package_PHP_KDevelop extends Format {
         'refname'               => 'format_refname_text',
     );
 
-    // Kdevelop TOC file
-    protected $tocStream;
-    // TOC Output directory
-    protected $tocDir;
-
-    protected $ext;
-
     protected $currentEntryName;
     protected $index = array();
 
@@ -77,13 +67,14 @@ class Package_PHP_KDevelop extends Format {
 
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
-        $this->ext = "php";
+        $this->registerFormatName("PHP-KDevelop");
+        $this->setTitle("PHP Manual");
+        $this->setExt("php");
     }
 
     public function __destruct() {
         self::footerToc();
-        fclose($this->tocStream);
+        fclose($this->getFileStream());
     }
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {}
@@ -103,8 +94,8 @@ class Package_PHP_KDevelop extends Format {
             break;
         case Render::INIT:
             if ($val) {
-                $this->tocDir = Config::output_dir();
-                $this->tocStream = fopen($this->tocDir . strtolower($this->getFormatName()), "w");
+                $this->setOutputDir(Config::output_dir());
+                $this->setFileStream(fopen($this->getOutputDir() . strtolower($this->getFormatName()), "w"));
                 self::headerToc();
             } 
             break;
@@ -119,15 +110,15 @@ class Package_PHP_KDevelop extends Format {
     }
 
     protected function headerToc() {
-        fwrite($this->tocStream, "<!DOCTYPE kdeveloptoc>\n<kdeveloptoc>\n<title>" . $this->title . "</title>\n" .
+        fwrite($this->getFileStream(), "<!DOCTYPE kdeveloptoc>\n<kdeveloptoc>\n<title>" . $this->getTitle() . "</title>\n" .
           "<base href=\"" . self::DEFAULT_HREF . "\"/>\n");
     }
 
     protected function footerToc() {
-        fwrite($this->tocStream, "<index>\n");
+        fwrite($this->getFileStream(), "<index>\n");
         foreach ($this->index as $name => $url)
-            fwrite($this->tocStream, "<entry name=\"{$name}\" url=\"{$url}\"/>\n");
-        fwrite($this->tocStream, "</index>\n</kdeveloptoc>\n");
+            fwrite($this->getFileStream(), "<entry name=\"{$name}\" url=\"{$url}\"/>\n");
+        fwrite($this->getFileStream(), "</index>\n</kdeveloptoc>\n");
     }
 
     public function format_tocsect1($open, $name, $attrs) {
@@ -136,11 +127,11 @@ class Package_PHP_KDevelop extends Format {
         $hasChild = (count(Format::getChildrens($id)) > 0);
         if ($open) {
             $name = htmlspecialchars(Format::getShortDescription($id), ENT_QUOTES, 'UTF-8');
-            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->ext;
-            fwrite($this->tocStream, "<tocsect1 name=\"{$name}\" url=\"{$url}\"" . ($hasChild ? "" : "/") . ">\n");
+            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->getExt();
+            fwrite($this->getFileStream(), "<tocsect1 name=\"{$name}\" url=\"{$url}\"" . ($hasChild ? "" : "/") . ">\n");
         } else {
             if ($hasChild)
-                fwrite($this->tocStream, "</tocsect1>\n");
+                fwrite($this->getFileStream(), "</tocsect1>\n");
         }
         return "";
     }
@@ -151,8 +142,8 @@ class Package_PHP_KDevelop extends Format {
         $hasChild = (count(Format::getChildrens($id)) > 0);
         if ($open) {
             $name = htmlspecialchars(Format::getShortDescription($id), ENT_QUOTES, 'UTF-8');
-            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->ext;
-            fwrite($this->tocStream, "    <tocsect2 name=\"{$name}\" url=\"{$url}\"/>\n");
+            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->getExt();
+            fwrite($this->getFileStream(), "    <tocsect2 name=\"{$name}\" url=\"{$url}\"/>\n");
         }
         return "";
     }
@@ -164,7 +155,7 @@ class Package_PHP_KDevelop extends Format {
             $this->currentEntryName = null;
         }
         if (!$open && $this->currentEntryName) {
-            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->ext;
+            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->getExt();
             $this->index[$this->currentEntryName] = $url;
         }
         return "";
