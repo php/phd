@@ -2,13 +2,11 @@
 namespace phpdotnet\phd;
 
 class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
-    protected $formatname = "Chunked-XHTML";
-    protected $title = "Index";
- 
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
-        $this->chunked = true;
+        $this->registerFormatName("Chunked-XHTML");
+        $this->setTitle("Index");
+        $this->setChunked(true);
     }
 
     public function __destruct() {
@@ -21,25 +19,26 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
 
     		return;
     	} elseif ($this->flags & Render::CLOSE) {
-            $fp = array_pop($this->fp);
+            $fp = $this->popFileStream();
             fwrite($fp, $data);
             $this->writeChunk($this->CURRENT_CHUNK, $fp);
             fclose($fp);
 
             $this->flags ^= Render::CLOSE;
         } elseif ($this->flags & Render::OPEN) {
-            $this->fp[] = $fp = fopen("php://temp/maxmemory", "r+");
+            $fp = fopen("php://temp/maxmemory", "r+");
             fwrite($fp, $data);
+            $this->pushFileStream($fp);
 
             $this->flags ^= Render::OPEN;
         } else {
-            $fp = end($this->fp);
-            fwrite($fp, $data);
+            $fp = $this->getFileStream();
+            fwrite(end($fp), $data);
         }
     }
 
     public function writeChunk($id, $fp) {
-        $filename = $this->outputdir . $id . '.' .$this->ext;
+        $filename = $this->getOutputDir() . $id . '.' . $this->getExt();
 
         rewind($fp);
         file_put_contents($filename, $this->header($id));
@@ -48,7 +47,7 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
     }
 
     public function close() {
-        foreach ($this->fp as $fp) {
+        foreach ($this->getFileStream() as $fp) {
             fclose($fp);
         }
     }
@@ -67,13 +66,13 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
             break;
 
         case Render::INIT:
-            $this->outputdir = $tmp = Config::output_dir() . strtolower($this->getFormatName()) . '/';
-            if (file_exists($tmp)) {
-                if (!is_dir($tmp)) {
+            $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            if (file_exists($this->getOutputDir())) {
+                if (!is_dir($this->getOutputDir())) {
                     v("Output directory is a file?", E_USER_ERROR);
                 }
             } else {
-                if (!mkdir($tmp)) {
+                if (!mkdir($this->getOutputDir())) {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
@@ -91,15 +90,15 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
         $prev = $next = $parent = array("href" => null, "desc" => null);
 
         if ($parentId = $this->getParent($id)) {
-            $parent = array("href" => $this->getFilename($parentId) . '.' .$this->ext,
+            $parent = array("href" => $this->getFilename($parentId) . '.' .$this->getExt(),
                 "desc" => $this->getShortDescription($parentId));
         }
         if ($prevId = Format::getPrevious($id)) {
-            $prev = array("href" => Format::getFilename($prevId) . '.' .$this->ext,
+            $prev = array("href" => Format::getFilename($prevId) . '.' .$this->getExt(),
                 "desc" => $this->getShortDescription($prevId));
         }
         if ($nextId = Format::getNext($id)) {
-            $next = array("href" => Format::getFilename($nextId) . '.' .$this->ext,
+            $next = array("href" => Format::getFilename($nextId) . '.' .$this->getExt(),
                 "desc" => $this->getShortDescription($nextId));
         }
         $navBar = $this->createNavBar($id);
@@ -109,7 +108,7 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' .$lang. '" lang="' .$lang. '">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>'.$this->title.': '.$title.'</title>
+    <title>'.$this->getTitle().': '.$title.'</title>
 </head>
 <body>
 <table width="100%">
@@ -122,7 +121,7 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
                 '.($prevId ? '<div class="prev" style="text-align: left; float: left;"><a href="' .$prev["href"]. '">' .$prev["desc"]. '</a></div>' : '') .'
                 '.($nextId ? '<div class="next" style="text-align: right; float: right;"><a href="' .$next["href"]. '">' .$next["desc"].'</a></div>' : '') .'
                 '.($parentId ? '<div class="up"><a href="' .$parent["href"]. '">' .$parent["desc"]. '</a></div>' : '') .'
-                <div class="home"><a href="index.html">'.$this->title.'</a></div>
+                <div class="home"><a href="index.html">'.$this->getTitle().'</a></div>
             </div><hr/>
 ';
     }
@@ -168,7 +167,7 @@ ul.toc li a:hover {
 }
 </style>
  <ul class="toc">
-  <li class="header home"><a href="index.'.$this->ext.'">'.$this->title.'</a></li>
+  <li class="header home"><a href="index.'.$this->getExt().'">'.$this->getTitle().'</a></li>
 ';
         // Fetch ancestors of the current node
         $ancestors = array();

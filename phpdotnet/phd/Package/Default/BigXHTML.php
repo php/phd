@@ -2,13 +2,11 @@
 namespace phpdotnet\phd;
 
 class Package_Default_BigXHTML extends Package_Default_XHTML {
-    protected $formatname = "Big-XHTML";
-    protected $title = "Index";
-
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
-        $this->chunked = false;
+        $this->registerFormatName("Big-XHTML");
+        $this->setTitle("Index");
+        $this->setChunked(false);
     }
 
     public function __destruct() {
@@ -21,16 +19,16 @@ class Package_Default_BigXHTML extends Package_Default_XHTML {
             return;
         }
         if ($this->flags & Render::CLOSE) {
-            fwrite($this->fp, $data);
+            fwrite($this->getFileStream(), $data);
 
             /* Append footer */
-            fwrite($this->fp, $this->footer());
+            fwrite($this->getFileStream(), $this->footer());
             $this->flags ^= Render::CLOSE;
         } elseif ($this->flags & Render::OPEN) {
-            fwrite($this->fp, "\n".$data);
+            fwrite($this->getFileStream(), "\n".$data);
             $this->flags ^= Render::OPEN;
         } else {
-            fwrite($this->fp, $data);
+            fwrite($this->getFileStream(), $data);
         }
 
     }
@@ -42,7 +40,7 @@ class Package_Default_BigXHTML extends Package_Default_XHTML {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>$this->title</title>
+    <title>$this->getTitle()</title>
 </head>
 <body>
 HEADER;
@@ -53,8 +51,8 @@ HEADER;
     }
 
     public function close() {
-        fwrite($this->fp, $this->footer(true));
-        fclose($this->fp);
+        fwrite($this->getFileStream(), $this->footer(true));
+        fclose($this->getFileStream());
     }
 
     public function update($event, $val = null) {
@@ -72,10 +70,10 @@ HEADER;
 
         case Render::INIT:
             if ($val) {
-                if (!is_resource($this->fp)) {
-                    $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->ext;
-                    $this->fp = fopen($filename, "w+");
-                    fwrite($this->fp, $this->header());
+                if (!is_resource($this->getFileStream())) {
+                    $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->getExt();
+                    $this->setFileStream(fopen($filename, "w+"));
+                    fwrite($this->getFileStream(), $this->header());
                 }
             } 
             break;

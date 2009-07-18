@@ -69,19 +69,16 @@ class Package_Default_PHP extends Package_Default_ChunkedXHTML {
         ),
 
     );
-    protected $formatname = "PHP";
-    protected $title = "Index";
     private   $acronyms = array();
     private   $versions = array();
     private   $refname  = "";
 
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
-        $this->ext = "php";
+        $this->registerFormatName("PHP");
+        $this->setExt("php");
         $this->versions = self::generateVersionInfo(Config::phpweb_version_filename());
         $this->acronyms = self::generateAcronymInfo(Config::phpweb_acronym_filename());
-
     }
 
     public function __destruct() {
@@ -92,7 +89,7 @@ class Package_Default_PHP extends Package_Default_ChunkedXHTML {
         return '<?php
 include_once $_SERVER[\'DOCUMENT_ROOT\'] . \'/include/shared-manual.inc\';
 $setup = array(
-    "home"    => array("index.php", "'.addslashes($this->title).'"),
+    "home"    => array("index.php", "'.addslashes($this->getTitle()).'"),
     "head"    => array("UTF-8", "en"),
     "this"    => array(null, null),
     "up"      => array(null, null),

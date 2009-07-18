@@ -415,6 +415,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
 
     public function __construct() {
         parent::__construct();
+        $this->setExt("html");
     }
 
     public function getDefaultElementMap() {

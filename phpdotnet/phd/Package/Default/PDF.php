@@ -297,7 +297,7 @@ abstract class Package_Default_PDF extends Format_Abstract_PDF {
 
     public function __construct() {
         parent::__construct();
-        $this->ext = "pdf";
+        $this->setExt("pdf");
         $this->pdfDoc = new PdfWriter(); 
     }
 
