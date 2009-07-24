@@ -303,7 +303,7 @@ abstract class Package_Default_Manpage extends Format_Abstract_Manpage {
     }
 
     public function format_parameter_text($value, $tag) {
-        return "\n\\fI$" . $value . "\\fP";
+        return "\n\\fI" . ((isset($value[0]) && $value[0] == "$") ? "" : "$") . $value . "\\fP";
     }
 
     public function format_parameter_term_text($value, $tag) {
