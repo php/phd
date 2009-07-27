@@ -2,18 +2,23 @@ PhD - PHP DocBook
 Copyright(c) 2007-2009 The PHP Documentation Team
 All Rights Reserved.
 
-Warning : you'll need Windows to build CHM files.
+Warning: you'll need Windows to build CHM files.
 
-First, you will need to get the last CVS version of the PhD renderer from the repository:
-	cvs -d:pserver:cvsread@cvs.php.net/repository co phd
+First, you will need to get the last SVN version of the PhD renderer from the repository:
+	svn checkout http://svn.php.net/repository/phd/trunk phd
 
 Then, you need to get the documentation:
-	cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc
+	svn checkout http://svn.php.net/repository/phpdoc/modules/doc-en
 
 If you want to render a translated documentation instead:
-	cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc-{lang}
-		where {lang} is the ISO Code of the wished language
-		(see http://www.unicode.org/unicode/onlinedat/languages.html)
+	svn checkout http://svn.php.net/repository/phpdoc/modules/doc-{lang}
+where {lang} is the ISO 639-1 Code of the desired language.
+(see http://www.sil.org/iso639-3/codes.asp for a list of codes)
+e.g. 'pt' for Portuguese, or pt_BR for Brazillian Portuguese.
+The example above would change to:
+	svn checkout http://svn.php.net/repository/phpdoc/modules/doc-pt
+or
+	svn checkout http://svn.php.net/repository/phpdoc/modules/doc-pt_BR
 
 To render the documentation:
 	#1) cd {PHPDOC_PATH}
@@ -35,3 +40,4 @@ Done ! The compiled CHM file is located on "{RENDER_PATH}\chm\php_manual_{lang}.
 Please read the README file for further information.
 
 - The PHP Documentation team
+
