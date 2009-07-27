@@ -67,7 +67,7 @@ class ManpagePhDFormat extends PhDFormat {
         'paramdef'              => 'format_suppressed_tags',
         'parameter'             => array(
             /* DEFAULT */          'format_suppressed_tags',
-            'methodparam'       => 'format_suppressed_tags',
+            'methodparam'       => 'format_parameter_method',
             'code'              => '\\fI',
         ),
         'productname'           => 'format_suppressed_tags',
@@ -273,7 +273,14 @@ class ManpagePhDFormat extends PhDFormat {
     }
 
     public function format_parameter_text($value, $tag) {
-        return "\n\\fI$" . $value . "\\fP";
+        return "\n\\fI" . ((isset($value[0]) && $value[0] == "$") ? "" : "$") . $value . "\\fP";
+    }
+
+    public function format_parameter_method($open, $name, $attrs, $props) {
+        if ($open && isset($attrs[PhDReader::XMLNS_DOCBOOK]["role"]) && $attrs[PhDReader::XMLNS_DOCBOOK]["role"] == "reference") {
+            $this->cchunk['methodsynopsis']['params'][count($this->cchunk['methodsynopsis']['params'])-1]['reference'] = true;
+        }
+        return "";
     }
 
     public function format_parameter_term_text($value, $tag) {
@@ -349,7 +356,9 @@ class ManpagePhDFormat extends PhDFormat {
                 "optional" => $opt,
                 "type" => "",
                 "name" => "",
-                "initializer" => "");
+                "initializer" => "",
+                "reference" => false,
+            );
         }
         return "";
     }
@@ -360,7 +369,9 @@ class ManpagePhDFormat extends PhDFormat {
                 "optional" => false,
                 "type" => "void",
                 "name" => "",
-                "initializer" => "");
+                "initializer" => "",
+                "reference" => false,
+            );
         }
         return "";
     }
@@ -400,9 +411,14 @@ class ManpagePhDFormat extends PhDFormat {
             return "\n.br";
         $params = array();
         // write the formatted synopsis
-        foreach ($this->cchunk['methodsynopsis']['params'] as $parameter)
-            array_push( $params, ($parameter['optional'] ? "[" : "") . $parameter['type'] .
-                ($parameter['name'] ? " \\fI$" . $parameter['name'] . "\\fP" : "") . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "") . ($parameter['optional'] ? "]" : "") );
+        foreach ($this->cchunk['methodsynopsis']['params'] as $parameter) {
+            array_push($params, ($parameter['optional'] ? "[" : "") 
+                        . $parameter['type'] 
+                        . ($parameter['reference'] ? " \\fI&\\fP" : " ") 
+                        . ($parameter['name'] ? "\\fI$" . $parameter['name'] . "\\fP" : "") 
+                        . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "") 
+                        . ($parameter['optional'] ? "]" : "") );
+        }
         $ret = "\n(" . join($params, ", ") . ")";
         $this->cchunk['methodsynopsis']['params'] = array();
 
