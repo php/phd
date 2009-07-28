@@ -214,6 +214,13 @@ class Render extends ObjectStorage
                 break;
                     /* }}} */
 
+                case \XMLReader::PI:
+                $target = $r->name;
+                $data = $r->value;
+                foreach ($this as $format) {
+                    $format->parsePI($target, $data);
+                }
+                break;
             }
         }
 
