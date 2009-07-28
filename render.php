@@ -20,7 +20,7 @@ define("NO_SQLITE", false);
 
 /* If no docbook file was passed, die */
 if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
-    trigger_error("No '.manual.xml' file was given. Specify it on the command line with --docbook.", E_USER_ERROR);
+    trigger_error("No Docbook file given. Specify it on the command line with --docbook.", E_USER_ERROR);
 }
 if (!file_exists(Config::output_dir())) {
     v("Creating output directory..", E_USER_NOTICE);
@@ -49,13 +49,11 @@ foreach(range(0, 0) as $i) {
     if (Index::requireIndexing()) {
         v("Indexing...", VERBOSE_INDEXING);
         // Create indexer
-        $format = new Index();
-        $render->attach($format);
+        $format = $render->attach(new Index);
 
         $reader->open(Config::xml_file());
         $render->render($reader);
 
-        $format->commit();
         $render->detach($format);
 
         v("Indexing done", VERBOSE_INDEXING);

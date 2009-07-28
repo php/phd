@@ -152,7 +152,11 @@ SQL;
                 }
                 break;
             case Render::FINALIZE:
-                $this->db->exec("INSERT INTO indexing (time) VALUES ('" . time() . "')");
+                $retval = $this->db->exec("BEGIN TRANSACTION; INSERT INTO indexing (time) VALUES ('" . time() . "'); COMMIT");
+                $this->commit();
+                if ($this->db->lastErrorCode()) {
+                    trigger_error($this->db->lastErrorMsg(), E_USER_WARNING);
+                }
                 break;
         }
     }
@@ -329,14 +333,6 @@ SQL;
 
         }
     }
-    
-    /*public function format_refname($open, $name, $attrs, $props) {
-        if ($open) {
-            $s = $this->getReader()->readInnerXml();
-            $s = str_replace(array("_", "::", "->"), array("-", "-", "-"), $s);
-            $this->nfo[$this->currentid]["sdesc"][] = strtolower($s);
-        }
-    }*/
     
     public function commit() {
         if (isset($this->commit) && $this->commit) {

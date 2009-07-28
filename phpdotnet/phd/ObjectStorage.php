@@ -18,6 +18,7 @@ class ObjectStorage extends \SplObjectStorage
 			);
 		}
 		parent::attach($obj, $inf);
+		return $obj;
 	}
 	final protected static function setReader(Reader $r) {
 		self::$r[] = $r;
