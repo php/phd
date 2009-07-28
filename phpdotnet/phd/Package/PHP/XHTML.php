@@ -19,6 +19,7 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
         'refpurpose'            => 'format_refpurpose',
         'set'                   => 'format_root_chunk',
         'setindex'              => 'format_chunk',
+        'methodname'            => 'format_suppressed_tags',
         'title'                 => array(
             /* DEFAULT */          'h1',
             'article'           => 'format_container_chunk_title',
@@ -60,7 +61,7 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
         'interfacename'         => 'format_classname_text',
         'refname'               => 'format_refname_text', 
 
-        'methodname'            => array(
+        'methodname'            => 
             /* DEFAULT */          'format_function_text',
 //            'constructorsynopsis' => array(
 //                /* DEFAULT */      'format_function_text',
@@ -74,7 +75,7 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
 //                /* DEFAULT */      'format_function_text',
 //                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
 //            ),
-        ),
+        //),
 //        'type'                  => array(
 //            /* DEFAULT */          'format_type_text',
 //            'classsynopsisinfo' => false,
