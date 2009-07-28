@@ -305,7 +305,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         ),
         'titleabbrev'           => 'format_suppressed_tags',
         'token'                 => 'tt',
-        'type'                  => 'span',
+        'type'                  => 'format_spaced_span',
         'userinput'             => 'format_userinput',
         'uri'                   => 'tt',
         'variablelist'          => 'format_variablelist',
@@ -1390,6 +1390,12 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
     }
 
+    public function format_spaced_span($open, $name, $attrs, $props) {
+        if ($open) {
+            return " " . parent::transformFromMap($open, "span", $name, $attrs, $props);
+        }
+        return parent::transformFromMap($open, "span", $name, $attrs, $props) . " ";
+    }
    /**
     * Functions from the old XHTMLPhDFormat
     */
