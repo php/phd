@@ -413,8 +413,13 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         ),
     );
 
+    protected $pihandlers = array(
+        'dbhtml'        => 'PI_DBHTMLHandler',
+    );
+
     public function __construct() {
         parent::__construct();
+        $this->registerPIHandlers($this->pihandlers);
         $this->setExt("html");
     }
 
