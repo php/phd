@@ -70,6 +70,9 @@ class Index extends Format
     );
     private $mytextmap = array(
     );
+    private $pihandlers = array(
+        'dbhtml'            => 'PI_DBHTMLHandler',
+    );
     private $chunks    = array();
     private $isChunk   = array();
     private $previousId = "";
@@ -110,6 +113,7 @@ class Index extends Format
                 if ($value) {
                     $this->registerElementMap(static::getDefaultElementMap());
                     $this->registerTextMap(static::getDefaultTextMap());
+                    $this->registerPIHandlers($this->pihandlers);
                 }
                 break;
             case Render::INIT:
@@ -291,12 +295,16 @@ SQL;
             return false;
         }
         if (array_pop($this->isChunk)) { 
-            array_pop($this->chunks);
+            $lastchunk = array_pop($this->chunks);
             $this->currentchunk = end($this->chunks);
+            $dbhtml = $this->getPIHandler("dbhtml");
+            if ($dbhtml->getAttribute("filename")) {
+                $this->nfo[$lastchunk]["filename"] = $dbhtml->getAttribute("filename");
+                $dbhtml->setAttribute("filename", false);
+            }
             $this->appendID();
             $this->notify(Render::CHUNK, Render::CLOSE);
         }
- 
         return false;
     }
     public function format_legalnotice_chunk($open, $name, $attrs, $props) {

@@ -38,7 +38,13 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
     }
 
     public function writeChunk($id, $fp) {
-        $filename = $this->getOutputDir() . $id . '.' . $this->getExt();
+        $dbhtml = $this->getPIHandler("dbhtml");
+        if ($dbhtml->getAttribute("filename")) {
+            $filename = $this->getOutputDir() . $dbhtml->getAttribute("filename") . "." . $this->getExt();
+            $dbhtml->setAttribute("filename", false);
+        } else {
+            $filename = $this->getOutputDir() . $id . '.' . $this->getExt();
+        }
 
         rewind($fp);
         file_put_contents($filename, $this->header($id));
