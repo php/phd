@@ -16,10 +16,12 @@ abstract class Format extends ObjectStorage {
     protected $outputdir;
     protected $chunked;
 
+    /*Processing Instructions Handlers*/
+    private $pihandlers = array();
+
     /* Indexing maps */
     protected $indexes = array();
     protected $childrens = array();
-
     protected $refs = array();
     protected $vars = array();
     protected $classes = array();
@@ -43,6 +45,23 @@ abstract class Format extends ObjectStorage {
     abstract public function createLink($for, &$desc = null, $type = Format::SDESC);
     abstract public function appendData($data);
     abstract public function update($event, $value = null);
+
+    public final function parsePI($target, $data) {
+        if (isset($this->pihandlers[$target])) {
+            return $this->pihandlers[$target]->parse($target, $data);
+        }
+    }
+
+    public final function registerPIHandlers($pihandlers) {
+        foreach ($pihandlers as $target => $classname) {
+            $class = __NAMESPACE__ . "\\" . $classname;
+            $this->pihandlers[$target] = new $class($this);
+        } 
+    }
+
+    public function getPIHandler($target) {
+        return $this->pihandlers[$target];
+    }
 
     public function sortIDs() {
         $this->sqlite->createAggregate("indexes", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 8);
