@@ -11,14 +11,13 @@ class BuildOptionsParser extends OptionParser
     {
         return array(
             "format:"      => "f:",        // The format to render (xhtml, pdf...)
-            //"theme:"       => "t:",        // The theme to render (phpweb, bightml..)
             "noindex"      => "I",         // Re-index or load from cache
             "docbook:"     => "d:",        // The Docbook XML file to render from (.manual.xml)
             "output:"      => "o:",        // The output directory
             "partial:"     => "p:",        // The ID to render (optionally ignoring its children)
             "skip:"        => "s:",        // The ID to skip (optionally skipping its children too)
             "verbose:"     => "v",         // Adjust the verbosity level
-            "list::"       => "l::",       // List supported packages/formats
+            "list"         => "l",         // List supported packages/formats
             "lang::"       => "L:",        // Language hint (used by the CHM)
             "color:"       => "c:",        // Use color output if possible
             'highlighter:' => 'g:',        // Class used as source code highlighter
@@ -260,12 +259,7 @@ class BuildOptionsParser extends OptionParser
     {
         $color = Config::phd_info_color();
         $output = Config::phd_info_output();
-        if (isset($GLOBALS['base_revision'])) {
-            $rev = preg_replace('/\$Re[v](?:ision)?(: ([\d.]+) ?)?\$$/e', "'\\1' == '' ? '??' : '\\2'", $GLOBALS['base_revision']);
-            fprintf($output, "%s\n", term_color("PhD Version: " . PHD_VERSION . " (" . $rev . ")", $color));
-        } else {
-            fprintf($output, "%s\n", term_color("PhD Version: " . PHD_VERSION, $color));
-        }
+        fprintf($output, "%s\n", term_color("PhD Version: " . Config::VERSION, $color));
         fprintf($output, "%s\n", term_color("Copyright(c) 2007-2009 The PHP Documentation Group", $color));
         exit(0);
     }
@@ -276,7 +270,7 @@ class BuildOptionsParser extends OptionParser
     }
     public function option_help($k, $v)
     {
-        echo "PhD version: " .PHD_VERSION;
+        echo "PhD version: " .Config::VERSION;
         echo "\nCopyright (c) 2007-2009 The PHP Documentation Group\n
   -v
   --verbose <int>            Adjusts the verbosity level
@@ -295,9 +289,8 @@ class BuildOptionsParser extends OptionParser
   -s <id[=bool]>
   --skip <id[=bool]>         The ID to skip, optionally skipping its children
                              chunks (default to true; skip children)
-  -l <packages/formats>
-  --list <packages/formats>  Print out the supported packages/formats
-                             (default: both)
+  -l
+  --list                     Print out the supported packages and formats
   -o <directory>
   --output <directory>       The output directory (default: .)
   -L <language>
@@ -314,7 +307,7 @@ class BuildOptionsParser extends OptionParser
   --help                     This help
 
 Most options can be passed multiple times for greater affect.
-NOTE: Long options are only supported using PHP5.3\n";
+";
         exit(0);
     }
 }
@@ -352,20 +345,8 @@ abstract class OptionParser
     }
 }
 
-/* {{{ Workaround/fix for Windows prior to PHP5.3 */
-if (!function_exists('getopt')) {
-    //Use PEAR's PHP_Compat package
-    @include_once('PHP/Compat/Function/getopt.php');
-}
-if (!function_exists('getopt')) {
-    function getopt($short, $long) {
-        global $argv;
-        printf("I'm sorry, you are running an operating system that does not support getopt()\n");
-        printf("Please install PEAR's PHP_Compat package.");
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
 
-        return array();
-    }
-}
-/* }}} */
-
-?>

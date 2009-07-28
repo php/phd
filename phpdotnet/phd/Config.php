@@ -2,10 +2,9 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-define("PHD_VERSION", "phd-from-cvs");
-
 class Config
 {
+    const VERSION = "1.0.0-dev";
     private static $optionArray = array(
         'output_format' => array(),
         'chunk_extra' => array(
@@ -23,15 +22,15 @@ class Config
         ),
         'skip_ids' => array(
         ),
-        'color_output' => false,
+        'color_output' => true,
         'output_dir' => './output/',
         'intermediate_output_dir' => '.',
         'php_error_output' => NULL,
-        'php_error_color' => false,
+        'php_error_color' => "01;31",
         'user_error_output' => NULL,
-        'user_error_color' => false,
+        'user_error_color' => "01;33",
         'phd_info_output' => NULL,
-        'phd_info_color' => false,
+        'phd_info_color' => "01;32",
         'highlighter'    => "phpdotnet\\phd\\Highlighter",
         'package' => 'Default',
     );
