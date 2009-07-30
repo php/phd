@@ -31,21 +31,14 @@ Rendering the documentations for the first time:
 		#2) svn checkout http://svn.php.net/repository/phpdoc/modules/doc-en
 		#3) cd doc-en\doc-base
 		#4) php configure.php
-		(Using PHP5.3:)
-			#5) phd --docbook c:\doc-en\doc-base\.manual.xml
-		(Using PHP prior to 5.3:)
-			#5-old) phd c:\doc-en\doc-base\
+    #5) phd --docbook c:\doc-en\doc-base\.manual.xml
 
 	*NIX:
 		#1) cd ~
 		#2) svn checkout http://svn.php.net/repository/phpdoc/modules/doc-en
 		#3) cd doc-en/doc-base
 		#4) php configure.php
-		(Using PHP5.3:)
-			#5) phd --docbook ~/doc-en/doc-base/.manual.xml
-		(Using PHP prior to 5.3:)
-			#5-old) phd -d ~/doc-en/doc-base/.manual.xml
-		NOTE: The short form works on PHP5.3 too
+    #5) phd --docbook ~/doc-en/doc-base/.manual.xml
 
 
 This will create
