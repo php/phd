@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-class BuildOptionsParser extends OptionParser
+class BuildOptionsParser
 {
     public $docbook = false;
     public $verbose = 0;
@@ -120,19 +120,8 @@ class BuildOptionsParser extends OptionParser
     }
 
     public function option_package($k, $v) {
-        static $packageList = NULL;
         
-        if (is_null($packageList)) {
-            $packageList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
-                $baseitem = basename($item);
-                if ($baseitem[0] != '.') {
-                    $packageList[] = $baseitem;
-                }
-            }
-        }
-        
-        if (in_array($v, $packageList)) {
+        if (in_array($v, Config::getSupportedPackages())) {
             Config::set_package($v);
         } else {
             trigger_error("Invalid Package", E_USER_ERROR);
@@ -205,22 +194,12 @@ class BuildOptionsParser extends OptionParser
     }
     public function option_list($k, $v)
     {
-        static $packageList = NULL;
-        
-        if (is_null($packageList)) {
-            $packageList = array();
-            foreach (glob($GLOBALS['ROOT'] . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
-                $baseitem = basename($item);
-                if ($baseitem[0] != '.') {
-                    $packageList[] = $baseitem;
-                }
-            }
-        }
+        $packageList = Config::getSupportedPackages();
         
         echo "Supported packages:\n";
         foreach ($packageList as $package) {
-            $factory = Format_Factory::createFactory($package);
-            echo "\t" . $package . "\n\t\t" . implode("\n\t\t", $factory->getOutputFormats()) . "\n";
+            $formats = Format_Factory::createFactory($package)->getOutputFormats();
+            echo "\t" . $package . "\n\t\t" . implode("\n\t\t", $formats) . "\n";
         }
       
         exit(0);
@@ -311,10 +290,6 @@ Most options can be passed multiple times for greater affect.
         exit(0);
     }
 }
-
-abstract class OptionParser
-{
-    abstract public function getOptionList();
 
     public function handlerForOption($opt)
     {

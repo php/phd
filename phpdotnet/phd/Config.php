@@ -54,6 +54,20 @@ class Config
         }
         return isset(self::$optionArray[$name]) ? self::$optionArray[$name] : NULL;
     }
+
+    public static function getSupportedPackages() {
+        static $packageList = array();
+        if (!$packageList) {
+            foreach (glob(__DIR__ . "/Package/*", GLOB_ONLYDIR) as $item) {
+                $baseitem = basename($item);
+                if ($baseitem[0] != '.') {
+                    $packageList[] = $baseitem;
+                }
+            }
+        }
+        return $packageList;
+    }
+
 }
 
 Config::set_php_error_output(STDERR);
