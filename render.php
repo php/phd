@@ -2,7 +2,6 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-$ROOT = __DIR__;
 function autoload($name)
 {
     $file = str_replace(array('\\', '_'), '/', $name) . '.php';
@@ -17,8 +16,6 @@ require_once 'phpdotnet/phd/functions.php';
 
 $optparser = new BuildOptionsParser();
 $optparser->getopt();
-
-define("NO_SQLITE", false);
 
 /* If no docbook file was passed, die */
 if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
@@ -35,7 +32,7 @@ if (!file_exists(Config::output_dir())) {
 
 Config::init(array(
     "verbose"                 => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING),
-    "lang_dir"                => $ROOT . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR 
+    "lang_dir"                => __DIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR 
                                     . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR 
                                     . "langs" . DIRECTORY_SEPARATOR,
     "phpweb_version_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
