@@ -4,11 +4,6 @@ namespace phpdotnet\phd;
 
 /* {{{ PhD error & message handler */
 
-// FC For PHP5.3
-if (!defined("E_DEPRECATED")) {
-    define("E_DEPRECATED",               E_RECOVERABLE_ERROR           << 1);
-}
-
 // PhD verbose flags
 define('VERBOSE_INDEXING',               E_DEPRECATED                  << 1);
 define('VERBOSE_FORMAT_RENDERING',       VERBOSE_INDEXING              << 1);
@@ -80,6 +75,8 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
 
     // Recursive protection
     if ($recursive) {
+        // Thats bad.. lets print a backtrace right away
+        debug_print_backtrace();
         // Fallback to the default errorhandler
         return false;
     }
