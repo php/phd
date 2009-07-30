@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 abstract class Package_Default_PDF extends Format_Abstract_PDF {
     private $elementmap = array( /* {{{ */
@@ -1133,4 +1134,8 @@ abstract class Package_Default_PDF extends Format_Abstract_PDF {
 
 }
 
-?>
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

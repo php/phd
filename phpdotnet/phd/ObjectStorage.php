@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class ObjectStorage extends \SplObjectStorage
 {
@@ -30,4 +31,10 @@ class ObjectStorage extends \SplObjectStorage
 		return array_pop(self::$r);
 	}
 }
+
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
 

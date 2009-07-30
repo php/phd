@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Theme_PEAR_BigHTML extends Theme_PEAR
 {
@@ -66,4 +67,10 @@ class Theme_PEAR_BigHTML extends Theme_PEAR
         return parent::qandaset($stream);
     }
 }
+
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
 

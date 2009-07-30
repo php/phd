@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Package_PHP_Functions extends Package_Default_Manpage {
     const OPEN_CHUNK = 0x01; 
@@ -210,4 +211,8 @@ class Package_PHP_Functions extends Package_Default_Manpage {
 
 }
 
-?>
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

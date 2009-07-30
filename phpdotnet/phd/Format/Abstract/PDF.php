@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 abstract class Format_Abstract_PDF extends Format {
     protected $pdfDoc;
@@ -906,4 +907,8 @@ class PdfWriter {
     }
 }
 
-?>
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Package_PHP_PDF extends Package_Default_PDF {    
     protected $elementmap = array(
@@ -312,4 +313,8 @@ class Package_PHP_PDF extends Package_Default_PDF {
 
 }
 
-?>
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

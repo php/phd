@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Format_Manpage extends Format
 {
@@ -562,3 +563,9 @@ class Format_Manpage extends Format
         return str_replace(array("::", "->", "()"), array(".", ".", ""), $functionName);
     }
 }
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 abstract class Theme_PEAR_Base extends Theme_XHTML
 {
@@ -1019,3 +1020,9 @@ abstract class Theme_PEAR_Base extends Theme_XHTML
         return "</td></tr>\n";
     }
 }
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

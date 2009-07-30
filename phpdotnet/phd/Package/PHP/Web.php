@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Package_PHP_Web extends Package_PHP_XHTML {
     public function __construct() {
@@ -174,3 +175,9 @@ manual_header();
     }
 
 }
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

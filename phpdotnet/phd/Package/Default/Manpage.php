@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 abstract class Package_Default_Manpage extends Format_Abstract_Manpage {
      private $elementmap = array( /* {{{ */
@@ -608,4 +609,8 @@ abstract class Package_Default_Manpage extends Format_Abstract_Manpage {
   
 }
 
-?>
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

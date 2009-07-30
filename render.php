@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 $ROOT = __DIR__;
 function autoload($name)
@@ -80,4 +81,10 @@ foreach(range(0, 0) as $i) {
 }
 
 v("Finished rendering", VERBOSE_FORMAT_RENDERING);
+
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
 

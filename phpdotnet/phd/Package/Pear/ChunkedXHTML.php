@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Package_Pear_ChunkedXHTML extends Package_Pear_XHTML {
     protected $formatname = "Pear-Chunked-XHTML";
@@ -193,4 +194,8 @@ NAV;
 
 }
 
-?>
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

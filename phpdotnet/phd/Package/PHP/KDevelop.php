@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Package_PHP_KDevelop extends Format {
     const DEFAULT_HREF = "http://www.php.net/manual/en/";
@@ -167,3 +168,9 @@ class Package_PHP_KDevelop extends Format {
     }
 
 }
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

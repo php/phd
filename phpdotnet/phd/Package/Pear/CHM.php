@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Package_Pear_CHM extends Package_Pear_ChunkedXHTML {
     const DEFAULT_FONT = "Arial,10,0";
@@ -390,3 +391,9 @@ $1</head>',
     }
 
 }
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

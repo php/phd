@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 abstract class Package_PHP_XHTML extends Package_Default_XHTML {
     private $myelementmap = array(
@@ -468,4 +469,8 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
 
 }
 
-?>
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

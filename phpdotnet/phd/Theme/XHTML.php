@@ -146,4 +146,4 @@ abstract class Theme_XHTML extends Theme
  * vim<600: sw=4 ts=4
  */
 
-?>
+

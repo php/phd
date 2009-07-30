@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Package_PHP_BigXHTML extends Package_PHP_XHTML {
     public function __construct() {
@@ -95,4 +96,8 @@ HEADER;
 
 }
 
-?>
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+

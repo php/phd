@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Package_Pear_BigXHTML extends Package_Pear_XHTML {
     protected $formatname = "Pear-BigXHTML";
@@ -100,4 +101,10 @@ HEADER;
         return $retval;
     }
 }
+
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
 

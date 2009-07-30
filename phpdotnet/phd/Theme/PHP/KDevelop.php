@@ -1,5 +1,6 @@
 <?php
 namespace phpdotnet\phd;
+/* $Id$ */
 
 class Theme_PHP_KDevelop extends Theme
 {
@@ -159,3 +160,9 @@ class Theme_PHP_KDevelop extends Theme
     }
 
 }
+
+/*
+* vim600: sw=4 ts=4 syntax=php et
+* vim<600: sw=4 ts=4
+*/
+
