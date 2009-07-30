@@ -5,34 +5,35 @@ namespace phpdotnet\phd;
 class Config
 {
     const VERSION = "1.0.0-dev";
+
     private static $optionArray = array(
-        'output_format' => array(),
-        'chunk_extra' => array(
-            "legalnotice" => true,
+        'output_format'     => array(),
+        'chunk_extra'       => array(
+            "legalnotice"      => true,
             "phpdoc:exception" => true,
         ),
-        'index' => true,
-        'xml_root' => '.',
-        'xml_file' => "./.manual.xml",
-        'lang_dir' => './',
-        'language' => 'en',
-        'verbose' => VERBOSE_DEFAULT,
-        'date_format' => "H:i:s",
-        'render_ids' => array(
+        'index'             => true,
+        'xml_root'          => '.',
+        'xml_file'          => "./.manual.xml",
+        'lang_dir'          => './',
+        'language'          => 'en',
+        'verbose'           => VERBOSE_DEFAULT,
+        'date_format'       => "H:i:s",
+        'render_ids'        => array(
         ),
-        'skip_ids' => array(
+        'skip_ids'          => array(
         ),
-        'color_output' => true,
-        'output_dir' => './output/',
+        'color_output'      => true,
+        'output_dir'        => './output/',
         'intermediate_output_dir' => '.',
-        'php_error_output' => NULL,
-        'php_error_color' => "01;31",
+        'php_error_output'  => NULL,
+        'php_error_color'   => "01;31",
         'user_error_output' => NULL,
-        'user_error_color' => "01;33",
-        'phd_info_output' => NULL,
-        'phd_info_color' => "01;32",
-        'highlighter'    => "phpdotnet\\phd\\Highlighter",
-        'package' => 'Default',
+        'user_error_color'  => "01;33",
+        'phd_info_output'   => NULL,
+        'phd_info_color'    => "01;32",
+        'highlighter'       => "phpdotnet\\phd\\Highlighter",
+        'package'           => 'Default',
     );
 
     public static function init(array $a) {
