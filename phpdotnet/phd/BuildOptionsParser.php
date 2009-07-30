@@ -289,7 +289,6 @@ Most options can be passed multiple times for greater affect.
 ";
         exit(0);
     }
-}
 
     public function handlerForOption($opt)
     {
