@@ -1217,7 +1217,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["table"] = true;
-            return '<table border="5">';
+            return '<table class="doctable ' .$name. '">';
         }
         $this->cchunk["table"] = false;
         $str = "";
@@ -1246,9 +1246,9 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
     public function format_tgroup($open, $name, $attrs) {
         if ($open) {
             Format::tgroup($attrs[Reader::XMLNS_DOCBOOK]);
-            return "<colgroup>\n";
+            return '';
         }
-        return "</colgroup>\n";
+        return '';
     }
     private function parse_table_entry_attributes($attrs) {
         $retval = 'align="' .$attrs["align"]. '"';
@@ -1290,16 +1290,27 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
     }
     public function format_row($open, $name, $attrs) {
         if ($open) {
+            $idstr = '';
+            if (isset($attrs[Reader::XMLNS_XML]['id'])) {
+                $idstr = ' id="'. $attrs[Reader::XMLNS_XML]['id']. '"';
+            }
             Format::initRow();
             $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
-            return '<tr valign="' .$valign. '">';
+            return '<tr'.$idstr.' valign="' .$valign. '">';
         }
         return "</tr>\n";
     }
-    public function format_th_entry($open, $name, $attrs) {
+    public function format_th_entry($open, $name, $attrs, $props) {
+        if ($props["empty"]) {
+            return '<th class="empty">&nbsp;</th>';
+        }
         if ($open) {
             $colspan = Format::colspan($attrs[Reader::XMLNS_DOCBOOK]);
-            return '<th colspan="' .((int)$colspan). '">';
+            if ($colspan == 1) {
+                return '<th>';
+            } else {
+                return '<th colspan="' .((int)$colspan). '">';
+            }
         }
         return '</th>';
     }
@@ -1329,7 +1340,10 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
 
             $rowspan = Format::rowspan($dbattrs);
             $moreattrs = self::parse_table_entry_attributes($dbattrs);
-            return $retval. '<td colspan="' .((int)$colspan). '" rowspan="' .((int)$rowspan). '" ' .$moreattrs. '>';
+
+            $sColspan = $colspan == 1 ? '' : ' colspan="' .((int)$colspan) . '"';
+            $sRowspan = $rowspan == 1 ? '' : ' rowspan="' .((int)$rowspan). '"';
+            return $retval. '<td' . $sColspan . $sRowspan . ' ' . $moreattrs. '>';
         }
         return "</td>";
     }
