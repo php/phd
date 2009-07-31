@@ -57,26 +57,9 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
     );
     private $mytextmap = array(
         'acronym'               => 'format_acronym_text',
-        'classname'             => 'format_classname_text',
         'function'              => 'format_function_text',
         'interfacename'         => 'format_classname_text',
         'refname'               => 'format_refname_text', 
-
-        'methodname'            => 
-            /* DEFAULT */          'format_function_text',
-//            'constructorsynopsis' => array(
-//                /* DEFAULT */      'format_function_text',
-//                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
-//            ),
-//            'methodsynopsis'    => array(
-//                /* DEFAULT */      'format_function_text',
-//                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
-//            ),
-//            'destructorsynopsis' => array(
-//                /* DEFAULT */      'format_function_text',
-//                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
-//            ),
-        //),
 //        'type'                  => array(
 //            /* DEFAULT */          'format_type_text',
 //            'classsynopsisinfo' => false,
@@ -284,6 +267,11 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
             return '<acronym title="' .$resolved. '">' .$value. '</acronym>';
         }
         return '<acronym>'.$value.'</acronym>';
+    }
+
+    public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
+        $display_value = parent::format_classsynopsis_methodsynopsis_methodname_text($value, $tag);
+        return $this->format_function_text($value, $tag, $display_value);
     }
 
     public function format_function_text($value, $tag, $display_value = null) {

@@ -34,7 +34,6 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'copyright'             => 'format_copyright',
         'date'                  => 'p',
         'editor'                => 'format_editor',
-        'function'              => 'b',
         'email'                 => 'format_suppressed_tags',
         'firstname'             => 'format_name',
         'footnote'              => 'format_footnote',
@@ -357,6 +356,21 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
             'ooclass'          => array(
                 /* DEFAULT */     false,
                 'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
+            ),
+        ),
+        'methodname'           => array(
+            /* DEFAULT */         false,
+            'constructorsynopsis' => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'methodsynopsis'    => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'destructorsynopsis' => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
             ),
         ),
         'para'                  => array(
@@ -811,6 +825,26 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
             return "}</div>";
         }
         return "</div>";
+    }
+
+    public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
+        $value = $this->TEXT($value);
+        if ($this->cchunk["classsynopsis"]["classname"] === false) {
+            return $value;
+        }
+        if (strpos($value, '::')) {
+            $explode = '::';
+        } elseif (strpos($value, '->')) {
+            $explode = '->';
+        } else {
+            return $value;
+        }
+
+        list($class, $method) = explode($explode, $value);
+        if ($class !== $this->cchunk["classsynopsis"]["classname"]) {
+            return $value;
+        }
+        return $method;
     }
 
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
