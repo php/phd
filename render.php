@@ -41,35 +41,38 @@ Config::init(array(
 
 $render = new Render();
 $reader = new Reader();
-$factory = Format_Factory::createFactory();
 
-// Indexing & registering formats
-foreach(range(0, 0) as $i) {
-    if (Index::requireIndexing()) {
-        v("Indexing...", VERBOSE_INDEXING);
-        // Create indexer
-        $format = $render->attach(new Index);
+// Indexing
+if (Index::requireIndexing()) {
+    v("Indexing...", VERBOSE_INDEXING);
+    // Create indexer
+    $format = $render->attach(new Index);
 
-        $reader->open(Config::xml_file());
-        $render->render($reader);
+    $reader->open(Config::xml_file());
+    $render->render($reader);
 
-        $render->detach($format);
+    $render->detach($format);
 
-        v("Indexing done", VERBOSE_INDEXING);
-    } else {
-        v("Skipping indexing", VERBOSE_INDEXING);
-    }
+    v("Indexing done", VERBOSE_INDEXING);
+} else {
+    v("Skipping indexing", VERBOSE_INDEXING);
+}
 
+foreach((array)Config::package() as $package) {
+    $factory = Format_Factory::createFactory($package);
+
+    // Default to all output formats specified by the package
     if (count(Config::output_format()) == 0) {
-        Config::set_output_format($factory->getOutputFormats());
+        Config::set_output_format((array)$factory->getOutputFormats());
     }
  
+    // Register the formats
     foreach (Config::output_format() as $format) {
         $render->attach($factory->createFormat($format));
     }
 }
 
-// Rendering formats
+// Render formats
 foreach(range(0, 0) as $i) {
 	$reader->open(Config::xml_file());
     foreach($render as $format) {

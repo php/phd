@@ -37,11 +37,11 @@ abstract class Format_Factory {
         trigger_error("This format is not supported by this package", E_USER_ERROR);
     }
 
-    public static final function createFactory($package = null) {
+    public static final function createFactory($package) {
         static $factories = array();
 
-        if ($package === null) {
-            $package = Config::package();
+        if (!is_string($package)) {
+            throw new \Exception("Package name must be string..");
         }
 
         if (!isset($factories[$package])) {

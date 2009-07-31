@@ -121,11 +121,12 @@ class BuildOptionsParser
 
     public function option_package($k, $v) {
         
-        if (in_array($v, Config::getSupportedPackages())) {
-            Config::set_package($v);
-        } else {
-            trigger_error("Invalid Package", E_USER_ERROR);
+        foreach((array)$v as $package) {
+            if (!in_array($package, Config::getSupportedPackages())) {
+                trigger_error("Invalid Package", E_USER_ERROR);
+            }
         }
+        Config::set_package($v);
     }
 
     public function option_s($k, $v)
