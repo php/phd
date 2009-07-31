@@ -10,6 +10,7 @@ class Package_Default_Factory extends Format_Factory {
     );
 
     public function __construct() {
+        parent::setPackageName("Default");
         parent::registerOutputFormats($this->formats);
     }
 }

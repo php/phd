@@ -10,6 +10,7 @@ class Package_Pear_Factory extends Format_Factory {
     );
     
     public function __construct() {
+        parent::setPackageName("Pear");
         parent::registerOutputFormats($this->formats);
     }
 }

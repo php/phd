@@ -9,6 +9,7 @@ class Package_IDE_Factory extends Format_Factory {
     );
 
     public function __construct() {
+        parent::setPackageName("IDE");
         parent::registerOutputFormats($this->formats);
     }
 }

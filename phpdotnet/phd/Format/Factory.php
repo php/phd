@@ -3,7 +3,8 @@ namespace phpdotnet\phd;
 /* $Id$ */
 
 abstract class Format_Factory {
-    private $formats = array();
+    private $formats     = array();
+    private $packageName = "";
 
     public final function getOutputFormats() {
         return array_keys($this->formats);
@@ -11,6 +12,16 @@ abstract class Format_Factory {
 
     public final function registerOutputFormats($formats) {
         $this->formats = $formats;
+    }
+
+    protected final function setPackageName($name) {
+        if (!is_string($name)) {
+            throw new \Exception("Package names must be strings..");
+        }
+        $this->packageName = $name;
+    }
+    public final function getPackageName() {
+        return $this->packageName;
     }
 
     public final function createFormat($format) { 
@@ -27,16 +38,26 @@ abstract class Format_Factory {
     }
 
     public static final function createFactory($package = null) {
+        static $factories = array();
+
         if ($package === null) {
             $package = Config::package();
         }
-        $classname = __NAMESPACE__ . "\\Package_" . $package . "_Factory";
 
-        $factory = new $classname();
-        if (!($factory instanceof Format_Factory)) {
-            throw new \Exception("All Factories must inherit Format_Factory");
+        if (!isset($factories[$package])) {
+            $classname = __NAMESPACE__ . "\\Package_" . $package . "_Factory";
+
+            $factory = new $classname();
+            if (!($factory instanceof Format_Factory)) {
+                throw new \Exception("All Factories must inherit Format_Factory");
+            }
+            $factories[$package] = $factory;
         }
-        return $factory;
+        return $factories[$package];
+    }
+
+    public final function __toString() {
+        return $this->getPackageName();
     }
 }
 

@@ -15,6 +15,7 @@ class Package_PHP_Factory extends Format_Factory {
     );
     
     public function __construct() {
+        parent::setPackageName("PHP");
         parent::registerOutputFormats($this->formats);
     }
 }
