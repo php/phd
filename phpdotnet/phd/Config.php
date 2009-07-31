@@ -15,7 +15,9 @@ class Config
         'index'             => true,
         'xml_root'          => '.',
         'xml_file'          => "./.manual.xml",
-        'lang_dir'          => './',
+        "lang_dir"          => __DIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
+                                . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
+                                . "langs" . DIRECTORY_SEPARATOR,
         'language'          => 'en',
         'verbose'           => VERBOSE_DEFAULT,
         'date_format'       => "H:i:s",
@@ -26,11 +28,11 @@ class Config
         'color_output'      => true,
         'output_dir'        => './output/',
         'intermediate_output_dir' => '.',
-        'php_error_output'  => NULL,
+        'php_error_output'  => STDERR,
         'php_error_color'   => "01;31",
-        'user_error_output' => NULL,
+        'user_error_output' => STDERR,
         'user_error_color'  => "01;33",
-        'phd_info_output'   => NULL,
+        'phd_info_output'   => STDOUT,
         'phd_info_color'    => "01;32",
         'highlighter'       => "phpdotnet\\phd\\Highlighter",
         "package"           => array(
@@ -72,10 +74,6 @@ class Config
     }
 
 }
-
-Config::set_php_error_output(STDERR);
-Config::set_user_error_output(STDERR);
-Config::set_phd_info_output(STDOUT);
 
 /* {{{ phd_bool($var) Returns boolean true/false on success, null on failure */
 function phd_bool($val) {

@@ -31,13 +31,9 @@ if (!file_exists(Config::output_dir())) {
 }
 
 Config::init(array(
-    "verbose"                 => VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING),
-    "lang_dir"                => __DIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR 
-                                    . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR 
-                                    . "langs" . DIRECTORY_SEPARATOR,
     "phpweb_version_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
     "phpweb_acronym_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
-    ));
+));
 
 $render = new Render();
 $reader = new Reader();
