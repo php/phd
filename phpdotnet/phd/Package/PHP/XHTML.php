@@ -113,7 +113,7 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
     protected $cchunk          = array();
     /* Default Chunk settings */
 
-    private $dchunk          = array(
+    protected $dchunk          = array(
         "phpdoc:classref"              => null,
         "fieldsynopsis"                => array(
             "modifier"                 => "public",

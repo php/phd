@@ -217,7 +217,7 @@ abstract class Format extends ObjectStorage {
 
         $this->appendToBuffer = true;
         $render->attach($this);
-        $render->render($reader);
+        $render->execute($reader);
         $this->appendToBuffer = false;
         $parsed = $this->buffer;
         $this->buffer = "";

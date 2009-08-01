@@ -1411,7 +1411,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
 
             $render = new Render;
             $render->attach($this);
-            $render->render($r);
+            $render->execute($r);
         }
     }
     public function format_question($open, $name, $attrs, $props) {

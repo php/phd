@@ -39,7 +39,7 @@ class Render extends ObjectStorage
         return parent::attach($obj, $inf);
     } /* }}} */
 
-    public function render(Reader $r) { /* {{{ */
+    public function execute(Reader $r) { /* {{{ */
         ObjectStorage::setReader($r);
 
         foreach($this as $format) {

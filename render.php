@@ -45,7 +45,7 @@ if (Index::requireIndexing()) {
     $format = $render->attach(new Index);
 
     $reader->open(Config::xml_file());
-    $render->render($reader);
+    $render->execute($reader);
 
     $render->detach($format);
 
@@ -74,7 +74,7 @@ foreach(range(0, 0) as $i) {
     foreach($render as $format) {
         $format->notify(Render::VERBOSE, true);
     }
-    $render->render($reader);
+    $render->execute($reader);
 }
 
 v("Finished rendering", VERBOSE_FORMAT_RENDERING);
