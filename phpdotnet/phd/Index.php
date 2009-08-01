@@ -337,8 +337,8 @@ SQL;
     
     public function commit() {
         if (isset($this->commit) && $this->commit) {
-            var_dump($this->db->exec('BEGIN TRANSACTION; '.$this->commit.' COMMIT'));
-            var_dump($this->db->exec('BEGIN TRANSACTION; '.$this->commitAfter.' COMMIT'));
+            $this->db->exec('BEGIN TRANSACTION; '.$this->commit.' COMMIT');
+            $this->db->exec('BEGIN TRANSACTION; '.$this->commitAfter.' COMMIT');
             $this->commit = $this->commitAfter = null;
         }
     }
