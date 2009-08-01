@@ -7,6 +7,7 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
         'appendix'              => 'format_container_chunk',
         'article'               => 'format_container_chunk',
         'book'                  => 'format_root_chunk',
+        'classname'             => 'format_suppressed_tags',
         'chapter'               => 'format_container_chunk',
         'colophon'              => 'format_chunk',
         'legalnotice'           => 'format_chunk',
@@ -52,12 +53,38 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
             'simplesect'        => 'h3',
             'table'             => 'format_table_title',
             'variablelist'      => 'strong',
+            'varname'               => array(
+                /* DEFAULT */          'format_suppressed_tags',
+                'fieldsynopsis'     => 'format_fieldsynopsis_varname',
+            ),
         ),        
     );
     private $mytextmap = array(
         'acronym'               => 'format_acronym_text',
         'function'              => 'format_function_text',
         'interfacename'         => 'format_classname_text',
+        'classname'            => array(
+            /* DEFAULT */         'format_classname_text',
+            'ooclass'          => array(
+                /* DEFAULT */     'format_classname_text',
+                'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
+            ),
+        ),
+        'methodname'            => array(
+            /* DEFAULT */          'format_function_text',
+            'constructorsynopsis' => array(
+                /* DEFAULT */      'format_function_text',
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'methodsynopsis'    => array(
+                /* DEFAULT */      'format_function_text',
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'destructorsynopsis' => array(
+                /* DEFAULT */      'format_function_text',
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+        ),
         'refname'               => 'format_refname_text', 
         'type'                  => array(
             /* DEFAULT */          'format_type_text',
@@ -351,6 +378,10 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
 
     public function format_grep_classname_text($value, $tag) {
         $this->cchunk["phpdoc:classref"] = strtolower($value);
+    }
+
+    public function format_classsynopsis_ooclass_classname_text($value, $tag) {
+        return $this->format_classname_text(parent::format_classsynopsis_ooclass_classname_text($value, $tag), $tag);
     }
 
     public function format_classname_text($value, $tag) {

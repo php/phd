@@ -936,9 +936,9 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
     }
     public function format_methodname($open, $name, $attr) {
         if ($open) {
-            return ' <span class="methodname"><b>';
+            return ' <span class="' .$name. '">';
         }
-        return '</b></span>';
+        return '</span>';
     }
 
     public function format_varname($open, $name, $attrs) {
