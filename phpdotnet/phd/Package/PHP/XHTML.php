@@ -59,17 +59,16 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
         'function'              => 'format_function_text',
         'interfacename'         => 'format_classname_text',
         'refname'               => 'format_refname_text', 
-//        'type'                  => array(
-//            /* DEFAULT */          'format_type_text',
-//            'classsynopsisinfo' => false,
-//            'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
-//            'methodparam'       => 'format_type_if_object_or_pseudo_text',
-//            'methodsynopsis'    => array(
-//                /* DEFAULT */      'format_type_if_object_or_pseudo_text',
-//                'classsynopsis' => false,
-//            ),
-//        ),
-
+        'type'                  => array(
+            /* DEFAULT */          'format_type_text',
+            'classsynopsisinfo' => false,
+            'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
+            'methodparam'       => 'format_type_if_object_or_pseudo_text',
+            'methodsynopsis'    => array(
+                /* DEFAULT */      'format_type_if_object_or_pseudo_text',
+                'classsynopsis' => false,
+            ),
+        ),
         'titleabbrev'           => array(
             /* DEFAULT */          'format_suppressed_text',
             'phpdoc:classref'   => 'format_grep_classname_text',
@@ -232,6 +231,57 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
         }
         return '<var class="varname">' .$value. '</var>';
 
+    }
+
+    public function format_type_if_object_or_pseudo_text($type, $tagname) {
+        if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
+            return false;
+        }
+        return self::format_type_text($type, $tagname);
+    }
+
+    public function format_type_text($type, $tagname) {
+        $t = strtolower($type);
+        $href = $fragment = "";
+
+        switch($t) {
+        case "bool":
+            $href = "language.types.boolean";
+            break;
+        case "int":
+            $href = "language.types.integer";
+            break;
+        case "double":
+            $href = "language.types.float";
+            break;
+        case "boolean":
+        case "integer":
+        case "float":
+        case "string":
+        case "array":
+        case "object":
+        case "resource":
+        case "null":
+            $href = "language.types.$t";
+            break;
+        case "mixed":
+        case "number":
+        case "callback":
+            $href = "language.pseudo-types";
+            $fragment = "language.types.$t";
+            break;
+        default:
+            /* Check if its a classname. */
+            $href = Format::getFilename("class.$t");
+        }
+
+        if ($href && $this->chunked) {
+            return '<a href="' .$href. '.' .$this->getExt().($fragment ? "#$fragment" : ""). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
+        }
+        if ($href) {
+            return '<a href="#' .($fragment ? $fragment : $href). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
+        }
+        return '<span class="' .$tagname. ' ' .$type. '">' .$type. '</span>';
     }
 
     public function format_example_title($open, $name, $attrs, $props) {
