@@ -20,7 +20,6 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
         'refpurpose'            => 'format_refpurpose',
         'set'                   => 'format_root_chunk',
         'setindex'              => 'format_chunk',
-        'methodname'            => 'format_suppressed_tags',
         'title'                 => array(
             /* DEFAULT */          'h1',
             'article'           => 'format_container_chunk_title',
