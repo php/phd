@@ -113,6 +113,27 @@ class Reader extends \XMLReader
         return parent::expand();
     }
 
+    /* Get the content of a named node, or the current node. */
+    public function readContent($node = null) { /* {{{ */
+        $retval = "";
+
+        if($this->isEmptyElement) {
+            return $retval;
+        }
+        if (!$node) {
+            $node = $this->name;
+        }
+        $retval = "";
+        while (self::readNode($node)) {
+            $retval .= $this->value;
+        }
+        return $retval;
+    } /* }}} */
+    /* Read $nodeName until END_ELEMENT */
+    public function readNode($nodeName) { /* {{{ */
+        return self::read() && !($this->nodeType === self::END_ELEMENT && $this->name == $nodeName);
+    } /* }}} */
+
 }
 
 

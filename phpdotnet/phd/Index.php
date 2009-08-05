@@ -319,7 +319,7 @@ SQL;
         if ($open) {
             if (empty($this->nfo[$this->currentid]["ldesc"])) {
                             /* FIXME: How can I mark that node with "reparse" flag? */
-                $s = $this->getReader()->readInnerXml();
+                $s = htmlentities(trim($this->getReader()->readContent()));
                 $this->nfo[$this->currentid]["ldesc"] = $s;
             }
         }
@@ -328,7 +328,7 @@ SQL;
         if ($open) {
             if (empty($this->nfo[$this->currentid]["sdesc"])) {
                             /* FIXME: How can I mark that node with "reparse" flag? */
-                $s = $this->getReader()->readInnerXml();
+                $s = htmlentities(trim($this->getReader()->readContent()));
                 $this->nfo[$this->currentid]["sdesc"] = $s;
             }
 
