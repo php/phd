@@ -1392,7 +1392,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
 
             $questions = $xp->query("//db:qandaentry/db:question");
 
-            $xml = '<questions xmlns="' .Reader::XMLNS_PHD. '">';
+            $retval = '<div class="qandaset"><ol class="qandaset_questions">';
             foreach($questions as $node) {
                 $id = $xp->evaluate("ancestor::db:qandaentry", $node)->item(0)->getAttributeNs(Reader::XMLNS_XML, "id");
 
@@ -1401,17 +1401,10 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
                     $id = uniqid("phd");
                 }
 
-                $node->setAttribute("xml:id", $id);
-                $xml .= $doc->saveXML($node);
+                $retval .= '<li><a href="#'.$id.'">'.htmlentities($node->textContent, ENT_QUOTES).'</a></li>';
             }
-            $xml .= "</questions>";
-
-            $r = new Reader();
-            $r->XML($xml);
-
-            $render = new Render;
-            $render->attach($this);
-            $render->execute($r);
+            $retval .= "</ol></div>";
+            return $retval;
         }
     }
     public function format_question($open, $name, $attrs, $props) {
