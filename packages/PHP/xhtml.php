@@ -1510,7 +1510,7 @@ ul.toc li a:hover {
 
             $questions = $xp->query("//db:qandaentry/db:question");
 
-            $xml = '<questions xmlns="' .PhDReader::XMLNS_PHD. '">';
+            $retval = '<div class="qandaset"><ol class="qandaset_questions">';
             foreach($questions as $node) {
                 $id = $xp->evaluate("ancestor::db:qandaentry", $node)->item(0)->getAttributeNs(PhDReader::XMLNS_XML, "id");
 
@@ -1519,17 +1519,10 @@ ul.toc li a:hover {
                     $id = uniqid("phd");
                 }
 
-                $node->setAttribute("xml:id", $id);
-                $xml .= $doc->saveXML($node);
+                $retval .= '<li><a href="#'.$id.'">'.htmlentities($node->textContent, ENT_QUOTES).'</a></li>';
             }
-            $xml .= "</questions>";
-
-            $r = new PhDReader();
-            $r->XML($xml);
-
-            $render = new PhDRender;
-            $render->attach($this);
-            $render->render($r);
+            $retval .= "</ol></div>";
+            return $retval;
         }
     }
     public function format_question($open, $name, $attrs, $props) {
