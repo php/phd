@@ -54,6 +54,15 @@ if (Index::requireIndexing()) {
     v("Skipping indexing", VERBOSE_INDEXING);
 }
 
+//Partial Rendering
+$idlist = Config::render_ids() + Config::skip_ids();
+if (!empty($idlist)) {
+    v("Running partial build", VERBOSE_RENDER_STYLE);
+    $reader = new Reader_Partial();
+} else {
+    v("Running full build", VERBOSE_RENDER_STYLE);
+}
+
 foreach((array)Config::package() as $package) {
     $factory = Format_Factory::createFactory($package);
 

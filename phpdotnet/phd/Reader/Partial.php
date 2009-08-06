@@ -2,13 +2,13 @@
 namespace phpdotnet\phd;
 /*  $Id$ */
 
-class Reader_Partial extends Reader_Legacy
+class Reader_Partial extends Reader
 {
     protected $partial = array();
     protected $skip    = array();
 
-    public function __construct($encoding = "UTF-8", $xml_opts = NULL) {
-        parent::__construct($encoding, $xml_opts);
+    public function __construct() {
+        parent::__construct();
 
         $render_ids = Config::render_ids();
         if ($render_ids !== NULL) {
@@ -26,7 +26,7 @@ class Reader_Partial extends Reader_Legacy
                 }
             }
         } else {
-            throw new Exception("Didn't get any IDs to seek");
+            throw new \Exception("Didn't get any IDs to seek");
         }
     }
 
@@ -34,60 +34,65 @@ class Reader_Partial extends Reader_Legacy
         static $seeked = 0;
         static $currently_reading = false;
         static $currently_skipping = false;
+        static $arrayPartial = array();
+        static $arraySkip = array();
         $ignore = false;
 
         while($ret = parent::read()) {
-            if ($this->isChunk) {
-                $id = $this->getAttributeNs("id", self::XMLNS_XML);
-                if (isset($this->partial[$id])) {
-                    if ($this->isChunk == self::CLOSE_CHUNK) {
-                        v("%s done", $id, VERBOSE_PARTIAL_READING);
+            $id = $this->getAttributeNs("id", self::XMLNS_XML);
+            $currentPartial = end($arrayPartial);
+            $currentSkip = end($arraySkip);
+            if (isset($this->partial[$id])) {
+                if ($currentPartial == $id) {
+                    v("%s done", $id, VERBOSE_PARTIAL_READING);
 
-                        unset($this->partial[$id]);
-                        --$seeked;
-                        $currently_reading = false;
-                    } else {
-                        v("Starting %s...", $id, VERBOSE_PARTIAL_READING);
-
-                        $currently_reading = $id;
-                        ++$seeked;
-                    }
-                    return $ret;
-                } elseif (isset($this->skip[$id])) {
-                    if ($this->isChunk == self::CLOSE_CHUNK) {
-                        v("%s done", $id, VERBOSE_PARTIAL_READING);
-
-                        unset($this->skip[$id]);
-                        $currently_skipping = false;
-                        $ignore = false;
-                    } else {
-                        v("Skipping %s...", $id, VERBOSE_PARTIAL_READING);
-
-                        $currently_skipping = $id;
-                        $ignore = true;
-                    }
-                } elseif ($currently_skipping && $this->skip[$currently_skipping]) {
-                    if ($this->isChunk == self::OPEN_CHUNK) {
-                        v("Skipping child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
-                    } else {
-                        v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
-                    }
-
-                    $ignore = true;
-                } elseif ($currently_reading && $this->partial[$currently_reading]) {
-                    if ($this->isChunk == self::OPEN_CHUNK) {
-                        v("Rendering child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
-                    } else {
-                        v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
-                    }
-                    return $ret;
-                } elseif (empty($this->partial)) {
-                    return false;
+                    unset($this->partial[$id]);
+                    --$seeked;
+                    $currently_reading = false;
+                    array_pop($arrayPartial);
                 } else {
-                    $ignore = true;
+                    v("Starting %s...", $id, VERBOSE_PARTIAL_READING);
+
+                    $currently_reading = $id;
+                    ++$seeked;
+                    $arrayPartial[] = $id;
                 }
-            } elseif (!$ignore && $seeked > 0) {
                 return $ret;
+            } elseif (isset($this->skip[$id])) {
+                if ($currentSkip == $id) {
+                    v("%s done", $id, VERBOSE_PARTIAL_READING);
+
+                    unset($this->skip[$id]);
+                    $currently_skipping = false;
+                    $ignore = false;
+                    array_pop($arraySkip);
+                } else {
+                    v("Skipping %s...", $id, VERBOSE_PARTIAL_READING);
+
+                    $currently_skipping = $id;
+                    $ignore = true;
+                    $arraySkip[] = $id;
+                }
+            } elseif ($currently_skipping && $this->skip[$currently_skipping]) {                
+                if ($currentSkip == $id) {
+                    v("Skipping child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
+                } else {
+                    v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
+                }
+                 
+                $ignore = true;
+            } elseif ($currently_reading && $this->partial[$currently_reading]) {                
+                if ($currentPartial == $id) {
+                    v("Rendering child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
+                } else {
+                    v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
+                }
+ 
+                return $ret;
+            } elseif (empty($this->partial)) {
+                return false;
+            } else {
+                $ignore = true;
             }
         }
         return $ret;
