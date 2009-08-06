@@ -178,6 +178,9 @@ class PhDXHTMLFormat extends PhDFormat {
         'personname'            => 'format_personname',
         'personblurb'           => 'div',
         'phrase'                => 'span',
+        'phpdoc:classref'       => 'format_class_chunk',
+        'phpdoc:exceptionref'   => 'format_exception_chunk',
+        'phpdoc:varentry'       => 'format_varentry_chunk',
         'preface'               => 'format_chunk',
         'primaryie'             => 'format_suppressed_tags',
         'procedure'             => 'format_procedure',
@@ -340,6 +343,21 @@ class PhDXHTMLFormat extends PhDFormat {
             'ooclass'          => array(
                 /* DEFAULT */     false,
                 'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
+            ),
+        ),
+        'methodname'           => array(
+            /* DEFAULT */         false,
+            'constructorsynopsis' => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'methodsynopsis'    => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+            ),
+            'destructorsynopsis' => array(
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
             ),
         ),
         'para'                  => array(
@@ -856,7 +874,14 @@ ul.toc li a:hover {
     }
     public function format_exception_chunk($open, $name, $attrs, $props) {
         return $this->format_container_chunk_below($open, "reference", $attrs, $props);
+    }        
+    public function format_varentry_chunk($open, $name, $attrs, $props) {
+        return $this->format_container_chunk_below($open, "refentry", $attrs, $props);
     }
+    public function format_class_chunk($open, $name, $attrs, $props) {
+        return $this->format_container_chunk_below($open, "reference", $attrs, $props);
+    }
+
     public function format_section_chunk($open, $name, $attrs, $props) {
         static $a = array();
         if ($open) {
@@ -1074,6 +1099,25 @@ ul.toc li a:hover {
             return ' <span class="methodname"><b>';
         }
         return '</b></span>';
+    }
+    public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
+        $value = $this->TEXT($value);
+        if ($this->cchunk["classsynopsis"]["classname"] === false) {
+            return $value;
+        }
+        if (strpos($value, '::')) {
+            $explode = '::';
+        } elseif (strpos($value, '->')) {
+            $explode = '->';
+        } else {
+            return $value;
+        }
+
+        list($class, $method) = explode($explode, $value);
+        if ($class !== $this->cchunk["classsynopsis"]["classname"]) {
+            return $value;
+        }
+        return $method;
     }
 
     public function format_varname($open, $name, $attrs) {
