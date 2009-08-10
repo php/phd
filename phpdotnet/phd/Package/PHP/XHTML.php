@@ -35,7 +35,11 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
                 'chapter'       => 'format_container_chunk_title',
                 'example'       => 'format_example_title',
                 'part'          => 'format_container_chunk_title',
-            ),            
+                'note'          => 'format_note_title',
+                'informaltable' => 'format_table_title',
+                'table'         => 'format_table_title',
+            ),
+            'formalpara'        => 'h5',
             'indexdiv'          => 'dt',
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
@@ -207,7 +211,9 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
     public function format_imagedata($open, $name, $attrs) {
         $file    = $attrs[Reader::XMLNS_DOCBOOK]["fileref"];
         $newpath = $this->mediamanager->handleFile($file);
-
+        if (strtolower($this->getFormatName()) != "php-big-xhtml") {
+            $newpath = "../" . $newpath;
+        }
         if ($this->cchunk["mediaobject"]["alt"] !== false) {
             return '<img src="' . $newpath . '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
         }
