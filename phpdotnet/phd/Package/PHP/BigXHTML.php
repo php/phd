@@ -6,6 +6,7 @@ class Package_PHP_BigXHTML extends Package_PHP_XHTML {
     public function __construct() {
         parent::__construct();        
         $this->registerFormatName("PHP-BigXHTML");
+        $this->setTitle("PHP Manual");
         $this->setChunked(false);
     }
 
@@ -18,7 +19,7 @@ class Package_PHP_BigXHTML extends Package_PHP_XHTML {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
-  <title>$this->getTitle()</title>
+  <title>{$this->getTitle()}</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
  </head>
  <body>
@@ -30,8 +31,21 @@ HEADER;
     }
 
     public function close() {
-        fwrite($this->getFileStream(), $this->footer(true));
-        fclose($this->getFileStream());
+        if ($this->getFileStream()) {
+            fwrite($this->getFileStream(), $this->footer(true));
+            fclose($this->getFileStream());
+        }
+    }
+
+    public function createFileName() {
+        return Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->getExt(); 
+    }
+
+    public function createOutputFile() {
+        if (!is_resource($this->getFileStream())) {
+            $this->setFileStream(fopen($this->createFileName(), "w+"));
+            fwrite($this->getFileStream(), $this->header());
+        }
     }
 
     public function appendData($data) {
@@ -67,11 +81,7 @@ HEADER;
 
         case Render::INIT:
             if ($val) {
-                if (!is_resource($this->getFileStream())) {
-                    $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->getExt();
-                    $this->setFileStream(fopen($filename, "w+"));
-                    fwrite($this->getFileStream(), $this->header());
-                }
+                $this->createOutputFile();
             } 
             break;
 
