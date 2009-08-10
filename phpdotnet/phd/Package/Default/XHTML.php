@@ -215,7 +215,6 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'section'               => array(
             /* DEFAULT */          'div',
             'sect1'                => 'format_section_chunk',
-            'preface'              => 'format_section_chunk',
             'chapter'              => 'format_section_chunk',
             'appendix'             => 'format_section_chunk',
             'article'              => 'format_section_chunk',
@@ -702,19 +701,17 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         return $this->format_container_chunk_below($open, "reference", $attrs, $props);
     }
     public function format_section_chunk($open, $name, $attrs, $props) {
-        static $a = array();
         if ($open) {
-            $a[] = $props["sibling"];
-            if ($props["sibling"] === $name) {
-                return $this->format_chunk($open, $name, $attrs, $props);
+            if (!isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $this->isSectionChunk[] = false;                
+                return $this->transformFromMap($open, "div", $name, $attrs, $props);
             }
-            return $this->transformFromMap($open, "div", $name, $attrs, $props);
+            $this->isSectionChunk[] = true;
+            return $this->format_chunk($open, $name, $attrs, $props);
         }
-        $x = array_pop($a);
-        if ($x == $name) {
-                return $this->format_chunk($open, $name, $attrs, $props);
-        }
-        $a[] = $x;
+        if (array_pop($this->isSectionChunk)) {
+            return $this->format_chunk($open, $name, $attrs, $props);
+        }        
         return $this->transformFromMap($open, "div", $name, $attrs, $props);
     }
     public function format_chunk($open, $name, $attrs, $props) {
@@ -1159,9 +1156,9 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
     }
     public function format_screen($open, $name, $attrs) {
         if ($open) {
-            return '<div class="example-contents"><pre>';
+            return '<div class="example-contents ' .$name. '">';
         }
-        return '</pre></div>';
+        return '</div>';
     }
     public function format_constant($open, $name, $attrs) {
         if ($open) {

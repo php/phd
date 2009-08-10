@@ -42,7 +42,6 @@ class Index extends Format
     'section'               => array(
         /* DEFAULT */          false,
         'sect1'                => 'format_section_chunk',
-        'preface'              => 'format_section_chunk',
         'chapter'              => 'format_section_chunk',
         'appendix'             => 'format_section_chunk',
         'article'              => 'format_section_chunk',
@@ -250,29 +249,18 @@ SQL;
         }
 
     }
-
     public function format_section_chunk($open, $name, $attrs, $props) {
-        static $sectionChunks = array();
         if ($open) {
-            $sectionChunks[] = $props["sibling"];
-            if ($props["sibling"] === $name) {
-                return $this->format_chunk($open, $name, $attrs, $props);
+            if (!isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $this->isSectionChunk[] = false;
+                return $this->UNDEF($open, $name, $attrs, $props);
             }
-            if(isset($attrs[Reader::XMLNS_XML]["id"])) {
-                $id = $attrs[Reader::XMLNS_XML]["id"];
-                return $this->storeInfo($name, $id, $this->currentchunk, false);
-            }
-            return $this->UNDEF($open, $name, $attrs, $props);
-        }
-        $x = array_pop($sectionChunks);
-        if ($x == $name) {
+            $this->isSectionChunk[] = true;
             return $this->format_chunk($open, $name, $attrs, $props);
         }
-        $sectionChunks[] = $x;
-        if(isset($attrs[Reader::XMLNS_XML]["id"])) {
-            $id = $attrs[Reader::XMLNS_XML]["id"];
-            return $this->appendID(false);
-        }
+        if (array_pop($this->isSectionChunk)) {
+            return $this->format_chunk($open, $name, $attrs, $props);
+        }        
         return $this->UNDEF($open, $name, $attrs, $props);
     }
     public function format_container_chunk($open, $name, $attrs, $props) {
