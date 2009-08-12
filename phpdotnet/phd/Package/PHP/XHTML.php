@@ -522,7 +522,7 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
             return $props["empty"] ? '' : '<h1>';
         }
         $ret = "";
-        if ($this->cchunk["container_chunk"]) {
+        if (isset($this->cchunk["container_chunk"]) && $this->cchunk["container_chunk"]) {
             $ret = $this->cchunk["container_chunk"];
             $this->cchunk["container_chunk"] = null;
         }
