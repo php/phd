@@ -228,18 +228,16 @@ class chmsource extends chunkedhtml {
 
                 $this->currentTocDepth++;
                 fwrite($this->hhpStream, "{$ref}\n");
-                fwrite($this->hhcStream, "{$this->offset(1)}<li><object type=\"text/sitemap\">\n" .
+                fwrite($this->hhcStream, "{$this->offset(1)}<LI><OBJECT type=\"text/sitemap\">\n" .
                     "{$this->offset(3)}<param name=\"Name\" value=\"" . $name . "\">\n" .
                     "{$this->offset(3)}<param name=\"Local\" value=\"{$ref}\">\n" .
-                    "{$this->offset(2)}</object>\n");
+                    "{$this->offset(2)}</OBJECT>\n");
                 if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
                 fwrite($this->hhkStream,
-                    "      <li>\n" .
-                    "        <object type=\"text/sitemap\">\n" .
-                    "          <param name=\"Local\" value=\"{$ref}\">\n" .
-                    "          <param name=\"Name\" value=\"{$name}\">\n" .
-                    "        </object>\n" .
-                    "      </li>\n");
+                    "      <LI><OBJECT type=\"text/sitemap\">\n" .
+                    "        <param name=\"Local\" value=\"{$ref}\">\n" .
+                    "        <param name=\"Name\" value=\"{$name}\">\n" .
+                    "      </object>\n");
                 break;
             case PhDReader::CLOSE_CHUNK :
                 if ($hasChild) {
@@ -272,7 +270,6 @@ doc="' . (isset($this->LANGUAGES[$lang]["title"]) ? $this->LANGUAGES[$lang]["tit
 
 [FILES]
 res' . DIRECTORY_SEPARATOR . 'style.css
-php_manual_' . $lang . '.hhp
 ');
         fwrite($this->hhcStream, '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html>
@@ -338,14 +335,12 @@ php_manual_' . $lang . '.hhp
         $charset = $this->LANGUAGES[$lang]["preferred_charset"];
         $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
 
-	if ($this->lastContent["reference"] || $content) {
+	if ($content) {
             fwrite($this->hhkStream,
-                "      <li>\n" .
-                "        <object type=\"text/sitemap\">\n" .
-                "          <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
-                "          <param name=\"Name\" value=\"{$content}\">\n" .
-                "        </object>\n" .
-                "      </li>\n");
+                "      <LI><OBJECT type=\"text/sitemap\">\n" .
+                "        <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
+                "        <param name=\"Name\" value=\"{$content}\">\n" .
+                "      </OBJECT>\n");
         }
         return false;
     }
