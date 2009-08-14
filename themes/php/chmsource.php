@@ -334,10 +334,12 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         $charset = $this->LANGUAGES[$lang]["preferred_charset"];
         $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
 
-        fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
-            "          <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
-            "          <param name=\"Name\" value=\"" . $content . "\">\n" .
-            "        </object>\n    </li>\n");
+	if ($this->lastContent["reference"] || $content) {
+            fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
+                "          <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
+                "          <param name=\"Name\" value=\"" . $content . "\">\n" .
+                "        </object>\n      </li>\n");
+        }
         return false;
     }
 
