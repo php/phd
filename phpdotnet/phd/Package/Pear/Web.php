@@ -3,13 +3,10 @@ namespace phpdotnet\phd;
 /* $Id$ */
 
 class Package_Pear_Web extends Package_Pear_ChunkedXHTML {
-    protected $formatname = "Pear-Web";
-    protected $title = "Pear Manual";
-
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
-        $this->ext = "php";
+        $this->registerFormatName("Pear-Web");
+        $this->setExt("php");
     }
 
     public function __destruct() {

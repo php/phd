@@ -3,13 +3,12 @@ namespace phpdotnet\phd;
 /* $Id$ */
 
 class Package_Pear_BigXHTML extends Package_Pear_XHTML {
-    protected $formatname = "Pear-BigXHTML";
-    protected $title = "Pear Manual";
-   
     public function __construct() {
         parent::__construct();
-        parent::registerFormatName($this->formatname);
-        $this->chunked = false;
+        $this->registerFormatName("Pear-BigXHTML");
+        $this->setTitle("Pear Manual");
+        $this->setExt("html");
+        $this->setChunked(false);
     }
 
     public function __destruct() {
@@ -21,7 +20,7 @@ class Package_Pear_BigXHTML extends Package_Pear_XHTML {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
-  <title>$this->title</title>
+  <title>{$this->getTitle()}</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
  </head>
  <body>
@@ -35,8 +34,21 @@ HEADER;
     }
 
     public function close() {
-        fwrite($this->fp, $this->footer(true));
-        fclose($this->fp);
+        if ($this->getFileStream()) {
+            fwrite($this->getFileStream(), $this->footer(true));
+            fclose($this->getFileStream());
+        }
+    }
+
+    public function createFileName() {
+        return Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->getExt();
+    }
+
+    public function createOutputFile() {
+        if (!is_resource($this->getFileStream())) {
+            $this->setFileStream(fopen($this->createFileName(), "w+"));
+            fwrite($this->getFileStream(), $this->header());
+        }
     }
 
     public function appendData($data) {
@@ -45,18 +57,17 @@ HEADER;
             return;
         }
         if ($this->flags & Render::CLOSE) {
-            fwrite($this->fp, $data);
+            fwrite($this->getFileStream(), $data);
 
             /* Append footer */
-            fwrite($this->fp, $this->footer());
+            fwrite($this->getFileStream(), $this->footer());
             $this->flags ^= Render::CLOSE;
         } elseif ($this->flags & Render::OPEN) {
-            fwrite($this->fp, $data."<hr />");
+            fwrite($this->getFileStream(), $data."<hr />");
             $this->flags ^= Render::OPEN;
         } else {
-            fwrite($this->fp, $data);
+            fwrite($this->getFileStream(), $data);
         }
-
     }
 
     public function update($event, $val = null) {
@@ -74,11 +85,7 @@ HEADER;
 
         case Render::INIT:
             if ($val) {
-                if (!is_resource($this->fp)) {
-                    $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->ext;
-                    $this->fp = fopen($filename, "w+");
-                    fwrite($this->fp, $this->header());
-                }
+                $this->createOutputFile();
             } 
             break;
 

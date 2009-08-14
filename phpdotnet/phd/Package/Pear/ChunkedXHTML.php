@@ -3,13 +3,12 @@ namespace phpdotnet\phd;
 /* $Id$ */
 
 class Package_Pear_ChunkedXHTML extends Package_Pear_XHTML {
-    protected $formatname = "Pear-Chunked-XHTML";
-    protected $title = "Pear Manual";
-
     public function __construct() {
         parent::__construct();        
-        parent::registerFormatName($this->formatname);
-        $this->chunked = true;
+        $this->registerFormatName("Pear-Chunked-XHTML");
+        $this->setTitle("Pear Manual");
+        $this->setExt("html");
+        $this->setChunked(true);
     }
 
     public function __destruct() {
@@ -22,25 +21,26 @@ class Package_Pear_ChunkedXHTML extends Package_Pear_XHTML {
 
     		return;
     	} elseif ($this->flags & Render::CLOSE) {
-            $fp = array_pop($this->fp);
+            $fp = $this->popFileStream();
             fwrite($fp, $data);
             $this->writeChunk($this->CURRENT_CHUNK, $fp);
             fclose($fp);
 
             $this->flags ^= Render::CLOSE;
         } elseif ($this->flags & Render::OPEN) {
-            $this->fp[] = $fp = fopen("php://temp/maxmemory", "r+");
+            $fp = fopen("php://temp/maxmemory", "r+");
             fwrite($fp, $data);
+            $this->pushFileStream($fp);
 
             $this->flags ^= Render::OPEN;
         } else {
-            $fp = end($this->fp);
-            fwrite($fp, $data);
+            $fp = $this->getFileStream();
+            fwrite(end($fp), $data);
         }
     }
 
     public function writeChunk($id, $fp) {
-        $filename = $this->outputdir . $id . '.' .$this->ext;
+        $filename = $this->getOutputDir() . $id . '.' .$this->getExt();
 
         rewind($fp);
         file_put_contents($filename, $this->header($id));
@@ -49,7 +49,7 @@ class Package_Pear_ChunkedXHTML extends Package_Pear_XHTML {
     }
 
     public function close() {
-        foreach ($this->fp as $fp) {
+        foreach ($this->getFileStream() as $fp) {
             fclose($fp);
         }
     }
@@ -68,13 +68,13 @@ class Package_Pear_ChunkedXHTML extends Package_Pear_XHTML {
             break;
 
         case Render::INIT:
-            $this->outputdir = $tmp = Config::output_dir() . strtolower($this->getFormatName()) . '/';
-            if (file_exists($tmp)) {
-                if (!is_dir($tmp)) {
+            $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            if (file_exists($this->getOutputDir())) {
+                if (!is_dir($this->getOutputDir())) {
                     v("Output directory is a file?", E_USER_ERROR);
                 }
             } else {
-                if (!mkdir($tmp)) {
+                if (!mkdir($this->getOutputDir())) {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
