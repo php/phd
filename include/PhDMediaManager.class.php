@@ -85,7 +85,8 @@ class PhDMediaManager
     protected function copyOver($filename, $newpath)
     {
         $fullpath = $this->output_dir . '/' . $newpath;
-        $fullfilename = $this->relative_source_path . '../' . $filename;
+        $fullfilename = $this->relative_source_path . $filename;
+        $altfullfilename = $this->relative_source_path . '../' . $filename;
 
         if (file_exists($fullpath)) {
             //no need to copy over again
@@ -93,8 +94,12 @@ class PhDMediaManager
         }
 
         if (!file_exists($fullfilename)) {
-            trigger_error('Image does not exist: ' . $fullfilename, E_USER_WARNING);
-            return;
+            if (!file_exists($altfullfilename)) {
+                trigger_error('Image does not exist: ' . $fullfilename, E_USER_WARNING);
+                return;
+            }
+
+            $fullfilename = $altfullfilename;
         }
 
         if (!$this->media_dir_exists) {
