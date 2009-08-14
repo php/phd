@@ -234,10 +234,13 @@ class Theme_PHP_CHMSource extends Theme_PHP_ChunkedHTML
                     "{$this->offset(3)}<param name=\"Local\" value=\"{$ref}\">\n" .
                     "{$this->offset(2)}</object>\n");
                 if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
-                fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
+                fwrite($this->hhkStream,
+                    "      <li>\n" .
+                    "        <object type=\"text/sitemap\">\n" .
                     "          <param name=\"Local\" value=\"{$ref}\">\n" .
-                    "          <param name=\"Name\" value=\"" . $name . "\">\n" .
-                    "        </object>\n    </li>\n");
+                    "          <param name=\"Name\" value=\"{$name}\">\n" .
+                    "        </object>\n" .
+                    "      </li>\n");
                 break;
             case Reader_Legacy::CLOSE_CHUNK :
                 if ($hasChild) {
@@ -270,6 +273,7 @@ doc="' . (isset($this->LANGUAGES[$lang]["title"]) ? $this->LANGUAGES[$lang]["tit
 
 [FILES]
 res' . DIRECTORY_SEPARATOR . 'style.css
+php_manual_' . $lang . '.hhp
 ');
         fwrite($this->hhcStream, '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html>
@@ -335,10 +339,13 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
 
 	if ($this->lastContent["reference"] || $content) {
-            fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
+            fwrite($this->hhkStream,
+                "      <li>\n" .
+                "        <object type=\"text/sitemap\">\n" .
                 "          <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
-                "          <param name=\"Name\" value=\"" . $content . "\">\n" .
-                "        </object>\n      </li>\n");
+                "          <param name=\"Name\" value=\"{$content}\">\n" .
+                "        </object>\n" .
+                "      </li>\n");
         }
         return false;
     }
