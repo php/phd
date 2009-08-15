@@ -95,7 +95,7 @@ class Package_Pear_ChunkedXHTML extends Package_Pear_XHTML {
     * @return string Header HTML
     */
     public function header($id) {
-        $title = $this->getLongDescription($id);
+        $title = $this->getShortDescription($id);
         $lang = Config::language();
 
         $this->prev = $this->next = $this->up = array("href" => null, "desc" => null);
@@ -103,15 +103,15 @@ class Package_Pear_ChunkedXHTML extends Package_Pear_XHTML {
 
         if ($parentId = $this->getParent($id)) {
             $this->up = array("href" => $this->getFilename($parentId) . '.' .$this->ext,
-                "desc" => htmlspecialchars($this->getShortDescription($parentId)));
+                "desc" => $this->getShortDescription($parentId));
         }
         if ($prevId = Format::getPrevious($id)) {
             $this->prev = array("href" => Format::getFilename($prevId) . '.' .$this->ext,
-                "desc" => htmlspecialchars($this->getShortDescription($prevId)));
+                "desc" => $this->getShortDescription($prevId));
         }
         if ($nextId = Format::getNext($id)) {
             $this->next = array("href" => Format::getFilename($nextId) . '.' .$this->ext,
-                "desc" => htmlspecialchars($this->getShortDescription($nextId)));
+                "desc" => $this->getShortDescription($nextId));
         }
         $header = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
