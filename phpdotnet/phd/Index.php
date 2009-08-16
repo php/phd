@@ -133,7 +133,8 @@ CREATE TABLE ids (
     ldesc TEXT,
     element TEXT,
     previous TEXT,
-    next TEXT
+    next TEXT,
+    chunk INTEGER
 );
 CREATE TABLE indexing (
     time INTEGER PRIMARY KEY
@@ -167,17 +168,20 @@ SQL;
         return $this->mytextmap;
     }
     public function UNDEF($open, $name, $attrs, $props) {
-        /*if ($open) {
+        if ($open) {
             if(isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $id = $attrs[Reader::XMLNS_XML]["id"];
-                $this->storeInfo($name, $id, $this->currentchunk);
+                $this->storeInfo($name, $id, $this->currentchunk, false);            
+                if ($props["empty"]) {
+                    $this->appendID();
+                }
             }
             return false;
         }
 
         if(isset($attrs[Reader::XMLNS_XML]["id"])) {
             $this->appendID();
-        }*/
+        }
         return false;
     }
     protected function storeInfo($elm, $id, $filename, $isChunk = true) {
@@ -190,7 +194,8 @@ SQL;
                     "ldesc"    => "",
                     "element"  => $elm,
                     "children" => array(),
-                    "previous" => $this->previousId
+                    "previous" => $isChunk ? $this->previousId : "",
+                    "chunk"    => $isChunk,
         );
         // Append "next" to the previously inserted row
         if ($isChunk) {
@@ -199,20 +204,15 @@ SQL;
                 $this->db->escapeString($id),
                 $this->db->escapeString($this->previousId)
             );
-            //echo "resquete UPDATE ids SET next = '".$this->db->escapeString($id)."' WHERE docbook_id = '".$this->db->escapeString($this->previousId)."';\n";
             $this->previousId = $id;
         }
     }
-    public function appendID($isChunk = true) {
+    public function appendID() {
         static $rand = 0;
 
         $lastChunkId = array_pop($this->ids);
         $parentid = end($this->ids);
         $this->currentid = $parentid;
-
-        if (!$isChunk) {
-            return false;
-        }
 
         $lastChunk = $this->nfo[$lastChunkId];
         if (is_array($lastChunk["sdesc"])) {
@@ -224,26 +224,28 @@ SQL;
         }
 
         $this->commit .= sprintf(
-            "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '');\n",
+            "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '', %d);\n",
             $this->db->escapeString($lastChunkId),
             $this->db->escapeString($lastChunk["filename"]),
             $this->db->escapeString($this->currentchunk),
             $this->db->escapeString($sdesc),
             $this->db->escapeString($lastChunk["ldesc"]),
             $this->db->escapeString($lastChunk["element"]),
-            $this->db->escapeString($lastChunk["previous"])
+            $this->db->escapeString($lastChunk["previous"]),
+            $this->db->escapeString($lastChunk["chunk"])
         );
         if ($array === true && !empty($a["sdesc"])) {
             foreach($lastChunk["sdesc"] as $sdesc) {
                 ++$rand;
                 $this->commit .= sprintf(
-                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) VALUES('%s', '%s', '', '%s', '%s', '%s', '%s', '');\n",
+                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '', '%s', '%s', '%s', '%s', '', %d);\n",
                     "phdgen-" . $rand,
                     $this->db->escapeString($lastChunk["filename"]),
                     $this->db->escapeString($sdesc),
                     $this->db->escapeString($lastChunk["ldesc"]),
                     $this->db->escapeString($lastChunk["element"]),
-                    $this->db->escapeString($lastChunk["previous"])
+                    $this->db->escapeString($lastChunk["previous"]),
+                    $this->db->escapeString($lastChunk["chunk"])
                 );
             }
         }

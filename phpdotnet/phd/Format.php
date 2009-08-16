@@ -65,19 +65,19 @@ abstract class Format extends ObjectStorage {
     }
 
     public function sortIDs() {
-        $this->sqlite->createAggregate("indexes", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 8);
+        $this->sqlite->createAggregate("indexes", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 9);
         $this->sqlite->createAggregate("childrens", array($this, "SQLiteChildrens"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->createAggregate("refname", array($this, "SQLiteRefname"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->createAggregate("varname", array($this, "SQLiteVarname"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->createAggregate("classname", array($this, "SQLiteClassname"), array($this, "SQLiteFinal"), 2);
-        $this->sqlite->query('SELECT indexes(docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next) FROM ids');
-        $this->sqlite->query('SELECT childrens(docbook_id, parent_id) FROM ids');
+        $this->sqlite->query('SELECT indexes(docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) FROM ids');
+        $this->sqlite->query('SELECT childrens(docbook_id, parent_id) FROM ids WHERE chunk != 0');
         $this->sqlite->query('SELECT refname(docbook_id, sdesc) FROM ids WHERE element=\'refentry\'');
         $this->sqlite->query('SELECT varname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:varentry\'');
         $this->sqlite->query('SELECT classname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:exceptionref\' OR element=\'phpdoc:classref\'');
     }
 
-    public function SQLiteIndex(&$context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next) {
+    public function SQLiteIndex(&$context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next, $chunk) {
         $this->indexes[$id] = array(
             "docbook_id" => $id,
             "filename"   => $filename,
@@ -86,7 +86,8 @@ abstract class Format extends ObjectStorage {
             "ldesc"      => $ldesc,
             "element"    => $element,
             "previous"   => $previous,
-            "next"       => $next
+            "next"       => $next,
+            "chunk"      => $chunk,
         );
     }
 
@@ -302,7 +303,11 @@ abstract class Format extends ObjectStorage {
             return null;
         }
         return $this->childrens[$id];
+    }    
+    final public function isChunkID($id) {
+        return isset($this->indexes[$id]["chunk"]) ? $this->indexes[$id]["chunk"] : false;
     }
+
 /* }}} */
 
 /* {{{ Table helper functions */
