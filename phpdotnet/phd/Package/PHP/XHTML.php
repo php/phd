@@ -131,10 +131,7 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
     );
 
     public function __construct() {
-        parent::__construct();
-        $this->versions = self::generateVersionInfo(Config::phpweb_version_filename());
-        $this->acronyms = self::generateAcronymInfo(Config::phpweb_acronym_filename());
-        
+        parent::__construct();               
         $this->myelementmap = array_merge(parent::getDefaultElementMap(), static::getDefaultElementMap());
         $this->mytextmap = array_merge(parent::getDefaultTextMap(), static::getDefaultTextMap());
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
@@ -150,6 +147,11 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
 
     public function getDefaultChunkInfo() {
         return $this->dchunk;
+    }
+
+    public function loadVersionAcronymInfo() {
+        $this->versions = self::generateVersionInfo(Config::phpweb_version_filename());
+        $this->acronyms = self::generateAcronymInfo(Config::phpweb_acronym_filename());
     }
 
     public static function generateVersionInfo($filename) {

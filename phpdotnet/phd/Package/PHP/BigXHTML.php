@@ -82,6 +82,7 @@ HEADER;
         case Render::INIT:
             if ($val) {
                 $this->createOutputFile();
+                $this->loadVersionAcronymInfo();
             } 
             break;
 

@@ -68,6 +68,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
             break;
 
         case Render::INIT:
+            $this->loadVersionAcronymInfo();
             $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
