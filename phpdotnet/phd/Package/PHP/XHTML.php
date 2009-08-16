@@ -253,6 +253,41 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
         return false;
     }
 
+    public function format_fieldsynopsis_varname($open, $name, $attrs) {
+        if ($open) {
+            $href = "";
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["linkend"])) {
+                $linkto = $attrs[Reader::XMLNS_DOCBOOK]["linkend"];
+                $href = Format::getFilename($linkto);
+
+                if ($this->chunked) {
+                    if ($href != $linkto) {
+                        $href .= ".{$this->ext}#{$linkto}";
+                    } else {
+                        $href .= '.' .$this->ext;
+                    }
+                } else {
+                    $href = '#' .$linkto;
+                }
+                $href = '<a href="' .$href. '">';
+            }
+
+            if (
+                $this->cchunk["fieldsynopsis"]["modifier"] == "const" ||
+                (
+                    $nfo = $this->getChunkInfo() AND $nfo["fieldsynopsis"]["modifier"] == "const"
+                )
+            ) {
+                return ' <var class="fieldsynopsis_varname">'.$href;
+            }
+            return ' <var class="'.$name.'">'.$href.'$';
+        }
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["linkend"])) {
+            return '</a></var>';
+        }
+        return '</var>';
+    }
+
     public function format_varname_text($value, $tag) {
         $var = $value;
         if (($pos = strpos($value, "[")) !== false) {
