@@ -181,6 +181,7 @@ class Package_PHP_PDF extends Package_Default_PDF {
 
     public function format_setname($value, $tag) {
         $this->cchunk["setname"] = trim($value);
+        parent::getPdfDoc()->appendText($this->cchunk["setname"]);
         return false;
     }
 
