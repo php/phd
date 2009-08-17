@@ -38,6 +38,12 @@ class Package_PHP_PDF extends Package_Default_PDF {
         'refentry'              => 'format_tocnode_newpage',
         'reference'             => 'format_tocnode_newpage',
         'phpdoc:varentry'       => 'format_tocnode_newpage',
+        'sect1'                 => 'format_tocnode',
+        'sect2'                 => 'format_tocnode',
+        'sect3'                 => 'format_tocnode',
+        'sect4'                 => 'format_tocnode',
+        'sect5'                 => 'format_tocnode',
+        'section'               => 'format_tocnode',
         'set'                   => array(
             /* DEFAULT */          'format_root_set',
             'set'               => 'format_set',
@@ -169,6 +175,7 @@ class Package_PHP_PDF extends Package_Default_PDF {
     public function format_bookname($value, $tag) {
         $this->cchunk["bookname"] = trim($value);
         parent::getPdfDoc()->setCurrentBookName($this->cchunk["bookname"]);
+        parent::getPdfDoc()->appendText($this->cchunk["bookname"]);
         return false;
     }
 
