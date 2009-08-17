@@ -548,6 +548,9 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
                     $this->cchunk["verinfo"] = true;
                 }
             }
+            if ($name == "legalnotice") {
+                return '<div id="legalnotice">';
+            }
             return '<div id="'.$id.'" class="'.$name.'">';
         }
         $this->notify(Render::CHUNK, Render::CLOSE);
