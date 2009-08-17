@@ -306,6 +306,7 @@ class Package_PHP_PDF extends Package_Default_PDF {
 
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
         if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
+            parent::getPdfDoc()->appendText(" " . $type);
             return false;
         }
         return self::format_type_text($type, $tagname);
