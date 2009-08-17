@@ -499,7 +499,10 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         $retval = null;
         if (isset($this->indexes[$for])) {
             $rsl = $this->indexes[$for];
-            $retval = $rsl["filename"] . "." . $this->ext . '#' . $rsl["docbook_id"];
+            $retval = $rsl["filename"] . "." . $this->ext;
+            if ($rsl["filename"] != $rsl["docbook_id"]) {
+                $retval .= '#' . $rsl["docbook_id"];
+            }
             $desc = $rsl["sdesc"] ?: $rsl["ldesc"];
         }
         return $retval;
@@ -1482,7 +1485,12 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         if ($props['empty']) {
             return '';
         }
-        $class = $attrs['class'];
+        
+        $class = 'starttag';
+        if (isset($attrs['class'])) {
+            $class = $attrs['class'];
+        }
+
         if (!isset($arFixes[$class])) {
             trigger_error('Unknown tag class "' . $class . '"', E_USER_WARNING);
             $class = 'starttag';
