@@ -15,9 +15,7 @@ class Config
         'index'             => true,
         'xml_root'          => '.',
         'xml_file'          => "./.manual.xml",
-        "lang_dir"          => __DIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
-                                . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
-                                . "langs" . DIRECTORY_SEPARATOR,
+        'lang_dir'          => './',
         'language'          => 'en',
         'verbose'           => VERBOSE_DEFAULT,
         'date_format'       => "H:i:s",
