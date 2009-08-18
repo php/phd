@@ -86,32 +86,38 @@ class MediaManager
     protected function copyOver($filename, $newpath)
     {
         $fullpath = $this->output_dir . '/' . $newpath;
-        $fullfilename = $this->relative_source_path . $filename;
-        $altfullfilename = $this->relative_source_path . '../' . $filename;
+        $sourcefilenames = array (
+            // Original format where @LANG@ was part of phpdoc (ala peardoc).
+            $this->relative_source_path . $filename,
 
-        if (file_exists($fullpath)) {
-            //no need to copy over again
+            // Where phpdoc/modules/doc-@LANG@ is used.
+            $this->relative_source_path . '../' . $filename,
+
+            // Where phpdoc/doc-base/trunks and phpdoc/en/trunk are used.
+            $this->relative_source_path . '../../' . substr($filename, 0, strpos($filename, '/', 1)) . '/trunk' . substr($filename, strpos($filename, '/', 1)),
+        );
+        $foundfile = false;
+        foreach($sourcefilenames as $fullfilename) {
+            if (file_exists($fullfilename)) {
+
+                if (!$this->media_dir_exists) {
+                    $dir = dirname($fullpath);
+                    if (!file_exists($dir)) {
+                        mkdir($dir, 0777, true);
+                    }
+                    $this->media_dir_exists = true;
+                }
+
+                $foundfile = copy($fullfilename, $fullpath);
+                break;
+            }
+        }
+
+        if (!$foundfile) {
+            trigger_error('Image does not exist: ' . $fullfilename, E_USER_WARNING);
             return;
         }
 
-        if (!file_exists($fullfilename)) {
-            if (!file_exists($altfullfilename)) {
-                trigger_error('Image does not exist: ' . $fullfilename, E_USER_WARNING);
-                return;
-            }
-
-            $fullfilename = $altfullfilename;
-        }
-
-        if (!$this->media_dir_exists) {
-            $dir = dirname($fullpath);
-            if (!file_exists($dir)) {
-                mkdir($dir, 0777, true);
-            }
-            $this->media_dir_exists = true;
-        }
-
-        copy($fullfilename, $fullpath);
     }//protected function copyOver(..)
 
 }//class MediaManager
