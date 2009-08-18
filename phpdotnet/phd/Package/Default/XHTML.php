@@ -238,6 +238,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'setindex'              => 'format_chunk',
         'shortaffil'            => 'format_suppressed_tags',
         'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
+        'simplesect'            => 'format_div',
         'simpara'               => array(
             /* DEFAULT */          'p',
             'note'              => 'span',
