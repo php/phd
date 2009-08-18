@@ -278,7 +278,6 @@ Default topic=res' . DIRECTORY_SEPARATOR . 'index.html
 Default Window=doc
 Display compile progress=Yes
 Enhanced decompilation=Yes
-Flat=Yes
 Full-text search=Yes
 Index file=php_manual_' . $lang . '.hhk
 Language=' . $this->LANGUAGES[$lang]["langcode"] . '
