@@ -93,6 +93,7 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
     public function header($id) {
         $title = $this->getLongDescription($id);
         $lang = Config::language();
+        $root = Format::getRootIndex();
 
         $prev = $next = $parent = array("href" => null, "desc" => null);
 
@@ -115,7 +116,7 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' .$lang. '" lang="' .$lang. '">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>'.$this->getTitle().': '.$title.'</title>
+    <title>'.(($title != $root["ldesc"]) ? $root["ldesc"].': ' : "").$title.'</title>
 </head>
 <body>
 <table width="100%">
@@ -128,7 +129,7 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
                 '.($prevId ? '<div class="prev" style="text-align: left; float: left;"><a href="' .$prev["href"]. '">' .$prev["desc"]. '</a></div>' : '') .'
                 '.($nextId ? '<div class="next" style="text-align: right; float: right;"><a href="' .$next["href"]. '">' .$next["desc"].'</a></div>' : '') .'
                 '.($parentId ? '<div class="up"><a href="' .$parent["href"]. '">' .$parent["desc"]. '</a></div>' : '') .'
-                <div class="home"><a href="index.html">'.$this->getTitle().'</a></div>
+                <div class="home"><a href="'.$root["filename"].".".$this->getExt().'">'.$root["ldesc"].'</a></div>
             </div><hr/>
 ';
     }
@@ -138,6 +139,7 @@ class Package_Default_ChunkedXHTML extends Package_Default_XHTML {
     }
 
     protected function createNavBar($id) {
+        $root = Format::getRootIndex();
         $navBar =  '<style type="text/css">
 #leftbar {
 	float: left;
@@ -174,7 +176,7 @@ ul.toc li a:hover {
 }
 </style>
  <ul class="toc">
-  <li class="header home"><a href="index.'.$this->getExt().'">'.$this->getTitle().'</a></li>
+  <li class="header home"><a href="'.$root["filename"].".".$this->getExt().'">'.$root["ldesc"].'</a></li>
 ';
         // Fetch ancestors of the current node
         $ancestors = array();

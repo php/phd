@@ -35,13 +35,14 @@ class Package_Default_BigXHTML extends Package_Default_XHTML {
     }
 
     public function header() {
+        $root = Format::getRootIndex();
         return <<<HEADER
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>$this->getTitle()</title>
+    <title>{$root["ldesc"]}</title>
 </head>
 <body>
 HEADER;
