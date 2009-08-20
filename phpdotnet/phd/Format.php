@@ -307,7 +307,13 @@ abstract class Format extends ObjectStorage {
     final public function isChunkID($id) {
         return isset($this->indexes[$id]["chunk"]) ? $this->indexes[$id]["chunk"] : false;
     }
-
+    final public function getRootIndex() {
+        static $root = null;
+        if ($root == null) {
+            $root = $this->sqlite->querySingle('SELECT * FROM ids WHERE parent_id=""', true);
+        }
+        return $root;
+    }
 /* }}} */
 
 /* {{{ Table helper functions */
