@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
+abstract class Package_Pear_XHTML extends Package_Default_XHTML {
     private $myelementmap = array(
         'abstract'              => 'format_div',
         'abbrev'                => 'abbr',
@@ -154,7 +154,8 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         'replaceable'           => 'format_replaceable',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
-        'phd:toc'               => 'format_phd_toc',
+//        'phd:toc'               => 'format_phd_toc',
+        'phd:toc'               => 'format_suppressed_tags',
         'phpdoc:exception'      => 'format_exception_chunk',
         'releaseinfo'           => 'format_div',
         'replaceable'           => 'span',
@@ -171,7 +172,29 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         'sect3'                 => 'format_chunk',
         'sect4'                 => 'format_chunk',
         'sect5'                 => 'format_chunk',
-        'section'               => 'format_chunk',
+//        'section'               => 'format_chunk',
+//        'section'               => 'format_container_chunk',
+
+    'section'               => array(
+        /* DEFAULT */          'div',
+        'sect1'                => 'format_container_chunk',
+        'chapter'              => 'format_container_chunk',
+        'appendix'             => 'format_container_chunk',
+        'article'              => 'format_container_chunk',
+        'part'                 => 'format_container_chunk',
+        'reference'            => 'format_container_chunk',
+        'refentry'             => 'format_container_chunk',
+        'index'                => 'format_container_chunk',
+        'bibliography'         => 'format_container_chunk',
+        'glossary'             => 'format_container_chunk',
+        'colopone'             => 'format_container_chunk',
+        'book'                 => 'format_container_chunk',
+        'set'                  => 'format_container_chunk',
+        'setindex'             => 'format_container_chunk',
+        'legalnotice'          => 'format_container_chunk',
+        ),
+
+
         'set'                   => 'format_root_chunk',
         'setindex'              => 'format_chunk',
         'simpara'               => array(
@@ -371,6 +394,9 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
      */
     public function __construct() {
         parent::__construct();
+        $this->myelementmap = array_merge(parent::getDefaultElementMap(), static::getDefaultElementMap());
+        $this->mytextmap = array_merge(parent::getDefaultTextMap(), static::getDefaultTextMap());
+        $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());    
     }
 
     public function getDefaultElementMap() {
@@ -381,7 +407,11 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return $this->mytextmap;
     }
 
-    protected function createTOC($id, $name, $props, $depth = 1, $header = true) {
+    public function getDefaultChunkInfo() {
+        return $this->dchunk;
+    }
+
+    protected function createPearTOC($id, $name, $props, $depth = 1, $header = true) {
         if (!$this->getChildrens($id) || $depth == 0) {
             return "";
         }
@@ -399,12 +429,13 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
 
             $list = "";
             if ($depth > 1 ) {
-                $list = $this->createTOC($child, $name, $props, $depth -1, false);
+                $list = $this->createPearTOC($child, $name, $props, $depth -1, false);
             }
             if ($isLDesc && $isSDesc) {
                 $toc .= '<li><a href="' . $link . '">' . $short . '</a> — ' . $long . $list . "</li>\n";
             } else {
-                $toc .= '<li><a href="' . $link . '">' . ($long ?: $short) . '</a>' . $list .  "</li>\n";
+//                $toc .= '<li><a href="' . $link . '">' . ($long ?: $short) . '</a>' . $list .  "</li>\n";
+                $toc .= '<li><a href="' . $link . '">' . ($long ? $long : $short) . '</a>' . $list .  "</li>\n";
             }
         }
         $toc .= "</ul>\n";
@@ -716,18 +747,6 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return $str;
     }
 
-    public function format_suppressed_tags($open, $name, $attrs)
-    {
-        /* Ignore it */
-        return '';
-    }
-
-    public function format_suppressed_text($value, $tag)
-    {
-        /* Suppress any content */
-        return '';
-    }
-
     public function format_surname($open, $name, $attrs)
     {
         /* Add a space before it, so firstname and surname are separated */
@@ -808,7 +827,7 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return '</td>';
     }
 
-    public function format_th_entry($open, $name, $attrs)
+    public function format_th_entry($open, $name, $attrs, $props)
     {
         if ($open) {
             $colspan = Format::colspan($attrs[Reader::XMLNS_DOCBOOK]);
@@ -827,7 +846,7 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return '</strong></caption>';
     }
 
-    public function format_userinput($open, $name, $attrs, $props)
+    public function format_userinput($open, $name, $attrs)
     {
         if ($open) {
             return '<tt class="'.$name.'"><strong>';
@@ -888,7 +907,7 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
     {
         if ($open) {
             $refnames = implode(' ', $this->cchunk['refname']);
-            $this->cchunk['refname'] = $this->dchunk['refname'];
+            $this->cchunk['refname'] = false;
             return '<div class="refnamediv">'. $refnames. ' &ndash; ';
         }
         return "</div>\n";
@@ -962,40 +981,6 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return '</dl>' . $this->restorePara();
     }
 
-    public function format_qandaset($open, $name, $attrs, $props) {
-        if ($open) {
-            $node = $this->getReader()->expand();
-            $doc = new \DOMDocument;
-            $doc->appendChild($node);
-
-            $xp = new \DOMXPath($doc);
-            $xp->registerNamespace("db", Reader::XMLNS_DOCBOOK);
-
-            $questions = $xp->query("//db:qandaentry/db:question");
-
-            $xml = '<questions xmlns="' .Reader::XMLNS_PHD. '">';
-            foreach($questions as $node) {
-                $id = $xp->evaluate("ancestor::db:qandaentry", $node)->item(0)->getAttributeNs(Reader::XMLNS_XML, "id");
-
-                /* FIXME: No ID? How can we create an anchor for it then? */
-                if (!$id) {
-                    $id = uniqid("phd");
-                }
-
-                $node->setAttribute("xml:id", $id);
-                $xml .= $doc->saveXML($node);
-            }
-            $xml .= "</questions>";
-
-            $r = new Reader();
-            $r->XML($xml);
-
-            $render = new Render;
-            $render->attach($this);
-            $render->render($r);
-        }
-    }
-
     public function format_qandaentry($open, $name, $attrs)
     {
         if ($open) {
@@ -1011,23 +996,6 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
             return '<dd><a name="' .end($this->cchunk['qandaentry']).'"></a>';
         }
         return '</dd>';
-    }
-
-    public function format_question($open, $name, $attrs)
-    {
-        if ($open) {
-            return '<dt><strong>';
-        }
-        return '</strong></dt>';
-    }
-
-    public function format_phd_question($open, $name, $attrs, $props) 
-    {
-        if ($open) {
-            $href = $this->createLink($attrs[Reader::XMLNS_XML]["id"]);
-            return '<li><a href="' .$href. '">';
-        }
-        return '</a></li>';
     }
 
     public function format_emphasis($open, $name, $attrs)
@@ -1073,14 +1041,14 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         }
         return "</td></tr>\n";
     }
-
+/*
     public function format_imagedata($open, $name, $attrs) {
         if ($this->cchunk["mediaobject"]["alt"] !== false) {
             return '<img src="' .$attrs[Reader::XMLNS_DOCBOOK]["fileref"]. '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
         }
         return '<img src="' .$attrs[Reader::XMLNS_DOCBOOK]["fileref"]. '" />';
     }
-
+*/
     public function format_para($open, $name, $attrs, $props) {    
         if ($props['empty']) {
             return '';
@@ -1094,722 +1062,12 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         return '</p>';
     }
 
-   /**
-    * Functions from the old XHTMLPhDFormat
-    */
-    public function format_literal($open, $name, $attrs) {
-        if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
-            } else {
-                $this->role = false;
-            }
-            return '<i>';
-        }
-        $this->role = false;
-        return '</i>';
-    }
-    public function format_literal_text($value, $tag) {
-        switch ($this->role) {
-            case 'infdec':
-                $value = (float)$value;
-                $p = strpos($value, '.');
-                $str = substr($value, 0, $p + 1);
-                $str .= '<span style="text-decoration: overline;">';
-                $str .= substr($value, $p + 1);
-                $str .= '</span>';
-                return $str;
-            default:
-                return $this->TEXT($value);
-        }
-    }
-
-    public function format_author($open, $name, $attrs, $props) {
-        if ($open) {
-            return '<div class="' .$name. ' vcard">';
-        }
-        return "</div>";
-    }
-    public function format_personname($open, $name, $attrs, $props) {
-        if ($open) {
-            return '<span class="' .$name. ' fn">';
-        }
-        return "</span>";
-    }
-    public function format_name($open, $name, $attrs) {
-        if ($open) {
-            $class = "";
-            switch($name) {
-            case "firstname":
-                $class = " given-name";
-                break;
-
-            case "surname":
-                $class = " family-name";
-                break;
-
-            case "othername":
-                if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                    /* We maight want to add support for other roles */
-                    switch($attrs[Reader::XMLNS_DOCBOOK]["role"]) {
-                    case "nickname":
-                        $class = " nickname";
-                        break;
-                    }
-                }
-                break;
-            }
-
-            return ' <span class="' . $name . $class . '">';
-        }
-        return '</span> ';
-    }
-
-    public function format_legalnotice_chunk($open, $name, $attrs) {
-        if ($open) {
-            return '<div id="legalnotice">';
-        }
-        return "</div>\n";
-    }
-    public function format_varentry_chunk($open, $name, $attrs, $props) {
-        return $this->format_chunk($open, "refentry", $attrs, $props);
-    }
-    public function format_refsect1_para($open, $name, $attrs, $props) {
-        if ($props['empty']) {
-            return '';
-        }
-        if ($open) {
-            switch ($props["sibling"]) {
-            case "methodsynopsis":
-            case "constructorsynopsis":
-            case "destructorsynopsis":
-                ++$this->openPara;
-                return '<p class="'.$name.' rdfs-comment">';
-                break;
-
-            default:
-                ++$this->openPara;
-                return '<p class="'.$name.'">';
-            }
-
-        }
-        --$this->openPara;
-        return '</p>';
-    }
-    public function format_refsect($open, $name, $attrs) {
-        if ($open) {
-            if(!isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $attrs[Reader::XMLNS_DOCBOOK]["role"] = "unknown";
-            }
-            $this->role = $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
-            return '<a name="' .$this->cchunk["chunk_id"]. '.' .$role. '"></a><div class="' .$name.' ' .$role. '">';
-        }
-        $this->role = null;
-        return "</div>\n";
-    }
-
-    public function format_classsynopsisinfo_oointerface($open, $name, $attrs) {
-        if ($open) {
-            if ($this->cchunk["classsynopsisinfo"]["implements"] === false) {
-                $this->cchunk["classsynopsisinfo"]["implements"] = true;
-                return '<span class="'.$name.'">implements ';
-            }
-            return '<span class="'.$name.'">, ';
-        }
-
-        return "</span>";
-    }
-    public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs) {
-        if ($open) {
-            if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
-                $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
-                return ' class <b class="'.$name.'">';
-            }
-            return '<b class="'.$name.'"> ';
-        }
-        return "</b>";
-    }
-    public function format_classsynopsisinfo($open, $name, $attrs) {
-        $this->cchunk["classsynopsisinfo"] = $this->dchunk["classsynopsisinfo"];
-        if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
-                return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
-            }
-            return '<div class="'.$name.'">';
-        }
-
-        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
-            return ' */</div>';
-        }
-        $this->cchunk["classsynopsis"]["close"] = true;
-        return ' {</div>';
-    }
-
-    public function format_classsynopsis($open, $name, $attrs) {
-        if ($open) {
-            return '<div class="'.$name.'">';
-        }
-
-        if ($this->cchunk["classsynopsis"]["close"] === true) {
-            $this->cchunk["classsynopsis"]["close"] = false;
-            return "}</div>";
-        }
-        return "</div>";
-    }
-
-    public function format_classsynopsis_ooclass_classname_text($value, $tag) {
-        $this->cchunk["classsynopsis"]["classname"] = $value;
-        return $this->TEXT($value);
-    }
-
-    public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
-        $value = $this->TEXT($value);
-        if ($this->cchunk["classsynopsis"]["classname"] === false) {
-            return $value;
-        }
-        if (strpos($value, '::')) {
-            $explode = '::';
-        } elseif (strpos($value, '->')) {
-            $explode = '->';
-        } else {
-            return $value;
-        }
-
-        list($class, $method) = explode($explode, $value);
-        if ($class !== $this->cchunk["classsynopsis"]["classname"]) {
-            return $value;
-        }
-        return $method;
-    }
-
     public function format_cmdsynopsis($open, $name, $attrs)
     {
         if ($open) {
             return '<span style="background-color:#eee">';
         }
         return '</span>';
-    }
-
-    public function format_fieldsynopsis($open, $name, $attrs) {
-        $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
-        if ($open) {
-            return '<div class="'.$name.'">';
-        }
-        return ";</div>\n";
-    }
-    public function format_fieldsynopsis_modifier_text($value, $tag) {
-        $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
-        return $this->TEXT($value);
-    }
-    public function format_methodsynopsis($open, $name, $attrs) {
-        if ($open) {
-            $this->params = array("count" => 0, "opt" => 0, "content" => "");
-            return '<div class="'.$name.' dc-description">';
-        }
-        $content = "";
-        if ($this->params["opt"]) {
-            $content = str_repeat("]", $this->params["opt"]);
-        }
-        $content .= " )";
-
-        $content .= "</div>\n";
-
-        return $content;
-    }
-    public function format_methodparam_parameter($open, $name, $attrs) {
-        if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return ' <tt class="parameter reference">&amp;$';
-            }
-            return ' <tt class="parameter">$';
-        }
-        return "</tt>";
-    }
-    public function format_initializer($open, $name, $attrs) {
-        if ($open) {
-            return '<span class="'.$name.'"> = ';
-        }
-        return '</span>';
-    }
-    public function format_parameter($open, $name, $attrs) {
-        if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return '<i><tt class="parameter reference">&amp;';
-            }
-            return '<i><tt class="parameter">';
-        }
-        return "</tt></i>\n";
-    }
-
-    public function format_void($open, $name, $attrs) {
-        return ' ( <span class="methodparam">void</span>';
-    }
-    public function format_methodparam($open, $name, $attrs) {
-        if ($open) {
-            $content = '';
-                if ($this->params["count"] == 0) {
-                    $content .= " (";
-                }
-                if (isset($attrs[Reader::XMLNS_DOCBOOK]["choice"]) && $attrs[Reader::XMLNS_DOCBOOK]["choice"] == "opt") {
-                    $this->params["opt"]++;
-                    $content .= "[";
-                } else if($this->params["opt"]) {
-                    $content .= str_repeat("]", $this->params["opt"]);
-                    $this->params["opt"] = 0;
-                }
-                if ($this->params["count"]) {
-                    $content .= ",";
-                }
-                $content .= ' <span class="methodparam">';
-                ++$this->params["count"];
-                return $content;
-        }
-        return "</span>";
-    }
-    public function format_methodname($open, $name, $attr) {
-        if ($open) {
-            return ' <span class="methodname"><b>';
-        }
-        return '</b></span>';
-    }
-
-    public function format_varname($open, $name, $attrs) {
-        if ($open) {
-            return '<var class="'.$name.'">$';
-        }
-        return "</var>\n";
-    }
-    public function format_fieldsynopsis_varname($open, $name, $attrs) {
-        if ($open) {
-            if ($this->cchunk["fieldsynopsis"]["modifier"] === "const") {
-                return '<var class="fieldsynopsis_varname">';
-            }
-            return '<var class="'.$name.'">$';
-        }
-        return '</var>';
-    }
-
-    public function format_footnoteref($open, $name, $attrs, $props) {
-        if ($open) {
-            $linkend = $attrs[Reader::XMLNS_DOCBOOK]["linkend"];
-            $found = false;
-            foreach($this->cchunk["footnote"] as $k => $note) {
-                if ($note["id"] === $linkend) {
-                    return '<a href="#fnid' .$note["id"]. '"><sup>[' .($k + 1). ']</sup></a>';
-                }
-            }
-            trigger_error("footnoteref ID '$linkend' not found", E_USER_WARNING);
-            return "";
-        }
-    }
-    public function format_footnote($open, $name, $attrs, $props) {
-        if ($open) {
-            $count = count($this->cchunk["footnote"]);
-            $noteid = isset($attrs[Reader::XMLNS_XML]["id"]) ? $attrs[Reader::XMLNS_XML]["id"] : $count + 1;
-            $note = array("id" => $noteid, "str" => "");
-            $this->cchunk["footnote"][$count] = $note;
-            if ($this->cchunk["table"]) {
-                $this->cchunk["tablefootnotes"][$count] = $noteid;
-            }
-            return '<a href="#fnid' .$noteid. '" name="fn'.$noteid.'"><sup>[' .($count + 1). ']</sup></a>';
-        }
-        return "";
-    }
-
-    /* {{{ FIXME: These are crazy workarounds :( */
-    public function format_footnote_constant($open, $name, $attrs, $props) {
-        $k = count($this->cchunk["footnote"]) - 1;
-        $this->cchunk["footnote"][$k]["str"] .= self::format_constant($open, $name, $attrs, $props);
-        return "";
-    }
-    public function format_footnote_constant_text($value, $tag) {
-        $k = count($this->cchunk["footnote"]) - 1;
-        $this->cchunk["footnote"][$k]["str"] .= $value;
-        return "";
-    }
-    public function format_footnote_para($open, $name, $attrs, $props) {
-        $k = count($this->cchunk["footnote"]) - 1;
-        if ($open) {
-            $this->cchunk["footnote"][$k]["str"] .= '<span class="para footnote">';
-            return "";
-        }
-
-        $this->cchunk["footnote"][$k]["str"] .= "</span>";
-        return "";
-    }
-    public function format_footnote_para_text($value, $tag) {
-        $k = count($this->cchunk["footnote"]) - 1;
-        $this->cchunk["footnote"][$k]["str"] .= $value;
-        return "";
-    }
-
-    /* }}} */
-
-    public function format_co($open, $name, $attrs, $props) {
-        if (($open || $props["empty"]) && isset($attrs[Reader::XMLNS_XML]["id"])) {
-            $co = ++$this->cchunk["co"];
-            return '<a name="'.$attrs[Reader::XMLNS_XML]["id"].'" id="'.$attrs[Reader::XMLNS_XML]["id"].'">' .str_repeat("*", $co) .'</a>';
-        }
-        /* Suppress closing tag if any */
-        return "";
-    }
-
-    public function format_quote($open, $name, $attrs) {
-        if ($open) {
-            return '"<span class="'.$name.'">';
-        }
-        return '</span>"';
-    }
-    public function format_manvolnum($open, $name, $attrs) {
-        if ($open) {
-            return '<span class="'.$name.'">(';
-        }
-        return ")</span>";
-    }
-
-    public function format_segmentedlist($open, $name, $attrs) {
-        $this->cchunk["segmentedlist"] = $this->dchunk["segmentedlist"];
-        if ($open) {
-            return '<div class="'.$name.'">';
-        }
-        return '</div>';
-    }
-    public function format_segtitle_text($value, $tag) {
-        $this->cchunk["segmentedlist"]["segtitle"][count($this->cchunk["segmentedlist"]["segtitle"])] = $value;
-        /* Suppress the text */
-        return "";
-    }
-    public function format_seglistitem($open, $name, $attrs) {
-        if ($open) {
-            $this->cchunk["segmentedlist"]["seglistitem"] = 0;
-            return '<div class="'.$name.'">';
-        }
-        return '</div>';
-    }
-    public function format_seg($open, $name, $attrs) {
-        if ($open) {
-            return '<div class="seg"><strong><span class="segtitle">' .$this->cchunk["segmentedlist"]["segtitle"][$this->cchunk["segmentedlist"]["seglistitem"]++]. ':</span></strong>';
-        }
-        return '</div>';
-    }
-    public function format_procedure($open, $name, $attrs) {
-        $this->cchunk["procedure"] = false;
-        if ($open) {
-            return '<div class="'.$name.'">';
-        }
-        return '</ol></div>';
-    }
-    public function format_step($open, $name, $attrs) {
-        if ($open) {
-            $ret = "";
-            if ($this->cchunk["procedure"] === false) {
-                $this->cchunk["procedure"] = true;
-                $ret = '<ol type="1">';
-            }
-            return $ret . "<li>";
-        }
-        return '</li>';
-    }
-    public function format_variablelist($open, $name, $attrs) {
-        if ($open) {
-            $idstr = '';
-            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
-                $idstr = ' id="'. $attrs[Reader::XMLNS_XML]['id']. '"';
-            }
-            return $this->escapePara() . "<dl" . $idstr . ">\n";
-        }
-        return "</dl>\n" . $this->restorePara();
-    }
-    public function format_varlistentry($open, $name, $attrs) {
-        if ($open) {
-            return isset($attrs[Reader::XMLNS_XML]["id"]) ? '<dt id="'.$attrs[Reader::XMLNS_XML]["id"]. '" class="varlistentry">' : "<dt class=\"varlistentry\">\n";
-        }
-
-        // Listitems close the the dt themselfs
-        if ($this->cchunk["varlistentry"]["listitems"] && array_pop($this->cchunk["varlistentry"]["listitems"])) {
-            return "";
-        }
-        return "</dt>\n";
-    }
-    public function format_varlistentry_listitem($open, $name, $attrs) {
-        if ($open) {
-            $this->cchunk["varlistentry"]["listitems"][] = 1;
-            return "</dt><dd class=\"listitem\">\n";
-        }
-        return "</dd>\n";
-    }
-    public function format_term($open, $name, $attrs, $props) {
-        if ($open) {
-            if ($props["sibling"] == $name) {
-                return '<br /><span class="' .$name. '">';
-            }
-            return '<span class="' .$name. '">';
-        }
-        return "</span>\n";
-    }
-    public function format_systemitem($open, $name, $attrs) {
-        if ($open) {
-            $val = isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) ? $attrs[Reader::XMLNS_DOCBOOK]["role"] : null;
-            switch($val) {
-            case "directive":
-            /* FIXME: Different roles should probably be handled differently */
-            default:
-                return '<code class="systemitem ' .$name. '">';
-            }
-        }
-        return "</code>\n";
-    }
-    public function format_example_content($open, $name, $attrs, $props) {
-        if ($props['empty']) {
-            return '';
-        }
-        if ($open) {
-            $retval = $this->escapePara() . '<div class="example-contents ' .$name. '"><p>';
-            ++$this->openPara;
-            return $retval;
-        }
-        --$this->openPara;
-        return "</p></div>" . $this->restorePara();
-    }
-       
-    public function format_screen_text($value, $tag) {
-        return nl2br($this->TEXT($value));
-    }
-    public function format_constant($open, $name, $attrs) {
-        if ($open) {
-            return "<b><tt class=\"constant\">";
-        }
-        return "</tt></b>";
-    }
-    
-    public function format_authorgroup_author($open, $name, $attrs, $props) {
-        if ($open) {
-            if ($props["sibling"] !== $name) {
-                return '<div class="'.$name.' vcard">' .$this->admonition_title("by", $props["lang"]). ':<br />';
-            }
-            return '<div class="'.$name.' vcard">';
-        }
-        return "</div>\n";
-    }
-    public function format_editor($open, $name, $attrs, $props) {
-        if ($open) {
-            return '<div class="editor vcard">' .$this->admonition_title("editedby", $props["lang"]). ': ';
-        }
-        return "</div>\n";
-    }
-    public function format_note($open, $name, $attrs, $props) {
-        if ($open) {
-            $retval = $this->escapePara() . '<blockquote><p>'.$this->admonition_title("note", $props["lang"]). ': ';
-            ++$this->openPara;
-            return $retval;
-        }
-
-        --$this->openPara;
-        return "</p></blockquote>" . $this->restorePara();
-    }
-    public function format_note_title($open, $name, $attrs) {
-        if ($open) {
-            return '<b>';
-        }
-        return '</b><br />';
-    }
-    public function format_note_content($open, $name, $attrs) {
-        if ($open) {
-            /* Ignore the open tag */
-            return "";
-        }
-        return "<br />";
-    }
-    public function format_bold_paragraph($open, $name, $attrs, $props) {
-        if ($props["empty"]) {
-            return "";
-        }
-        if ($open) {
-            ++$this->openPara;
-            return "<p><b>";
-        }
-        --$this->openPara;
-        return "</b></p>";
-    }
-    
-    /**
-    * Renders  a <tag class=""> tag.
-    *
-    * @return string HTML code
-    */
-    public function format_tag($open, $name, $attrs, $props)
-    {
-        static $arFixes = array(
-            'attribute'     => array('', ''),
-            'attvalue'      => array('"', '"'),
-            'comment'       => array('&lt;!--', '--&gt;'),
-            'element'       => array('', ''),
-            'emptytag'      => array('&lt;', '/&gt;'),
-            'endtag'        => array('&lt;/', '&gt;'),
-            'genentity'     => array('&amp;', ';'),
-            'localname'     => array('', ''),
-            'namespace'     => array('', ''),
-            'numcharref'    => array('&amp;#', ';'),
-            'paramentity'   => array('%', ';'),
-            'pi'            => array('&lt;?', '?&gt;'),
-            'prefix'        => array('', ''),
-            'starttag'      => array('&lt;', '&gt;'),
-            'xmlpi'         => array('&lt;?', '?&gt;'),
-        );
-        if ($props['empty']) {
-            return '';
-        }
-        $class = $attrs['class'];
-        if (!isset($arFixes[$class])) {
-            trigger_error('Unknown tag class "' . $class . '"', E_USER_WARNING);
-            $class = 'starttag';
-        }
-        if (!$open) {
-            return $arFixes[$class][1] . '</code>';
-        }
-
-        return '<code>' . $arFixes[$class][0];
-    }
-
-    public function format_mediaobject($open, $name, $attrs) {
-        $this->cchunk["mediaobject"] = $this->dchunk["mediaobject"];
-        if ($open) {
-            return '<div class="'.$name.'">';
-        }
-        return '</div>';
-    }
-    public function format_alt_text($value, $tag) {
-        $this->cchunk["mediaobject"]["alt"] = $value;
-    }
-
-    public function format_itemizedlist($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            return $this->escapePara() . '<ul class="' . $name . '">';
-        }
-        return '</ul>' . $this->restorePara();
-    }
-
-    public function format_orderedlist($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            $numeration = "1";
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["numeration"])) {
-                switch($attrs[Reader::XMLNS_DOCBOOK]["numeration"]) {
-                case "upperalpha":
-                    $numeration = "A";
-                    break;
-                case "loweralpha":
-                    $numeration = "a";
-                    break;
-                case "upperroman":
-                    $numeration = "I";
-                    break;
-                case "lowerroman":
-                    $numeration = "i";
-                    break;
-                }
-            }
-            return $this->escapePara(). '<ol type="' .$numeration. '">';
-        }
-        return '</ol>' . $this->restorePara();
-    }
-
-    public function format_tgroup($open, $name, $attrs) {
-        if ($open) {
-            Format::tgroup($attrs[Reader::XMLNS_DOCBOOK]);
-            return '';
-        }
-        return '';
-    }
-    private function parse_table_entry_attributes($attrs) {
-        $retval = 'align="' .$attrs["align"]. '"';
-        if ($attrs["align"] == "char" && isset($attrs["char"])) {
-            $retval .= ' char="' .(htmlspecialchars($attrs["char"], ENT_QUOTES)). '"';
-            if (isset($attrs["charoff"])) {
-                $retval .= ' charoff="' .(htmlspecialchars($attrs["charoff"], ENT_QUOTES)). '"';
-            }
-        }
-        if (isset($attrs["valign"])) {
-            $retval .= ' valign="' .$attrs["valign"]. '"';
-        }
-        if (isset($attrs["colwidth"])) {
-            $width = $attrs["colwidth"];
-            if (is_numeric($width)) {
-                $retval .= ' width="' .((int)$width). '"';
-            }
-            // N*
-            elseif(($pos = strpos($width, "*")) !== false) {
-                $cols = $this->getColCount();
-                $length = 100/$cols;
-                if (substr($width, -1) !== "*") {
-                    trigger_error("Mixing proportion and fixed measure not implemented", E_USER_WARNING);
-                }
-                // Standard length
-                elseif($width == "*" || $width == "1*") {
-                }
-                else {
-                    $width = (int)substr($width, 0, $pos);
-                    $length *= $width;
-                }
-                $retval = ' width="' .$length. '%"';
-
-            }
-            // Npt or Npx or other weird format
-            else {
-                $retval .= ' width="' .htmlentities($attrs["colwidth"], ENT_QUOTES, "UTF-8"). '"';
-            }
-        }
-        return $retval;
-    }
-    public function format_colspec($open, $name, $attrs) {
-        if ($open) {
-            $str = self::parse_table_entry_attributes(Format::colspec($attrs[Reader::XMLNS_DOCBOOK]));
-
-            return '<col '.$str. ' />';
-        }
-        /* noop */
-    }
-    public function format_th($open, $name, $attrs) {
-        if ($open) {
-            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
-            return '<' .$name. ' valign="' .$valign. '">';
-        }
-        return "</$name>\n";
-    }
-    public function format_tbody($open, $name, $attrs) {
-        if ($open) {
-            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
-            return '<tbody valign="' .$valign. '" class="' .$name. '">';
-        }
-        return "</tbody>";
-    }
-    public function format_row($open, $name, $attrs) {
-        if ($open) {
-            $idstr = '';
-            if (isset($attrs[Reader::XMLNS_XML]['id'])) {
-                $idstr = ' id="'. $attrs[Reader::XMLNS_XML]['id']. '"';
-            }
-            Format::initRow();
-            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
-            return '<tr'.$idstr.' valign="' .$valign. '">';
-        }
-        return "</tr>\n";
-    }
-    
-    public function admonition_title($title, $lang) {
-        return '<b class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</b>';
-    }
-
-    public function format_citation($open, $name, $attrs, $props) {
-        if ($open) {
-            return '[<span class="citation">';
-        }
-        return '</span>]';
-    }
-
-    public function format_email_text($value) {
-        return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
     }
 
 //Chunk Functions
@@ -1833,7 +1091,7 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
         }
         $this->notify(Render::CHUNK, Render::CLOSE);
 
-        $content = $this->createTOC(
+        $content = $this->createPearTOC(
             $id, $name, $props,
             isset($attrs[Reader::XMLNS_PHD]['toc-depth'])
                 ? (int)$attrs[Reader::XMLNS_PHD]['toc-depth'] : 1
@@ -1904,7 +1162,7 @@ abstract class Package_Pear_XHTML extends Format_Abstract_XHTML {
             return "</div>\n";
         }
  
-        $toc = $this->createTOC(
+        $toc = $this->createPearTOC(
             $id, $name, $props,
             isset($attrs[Reader::XMLNS_PHD]['toc-depth'])
                 ? (int)$attrs[Reader::XMLNS_PHD]['toc-depth'] : 1
