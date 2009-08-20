@@ -7,6 +7,7 @@ class Package_Pear_Factory extends Format_Factory {
         'xhtml'         => 'Package_Pear_ChunkedXHTML',
         'bigxhtml'      => 'Package_Pear_BigXHTML',
         'php'           => 'Package_Pear_Web',
+        'chm'           => 'Package_Pear_CHM',
     );
     
     public function __construct() {

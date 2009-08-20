@@ -183,27 +183,9 @@ class Package_Pear_CHM extends Package_Pear_ChunkedXHTML {
 	// Project files Output directory
 	protected $chmdir;
 
-    public function __construct(array $IDs, $ext = "html", $dir = "chm") {
-        parent::__construct($IDs, $ext);
-        $this->chmdir = Config::output_dir() . $dir . DIRECTORY_SEPARATOR;
-		if(!file_exists($this->chmdir) || is_file($this->chmdir))
-			mkdir($this->chmdir) or die("Can't create the CHM project directory");
-        $this->outputdir = Config::output_dir() . $dir . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
-		if(!file_exists($this->outputdir) || is_file($this->outputdir))
-			mkdir($this->outputdir) or die("Can't create the cache directory");
-
-		$lang = Config::language();
-		$this->hhpStream = fopen($this->chmdir . "pear_manual_{$lang}.hhp", "w");
-		$this->hhcStream = fopen($this->chmdir . "pear_manual_{$lang}.hhc", "w");
-		$this->hhkStream = fopen($this->chmdir . "pear_manual_{$lang}.hhk", "w");
-
-        foreach(array("reset-fonts", "style", "manual") as $name) {
-            if (!file_exists($this->outputdir . "$name.css")) {
-                file_put_contents($this->outputdir . "$name.css", $this->fetchStylesheet($name));
-            }
-        }
-
-		self::headerChm();
+    public function __construct() {
+        parent::__construct();
+        $this->registerFormatName("Pear-CHM");
     }
 
     public function __destruct() {
@@ -216,31 +198,60 @@ class Package_Pear_CHM extends Package_Pear_ChunkedXHTML {
         parent::__destruct();
     }
 
-	protected function appendChm($name, $ref, $isChunk, $hasChild) {
-		switch ($isChunk) {
-			case Reader_Legacy::OPEN_CHUNK :
-				$this->currentTocDepth++;
-				fwrite($this->hhpStream, "{$ref}\n");
-				fwrite($this->hhcStream, "{$this->offset(1)}<li><object type=\"text/sitemap\">\n" .
-					"{$this->offset(3)}<param name=\"Name\" value=\"" . htmlentities($name) . "\">\n" .
-					"{$this->offset(3)}<param name=\"Local\" value=\"{$ref}\">\n" .
-					"{$this->offset(2)}</object>\n");
-				if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
-				fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
-					"          <param name=\"Local\" value=\"{$ref}\">\n" .
-					"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name)) . "\">\n" .
-					"        </object>\n    </li>\n");
-				break;
-			case Reader_Legacy::CLOSE_CHUNK :
-				if ($hasChild) {
-					fwrite($this->hhcStream, "{$this->offset(2)}</ul>\n");
-				}
-				$this->currentTocDepth--;
-				break;
+    public function update($event, $val = null) {
+        switch($event) {
+        case Render::CHUNK:
+            parent::update($event, $val);
+            break;
+        case Render::STANDALONE:
+            parent::update($event, $val);
+            break;
+        case Render::INIT:
+            $this->chmdir = Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
+            if(!file_exists($this->chmdir) || is_file($this->chmdir)) {
+                mkdir($this->chmdir) or die("Can't create the CHM project directory");
+            }
+            $this->outputdir = Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
+            if(!file_exists($this->outputdir) || is_file($this->outputdir)) {
+                mkdir($this->outputdir) or die("Can't create the cache directory");
+            }
+            $lang = Config::language();
+            $this->hhpStream = fopen($this->chmdir . "pear_manual_{$lang}.hhp", "w");
+            $this->hhcStream = fopen($this->chmdir . "pear_manual_{$lang}.hhc", "w");
+            $this->hhkStream = fopen($this->chmdir . "pear_manual_{$lang}.hhk", "w");
+            foreach(array("reset-fonts", "style", "manual") as $name) {
+                if (!file_exists($this->outputdir . "$name.css")) {
+                    file_put_contents($this->outputdir . "$name.css", $this->fetchStylesheet($name));
+                }
+            }
+            self::headerChm();
+            break;
+        case Render::VERBOSE:
+            parent::update($event, $val);
+            break;
+        }
+    }
+
+	protected function appendChm($name, $ref, $hasChild) {
+		if ($this->flags & Render::OPEN) {
+			$this->currentTocDepth++;
+			fwrite($this->hhpStream, "{$ref}\n");
+			fwrite($this->hhcStream, "{$this->offset(1)}<li><object type=\"text/sitemap\">\n" .
+				"{$this->offset(3)}<param name=\"Name\" value=\"" . htmlentities($name) . "\">\n" .
+				"{$this->offset(3)}<param name=\"Local\" value=\"{$ref}\">\n" .
+				"{$this->offset(2)}</object>\n");
+			if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
+			fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
+				"          <param name=\"Local\" value=\"{$ref}\">\n" .
+				"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name)) . "\">\n" .
+				"        </object>\n    </li>\n");
+		} elseif ($this->flags & Render::CLOSE) {
+			if ($hasChild) {
+				fwrite($this->hhcStream, "{$this->offset(2)}</ul>\n");
+			}
+			$this->currentTocDepth--;
 		}
 	}
-
-
 
     /**
     * Clean up the index name.
@@ -317,12 +328,12 @@ res\manual.css
 			"</html>\n");
     }
 
-    public function appendData($data, $isChunk) {
-        if ($this->lastContent)
-			$this->appendChm($this->lastContent["name"], $this->lastContent["reference"],
-				$isChunk, $this->lastContent["hasChild"]);
+    public function appendData($data) {
+        if ($this->lastContent) {
+			$this->appendChm($this->lastContent["name"], $this->lastContent["reference"], $this->lastContent["hasChild"]);
+        }
         $this->lastContent = null;
-        return parent::appendData($data, $isChunk);
+        return parent::appendData($data);
     }
 
     public function format_chunk($open, $name, $attrs, $props) {
@@ -363,13 +374,13 @@ $1</head>',
     }
 
     private function collectContent($attrs) {
-		if (isset($attrs[Reader_Legacy::XMLNS_XML]["id"])) {
-			$id = $attrs[Reader_Legacy::XMLNS_XML]["id"];
+		if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+			$id = $attrs[Reader::XMLNS_XML]["id"];
 			$this->lastContent = array(
-				"name" => Helper::getDescription($id),
+				"name" => Format::getShortDescription($id),
 				"reference" => "res\\" .
-					(Helper::getFilename($id) ? Helper::getFilename($id) : $id) . "." . $this->ext,
-				"hasChild" => (count(Helper::getChildren($id)) > 0)
+					(Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->ext,
+				"hasChild" => (count(Format::getChildrens($id)) > 0)
 			);
 		}
     }
