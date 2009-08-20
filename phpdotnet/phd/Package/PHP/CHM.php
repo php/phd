@@ -278,6 +278,7 @@ Default topic=res' . DIRECTORY_SEPARATOR . 'index.html
 Default Window=doc
 Display compile progress=Yes
 Enhanced decompilation=Yes
+Flat=Yes
 Full-text search=Yes
 Index file=php_manual_' . $lang . '.hhk
 Language=' . $this->LANGUAGES[$lang]["langcode"] . '
@@ -352,7 +353,7 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         $charset = $this->LANGUAGES[Config::language()]["preferred_charset"];
         $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
 
-	if ($content) {
+        if ($content) {
             fwrite($this->hhkStream,
                 "      <LI><OBJECT type=\"text/sitemap\">\n" .
                 "        <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
@@ -365,10 +366,10 @@ res' . DIRECTORY_SEPARATOR . 'style.css
     public function header($id) {
         $header = parent::header($id);
         // Add CSS link to <head>
-				$pattern = '/(.*)(\r|\n|\r\n|\n\r)(.*)<\/head>/';
-				$replacement = '$1  <link media="all" rel="stylesheet" type="text/css" href="style.css"/>$2$3</head>';
+        $pattern = '/(.*)(\r|\n|\r\n|\n\r)(.*)<\/head>/';
+        $replacement = '$1  <link media="all" rel="stylesheet" type="text/css" href="style.css"/>$2$3</head>';
 
-				$header = preg_replace($pattern, $replacement, $header);
+        $header = preg_replace($pattern, $replacement, $header);
         return $header;
     }
 
@@ -409,6 +410,24 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         return $link;
     }
 
+    public function format_imagedata($open, $name, $attrs) {
+        // The default location of images, relative to the HTML files for the CHM is not ../images,
+        // but rather ../../images.
+        // If this path is used within the compiled CHM file, it is outside the CHM file and therefore
+        // invalid.
+        // To get images working, the location is in the root.
+        // The location of the image, relative to the HHP file needs to be added to the HHP file.
+        // A "feature" of the MS HTML Help Compiler is that for files added to the project which are
+        // outside of the project's directory and sub-directories, will lose the path and be placed in
+        // the root of the compiled CHM file, making the URL now correct.
+        preg_match('`src="([^"]++)"`', $image = parent::format_imagedata($open, $name, $attrs), $imageMatches);
+        $image = str_replace($imageMatches[1], '/' . basename($imageMatches[1]), $image);
+
+        // Add the image to the hhp project file as the automatic pickup won't find it.
+        fwrite($this->hhpStream, '..\\images\\' . basename($imageMatches[1]) . "\n");
+
+        return $image;
+    }
 }
 
 /*
