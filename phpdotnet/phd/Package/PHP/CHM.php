@@ -360,7 +360,7 @@ res' . DIRECTORY_SEPARATOR . 'style.css
                 "        <param name=\"Name\" value=\"{$content}\">\n" .
                 "      </OBJECT>\n");
         }
-        return false;
+        return parent::format_varlistentry($open, $name, $attrs);
     }
 
     public function header($id) {
