@@ -404,7 +404,7 @@ abstract class Package_PHP_XHTML extends Package_Default_XHTML {
                 $rel = $desc = "";
                 if ($this->role == "seealso") {
                     $rel  = ' rel="rdfs-seeAlso"';
-                    $desc = " - " . Format::getShortDescription($filename);
+                    $desc = " - " . Format::getLongDescription($filename);
                 }
 
                 if ($this->chunked) {
