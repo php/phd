@@ -276,7 +276,8 @@ SQL;
             if(isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $id = $attrs[Reader::XMLNS_XML]["id"];
             } else {
-                $id = uniqid("phd");
+                $this->isChunk[] = false;
+                return false;
             }
             $this->isChunk[] = isset($attrs[Reader::XMLNS_PHD]['chunk'])
                     ? $attrs[Reader::XMLNS_PHD]['chunk'] == "true" : true;
