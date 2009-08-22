@@ -1439,6 +1439,17 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         }
         return parent::transformFromMap($open, "span", $name, $attrs, $props) . " ";
     }
+    
+    public function format_bold_paragraph($open, $name, $attrs, $props) {
+        if ($props["empty"]) {
+            return "";
+        }
+        if ($open) {
+            return "<p><b>";
+        }
+        return "</p></b>";
+    }
+
    /**
     * Functions from the old XHTMLPhDFormat
     */
