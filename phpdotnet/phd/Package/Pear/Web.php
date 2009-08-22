@@ -43,7 +43,7 @@ manualHeader("index.php", "'.addslashes($this->title).'");
         // Fetch the siblings information
         $toc = array();
         $siblings = Format::getChildrens($parent);
-        foreach ($siblings as $sibling => $array) {
+        foreach ((array)$siblings as $sibling => $array) {
             $toc[] = array($sibling.$ext, empty($array["sdesc"]) ? $array["ldesc"] : $array["sdesc"]);
         }
 
