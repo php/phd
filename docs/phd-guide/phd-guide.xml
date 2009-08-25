@@ -48,29 +48,39 @@
 
         <para>Discover the channel:</para>
 
-        <screen>$ pear channel-discover doc.php.net
-Adding Channel "doc.php.net" succeeded</screen>
-
+        <screen>
+<![CDATA[
+$ pear channel-discover doc.php.net
+Adding Channel "doc.php.net" succeeded
+]]>
+        </screen>
+            
         <para>Now we're ready to install the latest version:</para>
 
-        <screen>$ pear install doc.php.net/phd-beta
+        <screen>
+<![CDATA[
+$ pear install doc.php.net/phd-beta
 
 ... installation of package "PhD" in channel "doc.php.net"
 
 $ phd --version
 PhD version: 0.4.2
-Copyright (c) 2008-2009 The PHP Documentation Group</screen>
+Copyright (c) 2008-2009 The PHP Documentation Group
+]]>
+        </screen>
 
         <para>That's it!</para>
       </section>
 
-      <section xml:base="" xml:id="installation-cvs">
-        <title>Installation from CVS</title>
+      <section xml:base="" xml:id="installation-svn">
+        <title>Installation from SVN</title>
 
         <para>To get the latest and greatest features that have not been
-        released yet, you can use PhD from CVS.</para>
+        released yet, you can use PhD from SVN.</para>
 
-        <screen>$ cvs -d :pserver:cvsread@cvs.php.net:/repository checkout phd
+        <screen>
+<![CDATA[
+$ svn checkout http://svn.php.net:/repository/phd/trunk phd
 ... output
 
 $ pear channel-discover doc.php.net
@@ -80,8 +90,10 @@ $ pear install package.xml
 ... installation of package "PhD" in channel "doc.php.net"
 
 $ phd --version
-PhD version: phd-from-cvs
-Copyright (c) 2008-2009 The PHP Documentation Group</screen>
+PhD version: 1.0.0-dev
+Copyright (c) 2008-2009 The PHP Documentation Group
+]]>
+        </screen>
 
         <para>And now you're done.</para>
       </section>
@@ -101,13 +113,17 @@ Copyright (c) 2008-2009 The PHP Documentation Group</screen>
         xlink:href="http://php.net/anoncvs">check them out from CVS</link>
         with the following command.</para>
 
-        <screen>$ cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc
-... output</screen>
+        <screen>
+<![CDATA[
+$ cvs -d:pserver:cvsread@cvs.php.net/repository co phpdoc
+... output
+]]>
+        </screen>
 
         <para>To prepare the documentation, <command>cd</command> to the
         phpdoc directory, and run configure.php.</para>
 
-        <screen>$ php configure.php</screen>
+        <screen><![CDATA[$ php configure.php]]></screen>
 
         <para>This process will generate a .manual.xml file in the current
         directory, which is what we need for building the docs. Now we're
@@ -118,8 +134,12 @@ Copyright (c) 2008-2009 The PHP Documentation Group</screen>
       PHP documentation sources and render those.Running PhD to render the
       docs is surprisingly simple, so we'll start with that.</para>
 
-      <screen>$ phd -d .manual.xml
-... status messages</screen>
+      <screen>
+<![CDATA[
+$ phd -d .manual.xml
+... status messages
+]]>
+      </screen>
 
       <para>After a running for a few moments, PhD will generate PHP-web and
       HTML output into <literal>build/en/</literal>. The HTML output includes
@@ -131,79 +151,92 @@ Copyright (c) 2008-2009 The PHP Documentation Group</screen>
       <para>So now that you've seen the fruits of your labor, let's take a
       closer look at PhD and see what capabilities are available to us.</para>
 
-      <screen>$ phd --help
+      <screen>
+<![CDATA[
+$ phd --help
 
-PhD version: 0.4.5
-Copyright (c) 2007-2009 The PHP Documentation Group
+PhD version: 1.0.0-dev                                                                                        
+Copyright (c) 2007-2009 The PHP Documentation Group                                                           
 
   -v
-  --verbose &lt;int&gt;            Adjusts the verbosity level
-  -f &lt;formatname&gt;
-  --format &lt;formatname&gt;      The build format to use
-  -t &lt;themename&gt;
-  --theme &lt;themename&gt;        The theme to use
-  -i &lt;bool&gt;
-  --index &lt;bool&gt;             Index before rendering (default) or load from cache (false)
-  -d &lt;filename&gt;
-  --docbook &lt;filename&gt;       The Docbook file to render from
-  -p &lt;id[=bool]&gt;
-  --partial &lt;id[=bool]&gt;      The ID to render, optionally skipping its childrenchunks (default to true; render children)
-  -s &lt;id[=bool]&gt;
-  --skip &lt;id[=bool]&gt;         The ID to skip, optionally skipping its children chunks (default to true; skip children)
-  -l &lt;formats/themes&gt;
-  --list &lt;formats/themes&gt;    Print out the supported formats/themes (default: both)
-  -o &lt;directory&gt;
-  --output &lt;directory&gt;       The output directory (default: .)
-  -L &lt;language&gt;
-  --lang &lt;language&gt;          The language of the source file (used by the CHM theme). (default: en)
-  -c &lt;color&gt;
-  --color &lt;color&gt;            Enable color output when output is to a terminal, optionally specify numerical color value (default: false)
-  -g &lt;classname&gt;
-  --highlighter &lt;classname&gt;  Use custom source code highlighting php class
+  --verbose <int>            Adjusts the verbosity level
+  -f <formatname>
+  --format <formatname>      The build format to use
+  -P <packagename>
+  --package <packagename>    The package to use
+  -I
+  --noindex                  Do not index before rendering but load from cache
+                             (default: false)
+  -d <filename>
+  --docbook <filename>       The Docbook file to render from
+  -p <id[=bool]>
+  --partial <id[=bool]>      The ID to render, optionally skipping its children
+                             chunks (default to true; render children)
+  -s <id[=bool]>
+  --skip <id[=bool]>         The ID to skip, optionally skipping its children
+                             chunks (default to true; skip children)
+  -l
+  --list                     Print out the supported packages and formats
+  -o <directory>
+  --output <directory>       The output directory (default: .)
+  -L <language>
+  --lang <language>          The language of the source file (used by the CHM
+                             theme). (default: en)
+  -c <bool>
+  --color <bool>             Enable color output when output is to a terminal
+                             (default: false)
+  -g <classname>
+  --highlighter <classname>  Use custom source code highlighting php class
   -V
   --version                  Print the PhD version information
   -h
   --help                     This help
 
 Most options can be passed multiple times for greater affect.
-NOTE: Long options are only supported using PHP5.3</screen>
+]]>
+      </screen>
 
       <para>As you can see, there are plenty of options to look into in PhD.
       The most important options are those which allow you to select a format
-      and theme to output your documentation to.</para>
+      and package to output your documentation to.</para>
 
-      <screen>$ phd --list
-Supported formats:
-    xhtml
-    manpage
-    pdf
-Supported themes:
-    xhtml:
-        phpweb
-        chunkedhtml
-        bightml
-        chmsource
-        phpkdevelop
-        howto
-        pearweb
-        pearbightml
-        pearchunkedhtml
-        pearchm
-    manpage:
-        phpfunctions
-    pdf:
-        phppdf
-        phpbigpdf</screen>
+      <screen>
+<![CDATA[
+$ phd --list
+Supported packages:
+        Default
+                xhtml
+                bigxhtml
+                php
+        IDE
+                functions
+                funclist
+        PHP
+                xhtml
+                bigxhtml
+                php
+                howto
+                manpage
+                pdf
+                bigpdf
+                kdevelop
+                chm
+        Pear
+                xhtml
+                bigxhtml
+                php
+                chm
+]]>
+      </screen>
 
       <para>You can tell by the output of the <literal>--list</literal> option
       that PhD can also be used to render the docs as a PDF file, or as Unix
       Man Pages.</para>
 
-      <para>To select a format and theme, you must use the <literal>-f
-      [formatName]</literal> and <literal>-t [themeName]</literal> options.
-      Both options are required if one of them is used.</para>
+      <para>To select a format and package, you must use the <literal>-f
+      [formatName]</literal> and <literal>-P [packageName]</literal> options.</para>
 
-      <screen>$ phd -f manpage -t phpfunctions -d .manual.xml</screen>
+      <screen><![CDATA[$ phd -f manpage -P PHP -d .manual.xml]]></screen>
 
       <para>This command will output the documentation for PHP functions in
       the Unix Man page format.</para>
@@ -213,18 +246,25 @@ Supported themes:
       <title>Compile the PhD guide</title>
 
       <para>The PhD guide is this manual you are reading currently. It lives
-      in <acronym>PhD</acronym>'s CVS repository under
+      in <acronym>PhD</acronym>'s SVN repository under
       <filename>docs/phd-guide/phd-guide.xml</filename>. If you installed PhD
-      from CVS, you already have it. Otherwise, get it:</para>
+      from SVN, you already have it. Otherwise, get it:</para>
 
-      <screen>$ cvs -d :pserver:cvsread@cvs.php.net:/repository checkout phd/docs/phd-guide
-cvs checkout: Updating phd/docs/phd-guide
-U phd/docs/phd-guide/phd-guide.xml</screen>
+      <screen>
+<![CDATA[
+$ svn checkout http://svn.php.net:/repository/phd/trunk/docs/phd-guide
+U phd/docs/phd-guide/phd-guide.xml
+]]>
+      </screen>
 
       <para>Now you have everything you need. Just type</para>
 
-      <screen>$ cd phd/docs/phd-guide/
-$ phd -f xhtml -t pearbightml phd-guide.xml</screen>
+      <screen>
+<![CDATA[
+$ cd phd/docs/phd-guide/
+$ phd -f bigxhtml -d phd-guide.xml
+]]>
+      </screen>
 
       <para>There should be an .html file in the directory now. View it with a
       browser!</para>
@@ -234,8 +274,8 @@ $ phd -f xhtml -t pearbightml phd-guide.xml</screen>
     </section>
   </chapter>
 
-  <chapter>
-    <title xml:id="docbook-extensions">DocBook extensions</title>
+  <chapter xml:id="docbook-extensions">
+    <title>DocBook extensions</title>
 
     <para>PhD has been tailored for PHP and PEAR manuals. To make writing
     documentation as easy as possible, some own tags have been added to the
@@ -248,7 +288,7 @@ $ phd -f xhtml -t pearbightml phd-guide.xml</screen>
 
     <programlisting>xmlns:phd="http://www.php.net/ns/phd"</programlisting>
 
-    <section>
+    <section xml:id="ext-general">
       <title>General DocBook extensions</title>
 
       <para>The extensions listed here are available in all PhD themes and
@@ -281,18 +321,22 @@ $ phd -f xhtml -t pearbightml phd-guide.xml</screen>
         <section>
           <title>Example</title>
 
-          <programlisting role="xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;preface xmlns="http://docbook.org/ns/docbook"
+          <programlisting role="xml">
+<![CDATA[
+<?xml version="1.0" encoding="utf-8"?>
+<preface xmlns="http://docbook.org/ns/docbook"
  xmlns:phd="http://www.php.net/ns/phd"
  xml:id="preface"
  phd:chunk="false"
-&gt;
- &lt;info&gt;
-  &lt;title&gt;Preface&lt;/title&gt;
+>
+ <info>
+  <title>Preface</title>
  ..
- &lt;/info&gt;
+ </info>
  ..
-&lt;/preface&gt;</programlisting>
+</preface>
+]]>
+          </programlisting>
         </section>
       </section>
 
@@ -384,8 +428,12 @@ $ phd -f xhtml -t pearbightml phd-guide.xml</screen>
           <para><literal>phd:package</literal> name is put into the attribute,
           any text:</para>
 
-          <programlisting role="xml">&lt;phd:pearapi phd:package="HTML_QuickForm"/&gt;
-&lt;phd:pearapi phd:package="HTML_QuickForm"&gt;some text&lt;/phd:pearapi&gt;</programlisting>
+          <programlisting role="xml">
+<![CDATA[
+<phd:pearapi phd:package="HTML_QuickForm"/>
+<phd:pearapi phd:package="HTML_QuickForm">some text</phd:pearapi>
+]]>
+          </programlisting>
 
           <screen><link
               xlink:href="http://pear.php.net/package/HTML_QuickForm/docs/latest/li_HTML_QuickForm.html">HTML_QuickForm</link>
@@ -398,8 +446,12 @@ $ phd -f xhtml -t pearbightml phd-guide.xml</screen>
           <para>Class name as <literal>phd:linkend</literal> attribute
           value.</para>
 
-          <programlisting role="xml">&lt;phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element"/&gt;
-&lt;phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element"&gt;some text&lt;/phd:pearapi&gt;</programlisting>
+          <programlisting role="xml">
+<![CDATA[
+<phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element"/>
+<phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element">some text</phd:pearapi>
+]]>
+          </programlisting>
 
           <screen><link
               xlink:href="http://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html">HTML_QuickForm_element</link>
@@ -412,8 +464,12 @@ $ phd -f xhtml -t pearbightml phd-guide.xml</screen>
           <para>Class and method name as <literal>phd:linkend</literal> text,
           separated by a double colon.</para>
 
-          <programlisting role="xml">&lt;phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element::setName"/&gt;
-&lt;phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element::setName"&gt;some text&lt;/phd:pearapi&gt;</programlisting>
+          <programlisting role="xml">
+<![CDATA[
+<phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element::setName"/>
+<phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element::setName">some text</phd:pearapi>
+]]>
+          </programlisting>
 
           <screen><link
               xlink:href="http://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html#methodsetName">HTML_QuickForm_element::setName()</link>
@@ -427,8 +483,12 @@ $ phd -f xhtml -t pearbightml phd-guide.xml</screen>
           text, separated by a double colon and a dollar sign before the
           variable name.</para>
 
-          <programlisting role="xml">&lt;phd:pearapi phd:package="Net_Geo" phd:linkend="Net_Geo::$cache_ttl"/&gt;
-&lt;phd:pearapi phd:package="Net_Geo" phd:linkend="Net_Geo::$cache_ttl"&gt;some text&lt;/phd:pearapi&gt;</programlisting>
+          <programlisting role="xml">
+<![CDATA[
+<phd:pearapi phd:package="Net_Geo" phd:linkend="Net_Geo::$cache_ttl"/>
+<phd:pearapi phd:package="Net_Geo" phd:linkend="Net_Geo::$cache_ttl">some text</phd:pearapi>
+]]>
+          </programlisting>
 
           <screen><link
               xlink:href="http://pear.php.net/package/Net_Geo/docs/latest/Net_Geo/Net_Geo.html#var$cache_ttl">Net_Geo::$cache_ttl</link>
@@ -438,8 +498,8 @@ $ phd -f xhtml -t pearbightml phd-guide.xml</screen>
     </section>
   </chapter>
 
-  <appendix>
-    <title xml:id="links">Links</title>
+  <appendix xml:id="links">
+    <title>Links</title>
 
     <para>Some other articles for further reading. Latest are on top.</para>
 
