@@ -154,8 +154,7 @@ abstract class Package_Pear_XHTML extends Package_Default_XHTML {
         'replaceable'           => 'format_replaceable',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
-//        'phd:toc'               => 'format_phd_toc',
-        'phd:toc'               => 'format_suppressed_tags',
+        'phd:toc'               => 'format_phd_toc',
         'phpdoc:exception'      => 'format_exception_chunk',
         'releaseinfo'           => 'format_div',
         'replaceable'           => 'span',
@@ -422,47 +421,6 @@ abstract class Package_Pear_XHTML extends Package_Default_XHTML {
 
     public function getDefaultChunkInfo() {
         return $this->dchunk;
-    }
-
-    protected function createPearTOC($id, $name, $props, $depth = 1, $header = true) {
-        if (!$this->getChildrens($id) || $depth == 0) {
-            return "";
-        }
-        $toc = '';
-        if ($header) {
-            $toc .= '<strong>' . $this->autogen('toc', $props['lang']) . '</strong>';
-        }
-        $toc .= "<ul class=\"chunklist chunklist_$name\">\n"; 
-        foreach ($this->getChildrens($id) as $child) {
-            $isLDesc = null;
-            $isSDesc = null;
-            $long = $this->parse($this->getLongDescription($child, $isLDesc));
-            $short = $this->getShortDescription($child, $isSDesc);
-            $link = $this->createLink($child);
-
-            $list = "";
-            if ($depth > 1 ) {
-                $list = $this->createPearTOC($child, $name, $props, $depth -1, false);
-            }
-            if ($isLDesc && $isSDesc) {
-                $toc .= '<li><a href="' . $link . '">' . $short . '</a> — ' . $long . $list . "</li>\n";
-            } else {
-//                $toc .= '<li><a href="' . $link . '">' . ($long ?: $short) . '</a>' . $list .  "</li>\n";
-                $toc .= '<li><a href="' . $link . '">' . ($long ? $long : $short) . '</a>' . $list .  "</li>\n";
-            }
-        }
-        $toc .= "</ul>\n";
-        return $toc;
-    }
-
-    public function createLink($for, &$desc = null, $type = Format::SDESC) {
-        $retval = null;
-        if (isset($this->indexes[$for])) {
-            $rsl = $this->indexes[$for];
-            $retval = $rsl["filename"] . "." . $this->ext . '#' . $rsl["docbook_id"];
-            $desc = $rsl["sdesc"] ?: $rsl["ldesc"];
-        }
-        return $retval;
     }
 
     /**
@@ -1104,7 +1062,7 @@ abstract class Package_Pear_XHTML extends Package_Default_XHTML {
         }
         $this->notify(Render::CHUNK, Render::CLOSE);
 
-        $content = $this->createPearTOC(
+        $content = $this->createTOC(
             $id, $name, $props,
             isset($attrs[Reader::XMLNS_PHD]['toc-depth'])
                 ? (int)$attrs[Reader::XMLNS_PHD]['toc-depth'] : 1
@@ -1175,7 +1133,7 @@ abstract class Package_Pear_XHTML extends Package_Default_XHTML {
             return "</div>\n";
         }
  
-        $toc = $this->createPearTOC(
+        $toc = $this->createTOC(
             $id, $name, $props,
             isset($attrs[Reader::XMLNS_PHD]['toc-depth'])
                 ? (int)$attrs[Reader::XMLNS_PHD]['toc-depth'] : 1
