@@ -130,7 +130,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
         'itemizedlist'          => 'format_itemizedlist',
-        'legalnotice'           => 'format_legalnotice_chunk',
+        'legalnotice'           => 'format_chunk',
         'listitem'              => array(
             /* DEFAULT */          'li',
             'varlistentry'      => 'format_varlistentry_listitem',
@@ -454,11 +454,15 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         return $this->dchunk;
     }
 
-    protected function createTOC($id, $lang) {
-        if (!$this->getChildrens($id)) {
+    protected function createTOC($id, $name, $props, $depth = 1, $header = true) {
+        if (!$this->getChildrens($id) || $depth == 0) {
             return "";
         }
-        $toc = '<strong>' . $this->autogen('toc', $lang) . '</strong><ul>';
+        $toc = '';
+        if ($header) {
+            $toc .= '<strong>' . $this->autogen('toc', $props['lang']) . '</strong>';
+        }
+        $toc .= "<ul class=\"chunklist chunklist_$name\">\n"; 
         foreach ($this->getChildrens($id) as $child) {
             $isLDesc = null;
             $isSDesc = null;
@@ -467,33 +471,34 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
             $link = $this->createLink($child);
 
             $list = "";
-            if ($this->cchunk["name"] === "book" || $this->cchunk["name"] === "set") {
-                if ($this->getChildrens($child)) {
-                    $list = "<ul>";
-                    foreach ($this->getChildrens($child) as $subChild) {
-                        $isSubLDesc = null;
-                        $isSubSDesc = null;
-                        $subLong = $this->parse($this->getLongDescription($subChild, $isLDesc));
-                        $subShort = $this->getShortDescription($subChild, $isSubSDesc);
-
-                        $href = $this->createLink($subChild);
-                        if ($isSubLDesc && $isSubSDesc) {
-                            $list .= '<li><a href="' . $href . '">' . $subShort . '</a> — ' . $subLong . "</li>\n";
-                        } else {
-                            $list .= '<li><a href="' . $href . '">' . ($subLong ?: $subShort) . '</a>' . "</li>\n";
-                        }
-                    }
-                    $list .="</ul>";
-                }
+            if ($depth > 1 ) {
+                $list = $this->createTOC($child, $name, $props, $depth -1, false);
             }
             if ($isLDesc && $isSDesc) {
                 $toc .= '<li><a href="' . $link . '">' . $short . '</a> — ' . $long . $list . "</li>\n";
             } else {
-                $toc .= '<li><a href="' . $link . '">' . ($long ?: $short) . '</a>' . $list .  "</li>\n";
+                $toc .= '<li><a href="' . $link . '">' . ($long ? $long : $short) . '</a>' . $list .  "</li>\n";
             }
         }
         $toc .= "</ul>\n";
         return $toc;
+    }
+
+    /**
+    * Handle a <phd:toc> tag.
+    */
+    function format_phd_toc($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<div class="phd-toc">';
+        }
+        return $this->createToc(
+            $attrs[Reader::XMLNS_PHD]['element'],
+            'phd-toc',
+            $props,
+            isset($attrs[Reader::XMLNS_PHD]['toc-depth'])
+                ? (int)$attrs[Reader::XMLNS_PHD]['toc-depth'] : 1,
+            false
+        ) . "</div>\n";
     }
 
     public function createLink($for, &$desc = null, $type = Format::SDESC) {
@@ -654,8 +659,8 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         $this->CURRENT_CHUNK = $id;
         $this->notify(Render::CHUNK, Render::CLOSE);
         $toc = "";
-        if (!in_array($id, $this->TOC_WRITTEN)) {
-            $toc = $this->createTOC($id, $props["lang"]);
+        if (!in_array($id, $this->TOC_WRITTEN)) {            
+            $toc = $this->createTOC($id, $name, $props);
         }
 
         return $toc."</div>";
@@ -667,7 +672,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
 
         $id = $this->CURRENT_CHUNK;
 
-        $toc = $this->createTOC($id, $props["lang"]);
+        $toc = $this->createTOC($id, $name, $props, 2);
 
         $this->TOC_WRITTEN[] = $id;
 
@@ -693,7 +698,7 @@ abstract class Package_Default_XHTML extends Format_Abstract_XHTML {
         $toc = '<ol>';
         $desc = "";
     	if (!in_array($id, $this->TOC_WRITTEN)) {
-            $toc = $this->createTOC($id, $props["lang"]);
+            $toc = $this->createTOC($id, $name, $props);
         }
         $toc .= "</ol>\n";
 
