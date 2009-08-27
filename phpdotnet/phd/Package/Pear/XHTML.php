@@ -1104,9 +1104,8 @@ abstract class Package_Pear_XHTML extends Package_Default_XHTML {
             if ($open) {
                 return '<div class="' . $name . '" ' . ($id ? "id=\"{$id}\"" : '') . '">';
             }
-            return "</div>\n";
         }
-        return false;
+        return $open ? '<div class="'.$name.'" id="'.$id.'">' : "</div>\n"; 
     }
 
     public function format_container_chunk($open, $name, $attrs, $props)
