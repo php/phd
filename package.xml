@@ -22,12 +22,18 @@
     <email>bjori@php.net</email>
     <active>yes</active>
   </lead>
-  <developer>
+  <lead>
     <name>Christian Weiske</name>
     <user>cweiske</user>
     <email>cweiske@php.net</email>
     <active>yes</active>
-  </developer>
+  </lead>
+  <lead>
+    <name>Moacir de Oliveira</name>
+    <user>moacir</user>
+    <email>moacir@php.net</email>
+    <active>yes</active>
+  </lead>
   <developer>
     <name>Gwynne Raskind</name>
     <user>gwynne</user>
@@ -41,18 +47,20 @@
     <active>no</active>
   </developer>
 
-  <date>2009-05-28</date>
+  <date>2009-08-28</date>
   <version>
     <release>0.4.8</release>
     <api>0.4.8</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Add support for external troff highlighter in man pages (Christian).
+    - Add title attribute to anchor tags so address can be seen in CHM files for external links (Richard Q.).
+    - CVS-&gt;SVN langs migration (Philip).
     - Fixed bug#49006 (The manpage format groups function arguments incorrectly). (Moacir)
     - Fixed bug#49005 (Reference sign in function prototypes in the manpage rendering). (Moacir)
   </notes>
