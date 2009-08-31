@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-abstract class Package_Pear_XHTML extends Package_Default_XHTML {
+abstract class Package_Pear_XHTML extends Package_Generic_XHTML {
     private $myelementmap = array(
         'abstract'              => 'format_div',
         'abbrev'                => 'abbr',

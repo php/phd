@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-class Package_PHP_PDF extends Package_Default_PDF {    
+class Package_PHP_PDF extends Package_Generic_PDF {    
     protected $elementmap = array(
         'article'               => 'format_tocnode_newpage',
         'appendix'              => 'format_tocnode_newpage',

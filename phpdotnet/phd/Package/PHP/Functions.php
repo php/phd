@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-class Package_PHP_Functions extends Package_Default_Manpage {
+class Package_PHP_Functions extends Package_Generic_Manpage {
     const OPEN_CHUNK = 0x01; 
     const CLOSE_CHUNK = 0x02; 
     const OPENED_CHUNK = 0x03; 

@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-abstract class Package_PHP_XHTML extends Package_Default_XHTML {
+abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     private $myelementmap = array(
         'appendix'              => 'format_container_chunk',
         'article'               => 'format_container_chunk',
