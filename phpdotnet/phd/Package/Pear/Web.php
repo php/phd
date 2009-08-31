@@ -42,19 +42,42 @@ manualHeader("index.php", "'.addslashes($this->title).'");
 
         // Fetch the siblings information
         $toc = array();
-        $siblings = Format::getChildrens($parent);
+        $siblingIDs = Format::getChildrens($parent);
+        $siblings = array();
+        foreach ($siblingIDs as $sid) {
+            $siblings[$sid] = array(
+                "filename" => Format::getFilename($sid),
+                "parent" => Format::getParent($sid),
+                "sdesc" => Format::getShortDescription($sid),
+                "ldesc" => Format::getLongDescription($sid),
+                "children" => $this->createChildren($sid),
+            );
+        }
         foreach ((array)$siblings as $sibling => $array) {
             $toc[] = array($sibling.$ext, empty($array["sdesc"]) ? $array["ldesc"] : $array["sdesc"]);
         }
 
+        $prev = $next = array(null, null);
+        if ($prevID = Format::getPrevious($id)) {
+            $prev = array(
+                Format::getFilename($prevID).$ext,
+                Format::getLongDescription($prevID),
+            );
+        }        
+        if ($nextID = Format::getNext($id)) {
+            $next = array(
+                Format::getFilename($nextID).$ext,
+                Format::getLongDescription($nextID),
+            );
+        }
         // Build the PEAR navigation table
         $nav = array(
             'home' => array('index' . $ext, $this->title),
-            'prev' => $this->createPrev($id, $parent, $siblings),
-            'next' => $this->createNext($id, $parent, $siblings),
+            'prev' => $prev,
+            'next' => $next,
             'up'   => array($this->getFilename($parent).$ext, Format::getLongDescription($parent)),
             'toc'  => $toc
-        );
+        );        
         return "<?php \n" .
             "sendManualHeaders(\"UTF-8\", \"{$this->lang}\");\n" .
             "setupNavigation(" . var_export($nav, true) . ");\n" .
@@ -85,104 +108,20 @@ manualHeader("index.php", "'.addslashes($this->title).'");
             . '); ?>';
     }
 
-    /**
-     * Create the previous page link information
-     *
-     * @param string $id       ID of the page
-     * @param string $parent   ID of the parent element
-     * @param array  $siblings array of siblings
-     *
-     * @return array(0=>filename,1=>description)
-     */
-    protected function createPrev($id, $parent, $siblings)
-    {
-        if (!isset($siblings[$id]) || $parent == 'ROOT') {
-            return array(null, null);
+    protected function createChildren($id) {
+        if (!Format::getChildrens($id)) {
+            return array();
         }
-        $ext = '.' .$this->ext;
-
-        // Seek to $id
-        while (list($tmp,) = each($siblings)) {
-            if ($tmp == $id) {
-                // Set the internal pointer back to $id
-                if (prev($siblings) === false) {
-                    end($siblings);
-                }
-                break;
-            }
+        $children =  array($id => array( 
+            "filename" => Format::getFilename($id),
+            "parent" => Format::getParent($id),
+            "sdesc" => Format::getShortDescription($id),
+            "ldesc" => Format::getLongDescription($id),
+        ));
+        foreach (Format::getChildrens($id) as $child) {
+            $children["children"] = $this->createChildren($child);
         }
-        $tmp = prev($siblings);
-        if ($tmp) {
-            while (!empty($tmp["children"])) {
-                $tmp = end($tmp["children"]);
-            }
-            return array(
-                $tmp["filename"].$ext,
-                htmlspecialchars(empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"])
-            );
-            break;
-        }
-
-        return array(Format::getFilename($parent).$ext, Format::getLongDescription($parent, false));
     }
-
-    /**
-     * Create the next page link information
-     *
-     * @param string $id       ID of the page
-     * @param string $parent   ID of the parent element
-     * @param array  $siblings array of siblings
-     *
-     * @return array(0=>filename,1=>description)
-     */
-    protected function createNext($id, $parent, $siblings)
-    {
-        $ext = '.' .$this->ext;
-        $next = array(null, null);
-        // {{{ Create the "next" link
-        if (!empty($siblings[$id]["children"])) {
-            $tmp = reset($siblings[$id]["children"]);
-            return array(
-                $tmp["filename"].$ext,
-                htmlspecialchars(empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"])
-            );
-        }
-        do {
-            if (!isset($siblings[$id])) {
-                break;
-            }
-
-            // Seek to $id
-            while (list($tmp,) = each($siblings)) {
-                if ($tmp == $id) {
-                    break;
-                }
-            }
-
-            $tmp = current($siblings);
-            prev($siblings); // Reset the internal pointer to previous pos
-            if ($tmp) {
-                $next = array(
-                    $tmp["filename"].$ext,
-                    htmlspecialchars(empty($tmp["sdesc"]) ? $tmp["ldesc"] : $tmp["sdesc"])
-                );
-                break;
-            }
-
-            // We are the end element in this chapter
-            $grandpa = Format::getParent($parent);
-            if (!$grandpa || $grandpa == "ROOT") {
-                // There is no next relative
-                break;
-            }
-
-            $siblings = Format::getChildrens($grandpa);
-            $id       = $parent;
-            $parent   = $grandpa;
-        } while (true);
-        return $next;
-    }
-
 }
 
 /*
