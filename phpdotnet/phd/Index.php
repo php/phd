@@ -272,6 +272,7 @@ SQL;
         return $this->format_chunk($open, $name, $attrs, $props);
     }
     public function format_chunk($open, $name, $attrs, $props) {
+        $this->processFilename();
         if ($open) {
             if(isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $id = $attrs[Reader::XMLNS_XML]["id"];
@@ -286,20 +287,13 @@ SQL;
                 $this->chunks[] = $id;
                 $this->currentchunk = $id;
                 $this->storeInfo($name, $id, $id);
-                $this->notify(Render::CHUNK, Render::OPEN);
             }
             return false;
         }
         if (array_pop($this->isChunk)) { 
             $lastchunk = array_pop($this->chunks);
             $this->currentchunk = end($this->chunks);
-            $dbhtml = $this->getPIHandler("dbhtml");
-            if ($dbhtml->getAttribute("filename")) {
-                $this->nfo[$lastchunk]["filename"] = $dbhtml->getAttribute("filename");
-                $dbhtml->setAttribute("filename", false);
-            }
             $this->appendID();
-            $this->notify(Render::CHUNK, Render::CLOSE);
         }
         return false;
     }
@@ -331,6 +325,18 @@ SQL;
             $this->db->exec('BEGIN TRANSACTION; '.$this->commit.' COMMIT');
             $this->db->exec('BEGIN TRANSACTION; '.$this->commitAfter.' COMMIT');
             $this->commit = $this->commitAfter = null;
+        }
+    }
+
+    public function processFilename() {
+        static $dbhtml = null;
+        if ($dbhtml == null) {            
+            $dbhtml = $this->getPIHandler("dbhtml");
+        }
+        $filename = $dbhtml->getAttribute("filename"); 
+        if ($filename) {
+            $this->nfo[end($this->chunks)]["filename"] = $filename;
+            $dbhtml->setAttribute("filename", false);
         }
     }
 }
