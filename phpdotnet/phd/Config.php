@@ -34,7 +34,7 @@ class Config
         'phd_info_color'    => "01;32",
         'highlighter'       => "phpdotnet\\phd\\Highlighter",
         "package"           => array(
-            "Default",
+            "Generic",
         ),
     );
 
