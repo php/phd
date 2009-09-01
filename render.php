@@ -1,10 +1,11 @@
+#!@php_bin@
 <?php
 namespace phpdotnet\phd;
 /* $Id$ */
 
 function autoload($name)
 {
-    $file = str_replace(array('\\', '_'), '/', $name) . '.php';
+    $file = __DIR__ . DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), '/', $name) . '.php';
     if (!$fp = fopen($file,'r', true)) {
         throw new \Exception('Cannot find file for ' . $name . ': ' . $file);
     }   
@@ -12,7 +13,7 @@ function autoload($name)
     require $file;
 }
 spl_autoload_register(__NAMESPACE__ . '\\autoload');
-require_once 'phpdotnet/phd/functions.php';
+require_once __DIR__ . '/phpdotnet/phd/functions.php';
 
 $optparser = new BuildOptionsParser();
 $optparser->getopt();
@@ -81,13 +82,11 @@ foreach((array)Config::package() as $package) {
 }
 
 // Render formats
-foreach(range(0, 0) as $i) {
-	$reader->open(Config::xml_file());
-    foreach($render as $format) {
-        $format->notify(Render::VERBOSE, true);
-    }
-    $render->execute($reader);
+$reader->open(Config::xml_file());
+foreach($render as $format) {
+    $format->notify(Render::VERBOSE, true);
 }
+$render->execute($reader);
 
 v("Finished rendering", VERBOSE_FORMAT_RENDERING);
 
