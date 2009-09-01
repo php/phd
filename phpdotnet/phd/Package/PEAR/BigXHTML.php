@@ -2,11 +2,11 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-class Package_Pear_BigXHTML extends Package_Pear_XHTML {
+class Package_PEAR_BigXHTML extends Package_PEAR_XHTML {
     public function __construct() {
         parent::__construct();
-        $this->registerFormatName("Pear-BigXHTML");
-        $this->setTitle("Pear Manual");
+        $this->registerFormatName("PEAR-BigXHTML");
+        $this->setTitle("PEAR Manual");
         $this->setExt("html");
         $this->setChunked(false);
     }

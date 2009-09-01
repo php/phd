@@ -2,10 +2,10 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-class Package_Pear_Web extends Package_Pear_ChunkedXHTML {
+class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML {
     public function __construct() {
         parent::__construct();
-        $this->registerFormatName("Pear-Web");
+        $this->registerFormatName("PEAR-Web");
         $this->setExt("php");
     }
 

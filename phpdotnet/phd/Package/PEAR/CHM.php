@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-class Package_Pear_CHM extends Package_Pear_ChunkedXHTML {
+class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
     const DEFAULT_FONT = "Arial,10,0";
     const DEFAULT_TITLE = "PEAR Manual";
 
@@ -185,7 +185,7 @@ class Package_Pear_CHM extends Package_Pear_ChunkedXHTML {
 
     public function __construct() {
         parent::__construct();
-        $this->registerFormatName("Pear-CHM");
+        $this->registerFormatName("PEAR-CHM");
     }
 
     public function __destruct() {
