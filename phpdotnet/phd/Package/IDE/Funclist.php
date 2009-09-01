@@ -13,6 +13,7 @@ class Package_IDE_Funclist extends Format {
 
     protected $isFunctionRefSet = false;
     protected $isRefname = false;
+    protected $buffer = "";
 
     public function __construct() {
         $this->registerFormatName("IDE-Funclist");
@@ -26,8 +27,8 @@ class Package_IDE_Funclist extends Format {
     public function transformFromMap($open, $tag, $name, $attrs, $props) {}    
 
     public function appendData($data) {
-        if ($this->isFunctionRefSet && $this->isRefname) {
-            fwrite($this->getFileStream(), $data ? $data . "\n" : "");
+        if ($data && $this->isFunctionRefSet && $this->isRefname) {
+            $this->buffer .= $data . "\n";
         }
     }
 
@@ -37,16 +38,9 @@ class Package_IDE_Funclist extends Format {
             $this->registerElementMap($this->elementmap);
             $this->registerTextMap($this->textmap);
             break;
-        case Render::INIT:
-            if ($value) {
-                if (!is_resource($this->getFileStream())) {
-                    $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->getExt();
-                    $this->setFileStream(fopen($filename, "w+"));
-                }
-            } 
-            break;
-        case Render::FINALIZE:            
-            fclose($this->getFileStream());
+       case Render::FINALIZE:
+            $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->getExt();
+            file_put_contents($filename, $this->buffer);
             break;
         case Render::VERBOSE:            
             v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
