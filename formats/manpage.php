@@ -49,7 +49,7 @@ class ManpagePhDFormat extends PhDFormat {
         'literal'               => '\\fI',
         'literallayout'         => 'format_verbatim',
         'manvolnum'             => 'format_manvolnum',
-        'mediaobject'           => '\\fB[NOT DISPLAYABLE MEDIA]',
+        'mediaobject'           => 'format_mediaobject',
         'member'                => 'format_member',
         'methodname'            => '\\fB',
         'methodparam'           => 'format_methodparam',
@@ -75,7 +75,7 @@ class ManpagePhDFormat extends PhDFormat {
         'property'              => 'format_suppressed_tags',
         'refentry'              => 'format_suppressed_tags',
         'refentrytitle'         => '\\fB',
-        'refname'               => '.SH NAME',
+        'refname'               => 'format_refname',
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
         'refsect1'              => 'format_refsect',
@@ -200,7 +200,7 @@ class ManpagePhDFormat extends PhDFormat {
     */
     public $role = false;
 
-                                        
+
     public function __construct(array $IDs) {
         parent::__construct($IDs);
     }
@@ -258,6 +258,13 @@ class ManpagePhDFormat extends PhDFormat {
             if ($this->cchunk["appendlater"] && isset($this->cchunk["buffer"]))
                 array_push($this->cchunk["buffer"], "\n.SH ");
             else return "\n.SH ";
+        }
+        return "";
+    }
+
+    public function format_refname($open, $name, $attrs, $props) {
+        if ($open) {
+            return "\n.SH " . $this->autogen($name, $props["lang"]) . "\n";
         }
         return "";
     }
@@ -394,7 +401,7 @@ class ManpagePhDFormat extends PhDFormat {
     public function format_refsynopsisdiv($open, $name, $attrs, $props) {
         if ($open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"])
             && $this->cchunk["methodsynopsis"]["firstsynopsis"]) {
-            return "\n.SH SYNOPSIS\n";
+            return "\n.SH " . $this->autogen("refsynopsis", $props["lang"]) . "\n";
         }
         if (!$open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"]))
             $this->cchunk["methodsynopsis"]["firstsynopsis"] = false;
@@ -405,18 +412,18 @@ class ManpagePhDFormat extends PhDFormat {
         if ($open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"])
             && $this->cchunk["methodsynopsis"]["firstsynopsis"] && $this->cchunk["appendlater"]) {
             $this->cchunk["appendlater"] = false;
-            return "\n.SH SYNOPSIS\n";
+            return "\n.SH " . $this->autogen("refsynopsis", $props["lang"]) . "\n";
         }
         if ($open)
             return "\n.br";
         $params = array();
         // write the formatted synopsis
         foreach ($this->cchunk['methodsynopsis']['params'] as $parameter) {
-            array_push($params, ($parameter['optional'] ? "[" : "") 
-                        . $parameter['type'] 
-                        . ($parameter['reference'] ? " \\fI&\\fP" : " ") 
-                        . ($parameter['name'] ? "\\fI$" . $parameter['name'] . "\\fP" : "") 
-                        . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "") 
+            array_push($params, ($parameter['optional'] ? "[" : "")
+                        . $parameter['type']
+                        . ($parameter['reference'] ? " \\fI&\\fP" : " ")
+                        . ($parameter['name'] ? "\\fI$" . $parameter['name'] . "\\fP" : "")
+                        . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "")
                         . ($parameter['optional'] ? "]" : "") );
         }
         $ret = "\n(" . join($params, ", ") . ")";
@@ -574,5 +581,12 @@ class ManpagePhDFormat extends PhDFormat {
     // Convert the function name to a Unix valid filename
     public function toValidName($functionName) {
         return str_replace(array("::", "->", "()"), array(".", ".", ""), $functionName);
+    }
+
+    public function format_mediaobject($open, $name, $attrs, $props) {
+        if ($open) {
+            return "\n\\fB" . $this->autogen($name, $props["lang"]) . "\\fP";
+        }
+        return "";
     }
 }
