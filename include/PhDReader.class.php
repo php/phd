@@ -81,7 +81,7 @@ class PhDReader extends XMLReader {
             $depth = $this->depth;
         }
         do {
-            if (isset($tag[$this->STACK[--$depth]])) {
+            if ((--$depth >= 0) && isset($tag[$this->STACK[$depth]])) {
                 $tag = $tag[$this->STACK[$depth]];
             } else {
                 $tag = $tag[0];
