@@ -113,7 +113,7 @@
         <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config"/>
       </file>
       <file baseinstalldir="phd" name="config.php" role="php">
-        <tasks:replace from="phd-from-cvs" to="version" type="package-info" />
+        <tasks:replace from="phd-from-svn" to="version" type="package-info" />
       </file>
       <file baseinstalldir="phd" name="LICENSE" role="php"/>
       <file baseinstalldir="phd" name="mktoc.php" role="php"/>
