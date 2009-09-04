@@ -55,6 +55,7 @@
       <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/ChunkedXHTML.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/HowTo.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/XHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/README" role="php"/>
     </dir>
   </contents>
 
