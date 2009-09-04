@@ -56,6 +56,7 @@
       <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/HowTo.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/XHTML.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/README" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/HOWTO.GENERATE_CHM" role="php"/>
     </dir>
   </contents>
 
