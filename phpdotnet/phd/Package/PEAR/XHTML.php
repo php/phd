@@ -1012,14 +1012,19 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         }
         return "</td></tr>\n";
     }
-/*
+
     public function format_imagedata($open, $name, $attrs) {
-        if ($this->cchunk["mediaobject"]["alt"] !== false) {
-            return '<img src="' .$attrs[Reader::XMLNS_DOCBOOK]["fileref"]. '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
+        $file    = $attrs[Reader::XMLNS_DOCBOOK]["fileref"];
+        $newpath = $this->mediamanager->handleFile($file);
+        if ($this->isChunked()) {
+            $newpath = "../" . $newpath;
         }
-        return '<img src="' .$attrs[Reader::XMLNS_DOCBOOK]["fileref"]. '" />';
+        if ($this->cchunk["mediaobject"]["alt"] !== false) {
+            return '<img src="' . $newpath . '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
+        }
+        return '<img src="' . $newpath . '" />';
     }
-*/
+
     public function format_para($open, $name, $attrs, $props) {    
         if ($props['empty']) {
             return '';
