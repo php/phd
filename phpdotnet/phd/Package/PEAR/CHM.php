@@ -375,7 +375,7 @@ $1</head>',
     }
 
     private function collectContent($attrs) {
-		if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+		if (isset($attrs[Reader::XMLNS_XML]["id"]) && $this->isChunkID($attrs[Reader::XMLNS_XML]["id"])) {
 			$id = $attrs[Reader::XMLNS_XML]["id"];
 			$this->lastContent = array(
 				"name" => Format::getShortDescription($id),
