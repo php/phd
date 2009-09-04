@@ -70,6 +70,22 @@
 
   <contents>
     <dir baseinstalldir="phd" name="/">
+      <!-- Translations -->
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/fr.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/de.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/ja.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/ru.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/sv.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/ro.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/en.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/tr.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/it.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/pl.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/da.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/bg.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/pt_BR.xml" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/cs.xml" role="php"/>
+
       <file baseinstalldir="phd" name="phpdotnet/phd/BuildOptionsParser.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/Config.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/Format/Abstract/Manpage.php" role="php"/>
@@ -631,3 +647,4 @@
 <!--
 vim: et sw=2 ts=2
 -->
+
