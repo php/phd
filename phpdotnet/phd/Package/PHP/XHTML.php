@@ -210,18 +210,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return $acronyms;
     }
 
-    public function format_imagedata($open, $name, $attrs) {
-        $file    = $attrs[Reader::XMLNS_DOCBOOK]["fileref"];
-        $newpath = $this->mediamanager->handleFile($file);
-        if (strtolower($this->getFormatName()) != "php-big-xhtml") {
-            $newpath = "../" . $newpath;
-        }
-        if ($this->cchunk["mediaobject"]["alt"] !== false) {
-            return '<img src="' . $newpath . '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
-        }
-        return '<img src="' . $newpath . '" />';
-    }
-
     public function format_refpurpose($open, $tag, $attrs, $props) {
         if ($open) {
             $retval = "";

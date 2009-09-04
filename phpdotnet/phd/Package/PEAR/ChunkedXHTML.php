@@ -69,6 +69,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
 
         case Render::INIT:
             $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            $this->postConstruct();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
                     v("Output directory is a file?", E_USER_ERROR);

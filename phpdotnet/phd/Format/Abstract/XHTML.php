@@ -15,7 +15,6 @@ abstract class Format_Abstract_XHTML extends Format {
 
     public function __construct() {
         parent::__construct();
-        $this->postConstruct();
     }
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
@@ -69,11 +68,11 @@ abstract class Format_Abstract_XHTML extends Format {
     */
     public function postConstruct() {    
         $this->mediamanager = new MediaManager(Config::xml_root());
-        $outputdir = Config::output_dir();
+        $outputdir = $this->getOutputDir();
         if (isset($outputdir) && $outputdir) {
             $this->mediamanager->output_dir = $outputdir;
         } else {
-            $this->mediamanager->output_dir        = $outputfile . '-data/';
+            $this->mediamanager->output_dir        = Config::output_dir() . '/' . strtolower($this->getFormatName()) . '-data/';
             $this->mediamanager->relative_ref_path = basename($this->mediamanager->output_dir) . '/';
         }
     }

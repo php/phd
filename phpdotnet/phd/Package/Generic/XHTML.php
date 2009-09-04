@@ -1248,10 +1248,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         $this->cchunk["mediaobject"]["alt"] = $value;
     }
     public function format_imagedata($open, $name, $attrs) {
+        $file    = $attrs[Reader::XMLNS_DOCBOOK]["fileref"];
+        $newpath = $this->mediamanager->handleFile($file);
         if ($this->cchunk["mediaobject"]["alt"] !== false) {
-            return '<img src="' .$attrs[Reader::XMLNS_DOCBOOK]["fileref"]. '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
+            return '<img src="' . $newpath . '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
         }
-        return '<img src="' .$attrs[Reader::XMLNS_DOCBOOK]["fileref"]. '" />';
+        return '<img src="' . $newpath . '" />';
     }
 
     public function format_table($open, $name, $attrs, $props) {

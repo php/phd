@@ -212,6 +212,7 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
                 mkdir($this->chmdir) or die("Can't create the CHM project directory");
             }
             $this->outputdir = Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
+            $this->postConstruct();
             if(!file_exists($this->outputdir) || is_file($this->outputdir)) {
                 mkdir($this->outputdir) or die("Can't create the cache directory");
             }

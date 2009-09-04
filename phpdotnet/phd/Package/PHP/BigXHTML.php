@@ -83,6 +83,7 @@ HEADER;
             if ($val) {
                 $this->createOutputFile();
                 $this->loadVersionAcronymInfo();
+                $this->postConstruct();
             } 
             break;
 
