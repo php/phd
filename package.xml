@@ -76,33 +76,6 @@
       <file baseinstalldir="phd" name="phpdotnet/phd/Format/Abstract/PDF.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/Format/Abstract/XHTML.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/Format/Factory.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/Factory.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/PHP.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/Manpage.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/PDF.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/BigXHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/ChunkedXHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/XHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/Factory.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/CHM.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/Web.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/PDF.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/BigXHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/Functions.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/BigPDF.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/KDevelop.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/ChunkedXHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/HowTo.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/XHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/Factory.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/CHM.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/Web.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/BigXHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/ChunkedXHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/XHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/IDE/Factory.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/IDE/Funclist.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/IDE/Functions.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/PIHandler.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/functions.php" role="php"/>
       <file baseinstalldir="phd" name="phpdotnet/phd/Reader/Partial.php" role="php"/>
@@ -136,6 +109,10 @@
       <pearinstaller>
         <min>1.4.0</min>
       </pearinstaller>
+      <package>
+        <name>PhDGeneric</name>
+        <channel>doc.php.net</channel>
+      </package>
       <extension>
         <name>libxml</name>
       </extension>
@@ -147,6 +124,18 @@
       </extension>
     </required>
     <optional>
+      <package>
+        <name>PhDPHP</name>
+        <channel>doc.php.net</channel>
+      </package>
+      <package>
+        <name>PhDPEAR</name>
+        <channel>doc.php.net</channel>
+      </package>
+      <package>
+        <name>PhDIDE</name>
+        <channel>doc.php.net</channel>
+      </package>
       <extension>
         <name>posix</name>
       </extension>
