@@ -58,7 +58,11 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+    - Added Pear classname conventions. (cweiske)
     - Added support for dbhtml Process Instructions (PI). (moacir)
+    - Added the --package option. (moacir)
+    - Added the Generic Package. (moacir)
+    - Added the phpdotnet/phd namespace. (cweiske)
     - Killed themes and added a concept of "packages". (moacir)
     - Rewritten indexer. (bjori, loudi, moacir)
     - Rewritten program flow. (bjori)
