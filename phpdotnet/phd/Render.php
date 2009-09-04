@@ -19,7 +19,7 @@ class Render extends ObjectStorage
 
     public function notXPath($tag, $depth) { /* {{{ */
         do {
-            if (isset($tag[$this->STACK[--$depth]])) {
+            if ((--$depth >= 0) && isset($tag[$this->STACK[$depth]])) {
                 $tag = $tag[$this->STACK[$depth]];
             } else {
                 $tag = $tag[0];
