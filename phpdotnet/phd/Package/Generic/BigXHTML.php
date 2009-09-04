@@ -76,6 +76,7 @@ HEADER;
                     $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->getExt();
                     $this->setFileStream(fopen($filename, "w+"));
                     fwrite($this->getFileStream(), $this->header());
+                    $this->postConstruct();
                 }
             } 
             break;

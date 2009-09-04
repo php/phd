@@ -68,6 +68,7 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
 
         case Render::INIT:
             $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            $this->postConstruct();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
                     v("Output directory is a file?", E_USER_ERROR);
