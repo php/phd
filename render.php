@@ -3,9 +3,13 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
+// @php_dir@ gets replaced by pear with the install dir. use __DIR__ when 
+// running from SVN
+define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? __DIR__ : "@php_dir@/phd");
+
 function autoload($name)
 {
-    $file = __DIR__ . DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), '/', $name) . '.php';
+    $file = __INSTALLDIR__ . DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), '/', $name) . '.php';
     if (!$fp = fopen($file,'r', true)) {
         throw new \Exception('Cannot find file for ' . $name . ': ' . $file);
     }   
@@ -13,7 +17,7 @@ function autoload($name)
     require $file;
 }
 spl_autoload_register(__NAMESPACE__ . '\\autoload');
-require_once __DIR__ . '/phpdotnet/phd/functions.php';
+require_once __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
 
 $optparser = new BuildOptionsParser();
 $optparser->getopt();
@@ -32,7 +36,7 @@ if (!file_exists(Config::output_dir())) {
 }
 
 Config::init(array(
-    "lang_dir"  => __DIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
+    "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
                     . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
                     . "langs" . DIRECTORY_SEPARATOR,
     "phpweb_version_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',

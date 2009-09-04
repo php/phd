@@ -66,47 +66,51 @@
 
   <contents>
     <dir baseinstalldir="phd" name="/">
-      <file baseinstalldir="phd" name="formats/xhtml.php" role="php"/>
-      <file baseinstalldir="phd" name="formats/manpage.php" role="php"/>
-      <file baseinstalldir="phd" name="formats/pdf.php" role="php"/>
-      <file baseinstalldir="phd" name="include/PhDFormat.class.php" role="php"/>
-      <file baseinstalldir="phd" name="include/PhDHighlighter.class.php" role="php"/>
-      <file baseinstalldir="phd" name="include/PhDTheme.class.php" role="php"/>
-      <file baseinstalldir="phd" name="include/PhDThemeXhtml.class.php" role="php"/>
-      <file baseinstalldir="phd" name="include/PhDHelper.class.php" role="php"/>
-      <file baseinstalldir="phd" name="include/PhDMediaManager.class.php" role="php"/>
-      <file baseinstalldir="phd" name="include/PhDReader.class.php" role="php"/>
-      <file baseinstalldir="phd" name="include/PhDPartialReader.class.php" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/bg.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/cs.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/da.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/de.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/en.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/fr.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/it.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/ja.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/pl.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/pt_BR.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/ro.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/ru.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/sv.xml" role="php"/>
-      <file baseinstalldir="phd" name="include/langs/tr.xml" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/bightml.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/chmsource.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/chunkedhtml.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/howto.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/phpdotnet.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/phpweb.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/phpfunctions.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/phpkdevelop.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/phppdf.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/php/phpbigpdf.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/pear/pearbightml.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/pear/pearchm.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/pear/pearchunkedhtml.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/pear/peartheme.php" role="php"/>
-      <file baseinstalldir="phd" name="themes/pear/pearweb.php" role="php"/>
-      <file baseinstalldir="" name="build.php" role="script">
+      <file baseinstalldir="phd" name="phpdotnet/phd/BuildOptionsParser.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Config.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Format/Abstract/Manpage.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Format/Abstract/PDF.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Format/Abstract/XHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Format/Factory.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/Factory.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/PHP.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/Manpage.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/PDF.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/BigXHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/ChunkedXHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/Generic/XHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/Factory.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/CHM.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/Web.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/PDF.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/BigXHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/Functions.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/BigPDF.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/KDevelop.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/ChunkedXHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/HowTo.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/XHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/Factory.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/CHM.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/Web.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/BigXHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/ChunkedXHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PEAR/XHTML.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/IDE/Factory.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/IDE/Funclist.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Package/IDE/Functions.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/PIHandler.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/functions.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Reader/Partial.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/MediaManager.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Highlighter.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/ObjectStorage.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Reader.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/PI/DBHTMLHandler.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Format.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Index.php" role="php"/>
+      <file baseinstalldir="phd" name="phpdotnet/phd/Render.php" role="php"/>
+      <file baseinstalldir="" name="render.php" role="script">
         <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
         <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
       </file>
@@ -114,11 +118,7 @@
         <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
         <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config"/>
       </file>
-      <file baseinstalldir="phd" name="config.php" role="php">
-        <tasks:replace from="phd-from-cvs" to="version" type="package-info" />
-      </file>
       <file baseinstalldir="phd" name="LICENSE" role="php"/>
-      <file baseinstalldir="phd" name="mktoc.php" role="php"/>
       <file baseinstalldir="phd" name="README" role="php"/>
       <file baseinstalldir="phd" name="TODO.RENDERER" role="php"/>
     </dir>
@@ -164,7 +164,7 @@
   </phprelease>
   <phprelease>
     <filelist>
-      <install as="phd" name="build.php"/>
+      <install as="phd" name="render.php"/>
       <ignore name="phd.bat"/>
     </filelist>
   </phprelease>
