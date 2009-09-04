@@ -1407,7 +1407,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                     $id = uniqid("phd");
                 }
 
-                $retval .= '<li><a href="#'.$id.'">'.htmlentities($node->textContent, ENT_QUOTES).'</a></li>';
+                $retval .= '<li><a href="#'.$id.'">'.htmlentities($node->textContent, ENT_QUOTES, "UTF-8").'</a></li>';
             }
             $retval .= "</ol></div>";
             return $retval;

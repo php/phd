@@ -237,13 +237,13 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
 			$this->currentTocDepth++;
 			fwrite($this->hhpStream, "{$ref}\n");
 			fwrite($this->hhcStream, "{$this->offset(1)}<li><object type=\"text/sitemap\">\n" .
-				"{$this->offset(3)}<param name=\"Name\" value=\"" . htmlentities($name) . "\">\n" .
+				"{$this->offset(3)}<param name=\"Name\" value=\"" . htmlentities($name, ENT_COMPAT, "UTF-8") . "\">\n" .
 				"{$this->offset(3)}<param name=\"Local\" value=\"{$ref}\">\n" .
 				"{$this->offset(2)}</object>\n");
 			if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
 			fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
 				"          <param name=\"Local\" value=\"{$ref}\">\n" .
-				"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name)) . "\">\n" .
+				"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name, ENT_COMPAT, "UTF-8")) . "\">\n" .
 				"        </object>\n    </li>\n");
 		} elseif ($this->flags & Render::CLOSE) {
 			if ($hasChild) {

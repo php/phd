@@ -300,8 +300,8 @@ SQL;
     public function format_ldesc($open, $name, $attrs, $props) {
         if ($open) {
             if (empty($this->nfo[$this->currentid]["ldesc"])) {
-                            /* FIXME: How can I mark that node with "reparse" flag? */
-                $s = htmlentities(trim($this->getReader()->readContent()));
+                /* FIXME: How can I mark that node with "reparse" flag? */
+                $s = htmlentities(trim($this->getReader()->readContent()), ENT_COMPAT, "UTF-8");
                 $this->nfo[$this->currentid]["ldesc"] = $s;
             }
         }
@@ -309,11 +309,10 @@ SQL;
     public function format_sdesc($open, $name, $attrs, $props) {
         if ($open) {
             if (empty($this->nfo[$this->currentid]["sdesc"])) {
-                            /* FIXME: How can I mark that node with "reparse" flag? */
-                $s = htmlentities(trim($this->getReader()->readContent()));
+                /* FIXME: How can I mark that node with "reparse" flag? */
+                $s = htmlentities(trim($this->getReader()->readContent()), ENT_COMPAT, "UTF-8");
                 $this->nfo[$this->currentid]["sdesc"] = $s;
             }
-
         }
     }
     
