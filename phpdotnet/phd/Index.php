@@ -12,7 +12,7 @@ class Index extends Format
         'article'           => 'format_chunk',
         'book'              => 'format_chunk',
         'part'              => 'format_chunk',
-        ),
+    ),
     'book'                  => 'format_container_chunk',
     'chapter'               => 'format_container_chunk',
     'colophon'              => 'format_chunk',
@@ -21,14 +21,13 @@ class Index extends Format
         'article'           => 'format_chunk',
         'book'              => 'format_chunk',
         'part'              => 'format_chunk',
-        ),
+    ),
     'index'                 => array(
         /* DEFAULT */          false,
         'article'           => 'format_chunk',
         'book'              => 'format_chunk',
         'part'              => 'format_chunk',
-        ),
-
+    ),
     'legalnotice'           => 'format_legalnotice_chunk',
     'part'                  => 'format_container_chunk',
     'phpdoc:exception'      => 'format_container_chunk',
@@ -41,38 +40,36 @@ class Index extends Format
     'sect1'                 => 'format_chunk',
     'section'               => array(
         /* DEFAULT */          false,
-        'sect1'                => 'format_section_chunk',
-        'chapter'              => 'format_section_chunk',
-        'appendix'             => 'format_section_chunk',
-        'article'              => 'format_section_chunk',
-        'part'                 => 'format_section_chunk',
-        'reference'            => 'format_section_chunk',
-        'refentry'             => 'format_section_chunk',
-        'index'                => 'format_section_chunk',
-        'bibliography'         => 'format_section_chunk',
-        'glossary'             => 'format_section_chunk',
-        'colopone'             => 'format_section_chunk',
-        'book'                 => 'format_section_chunk',
-        'set'                  => 'format_section_chunk',
-        'setindex'             => 'format_section_chunk',
-        'legalnotice'          => 'format_section_chunk',
-        ),
+        'sect1'             => 'format_section_chunk',
+        'chapter'           => 'format_section_chunk',
+        'appendix'          => 'format_section_chunk',
+        'article'           => 'format_section_chunk',
+        'part'              => 'format_section_chunk',
+        'reference'         => 'format_section_chunk',
+        'refentry'          => 'format_section_chunk',
+        'index'             => 'format_section_chunk',
+        'bibliography'      => 'format_section_chunk',
+        'glossary'          => 'format_section_chunk',
+        'colopone'          => 'format_section_chunk',
+        'book'              => 'format_section_chunk',
+        'set'               => 'format_section_chunk',
+        'setindex'          => 'format_section_chunk',
+        'legalnotice'       => 'format_section_chunk',
+    ),
     'set'                   => 'format_container_chunk',
     'setindex'              => 'format_chunk',
-
-
-
-            'title'                 => 'format_ldesc',
-            'refpurpose'            => 'format_ldesc',
-            'refname'               => 'format_sdesc',
-            'titleabbrev'           => 'format_sdesc',
-
+    'title'                 => 'format_ldesc',
+    'refpurpose'            => 'format_ldesc',
+    'refname'               => 'format_sdesc',
+    'titleabbrev'           => 'format_sdesc',
     );
+
     private $mytextmap = array(
     );
     private $pihandlers = array(
         'dbhtml'            => 'PI_DBHTMLHandler',
     );
+
     private $chunks    = array();
     private $isChunk   = array();
     private $previousId = "";
