@@ -1,40 +1,55 @@
 How to release a new version of PhD
 -----------------------------------
 
-Releases are currently made from the PHD_0_4 branch.
-Changes in HEAD are merged back into that branch.
+Releases are currently made from the PHD_0_4 and PHD_0_1 branches.
+Changes in trunk are merged back into those branches.
 
-0. Check if all changes in HEAD have been merged back to the release branch.
+0. Check if all changes in trunk have been merged back to the release branch.
 
 1. Check if all changes have an entry in package.xml's <notes>.
 
 2. Check if the api version needs to be increased to match the release
    version. (This is the case when the API has changed. Normally the
-   committer has done that already when merging from HEAD, but you'll
+   committer has done that already when merging from trunk, but you'll
    never know).
    
 3. Make sure all files are listed in package.xml's <content>.
 
-4. Edit config.php and set PHD_VERSION to the current one.
+4. Edit config.php and set PHD_VERSION to the current one (phpdotnet/phd/Config.php VERSION for 1_0).
 
 5. $ pear package
    $ pear install PhD-*.tgz
    .. try phd on phpdoc and peardoc ..
-   $ pear cvstag package.xml
 
-6. Upload the tgz to http://doc.php.net/up.php
+6. Download Simple Channel Server in the docweb/www/ dir. 
+   $ cd /path/to/docweb/www
+   $ wget -O pearscs.phar "http://svn.pear.php.net/wsvn/PEARSVN/sandbox/SimpleChannelServer/pearscs.phar?op=file&rev=0&sc=0"
 
-7. Test by installing from the channel:
+7. Generate the appropriate xml entries using the Simple Channel Server packages. You need to be running PHP 5.3 (make sure you have ext/phar and
+ext/zlib enabled):
+   $ php pearscs.phar release /path/to/PhD-*.tgz <username>
+   $ svn diff # Just quickly scan through the changed XML files
+   $ svn status # Check new files
+   $ svn add .... # all the files from svn status, except pearscs.phar
+
+8. Update the file in path/to/docweb/templates/all/phd/home.tpl.php and add a new <li></li> with info from package.xml.
+
+9. Commit the changes. 
+   $ svn commit -m "Release PhD *"
+
+10. Create a svn tag.
+   $ cd /path/to/phd
+   $ svn cp http://svn.php.net/repository/phd/branches/PHD_* http://svn.php.net/repository/phd/tags/RELEASE_*
+
+11. Test by installing from the channel:
    $ pear upgrade -f doc.php.net/phd-$previousversion
    $ pear upgrade doc.php.net/phd-$thisstability
    .. try phd on phpdoc and peardoc ..
 
-8. Let Hannes update http://doc.php.net/phd/
-
-9. Send release mail to phpdoc@ and pear-doc@lists.php.net
+12. Send release mail to phpdoc@ and pear-doc@lists.php.net
 
 A. Remove all contents from <notes> and increase version/release.
    Change stability back to "snapshot". Revert PHD_VERSION in
-   config.php back to "phd-from-cvs".
+   config.php (VERSION in phpdotnet/phd/Config) back to "phd-from-svn".
 
 B. Hack on.
