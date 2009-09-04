@@ -95,7 +95,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         $ext = '.' . $this->getExt();
         $parent = Format::getParent($id);
         $filename = "toc" . DIRECTORY_SEPARATOR . $parent . ".inc";
-        $up = array("href" => null, "desc" => null);
+        $up = array(0 => null, 1 => null);
         $incl = '';
 
         $next = $prev = array(null, null);
