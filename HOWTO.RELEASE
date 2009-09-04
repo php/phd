@@ -23,7 +23,7 @@ Changes in trunk are merged back into those branches.
 
 6. Download Simple Channel Server in the docweb/www/ dir. 
    $ cd /path/to/docweb/www
-   $ wget -O pearscs.phar "http://svn.pear.php.net/wsvn/PEARSVN/sandbox/SimpleChannelServer/pearscs.phar?op=file&rev=0&sc=0"
+   $ wget -O pearscs.phar "http://svn.php.net/repository/pear2/sandbox/SimpleChannelServer/trunk/pearscs.phar" 
 
 7. Generate the appropriate xml entries using the Simple Channel Server packages. You need to be running PHP 5.3 (make sure you have ext/phar and
 ext/zlib enabled):
