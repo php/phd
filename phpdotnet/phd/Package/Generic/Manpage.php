@@ -77,7 +77,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'literal'               => '\\fI',
         'literallayout'         => 'format_verbatim',
         'manvolnum'             => 'format_manvolnum',
-        'mediaobject'           => '\\fB[NOT DISPLAYABLE MEDIA]',
+        'mediaobject'           => 'format_mediaobject',
         'member'                => 'format_member',
         'methodname'            => '\\fB',
         'methodparam'           => 'format_methodparam',
@@ -120,7 +120,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'refentry'              => 'format_suppressed_tags',
         'refentrytitle'         => '\\fB',
         'reference'             => 'format_suppressed_tags',
-        'refname'               => '.SH NAME',
+        'refname'               => 'format_refname',
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
         'refsect1'              => 'format_refsect',
@@ -293,6 +293,13 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         return "";
     }
 
+    public function format_refname($open, $name, $attrs, $props) {
+        if ($open) {
+            return "\n.SH " . $this->autogen($name, $props["lang"]) . "\n";
+        }
+        return "";
+    }
+
     public function format_refpurpose($open, $name, $attrs, $props) {
         if ($open) {
             return " \- ";
@@ -425,7 +432,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
     public function format_refsynopsisdiv($open, $name, $attrs, $props) {
         if ($open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"])
             && $this->cchunk["methodsynopsis"]["firstsynopsis"]) {
-            return "\n.SH SYNOPSIS\n";
+            return "\n.SH " . $this->autogen("refsynopsis", $props["lang"]) . "\n";
         }
         if (!$open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"]))
             $this->cchunk["methodsynopsis"]["firstsynopsis"] = false;
@@ -436,18 +443,18 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         if ($open && isset($this->cchunk["methodsynopsis"]["firstsynopsis"])
             && $this->cchunk["methodsynopsis"]["firstsynopsis"] && $this->cchunk["appendlater"]) {
             $this->cchunk["appendlater"] = false;
-            return "\n.SH SYNOPSIS\n";
+            return "\n.SH " . $this->autogen("refsynopsis", $props["lang"]) . "\n";
         }
         if ($open)
             return "\n.br";
         $params = array();
         // write the formatted synopsis
         foreach ($this->cchunk['methodsynopsis']['params'] as $parameter) {
-            array_push($params, ($parameter['optional'] ? "[" : "") 
-                        . $parameter['type'] 
-                        . ($parameter['reference'] ? " \\fI&\\fP" : " ") 
-                        . ($parameter['name'] ? "\\fI$" . $parameter['name'] . "\\fP" : "") 
-                        . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "") 
+            array_push($params, ($parameter['optional'] ? "[" : "")
+                        . $parameter['type']
+                        . ($parameter['reference'] ? " \\fI&\\fP" : " ")
+                        . ($parameter['name'] ? "\\fI$" . $parameter['name'] . "\\fP" : "")
+                        . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "")
                         . ($parameter['optional'] ? "]" : "") );
         }
         $ret = "\n(" . join($params, ", ") . ")";
@@ -605,6 +612,13 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
     // Convert the function name to a Unix valid filename
     public function toValidName($functionName) {
         return str_replace(array("::", "->", "()"), array(".", ".", ""), $functionName);
+    }
+
+    public function format_mediaobject($open, $name, $attrs, $props) {
+        if ($open) {
+            return "\n\\fB" . $this->autogen($name, $props["lang"]) . "\\fP";
+        }
+        return "";
     }
   
 }
