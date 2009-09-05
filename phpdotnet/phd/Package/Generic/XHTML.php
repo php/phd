@@ -466,7 +466,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         foreach ($this->getChildrens($id) as $child) {
             $isLDesc = null;
             $isSDesc = null;
-            $long = $this->parse($this->getLongDescription($child, $isLDesc));
+            $long = $this->getLongDescription($child, $isLDesc);
             $short = $this->getShortDescription($child, $isSDesc);
             $link = $this->createLink($child);
 
