@@ -257,7 +257,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             fwrite($this->hhkStream,
                 "      <LI><OBJECT type=\"text/sitemap\">\n" .
                 "        <param name=\"Local\" value=\"{$ref}\">\n" .
-                "        <param name=\"Name\" value=\"{$name}\">\n" .
+                "        <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name)) . "\">\n" .
                 "      </OBJECT>\n");
         } elseif ($this->flags & Render::CLOSE) {
             if ($hasChild) {
@@ -266,6 +266,24 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             $this->currentTocDepth--;
         }
     }
+
+    /**
+    * Clean up the index name.
+    * Newlines and double spaces don't look that good in some chm viewer apps.
+    *
+    * @param string $value Value to fix
+    *
+    * @return string Fixed/cleaned value
+    */
+    protected static function cleanIndexName($value)
+    {
+        return str_replace(
+            array("\n", "\r", '  '),
+            array('', '', ' '),
+            $value
+        );
+    }
+
 
     protected function headerChm() {
         $lang = Config::language();
@@ -279,6 +297,7 @@ Default topic=res' . DIRECTORY_SEPARATOR . 'index.html
 Default Window=doc
 Display compile progress=Yes
 Enhanced decompilation=Yes
+Flat=Yes
 Full-text search=Yes
 Index file=php_manual_' . $lang . '.hhk
 Language=' . $this->LANGUAGES[$lang]["langcode"] . '
@@ -408,6 +427,17 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         $replacement = '<a href="\1" class="link external" title="Link : \1">';
         $link = preg_replace($search, $replacement, $link);
         return $link;
+    }
+
+    public function format_imagedata($open, $name, $attrs) {
+        // Due to flattening of the CHM build process, the links to the images cannot be relative.
+        preg_match('`src="([^"]++)"`', $image = parent::format_imagedata($open, $name, $attrs), $imageMatches);
+        $image = str_replace($imageMatches[1], basename($imageMatches[1]), $image);
+
+        // Add the image to the hhp project file as the automatic build won't find it.
+        fwrite($this->hhpStream, 'res\\images\\' . basename($imageMatches[1]) . "\n");
+
+        return $image;
     }
 }
 
