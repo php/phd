@@ -12,7 +12,7 @@ class Package_IDE_Functions extends Format {
         'refentry'              => 'format_refentry',
         'refname'               => 'name',
         'refnamediv'            => 'format_suppressed_tags',
-        'refpurpose'            => 'purpose',
+        'refpurpose'            => 'format_refpurpose',
         'refsect1'              => 'format_refsect1',
         'row'                   => 'format_changelog_row',
         'set'                   => 'format_set',
@@ -32,6 +32,7 @@ class Package_IDE_Functions extends Format {
     protected $dchunk = array(
         "code"                  => false,
         "funcname"              => array(),
+        "manualid"              => false,
         "param"                 => array(
             "name"                  => false,
             "type"                  => false,
@@ -46,6 +47,7 @@ class Package_IDE_Functions extends Format {
             "return"                => false,
         ),
         "methodparam"           => false,
+        "refname"               => false,
         "return"                => array(
             "type"                  => false,
         ),
@@ -65,6 +67,7 @@ class Package_IDE_Functions extends Format {
     protected $chunkOpened = false;
     protected $isFunctionRefSet;
     protected $role = false;
+    protected $versions;
 
     public function __construct() {
         $this->registerFormatName("IDE-Functions");
@@ -169,6 +172,11 @@ class Package_IDE_Functions extends Format {
     }
 
     public function INIT($value) {
+        if (file_exists(Config::phpweb_version_filename())) {
+            $this->versions = self::generateVersionInfo(Config::phpweb_version_filename());
+        } else {
+            trigger_error("Can't load the versions file", E_USER_ERROR);
+        }
         $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
         if (file_exists($this->getOutputDir())) {
             if (!is_dir($this->getOutputDir())) {
@@ -211,6 +219,47 @@ class Package_IDE_Functions extends Format {
         }
     }
 
+    public static function generateVersionInfo($filename) {
+        static $info;
+        if ($info) {
+            return $info;
+        }
+        $r = new \XMLReader;
+        if (!$r->open($filename)) {
+            throw new \Exception;
+        }
+        $versions = array();
+        while($r->read()) {
+            if (
+                $r->moveToAttribute("name")
+                && ($funcname = str_replace(
+                    array("::", "->", "__", "_", '$'),
+                    array("-",  "-",  "-",  "-", ""),
+                    $r->value))
+                && $r->moveToAttribute("from")
+                && ($from = $r->value)
+            ) {
+                $versions[strtolower($funcname)] = $from;
+                $r->moveToElement();
+            }
+        }
+        $r->close();
+        $info = $versions;
+        return $versions;
+    }
+
+    public function versionInfo($funcname) {
+        $funcname = str_replace(
+                array("::", "-&gt;", "->", "__", "_", '$', '()'),
+                array("-",  "-",     "-",  "-",  "-", "",  ''),
+                strtolower($funcname));
+        if(isset($this->versions[$funcname])) {
+           return $this->versions[$funcname];
+        }
+        v("No version info for $funcname", VERBOSE_NOVERSION);
+        return false;
+    }
+
     public function format_suppressed_tags($open, $name, $attrs, $props) {
         return "";
     }
@@ -227,11 +276,13 @@ class Package_IDE_Functions extends Format {
     }
 
     public function format_refentry($open, $name, $attrs, $props) {
-        if (!$this->isFunctionRefSet)
+        if (!$this->isFunctionRefSet) {
             return false;
+        }
         if ($open) {
             $this->notify(Render::CHUNK, Render::OPEN);
             $this->cchunk = $this->dchunk;
+            $this->cchunk["manualid"] =  $attrs[Reader::XMLNS_XML]['id'];
             return "<function>\n";
         }
         $this->notify(Render::CHUNK, Render::CLOSE);
@@ -239,8 +290,23 @@ class Package_IDE_Functions extends Format {
     }
 
     public function format_refname_text($value, $tag) {
-        $this->cchunk["funcname"][] = $this->toValidName(trim($value));
+        $this->cchunk["refname"] = $this->cchunk["funcname"][] = $this->toValidName(trim($value)); 
         return $this->toValidName(trim($value));
+    }
+
+    public function format_refpurpose($open, $name, $attrs, $props) {
+        if (!$this->isFunctionRefSet) {
+            return false;
+        }
+        if ($open) {
+            return "<purpose>";
+        }
+        $ret = "</purpose>\n";
+        $ret .= "<version>".$this->versionInfo($this->cchunk["refname"])."</version>\n";
+        $ret .= "<manualid>".$this->cchunk["manualid"]."</manualid>\n";
+        $this->cchunk["manualid"] = $this->dchunk["manualid"];
+        $this->cchunk["refname"] = $this->dchunk["refname"];
+        return $ret;
     }
 
     public function format_refsect1($open, $name, $attrs, $props) {
