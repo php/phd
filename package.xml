@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://pear.php.net/dtd/package-2.0"
-    xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    packagerversion="1.5.4"
-    version="2.0"
-    xsi:schemaLocation="
-      http://pear.php.net/dtd/tasks-1.0      http://pear.php.net/dtd/tasks-1.0.xsd
-      http://pear.php.net/dtd/package-2.0    http://pear.php.net/dtd/package-2.0.xsd">
+  xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  packagerversion="1.5.4"
+  version="2.0"
+  xsi:schemaLocation="
+    http://pear.php.net/dtd/tasks-1.0   http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd"
+>
 
   <name>PhD</name>
   <channel>doc.php.net</channel>
@@ -47,10 +48,10 @@
     <active>no</active>
   </developer>
 
-  <date>2009-05-07</date>
+  <date>2009-09-08</date>
   <version>
     <release>0.9.0</release>
-    <api>1.0.0</api>
+    <api>0.9.0</api>
   </version>
   <stability>
     <release>snapshot</release>
@@ -58,62 +59,80 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added Pear classname conventions. (cweiske)
-    - Added support for dbhtml Process Instructions (PI). (moacir)
-    - Added the --package option. (moacir)
-    - Added the Generic Package. (moacir)
-    - Added the phpdotnet/phd namespace. (cweiske)
-    - Killed themes and added a concept of "packages". (moacir)
-    - Rewritten indexer. (bjori, loudi, moacir)
-    - Rewritten program flow. (bjori)
+    - Use namespaces [moacir]
+    - Use PEAR classname conventions [cweiske]
+    - Add support for dbhtml Process Instructions (PI) [moacir]
+    - Add the --package option [moacir]
+    - Add the Generic Package [moacir]
+    - Add the phpdotnet/phd namespace [cweiske]
+    - Kill themes and add a concept of "packages" [moacir]
+    - Rewrite indexer [bjori, loudi, moacir]
+    - Rewrite program flow [bjori]
   </notes>
 
   <contents>
-    <dir baseinstalldir="phd" name="/">
-      <!-- Translations -->
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/fr.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/de.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/ja.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/ru.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/sv.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/ro.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/en.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/tr.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/it.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/pl.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/da.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/bg.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/pt_BR.xml" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/data/langs/cs.xml" role="php"/>
+    <dir name="/">
+      <dir name="phpdotnet">
+	<dir name="phd">
+	  <dir name="data">
+	    <dir name="langs">
+	      <!-- Translations -->
+	      <file name="fr.xml" role="php"/>
+	      <file name="de.xml" role="php"/>
+	      <file name="ja.xml" role="php"/>
+	      <file name="ru.xml" role="php"/>
+	      <file name="sv.xml" role="php"/>
+	      <file name="ro.xml" role="php"/>
+	      <file name="en.xml" role="php"/>
+	      <file name="tr.xml" role="php"/>
+	      <file name="it.xml" role="php"/>
+	      <file name="pl.xml" role="php"/>
+	      <file name="da.xml" role="php"/>
+	      <file name="bg.xml" role="php"/>
+	      <file name="pt_BR.xml" role="php"/>
+	      <file name="cs.xml" role="php"/>
+	    </dir>
+	  </dir>
+	  <dir name="Format">
+	    <dir name="Abstract">
+	      <file name="Manpage.php" role="php"/>
+	      <file name="PDF.php" role="php"/>
+	      <file name="XHTML.php" role="php"/>
+	    </dir>
+	    <file name="Factory.php" role="php"/>
+	  </dir>
+	  <dir name="Reader">
+	    <file name="Partial.php" role="php"/>
+	  </dir>
+	  <dir name="PI">
+	    <file name="DBHTMLHandler.php" role="php"/>
+	  </dir>
+	  <file name="BuildOptionsParser.php" role="php"/>
+	  <file name="Config.php" role="php"/>
+	  <file name="Format.php" role="php"/>
+	  <file name="functions.php" role="php"/>
+	  <file name="Highlighter.php" role="php"/>
+	  <file name="Index.php" role="php"/>
+	  <file name="MediaManager.php" role="php"/>
+	  <file name="ObjectStorage.php" role="php"/>
+	  <file name="PIHandler.php" role="php"/>
+	  <file name="Reader.php" role="php"/>
+	  <file name="Render.php" role="php"/>
 
-      <file baseinstalldir="phd" name="phpdotnet/phd/BuildOptionsParser.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Config.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Format/Abstract/Manpage.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Format/Abstract/PDF.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Format/Abstract/XHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Format/Factory.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/PIHandler.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/functions.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Reader/Partial.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/MediaManager.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Highlighter.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/ObjectStorage.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Reader.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/PI/DBHTMLHandler.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Format.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Index.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Render.php" role="php"/>
-      <file baseinstalldir="" name="render.php" role="script">
-        <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
-        <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
+
+	</dir>
+      </dir>
+      <file name="render.php" role="script">
+	<tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
+	<tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
       </file>
-      <file baseinstalldir="" name="phd.bat" role="script">
-        <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
-        <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config"/>
+      <file name="phd.bat" role="script">
+	<tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
+	<tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config"/>
       </file>
-      <file baseinstalldir="phd" name="LICENSE" role="php"/>
-      <file baseinstalldir="phd" name="README" role="php"/>
-      <file baseinstalldir="phd" name="TODO.RENDERER" role="php"/>
+      <file name="LICENSE" role="doc"/>
+      <file name="README" role="doc"/>
+      <file name="TODO.RENDERER" role="doc"/>
     </dir>
   </contents>
 
@@ -123,7 +142,7 @@
         <min>5.3.0</min>
       </php>
       <pearinstaller>
-        <min>1.4.0</min>
+        <min>1.9.0</min>
       </pearinstaller>
       <package>
         <name>PhDGeneric</name>
@@ -168,12 +187,12 @@
       </os>
     </installconditions>
     <filelist>
-      <install as="phd.bat" name="phd.bat"/>
+      <install name="phd.bat" as="phd.bat"/>
     </filelist>
   </phprelease>
   <phprelease>
     <filelist>
-      <install as="phd" name="render.php"/>
+      <install name="render.php" as="phd"/>
       <ignore name="phd.bat"/>
     </filelist>
   </phprelease>
@@ -647,4 +666,3 @@
 <!--
 vim: et sw=2 ts=2
 -->
-
