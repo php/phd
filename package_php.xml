@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://pear.php.net/dtd/package-2.0"
-    xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    packagerversion="1.5.4"
-    version="2.0"
-    xsi:schemaLocation="
-      http://pear.php.net/dtd/tasks-1.0      http://pear.php.net/dtd/tasks-1.0.xsd
-      http://pear.php.net/dtd/package-2.0    http://pear.php.net/dtd/package-2.0.xsd">
+  xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  packagerversion="1.5.4"
+  version="2.0"
+  xsi:schemaLocation="
+    http://pear.php.net/dtd/tasks-1.0   http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd"
+>
 
-  <name>PhDPHP</name>
+  <name>PhD_PHP</name>
   <channel>doc.php.net</channel>
-  <summary>A rendering Package for PhD</summary>
+  <summary>PHP documentation rendering package for PhD</summary>
   <description>
-    A package for PhD to render the php.net (phpdoc) documentations
+    A package for PhD to render the php.net (phpdoc) documentation
   </description>
 
   <lead>
@@ -28,13 +29,13 @@
     <active>yes</active>
   </lead>
 
-  <date>2009-05-07</date>
+  <date>2009-09-09</date>
   <version>
     <release>0.9.0</release>
-    <api>1.0.0</api>
+    <api>0.9.0</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
@@ -43,20 +44,28 @@
   </notes>
 
   <contents>
-    <dir baseinstalldir="phd" name="/">
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/Factory.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/CHM.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/Web.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/PDF.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/BigXHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/Functions.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/BigPDF.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/KDevelop.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/ChunkedXHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/HowTo.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/XHTML.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/README" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/PHP/HOWTO.GENERATE_CHM" role="php"/>
+    <dir name="/">
+      <dir name="phpdotnet">
+	<dir name="phd">
+	  <dir name="Package">
+	    <dir name="PHP">
+	      <file name="Factory.php" role="php"/>
+	      <file name="CHM.php" role="php"/>
+	      <file name="Web.php" role="php"/>
+	      <file name="PDF.php" role="php"/>
+	      <file name="BigXHTML.php" role="php"/>
+	      <file name="Functions.php" role="php"/>
+	      <file name="BigPDF.php" role="php"/>
+	      <file name="KDevelop.php" role="php"/>
+	      <file name="ChunkedXHTML.php" role="php"/>
+	      <file name="HowTo.php" role="php"/>
+	      <file name="XHTML.php" role="php"/>
+	      <file name="README" role="doc"/>
+	      <file name="HOWTO.GENERATE_CHM" role="doc"/>
+	    </dir>
+	  </dir>
+	</dir>
+      </dir>
     </dir>
   </contents>
 
@@ -66,7 +75,7 @@
         <min>5.3.0</min>
       </php>
       <pearinstaller>
-        <min>1.4.0</min>
+        <min>1.8.0</min>
       </pearinstaller>
       <package>
         <name>PhD</name>
@@ -97,13 +106,13 @@
     <release>
       <version>
         <release>0.9.0</release>
-        <api>1.0.0</api>
+        <api>0.9.0</api>
       </version>
       <stability>
-        <release>snapshot</release>
-        <api>devel</api>
+        <release>beta</release>
+        <api>beta</api>
       </stability>
-      <date>2007-10-01</date>
+      <date>2009-09-09</date>
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Initial release

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://pear.php.net/dtd/package-2.0"
-    xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    packagerversion="1.5.4"
-    version="2.0"
-    xsi:schemaLocation="
-      http://pear.php.net/dtd/tasks-1.0      http://pear.php.net/dtd/tasks-1.0.xsd
-      http://pear.php.net/dtd/package-2.0    http://pear.php.net/dtd/package-2.0.xsd">
-
-  <name>PhDIDE</name>
+  xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  packagerversion="1.5.4"
+  version="2.0"
+  xsi:schemaLocation="
+    http://pear.php.net/dtd/tasks-1.0   http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd"
+>
+  <name>PhD_IDE</name>
   <channel>doc.php.net</channel>
-  <summary>A rendering Package for PhD</summary>
+  <summary>Render docbook for IDEs</summary>
   <description>
     An IDE specific rendering package for PhD
   </description>
@@ -22,13 +22,13 @@
     <active>yes</active>
   </lead>
 
-  <date>2009-05-07</date>
+  <date>2009-09-09</date>
   <version>
     <release>0.9.0</release>
-    <api>1.0.0</api>
+    <api>0.9.0</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
@@ -37,10 +37,18 @@
   </notes>
 
   <contents>
-    <dir baseinstalldir="phd" name="/">
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/IDE/Factory.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/IDE/Funclist.php" role="php"/>
-      <file baseinstalldir="phd" name="phpdotnet/phd/Package/IDE/Functions.php" role="php"/>
+    <dir name="/">
+      <dir name="phpdotnet">
+	<dir name="phd">
+	  <dir name="Package">
+	    <dir name="IDE">
+	      <file name="Factory.php" role="php"/>
+	      <file name="Funclist.php" role="php"/>
+	      <file name="Functions.php" role="php"/>
+	    </dir>
+	  </dir>
+	</dir>
+      </dir>
     </dir>
   </contents>
 
@@ -50,7 +58,7 @@
         <min>5.3.0</min>
       </php>
       <pearinstaller>
-        <min>1.4.0</min>
+        <min>1.8.0</min>
       </pearinstaller>
       <package>
         <name>PhD</name>
@@ -67,11 +75,6 @@
         <name>dom</name>
       </extension>
     </required>
-    <optional>
-      <extension>
-        <name>haru</name>
-      </extension>
-    </optional>
   </dependencies>
 
   <phprelease>
@@ -81,13 +84,13 @@
     <release>
       <version>
         <release>0.9.0</release>
-        <api>1.0.0</api>
+        <api>0.9.0</api>
       </version>
       <stability>
-        <release>snapshot</release>
-        <api>devel</api>
+        <release>beta</release>
+        <api>beta</api>
       </stability>
-      <date>2007-10-01</date>
+      <date>2009-09-09</date>
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Initial release
