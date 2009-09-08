@@ -142,7 +142,7 @@
         <min>5.3.0</min>
       </php>
       <pearinstaller>
-        <min>1.9.0</min>
+        <min>1.8.0</min>
       </pearinstaller>
       <package>
         <name>PhDGeneric</name>
