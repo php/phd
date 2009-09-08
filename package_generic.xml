@@ -9,7 +9,7 @@
     http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd"
 >
 
-  <name>PhDGeneric</name>
+  <name>PhD_Generic</name>
   <channel>doc.php.net</channel>
   <summary>Generic rendering package for PhD</summary>
   <description>
