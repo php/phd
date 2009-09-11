@@ -163,6 +163,12 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
 					   "mime_charset_name" => "Windows-1252",
 					   "preferred_font" => self::DEFAULT_FONT
 				   ),
+		"tr"    => array(
+					   "langcode" => "0x41f Turkish",
+					   "preferred_charset" => "Windows-1254",
+					   "mime_charset_name" => "Windows-1254",
+					   "preferred_font" => self::DEFAULT_FONT
+				   ),
 		"zh"    => array(
 					   "langcode" => "0x804 Simplified Chinese",
 					   "preferred_charset" => "CP936",
@@ -245,7 +251,7 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
 			fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
 				"          <param name=\"Local\" value=\"{$ref}\">\n" .
 				"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name, ENT_COMPAT, "UTF-8")) . "\">\n" .
-				"        </object>\n    </li>\n");
+				"        </object>\n");
 		} elseif ($this->flags & Render::CLOSE) {
 			if ($hasChild) {
 				fwrite($this->hhcStream, "{$this->offset(2)}</ul>\n");
@@ -274,20 +280,22 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
     protected function headerChm() {
 		$lang = Config::language();
 		fwrite($this->hhpStream, '[OPTIONS]
+Binary TOC=Yes
 Compatibility=1.1 or later
 Compiled file=pear_manual_' . $lang . '.chm
 Contents file=pear_manual_' . $lang . '.hhc
-Index file=pear_manual_' . $lang . '.hhk
-Default Window=doc
-Default topic=res\index.html
-Display compile progress=Yes
-Full-text search=Yes
-Language=' . $this->LANGUAGES[$lang]["langcode"] . '
-Title=' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '
 Default Font=' . ($this->LANGUAGES[$lang]["preferred_font"] ? $this->LANGUAGES[$lang]["preferred_font"] : self::DEFAULT_FONT). '
+Default topic=res\index.html
+Default Window=doc
+Display compile progress=Yes
+Enhanced decompilation=Yes
+Full-text search=Yes
+Index file=pear_manual_' . $lang . '.hhk
+Language=' . $this->LANGUAGES[$lang]["langcode"] . '
+Title=' . (isset($this->LANGUAGES[$lang]["title"]) ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '
 
 [WINDOWS]
-doc="' . ($this->LANGUAGES[$lang]["title"] ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","pear_manual_' . $lang . '.hhc","pear_manual_' . $lang . '.hhk","res\index.html","res\index.html",,,,,0x23520,,0x386e,,,,,,,,0
+doc="' . (isset($this->LANGUAGES[$lang]["title"]) ? $this->LANGUAGES[$lang]["title"] : self::DEFAULT_TITLE) . '","pear_manual_' . $lang . '.hhc","pear_manual_' . $lang . '.hhk","res\index.html","res\index.html",,,,,0x33520,,0x70386e,,,,,,,,0
 
 [FILES]
 res\reset-fonts.css
@@ -402,6 +410,14 @@ $1</head>',
 		return $spaces;
     }
 
+    public function format_link($open, $name, $attrs, $props) {
+        $link = parent::format_link($open, $name, $attrs, $props);
+        // Add title attribute to external links so address can be seen in CHM files.
+        $search = '`<a href="([^#"][^"]++)" class="link external">`';
+        $replacement = '<a href="\1" class="link external" title="Link : \1">';
+        $link = preg_replace($search, $replacement, $link);
+        return $link;
+    }
 }
 
 /*
