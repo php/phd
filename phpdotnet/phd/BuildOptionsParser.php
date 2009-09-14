@@ -235,12 +235,19 @@ class BuildOptionsParser
         }
     }
 
+    /**
+     * Prints out the current PhD and PHP version.
+     * Exits directly.
+     *
+     * @return void
+     */
     public function option_version($k, $v)
     {
-        $color = Config::phd_info_color();
+        $color  = Config::phd_info_color();
         $output = Config::phd_info_output();
-        fprintf($output, "%s\n", term_color("PhD Version: " . Config::VERSION, $color));
-        fprintf($output, "%s\n", term_color("Copyright(c) 2007-2009 The PHP Documentation Group", $color));
+        fprintf($output, "%s\n", term_color('PhD Version: ' . Config::VERSION, $color));
+        fprintf($output, "%s\n", term_color('PHP Version: ' . phpversion(), $color));
+        fprintf($output, "%s\n", term_color('Copyright(c) 2007-2009 The PHP Documentation Group', $color));
         exit(0);
     }
 
