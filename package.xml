@@ -68,6 +68,7 @@
     - Kill themes and add a concept of "packages" [moacir]
     - Rewrite indexer [bjori, loudi, moacir]
     - Rewrite program flow [bjori]
+    - Fixed bug #49547 - default of --color is true, not false [Richard Quadling]
   </notes>
 
   <contents>

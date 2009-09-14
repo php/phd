@@ -285,7 +285,7 @@ class BuildOptionsParser
                              theme). (default: en)
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal
-                             (default: false)
+                             (default: true)
   -g <classname>
   --highlighter <classname>  Use custom source code highlighting php class
   -V
@@ -293,7 +293,7 @@ class BuildOptionsParser
   -h
   --help                     This help
 
-Most options can be passed multiple times for greater affect.
+Most options can be passed multiple times for greater effect.
 ";
         exit(0);
     }
