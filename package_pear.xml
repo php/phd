@@ -102,7 +102,8 @@
       <date>2009-09-09</date>
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
-        - Initial release
+        - Added Next/Prev and Image Zoom buttons to CHM build (Richard Quadling)
+        - Add title attribute to anchor tags so address can be seen in CHM files for external links (Richard Quadling)
       </notes>
     </release>
 
