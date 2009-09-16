@@ -8,7 +8,7 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
 
     // Array to manual code -> HTML Help Code conversion
 	// Code list: http://www.helpware.net/htmlhelp/hh_info.htm
-	// Charset list: http://www.microsoft.com/globaldev/nlsweb/default.asp
+	// Charset list: http://msdn.microsoft.com/en-us/goglobal/bb896001.aspx
 	// Language code: http://www.unicode.org/unicode/onlinedat/languages.html
 	// MIME preferred charset list: http://www.iana.org/assignments/character-sets
 	// Font list: http://www.microsoft.com/office/ork/xp/three/inte03.htm
