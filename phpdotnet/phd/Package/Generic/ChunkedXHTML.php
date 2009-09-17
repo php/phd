@@ -92,8 +92,10 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
         $title = $this->getLongDescription($id);
         $lang = Config::language();
         $root = Format::getRootIndex();
-        $cssLinks = $this->createCSSLinks();
-
+        static $cssLinks = '';
+        if (!$cssLinks) {
+            $cssLinks = $this->createCSSLinks();
+        }
         $prev = $next = $parent = array("href" => null, "desc" => null);
 
         if ($parentId = $this->getParent($id)) {

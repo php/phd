@@ -17,7 +17,10 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
 
     public function header($id) {
         $title = Format::getLongDescription($id);
-        $cssLinks = $this->createCSSLinks();
+        static $cssLinks = '';
+        if (!$cssLinks) {
+            $cssLinks = $this->createCSSLinks();
+        }
         $header = <<<HEADER
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
