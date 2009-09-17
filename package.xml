@@ -156,6 +156,9 @@
       <extension>
         <name>dom</name>
       </extension>
+      <extension>
+        <name>sqlite3</name>
+      </extension>
     </required>
     <optional>
       <package>
