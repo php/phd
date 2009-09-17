@@ -93,9 +93,11 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
         $lang = Config::language();
         $root = Format::getRootIndex();
 
-        $cssLinks = '';
-        foreach ((array)$this->stylesheets as $css) {
-            $cssLinks .= "    <link media=\"all\" rel=\"stylesheet\" type=\"text/css\" href=\"styles/".$css."\" />\n";
+        static $cssLinks = '';
+        if (!$cssLinks) {
+            foreach ((array)$this->stylesheets as $css) {
+                $cssLinks .= "    <link media=\"all\" rel=\"stylesheet\" type=\"text/css\" href=\"styles/".$css."\" />\n";
+            }
         }
 
         $prev = $next = $parent = array("href" => null, "desc" => null);
