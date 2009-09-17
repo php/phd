@@ -50,25 +50,19 @@
 
   <date>2009-09-08</date>
   <version>
-    <release>0.9.0</release>
-    <api>0.9.0</api>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Use namespaces [moacir]
-    - Use PEAR classname conventions [cweiske]
-    - Add support for dbhtml Process Instructions (PI) [moacir]
-    - Add the --package option [moacir]
-    - Add the Generic Package [moacir]
-    - Add the phpdotnet/phd namespace [cweiske]
-    - Kill themes and add a concept of "packages" [moacir]
-    - Rewrite indexer [bjori, loudi, moacir]
-    - Rewrite program flow [bjori]
-    - Fixed bug #49547 - default of --color is true, not false [Richard Quadling]
+    - Added the --css option (Moacir)
+    - Fixed bug #47406 - Add support for external css (Moacir)
+    - Fixed bug #48264 - No style for HTML version of php docs (Moacir)
+    - Fixed bug #49547 - default of --color is true, not false (Richard Quadling)
   </notes>
 
   <contents>
@@ -659,6 +653,30 @@
         - CVS-&gt;SVN langs migration (Philip).
         - Fixed bug#49006 (The manpage format groups function arguments incorrectly). (Moacir)
         - Fixed bug#49005 (Reference sign in function prototypes in the manpage rendering). (Moacir)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>0.9.0</release>
+        <api>0.9.0</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2009-09-08</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Use namespaces (Moacir)
+        - Use PEAR classname conventions (Christian)
+        - Add support for dbhtml Process Instructions (PI) (Moacir)
+        - Add the --package option (Moacir)
+        - Add the Generic Package (Moacir)
+        - Add the phpdotnet/phd namespace (Christian)
+        - Kill themes and add a concept of "packages" (Moacir)
+        - Rewrite indexer (Hannes, Rudy, Moacir)
+        - Rewrite program flow (Hannes)
       </notes>
     </release>
 
