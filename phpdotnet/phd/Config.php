@@ -36,6 +36,7 @@ class Config
         "package"           => array(
             "Generic",
         ),
+        'css'               => array(),
     );
 
     public static function init(array $a) {

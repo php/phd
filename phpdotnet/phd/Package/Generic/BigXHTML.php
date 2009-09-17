@@ -36,6 +36,10 @@ class Package_Generic_BigXHTML extends Package_Generic_XHTML {
 
     public function header() {
         $root = Format::getRootIndex();
+        $style = '';
+        foreach ((array)$this->stylesheets as $css) {
+            $style .= "<style type=\"text/css\">\n" . $css . "\n</style>\n";
+        }
         return <<<HEADER
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -43,6 +47,7 @@ class Package_Generic_BigXHTML extends Package_Generic_XHTML {
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>{$root["ldesc"]}</title>
+{$style}
 </head>
 <body>
 HEADER;
@@ -74,9 +79,12 @@ HEADER;
             if ($val) {
                 if (!is_resource($this->getFileStream())) {
                     $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->getExt();
+                    $this->postConstruct();
+                    if (Config::css()) {
+                        $this->fetchStylesheet();
+                    }
                     $this->setFileStream(fopen($filename, "w+"));
                     fwrite($this->getFileStream(), $this->header());
-                    $this->postConstruct();
                 }
             } 
             break;

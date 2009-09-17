@@ -432,6 +432,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'dbhtml'        => 'PI_DBHTMLHandler',
     );
 
+    protected $stylesheets = array();
+
     public function __construct() {
         parent::__construct();
         $this->registerPIHandlers($this->pihandlers);
@@ -514,6 +516,41 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $retval;
     }
 
+    protected function fetchStylesheet() {
+        if (!$this->isChunked()) {
+            foreach ((array)Config::css() as $css) {
+                if ($style = file_get_contents($css)) {                
+                    $this->stylesheets[] = $style;
+                } else {
+                    v(sprintf("Stylesheet %s not fetched.", $css), E_USER_WARNING);
+                }
+            }
+            return;
+        }
+        $stylesDir = $this->getOutputDir();
+        if (!$stylesDir) {
+            $stylesDir = Config::output_dir();
+        }
+        $stylesDir .= 'styles/';
+        if (file_exists($stylesDir)) {
+            if (!is_dir($stylesDir)) {
+                v("The styles/ directory is a file?", E_USER_ERROR);
+            }
+        } else {
+            if (!mkdir($stylesDir)) {
+                v("Can't create the styles/ directory.", E_USER_ERROR);
+            }
+        }
+        foreach ((array)Config::css() as $css) {
+            $basename = basename($css);
+            $dest = md5(substr($css, 0, -strlen($basename))) . '-' . $basename;
+            if (@copy($css, $stylesDir . $dest)) {
+                $this->stylesheets[] = $dest;
+            } else {
+                v(sprintf('Impossible to copy the %s file.', $css), E_USER_WARNING);
+            }
+        }
+    }
  
 /* Functions format_* */     
     public function format_suppressed_tags($open, $name, $attrs, $props) {

@@ -24,6 +24,7 @@ class BuildOptionsParser
             "version"      => "V",         // Print out version information
             "help"         => "h",         // Print out help
             "package:"     => "P:",        // The package of formats            
+            "css:"         => "C:",        // External CSS 
         );
     }
 
@@ -212,6 +213,9 @@ class BuildOptionsParser
     }
     public function option_c($k, $v)
     {
+        if ($k == "C") {
+            return $this->option_css($k, $v);
+        }
         $this->option_color($k, $v);
     }
     public function option_color($k, $v)
@@ -233,6 +237,15 @@ class BuildOptionsParser
         } else {
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
+    }
+    public function option_css($k, $v) {
+        $styles = array();
+        foreach((array)$v as $key => $val) {
+            if (!in_array($val, $styles)) {
+                $styles[] = $val;
+            }
+        }
+        Config::set_css($styles);
     }
 
     /**

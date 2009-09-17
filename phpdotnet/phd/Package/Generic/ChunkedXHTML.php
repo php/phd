@@ -78,6 +78,9 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
+            if (Config::css()) {
+                $this->fetchStylesheet();
+            }
             break;
         case Render::VERBOSE:
         	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
@@ -89,6 +92,11 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
         $title = $this->getLongDescription($id);
         $lang = Config::language();
         $root = Format::getRootIndex();
+
+        $cssLinks = '';
+        foreach ((array)$this->stylesheets as $css) {
+            $cssLinks .= "    <link media=\"all\" rel=\"stylesheet\" type=\"text/css\" href=\"styles/".$css."\" />\n";
+        }
 
         $prev = $next = $parent = array("href" => null, "desc" => null);
 
@@ -112,6 +120,7 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>'.(($title != $root["ldesc"]) ? $root["ldesc"].': ' : "").$title.'</title>
+'.$cssLinks.'
 </head>
 <body>
 <table width="100%">
