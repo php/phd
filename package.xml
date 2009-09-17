@@ -74,60 +74,60 @@
   <contents>
     <dir name="/">
       <dir name="phpdotnet">
-	<dir name="phd">
-	  <dir name="data">
-	    <dir name="langs">
-	      <!-- Translations -->
-	      <file name="fr.xml" role="php"/>
-	      <file name="de.xml" role="php"/>
-	      <file name="ja.xml" role="php"/>
-	      <file name="ru.xml" role="php"/>
-	      <file name="sv.xml" role="php"/>
-	      <file name="ro.xml" role="php"/>
-	      <file name="en.xml" role="php"/>
-	      <file name="tr.xml" role="php"/>
-	      <file name="it.xml" role="php"/>
-	      <file name="pl.xml" role="php"/>
-	      <file name="da.xml" role="php"/>
-	      <file name="bg.xml" role="php"/>
-	      <file name="pt_BR.xml" role="php"/>
-	      <file name="cs.xml" role="php"/>
-	    </dir>
-	  </dir>
-	  <dir name="Format">
-	    <dir name="Abstract">
-	      <file name="Manpage.php" role="php"/>
-	      <file name="PDF.php" role="php"/>
-	      <file name="XHTML.php" role="php"/>
-	    </dir>
-	    <file name="Factory.php" role="php"/>
-	  </dir>
-	  <dir name="Reader">
-	    <file name="Partial.php" role="php"/>
-	  </dir>
-	  <dir name="PI">
-	    <file name="DBHTMLHandler.php" role="php"/>
-	  </dir>
-	  <file name="BuildOptionsParser.php" role="php"/>
-	  <file name="Config.php" role="php"/>
-	  <file name="Format.php" role="php"/>
-	  <file name="functions.php" role="php"/>
-	  <file name="Highlighter.php" role="php"/>
-	  <file name="Index.php" role="php"/>
-	  <file name="MediaManager.php" role="php"/>
-	  <file name="ObjectStorage.php" role="php"/>
-	  <file name="PIHandler.php" role="php"/>
-	  <file name="Reader.php" role="php"/>
-	  <file name="Render.php" role="php"/>
-	</dir>
+        <dir name="phd">
+          <dir name="data">
+            <dir name="langs">
+              <!-- Translations -->
+              <file name="fr.xml" role="php"/>
+              <file name="de.xml" role="php"/>
+              <file name="ja.xml" role="php"/>
+              <file name="ru.xml" role="php"/>
+              <file name="sv.xml" role="php"/>
+              <file name="ro.xml" role="php"/>
+              <file name="en.xml" role="php"/>
+              <file name="tr.xml" role="php"/>
+              <file name="it.xml" role="php"/>
+              <file name="pl.xml" role="php"/>
+              <file name="da.xml" role="php"/>
+              <file name="bg.xml" role="php"/>
+              <file name="pt_BR.xml" role="php"/>
+              <file name="cs.xml" role="php"/>
+            </dir>
+          </dir>
+          <dir name="Format">
+            <dir name="Abstract">
+              <file name="Manpage.php" role="php"/>
+              <file name="PDF.php" role="php"/>
+              <file name="XHTML.php" role="php"/>
+            </dir>
+            <file name="Factory.php" role="php"/>
+          </dir>
+          <dir name="Reader">
+            <file name="Partial.php" role="php"/>
+          </dir>
+          <dir name="PI">
+            <file name="DBHTMLHandler.php" role="php"/>
+          </dir>
+          <file name="BuildOptionsParser.php" role="php"/>
+          <file name="Config.php" role="php"/>
+          <file name="Format.php" role="php"/>
+          <file name="functions.php" role="php"/>
+          <file name="Highlighter.php" role="php"/>
+          <file name="Index.php" role="php"/>
+          <file name="MediaManager.php" role="php"/>
+          <file name="ObjectStorage.php" role="php"/>
+          <file name="PIHandler.php" role="php"/>
+          <file name="Reader.php" role="php"/>
+          <file name="Render.php" role="php"/>
+        </dir>
       </dir>
       <file name="render.php" role="script">
-	<tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
-	<tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
+        <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
+        <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
       </file>
       <file name="phd.bat" role="script">
-	<tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
-	<tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config"/>
+        <tasks:replace from="@php_bin@" to="php_bin" type="pear-config"/>
+        <tasks:replace from="@bin_dir@" to="bin_dir" type="pear-config"/>
       </file>
       <file name="LICENSE" role="doc"/>
       <file name="README" role="doc"/>
