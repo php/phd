@@ -16,12 +16,14 @@ class Package_PEAR_BigXHTML extends Package_PEAR_XHTML {
     }
 
     public function header() {
+        $style = $this->createCSSLinks();
         return <<<HEADER
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
   <title>{$this->getTitle()}</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+{$style}
  </head>
  <body>
   <div id="doc3">
@@ -85,8 +87,11 @@ HEADER;
 
         case Render::INIT:
             if ($val) {
-                $this->createOutputFile();
                 $this->postConstruct();
+                if (Config::css()) {
+                    $this->fetchStylesheet();
+                }
+                $this->createOutputFile();
             } 
             break;
 

@@ -79,6 +79,9 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
+            if (Config::css()) {
+                $this->fetchStylesheet();
+            }
             break;
         case Render::VERBOSE:
         	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
@@ -98,7 +101,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
     public function header($id) {
         $title = $this->getShortDescription($id);
         $lang = Config::language();
-
+        $cssLinks = $this->createCSSLinks();
         $this->prev = $this->next = $this->up = array("href" => null, "desc" => null);
         $strPrev = $strNext = '';
 
@@ -120,6 +123,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
   <title>' . $title . '</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
   <meta name="generator" content="PhD" />
+'.$cssLinks.'
   <link rel="start" href="index.html" title="'.$this->title.'" />
 ';
         if ($this->up["href"]) {

@@ -85,6 +85,9 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                     mkdir($this->getOutputDir() . "toc") or die("Can't create the toc directory");
                 }
             }
+            if (Config::css()) {
+                $this->fetchStylesheet();
+            }
             break;
         case Render::VERBOSE:
         	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);

@@ -516,6 +516,20 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $retval;
     }
 
+    protected function createCSSLinks() {
+        static $cssLinks = '';
+        if (!$cssLinks) {
+            foreach ((array)$this->stylesheets as $css) {
+                if ($this->isChunked()) {
+                    $cssLinks .= "<link media=\"all\" rel=\"stylesheet\" type=\"text/css\" href=\"styles/".$css."\" />\n";
+                } else {
+                    $cssLinks .= "<style type=\"text/css\">\n" . $css . "\n</style>\n";
+                }
+            }
+        }
+        return $cssLinks;
+    }
+
     protected function fetchStylesheet() {
         if (!$this->isChunked()) {
             foreach ((array)Config::css() as $css) {
