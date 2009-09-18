@@ -299,6 +299,8 @@ class BuildOptionsParser
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal
                              (default: true)
+  -C <filename>
+  --css <filename>           Link for an external CSS file.
   -g <classname>
   --highlighter <classname>  Use custom source code highlighting php class
   -V

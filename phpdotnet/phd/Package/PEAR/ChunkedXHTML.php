@@ -101,8 +101,8 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
     public function header($id) {
         $title = $this->getShortDescription($id);
         $lang = Config::language();
-        static $cssLinks = '';
-        if (!$cssLinks) {
+        static $cssLinks = null;
+        if ($cssLinks === null) {
             $cssLinks = $this->createCSSLinks();
         }
         $this->prev = $this->next = $this->up = array("href" => null, "desc" => null);

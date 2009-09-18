@@ -17,8 +17,8 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
 
     public function header($id) {
         $title = Format::getLongDescription($id);
-        static $cssLinks = '';
-        if (!$cssLinks) {
+        static $cssLinks = null;
+        if ($cssLinks === null) {
             $cssLinks = $this->createCSSLinks();
         }
         $header = <<<HEADER
