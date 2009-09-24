@@ -404,7 +404,7 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         }
     }
 
-    private function fetchStylesheet() {
+    protected function fetchStylesheet() {
         $stylesheet = file_get_contents("http://www.php.net/styles/site.css");
         if ($stylesheet) return $stylesheet;
         else {
