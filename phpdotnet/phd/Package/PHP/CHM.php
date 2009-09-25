@@ -9,7 +9,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 
     // Array to manual code -> HTML Help Code conversion
     // Code list: http://www.helpware.net/htmlhelp/hh_info.htm
-    // Charset list: http://www.microsoft.com/globaldev/nlsweb/default.asp
+    // Charset list: http://msdn.microsoft.com/en-us/goglobal/bb896001.aspx
     // Language code: http://www.unicode.org/unicode/onlinedat/languages.html
     // MIME preferred charset list: http://www.iana.org/assignments/character-sets
     // Font list: http://www.microsoft.com/office/ork/xp/three/inte03.htm
@@ -297,7 +297,6 @@ Default topic=res' . DIRECTORY_SEPARATOR . 'index.html
 Default Window=doc
 Display compile progress=Yes
 Enhanced decompilation=Yes
-Flat=Yes
 Full-text search=Yes
 Index file=php_manual_' . $lang . '.hhk
 Language=' . $this->LANGUAGES[$lang]["langcode"] . '
@@ -368,16 +367,18 @@ res' . DIRECTORY_SEPARATOR . 'style.css
     }
 
     public function format_varlistentry($open, $name, $attrs) {
-        $this->collectContent($attrs);
-        $charset = $this->LANGUAGES[Config::language()]["preferred_charset"];
-        $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
+        if ($open) {
+            $this->collectContent($attrs);
+            $charset = $this->LANGUAGES[Config::language()]["preferred_charset"];
+            $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
 
-        if ($content) {
-            fwrite($this->hhkStream,
-                "      <LI><OBJECT type=\"text/sitemap\">\n" .
-                "        <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
-                "        <param name=\"Name\" value=\"{$content}\">\n" .
-                "      </OBJECT>\n");
+            if ($content) {
+                fwrite($this->hhkStream,
+                    "      <LI><OBJECT type=\"text/sitemap\">\n" .
+                    "        <param name=\"Local\" value=\"{$this->lastContent["reference"]}\">\n" .
+                    "        <param name=\"Name\" value=\"{$content}\">\n" .
+                    "      </OBJECT>\n");
+            }
         }
         return parent::format_varlistentry($open, $name, $attrs);
     }
@@ -422,22 +423,11 @@ res' . DIRECTORY_SEPARATOR . 'style.css
 
     public function format_link($open, $name, $attrs, $props) {
         $link = parent::format_link($open, $name, $attrs, $props);
-        // Add title attribute so address can be seen in CHM files.
-        $search = '`<a href="([^"]++)" class="link external">`';
+        // Add title attribute to external links so address can be seen in CHM files.
+        $search = '`<a href="([^#"][^"]++)" class="link external">`';
         $replacement = '<a href="\1" class="link external" title="Link : \1">';
         $link = preg_replace($search, $replacement, $link);
         return $link;
-    }
-
-    public function format_imagedata($open, $name, $attrs) {
-        // Due to flattening of the CHM build process, the links to the images cannot be relative.
-        preg_match('`src="([^"]++)"`', $image = parent::format_imagedata($open, $name, $attrs), $imageMatches);
-        $image = str_replace($imageMatches[1], basename($imageMatches[1]), $image);
-
-        // Add the image to the hhp project file as the automatic build won't find it.
-        fwrite($this->hhpStream, 'res\\images\\' . basename($imageMatches[1]) . "\n");
-
-        return $image;
     }
 }
 
