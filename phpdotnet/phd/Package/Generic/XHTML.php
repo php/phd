@@ -528,7 +528,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $cssLinks;
     }
 
-    protected function fetchStylesheet() {
+    protected function fetchStylesheet($name = null) {
         if (!$this->isChunked()) {
             foreach ((array)Config::css() as $css) {
                 if ($style = file_get_contents($css)) {                

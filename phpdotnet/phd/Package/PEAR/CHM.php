@@ -388,7 +388,7 @@ $1</head>',
 		}
     }
 
-    protected function fetchStylesheet($name) {
+    protected function fetchStylesheet($name = null) {
 		$stylesheet = file_get_contents("http://pear.php.net/css/$name.css");
 		if ($stylesheet) return $stylesheet;
 		else {
