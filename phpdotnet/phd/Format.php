@@ -99,7 +99,7 @@ abstract class Format extends ObjectStorage {
     }
 
     public function SQLiteRefname(&$context, $index, $id, $sdesc) {
-        $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $sdesc));
+        $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), html_entity_decode($sdesc, ENT_QUOTES, 'UTF-8')));
         $this->refs[$ref] = $id;
     }
 
