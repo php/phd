@@ -16,13 +16,13 @@ class Package_PHP_BigXHTML extends Package_PHP_XHTML {
 
     public function header() {
         $style = $this->createCSSLinks();
+        $style = $style ? "\n".$style : false;
         return <<<HEADER
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
   <title>{$this->getTitle()}</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-{$style}
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">{$style}
  </head>
  <body>
 HEADER;
