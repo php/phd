@@ -8,14 +8,29 @@ Installing the PhD renderer:
 	From a PEAR channel:
 		pear install doc.php.net/phd-beta
 
+        To install the PHP Package:
+            pear install doc.php.net/phd_php-beta 
+        
+        To install the PEAR Package:
+            pear install doc.php.net/phd_pear-beta 
+
+        To see all available packages:
+            pear remote-list -c doc.php.net
+
 	From SVN:
 		svn checkout http://svn.php.net/repository/phd/trunk phd
 		cd phd
 		pear install -f package.xml
 
+        To install the PHP Package:
+            pear install -f package_php.xml
+        
+        To install the PEAR Package:
+            pear install -f package_pear.xml
+
 Requirements:
     - PHP 5.3
-    - DOM, libXML2, and XMLReader.
+    - DOM, libXML2, XMLReader and SQLite3.
 
 After installing PhD you can use the `phd` command
 to render the documentations. To see a list of available packages/formats
