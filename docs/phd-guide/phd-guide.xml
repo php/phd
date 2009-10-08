@@ -46,26 +46,33 @@
           installation</link>.</para>
         </note>
 
-        <para>Discover the channel:</para>
-
-        <screen>
-<![CDATA[
-$ pear channel-discover doc.php.net
-Adding Channel "doc.php.net" succeeded
-]]>
-        </screen>
-            
-        <para>Now we're ready to install the latest version:</para>
+        <para>To install the latest version of PhD:</para>
 
         <screen>
 <![CDATA[
 $ pear install doc.php.net/phd-beta
 
-... installation of package "PhD" in channel "doc.php.net"
+... downloading
 
 $ phd --version
-PhD version: 0.4.2
-Copyright (c) 2008-2009 The PHP Documentation Group
+PhD Version: 1.0.0-dev
+Copyright(c) 2007-2009 The PHP Documentation Group
+]]>
+        </screen>
+
+        <para>Installing the PhD Packages:</para>
+
+        <screen>
+<![CDATA[
+$ pear install doc.php.net/phd_php-beta
+downloading PhD_PHP-0.9.0.tgz ...
+Starting to download PhD_PHP-0.9.0.tgz (17,064 bytes)
+......done: 17,064 bytes
+
+$ pear install doc.php.net/phd_pear-beta
+downloading PhD_PEAR-0.9.0.tgz ...
+Starting to download PhD_PEAR-0.9.0.tgz (13,991 bytes)
+.....done: 13,991 bytes
 ]]>
         </screen>
 
@@ -83,11 +90,15 @@ Copyright (c) 2008-2009 The PHP Documentation Group
 $ svn checkout http://svn.php.net:/repository/phd/trunk phd
 ... output
 
-$ pear channel-discover doc.php.net
-Adding Channel "doc.php.net" succeeded
+$ pear install -f package.xml
+... install ok: channel://doc.php.net/PhD-1.0.0
+... install ok: channel://doc.php.net/PhD_Generic-0.9.0
 
-$ pear install package.xml
-... installation of package "PhD" in channel "doc.php.net"
+$ pear install -f package_php.xml
+... install ok: channel://doc.php.net/PhD_PHP-0.9.0
+
+$ pear install -f package_pear.xml
+... install ok: channel://doc.php.net/PhD_PEAR-0.9.0
 
 $ phd --version
 PhD version: 1.0.0-dev
