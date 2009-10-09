@@ -123,7 +123,7 @@ class Index extends Format
                         $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
                         $create = <<<SQL
 CREATE TABLE ids (
-    docbook_id TEXT PRIMARY KEY,
+    docbook_id TEXT,
     filename TEXT,
     parent_id TEXT,
     sdesc TEXT,
@@ -205,8 +205,6 @@ SQL;
         }
     }
     public function appendID() {
-        static $rand = 0;
-
         $lastChunkId = array_pop($this->ids);
         $parentid = end($this->ids);
         $this->currentid = $parentid;
@@ -231,18 +229,17 @@ SQL;
             $this->db->escapeString($lastChunk["previous"]),
             $this->db->escapeString($lastChunk["chunk"])
         );
-        if ($array === true && !empty($a["sdesc"])) {
+        if ($array === true) {
             foreach($lastChunk["sdesc"] as $sdesc) {
-                ++$rand;
                 $this->commit .= sprintf(
-                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '', '%s', '%s', '%s', '%s', '', %d);\n",
-                    "phdgen-" . $rand,
+                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '', 0);\n",
+                    $this->db->escapeString($lastChunkId),
                     $this->db->escapeString($lastChunk["filename"]),
+                    $this->db->escapeString($this->currentchunk),
                     $this->db->escapeString($sdesc),
                     $this->db->escapeString($lastChunk["ldesc"]),
                     $this->db->escapeString($lastChunk["element"]),
-                    $this->db->escapeString($lastChunk["previous"]),
-                    $this->db->escapeString($lastChunk["chunk"])
+                    $this->db->escapeString($lastChunk["previous"])
                 );
             }
         }
@@ -308,10 +305,16 @@ SQL;
     }
     public function format_sdesc($open, $name, $attrs, $props) {
         if ($open) {
+            $s = htmlentities(trim($this->getReader()->readContent()), ENT_COMPAT, "UTF-8");
             if (empty($this->nfo[$this->currentid]["sdesc"])) {
                 /* FIXME: How can I mark that node with "reparse" flag? */
-                $s = htmlentities(trim($this->getReader()->readContent()), ENT_COMPAT, "UTF-8");
                 $this->nfo[$this->currentid]["sdesc"] = $s;
+            } else {
+                if (!is_array($this->nfo[$this->currentid]["sdesc"])) {
+                    $this->nfo[$this->currentid]["sdesc"] = (array)$this->nfo[$this->currentid]["sdesc"];
+                }
+                //In the beginning of the array to stay compatible with 0.4 
+                array_unshift($this->nfo[$this->currentid]["sdesc"], $s);
             }
         }
     }
