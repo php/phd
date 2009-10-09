@@ -170,6 +170,15 @@ abstract class Format extends ObjectStorage {
         return array_pop($this->fp);
     }
 
+    public function addRefname($id, $ref) {
+        $this->refs[$ref] = $id;
+    }
+    public function addClassname($id, $class) {
+        $this->classes[$class] = $id;
+    }
+    public function addVarname($id, $var) {
+        $this->vars[$var] = $id;
+    }
     public function getRefnameLink($ref) {
         return isset($this->refs[$ref]) ? $this->refs[$ref] : null;
     }

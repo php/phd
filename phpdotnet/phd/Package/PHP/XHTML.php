@@ -135,6 +135,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $this->myelementmap = array_merge(parent::getDefaultElementMap(), static::getDefaultElementMap());
         $this->mytextmap = array_merge(parent::getDefaultTextMap(), static::getDefaultTextMap());
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
+        $this->extraIndexInformation();
     }
 
     public function getDefaultElementMap() {
@@ -147,6 +148,14 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function getDefaultChunkInfo() {
         return $this->dchunk;
+    }
+
+    public function extraIndexInformation() {
+        $this->addRefname("function.include", "include");
+        $this->addRefname("function.include-once", "include-once");
+        $this->addRefname("function.require", "require");
+        $this->addRefname("function.require-once", "require-once");
+        $this->addRefname("function.return", "return");
     }
 
     public function loadVersionAcronymInfo() {
