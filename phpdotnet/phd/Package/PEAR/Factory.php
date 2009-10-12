@@ -8,6 +8,7 @@ class Package_PEAR_Factory extends Format_Factory {
         'bigxhtml'      => 'Package_PEAR_BigXHTML',
         'php'           => 'Package_PEAR_Web',
         'chm'           => 'Package_PEAR_CHM',
+        'tocfeed'       => 'Package_PEAR_TocFeed',
     );
     
     public function __construct() {
