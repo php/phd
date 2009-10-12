@@ -2,8 +2,24 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-abstract class Format extends ObjectStorage {
+abstract class Format extends ObjectStorage
+{
+    /**
+     * Represents a short description.
+     * Used in createLink()
+     *
+     * @var    integer
+     * @usedby createLink()
+     */
     const SDESC = 1;
+
+    /**
+     * Represents a long description.
+     * Used in createLink()
+     *
+     * @var    integer
+     * @usedby createLink()
+     */
     const LDESC = 2;
 
     private $elementmap = array();
@@ -43,8 +59,53 @@ abstract class Format extends ObjectStorage {
     abstract public function UNDEF($open, $name, $attrs, $props);
     abstract public function TEXT($value);
     abstract public function CDATA($value);
-    abstract public function createLink($for, &$desc = null, $type = Format::SDESC);
+
+    /**
+     * Create link to chunk.
+     *
+     * @param string  $for   Chunk ID
+     * @param string  &$desc Description of link, to be filled if neccessary
+     * @param integer $type  Format of description, Format::SDESC or
+     *                       Format::LDESC
+     *
+     * @return string Relative or absolute URI to access $for
+     */
+    abstract public function createLink(
+        $for, &$desc = null, $type = Format::SDESC
+    );
+
     abstract public function appendData($data);
+
+    /**
+     * Called by Format::notify()
+     *
+     * Possible events:
+     * - Render::STANDALONE
+     *     Always called with true as value from Render::attach()
+     *     
+     *
+     * - Render::INIT
+     *     Called from Render::execute() when rendering
+     *     is being started. Value is always true
+     *
+     * - Render::FINALIZE (from Render::execute())
+     *     Called from Render::execute() when there is
+     *     nothing more to read in the XML file.
+     *
+     * - Render::VERBOSE
+     *     Called if the user specified the --verbose option
+     *     as commandline parameter. Called in render.php
+     *
+     * - Render::CHUNK
+     *     Called when a new chunk is opened or closed.
+     *     Value is either Render::OPEN or Render::CLOSE
+     *
+     * @param integer $event Event flag (see Render class)
+     * @param mixed   $val   Additional value flag. Depends
+     *                       on $event type
+     *
+     * @return void
+     */
     abstract public function update($event, $value = null);
 
     public final function parsePI($target, $data) {
@@ -115,8 +176,19 @@ abstract class Format extends ObjectStorage {
         return $context;
     }
 
-    final public function notify($event, $val = null) {
+    /**
+     * Calls update().
+     *
+     * @param integer $event Event flag. See Render class for constants
+     *                       like Render::INIT and Render::CHUNK
+     * @param mixed   $val   Value; depends on $event flag
+     *
+     * @return void
+     */
+    final public function notify($event, $val = null)
+    {
         $this->update($event, $val);
+        //FIXME: the following code is not necessary anymore
         foreach($this as $format) {
             $format->update($event, $val);
         }
@@ -130,10 +202,29 @@ abstract class Format extends ObjectStorage {
         return $this->title;
     }
 
-    public function setExt($ext) {
+    /**
+     * Set file extension used when chunking and writing
+     * out files.
+     *
+     * @param string $ext File extension without dot
+     *
+     * @return void
+     *
+     * @see getExt()
+     */
+    public function setExt($ext)
+    {
         $this->ext = $ext;
     }
 
+    /**
+     * Returns file extension without
+     * leading dot.
+     *
+     * @return string File extension.
+     *
+     * @see setExt()
+     */
     public function getExt() {
         return $this->ext;
     }
@@ -277,9 +368,22 @@ abstract class Format extends ObjectStorage {
     }
 
 /* {{{ TOC helper functions */
-    final public function getFilename($id) {
-        return isset($this->indexes[$id]["filename"]) ? $this->indexes[$id]["filename"] : false;
+
+    /**
+     * Returns the filename for the given id, without the file extension
+     *
+     * @param string $id XML Id
+     *
+     * @return mixed Stringular filename or false if no filename
+     *               can be detected.
+     */
+    final public function getFilename($id)
+    {
+        return isset($this->indexes[$id]['filename'])
+            ? $this->indexes[$id]['filename']
+            : false;
     }
+
     final public function getPrevious($id) {
         return $this->indexes[$id]["previous"];
     }
