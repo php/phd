@@ -97,9 +97,11 @@ abstract class Package_Generic_TocFeed extends Format
      * @link http://www.faqs.org/rfcs/rfc4151.html
      * @link http://diveintomark.org/archives/2004/05/28/howto-atom-id
      *
+     * And no, this date should never be changed.
+     *
      * @var string
      */
-    protected $idprefix = 'tag:doc.php.net,phd,FIXME,';
+    protected $idprefix = 'tag:doc.php.net,2009-10-13:/phd/FIXME/';
 
     /**
      * Date used in feed <updated> tags.
@@ -378,6 +380,7 @@ ATM;
         $lang   = Config::language();
         $link   = $this->createLink($id);
         $author = htmlspecialchars($this->author);
+        $atomid = $this->idprefix . 'file/' . $id;
 
         return <<<XML
 <?xml version="1.0" encoding="utf-8" ?>
@@ -385,7 +388,7 @@ ATM;
  <title>{$title}</title>
  <link href="{$link}" />
  <updated>{$date}</updated>
- <id>{$id}</id>
+ <id>{$atomid}</id>
  <author>
   <name>{$author}</name>
  </author>

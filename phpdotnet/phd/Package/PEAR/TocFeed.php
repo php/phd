@@ -63,9 +63,11 @@ class Package_PEAR_TocFeed extends Package_Generic_TocFeed
      * @link http://www.faqs.org/rfcs/rfc4151.html
      * @link http://diveintomark.org/archives/2004/05/28/howto-atom-id
      *
+     * And no, this date should never be changed.
+     *
      * @var string
      */
-    protected $idprefix = 'tag:pear.php.net,manual-{language},';
+    protected $idprefix = 'tag:pear.php.net,2009-10-13:/manual/{language}/';
 
 
 
