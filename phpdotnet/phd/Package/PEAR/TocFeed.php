@@ -6,7 +6,11 @@ namespace phpdotnet\phd;
  * Generates Atom feed of Table of Contents for
  * each chunk.
  *
- * @author Christian Weiske <cweiske@php.net>
+ * @category PhD
+ * @package  PhD_PEAR
+ * @author   Christian Weiske <cweiske@php.net>
+ * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
+ * @link     http://doc.php.net/phd/
  */
 class Package_PEAR_TocFeed extends Package_Generic_TocFeed
 {

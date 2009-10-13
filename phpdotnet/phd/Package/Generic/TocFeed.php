@@ -6,7 +6,11 @@ namespace phpdotnet\phd;
  * Generates Atom feed of Table of Contents for
  * each chunk.
  *
- * @author Christian Weiske <cweiske@php.net>
+ * @category PhD
+ * @package  PhD_Generic
+ * @author   Christian Weiske <cweiske@php.net>
+ * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
+ * @link     http://doc.php.net/phd/
  */
 abstract class Package_Generic_TocFeed extends Format
 {
@@ -92,6 +96,19 @@ abstract class Package_Generic_TocFeed extends Format
      */
     protected $idprefix = 'phd-atom-id-';
 
+    /**
+     * Date used in feed <updated> tags.
+     * ISO 8601 format (2004-02-12T15:19:21+00:00)
+     *
+     * @internal
+     * Set in __construct to be as fast as possible
+     * and don't waste time on re-generating the same
+     * data again and again.
+     *
+     * @var string
+     */
+    protected $date = null;
+
 
 
     /**
@@ -104,6 +121,7 @@ abstract class Package_Generic_TocFeed extends Format
         $this->setTitle('Index');
         $this->setChunked(true);
         $this->setExt('atom');
+        $this->date = date('c');
     }
 
 
@@ -194,11 +212,11 @@ abstract class Package_Generic_TocFeed extends Format
             break;
 
         case Render::VERBOSE:
-        	v(
+            v(
                 'Starting %s rendering',
                 $this->getFormatName(), VERBOSE_FORMAT_RENDERING
             );
-        	break;
+            break;
         }
     }
 
@@ -307,13 +325,13 @@ abstract class Package_Generic_TocFeed extends Format
      */
     protected function createAtomToc($id)
     {
-        $chunks = static::getChildrens($id);
+        $chunks = static::getChildren($id);
         if (count($chunks) == 0) {
             return '';
         }
 
         $toc  = '';
-        $date = date('c');
+        $date = $this->date;
         foreach ($chunks as $junk => $chunkid) {
             $long  = $this->getLongDescription($chunkid);
             $short = $this->getShortDescription($chunkid);
@@ -321,7 +339,7 @@ abstract class Package_Generic_TocFeed extends Format
             if ($long && $short && $long != $short) {
                 $title = $short . ' -- ' . $long;
             } else {
-                $title = ($long ? $long : $short);
+                $title = ($long ?: $short);
             }
             $link = $this->createTargetLink($chunkid);
             $toc .= <<<ATM
@@ -351,9 +369,8 @@ ATM;
     public function header($id)
     {
         $title  = htmlspecialchars($this->getLongDescription($id));
-        $date   = date('c');
+        $date   = $this->date;
         $lang   = Config::language();
-        $root   = Format::getRootIndex();
         $link   = $this->createLink($id);
         $author = htmlspecialchars($this->author);
 
