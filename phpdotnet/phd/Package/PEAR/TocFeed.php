@@ -56,11 +56,16 @@ class Package_PEAR_TocFeed extends Package_Generic_TocFeed
     protected $author = 'PEAR Documentation Group';
 
     /**
-     * Prefix for atom entry id values
+     * Prefix for atom entry id values.
+     *
+     * @internal
+     * We are using tag URIs here.
+     * @link http://www.faqs.org/rfcs/rfc4151.html
+     * @link http://diveintomark.org/archives/2004/05/28/howto-atom-id
      *
      * @var string
      */
-    protected $idprefix = 'pear-manual-';
+    protected $idprefix = 'tag:pear.php.net,manual-{language},';
 
 
 
@@ -70,8 +75,14 @@ class Package_PEAR_TocFeed extends Package_Generic_TocFeed
     public function __construct()
     {
         parent::__construct();
+
+        $language = Config::language();
         $this->targetBaseUri = str_replace(
-            '{language}', Config::language(), $this->targetBaseUri
+            '{language}', $language, $this->targetBaseUri
+        );
+        $this->idprefix = str_replace(
+            '{language}', $language, $this->idprefix
         );
     }
+
 }

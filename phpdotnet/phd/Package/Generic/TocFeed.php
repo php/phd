@@ -88,13 +88,18 @@ abstract class Package_Generic_TocFeed extends Format
     protected $author = 'PhD - The PHP Docbook Renderer';
 
     /**
-     * Prefix for atom entry id values
+     * Prefix for atom entry id values.
      *
      * Inheriting classes should change this.
      *
+     * @internal
+     * We are using tag URIs here.
+     * @link http://www.faqs.org/rfcs/rfc4151.html
+     * @link http://diveintomark.org/archives/2004/05/28/howto-atom-id
+     *
      * @var string
      */
-    protected $idprefix = 'phd-atom-id-';
+    protected $idprefix = 'tag:doc.php.net,phd,FIXME,';
 
     /**
      * Date used in feed <updated> tags.
