@@ -194,7 +194,7 @@ ul.toc li a:hover {
         }
         // Fetch siblings of the current node
         $parent = $this->getParent($id);
-        foreach ($this->getChildrens($parent) as $child) {
+        foreach ($this->getChildren($parent) as $child) {
             $desc = "";
             $link = $this->createLink($child, $desc);
             $active = ($id === $child);

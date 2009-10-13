@@ -535,7 +535,7 @@
       <notes>
         - Automatically add anchors for refsect roles. (Hannes)
         - Added description for seealso links. (Hannes)
-        - Fixed a bug where prefaces had unlisted childrens. (Hannes)
+        - Fixed a bug where prefaces had unlisted children. (Hannes)
         - Compressed methodnames in classsynopsis again. (Hannes)
         - Added Next/Prev and Image Zoom buttons to CHM build (Richard Quadling)
         - Fixed bug#46941 (FR: Find broken links). (Hannes)

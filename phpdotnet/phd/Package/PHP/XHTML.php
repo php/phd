@@ -446,7 +446,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 $this->cchunk = $this->dchunk;
             }
             if ($name != "reference") {
-                $chunks = Format::getChildrens($id);
+                $chunks = Format::getChildren($id);
                 if (!count($chunks)) {
                     return '<div id="'.$id.'" class="'.$name.'">';
                 }
@@ -467,7 +467,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
         $content = "";
         if ($name == "reference") {
-            $chunks = Format::getChildrens($id);
+            $chunks = Format::getChildren($id);
             if (count($chunks)) {
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_reference">';
                 foreach($chunks as $chunkid) {
@@ -492,7 +492,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return '<div id="'.$id.'" class="'.$name.'">';
         }
         $this->notify(Render::CHUNK, Render::CLOSE);
-        $chunks = Format::getChildrens($id);
+        $chunks = Format::getChildren($id);
         $content = '<ul class="chunklist chunklist_'.$name.'">';
         foreach($chunks as $chunkid) {
             $href = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
@@ -503,10 +503,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             } else {
                 $content .= '<li><a href="' .$href. '">' .($long ? $long : $short). '</a>';
             }
-            $children = Format::getChildrens($chunkid);
+            $children = Format::getChildren($chunkid);
             if (count($children)) {
                 $content .= '<ul class="chunklist chunklist_'.$name.' chunklist_children">';
-                foreach(Format::getChildrens($chunkid) as $childid) {
+                foreach(Format::getChildren($chunkid) as $childid) {
                     $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
                     $long = Format::getLongDescription($childid);
                     $short = Format::getShortDescription($childid);

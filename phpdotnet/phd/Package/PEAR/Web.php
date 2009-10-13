@@ -42,7 +42,7 @@ manualHeader("index.php", "'.addslashes($this->title).'");
 
         // Fetch the siblings information
         $toc = array();
-        $siblingIDs = Format::getChildrens($parent);
+        $siblingIDs = Format::getChildren($parent);
         $siblings = array();
         foreach ($siblingIDs as $sid) {
             $siblings[$sid] = array(
@@ -109,7 +109,7 @@ manualHeader("index.php", "'.addslashes($this->title).'");
     }
 
     protected function createChildren($id) {
-        if (!Format::getChildrens($id)) {
+        if (!Format::getChildren($id)) {
             return array();
         }
         $children =  array($id => array( 
@@ -118,7 +118,7 @@ manualHeader("index.php", "'.addslashes($this->title).'");
             "sdesc" => Format::getShortDescription($id),
             "ldesc" => Format::getLongDescription($id),
         ));
-        foreach (Format::getChildrens($id) as $child) {
+        foreach (Format::getChildren($id) as $child) {
             $children["children"] = $this->createChildren($child);
         }
     }

@@ -457,7 +457,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
 
     protected function createTOC($id, $name, $props, $depth = 1, $header = true) {
-        if (!$this->getChildrens($id) || $depth == 0) {
+        if (!$this->getChildren($id) || $depth == 0) {
             return "";
         }
         $toc = '';
@@ -465,7 +465,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             $toc .= '<strong>' . $this->autogen('toc', $props['lang']) . '</strong>';
         }
         $toc .= "<ul class=\"chunklist chunklist_$name\">\n"; 
-        foreach ($this->getChildrens($id) as $child) {
+        foreach ($this->getChildren($id) as $child) {
             $isLDesc = null;
             $isSDesc = null;
             $long = $this->getLongDescription($child, $isLDesc);

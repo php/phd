@@ -19,7 +19,7 @@ class Package_PHP_HowTo extends Package_PHP_Web {
         $parent = Format::getParent($id);
         $next = $prev = $up = array(null, null);
         if ($parent && $parent != "ROOT") {
-            $siblings = Format::getChildrens($parent);
+            $siblings = Format::getChildren($parent);
             if ($nextId = Format::getNext($id)) {
                 $next = array(
                     Format::getFilename($nextId) . '.' . $this->getExt(),

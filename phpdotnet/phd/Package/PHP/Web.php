@@ -104,7 +104,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
 
         $next = $prev = array(null, null);
         if ($parent && $parent != "ROOT") {
-            $siblings = Format::getChildrens($parent);
+            $siblings = Format::getChildren($parent);
             if (!file_exists($this->getOutputDir() . $filename)) {
                 $toc = array();
 

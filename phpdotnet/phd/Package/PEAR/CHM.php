@@ -383,7 +383,7 @@ $1</head>',
 				"name" => Format::getShortDescription($id),
 				"reference" => "res\\" .
 					(Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->ext,
-				"hasChild" => (count(Format::getChildrens($id)) > 0)
+				"hasChild" => (count(Format::getChildren($id)) > 0)
 			);
 		}
     }

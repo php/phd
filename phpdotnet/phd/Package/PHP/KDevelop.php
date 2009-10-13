@@ -125,7 +125,7 @@ class Package_PHP_KDevelop extends Format {
     public function format_tocsect1($open, $name, $attrs) {
         if (!isset($attrs[Reader::XMLNS_XML]["id"])) return "";
         $id = $attrs[Reader::XMLNS_XML]["id"];
-        $hasChild = (count(Format::getChildrens($id)) > 0);
+        $hasChild = (count(Format::getChildren($id)) > 0);
         if ($open) {
             $name = htmlspecialchars(Format::getShortDescription($id), ENT_QUOTES, 'UTF-8');
             $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->getExt();
@@ -140,7 +140,7 @@ class Package_PHP_KDevelop extends Format {
     public function format_tocsect2($open, $name, $attrs) {
         if (!isset($attrs[Reader::XMLNS_XML]["id"])) return "";
         $id = $attrs[Reader::XMLNS_XML]["id"];
-        $hasChild = (count(Format::getChildrens($id)) > 0);
+        $hasChild = (count(Format::getChildren($id)) > 0);
         if ($open) {
             $name = htmlspecialchars(Format::getShortDescription($id), ENT_QUOTES, 'UTF-8');
             $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->getExt();

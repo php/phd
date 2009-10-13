@@ -38,7 +38,7 @@ abstract class Format extends ObjectStorage
 
     /* Indexing maps */
     protected $indexes = array();
-    protected $childrens = array();
+    protected $children = array();
     protected $refs = array();
     protected $vars = array();
     protected $classes = array();
@@ -127,12 +127,12 @@ abstract class Format extends ObjectStorage
 
     public function sortIDs() {
         $this->sqlite->createAggregate("indexes", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 9);
-        $this->sqlite->createAggregate("childrens", array($this, "SQLiteChildrens"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->createAggregate("children", array($this, "SQLiteChildren"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->createAggregate("refname", array($this, "SQLiteRefname"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->createAggregate("varname", array($this, "SQLiteVarname"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->createAggregate("classname", array($this, "SQLiteClassname"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->query('SELECT indexes(docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) FROM ids');
-        $this->sqlite->query('SELECT childrens(docbook_id, parent_id) FROM ids WHERE chunk != 0');
+        $this->sqlite->query('SELECT children(docbook_id, parent_id) FROM ids WHERE chunk != 0');
         $this->sqlite->query('SELECT refname(docbook_id, sdesc) FROM ids WHERE element=\'refentry\'');
         $this->sqlite->query('SELECT varname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:varentry\'');
         $this->sqlite->query('SELECT classname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:exceptionref\' OR element=\'phpdoc:classref\'');
@@ -152,11 +152,14 @@ abstract class Format extends ObjectStorage
         );
     }
 
-    public function SQLiteChildrens(&$context, $index, $id, $parent) {
-        if (!isset($this->childrens[$parent]) || !is_array($this->childrens[$parent])) {
-            $this->childrens[$parent] = array();
+    public function SQLiteChildren(&$context, $index, $id, $parent)
+    {
+        if (!isset($this->children[$parent])
+            || !is_array($this->children[$parent])
+        ) {
+            $this->children[$parent] = array();
         }
-        $this->childrens[$parent][] = $id;
+        $this->children[$parent][] = $id;
     }
 
     public function SQLiteRefname(&$context, $index, $id, $sdesc) {
@@ -411,15 +414,39 @@ abstract class Format extends ObjectStorage
             return $this->indexes[$id]["ldesc"];
         }
     }
-    final public function getChildrens($id) {
-        if (!isset($this->childrens[$id]) || !is_array($this->childrens[$id]) || count($this->childrens[$id]) == 0) {
+
+    /**
+     * Returns an array of children IDs of given ID.
+     *
+     * @param string $id XML ID to retrieve children for.
+     *
+     * @return array Array of XML IDs
+     */
+    final public function getChildren($id)
+    {
+        if (!isset($this->children[$id])
+            || !is_array($this->children[$id])
+            || count($this->children[$id]) == 0
+        ) {
             return null;
         }
-        return $this->childrens[$id];
-    }    
-    final public function isChunkID($id) {
-        return isset($this->indexes[$id]["chunk"]) ? $this->indexes[$id]["chunk"] : false;
+        return $this->children[$id];
     }
+
+    /**
+     * Tells you if the given ID is to be chunked or not.
+     *
+     * @param string $id XML ID to get chunk status for
+     *
+     * @return boolean True if it is to be chunked
+     */
+    final public function isChunkID($id)
+    {
+        return isset($this->indexes[$id]['chunk'])
+            ? $this->indexes[$id]['chunk']
+            : false;
+    }
+
     final public function getRootIndex() {
         static $root = null;
         if ($root == null) {
