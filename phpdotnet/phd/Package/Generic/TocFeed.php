@@ -67,15 +67,26 @@ abstract class Package_Generic_TocFeed extends Format
     protected $targetExt = '.htm';
 
     /**
-     * Base URI for links from atom feed to chunks.
+     * Base URI for links from atom feed to chunks (HTML files).
      *
      * Inheriting classes should change this if neccessary.
      *
      * @var    string
      * @usedby createTargetLink()
+     */
+    protected $targetBaseUri = null;
+
+    /**
+     * Base URI for the feed files themselves.
+     *
+     * Inheriting classes should change this if neccessary.
+     * If this variable is not set, __construct() sets
+     * it to $targetBaseUri
+     *
+     * @var    string
      * @usedby createLink()
      */
-    protected $targetBaseUri = '';
+    protected $feedBaseUri = null;
 
     /**
      * Author string used in atom feed files.
@@ -129,6 +140,9 @@ abstract class Package_Generic_TocFeed extends Format
         $this->setChunked(true);
         $this->setExt('atom');
         $this->date = date('c');
+        if ($this->feedBaseUri === null) {
+            $this->feedBaseUri = $this->targetBaseUri;
+        }
     }
 
 
@@ -375,20 +389,23 @@ ATM;
      */
     public function header($id)
     {
-        $title  = htmlspecialchars($this->getLongDescription($id));
-        $date   = $this->date;
-        $lang   = Config::language();
-        $link   = $this->createLink($id);
-        $author = htmlspecialchars($this->author);
-        $atomid = $this->idprefix . 'file/' . $id;
+        $title    = htmlspecialchars($this->getLongDescription($id));
+        $date     = $this->date;
+        $lang     = Config::language();
+        $selflink = $this->createLink($id);
+        $htmllink = $this->createTargetLink($id);
+        $author   = htmlspecialchars($this->author);
+        $atomid   = $this->idprefix . 'file/' . $id;
 
         return <<<XML
 <?xml version="1.0" encoding="utf-8" ?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="{$lang}">
  <title>{$title}</title>
- <link href="{$link}" />
  <updated>{$date}</updated>
  <id>{$atomid}</id>
+ <link rel="self" type="application/atom+xml" href="{$selflink}" />
+ <link rel="alternate" type="text/html" href="{$htmllink}" />
+ <generator uri="http://doc.php.net/phd/">PhD</generator>
  <author>
   <name>{$author}</name>
  </author>
@@ -467,7 +484,7 @@ XML;
      * to overwrite this method to return full absolute URIs,
      * or modify $targetBaseUri.
      *
-     * @param string  $for   Chunk ID
+     * @param string  $id    Chunk ID
      * @param string  &$desc Description of link, to be filled if neccessary.
      *                       Not used here.
      * @param integer $type  Format of description, Format::SDESC or
@@ -478,28 +495,28 @@ XML;
      *
      * @uses $targetBaseUri
      */
-    public function createLink($for, &$desc = null, $type = Format::SDESC)
+    public function createLink($id, &$desc = null, $type = Format::SDESC)
     {
-        return $this->targetBaseUri . $for . '.' . $this->ext;
+        return $this->feedBaseUri . $id . '.' . $this->ext;
     }
 
     /**
-     * Create external link from Atom feed to given chunk ID.
+     * Create external link from Atom feed to given chunk ID (HTML).
      *
      * Every class inheriting from this one should
      * to overwrite this method to return full absolute URIs,
      * or modify $targetBaseUri and $targetExt.
      *
-     * @param string $for Chunk ID
+     * @param string $id Chunk ID
      *
      * @return string Absolute URI to chunk
      *
      * @uses $targetBaseUri
      * @uses $targetExt
      */
-    public function createTargetLink($for)
+    public function createTargetLink($id)
     {
-        return $this->targetBaseUri. $for . $this->targetExt;
+        return $this->targetBaseUri. $id . $this->targetExt;
     }
 
 }

@@ -41,9 +41,20 @@ class Package_PEAR_TocFeed extends Package_Generic_TocFeed
      *
      * @var    string
      * @usedby createTargetLink()
-     * @usedby createLink()
      */
     protected $targetBaseUri = 'http://pear.php.net/manual/{language}/';
+
+    /**
+     * Base URI for the feed files themselves.
+     *
+     * Inheriting classes should change this if neccessary.
+     * If this variable is not set, __construct() sets
+     * it to $targetBaseUri
+     *
+     * @var    string
+     * @usedby createLink()
+     */
+    protected $feedBaseUri = 'http://pear.php.net/manual/{language}/feeds/';
 
     /**
      * Author string used in atom feed files.
@@ -79,12 +90,12 @@ class Package_PEAR_TocFeed extends Package_Generic_TocFeed
         parent::__construct();
 
         $language = Config::language();
-        $this->targetBaseUri = str_replace(
-            '{language}', $language, $this->targetBaseUri
-        );
-        $this->idprefix = str_replace(
-            '{language}', $language, $this->idprefix
-        );
+        $variables = array('targetBaseUri', 'feedBaseUri', 'idprefix');
+        foreach ($variables as $varname) {
+            $this->$varname = str_replace(
+                '{language}', $language, $this->$varname
+            );
+        }
     }
 
 }
