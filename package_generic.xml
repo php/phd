@@ -35,7 +35,7 @@
     <active>yes</active>
   </lead>
 
-  <date>2009-09-09</date>
+  <date>2009-10-13</date>
   <version>
     <release>1.0.0</release>
     <api>1.0.0</api>
@@ -46,7 +46,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Initial release
+    - Implemented PEAR request #2390: RSS feeds for PEAR Dcumentation Index (Christian)
   </notes>
 
   <contents>
@@ -61,6 +61,7 @@
 	      <file name="PDF.php" role="php"/>
 	      <file name="BigXHTML.php" role="php"/>
 	      <file name="ChunkedXHTML.php" role="php"/>
+	      <file name="TocFeed.php" role="php"/>
 	      <file name="XHTML.php" role="php"/>
 	    </dir>
 	  </dir>
