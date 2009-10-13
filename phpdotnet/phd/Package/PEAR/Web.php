@@ -2,14 +2,28 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML {
-    public function __construct() {
+/**
+ * Renders the pear documentation visible on the PEAR website.
+ *
+ * @category PhD
+ * @package  PhD_PEAR
+ * @author   Christian Weiske <cweiske@php.net>
+ * @author   Moacir de Oliveira Miranda Júnior <moacir@php.net>
+ * @author   Rudy Nappée <loudi@php.net>
+ * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
+ * @link     http://doc.php.net/phd/
+ */
+class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML
+{
+    public function __construct()
+    {
         parent::__construct();
-        $this->registerFormatName("PEAR-Web");
-        $this->setExt("php");
+        $this->registerFormatName('PEAR-Web');
+        $this->setExt('php');
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         parent::close();
     }
 
@@ -22,11 +36,16 @@ class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML {
      */
     public function header($id)
     {
-        $ext = "." . $this->ext;
+        $ext = '.' . $this->ext;
 
         $parent = Format::getParent($id);
 
-        if (!$parent || $parent == "ROOT")
+        //we link toc feeds
+        $extraHeader = <<<XML
+<link rel="alternate" type="application/atom+xml" title="Live Bookmarks" href="feeds/{$id}.atom" />
+XML;
+
+        if (!$parent || $parent == "ROOT") {
             return '<?php
 sendManualHeaders("UTF-8","en");
 setupNavigation(array(
@@ -36,9 +55,13 @@ setupNavigation(array(
   "up"   => array("#", ""),
   "toc"  => array(
     array("#", ""))));
-manualHeader("index.php", "'.addslashes($this->title).'");
+manualHeader("index.php"'
+    . ', ' . var_export($this->title, true)
+    . ', ' . var_export($extraHeader, true)
+    . ');
 ?>
 ';
+        }
 
         // Fetch the siblings information
         $toc = array();
@@ -46,15 +69,18 @@ manualHeader("index.php", "'.addslashes($this->title).'");
         $siblings = array();
         foreach ($siblingIDs as $sid) {
             $siblings[$sid] = array(
-                "filename" => Format::getFilename($sid),
-                "parent" => Format::getParent($sid),
-                "sdesc" => Format::getShortDescription($sid),
-                "ldesc" => Format::getLongDescription($sid),
-                "children" => $this->createChildren($sid),
+                'filename' => Format::getFilename($sid),
+                'parent'   => Format::getParent($sid),
+                'sdesc'    => Format::getShortDescription($sid),
+                'ldesc'    => Format::getLongDescription($sid),
+                'children' => $this->createChildren($sid),
             );
         }
         foreach ((array)$siblings as $sibling => $array) {
-            $toc[] = array($sibling.$ext, empty($array["sdesc"]) ? $array["ldesc"] : $array["sdesc"]);
+            $toc[] = array(
+                $sibling . $ext,
+                empty($array['sdesc']) ? $array['ldesc'] : $array['sdesc']
+             );
         }
 
         $prev = $next = array(null, null);
@@ -75,15 +101,19 @@ manualHeader("index.php", "'.addslashes($this->title).'");
             'home' => array('index' . $ext, $this->title),
             'prev' => $prev,
             'next' => $next,
-            'up'   => array($this->getFilename($parent).$ext, Format::getLongDescription($parent)),
+            'up'   => array(
+                $this->getFilename($parent) . $ext,
+                Format::getLongDescription($parent)
+            ),
             'toc'  => $toc
         );        
         return "<?php \n" .
             "sendManualHeaders(\"UTF-8\", \"{$this->lang}\");\n" .
             "setupNavigation(" . var_export($nav, true) . ");\n" .
             'manualHeader("'
-                . $this->getFilename($id).$ext . '", '
-                . var_export(Format::getLongDescription($id), true)
+                . $this->getFilename($id).$ext . '"'
+                . ', ' . var_export(Format::getLongDescription($id), true)
+                . ', ' . var_export($extraHeader, true)
             . ');' . "\n" .
             "?>\n";
     }
