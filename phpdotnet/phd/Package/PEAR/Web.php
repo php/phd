@@ -40,12 +40,17 @@ class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML
 
         $parent = Format::getParent($id);
 
-        //we link toc feeds
-        $extraHeader = <<<XML
-<link rel="alternate" type="application/atom+xml" title="Live Bookmarks" href="feeds/{$id}.atom" />
-XML;
+        //we link toc feeds if there are children
+        if (count($this->getChildren($id)) > 0) {
+            $extraHeader = <<<XML
+ <link rel="alternate" type="application/atom+xml" title="Live Bookmarks" href="feeds/{$id}.atom" />
 
-        if (!$parent || $parent == "ROOT") {
+XML;
+        } else {
+            $extraHeader = '';
+        }
+
+        if (!$parent || $parent == 'ROOT') {
             return '<?php
 sendManualHeaders("UTF-8","en");
 setupNavigation(array(
@@ -63,24 +68,15 @@ manualHeader("index.php"'
 ';
         }
 
-        // Fetch the siblings information
-        $toc = array();
+        $toc        = array();
         $siblingIDs = Format::getChildren($parent);
-        $siblings = array();
         foreach ($siblingIDs as $sid) {
-            $siblings[$sid] = array(
-                'filename' => Format::getFilename($sid),
-                'parent'   => Format::getParent($sid),
-                'sdesc'    => Format::getShortDescription($sid),
-                'ldesc'    => Format::getLongDescription($sid),
-                'children' => $this->createChildren($sid),
-            );
-        }
-        foreach ((array)$siblings as $sibling => $array) {
+            $sdesc = Format::getShortDescription($sid);
+            $ldesc = Format::getLongDescription($sid);
             $toc[] = array(
-                $sibling . $ext,
-                empty($array['sdesc']) ? $array['ldesc'] : $array['sdesc']
-             );
+                $sid . $ext,
+                empty($sdesc) ? $ldesc : $sdesc
+            );
         }
 
         $prev = $next = array(null, null);
@@ -138,20 +134,6 @@ manualHeader("index.php"'
             . '); ?>';
     }
 
-    protected function createChildren($id) {
-        if (!Format::getChildren($id)) {
-            return array();
-        }
-        $children =  array($id => array( 
-            "filename" => Format::getFilename($id),
-            "parent" => Format::getParent($id),
-            "sdesc" => Format::getShortDescription($id),
-            "ldesc" => Format::getLongDescription($id),
-        ));
-        foreach (Format::getChildren($id) as $child) {
-            $children["children"] = $this->createChildren($child);
-        }
-    }
 }
 
 /*
