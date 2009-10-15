@@ -84,23 +84,53 @@ class Index extends Format
     }
     public function appendData($data) {
     }
-    // Require indexing if --index=true, if no indexing has been successfully done before
-    // or if xml input file has changed since the last indexing
-    final static public function requireIndexing() {
-        if (!Config::index() && file_exists(Config::output_dir() . "index.sqlite")) {
-            $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
-            $indexingCount = $db->query('SELECT COUNT(time) FROM indexing')->fetchArray(SQLITE3_NUM);
-            if ($indexingCount[0] > 0) {
-                $indexing = $db->query('SELECT time FROM indexing')->fetchArray(SQLITE3_ASSOC);
-                $xmlLastModification = filemtime(Config::xml_file());
-                if ($indexing["time"] > $xmlLastModification) {
-                    return false;
-                }
-            }
+
+    /**
+     * Checks if indexing is needed.
+     *
+     * This is determined the following way:
+     * 0. If no index file exists, indexing is required.
+     * 1. If the config option --no-index is supplied, nothing is indexed
+     * 2. If the config option --force-index is supplied, indexing is required
+     * 3. If no option is given, the file modification time of the index and
+     *    the manual docbook file are compared. If the index is older than
+     *    the docbook file, indexing will be done.
+     *
+     * @return boolean True if indexing is required.
+     */
+    final static public function requireIndexing()
+    {
+        $indexfile = Config::output_dir() . 'index.sqlite';
+        if (!file_exists($indexfile)) {
+            return true;
+        }
+
+        if (Config::no_index()) {
+            return false;
+        }
+
+        if (Config::force_index()) {
+            return true;
+        }
+
+        $db            = new \SQLite3($indexfile);
+        $indexingCount = $db->query('SELECT COUNT(time) FROM indexing')
+            ->fetchArray(SQLITE3_NUM);
+        if ($indexingCount[0] == 0) {
+            return true;
+        }
+
+        $indexing = $db->query('SELECT time FROM indexing')
+            ->fetchArray(SQLITE3_ASSOC);
+        $xmlLastModification = filemtime(Config::xml_file());
+        if ($indexing['time'] > $xmlLastModification) {
+            return false;
         }
         return true;
     }
-    public function update($event, $value = null) {
+
+    public function update($event, $value = null)
+    {
         switch($event) {
             case Render::CHUNK:
                 $this->flags = $value;

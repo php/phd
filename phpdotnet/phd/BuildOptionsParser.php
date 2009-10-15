@@ -10,21 +10,22 @@ class BuildOptionsParser
     public function getOptionList()
     {
         return array(
-            "format:"      => "f:",        // The format to render (xhtml, pdf...)
-            "noindex"      => "I",         // Re-index or load from cache
-            "docbook:"     => "d:",        // The Docbook XML file to render from (.manual.xml)
-            "output:"      => "o:",        // The output directory
-            "partial:"     => "p:",        // The ID to render (optionally ignoring its children)
-            "skip:"        => "s:",        // The ID to skip (optionally skipping its children too)
-            "verbose:"     => "v",         // Adjust the verbosity level
-            "list"         => "l",         // List supported packages/formats
-            "lang::"       => "L:",        // Language hint (used by the CHM)
-            "color:"       => "c:",        // Use color output if possible
+            'format:'      => 'f:',        // The format to render (xhtml, pdf...)
+            'noindex'      => 'I',         // Do not re-index
+            'forceindex'   => 'r',         // Force re-indexing under all circumstances
+            'docbook:'     => 'd:',        // The Docbook XML file to render from (.manual.xml)
+            'output:'      => 'o:',        // The output directory
+            'partial:'     => 'p:',        // The ID to render (optionally ignoring its children)
+            'skip:'        => 's:',        // The ID to skip (optionally skipping its children too)
+            'verbose:'     => 'v',         // Adjust the verbosity level
+            'list'         => 'l',         // List supported packages/formats
+            'lang::'       => 'L:',        // Language hint (used by the CHM)
+            'color:'       => 'c:',        // Use color output if possible
             'highlighter:' => 'g:',        // Class used as source code highlighter
-            "version"      => "V",         // Print out version information
-            "help"         => "h",         // Print out help
-            "package:"     => "P:",        // The package of formats            
-            "css:"         => "C:",        // External CSS 
+            'version'      => 'V',         // Print out version information
+            'help'         => 'h',         // Print out help
+            'package:'     => 'P:',        // The package of formats            
+            'css:'         => 'C:',        // External CSS 
         );
     }
 
@@ -51,14 +52,23 @@ class BuildOptionsParser
     {
         Config::setHighlighter($v);
     }
-   
+
     public function option_i($k, $v)
     {
         $this->option_noindex($k, 'true');
     }
     public function option_noindex($k, $v)
     {
-        Config::set_index(false);
+        Config::set_no_index(true);
+    }
+
+    public function option_r($k, $v)
+    {
+        $this->option_forceindex($k, 'true');
+    }
+    public function option_forceindex($k, $v)
+    {
+        Config::set_force_index(true);
     }
 
     public function option_d($k, $v)
@@ -281,6 +291,9 @@ class BuildOptionsParser
   -I
   --noindex                  Do not index before rendering but load from cache
                              (default: false)
+  -r
+  --forceindex               Force re-indexing under all circumstances
+                             (default: false)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -p <id[=bool]>
@@ -325,7 +338,7 @@ Most options can be passed multiple times for greater effect.
     public function getopt()
     {
         $opts = $this->getOptionList();
-        $args = getopt(implode("", array_values($opts)), array_keys($opts));
+        $args = getopt(implode('', array_values($opts)), array_keys($opts));
         if ($args === false) {
             trigger_error("Something happend with getopt(), please report a bug", E_USER_ERROR);
         }

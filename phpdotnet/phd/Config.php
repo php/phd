@@ -4,21 +4,22 @@ namespace phpdotnet\phd;
 
 class Config
 {
-    const VERSION = "1.0.0-dev";
+    const VERSION = '1.0.0-dev';
 
     private static $optionArray = array(
         'output_format'     => array(),
         'chunk_extra'       => array(
-            "legalnotice"      => true,
-            "phpdoc:exception" => true,
+            'legalnotice'      => true,
+            'phpdoc:exception' => true,
         ),
-        'index'             => true,
+        'no_index'          => false,
+        'force_index'       => false,
         'xml_root'          => '.',
-        'xml_file'          => "./.manual.xml",
+        'xml_file'          => './.manual.xml',
         'lang_dir'          => './',
         'language'          => 'en',
         'verbose'           => VERBOSE_DEFAULT,
-        'date_format'       => "H:i:s",
+        'date_format'       => 'H:i:s',
         'render_ids'        => array(
         ),
         'skip_ids'          => array(
@@ -27,14 +28,14 @@ class Config
         'output_dir'        => './output/',
         'intermediate_output_dir' => '.',
         'php_error_output'  => STDERR,
-        'php_error_color'   => "01;31",
+        'php_error_color'   => '01;31',
         'user_error_output' => STDERR,
-        'user_error_color'  => "01;33",
+        'user_error_color'  => '01;33',
         'phd_info_output'   => STDOUT,
-        'phd_info_color'    => "01;32",
-        'highlighter'       => "phpdotnet\\phd\\Highlighter",
-        "package"           => array(
-            "Generic",
+        'phd_info_color'    => '01;32',
+        'highlighter'       => 'phpdotnet\\phd\\Highlighter',
+        'package'           => array(
+            'Generic',
         ),
         'css'               => array(),
     );
