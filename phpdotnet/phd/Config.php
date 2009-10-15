@@ -43,20 +43,38 @@ class Config
         self::$optionArray = array_merge(self::$optionArray, (array)$a);
     }
 
-    public static function __callStatic($name, $params) {
+    /**
+     * Maps static function calls to config option setter/getters.
+     *
+     * To set an option, call "Config::setOptionname($value)".
+     * To retrieve an option, call "Config::optionname()".
+     *
+     * It is also possible, but deprecated, to call
+     * "Config::set_optionname($value)".
+     *
+     * @param string $name   Name of called function
+     * @param array  $params Array of function parameters
+     *
+     * @return mixed Config value that was requested or set.
+     */
+    public static function __callStatic($name, $params)
+    {
         $name = strtolower($name); // FC if this becomes case-sensitive
+
         if (strncmp($name, 'set', 3) === 0) {
             $name = substr($name, 3);
             if ($name[0] === '_') {
                 $name = substr($name, 1);
             }
             if (strlen($name) < 1 || count($params) !== 1) { // assert
-                trigger_error("Misuse of config option setter", E_USER_ERROR);
+                trigger_error('Misuse of config option setter', E_USER_ERROR);
             }
             self::$optionArray[$name] = $params[0];
             // no return, intentional
         }
-        return isset(self::$optionArray[$name]) ? self::$optionArray[$name] : NULL;
+        return isset(self::$optionArray[$name])
+            ? self::$optionArray[$name]
+            : NULL;
     }
 
     public static function getSupportedPackages() {
