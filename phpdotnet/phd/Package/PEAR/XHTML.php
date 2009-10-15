@@ -123,8 +123,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         'para'                  => array(
             /* DEFAULT */          'format_para',
             'question'          => 'span',//can't ignore it since it's defined in format
-            'warning'           => 'format_warning_para',
-            'important'         => 'format_suppressed_tags',
         ),
         'paramdef'              => 'format_paramdef',
         'parameter'             => array(
@@ -198,7 +196,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             /* DEFAULT */          'format_para',
             'entry'             => 'p',
             'listitem'          => 'p',
-            'warning'           => 'format_warning_para',
         ),
         'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
         'spanspec'              => 'format_suppressed_tags',
@@ -523,7 +520,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             $idstr = '';
             if (isset($attrs[Reader::XMLNS_XML]['id'])) {
                 $id = $attrs[Reader::XMLNS_XML]['id'];
-                $idstr = ' id="' .$id. '" name="' .$id. '"';
+                $idstr = ' id="' . $id . '"';
             }
             return '<' .$tag. ' class="' .$name. '"' . $idstr. '>' . ($props['empty'] ? "</{$tag}>" : '');
         }
@@ -624,7 +621,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
 
             return $this->escapePara()
                 . '<div class="'. ($this->role ? $this->role . 'code' : 'programlisting')
-                . '" style="background-color:#EEE; width: 100%">';
+                . '">';
         }
         $this->role = false;
         $this->trim = false;
@@ -661,9 +658,13 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     {
         if ($open) {
             return $this->escapePara()
-                . '<pre class="screen" style="background-color:#EEE; width: 100%">';
+                . '<pre class="screen">';
         }
         return "</pre>\n" . $this->restorePara();
+    }
+
+    public function format_screen_text($value, $tag) {
+        return ($this->TEXT($value));
     }
 
     public function format_literallayout($open, $name, $attrs)
@@ -774,7 +775,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     {
         if ($open) {
             return $this->escapePara()
-                . '<blockquote class="' . $name . '"><strong>'.$this->autogen($name, $props['lang']). ': </strong>';
+                . '<blockquote class="' . $name . '">';
         }
         return "</blockquote>\n" . $this->restorePara();
     }
@@ -782,7 +783,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     public function format_table($open, $name, $attrs, $props)
     {
         if ($open) {
-            return $this->escapePara() . '<table border="1" class="'.$name.'">';
+            return $this->escapePara() . '<table class="' . $name . '">';
         }
         return "</table>\n" . $this->restorePara();
     }
@@ -812,9 +813,9 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         if ($props['empty'])
             return '';
         if ($open) {
-            return '<caption><strong>';
+            return '<caption>';
         }
-        return '</strong></caption>';
+        return '</caption>';
     }
 
     public function format_userinput($open, $name, $attrs)
@@ -837,29 +838,17 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     {
         if ($open) {
             return $this->escapePara()
-                . '<div class="warning" style="border: 3px double black; padding: 5px">' . "\n";
+                . '<blockquote class="warning">' . "\n";
         }
-        return "</div>\n" . $this->restorePara();
+        return "</blockquote>\n" . $this->restorePara();
     }
 
     public function format_warning_title($open, $name, $attrs, $props)
     {
         if ($open) {
-            return '<strong class="warning_title" style="display:block; text-align: center; width:100%">';
+            return '<h3 class="warning-title">';
         }
-        return "</strong>\n";
-    }
-
-    public function format_warning_para($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            if (!$props['sibling']) {
-                return '<strong>' . $this->autogen('warning', $props['lang']) . "</strong>\n"
-                    . '<p>';
-            }
-            return '<p>';
-        }
-        return "</p>\n";
+        return "</h3>\n";
     }
 
     public function format_refname_function_text($value)

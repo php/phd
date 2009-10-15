@@ -65,6 +65,7 @@
     - Fixed bug #48264 - No style for HTML version of php docs (Moacir)
     - Fixed bug #49547 - default of --color is true, not false (Richard Quadling)
     - Fixed bug #49743 - Problem with functions both procedural and oo (Moacir)
+    - Fixed bug #49839 - Patch to clean up peardoc output (Michael Gauthier)
   </notes>
 
   <contents>
