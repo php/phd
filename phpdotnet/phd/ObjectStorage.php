@@ -4,8 +4,6 @@ namespace phpdotnet\phd;
 
 class ObjectStorage extends \SplObjectStorage
 {
-	protected static $r = array();
-
 	public function attach($obj, $inf = array()) {
 		if (!($obj instanceof Format)) {
 			throw new InvalidArgumentException(
@@ -20,15 +18,6 @@ class ObjectStorage extends \SplObjectStorage
 		}
 		parent::attach($obj, $inf);
 		return $obj;
-	}
-	final protected static function setReader(Reader $r) {
-		self::$r[] = $r;
-	}
-	final protected function getReader() {
-		return end(self::$r);
-	}
-	final protected function popReader() {
-		return array_pop(self::$r);
 	}
 }
 

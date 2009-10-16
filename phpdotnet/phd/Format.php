@@ -191,10 +191,6 @@ abstract class Format extends ObjectStorage
     final public function notify($event, $val = null)
     {
         $this->update($event, $val);
-        //FIXME: the following code is not necessary anymore
-        foreach($this as $format) {
-            $format->update($event, $val);
-        }
     }   
 
     public function setTitle($title) {

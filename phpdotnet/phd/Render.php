@@ -40,7 +40,7 @@ class Render extends ObjectStorage
     } /* }}} */
 
     public function execute(Reader $r) { /* {{{ */
-        ObjectStorage::setReader($r);
+        ReaderKeeper::setReader($r);
 
         foreach($this as $format) {
             $format->notify(Render::INIT, true);
@@ -112,26 +112,6 @@ class Render extends ObjectStorage
                         $data = $retval = $format->{$tag}($open, $name, $attrs, $props);
                     }
                     $format->appendData($data);
-
-                    foreach($format as $theme) {
-                        $map = $format[$theme][\XMLReader::ELEMENT];
-                        if (isset($map[$name])) {
-                            $tag = $map[$name];
-
-                            if (is_array($tag)) {
-                                $tag = $this->notXPath($tag, $depth);
-                            }
-
-                            if ($tag !== false) {
-                                $retval = $theme->{$tag}($open, $name, $attrs, $props);
-
-                                if ($retval !== false) {
-                                    $data = $retval;
-                                }
-                            }
-                        }
-                        $theme->appendData($data);
-                    }
                 }
 
                 $lastdepth = $depth;
@@ -166,25 +146,6 @@ class Render extends ObjectStorage
                     } else {
                         $format->appendData($data);
                     }
-
-                    foreach($format as $theme) {
-                        $map = $format[$theme][\XMLReader::TEXT];
-                        if (isset($map[$name])) {
-                            $tag = $map[$name];
-
-                            if (is_array($tag)) {
-                                $tag = $this->notXPath($tag, $eldepth);
-                            }
-
-                            if ($tag !== false) {
-                                $retval = $format->{$tag}($value, $name);
-                                if ($retval !== false) {
-                                    $data = $retval;
-                                }
-                            }
-                        }
-                        $theme->appendData($data);
-                    }
                 }
                 break;
                     /* }}} */
@@ -195,9 +156,6 @@ class Render extends ObjectStorage
                 foreach($this as $format) {
                     $retval = $format->CDATA($value);
                     $format->appendData($retval);
-                    foreach($format as $theme) {
-                        $theme->appendData($retval);
-                    }
                 }
                 break;
                     /* }}} */
@@ -208,9 +166,6 @@ class Render extends ObjectStorage
                 $retval  = $r->value;
                 foreach($this as $format) {
                     $format->appendData($retval);
-                    foreach($format as $theme) {
-                        $theme->appendData($retval);
-                    }
                 }
                 break;
                     /* }}} */
@@ -231,7 +186,7 @@ class Render extends ObjectStorage
         }
         $r->close();
 
-        ObjectStorage::popReader();
+        ReaderKeeper::popReader();
 
     } /* }}} */
 

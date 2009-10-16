@@ -1440,7 +1440,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_qandaset($open, $name, $attrs, $props) {
         if ($open) {
-            $node = $this->getReader()->expand();
+            $node = ReaderKeeper::getReader()->expand();
             $doc = new \DOMDocument;
             $doc->appendChild($node);
 
