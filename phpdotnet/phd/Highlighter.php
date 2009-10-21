@@ -1,12 +1,27 @@
 <?php
+/**
+ * Source code highlighting class for phd.
+ *
+ * PHP version 5.3+
+ *
+ * @category PhD
+ * @package  PhD
+ * @author   Christian Weiske <cweiske@php.net>
+ * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
+ * @version  SVN: $Id$
+ * @link     http://doc.php.net/phd/
+ */
 namespace phpdotnet\phd;
-/* $Id$ */
 
 /**
-* Source code highlighting class for phd.
-*
-* @author Christian Weiske <cweiske@php.net>
-*/
+ * Source code highlighting class for phd.
+ *
+ * @category PhD
+ * @package  PhD
+ * @author   Christian Weiske <cweiske@php.net>
+ * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
+ * @link     http://doc.php.net/phd/
+ */
 class Highlighter
 {
     /**
