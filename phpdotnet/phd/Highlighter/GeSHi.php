@@ -13,14 +13,24 @@
  */
 namespace phpdotnet\phd;
 
-require 'geshi/geshi.php';
+/**
+ * Yes, geshi needs to be in your include path
+ * We use the mediawiki geshi extension package.
+ */
+require 'MediaWiki/geshi/geshi/geshi.php';
 
 /**
  * Syntax highlighting using GeSHi, the generic syntax highlighter.
  *
  * Note that this highlighter is particularly slow, because
- * we need to instantiate a new geshi instance for each single code
+ * we need to instantiate a new GeSHi instance for each single code
  * snippet.
+ *
+ * This highlighter uses geshi 1.0.x, the stable version as of
+ * 2009. It will not work with geshi 1.1.x or 1.2.x.
+ *
+ * @example
+ * phd -g 'phpdotnet\phd\Highlighter_GeSHi' -L en -P PEAR -f xhtml -o build/en -d .manual.xml
  *
  * @category PhD
  * @package  PhD_GeSHi
