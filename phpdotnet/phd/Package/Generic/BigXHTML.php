@@ -55,8 +55,10 @@ HEADER;
     }
 
     public function close() {
-        fwrite($this->getFileStream(), $this->footer(true));
-        fclose($this->getFileStream());
+        if ($this->getFileStream()) {
+            fwrite($this->getFileStream(), $this->footer(true));
+            fclose($this->getFileStream());
+        }
     }
 
     public function update($event, $val = null) {
