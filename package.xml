@@ -60,13 +60,16 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Added the --css option (Moacir)
+    - Added the --forceindex option (Christian)
     - Fixed bug #45071 - Links to require/include(_once) not rendered (Moacir)
     - Fixed bug #47406 - Add support for external css (Moacir)
     - Fixed bug #48264 - No style for HTML version of php docs (Moacir)
     - Fixed bug #49547 - default of --color is true, not false (Richard Quadling)
+    - Fixed bug #49675 - Missing links in SeeAlso (Moacir)
     - Fixed bug #49743 - Problem with functions both procedural and oo (Moacir)
     - Fixed bug #49839 - Patch to clean up peardoc output (Michael Gauthier)
     - Fixed --noindex option which did not work properly (Christian)
+    - Fixed --verbose option which did not work properly (Moacir)
   </notes>
 
   <contents>
