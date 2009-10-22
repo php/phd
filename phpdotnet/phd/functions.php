@@ -5,7 +5,7 @@ namespace phpdotnet\phd;
 /* {{{ PhD error & message handler */
 
 // PhD verbose flags
-define('VERBOSE_INDEXING',               E_DEPRECATED                  << 1);
+define('VERBOSE_INDEXING',               E_USER_DEPRECATED             << 1);
 define('VERBOSE_FORMAT_RENDERING',       VERBOSE_INDEXING              << 1);
 define('VERBOSE_THEME_RENDERING',        VERBOSE_FORMAT_RENDERING      << 1);
 define('VERBOSE_RENDER_STYLE',           VERBOSE_THEME_RENDERING       << 1);

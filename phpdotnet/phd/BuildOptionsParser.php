@@ -17,7 +17,7 @@ class BuildOptionsParser
             'output:'      => 'o:',        // The output directory
             'partial:'     => 'p:',        // The ID to render (optionally ignoring its children)
             'skip:'        => 's:',        // The ID to skip (optionally skipping its children too)
-            'verbose:'     => 'v',         // Adjust the verbosity level
+            'verbose:'     => 'v:',        // Adjust the verbosity level
             'list'         => 'l',         // List supported packages/formats
             'lang::'       => 'L:',        // Language hint (used by the CHM)
             'color:'       => 'c:',        // Use color output if possible
@@ -168,16 +168,7 @@ class BuildOptionsParser
             $this->option_version($k, $v);
             return;
         }
-
-        if (is_array($v)) {
-            foreach($v as $i => $val) {
-                $this->verbose |= pow(2, $i);
-            }
-        } else {
-            $this->verbose |= 1;
-        }
-        Config::set_verbose($this->verbose);
-        error_reporting($GLOBALS['olderrrep'] | $this->verbose);
+        $this->option_verbose($k, $v);
     }
 
     public function option_verbose($k, $v)
