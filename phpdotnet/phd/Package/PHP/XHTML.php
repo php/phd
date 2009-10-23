@@ -170,7 +170,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
         $r = new \XMLReader;
         if (!$r->open($filename)) {
-            throw new \Exception;
+            throw new \Exception("Could not open file for accessing version information: $filename");
         }
         $versions = array();
         while($r->read()) {
@@ -199,7 +199,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
         $r = new \XMLReader;
         if (!$r->open($filename)) {
-            throw new \Exception("Could not open $filename");
+            throw new \Exception("Could not open file for accessing acronym information:  $filename");
         }
         $acronyms = array();
         while ($r->read()) {
