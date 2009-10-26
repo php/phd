@@ -14,6 +14,32 @@ class Package_PHP_HowTo extends Package_PHP_Web {
         parent::__destruct();
     }
 
+    public function update($event, $val = null) {
+        switch($event) {
+        case Render::CHUNK:
+        case Render::STANDALONE:
+        case Render::VERBOSE:
+            parent::update($event, $val);
+            break;
+        case Render::INIT:
+            $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            $this->postConstruct();
+            if (file_exists($this->getOutputDir())) {
+                if (!is_dir($this->getOutputDir())) {
+                    v("Output directory is a file?", E_USER_ERROR);
+                }
+            } else {
+                if (!mkdir($this->getOutputDir())) {
+                    v("Can't create output directory", E_USER_ERROR);
+                }
+            }
+            if (Config::css()) {
+                $this->fetchStylesheet();
+            }
+            break;
+        }
+    }
+
     public function header($id) {
         $title = Format::getShortDescription($id);
         $parent = Format::getParent($id);
@@ -42,10 +68,8 @@ class Package_PHP_HowTo extends Package_PHP_Web {
  <div class="up"><a href="{$up[0]}">{$up[1]}</a></div>
 </div>
 NAV;
-/*
+
         return "<?php include_once '../include/init.inc.php'; echo site_header('$title');?>\n" . $this->nav . "<hr />\n";
-*/
-        return "<?php include_once '../include/shared-manual.inc'; echo site_header('$title');?>\n" . $this->nav . "<hr />\n";
     }
 
     public function footer($id) {
