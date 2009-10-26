@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://pear.php.net/dtd/package-2.0"
   xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -47,6 +47,7 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Implemented PEAR request #2390: RSS feeds for PEAR Dcumentation Index (Christian)
+    - Fixed bug #49925 - imagedata now supports width and/or depth (becomes width and/or height) (Richard Quadling)
   </notes>
 
   <contents>

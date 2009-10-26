@@ -1299,10 +1299,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_imagedata($open, $name, $attrs) {
         $file    = $attrs[Reader::XMLNS_DOCBOOK]["fileref"];
         $newpath = $this->mediamanager->handleFile($file);
-        if ($this->cchunk["mediaobject"]["alt"] !== false) {
-            return '<img src="' . $newpath . '" alt="' .$this->cchunk["mediaobject"]["alt"]. '" />';
-        }
-        return '<img src="' . $newpath . '" />';
+	$width   = isset($attrs[Reader::XMLNS_DOCBOOK]["width"]) ? ' width="' . $attrs[Reader::XMLNS_DOCBOOK]["width"] . '"' : '';
+	$height  = isset($attrs[Reader::XMLNS_DOCBOOK]["depth"]) ? ' height="' . $attrs[Reader::XMLNS_DOCBOOK]["depth"] . '"' : '';
+	$alt     = ($this->cchunk["mediaobject"]["alt"] !== false) ? ' ' . $this->cchunk["mediaobject"]["alt"] : '';
+
+        return '<img src="' . $newpath . '"' . $alt . $width . $height . ' />';
     }
 
     public function format_table($open, $name, $attrs, $props) {
