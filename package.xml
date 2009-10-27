@@ -119,6 +119,7 @@
           <file name="ObjectStorage.php" role="php"/>
           <file name="PIHandler.php" role="php"/>
           <file name="Reader.php" role="php"/>
+          <file name="ReaderKeeper.php" role="php"/>
           <file name="Render.php" role="php"/>
         </dir>
       </dir>
