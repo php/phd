@@ -86,6 +86,30 @@ class MediaManager
     protected function copyOver($filename, $newpath)
     {
         $fullpath = $this->output_dir . '/' . $newpath;
+        if ($fullfilename = $this->findFile($filename)) {
+            if (!$this->media_dir_exists) {
+                $dir = dirname($fullpath);
+                if (!file_exists($dir)) {
+                    mkdir($dir, 0777, true);
+                }
+                $this->media_dir_exists = true;
+            }
+
+            if (!copy($fullfilename, $fullpath)) {
+                trigger_error('Image could not be copied to : ' . $fullfilename, E_USER_WARNING);
+            }
+        }
+    }//protected function copyOver(..)
+
+    /**
+    * Find the exact location of the file referenced with $filename
+    *
+    * @param string $filename Original filename
+    *
+    * @return string Exact location of the file referenced with $filename or False if file not found.
+    */
+    public function findFile($filename)
+    {
         $sourcefilenames = array (
             // Original format where @LANG@ was part of phpdoc (ala peardoc).
             $this->relative_source_path . $filename,
@@ -99,26 +123,17 @@ class MediaManager
         $foundfile = false;
         foreach($sourcefilenames as $fullfilename) {
             if (file_exists($fullfilename)) {
-
-                if (!$this->media_dir_exists) {
-                    $dir = dirname($fullpath);
-                    if (!file_exists($dir)) {
-                        mkdir($dir, 0777, true);
-                    }
-                    $this->media_dir_exists = true;
-                }
-
-                $foundfile = copy($fullfilename, $fullpath);
+                $foundfile = $fullfilename;
                 break;
             }
         }
 
         if (!$foundfile) {
-            trigger_error('Image does not exist: ' . $fullfilename, E_USER_WARNING);
-            return;
+            trigger_error('Image does not exist: ' . $filename, E_USER_WARNING);
         }
 
-    }//protected function copyOver(..)
+        return $foundfile;
+    }//protected function findFile(..)
 
 }//class MediaManager
 

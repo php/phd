@@ -1298,12 +1298,31 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_imagedata($open, $name, $attrs) {
         $file    = $attrs[Reader::XMLNS_DOCBOOK]["fileref"];
-        $newpath = $this->mediamanager->handleFile($file);
-	$width   = isset($attrs[Reader::XMLNS_DOCBOOK]["width"]) ? ' width="' . $attrs[Reader::XMLNS_DOCBOOK]["width"] . '"' : '';
-	$height  = isset($attrs[Reader::XMLNS_DOCBOOK]["depth"]) ? ' height="' . $attrs[Reader::XMLNS_DOCBOOK]["depth"] . '"' : '';
-	$alt     = ($this->cchunk["mediaobject"]["alt"] !== false) ? ' ' . $this->cchunk["mediaobject"]["alt"] : '';
+        if ($newpath = $this->mediamanager->handleFile($file)) {
+            $curfile = $this->mediamanager->findFile($file);
+            $width   = isset($attrs[Reader::XMLNS_DOCBOOK]["width"]) ? 'width="' . $attrs[Reader::XMLNS_DOCBOOK]["width"] . '"' : '';
+            $height  = isset($attrs[Reader::XMLNS_DOCBOOK]["depth"]) ? 'height="' . $attrs[Reader::XMLNS_DOCBOOK]["depth"] . '"' : '';
+            $alt     = 'alt="' . ($this->cchunk["mediaobject"]["alt"] !== false ? $this->cchunk["mediaobject"]["alt"] : basename($file)) . '"';
 
-        return '<img src="' . $newpath . '"' . $alt . $width . $height . ' />';
+            // Generate height and width when none are supplied.
+            if ('' === $width . $height) {
+                list(,,,$dimensions,,,,) = getimagesize($curfile);
+            } else {
+            	$dimensions = $width . ' ' . $height;
+            }
+
+            // Generate warnings when only 1 dimension supplied or alt is not supplied.
+            if (!$width xor !$height) {
+                v('Missing ' . (!$width ? 'width' : 'height') . ' attribute for ' . $file, VERBOSE_MISSING_ATTRIBUTES);
+            }
+            if (false === $this->cchunk["mediaobject"]["alt"]) {
+                v('Missing alt attribute for ' . $file, VERBOSE_MISSING_ATTRIBUTES);
+            }
+
+            return '<img src="' . $newpath . '" ' . $alt . ' ' . $dimensions . ' />';
+        } else {
+            return '';
+        }
     }
 
     public function format_table($open, $name, $attrs, $props) {

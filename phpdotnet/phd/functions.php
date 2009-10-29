@@ -15,9 +15,10 @@ define('VERBOSE_TOC_WRITING',            VERBOSE_PARTIAL_CHILD_READING << 1);
 define('VERBOSE_CHUNK_WRITING',          VERBOSE_TOC_WRITING           << 1);
 define('VERBOSE_NOVERSION',              VERBOSE_CHUNK_WRITING         << 1);
 define('VERBOSE_BROKEN_LINKS',           VERBOSE_NOVERSION             << 1);
+define('VERBOSE_MISSING_ATTRIBUTES',     VERBOSE_BROKEN_LINKS          << 1);
 
-define('VERBOSE_ALL',                    (VERBOSE_BROKEN_LINKS         << 1)-1);
-define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION|VERBOSE_BROKEN_LINKS)));
+define('VERBOSE_ALL',                    (VERBOSE_MISSING_ATTRIBUTES   << 1)-1);
+define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_NOVERSION|VERBOSE_BROKEN_LINKS|VERBOSE_MISSING_ATTRIBUTES)));
 
 $olderrrep = error_reporting();
 error_reporting($olderrrep | VERBOSE_DEFAULT);
@@ -45,16 +46,19 @@ function term_color($text, $color)
 /* {{{ The PhD errorhandler */
 function errh($errno, $msg, $file, $line, $ctx = null) {
     static $err = array(
+        // PHP Triggered Errors
         E_DEPRECATED                  => 'E_DEPRECATED',
         E_RECOVERABLE_ERROR           => 'E_RECOVERABLE_ERROR',
         E_STRICT                      => 'E_STRICT',
         E_WARNING                     => 'E_WARNING',
         E_NOTICE                      => 'E_NOTICE',
 
+        // User Triggered Errors
         E_USER_ERROR                  => 'E_USER_ERROR',
         E_USER_WARNING                => 'E_USER_WARNING',
         E_USER_NOTICE                 => 'E_USER_NOTICE',
 
+        // PhD informationals
         VERBOSE_INDEXING              => 'VERBOSE_INDEXING',
         VERBOSE_FORMAT_RENDERING      => 'VERBOSE_FORMAT_RENDERING',
         VERBOSE_THEME_RENDERING       => 'VERBOSE_THEME_RENDERING',
@@ -63,8 +67,11 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         VERBOSE_PARTIAL_CHILD_READING => 'VERBOSE_PARTIAL_CHILD_READING',
         VERBOSE_TOC_WRITING           => 'VERBOSE_TOC_WRITING',
         VERBOSE_CHUNK_WRITING         => 'VERBOSE_CHUNK_WRITING',
+
+        // PhD warnings
         VERBOSE_NOVERSION             => 'VERBOSE_NOVERSION',
         VERBOSE_BROKEN_LINKS          => 'VERBOSE_BROKEN_LINKS',
+        VERBOSE_MISSING_ATTRIBUTES    => 'VERBOSE_MISSING_ATTRIBUTES',
     );
     static $recursive = false;
 
@@ -92,10 +99,16 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         case VERBOSE_PARTIAL_CHILD_READING:
         case VERBOSE_TOC_WRITING:
         case VERBOSE_CHUNK_WRITING:
-        case VERBOSE_NOVERSION:
-        case VERBOSE_BROKEN_LINKS:
             $color = Config::phd_info_color();
             $output = Config::phd_info_output();
+            $data = $msg;
+            break;
+
+        case VERBOSE_NOVERSION:
+        case VERBOSE_BROKEN_LINKS:
+        case VERBOSE_MISSING_ATTRIBUTES:
+            $color = Config::phd_warning_color();
+            $output = Config::phd_warning_output();
             $data = $msg;
             break;
 

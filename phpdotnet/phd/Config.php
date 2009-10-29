@@ -28,11 +28,13 @@ class Config
         'output_dir'        => './output/',
         'intermediate_output_dir' => '.',
         'php_error_output'  => STDERR,
-        'php_error_color'   => '01;31',
+        'php_error_color'   => '01;31', // Red
         'user_error_output' => STDERR,
-        'user_error_color'  => '01;33',
+        'user_error_color'  => '01;33', // Yellow
         'phd_info_output'   => STDOUT,
-        'phd_info_color'    => '01;32',
+        'phd_info_color'    => '01;32', // Green
+        'phd_warning_output' => STDOUT,
+        'phd_warning_color' => '01;35', // Magenta
         'highlighter'       => 'phpdotnet\\phd\\Highlighter',
         'package'           => array(
             'Generic',
