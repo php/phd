@@ -10,9 +10,10 @@ define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? __DIR__ : "@php_dir@/")
 function autoload($name)
 {
     $file = __INSTALLDIR__ . DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), '/', $name) . '.php';
-    if (!is_readable($file)) {
+    if (!$fp = fopen($file,'r', true)) {
         throw new \Exception('Cannot find file for ' . $name . ': ' . $file);
     }   
+    fclose($fp);
     require $file;
 }
 spl_autoload_register(__NAMESPACE__ . '\\autoload');
