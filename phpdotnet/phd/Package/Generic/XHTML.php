@@ -534,7 +534,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 if ($style = file_get_contents($css)) {                
                     $this->stylesheets[] = $style;
                 } else {
-                    v(sprintf("Stylesheet %s not fetched.", $css), E_USER_WARNING);
+                    v("Stylesheet %s not fetched.", $css, E_USER_WARNING);
                 }
             }
             return;
@@ -559,7 +559,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             if (@copy($css, $stylesDir . $dest)) {
                 $this->stylesheets[] = $dest;
             } else {
-                v(sprintf('Impossible to copy the %s file.', $css), E_USER_WARNING);
+                v('Impossible to copy the %s file.', $css, E_USER_WARNING);
             }
         }
     }
@@ -1313,10 +1313,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
             // Generate warnings when only 1 dimension supplied or alt is not supplied.
             if (!$width xor !$height) {
-                v('Missing ' . (!$width ? 'width' : 'height') . ' attribute for ' . $file, VERBOSE_MISSING_ATTRIBUTES);
+                v('Missing %s attribute for %s', (!$width ? 'width' : 'height'), $file, VERBOSE_MISSING_ATTRIBUTES);
             }
             if (false === $this->cchunk["mediaobject"]["alt"]) {
-                v('Missing alt attribute for ' . $file, VERBOSE_MISSING_ATTRIBUTES);
+                v('Missing alt attribute for %s', $file, VERBOSE_MISSING_ATTRIBUTES);
             }
 
             return '<img src="' . $newpath . '" ' . $alt . ' ' . $dimensions . ' />';
