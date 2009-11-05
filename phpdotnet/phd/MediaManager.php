@@ -98,38 +98,48 @@ class MediaManager
             if (!copy($fullfilename, $fullpath)) {
                 trigger_error('Image could not be copied to : ' . $fullfilename, E_USER_WARNING);
             }
+        } else {
+	    trigger_error("Image does not exist : $filename", E_USER_WARNING);
         }
     }//protected function copyOver(..)
 
     /**
     * Find the exact location of the file referenced with $filename
     *
-    * @param string $filename Original filename
+    * If the file cannot be found using the supplied filename, which may be
+    * based upon a specific language, then fallback to the English translation.
+    *
+    * @param string  $filename      Original filename
+    * @param boolean $allowfallback If the required file cannot be found then fallback to English
     *
     * @return string Exact location of the file referenced with $filename or False if file not found.
     */
-    public function findFile($filename)
+    public function findFile($filename, $allowfallback = true)
     {
         $sourcefilenames = array (
             // Original format where @LANG@ was part of phpdoc (ala peardoc).
-            $this->relative_source_path . $filename,
+            array('', $filename),
 
             // Where phpdoc/modules/doc-@LANG@ is used.
-            $this->relative_source_path . '../' . $filename,
+            array('../', $filename),
 
             // Where phpdoc/doc-base/trunks and phpdoc/en/trunk are used.
-            $this->relative_source_path . '../../' . substr($filename, 0, strpos($filename, '/', 1)) . '/trunk' . substr($filename, strpos($filename, '/', 1)),
+            array('../../', (substr($filename, 0, strpos($filename, '/', 1)) . '/trunk' . substr($filename, strpos($filename, '/', 1)))),
         );
+
         $foundfile = false;
-        foreach($sourcefilenames as $fullfilename) {
-            if (file_exists($fullfilename)) {
-                $foundfile = $fullfilename;
+        foreach($sourcefilenames as $pathoffset => $filenameinfo) {
+            // Look for current language specific file.
+            if (file_exists($testingfile = $this->relative_source_path . $filenameinfo[0] . $filenameinfo[1])) {
+                $foundfile = $testingfile;
                 break;
             }
-        }
 
-        if (!$foundfile) {
-            trigger_error('Image does not exist: ' . $filename, E_USER_WARNING);
+            // Fallback to English version.
+            if ($allowfallback && file_exists($testingfile = $this->relative_source_path . $filenameinfo[0] . 'en' . substr($filenameinfo[1], strpos($filenameinfo[1], '/')))) {
+                $foundfile = $testingfile;
+                break;
+            }
         }
 
         return $foundfile;

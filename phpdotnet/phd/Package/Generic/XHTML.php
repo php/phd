@@ -1305,7 +1305,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             $alt     = 'alt="' . ($this->cchunk["mediaobject"]["alt"] !== false ? $this->cchunk["mediaobject"]["alt"] : basename($file)) . '"';
 
             // Generate height and width when none are supplied.
-            if ('' === $width . $height) {
+            if ($curfile && '' === $width . $height) {
                 list(,,,$dimensions,,,,) = getimagesize($curfile);
             } else {
             	$dimensions = $width . ' ' . $height;

@@ -59,6 +59,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+    - Added fallback option to find English files when unable to find translated files (Richard Quadling)
     - Added VERBOSE_ERRORS, VERBOSE_INFO and VERBOSE_WARNINGS to group verbose levels (Richard Quadling)
     - Added VERBOSE_MISSING_ATTRIBUTES verbose level (Richard Quadling)
     - Separated PhD verbose messages into informational and warnings (Richard Quadling)
