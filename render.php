@@ -12,7 +12,7 @@ function autoload($name)
     $file = __INSTALLDIR__ . DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), '/', $name) . '.php';
     // Using fopen() because it has use_include_path parameter.
     if (!$fp = @fopen($file, 'r', true)) {
-        v('Cannot find file for ' . $name . ': ' . $file, E_USER_ERROR);
+        v('Cannot find file for %s: %s', $name, $file, E_USER_ERROR);
     }   
     fclose($fp);
     require $file;

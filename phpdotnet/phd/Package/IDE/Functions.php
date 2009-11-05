@@ -256,7 +256,7 @@ class Package_IDE_Functions extends Format {
         if(isset($this->versions[$funcname])) {
            return $this->versions[$funcname];
         }
-        v("No version info for $funcname", VERBOSE_NOVERSION);
+        v("No version info for %s", $funcname, VERBOSE_NOVERSION);
         return false;
     }
 

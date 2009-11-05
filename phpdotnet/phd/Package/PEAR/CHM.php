@@ -392,7 +392,7 @@ $1</head>',
 		$stylesheet = file_get_contents("http://pear.php.net/css/$name.css");
 		if ($stylesheet) return $stylesheet;
 		else {
-			v("Stylesheet $name not fetched. Uses default rendering style.", E_USER_WARNING);
+			v("Stylesheet %s not fetched. Uses default rendering style.", $name, E_USER_WARNING);
 			return "";
 		}
     }

@@ -369,7 +369,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if(isset($this->versions[$funcname])) {
            return $this->versions[$funcname];
         }
-        v("No version info for $funcname", VERBOSE_NOVERSION);
+        v("No version info for %s", $funcname, VERBOSE_NOVERSION);
         return false;
     }
 
@@ -410,7 +410,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 return '<a href="#'.$filename. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>'.$desc;
             }
         } elseif ($this->CURRENT_ID !== $filename) {
-            v("No link found for $value", VERBOSE_BROKEN_LINKS);
+            v("No link found for %s", $value, VERBOSE_BROKEN_LINKS);
         }
 
         return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
