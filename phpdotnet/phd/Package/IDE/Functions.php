@@ -4,11 +4,13 @@ namespace phpdotnet\phd;
 
 class Package_IDE_Functions extends Format {
     protected $elementmap = array(
+        'caution'               => 'format_notes',
         'entry'                 => 'format_changelog_entry',
         'function'              => 'format_seealso_entry',
         'methodparam'           => 'format_methodparam',
         'methodname'            => 'format_seealso_entry',
         'member'                => 'format_member',
+        'note'                  => 'format_notes',
         'refentry'              => 'format_refentry',
         'refname'               => 'name',
         'refnamediv'            => 'format_suppressed_tags',
@@ -17,6 +19,8 @@ class Package_IDE_Functions extends Format {
         'row'                   => 'format_changelog_row',
         'set'                   => 'format_set',
         'tbody'                 => 'format_changelog_tbody',
+        'tip'                   => 'format_notes',
+        'warning'               => 'format_notes',
     );
     protected $textmap    = array(
         'entry'                 => 'format_changelog_entry_text',
@@ -412,7 +416,29 @@ class Package_IDE_Functions extends Format {
             return $content;
         }
     }
-    
+
+    public function format_notes($open, $name, $attrs, $props) {
+        if ($this->role != "notes") {
+            return '';
+        }
+        if ($open) {
+            $content = "<note>";
+            $content .= "\n<type>" . $name . "</type>\n";
+            $content .= "<description>";
+            //Read the description
+            $reader = ReaderKeeper::getReader();
+            do {
+                $reader->read();
+                //Skipping the title
+                if ($reader->nodeType === \XMLReader::ELEMENT && $reader->name != 'title') {
+                    $content .= trim($reader->readContent());
+                }
+            } while ($reader->name != $name);
+            $content .= "</description>\n</note>\n";
+            return $content;
+        }
+    }
+
     public function format_errors($open, $name, $attrs, $props) {
         if ($open) {
             return "\n\n<errors>\n<description>";
