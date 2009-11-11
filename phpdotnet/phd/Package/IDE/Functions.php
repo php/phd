@@ -398,11 +398,19 @@ class Package_IDE_Functions extends Format {
             $content = "\n\n<return>\n";
             $content .= "<type>" . $this->cchunk["return"]["type"] . "</type>\n";
             $content .= "<description>";
-            
+            //Read the description
+            $reader = ReaderKeeper::getReader();
+            do {
+                $reader->read();
+                //Skipping the title
+                if ($reader->nodeType === \XMLReader::ELEMENT && $reader->name != 'title') {
+                    $content .= trim($reader->readContent());
+                }
+            } while ($reader->name != 'refsect1');
+            $content .= "</description>\n</return>\n";
+            $this->cchunk["return"] = $this->dchunk["return"];
             return $content;
         }
-        $this->cchunk["return"] = $this->dchunk["return"];
-        return "</description>\n</return>\n";
     }
     
     public function format_errors($open, $name, $attrs, $props) {
