@@ -18,13 +18,10 @@ Installing the PhD renderer:
     From SVN:
         svn checkout http://svn.php.net/repository/phd/trunk phd
         cd phd
-        pear install -f package.xml package_generic.xml
+        pear install package.xml package_generic.xml
 
-        To install the PHP Package:
-            pear install -f package_php.xml
-        
-        To install the PEAR Package:
-            pear install -f package_pear.xml
+        To install the standalone Packages:
+            for i in package_*.xml; do pear install $i; done
 
 Requirements:
     - PHP 5.3
