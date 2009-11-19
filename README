@@ -16,6 +16,8 @@ Installing the PhD renderer:
             pear remote-list -c doc.php.net
 
     From SVN:
+        Note: Do not install anything from PEAR above.
+
         svn checkout http://svn.php.net/repository/phd/trunk phd
         cd phd
         pear install package.xml package_generic.xml
