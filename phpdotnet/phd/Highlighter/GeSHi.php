@@ -76,6 +76,7 @@ class Highlighter_GeSHi extends Highlighter
     {
         $geshi = new \GeSHi($text, $role);
         $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
+        $geshi->set_header_type(GESHI_HEADER_DIV);
         return $geshi->parse_code();
     }//public function highlight(..)
 
