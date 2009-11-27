@@ -13,6 +13,7 @@ class Package_PHP_Factory extends Format_Factory {
         'bigpdf'        => 'Package_PHP_BigPDF',
         'kdevelop'      => 'Package_PHP_KDevelop',
         'chm'           => 'Package_PHP_CHM',
+        'tocfeed'       => 'Package_PHP_TocFeed',
     );
     
     public function __construct() {
