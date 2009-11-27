@@ -61,6 +61,7 @@ while($reader->read()) {
 }
 
 $reader->close();
+?>
 --EXPECT--
 <div id="" class="article">
 <h1 class="title">
