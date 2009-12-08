@@ -35,6 +35,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'date'                  => 'p',
         'editor'                => 'format_editor',
         'email'                 => 'format_suppressed_tags',
+        'errortext'             => 'tt',
         'firstname'             => 'format_name',
         'footnote'              => 'format_footnote',
         'footnoteref'           => 'format_footnoteref',

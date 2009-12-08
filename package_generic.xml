@@ -46,10 +46,11 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+    - Added support for &lt;errortext&gt; (Hannes)
     - Implemented PEAR request #2390: RSS feeds for PEAR Dcumentation Index (Christian)
     - Fixed bug #49925 - imagedata now supports width and/or depth (becomes width and/or height) (Richard Quadling)
     - VERBOSE_MISSING_ATTRIBUTE message generated when missing one of the width/height attributes on imagedata (Richard Quadling)
-    - VERBOSE_MISSING_ATTRIBUTE message generated when missing alt attributes on mediaobject > imagedata (Richard Quadling)
+    - VERBOSE_MISSING_ATTRIBUTE message generated when missing alt attributes on mediaobject &gt; imagedata (Richard Quadling)
   </notes>
 
   <contents>
