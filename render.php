@@ -5,23 +5,22 @@ namespace phpdotnet\phd;
 
 // @php_dir@ gets replaced by pear with the install dir. use __DIR__ when 
 // running from SVN
-define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? __DIR__ : "@php_dir@/");
+define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? __DIR__ : "@php_dir@");
 
 function autoload($name)
 {
-    $file = __INSTALLDIR__ . DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), '/', $name) . '.php';
+    $file = __INSTALLDIR__ . DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $name) . '.php';
     // Using fopen() because it has use_include_path parameter.
     if (!$fp = @fopen($file, 'r', true)) {
         v('Cannot find file for %s: %s', $name, $file, E_USER_ERROR);
-    }   
+    }
     fclose($fp);
     require $file;
 }
 spl_autoload_register(__NAMESPACE__ . '\\autoload');
 require_once __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
 
-$optparser = new BuildOptionsParser();
-$optparser->getopt();
+BuildOptionsParser::getopt();
 
 /* If no docbook file was passed, die */
 if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
