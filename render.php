@@ -7,18 +7,10 @@ namespace phpdotnet\phd;
 // running from SVN
 define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? __DIR__ : "@php_dir@");
 
-function autoload($name)
-{
-    $file = __INSTALLDIR__ . DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $name) . '.php';
-    // Using fopen() because it has use_include_path parameter.
-    if (!$fp = @fopen($file, 'r', true)) {
-        v('Cannot find file for %s: %s', $name, $file, E_USER_ERROR);
-    }
-    fclose($fp);
-    require $file;
-}
-spl_autoload_register(__NAMESPACE__ . '\\autoload');
-require_once __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
+require __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
+require __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
+
+spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
 
 BuildOptionsParser::getopt();
 
