@@ -4,9 +4,6 @@ namespace phpdotnet\phd;
 
 class BuildOptionsParser
 {
-    public $docbook = false;
-    public $verbose = 0;
-
     public function getOptionList()
     {
         return array(
@@ -85,7 +82,6 @@ class BuildOptionsParser
         }
         Config::set_xml_root(dirname($v));
         Config::set_xml_file($v);
-        $this->docbook = true;
     }
 
     public function option_o($k, $v)
@@ -173,19 +169,21 @@ class BuildOptionsParser
 
     public function option_verbose($k, $v)
     {
+        static $verbose = 0;
+
         foreach((array)$v as $i => $val) {
             foreach(explode("|", $val) as $const) {
                 if (defined($const)) {
-                    $this->verbose |= (int)constant($const);
+                    $verbose |= (int)constant($const);
                 } elseif (is_numeric($const)) {
-                    $this->verbose |= (int)$const;
+                    $verbose |= (int)$const;
                 } else {
                     trigger_error("Unknown option passed to --$k, $const", E_USER_ERROR);
                 }
             }
         }
-        Config::set_verbose($this->verbose);
-        error_reporting($GLOBALS['olderrrep'] | $this->verbose);
+        Config::set_verbose($verbose);
+        error_reporting($GLOBALS['olderrrep'] | $verbose);
     }
 
     public function option_l($k, $v)
@@ -326,16 +324,17 @@ Most options can be passed multiple times for greater effect.
         }
     }
 
-    public function getopt()
+    public static function getopt()
     {
-        $opts = $this->getOptionList();
+        $bop = new self;
+        $opts = $bop->getOptionList();
         $args = getopt(implode('', array_values($opts)), array_keys($opts));
         if ($args === false) {
             trigger_error("Something happend with getopt(), please report a bug", E_USER_ERROR);
         }
 
         foreach ($args as $k => $v) {
-            $handler = $this->handlerForOption($k);
+            $handler = $bop->handlerForOption($k);
             if (is_callable($handler)) {
                 call_user_func($handler, $k, $v);
             } else {
