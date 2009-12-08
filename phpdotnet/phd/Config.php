@@ -95,33 +95,6 @@ class Config
 
 }
 
-/* {{{ phd_bool($var) Returns boolean true/false on success, null on failure */
-function phd_bool($val) {
-    if (!is_string($val)) {
-        return null;
-    }
-
-    switch ($val) {
-    case "on":
-    case "yes":
-    case "true":
-    case "1":
-        return true;
-        break;
-
-    case "off":
-    case "no":
-    case "false":
-    case "0":
-        return false;
-        break;
-
-    default:
-        return null;
-    }
-}
-/* }}} */
-
 /*
 * vim600: sw=4 ts=4 syntax=php et
 * vim<600: sw=4 ts=4

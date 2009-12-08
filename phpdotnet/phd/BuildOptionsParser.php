@@ -224,7 +224,7 @@ class BuildOptionsParser
         if (is_array($v)) {
             trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
         }
-        $val = phd_bool($v);
+        $val = self::boolval($v);
         if (is_bool($val)) {
             if ($val && function_exists('posix_isatty')) {
                 Config::set_phd_info_color(posix_isatty(Config::phd_info_output()) ? '01;32' : false);         // Bright (bold) green
@@ -342,6 +342,39 @@ Most options can be passed multiple times for greater effect.
                 var_dump($k, $v);
                 trigger_error("Hmh, something weird has happend, I don't know this option", E_USER_ERROR);
             }
+        }
+    }
+
+    /**
+     * Makes a string into a boolean (i.e. on/off, yes/no, ..)
+     *
+     * Returns boolean true/false on success, null on failure
+     * 
+     * @param string $val 
+     * @return bool
+     */
+    public static function boolval($val) {
+        if (!is_string($val)) {
+            return null;
+        }
+
+        switch ($val) {
+            case "on":
+                case "yes":
+                case "true":
+                case "1":
+                return true;
+            break;
+
+            case "off":
+                case "no":
+                case "false":
+                case "0":
+                return false;
+            break;
+
+            default:
+            return null;
         }
     }
 }
