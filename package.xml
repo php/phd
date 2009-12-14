@@ -115,6 +115,7 @@
           <dir name="PI">
             <file name="DBHTMLHandler.php" role="php"/>
           </dir>
+          <file name="Autoloader.php" role="php"/>
           <file name="BuildOptionsParser.php" role="php"/>
           <file name="Config.php" role="php"/>
           <file name="Format.php" role="php"/>
