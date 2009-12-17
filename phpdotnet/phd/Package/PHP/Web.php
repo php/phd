@@ -158,6 +158,14 @@ $PARENTS = ' . var_export($parents, true) . ';';
             "prev" => $prev,
             "next" => $next,
         );
+        if ($this->getChildren($id)) {
+            $lang = Config::language();
+            $setup["extra_header_links"] = array(
+                "rel"   => "alternate",
+                "href"  => "/manual/{$lang}/feeds/{$id}.atom",
+                "type"  => "application/atom+xml",
+            );
+        }
         $var = var_export($setup, true);
 
         return '<?php

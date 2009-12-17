@@ -60,6 +60,7 @@
 	      <file name="ChunkedXHTML.php" role="php"/>
 	      <file name="HowTo.php" role="php"/>
 	      <file name="XHTML.php" role="php"/>
+	      <file name="TocFeed.php" role="php"/>
 	      <file name="README" role="doc"/>
 	      <file name="HOWTO.GENERATE_CHM" role="doc"/>
 	    </dir>
