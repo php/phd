@@ -28,13 +28,13 @@
     <active>yes</active>
   </lead>
 
-  <date>2009-10-13</date>
+  <date>2009-12-21</date>
   <version>
-    <release>1.0.0</release>
-    <api>1.0.0</api>
+    <release>0.9.1</release>
+    <api>0.9.1</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>beta</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
