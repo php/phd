@@ -29,16 +29,16 @@
 
   <date>2009-12-21</date>
   <version>
-    <release>0.9.1</release>
-    <api>0.9.1</api>
+    <release>0.9.2</release>
+    <api>0.9.2</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-   - Initial release
+   - notes
   </notes>
 
   <contents>
@@ -83,7 +83,7 @@
         <release>beta</release>
         <api>beta</api>
       </stability>
-      <date>2009-10-23</date>
+      <date>2009-12-21</date>
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Initial release

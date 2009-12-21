@@ -50,32 +50,16 @@
 
   <date>2009-12-21</date>
   <version>
-    <release>0.9.1</release>
-    <api>0.9.1</api>
+    <release>0.9.2</release>
+    <api>0.9.2</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added fallback option to find English files when unable to find translated files (Richard Quadling)
-    - Added VERBOSE_ERRORS, VERBOSE_INFO and VERBOSE_WARNINGS to group verbose levels (Richard Quadling)
-    - Added VERBOSE_MISSING_ATTRIBUTES verbose level (Richard Quadling)
-    - Separated PhD verbose messages into informational and warnings (Richard Quadling)
-    - PhD verbose warning messages are colored magenta (Richard Quadling)
-    - Added MediaManger->findFile() method to return full filename of required image (Richard Quadling)
-    - Added the --css option (Moacir)
-    - Added the --forceindex option (Christian)
-    - Fixed bug #45071 - Links to require/include(_once) not rendered (Moacir)
-    - Fixed bug #47406 - Add support for external css (Moacir)
-    - Fixed bug #48264 - No style for HTML version of php docs (Moacir)
-    - Fixed bug #49547 - default of --color is true, not false (Richard Quadling)
-    - Fixed bug #49675 - Missing links in SeeAlso (Moacir)
-    - Fixed bug #49743 - Problem with functions both procedural and oo (Moacir)
-    - Fixed bug #49839 - Patch to clean up peardoc output (Michael Gauthier)
-    - Fixed --noindex option which did not work properly (Christian)
-    - Fixed --verbose option which did not work properly (Moacir)
+    - notes
   </notes>
 
   <contents>
@@ -692,6 +676,38 @@
         - Kill themes and add a concept of "packages" (Moacir)
         - Rewrite indexer (Hannes, Rudy, Moacir)
         - Rewrite program flow (Hannes)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>0.9.1</release>
+        <api>0.9.1</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2009-12-21</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added fallback option to find English files when unable to find translated files (Richard Quadling)
+        - Added VERBOSE_ERRORS, VERBOSE_INFO and VERBOSE_WARNINGS to group verbose levels (Richard Quadling)
+        - Added VERBOSE_MISSING_ATTRIBUTES verbose level (Richard Quadling)
+        - Separated PhD verbose messages into informational and warnings (Richard Quadling)
+        - PhD verbose warning messages are colored magenta (Richard Quadling)
+        - Added MediaManger->findFile() method to return full filename of required image (Richard Quadling)
+        - Added the --css option (Moacir)
+        - Added the --forceindex option (Christian)
+        - Fixed bug #45071 - Links to require/include(_once) not rendered (Moacir)
+        - Fixed bug #47406 - Add support for external css (Moacir)
+        - Fixed bug #48264 - No style for HTML version of php docs (Moacir)
+        - Fixed bug #49547 - default of --color is true, not false (Richard Quadling)
+        - Fixed bug #49675 - Missing links in SeeAlso (Moacir)
+        - Fixed bug #49743 - Problem with functions both procedural and oo (Moacir)
+        - Fixed bug #49839 - Patch to clean up peardoc output (Michael Gauthier)
+        - Fixed --noindex option which did not work properly (Christian)
+        - Fixed --verbose option which did not work properly (Moacir)
       </notes>
     </release>
 

@@ -37,21 +37,16 @@
 
   <date>2009-12-21</date>
   <version>
-    <release>0.9.1</release>
-    <api>0.9.1</api>
+    <release>0.9.2</release>
+    <api>0.9.2</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added support for &lt;errortext&gt; (Hannes)
-    - Implemented PEAR request #2390: RSS feeds for PEAR Dcumentation Index (Christian)
-    - Fixed bug #49925 - imagedata now supports width and/or depth (becomes width and/or height) (Richard Quadling)
-    - Removed the format php (Moacir)
-    - VERBOSE_MISSING_ATTRIBUTE message generated when missing one of the width/height attributes on imagedata (Richard Quadling)
-    - VERBOSE_MISSING_ATTRIBUTE message generated when missing alt attributes on mediaobject &gt; imagedata (Richard Quadling)
+    - notes
   </notes>
 
   <contents>
@@ -121,6 +116,27 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Initial release
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>0.9.1</release>
+        <api>0.9.1</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2009-12-21</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added support for &lt;errortext&gt; (Hannes)
+        - Implemented PEAR request #2390: RSS feeds for PEAR Dcumentation Index (Christian)
+        - Fixed bug #49925 - imagedata now supports width and/or depth (becomes width and/or height) (Richard Quadling)
+        - Removed the format php (Moacir)
+        - VERBOSE_MISSING_ATTRIBUTE message generated when missing one of the width/height attributes on imagedata (Richard Quadling)
+        - VERBOSE_MISSING_ATTRIBUTE message generated when missing alt attributes on mediaobject &gt; imagedata (Richard Quadling)
       </notes>
     </release>
 

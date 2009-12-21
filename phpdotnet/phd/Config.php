@@ -4,7 +4,7 @@ namespace phpdotnet\phd;
 
 class Config
 {
-    const VERSION = '0.9.1';
+    const VERSION = 'phd-from-svn';
 
     private static $optionArray = array(
         'output_format'     => array(),
