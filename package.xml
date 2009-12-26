@@ -59,7 +59,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - notes
+    - Fixed bug#45098 - named constants require long opt. (Hannes)
   </notes>
 
   <contents>

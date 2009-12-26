@@ -14,7 +14,7 @@ class BuildOptionsParser
             'output:'      => 'o:',        // The output directory
             'partial:'     => 'p:',        // The ID to render (optionally ignoring its children)
             'skip:'        => 's:',        // The ID to skip (optionally skipping its children too)
-            'verbose:'     => 'v:',        // Adjust the verbosity level
+            'verbose:'     => 'v::',        // Adjust the verbosity level
             'list'         => 'l',         // List supported packages/formats
             'lang::'       => 'L:',        // Language hint (used by the CHM)
             'color:'       => 'c:',        // Use color output if possible
@@ -177,8 +177,11 @@ class BuildOptionsParser
                     $verbose |= (int)constant($const);
                 } elseif (is_numeric($const)) {
                     $verbose |= (int)$const;
+                } elseif (empty($const)) {
+                    $verbose = max($verbose, 1);
+                    $verbose <<= 1;
                 } else {
-                    trigger_error("Unknown option passed to --$k, $const", E_USER_ERROR);
+                    trigger_error("Unknown option passed to --$k, '$const'", E_USER_ERROR);
                 }
             }
         }
