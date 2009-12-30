@@ -589,7 +589,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 $content = "&raquo; ";
             }
             if ($props["empty"]) {
-                $content .= $link ."</a>\n";
+                $content .= $link ."</a>";
             }
 
             return '<a href="' . $link . '" class="' . $name . $class . '">' . $content;
@@ -962,7 +962,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             }
             return '<i><tt class="parameter">';
         }
-        return "</tt></i>\n";
+        return "</tt></i>";
     }
 
     public function format_void($open, $name, $attrs) {
@@ -1001,7 +1001,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($open) {
             return '<var class="'.$name.'">$';
         }
-        return "</var>\n";
+        return "</var>";
     }
     public function format_fieldsynopsis_varname($open, $name, $attrs) {
         if ($open) {
@@ -1171,13 +1171,13 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             }
             return '<span class="' .$name. '">';
         }
-        return "</span>\n";
+        return "</span>";
     }
     public function format_userinput($open, $name, $attrs) {
         if ($open) {
             return '<strong class="' .$name. '"><code>';
         }
-        return "</code></strong>\n";
+        return "</code></strong>";
     }
     public function format_systemitem($open, $name, $attrs) {
         if ($open) {
@@ -1189,7 +1189,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 return '<code class="systemitem ' .$name. '">';
             }
         }
-        return "</code>\n";
+        return "</code>";
     }
     public function format_example_content($open, $name, $attrs) {
         if ($open) {
@@ -1342,7 +1342,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
             foreach ($this->cchunk["tablefootnotes"] as $k => $noteid) {
                 $str .= '<div class="footnote">';
-                $str .= '<a name="fnid' .$noteid. '" href="#fn' .$noteid .'"><sup>[' .($k + 1). ']</sup></a>' .$this->cchunk["footnote"][$k]["str"] . "\n";
+                $str .= '<a name="fnid' .$noteid. '" href="#fn' .$noteid .'"><sup>[' .($k + 1). ']</sup></a>' .$this->cchunk["footnote"][$k]["str"];
                 unset($this->cchunk["footnote"][$k]);
                 $str .= "</div>\n";
 
