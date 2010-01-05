@@ -34,6 +34,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'copyright'             => 'format_copyright',
         'date'                  => 'p',
         'editor'                => 'format_editor',
+        'edition'               => 'format_suppressed_tags',
         'email'                 => 'format_suppressed_tags',
         'errortext'             => 'tt',
         'firstname'             => 'format_name',
@@ -141,6 +142,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'link'                  => 'format_link',
         'xref'                  => 'format_xref',
         'manvolnum'             => 'format_manvolnum',
+        'inlinemediaobject'     => 'format_mediaobject',
         'mediaobject'           => 'format_mediaobject',
         'methodparam'           => 'format_methodparam',
         'methodsynopsis'        => 'format_methodsynopsis',
@@ -159,6 +161,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'classsynopsisinfo'    => 'format_classsynopsisinfo_oointerface',
         ),
         'interfacename'         => 'span',
+        'exceptionname'         => 'span',
         'option'                => 'span',
         'orderedlist'           => 'format_orderedlist',
         'para'                  => array(
@@ -255,6 +258,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'synopsis'              => 'pre',
         'tag'                   => 'code',
         'table'                 => 'format_table',
+        'firstterm'             => 'format_term',
         'term'                  => 'format_term',
         'tfoot'                 => 'format_th',
         'tbody'                 => 'format_tbody',
@@ -305,6 +309,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         ),
         'titleabbrev'           => 'format_suppressed_tags',
         'token'                 => 'tt',
+        'trademark'             => 'format_trademark',
         'type'                  => 'format_spaced_span',
         'userinput'             => 'format_userinput',
         'uri'                   => 'tt',
@@ -328,7 +333,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'questions'             => 'ol', // From the PhD namespace
         'answer'                => 'dd',
 
-        //phpdoc: implement in the PHP Package
+        //phpdoc: implemented in the PHP Package
         'phpdoc:classref'       => 'format_suppressed_tags',
         'phpdoc:exception'      => 'format_suppressed_tags',
         'phpdoc:exceptionref'   => 'format_suppressed_tags',
@@ -344,6 +349,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'affiliation'          => 'format_suppressed_text',
         'contrib'              => 'format_suppressed_text',
         'shortaffil'           => 'format_suppressed_text',
+        'edition'              => 'format_suppressed_text',
         
         'programlisting'       => 'format_programlisting_text',
         'alt'                  => 'format_alt_text',
@@ -1171,6 +1177,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return '<span class="' .$name. '">';
         }
         return "</span>";
+    }
+    public function format_trademark($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<span class=' .$name. '">';
+        }
+        return '®</span>';
     }
     public function format_userinput($open, $name, $attrs) {
         if ($open) {
