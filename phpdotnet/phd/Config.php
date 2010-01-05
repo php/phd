@@ -40,6 +40,7 @@ class Config
             'Generic',
         ),
         'css'               => array(),
+        'process_xincludes' => false,
     );
 
     public static function init(array $a) {

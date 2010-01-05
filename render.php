@@ -38,13 +38,19 @@ Config::init(array(
 $render = new Render();
 $reader = new Reader();
 
+// Set reader LIBXML options
+$readerOpts = 0;
+if (Config::process_xincludes()) {
+    $readerOpts |= LIBXML_XINCLUDE;
+}
+
 // Indexing
 if (Index::requireIndexing()) {
     v("Indexing...", VERBOSE_INDEXING);
     // Create indexer
     $format = $render->attach(new Index);
 
-    $reader->open(Config::xml_file());
+    $reader->open(Config::xml_file(), NULL, $readerOpts);
     $render->execute($reader);
 
     $render->detach($format);
@@ -78,7 +84,7 @@ foreach((array)Config::package() as $package) {
 }
 
 // Render formats
-$reader->open(Config::xml_file());
+$reader->open(Config::xml_file(), NULL, $readerOpts);
 foreach($render as $format) {
     $format->notify(Render::VERBOSE, true);
 }

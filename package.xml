@@ -59,6 +59,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+    - Implemented FR#50668 - add xinclude processing in phd (Shahar Evron)
     - Fixed bug#45098 - named constants require long opt. (Hannes)
   </notes>
 

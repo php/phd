@@ -23,6 +23,7 @@ class BuildOptionsParser
             'help'         => 'h',         // Print out help
             'package:'     => 'P:',        // The package of formats            
             'css:'         => 'C:',        // External CSS 
+            'xinclude'     => 'x',         // Automatically process xinclude directives
         );
     }
 
@@ -250,6 +251,15 @@ class BuildOptionsParser
         Config::set_css($styles);
     }
 
+    public function option_x($k, $v)
+    {
+        $this->option_xinclude($k, 'true');
+    }
+    public function option_xinclude($k, $v)
+    {
+        Config::set_process_xincludes(true);
+    }
+
     /**
      * Prints out the current PhD and PHP version.
      * Exits directly.
@@ -288,6 +298,9 @@ class BuildOptionsParser
                              (default: false)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
+  -x
+  --xinclude                 Process XML Inclusions (XInclude)
+                             (default: false)
   -p <id[=bool]>
   --partial <id[=bool]>      The ID to render, optionally skipping its children
                              chunks (default to true; render children)
