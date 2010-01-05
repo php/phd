@@ -67,6 +67,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'acronym'               => 'format_acronym_text',
         'function'              => 'format_function_text',
         'interfacename'         => 'format_classname_text',
+        'exceptionname'         => 'format_classname_text',
         'classname'            => array(
             /* DEFAULT */         'format_classname_text',
             'ooclass'          => array(
