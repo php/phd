@@ -296,6 +296,10 @@ SQL;
         return $this->format_chunk($open, $name, $attrs, $props);
     }
     public function format_chunk($open, $name, $attrs, $props) {
+        if ($props["empty"]) {
+            return false;
+        }
+
         $this->processFilename();
         if ($open) {
             if(isset($attrs[Reader::XMLNS_XML]["id"])) {
