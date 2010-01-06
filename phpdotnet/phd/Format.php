@@ -33,7 +33,7 @@ abstract class Format extends ObjectStorage
     protected $outputdir;
     protected $chunked;
 
-    /*Processing Instructions Handlers*/
+    /* Processing Instructions Handlers */
     private $pihandlers = array();
 
     /* Indexing maps */
@@ -45,8 +45,11 @@ abstract class Format extends ObjectStorage
 
     private static $autogen = array();
 
-    /* PhDHelper */
     private static $highlighters = array();
+
+    /* See self::parse() */
+    protected $appendToBuffer = false;
+    protected $buffer = "";
 
     public function __construct() {
         if (file_exists(Config::output_dir() . "index.sqlite")) {
@@ -304,10 +307,7 @@ abstract class Format extends ObjectStorage
         return $this->formatname;
     }
 
-	/* Buffer where append data instead of the standard stream (see format's appendData()) */
-    protected $appendToBuffer = false;
-	protected $buffer = "";
-
+    /* Buffer where append data instead of the standard stream (see format's appendData()) */
     final public function parse($xml) {
         $parsed = "";
         $reader = new Reader();
@@ -521,8 +521,6 @@ abstract class Format extends ObjectStorage
         return 1;
     }
 /* }}} */
-
-    /*PhDHelper functions*/
 
     /**
     * Highlight (color) the given piece of source code
