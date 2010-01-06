@@ -66,8 +66,7 @@ class Render extends ObjectStorage
                 if ($r->hasAttributes) {
                     $r->moveToFirstAttribute();
                     do {
-                        $k = $r->namespaceURI;
-                        $attrs[!empty($k) ? $k : Reader::XMLNS_DOCBOOK][$r->localName] = $r->value;
+                        $attrs[$r->namespaceURI ?: Reader::XMLNS_DOCBOOK][$r->localName] = $r->value;
                     } while ($r->moveToNextAttribute());
                     $r->moveToElement();
                 }
