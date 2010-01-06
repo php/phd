@@ -436,6 +436,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     protected $pihandlers = array(
         'dbhtml'        => 'PI_DBHTMLHandler',
+        'dbtimestamp'   => 'PI_DBHTMLHandler',
     );
 
     protected $stylesheets = array();
