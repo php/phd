@@ -1301,9 +1301,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_mediaobject($open, $name, $attrs) {
         $this->cchunk["mediaobject"] = $this->dchunk["mediaobject"];
-        if (isset($attrs[Reader::XMLNS_DOCBOOK]["alt"])) {
-	        $this->cchunk["mediaobject"]["alt"] = $attrs[Reader::XMLNS_DOCBOOK]["alt"];
-	}
         if ($open) {
             return '<div class="'.$name.'">';
         }
