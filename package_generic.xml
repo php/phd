@@ -137,6 +137,7 @@
         - Removed the format php (Moacir)
         - VERBOSE_MISSING_ATTRIBUTE message generated when missing one of the width/height attributes on imagedata (Richard Quadling)
         - VERBOSE_MISSING_ATTRIBUTE message generated when missing alt attributes on mediaobject &gt; imagedata (Richard Quadling)
+        - Implemented support for alt attribute on mediaobject (Richard Quadling)
       </notes>
     </release>
 
