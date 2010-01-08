@@ -70,19 +70,19 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         E_USER_NOTICE                 => 'E_USER_NOTICE',
 
         // PhD informationals
-        VERBOSE_INDEXING              => 'VERBOSE_INDEXING',
-        VERBOSE_FORMAT_RENDERING      => 'VERBOSE_FORMAT_RENDERING',
-        VERBOSE_THEME_RENDERING       => 'VERBOSE_THEME_RENDERING',
-        VERBOSE_RENDER_STYLE          => 'VERBOSE_RENDER_STYLE',
-        VERBOSE_PARTIAL_READING       => 'VERBOSE_PARTIAL_READING',
-        VERBOSE_PARTIAL_CHILD_READING => 'VERBOSE_PARTIAL_CHILD_READING',
-        VERBOSE_TOC_WRITING           => 'VERBOSE_TOC_WRITING',
-        VERBOSE_CHUNK_WRITING         => 'VERBOSE_CHUNK_WRITING',
+        VERBOSE_INDEXING              => 'Indexing',
+        VERBOSE_FORMAT_RENDERING      => 'Rendering Format',
+        VERBOSE_THEME_RENDERING       => 'Rendering Theme',
+        VERBOSE_RENDER_STYLE          => 'Rendering Style',
+        VERBOSE_PARTIAL_READING       => 'Partial Reading',
+        VERBOSE_PARTIAL_CHILD_READING => 'Partial Child Reading',
+        VERBOSE_TOC_WRITING           => 'Writing TOC',
+        VERBOSE_CHUNK_WRITING         => 'Writing Chunk',
 
         // PhD warnings
-        VERBOSE_NOVERSION             => 'VERBOSE_NOVERSION',
-        VERBOSE_BROKEN_LINKS          => 'VERBOSE_BROKEN_LINKS',
-        VERBOSE_MISSING_ATTRIBUTES    => 'VERBOSE_MISSING_ATTRIBUTES',
+        VERBOSE_NOVERSION             => 'No version information',
+        VERBOSE_BROKEN_LINKS          => 'Broken links',
+        VERBOSE_MISSING_ATTRIBUTES    => 'Missing attributes',
     );
     static $recursive = false;
 
