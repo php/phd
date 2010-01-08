@@ -1,6 +1,6 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id: ChunkedXHTML.php 288433 2009-09-18 04:13:15Z moacir $ */
+/* $Id$ */
 
 /**
  * Generates Atom feed of Table of Contents for

@@ -1,6 +1,6 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id: ObjectStorage.php 286561 2009-07-30 16:56:01Z bjori $ */
+/* $Id$ */
 
 class ReaderKeeper
 {
