@@ -50,7 +50,8 @@ function v($msg, $errno) {
 /* {{{ Function to get a color escape sequence */
 function term_color($text, $color)
 {
-    return $color === false ? $text : "\033[" . $color . "m" . $text . "\033[m";
+    // Always disabled on Windows
+    return defined('PHP_WINDOWS_VERSION_BUILD') || $color === false ? $text : "\033[" . $color . "m" . $text . "\033[m";
 }
 /* }}} */
 

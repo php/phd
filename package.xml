@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://pear.php.net/dtd/package-2.0"
   xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -67,6 +67,7 @@
     - Updated translations: (Kalle)
        - Danish
        - Swedish
+    - Disabled colored output on Windows. (Kalle)
     - Fixed bug #45098 - named constants require long opt. (Hannes)
   </notes>
 

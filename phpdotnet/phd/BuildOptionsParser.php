@@ -283,7 +283,7 @@ class BuildOptionsParser
     public function option_help($k, $v)
     {
         echo "PhD version: " .Config::VERSION;
-        echo "\nCopyright (c) 2007-2009 The PHP Documentation Group\n
+        echo "\nCopyright (c) 2007-2010 The PHP Documentation Group\n
   -v
   --verbose <int>            Adjusts the verbosity level
   -f <formatname>
