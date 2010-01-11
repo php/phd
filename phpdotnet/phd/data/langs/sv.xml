@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 
-<!-- $Revision: 1.5 $ -->
-<!--  EN-Revision: 1.4 Maintainer: Kalle Status: ready -->
+<!-- $Revision$ -->
+<!--  EN-Revision: 288053 Maintainer: Kalle Status: ready -->
 
 <section xml:id="autogen" xml:lang="sv">
  <title>Auto-genererad text</title>
@@ -64,6 +64,24 @@
    <term>unknownversion</term>
    <listitem>
     <simpara>Ingen version information, det kan finnas bara i SVN</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>refname</term>
+   <listitem>
+    <simpara>NAMN</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>refsynopsis</term>
+   <listitem>
+    <simpara>SYNOPSIS</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>mediaobject</term>
+   <listitem>
+    <simpara>[INTE VISNINGSBART MEDIA]</simpara>
    </listitem>
   </varlistentry>
  </variablelist>
