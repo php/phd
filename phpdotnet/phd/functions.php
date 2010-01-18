@@ -59,31 +59,32 @@ function term_color($text, $color)
 function errh($errno, $msg, $file, $line, $ctx = null) {
     static $err = array(
         // PHP Triggered Errors
-        E_DEPRECATED                  => 'E_DEPRECATED',
-        E_RECOVERABLE_ERROR           => 'E_RECOVERABLE_ERROR',
-        E_STRICT                      => 'E_STRICT',
-        E_WARNING                     => 'E_WARNING',
-        E_NOTICE                      => 'E_NOTICE',
+        E_DEPRECATED                  => 'E_DEPRECATED          ',
+        E_RECOVERABLE_ERROR           => 'E_RECOVERABLE_ERROR   ',
+        E_STRICT                      => 'E_STRICT              ',
+        E_WARNING                     => 'E_WARNING             ',
+        E_NOTICE                      => 'E_NOTICE              ',
 
         // User Triggered Errors
-        E_USER_ERROR                  => 'E_USER_ERROR',
-        E_USER_WARNING                => 'E_USER_WARNING',
-        E_USER_NOTICE                 => 'E_USER_NOTICE',
+        E_USER_ERROR                  => 'E_USER_ERROR          ',
+        E_USER_WARNING                => 'E_USER_WARNING        ',
+        E_USER_NOTICE                 => 'E_USER_NOTICE         ',
+        E_USER_DEPRECATED             => 'E_USER_DEPRECATED     ',
 
         // PhD informationals
-        VERBOSE_INDEXING              => 'Indexing',
-        VERBOSE_FORMAT_RENDERING      => 'Rendering Format',
-        VERBOSE_THEME_RENDERING       => 'Rendering Theme',
-        VERBOSE_RENDER_STYLE          => 'Rendering Style',
-        VERBOSE_PARTIAL_READING       => 'Partial Reading',
-        VERBOSE_PARTIAL_CHILD_READING => 'Partial Child Reading',
-        VERBOSE_TOC_WRITING           => 'Writing TOC',
-        VERBOSE_CHUNK_WRITING         => 'Writing Chunk',
+        VERBOSE_INDEXING              => 'Indexing              ',
+        VERBOSE_FORMAT_RENDERING      => 'Rendering Format      ',
+        VERBOSE_THEME_RENDERING       => 'Rendering Theme       ',
+        VERBOSE_RENDER_STYLE          => 'Rendering Style       ',
+        VERBOSE_PARTIAL_READING       => 'Partial Reading       ',
+        VERBOSE_PARTIAL_CHILD_READING => 'Partial Child Reading ',
+        VERBOSE_TOC_WRITING           => 'Writing TOC           ',
+        VERBOSE_CHUNK_WRITING         => 'Writing Chunk         ',
 
         // PhD warnings
         VERBOSE_NOVERSION             => 'No version information',
-        VERBOSE_BROKEN_LINKS          => 'Broken links',
-        VERBOSE_MISSING_ATTRIBUTES    => 'Missing attributes',
+        VERBOSE_BROKEN_LINKS          => 'Broken links          ',
+        VERBOSE_MISSING_ATTRIBUTES    => 'Missing attributes    ',
     );
     static $recursive = false;
 
