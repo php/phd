@@ -352,6 +352,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'edition'              => 'format_suppressed_text',
         
         'programlisting'       => 'format_programlisting_text',
+        'screen'               => 'format_screen_text',
         'alt'                  => 'format_alt_text',
         'modifier'             => array(
             /* DEFAULT */         false,
