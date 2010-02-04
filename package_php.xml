@@ -46,26 +46,26 @@
   <contents>
     <dir name="/">
       <dir name="phpdotnet">
-    <dir name="phd">
-      <dir name="Package">
-        <dir name="PHP">
-          <file name="Factory.php" role="php"/>
-          <file name="CHM.php" role="php"/>
-          <file name="Web.php" role="php"/>
-          <file name="PDF.php" role="php"/>
-          <file name="BigXHTML.php" role="php"/>
-          <file name="Functions.php" role="php"/>
-          <file name="BigPDF.php" role="php"/>
-          <file name="KDevelop.php" role="php"/>
-          <file name="ChunkedXHTML.php" role="php"/>
-          <file name="HowTo.php" role="php"/>
-          <file name="XHTML.php" role="php"/>
-          <file name="TocFeed.php" role="php"/>
-          <file name="README" role="doc"/>
-          <file name="HOWTO.GENERATE_CHM" role="doc"/>
+        <dir name="phd">
+          <dir name="Package">
+            <dir name="PHP">
+              <file name="Factory.php" role="php"/>
+              <file name="CHM.php" role="php"/>
+              <file name="Web.php" role="php"/>
+              <file name="PDF.php" role="php"/>
+              <file name="BigXHTML.php" role="php"/>
+              <file name="Functions.php" role="php"/>
+              <file name="BigPDF.php" role="php"/>
+              <file name="KDevelop.php" role="php"/>
+              <file name="ChunkedXHTML.php" role="php"/>
+              <file name="HowTo.php" role="php"/>
+              <file name="XHTML.php" role="php"/>
+              <file name="TocFeed.php" role="php"/>
+              <file name="README" role="doc"/>
+              <file name="HOWTO.GENERATE_CHM" role="doc"/>
+            </dir>
+          </dir>
         </dir>
-      </dir>
-    </dir>
       </dir>
     </dir>
   </contents>
