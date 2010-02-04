@@ -245,7 +245,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
     protected function appendChm($name, $ref, $hasChild) {
         if ($this->flags & Render::OPEN) {
             $charset = $this->LANGUAGES[Config::language()]["preferred_charset"];
-            $name = htmlspecialchars(iconv('UTF-8', $charset, $name), ENT_QUOTES);
+            $name = htmlspecialchars(iconv('UTF-8', $charset, html_entity_decode($name, ENT_QUOTES)), ENT_QUOTES);
 
             $this->currentTocDepth++;
             fwrite($this->hhpStream, "{$ref}\n");
@@ -257,7 +257,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             fwrite($this->hhkStream,
                 "      <LI><OBJECT type=\"text/sitemap\">\n" .
                 "        <param name=\"Local\" value=\"{$ref}\">\n" .
-                "        <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name)) . "\">\n" .
+                "        <param name=\"Name\" value=\"" . self::cleanIndexName($name) . "\">\n" .
                 "      </OBJECT>\n");
         } elseif ($this->flags & Render::CLOSE) {
             if ($hasChild) {
