@@ -69,6 +69,7 @@
        - Swedish
     - Disabled colored output on Windows. (Kalle)
     - Fixed bug #45098 - named constants require long opt. (Hannes)
+    - Fixed bug #51070 - Double acronym tags in HTML output. (Moacir)
   </notes>
 
   <contents>
