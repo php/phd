@@ -4,6 +4,7 @@ namespace phpdotnet\phd;
 
 abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     private $myelementmap = array(
+        'acronym'               => 'format_suppressed_tags',
         'appendix'              => 'format_container_chunk',
         'article'               => 'format_container_chunk',
         'book'                  => 'format_root_chunk',
