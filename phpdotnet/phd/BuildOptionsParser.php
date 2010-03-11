@@ -272,7 +272,7 @@ class BuildOptionsParser
         $output = Config::phd_info_output();
         fprintf($output, "%s\n", term_color('PhD Version: ' . Config::VERSION, $color));
         fprintf($output, "%s\n", term_color('PHP Version: ' . phpversion(), $color));
-        fprintf($output, "%s\n", term_color('Copyright(c) 2007-2009 The PHP Documentation Group', $color));
+        fprintf($output, "%s\n", term_color('Copyright(c) 2007-2010 The PHP Documentation Group', $color));
         exit(0);
     }
 
