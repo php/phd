@@ -22,18 +22,18 @@
     <active>yes</active>
   </lead>
 
-  <date>2009-09-09</date>
+  <date>2010-03-11</date>
   <version>
-    <release>0.9.0</release>
-    <api>0.9.0</api>
+    <release>1.0.1</release>
+    <api>1.0.0</api>
   </version>
   <stability>
-    <release>beta</release>
-    <api>beta</api>
+    <release>snapshot</release>
+    <api>alpha</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Initial release
+    - notes
   </notes>
 
   <contents>
@@ -91,20 +91,19 @@
   <changelog>
     <release>
       <version>
-        <release>0.9.0</release>
-        <api>0.9.0</api>
+        <release>1.0.0</release>
+        <api>1.0.0</api>
       </version>
       <stability>
-        <release>beta</release>
-        <api>beta</api>
+        <release>alpha</release>
+        <api>alpha</api>
       </stability>
-      <date>2009-09-09</date>
+      <date>2010-03-11</date>
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Initial release
       </notes>
     </release>
-
   </changelog>
 
 </package>
