@@ -6099,6 +6099,9 @@
       <pearinstaller>
         <min>1.4.0</min>
       </pearinstaller>
+      <extension>
+        <name>zlib</name>
+      </extension>
     </required>
   </dependencies>
 
