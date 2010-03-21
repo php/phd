@@ -131,7 +131,8 @@ class BuildOptionsParser
         
         foreach((array)$v as $package) {
             if (!in_array($package, Config::getSupportedPackages())) {
-                trigger_error("Invalid Package", E_USER_ERROR);
+                $supported = implode(', ', Config::getSupportedPackages());
+                trigger_error("Invalid Package (Tried: '$package' Supported: '$supported')", E_USER_ERROR);
             }
         }
         Config::set_package($v);
