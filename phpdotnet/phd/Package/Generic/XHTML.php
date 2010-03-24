@@ -310,7 +310,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'titleabbrev'           => 'format_suppressed_tags',
         'token'                 => 'tt',
         'trademark'             => 'format_trademark',
-        'type'                  => 'format_spaced_span',
+        'type'                  => 'span',
         'userinput'             => 'format_userinput',
         'uri'                   => 'tt',
         'variablelist'          => 'format_variablelist',
@@ -1523,13 +1523,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
     }
 
-    public function format_spaced_span($open, $name, $attrs, $props) {
-        if ($open) {
-            return " " . parent::transformFromMap($open, "span", $name, $attrs, $props);
-        }
-        return parent::transformFromMap($open, "span", $name, $attrs, $props) . " ";
-    }
-    
     public function format_bold_paragraph($open, $name, $attrs, $props) {
         if ($props["empty"]) {
             return "";
