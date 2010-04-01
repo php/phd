@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- $Revision$ -->
 <!--  EN-Revision: 288053 Maintainer: Kalle Status: ready -->
 
@@ -8,7 +8,7 @@
   <varlistentry>
    <term>toc</term>
    <listitem>
-    <simpara>Indholds Fortegnelse</simpara>
+    <simpara>Indholdsfortegnelse</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
@@ -62,7 +62,7 @@
   <varlistentry>
    <term>unknownversion</term>
    <listitem>
-    <simpara>Ingen versions oplysninger tilgængelige, findes måske kun i SVN</simpara>
+    <simpara>Ingen versionsoplysninger tilgÃ¦ngelige, findes mÃ¥ske kun i SVN</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
