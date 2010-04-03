@@ -92,13 +92,13 @@
       <extension>
         <name>dom</name>
       </extension>
-      <extension>
-        <name>iconv</name>
-      </extension>
     </required>
     <optional>
       <extension>
         <name>haru</name>
+      </extension>
+      <extension>
+        <name>iconv</name>
       </extension>
     </optional>
   </dependencies>
