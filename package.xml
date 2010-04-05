@@ -100,7 +100,9 @@
           <dir name="PI">
             <file name="DBHTMLHandler.php" role="php"/>
           </dir>
-          <file name="Autoloader.php" role="php"/>
+          <file name="Autoloader.php" role="php">
+            <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
+          </file>
           <file name="BuildOptionsParser.php" role="php"/>
           <file name="Config.php" role="php"/>
           <file name="Format.php" role="php"/>

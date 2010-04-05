@@ -1,6 +1,10 @@
 <?php
 namespace phpdotnet\phd;
 
+if (!defined("__INSTALLDIR__")) {
+    define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? dirname(dirname(__DIR__)) : "@php_dir@");
+}
+
 class Autoloader
 {
     public static function autoload($name)
