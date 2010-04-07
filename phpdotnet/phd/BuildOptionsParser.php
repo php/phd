@@ -4,6 +4,16 @@ namespace phpdotnet\phd;
 
 class BuildOptionsParser
 {
+    public function __construct()
+    {
+        // By default, Windows does not support colors on the console.
+        // ANSICON by Jason Hood can be used to provide colors at the console.
+        // Color output can still be set via the command line parameters.
+        if('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
+        	$this->option_color('color', 'off');
+        }
+    }
+
     public function getOptionList()
     {
         return array(
@@ -229,15 +239,7 @@ class BuildOptionsParser
         }
         $val = self::boolval($v);
         if (is_bool($val)) {
-            if ($val && function_exists('posix_isatty')) {
-                Config::set_phd_info_color(posix_isatty(Config::phd_info_output()) ? '01;32' : false);         // Bright (bold) green
-                Config::set_user_error_color(posix_isatty(Config::user_error_output()) ? '01;33' : false);     // Bright (bold) yellow
-                Config::set_php_error_color(posix_isatty(Config::php_error_output()) ? '01;31' : false);       // Bright (bold) red
-            } else {
-                Config::set_phd_info_color(false);
-                Config::set_user_error_color(false);
-                Config::set_php_error_color(false);
-            }
+            Config::setColor_output($val);
         } else {
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
@@ -317,7 +319,7 @@ class BuildOptionsParser
                              theme). (default: en)
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal
-                             (default: true)
+                             (default: true; On Windows the default is false)
   -C <filename>
   --css <filename>           Link for an external CSS file.
   -g <classname>

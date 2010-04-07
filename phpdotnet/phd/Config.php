@@ -94,6 +94,30 @@ class Config
         return $packageList;
     }
 
+    public static function setColor_output($color_output)
+    {
+        // Disable colored output if the terminal doesn't support colours
+        if ($color_output && function_exists('posix_isatty')) {
+            if (!posix_isatty(Config::phd_info_output())) {
+                Config::set_phd_info_color(false);
+            }
+            if (!posix_isatty(Config::phd_warning_output())) {
+                Config::set_phd_info_color(false);
+            }
+            if (!posix_isatty(Config::php_error_output())) {
+                Config::set_phd_info_color(false);
+            }
+            if (!posix_isatty(Config::user_error_output())) {
+                Config::set_phd_info_color(false);
+            }
+        }
+        self::$optionArray['color_output'] = $color_output;
+    }
+
+    public static function set_color_output($color_output)
+    {
+        trigger_error('Use setColor_output()', E_USER_DEPRECATED);
+    }
 }
 
 /*

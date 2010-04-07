@@ -61,6 +61,7 @@
   <notes>
     - Fixed #51346 - Extra whitespace when using &lt;type&gt; and plural (Daniel Egeberg)
     - Corrected grammar in Danish translation + fixed encoding (Daniel Egeberg)
+    - Allow colored output on Windows, but not by default (Richard Quadling)
   </notes>
 
   <contents>
