@@ -408,7 +408,7 @@ class Package_IDE_Functions extends Format {
                 $reader->read();
                 //Skipping the title
                 if ($reader->nodeType === \XMLReader::ELEMENT && $reader->name != 'title') {
-                    $content .= trim($reader->readContent());
+                    $content .= trim(htmlspecialchars($reader->readContent(), ENT_QUOTES, 'UTF-8'));
                 }
             } while ($reader->name != 'refsect1');
             $content .= "</description>\n</return>\n";
@@ -431,7 +431,7 @@ class Package_IDE_Functions extends Format {
                 $reader->read();
                 //Skipping the title
                 if ($reader->nodeType === \XMLReader::ELEMENT && $reader->name != 'title') {
-                    $content .= trim($reader->readContent());
+                    $content .= trim(htmlspecialchars($reader->readContent(), ENT_QUOTES, 'UTF-8'));
                 }
             } while ($reader->name != $name);
             $content .= "</description>\n</note>\n";
