@@ -65,6 +65,12 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             "mime_charset_name" => "Windows-1252",
             "preferred_font" => self::DEFAULT_FONT
         ),
+        "fa"    => array(
+            "langcode" => "0x429 Persian",
+            "preferred_charset" => "Windows-1254",
+            "mime_charset_name" => "Windows-1254",
+            "preferred_font" => "Sylfaen,10,0",
+        ),
         "fr"    => array(
             "langcode" => "0x40c French (France)",
             "preferred_charset" => "Windows-1252",
