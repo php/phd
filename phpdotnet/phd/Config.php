@@ -99,16 +99,16 @@ class Config
         // Disable colored output if the terminal doesn't support colours
         if ($color_output && function_exists('posix_isatty')) {
             if (!posix_isatty(Config::phd_info_output())) {
-                Config::set_phd_info_color(false);
+                Config::setPhd_info_color(false);
             }
             if (!posix_isatty(Config::phd_warning_output())) {
-                Config::set_phd_info_color(false);
+                Config::setPhd_warning_color(false);
             }
             if (!posix_isatty(Config::php_error_output())) {
-                Config::set_phd_info_color(false);
+                Config::setPhd_error_color(false);
             }
             if (!posix_isatty(Config::user_error_output())) {
-                Config::set_phd_info_color(false);
+                Config::setUser_error_color(false);
             }
         }
         self::$optionArray['color_output'] = $color_output;
