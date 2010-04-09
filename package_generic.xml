@@ -46,7 +46,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Fixed #51514 - Added tr, th and td mappings (Richard Quadling)
+    - Fixed #51514 - Added tr, th and td mappings (Patch provided by Paul M Jones) (Richard Quadling)
   </notes>
 
   <contents>
