@@ -53,3 +53,19 @@ A. Remove all contents from <notes> and increase version/release.
 
 B. Hack on.
 
+
+How to release a new version of pman
+------------------------------------
+
+$ mkdir ~/tmp && cd ~/tmp
+$ php /path/to/phpdoc/doc-base/configure.php --output=pman.xml
+$ phd -d pman -P PHP -f manpage
+$ php /path/to/phd/package-pman.php
+$ cd /path/to/docweb/www
+$ php pearscs.phar release ~/tmp/pman-YYYY.MM.DD.tgz phpdoc
+$ svn st
+$ svn add ... # Usually stuff in rest/ and get/
+$ svn commit -m "New pman release" rest
+$ svn commit -m "pman binary files" get
+
+
