@@ -47,10 +47,10 @@ $packagexml->addInstallAs("pman.sh", "pman");
 
 
 rename("output/php-functions", "output/man3");
-copy("pman.sh", "output/pman.sh");
+copy(__DIR__ . "/pman.sh", "output/pman.sh");
 $packagexml->generateContents();
 $packagexml->writePackageFile();
-unlink("output/pman.sh");
+rename("output/pman.sh", "pman.sh");
 rename("output/man3", "man3");
 
 $contents = file_get_contents("package_pman.xml");
@@ -63,5 +63,6 @@ file_put_contents("package_pman.xml", $contents);
 system("pear package package_pman.xml");
 
 rename("man3", "output/php-functions");
+unlink("pman.sh");
 
 
