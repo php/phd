@@ -50,13 +50,14 @@
 
         <screen>
 <![CDATA[
-$ pear install doc.php.net/phd-beta
+$ pear install doc.php.net/phd
 
 ... downloading
 
 $ phd --version
-PhD Version: 1.0.0-dev
-Copyright(c) 2007-2009 The PHP Documentation Group
+PhD Version: 1.0.0-stable
+PHP Version: 5.3.3
+Copyright(c) 2007-2010 The PHP Documentation Group
 ]]>
         </screen>
 
@@ -64,15 +65,15 @@ Copyright(c) 2007-2009 The PHP Documentation Group
 
         <screen>
 <![CDATA[
-$ pear install doc.php.net/phd_php-beta
-downloading PhD_PHP-0.9.0.tgz ...
-Starting to download PhD_PHP-0.9.0.tgz (17,064 bytes)
-......done: 17,064 bytes
+$ pear install doc.php.net/phd_php
+Starting to download PhD_PHP-1.0.0.tgz (18,948 bytes)
+[...]
+install ok: channel://doc.php.net/PhD_PHP-1.0.0
 
-$ pear install doc.php.net/phd_pear-beta
-downloading PhD_PEAR-0.9.0.tgz ...
-Starting to download PhD_PEAR-0.9.0.tgz (13,991 bytes)
-.....done: 13,991 bytes
+$ pear install doc.php.net/phd_pear
+downloading PhD_PEAR-1.0.0.tgz ...
+[...]
+install ok: channel://doc.php.net/PhD_PEAR-1.0.0
 ]]>
         </screen>
 
@@ -90,19 +91,18 @@ Starting to download PhD_PEAR-0.9.0.tgz (13,991 bytes)
 $ svn checkout http://svn.php.net:/repository/phd/trunk phd
 ... output
 
-$ pear install -f package.xml
-... install ok: channel://doc.php.net/PhD-1.0.0
-... install ok: channel://doc.php.net/PhD_Generic-0.9.0
-
-$ pear install -f package_php.xml
-... install ok: channel://doc.php.net/PhD_PHP-0.9.0
-
-$ pear install -f package_pear.xml
-... install ok: channel://doc.php.net/PhD_PEAR-0.9.0
+pear install package.xml package_generic.xml package_php.xml package_pear.xml 
+[...]
+install ok: channel://doc.php.net/PhD-1.0.1
+install ok: channel://doc.php.net/PhD_Generic-1.0.1
+install ok: channel://doc.php.net/PhD_PHP-1.0.1
+install ok: channel://doc.php.net/PhD_PEAR-1.0.1
+bjori@jessica:/usr/src/php/svn/phd/trunk$ 
 
 $ phd --version
-PhD version: 1.0.0-dev
-Copyright (c) 2008-2009 The PHP Documentation Group
+PhD Version: phd-from-svn
+PHP Version: 5.3.3-dev
+Copyright(c) 2007-2010 The PHP Documentation Group
 ]]>
         </screen>
 
@@ -161,9 +161,8 @@ $ phd -d .manual.xml -P PHP
       <screen>
 <![CDATA[
 $ phd --help
-
-PhD version: 1.0.0-dev                                                                                        
-Copyright (c) 2007-2009 The PHP Documentation Group                                                           
+PhD version: 1.0.0-stable
+Copyright (c) 2007-2010 The PHP Documentation Group
 
   -v
   --verbose <int>            Adjusts the verbosity level
@@ -174,8 +173,14 @@ Copyright (c) 2007-2009 The PHP Documentation Group
   -I
   --noindex                  Do not index before rendering but load from cache
                              (default: false)
+  -r
+  --forceindex               Force re-indexing under all circumstances
+                             (default: false)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
+  -x
+  --xinclude                 Process XML Inclusions (XInclude)
+                             (default: false)
   -p <id[=bool]>
   --partial <id[=bool]>      The ID to render, optionally skipping its children
                              chunks (default to true; render children)
@@ -191,7 +196,9 @@ Copyright (c) 2007-2009 The PHP Documentation Group
                              theme). (default: en)
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal
-                             (default: false)
+                             (default: true)
+  -C <filename>
+  --css <filename>           Link for an external CSS file.
   -g <classname>
   --highlighter <classname>  Use custom source code highlighting php class
   -V
@@ -199,7 +206,7 @@ Copyright (c) 2007-2009 The PHP Documentation Group
   -h
   --help                     This help
 
-Most options can be passed multiple times for greater affect.
+Most options can be passed multiple times for greater effect.
 ]]>
       </screen>
 
@@ -211,28 +218,30 @@ Most options can be passed multiple times for greater affect.
 <![CDATA[
 $ phd --list
 Supported packages:
-        Default
-                xhtml
-                bigxhtml
-                php
-        IDE
-                functions
-                funclist
-        PHP
-                xhtml
-                bigxhtml
-                php
-                howto
-                manpage
-                pdf
-                bigpdf
-                kdevelop
-                chm
-        Pear
-                xhtml
-                bigxhtml
-                php
-                chm
+       Generic
+              xhtml
+              bigxhtml
+       IDE
+              functions
+              funclist
+       PEAR
+              xhtml
+              bigxhtml
+              php
+              chm
+              tocfeed
+       PHP
+              xhtml
+              bigxhtml
+              php
+              howto
+              manpage
+              pdf
+              bigpdf
+              kdevelop
+              chm
+              tocfeed
+
 ]]>
       </screen>
 
