@@ -20,7 +20,7 @@ abstract class Format_Abstract_Manpage extends Format {
     }
 
     public function TEXT($str) {
-        $ret = trim(preg_replace( '/[ \n\t]+/', ' ', $str));
+        $ret = preg_replace( '/[ \n\t]+/', ' ', $str);
 
         // Escape \ ' and NUL byte
         $ret = addcslashes($ret, "\\'\0");
@@ -30,7 +30,7 @@ abstract class Format_Abstract_Manpage extends Format {
             return $ret;
         }
         
-        return "\n" . $ret;
+        return $ret;
     }
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {

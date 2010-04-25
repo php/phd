@@ -307,15 +307,15 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
     }
 
     public function format_function_text($value, $tag) {
-        return "\n\\fB" . $this->toValidName($value) . "\\fP(3)";
+        return "\\fB" . $this->toValidName($value) . "\\fP(3)";
     }
 
     public function format_parameter_text($value, $tag) {
-        return "\n\\fI" . ((isset($value[0]) && $value[0] == "$") ? "" : "$") . $value . "\\fP";
+        return "\\fI" . ((isset($value[0]) && $value[0] == "$") ? "" : "$") . $value . "\\fP";
     }
 
     public function format_parameter_term_text($value, $tag) {
-        return "\n\\fI$" . $value . "\\fP\n\-";
+        return "\\fI$" . $value . "\\fP\n\-";
     }
 
     public function format_term($open, $name, $attrs, $props) {
@@ -346,13 +346,18 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
                 if ($this->cchunk["firstitem"]) {
                     $ret = "";
                     $this->cchunk["firstitem"] = false;
-                } else $ret = ",";
+                } else {
+                    $ret = ", ";
+                }
                 return $ret;
             }
+
             if ($this->cchunk["firstitem"]) {
                 $ret = "\n.TP 0.2i\n\\(bu";
                 $this->cchunk["firstitem"] = false;
-            } else $ret = "\n.TP 0.2i\n\\(bu";
+            } else {
+                $ret = "\n.TP 0.2i\n\\(bu";
+            }
             return $ret;
         }
         return "";
@@ -360,23 +365,23 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
-            return "\n.PP\n\\fB" . $this->autogen($name, $props["lang"]) . "\\fR\n.RS";
+            return "\n.PP\n\\fB" . $this->autogen($name, $props["lang"]) . "\\fR\n.RS\n";
         }
-        return "\n.RE\n.PP";
+        return "\n.RE\n.PP\n";
     }
 
     public function format_example($open, $name, $attrs, $props) {
         if ($open && isset($this->cchunk["examplenumber"])) {
-            return "\n.PP\n\\fB" . $this->autogen($name, $props["lang"]) . ++$this->cchunk["examplenumber"] . "\\fR\n.RS";
+            return "\n.PP\n\\fB" . $this->autogen($name, $props["lang"]) . ++$this->cchunk["examplenumber"] . "\\fR\n.RS\n";
         }
-        return "\n.RE";
+        return "\n.RE\n";
     }
 
     public function format_itemizedlist($open, $name, $attrs, $props) {
         if ($open) {
-            return "\n.PP\n.RS";
+            return "\n.PP\n.RS\n";
         }
-        return "\n.RE\n.PP";
+        return "\n.RE\n.PP\n";
     }
 
     public function format_methodparam($open, $name, $attrs, $props) {
@@ -481,7 +486,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     public function format_xref($open, $name, $attrs, $props) {
         if ($props['empty'])
-            return "\n\"" . Format::getShortDescription($attrs[Reader::XMLNS_DOCBOOK]["linkend"]) . "\"";
+            return "\"" . Format::getShortDescription($attrs[Reader::XMLNS_DOCBOOK]["linkend"]) . "\"";
         return "";
     }
 
@@ -499,7 +504,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
     }
 
     public function format_verbatim_text($value, $tag) {
-        return "\n" . trim($value) . "\n";
+        return trim($value);
     }
 
     public function format_refsect($open, $name, $attrs, $props) {
@@ -528,7 +533,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
             $ret .= ".";
             return $ret;
         }
-        return "\n.TE\n.PP";
+        return "\n.TE\n.PP\n";
     }
 
     public function format_thead($open, $name, $attrs, $props) {
@@ -554,12 +559,12 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
             }
             return "|T{\n";
         }
-        return "\nT}";
+        return "\n\nT}";
     }
 
     public function format_segmentedlist($open, $name, $attrs, $props) {
         if ($open) {
-            return "\n.P";
+            return "\n.P\n";
         }
         $this->cchunk["segtitle"] = array();
         return "\n";
@@ -600,13 +605,13 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     public function format_indent($open, $name, $attrs, $props) {
         if ($open) {
-            return "\n.PP\n.RS";
+            return "\n.PP\n.RS\n";
         }
-        return "\n.RE\n.PP";
+        return "\n.RE\n.PP\n";
     }
 
     public function format_tag_text($value, $tag) {
-        return "\n<" . $value . ">";
+        return "<" . $value . ">";
     }
 
     // Convert the function name to a Unix valid filename
@@ -616,7 +621,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     public function format_mediaobject($open, $name, $attrs, $props) {
         if ($open) {
-            return "\n\\fB" . $this->autogen($name, $props["lang"]) . "\\fP";
+            return "\\fB" . $this->autogen($name, $props["lang"]) . "\\fP";
         }
         return "";
     }
