@@ -43,6 +43,7 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
 
     public function __construct() {
         parent::__construct();
+
         $this->registerFormatName("PHP-Functions");
         $this->setTitle("PHP Manual");
         $this->setExt("3.gz");
@@ -93,8 +94,10 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
     }
 
     public function writeChunk($stream) {
-        if (!isset($this->cchunk["funcname"][0]))
+        if (!isset($this->cchunk["funcname"][0])) {
              return;
+        }
+
         $index = 0;
         rewind($stream);
 
@@ -130,8 +133,10 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
     }
 
     public function appendData($data) {
-        if (!$this->isFunctionRefSet)
+        if (!$this->isFunctionRefSet) {
             return 0;
+        }
+
         switch($this->isChunk) {
         case self::CLOSE_CHUNK:
             $stream = $this->popFileStream();
@@ -141,6 +146,7 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
 
             $this->isChunk = null;
             $this->cchunk = array();
+
             return $retval;
             break;
 
@@ -148,10 +154,13 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
             $this->pushFileStream(fopen("php://temp/maxmemory", "r+"));
             $this->isChunk = self::OPENED_CHUNK;
 
+            /* Break intentionally missing */
+
         case self::OPENED_CHUNK:
             $stream = $this->getFileStream();
             // Remove whitespace nodes
             $retval = ($data != "\n" && trim($data) === "") ? false : fwrite(end($stream), $data);
+
             return $retval;
         default:
             return 0;
@@ -172,12 +181,15 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
         if (isset($attrs[Reader::XMLNS_XML]["id"]) && $attrs[Reader::XMLNS_XML]["id"] == "funcref") {
             $this->isFunctionRefSet = $open;
         }
+
         return false;
     }
 
     public function format_refentry($open, $name, $attrs, $props) {
-        if (!$this->isFunctionRefSet)
+        if (!$this->isFunctionRefSet) {
             return false;
+        }
+
         if ($open) {
             $this->notify(Render::CHUNK, self::OPEN_CHUNK);
             $this->newChunk();
@@ -186,23 +198,26 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
             $this->notify(Render::CHUNK, self::CLOSE_CHUNK);
             $this->closeChunk();
         }
+
         return false;
     }
 
     public function format_refname($open, $name, $attrs, $props) {
         if ($open) {
             return (isset($this->cchunk["firstrefname"]) && $this->cchunk["firstrefname"]) ? false : "";
-        } else {
-            if (isset($this->cchunk["firstrefname"]) && $this->cchunk["firstrefname"]) {
-                $this->cchunk["firstrefname"] = false;
-                return false;
-            }
-            return "";
         }
+
+        if (isset($this->cchunk["firstrefname"]) && $this->cchunk["firstrefname"]) {
+            $this->cchunk["firstrefname"] = false;
+            return false;
+        }
+
+        return "";
     }
 
     public function format_refname_text($value, $tag) {
         $this->cchunk["funcname"][] = $this->toValidName(trim($value));
+
         if (isset($this->cchunk["firstrefname"]) && $this->cchunk["firstrefname"]) {
             return false;
         }
