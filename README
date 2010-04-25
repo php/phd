@@ -1,16 +1,16 @@
 PhD - PHP DocBook
-Copyright(c) 2007-2009 The PHP Documentation Team
+Copyright(c) 2007-2010 The PHP Documentation Team
 $Revision$
 
 Installing the PhD renderer:
     From a PEAR channel:
-        pear install doc.php.net/phd-beta
+        pear install doc.php.net/phd
 
         To install the PHP Package:
-            pear install doc.php.net/phd_php-beta 
+            pear install doc.php.net/phd_php
         
         To install the PEAR Package:
-            pear install doc.php.net/phd_pear-beta 
+            pear install doc.php.net/phd_pear
 
         To see all available packages:
             pear remote-list -c doc.php.net
