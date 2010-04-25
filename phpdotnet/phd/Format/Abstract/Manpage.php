@@ -21,18 +21,26 @@ abstract class Format_Abstract_Manpage extends Format {
 
     public function TEXT($str) {
         $ret = trim(preg_replace( '/[ \n\t]+/', ' ', $str));
+
         // No newline if current line begins with ',', ';', ':', '.'
-        if (strncmp($ret, ",", 1) && strncmp($ret, ";", 1) && strncmp($ret, ":", 1) && strncmp($ret, ".", 1))
-            $ret = "\n" . $ret;
-        return $ret;
+        if (in_array($ret[0], array(",", ";", ":", "."))) {
+            return $ret;
+        }
+        
+        return "\n" . $ret;
     }
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
-        if ($tag === '') return $tag;
-        $isMacro = (strncmp($tag, ".", 1) == 0);
+        if ($tag === '') {
+            return $tag;
+        }
+
+        $isMacro = $tag[0] == ".";
+
         if ($open) {
             return "\n" . $tag . ($isMacro ? "\n" : "");
         }
+
         return ($isMacro ? "" : "\\fP");
     }
 
