@@ -22,6 +22,9 @@ abstract class Format_Abstract_Manpage extends Format {
     public function TEXT($str) {
         $ret = trim(preg_replace( '/[ \n\t]+/', ' ', $str));
 
+        // Escape \ ' and NUL byte
+        $ret = addcslashes($ret, "\\'\0");
+
         // No newline if current line begins with ',', ';', ':', '.'
         if (in_array($ret[0], array(",", ";", ":", "."))) {
             return $ret;
