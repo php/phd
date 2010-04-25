@@ -49,6 +49,7 @@
     - Fixed #51514 - Added tr, th and td mappings (Patch provided by Paul M Jones) (Richard Quadling)
     - Fixed #51346 - Extra whitespace when using &lt;type&gt; and plural (Daniel Egeberg)
     - Fixed #50666 - Missing entries in table (man pages) (Hannes)
+    - Fixed #51301 - Wrong escape sequence (man pages) (Hannes)
     - Several formatting fixes for the unix manual pages (Hannes)
   </notes>
 
