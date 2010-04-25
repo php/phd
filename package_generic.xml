@@ -47,7 +47,9 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Fixed #51514 - Added tr, th and td mappings (Patch provided by Paul M Jones) (Richard Quadling)
-    - Fixed #50666 - Missing entries in table (Hannes)
+    - Fixed #51346 - Extra whitespace when using &lt;type&gt; and plural (Daniel Egeberg)
+    - Fixed #50666 - Missing entries in table (man pages) (Hannes)
+    - Several formatting fixes for the unix manual pages (Hannes)
   </notes>
 
   <contents>
@@ -153,6 +155,7 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Fixed bug#50799 (No text mapping for screen). (Paul Jones)
+        - Fixed bug #46413 Weird examples in Unix manual pages (Rudy)
       </notes>
     </release>
   </changelog>
