@@ -99,6 +99,9 @@
       <extension>
         <name>haru</name>
       </extension>
+      <extension>
+        <name>zlib</name>
+      </extension>
     </optional>
   </dependencies>
 
