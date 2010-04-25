@@ -75,7 +75,7 @@ class Package_IDE_Functions extends Format {
 
     public function __construct() {
         $this->registerFormatName("IDE-Functions");
-        $this->setExt(Config::ext() ?: ".xml");
+        $this->setExt(Config::ext() === null ? ".xml" : Config::ext());
     }
 
     public function createLink($for, &$desc = null, $type = Format::SDESC) {}

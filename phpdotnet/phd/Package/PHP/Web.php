@@ -8,7 +8,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         $this->registerFormatName("PHP-Web");
         $this->setTitle("PHP Manual");
         $this->setChunked(true);
-        $this->setExt(Config::ext() ?: ".php");
+        $this->setExt(Config::ext() === null ? ".php" : Config::ext());
     }
 
     public function close() {

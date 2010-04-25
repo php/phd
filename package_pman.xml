@@ -34,9 +34,9 @@ New release \o/
     <!-- [...] -->
     <file baseinstalldir="php.net/" name="__halt_compiler.3.gz" role="doc" />
    </dir> <!-- //man3 -->
-   <file baseinstalldir="" name="pman.sh" role="script">
-    <tasks:replace from="@doc_dir@" to="doc_dir" type="pear-config" />
-   </file>
+      <file baseinstalldir="" name="pman.sh" role="script">
+        <tasks:replace from="@doc_dir@" to="doc_dir" type="pear-config" />
+      </file>
   </dir> <!-- / -->
  </contents>
  <dependencies>

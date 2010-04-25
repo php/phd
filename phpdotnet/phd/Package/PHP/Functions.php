@@ -46,7 +46,7 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
 
         $this->registerFormatName("PHP-Functions");
         $this->setTitle("PHP Manual");
-        $this->setExt(Config::ext() ?: ".3.gz");
+        $this->setExt(Config::ext() === null ? ".3.gz" : Config::ext());
         $this->setChunked(true); 
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
     }

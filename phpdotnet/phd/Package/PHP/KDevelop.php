@@ -70,7 +70,7 @@ class Package_PHP_KDevelop extends Format {
         parent::__construct();
         $this->registerFormatName("PHP-KDevelop");
         $this->setTitle("PHP Manual");
-        $this->setExt(Config::ext() ?: ".php");
+        $this->setExt(Config::ext() === null ? ".php" : Config::ext());
     }
 
     public function __destruct() {

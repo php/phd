@@ -7,7 +7,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
         parent::__construct();        
         $this->registerFormatName("PEAR-Chunked-XHTML");
         $this->setTitle("PEAR Manual");
-        $this->setExt(Config::ext() ?: ".html");
+        $this->setExt(Config::ext() === null ? ".html" : Config::ext());
         $this->setChunked(true);
     }
 

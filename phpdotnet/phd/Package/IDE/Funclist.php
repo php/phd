@@ -17,7 +17,7 @@ class Package_IDE_Funclist extends Format {
 
     public function __construct() {
         $this->registerFormatName("IDE-Funclist");
-        $this->setExt(Config::ext() ?: ".txt");
+        $this->setExt(Config::ext() === null ? ".txt" : Config::ext());
     }
 
     public function createLink($for, &$desc = null, $type = Format::SDESC) {}

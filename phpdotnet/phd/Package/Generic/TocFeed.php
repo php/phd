@@ -138,7 +138,7 @@ abstract class Package_Generic_TocFeed extends Format
         $this->registerFormatName($this->formatName);
         $this->setTitle('Index');
         $this->setChunked(true);
-        $this->setExt(Config::ext() ?: ".atom");
+        $this->setExt(Config::ext() === null ? ".atom" : Config::ext());
         $this->date = date('c');
         if ($this->feedBaseUri === null) {
             $this->feedBaseUri = $this->targetBaseUri;

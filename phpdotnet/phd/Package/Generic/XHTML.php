@@ -448,7 +448,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function __construct() {
         parent::__construct();
         $this->registerPIHandlers($this->pihandlers);
-        $this->setExt(Config::ext() ?: ".html");
+        $this->setExt(Config::ext() === null ? ".html" : Config::ext());
     }
     
     public function getDefaultElementMap() {
