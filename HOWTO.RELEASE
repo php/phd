@@ -1,8 +1,7 @@
 How to release a new version of PhD
 -----------------------------------
 
-Releases are currently made from the PHD_0_4 and PHD_0_1 branches.
-Changes in trunk are merged back into those branches.
+Releases are currently made from trunk/ (PHD_1_0)
 
 0. Check if all changes in trunk have been merged back to the release branch.
 
@@ -39,7 +38,7 @@ ext/zlib enabled):
 
 10. Create a svn tag.
    $ cd /path/to/phd
-   $ svn cp http://svn.php.net/repository/phd/branches/PHD_* http://svn.php.net/repository/phd/tags/RELEASE_*
+   $ svn cp http://svn.php.net/repository/phd/[trunk|branches/PHD_*] http://svn.php.net/repository/phd/tags/RELEASE_*
 
 11. Test by installing from the channel:
    $ pear upgrade -f doc.php.net/phd-$previousversion
@@ -53,3 +52,4 @@ A. Remove all contents from <notes> and increase version/release.
    config.php (VERSION in phpdotnet/phd/Config) back to "phd-from-svn".
 
 B. Hack on.
+
