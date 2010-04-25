@@ -7,7 +7,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
         parent::__construct();        
         $this->registerFormatName("PEAR-Chunked-XHTML");
         $this->setTitle("PEAR Manual");
-        $this->setExt("html");
+        $this->setExt(Config::ext() ?: ".html");
         $this->setChunked(true);
     }
 
@@ -40,7 +40,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
     }
 
     public function writeChunk($id, $fp) {
-        $filename = $this->getOutputDir() . $id . '.' .$this->getExt();
+        $filename = $this->getOutputDir() . $id . $this->getExt();
 
         rewind($fp);
         file_put_contents($filename, $this->header($id));
@@ -109,15 +109,15 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
         $strPrev = $strNext = '';
 
         if ($parentId = $this->getParent($id)) {
-            $this->up = array("href" => $this->getFilename($parentId) . '.' .$this->ext,
+            $this->up = array("href" => $this->getFilename($parentId) . $this->ext,
                 "desc" => $this->getShortDescription($parentId));
         }
         if ($prevId = Format::getPrevious($id)) {
-            $this->prev = array("href" => Format::getFilename($prevId) . '.' .$this->ext,
+            $this->prev = array("href" => Format::getFilename($prevId) . $this->ext,
                 "desc" => $this->getShortDescription($prevId));
         }
         if ($nextId = Format::getNext($id)) {
-            $this->next = array("href" => Format::getFilename($nextId) . '.' .$this->ext,
+            $this->next = array("href" => Format::getFilename($nextId) . $this->ext,
                 "desc" => $this->getShortDescription($nextId));
         }
         $header = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

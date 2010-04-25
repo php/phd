@@ -75,7 +75,7 @@ class Package_IDE_Functions extends Format {
 
     public function __construct() {
         $this->registerFormatName("IDE-Functions");
-        $this->setExt("xml");
+        $this->setExt(Config::ext() ?: ".xml");
     }
 
     public function createLink($for, &$desc = null, $type = Format::SDESC) {}
@@ -149,13 +149,13 @@ class Package_IDE_Functions extends Format {
              return;
         }
         $index = 0;
-        $filename = $this->getOutputDir() . $this->cchunk["funcname"][$index] . '.' .$this->getExt();
+        $filename = $this->getOutputDir() . $this->cchunk["funcname"][$index] . $this->getExt();
 
         rewind($fp);
         file_put_contents($filename, $this->header());
         file_put_contents($filename, $fp, FILE_APPEND);
         while(isset($this->cchunk["funcname"][++$index])) {
-            $filename = $this->getOutputDir() . $this->cchunk["funcname"][$index] . '.' . $this->getExt();
+            $filename = $this->getOutputDir() . $this->cchunk["funcname"][$index] . $this->getExt();
             rewind($fp);
             // Replace the default function name by the alternative one
             $content = preg_replace('/'.$this->cchunk["funcname"][0].'/',

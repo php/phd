@@ -405,7 +405,7 @@ res' . DIRECTORY_SEPARATOR . 'style.css
             $this->lastContent = array(
                 "name" => Format::getShortDescription($id),
                 "reference" => "res" . DIRECTORY_SEPARATOR .
-                    (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->ext,
+                    (Format::getFilename($id) ? Format::getFilename($id) : $id) . $this->ext,
                 "hasChild" => (count(Format::getChildren($id)) > 0)
             );
         }

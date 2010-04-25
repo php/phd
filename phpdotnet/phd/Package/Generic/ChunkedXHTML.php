@@ -39,7 +39,7 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
     }
 
     public function writeChunk($id, $fp) {
-        $filename = $this->getOutputDir() . Format::getFilename($id) . '.' . $this->getExt();
+        $filename = $this->getOutputDir() . Format::getFilename($id) . $this->getExt();
 
         rewind($fp);
         file_put_contents($filename, $this->header($id));
@@ -99,15 +99,15 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
         $prev = $next = $parent = array("href" => null, "desc" => null);
 
         if ($parentId = $this->getParent($id)) {
-            $parent = array("href" => $this->getFilename($parentId) . '.' .$this->getExt(),
+            $parent = array("href" => $this->getFilename($parentId) . $this->getExt(),
                 "desc" => $this->getShortDescription($parentId));
         }
         if ($prevId = Format::getPrevious($id)) {
-            $prev = array("href" => Format::getFilename($prevId) . '.' .$this->getExt(),
+            $prev = array("href" => Format::getFilename($prevId) . $this->getExt(),
                 "desc" => $this->getShortDescription($prevId));
         }
         if ($nextId = Format::getNext($id)) {
-            $next = array("href" => Format::getFilename($nextId) . '.' .$this->getExt(),
+            $next = array("href" => Format::getFilename($nextId) . $this->getExt(),
                 "desc" => $this->getShortDescription($nextId));
         }
         $navBar = $this->createNavBar($id);
@@ -131,7 +131,7 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
                 '.($prevId ? '<div class="prev" style="text-align: left; float: left;"><a href="' .$prev["href"]. '">' .$prev["desc"]. '</a></div>' : '') .'
                 '.($nextId ? '<div class="next" style="text-align: right; float: right;"><a href="' .$next["href"]. '">' .$next["desc"].'</a></div>' : '') .'
                 '.($parentId ? '<div class="up"><a href="' .$parent["href"]. '">' .$parent["desc"]. '</a></div>' : '') .'
-                <div class="home"><a href="'.$root["filename"].".".$this->getExt().'">'.$root["ldesc"].'</a></div>
+                <div class="home"><a href="'.$root["filename"].$this->getExt().'">'.$root["ldesc"].'</a></div>
             </div><hr/>
 ';
     }
@@ -178,7 +178,7 @@ ul.toc li a:hover {
 }
 </style>
  <ul class="toc">
-  <li class="header home"><a href="'.$root["filename"].".".$this->getExt().'">'.$root["ldesc"].'</a></li>
+  <li class="header home"><a href="'.$root["filename"].$this->getExt().'">'.$root["ldesc"].'</a></li>
 ';
         // Fetch ancestors of the current node
         $ancestors = array();

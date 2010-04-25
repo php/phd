@@ -41,6 +41,7 @@ class Config
         ),
         'css'               => array(),
         'process_xincludes' => false,
+        'ext'               => null,
     );
 
     public static function init(array $a) {

@@ -52,7 +52,7 @@ class Package_PHP_BigPDF extends Package_PHP_PDF {
             $this->resolveLinks($this->cchunk["setname"]);
             $pdfDoc = parent::getPdfDoc();
             v("Writing Full PDF Manual (%s)", $this->cchunk["setname"], VERBOSE_TOC_WRITING);
-            $pdfDoc->saveToFile($this->getOutputDir() . strtolower($this->getFormatName()) . "." . $this->getExt());
+            $pdfDoc->saveToFile($this->getOutputDir() . strtolower($this->getFormatName()) . $this->getExt());
             unset($pdfDoc);
         }
         return "";

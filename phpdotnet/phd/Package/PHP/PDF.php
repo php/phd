@@ -166,7 +166,7 @@ class Package_PHP_PDF extends Package_Generic_PDF {
             $this->resolveLinks($this->cchunk["bookname"]);
             $pdfDoc = parent::getPdfDoc();
             v("Writing PDF Manual (%s)", $this->cchunk["bookname"], VERBOSE_TOC_WRITING);
-            $pdfDoc->saveToFile($this->getOutputDir() . $this->toValidName($this->cchunk["bookname"]) . "." . $this->getExt());
+            $pdfDoc->saveToFile($this->getOutputDir() . $this->toValidName($this->cchunk["bookname"]) . $this->getExt());
             unset($pdfDoc);
         }
         return false;

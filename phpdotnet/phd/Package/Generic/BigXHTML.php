@@ -77,7 +77,7 @@ HEADER;
         case Render::INIT:
             if ($val) {
                 if (!is_resource($this->getFileStream())) {
-                    $filename = Config::output_dir() . strtolower($this->getFormatName()) . '.' . $this->getExt();
+                    $filename = Config::output_dir() . strtolower($this->getFormatName()) . $this->getExt();
                     $this->postConstruct();
                     if (Config::css()) {
                         $this->fetchStylesheet();

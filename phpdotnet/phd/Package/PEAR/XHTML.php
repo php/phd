@@ -471,7 +471,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
                     $fragment = "#$linkto";
                 }
                 if ($this->chunked) {
-                    $href .= '.'.$this->ext;
+                    $href .= $this->ext;
                 }
             } elseif (isset($attrs[Reader::XMLNS_XLINK]['href'])) {
                 $href = $attrs[Reader::XMLNS_XLINK]['href'];
@@ -744,7 +744,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     {
         if ($open) {
             if ($this->chunked) {
-                return '<p class="'.$name.'"><a href="copyright.' . $this->ext . '">Copyright</a> &copy; ';
+                return '<p class="'.$name.'"><a href="copyright' . $this->ext . '">Copyright</a> &copy; ';
             } else {
                 return '<p class="'.$name.'"><a href="#copyright">Copyright</a> &copy; ';
             }

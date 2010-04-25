@@ -388,7 +388,7 @@ $1</head>',
 			$this->lastContent = array(
 				"name" => Format::getShortDescription($id),
 				"reference" => "res\\" .
-					(Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->ext,
+					(Format::getFilename($id) ? Format::getFilename($id) : $id) . $this->ext,
 				"hasChild" => (count(Format::getChildren($id)) > 0)
 			);
 		}

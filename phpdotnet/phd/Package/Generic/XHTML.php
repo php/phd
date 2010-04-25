@@ -448,9 +448,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function __construct() {
         parent::__construct();
         $this->registerPIHandlers($this->pihandlers);
-        $this->setExt("html");
+        $this->setExt(Config::ext() ?: ".html");
     }
-
+    
     public function getDefaultElementMap() {
         return $this->myelementmap;
     }
@@ -518,7 +518,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         $retval = null;
         if (isset($this->indexes[$for])) {
             $rsl = $this->indexes[$for];
-            $retval = $rsl["filename"] . "." . $this->ext;
+            $retval = $rsl["filename"] . $this->ext;
             if ($rsl["filename"] != $rsl["docbook_id"]) {
                 $retval .= '#' . $rsl["docbook_id"];
             }

@@ -34,6 +34,7 @@ class BuildOptionsParser
             'package:'     => 'P:',        // The package of formats            
             'css:'         => 'C:',        // External CSS 
             'xinclude'     => 'x',         // Automatically process xinclude directives
+            'ext:'         => 'e:',        // The file-format extension to use, including the dot
         );
     }
 
@@ -51,7 +52,25 @@ class BuildOptionsParser
         }
         Config::set_output_format($formats);
     }
-
+    
+    public function option_e($k, $v)
+    {
+        $this->option_ext($k, $v);
+    }
+    public function option_ext($k, $v)
+    {
+        $bool = self::boolval($v);
+        if ($bool === false) {
+            // `--ext=false` means no extension will be used
+            $v = "";
+            Config::setExt($v);
+        } elseif ($bool === null) {
+            // `--ext=true` means use the default extension,
+            // `--ext=".foo"` means use ".foo" as the extension
+            Config::setExt($v);
+        }
+    }
+    
     public function option_g($k, $v)
     {
         $this->option_highlighter($k, $v);
@@ -328,6 +347,9 @@ class BuildOptionsParser
   --version                  Print the PhD version information
   -h
   --help                     This help
+  -e <extension>
+  --ext <extension>          The alternative filename extension to use, including
+                             the dot. Use 'false' for no extension.
 
 Most options can be passed multiple times for greater effect.
 ";

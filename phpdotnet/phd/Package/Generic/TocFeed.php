@@ -138,7 +138,7 @@ abstract class Package_Generic_TocFeed extends Format
         $this->registerFormatName($this->formatName);
         $this->setTitle('Index');
         $this->setChunked(true);
-        $this->setExt('atom');
+        $this->setExt(Config::ext() ?: ".atom");
         $this->date = date('c');
         if ($this->feedBaseUri === null) {
             $this->feedBaseUri = $this->targetBaseUri;
@@ -281,7 +281,7 @@ abstract class Package_Generic_TocFeed extends Format
 
         $filename = $this->getOutputDir()
             . $filepart
-            . '.' . $this->getExt();
+            . $this->getExt();
 
 
         file_put_contents($filename, $this->header($id));
@@ -497,7 +497,7 @@ XML;
      */
     public function createLink($id, &$desc = null, $type = Format::SDESC)
     {
-        return $this->feedBaseUri . $id . '.' . $this->ext;
+        return $this->feedBaseUri . $id . $this->ext;
     }
 
     /**

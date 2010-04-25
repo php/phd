@@ -46,7 +46,7 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
 
         $this->registerFormatName("PHP-Functions");
         $this->setTitle("PHP Manual");
-        $this->setExt("3.gz");
+        $this->setExt(Config::ext() ?: ".3.gz");
         $this->setChunked(true); 
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
     }
@@ -101,7 +101,7 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
         $index = 0;
         rewind($stream);
 
-        $filename = $this->cchunk["funcname"][$index] . '.' .$this->getExt();
+        $filename = $this->cchunk["funcname"][$index] . $this->getExt();
         $gzfile = gzopen($this->getOutputDir() . $filename, "w9");
 
         gzwrite($gzfile, $this->header($index));
@@ -110,7 +110,7 @@ class Package_PHP_Functions extends Package_Generic_Manpage {
         v("Wrote %s", $this->getOutputDir() . $filename, VERBOSE_CHUNK_WRITING);
 
         while(isset($this->cchunk["funcname"][++$index])) {
-            $filename = $this->cchunk["funcname"][$index] . '.' . $this->getExt();
+            $filename = $this->cchunk["funcname"][$index] . $this->getExt();
             rewind($stream);
             // Replace the default function name by the alternative one
             $content = preg_replace('/'.$this->cchunk["funcname"][0].'/',

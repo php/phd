@@ -19,7 +19,7 @@ class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML
     {
         parent::__construct();
         $this->registerFormatName('PEAR-Web');
-        $this->setExt('php');
+        $this->setExt(Config::ext() ?: 'php');
     }
 
     public function __destruct()
@@ -36,7 +36,7 @@ class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML
      */
     public function header($id)
     {
-        $ext = '.' . $this->ext;
+        $ext = $this->ext;
 
         $parent = Format::getParent($id);
 
@@ -125,7 +125,7 @@ manualHeader("index.php"'
      */
     public function footer($id)
     {
-        $ext = '.' . $this->ext;
+        $ext = $this->ext;
         $parent = Format::getParent($id);
 
         return '<?php manualFooter("'

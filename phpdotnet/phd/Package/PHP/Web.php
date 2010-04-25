@@ -8,7 +8,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         $this->registerFormatName("PHP-Web");
         $this->setTitle("PHP Manual");
         $this->setChunked(true);
-        $this->setExt("php");
+        $this->setExt(Config::ext() ?: ".php");
     }
 
     public function close() {
@@ -46,7 +46,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
     }
 
     public function writeChunk($id, $fp) {
-        $filename = $this->getOutputDir() . $id . '.' .$this->getExt();
+        $filename = $this->getOutputDir() . $id . $this->getExt();
 
         rewind($fp);
         file_put_contents($filename, $this->header($id));
@@ -96,7 +96,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
     }
 
     public function header($id) {
-        $ext = '.' . $this->getExt();
+        $ext = $this->getExt();
         $parent = Format::getParent($id);
         $filename = "toc" . DIRECTORY_SEPARATOR . $parent . ".inc";
         $up = array(0 => null, 1 => null);

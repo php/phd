@@ -70,7 +70,7 @@ class Package_PHP_KDevelop extends Format {
         parent::__construct();
         $this->registerFormatName("PHP-KDevelop");
         $this->setTitle("PHP Manual");
-        $this->setExt("php");
+        $this->setExt(Config::ext() ?: ".php");
     }
 
     public function __destruct() {
@@ -128,7 +128,7 @@ class Package_PHP_KDevelop extends Format {
         $hasChild = (count(Format::getChildren($id)) > 0);
         if ($open) {
             $name = htmlspecialchars(Format::getShortDescription($id), ENT_QUOTES, 'UTF-8');
-            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->getExt();
+            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . $this->getExt();
             fwrite($this->getFileStream(), "<tocsect1 name=\"{$name}\" url=\"{$url}\"" . ($hasChild ? "" : "/") . ">\n");
         } else {
             if ($hasChild)
@@ -143,7 +143,7 @@ class Package_PHP_KDevelop extends Format {
         $hasChild = (count(Format::getChildren($id)) > 0);
         if ($open) {
             $name = htmlspecialchars(Format::getShortDescription($id), ENT_QUOTES, 'UTF-8');
-            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->getExt();
+            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . $this->getExt();
             fwrite($this->getFileStream(), "    <tocsect2 name=\"{$name}\" url=\"{$url}\"/>\n");
         }
         return "";
@@ -156,7 +156,7 @@ class Package_PHP_KDevelop extends Format {
             $this->currentEntryName = null;
         }
         if (!$open && $this->currentEntryName) {
-            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . "." . $this->getExt();
+            $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . $this->getExt();
             $this->index[$this->currentEntryName] = $url;
         }
         return "";

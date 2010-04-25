@@ -261,9 +261,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
                 if ($this->chunked) {
                     if ($href != $linkto) {
-                        $href .= ".{$this->ext}#{$linkto}";
+                        $href .= "{$this->ext}#{$linkto}";
                     } else {
-                        $href .= '.' .$this->ext;
+                        $href .= $this->ext;
                     }
                 } else {
                     $href = '#' .$linkto;
@@ -294,7 +294,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
         if (($filename = $this->getVarnameLink($var)) !== null && !in_array($var, $this->cchunk["refname"])) {
             if ($this->chunked) {
-                return '<var class="varname"><a href="'.$filename. '.' .$this->ext. '" class="classname">' .$value. '</a></var>';
+                return '<var class="varname"><a href="'.$filename.$this->ext.'" class="classname">' .$value. '</a></var>';
             }
             return '<var><a href="#'.$filename. '" class="classname">'.$value.'</a></var>';
         }
@@ -345,7 +345,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
 
         if ($href && $this->chunked) {
-            return '<a href="' .$href. '.' .$this->getExt().($fragment ? "#$fragment" : ""). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
+            return '<a href="' .$href. $this->getExt().($fragment ? "#$fragment" : ""). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
         }
         if ($href) {
             return '<a href="#' .($fragment ? $fragment : $href). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
@@ -407,7 +407,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 }
 
                 if ($this->chunked) {
-                    return '<a href="'.$filename. '.' .$this->ext. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>'.$desc;
+                    return '<a href="'.$filename. $this->ext. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>'.$desc;
                 }
                 return '<a href="#'.$filename. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>'.$desc;
             }
@@ -429,7 +429,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_classname_text($value, $tag) {
         if (($filename = $this->getClassnameLink(strtolower($value))) !== null && $this->cchunk["phpdoc:classref"] !== strtolower($value)) {
             if ($this->chunked) {
-                return '<a href="'.$filename. '.' .$this->ext. '" class="' .$tag. '">' .$value. '</a>';
+                return '<a href="'.$filename. $this->ext. '" class="' .$tag. '">' .$value. '</a>';
             }
             return '<a href="#'.$filename. '" class="' .$tag. '">'.$value.'</a>';
         }
@@ -455,7 +455,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_'.$name.'">';
                 foreach($chunks as $chunkid) {
                     if ($this->chunked) {
-                        $content .= '<li><a href="'.$chunkid. '.' .$this->ext. '">' .(Format::getShortDescription($chunkid)). '</a></li>';
+                        $content .= '<li><a href="'.$chunkid. $this->ext. '">' .(Format::getShortDescription($chunkid)). '</a></li>';
                     } else {
                         $content .= '<li><a href="#'.$chunkid. '">' .(Format::getShortDescription($chunkid)). '</a></li>';
                     }
@@ -474,7 +474,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 $content = '<h2>'.$this->autogen("toc", $props["lang"]). '</h2><ul class="chunklist chunklist_reference">';
                 foreach($chunks as $chunkid) {
                     if ($this->chunked) {
-                        $content .= '<li><a href="'.$chunkid. '.' .$this->ext. '">' .(Format::getShortDescription($chunkid)). '</a> — ' .(Format::getLongDescription($chunkid)). '</li>';
+                        $content .= '<li><a href="'.$chunkid. $this->ext. '">' .(Format::getShortDescription($chunkid)). '</a> — ' .(Format::getLongDescription($chunkid)). '</li>';
                     } else {
                         $content .= '<li><a href="#'.$chunkid.'">' .(Format::getShortDescription($chunkid)). '</a> — ' .(Format::getLongDescription($chunkid)). '</li>';
                     }
@@ -497,7 +497,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $chunks = Format::getChildren($id);
         $content = '<ul class="chunklist chunklist_'.$name.'">';
         foreach($chunks as $chunkid) {
-            $href = $this->chunked ? $chunkid .'.'. $this->ext : "#$chunkid";
+            $href = $this->chunked ? $chunkid . $this->ext : "#$chunkid";
             $long = Format::getLongDescription($chunkid);
             $short = Format::getShortDescription($chunkid);
             if ($long && $short && $long != $short) {
@@ -509,7 +509,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             if (count($children)) {
                 $content .= '<ul class="chunklist chunklist_'.$name.' chunklist_children">';
                 foreach(Format::getChildren($chunkid) as $childid) {
-                    $href = $this->chunked ? $childid .'.'. $this->ext : "#$childid";
+                    $href = $this->chunked ? $childid . $this->ext : "#$childid";
                     $long = Format::getLongDescription($childid);
                     $short = Format::getShortDescription($childid);
                     if ($long && $short && $long != $short) {

@@ -48,17 +48,17 @@ class Package_PHP_HowTo extends Package_PHP_Web {
             $siblings = Format::getChildren($parent);
             if ($nextId = Format::getNext($id)) {
                 $next = array(
-                    Format::getFilename($nextId) . '.' . $this->getExt(),
+                    Format::getFilename($nextId) . $this->getExt(),
                     Format::getShortDescription($nextId),
                 );
             }
             if ($prevId = Format::getPrevious($id)) {
                 $prev = array(
-                    Format::getFilename($prevId) . '.' . $this->getExt(),
+                    Format::getFilename($prevId) . $this->getExt(),
                     Format::getShortDescription($prevId),
                 );
             }
-            $up = array($parent . '.' . $this->getExt(), Format::getShortDescription($parent));
+            $up = array($parent . $this->getExt(), Format::getShortDescription($parent));
         }
 
         $this->nav = <<<NAV
