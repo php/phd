@@ -166,7 +166,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         ),
         'userinput'             => '\\fB',
         'variablelist'          => 'format_indent',
-        'varlistentry'          => ".TP 0.2i\n\\(bu",
+        'varlistentry'          => ".TP 0.2i\n\\(bu ",
         'varname'               => 'format_suppressed_tags',
         'void'                  => 'format_void',
         'warning'               => 'format_admonition',

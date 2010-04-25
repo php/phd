@@ -41,7 +41,11 @@ abstract class Format_Abstract_Manpage extends Format {
         $isMacro = $tag[0] == ".";
 
         if ($open) {
-            return "\n" . $tag . ($isMacro ? "\n" : "");
+
+            if ($isMacro && strpos($tag, "\n") === false) {
+                return "\n" . $tag . "\n";
+            }
+            return "\n" . $tag;
         }
 
         return ($isMacro ? "" : "\\fP");
