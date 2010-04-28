@@ -2,7 +2,10 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
+class Package_Generic_Manpage extends Format_Abstract_Manpage {
+    const OPEN_CHUNK    = 0x01; 
+    const CLOSE_CHUNK   = 0x02; 
+
      private $elementmap = array( /* {{{ */
         'acronym'               => 'format_suppressed_tags',
         'article'               => 'format_suppressed_tags',
@@ -43,9 +46,6 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'footnoteref'           => 'format_suppressed_tags',
         'filename'              => '\\fI',
         'formalpara'            => 'format_indent',
-        /*'funcsynopsis'          => '.SH SYNOPSIS',
-        'funcsynopsisinfo'      => '',
-        'funcprototype'         => '',*/
         'funcdef'               => '.B',
         'function'              => array(
             /* DEFAULT */          'format_suppressed_tags',
@@ -117,7 +117,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'question'              => 'format_suppressed_tags',
         'answer'              => 'format_suppressed_tags',
         'quote'                 => 'format_suppressed_tags',
-        'refentry'              => 'format_suppressed_tags',
+        'refentry'              => 'format_refentry',
         'refentrytitle'         => '\\fB',
         'reference'             => 'format_suppressed_tags',
         'refname'               => 'format_refname',
@@ -127,6 +127,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'refsection'            => 'format_refsect',
         'refsynopsisdiv'        => 'format_refsynopsisdiv',
         'replaceable'           => '\\fI',
+        'set'                   => 'format_bookname',
         'screen'                => 'format_verbatim',
         'section'               => 'format_suppressed_tags',
         'sect1'                 => 'format_suppressed_tags',
@@ -203,18 +204,14 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'parameter'             => array(
             /* DEFAULT */          'format_parameter_text',
             'code'              => false,
-            //'term'              => 'format_parameter_term_text',
             'methodparam'       => 'format_parameter_method_text',
         ),
         'programlisting'        => 'format_verbatim_text',
-        'refname'               => 'format_text',
+        'pubdate'               => 'format_pubdate_text',
+        'refname'               => 'format_refname_text',
         'refpurpose'            => 'format_text',
         'screen'                => 'format_verbatim_text',
         'segtitle'              => 'format_segtitle_text',
-      //  'term'                  => array(
-        //    /* DEFAULT */          false,
-          //  'varlistentry'      => 'format_term_text',
-       // ),
         'title'                 => array(
             /* DEFAULT */          false,
             'refsect'           => 'format_refsect_text',
@@ -227,6 +224,13 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         ),
         'varname'               => 'format_parameter_text',
     );
+
+    /* If a chunk is being processed */
+    protected $chunkOpen = false;
+
+    /* Common properties for all functions pages */
+    protected $bookName = "";
+    protected $date = "";
 
     /* Current Chunk variables */
     protected $cchunk      = array();
@@ -245,11 +249,122 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         "role"                  => null,
         "segtitle"              => array(),
         "segindex"              => 0,
+        "funcname"              => array(),
+        "firstrefname"          => true,
     );
         
     public function __construct() {
         parent::__construct();
+
+        $this->registerFormatName("Generic Unix Manual Pages");
+        $this->setExt(Config::ext() === null ? ".3.gz" : Config::ext());
+        $this->setChunked(true); 
+        $this->cchunk = $this->dchunk;
     }
+
+    public function update($event, $val = null) {
+        switch($event) {
+        case Render::CHUNK:
+            switch($val) {
+            case self::OPEN_CHUNK:
+                $this->pushFileStream(fopen("php://temp/maxmemory", "r+"));
+                $this->cchunk    = $this->dchunk;
+                $this->chunkOpen = true;
+                break;
+
+            case self::CLOSE_CHUNK:
+                $stream = $this->popFileStream();
+                $this->writeChunk($stream);
+                fclose($stream);
+                $this->cchunk    = array();
+                $this->chunkOpen = false;
+                break;
+
+            default:
+                var_dump("Unknown action");
+            }
+            break;
+
+        case Render::STANDALONE:
+            if ($val) {
+                $this->registerElementMap(self::getDefaultElementMap());
+                $this->registerTextMap(self::getDefaultTextMap());
+            } else {
+                $this->registerElementMap(static::getDefaultElementMap());
+                $this->registerTextMap(static::getDefaultTextMap());
+            }
+            break;
+
+        case Render::INIT:
+            $this->setOutputDir(Config::output_dir() . strtolower($this->toValidName($this->getFormatName())) . '/');
+            if (file_exists($this->getOutputDir())) {
+                if (!is_dir($this->getOutputDir())) {
+                    v("Output directory is a file?", E_USER_ERROR);
+                }
+            } else {
+                if (!mkdir($this->getOutputDir())) {
+                    v("Can't create output directory", E_USER_ERROR);
+                }
+            }
+            break;
+        case Render::VERBOSE:
+        	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+        	break;
+        }
+    }
+
+    public function appendData($data) {
+        if ($this->chunkOpen) {
+            if (trim($data) === "") {
+                return 0;
+            }
+
+            $streams = $this->getFileStream();
+            $stream = end($streams);
+            return fwrite($stream, $data);
+        }
+
+        return 0;
+    }
+
+    public function writeChunk($stream) {
+        if (!isset($this->cchunk["funcname"][0])) {
+            return;
+        }
+
+        $index = 0;
+        rewind($stream);
+
+        $filename = $this->cchunk["funcname"][$index] . $this->getExt();
+        $gzfile = gzopen($this->getOutputDir() . $filename, "w9");
+
+        gzwrite($gzfile, $this->header($index));
+        gzwrite($gzfile, stream_get_contents($stream));
+        gzclose($gzfile);
+        v("Wrote %s", $this->getOutputDir() . $filename, VERBOSE_CHUNK_WRITING);
+
+        /* methods/functions with the same name */
+        while(isset($this->cchunk["funcname"][++$index])) {
+            $filename = $this->cchunk["funcname"][$index] . $this->getExt();
+            rewind($stream);
+            // Replace the default function name by the alternative one
+            $content = preg_replace('/'.$this->cchunk["funcname"][0].'/',
+                $this->cchunk["funcname"][$index], stream_get_contents($stream), 1);
+
+            $gzfile = gzopen($this->getOutputDir() . $filename, "w9");
+
+            gzwrite($gzfile, $this->header($index));
+            gzwrite($gzfile, $content);
+            gzclose($gzfile);
+
+            v("Wrote %s", $this->getOutputDir() . $filename, VERBOSE_CHUNK_WRITING);
+        }
+    }
+
+    public function header($index) {
+        return ".TH " . strtoupper($this->cchunk["funcname"][$index]) . " 3 \"" . $this->date . "\" \"PhD manpage\" \"" . $this->bookName . "\"" . "\n";
+    }
+
 
     public function getChunkInfo() {
         return $this->cchunk;
@@ -265,6 +380,22 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     public function getDefaultTextMap() {
         return $this->textmap;
+    }
+
+
+    public function format_refentry($open, $name, $attrs, $props) {
+        if ($open) {
+            $this->notify(Render::CHUNK, self::OPEN_CHUNK);
+        } else {
+            $this->notify(Render::CHUNK, self::CLOSE_CHUNK);
+        }
+
+        return false;
+    }
+
+    public function format_bookname($value, $tag) {
+        $this->bookName = $value;
+        return false;
     }
 
     public function format_suppressed_tags($open, $name, $attrs) {
@@ -295,7 +426,29 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     public function format_refname($open, $name, $attrs, $props) {
         if ($open) {
+            return (isset($this->cchunk["firstrefname"]) && $this->cchunk["firstrefname"]) ? false : "";
+        }
+
+        if (isset($this->cchunk["firstrefname"]) && $this->cchunk["firstrefname"]) {
+            $this->cchunk["firstrefname"] = false;
+            return false;
+        }
+
+        return "";
+    }
+    /*
+    public function format_refname($open, $name, $attrs, $props) {
+        if ($open) {
             return "\n.SH " . $this->autogen($name, $props["lang"]) . "\n";
+        }
+        return "";
+    }
+    */
+    public function format_refname_text($value, $tag) {
+        $this->cchunk["funcname"][] = $this->toValidName(trim($value));
+
+        if (isset($this->cchunk["firstrefname"]) && $this->cchunk["firstrefname"]) {
+            return false;
         }
         return "";
     }
@@ -475,15 +628,6 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         return $ret;
     }
 
-    public function newChunk() {
-        $this->cchunk = $this->dchunk;
-        $this->chunkOpen = true;
-    }
-
-    public function closeChunk() {
-        $this->chunkOpen = false;
-    }
-
     public function format_xref($open, $name, $attrs, $props) {
         if ($props['empty'])
             return "\"" . Format::getShortDescription($attrs[Reader::XMLNS_DOCBOOK]["linkend"]) . "\"";
@@ -616,7 +760,7 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     // Convert the function name to a Unix valid filename
     public function toValidName($functionName) {
-        return str_replace(array("::", "->", "()"), array(".", ".", ""), $functionName);
+        return str_replace(array("::", "->", "()", " "), array(".", ".", "", "-"), $functionName);
     }
 
     public function format_mediaobject($open, $name, $attrs, $props) {
@@ -626,6 +770,10 @@ abstract class Package_Generic_Manpage extends Format_Abstract_Manpage {
         return "";
     }
   
+    public function format_pubdate_text($value, $tag) {
+        $this->date = $value;
+        return false;
+    }
 }
 
 /*

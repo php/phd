@@ -5,9 +5,6 @@ namespace phpdotnet\phd;
 abstract class Format_Abstract_Manpage extends Format {
     public $role = false;
 
-    /* If a chunk is being processed */
-    protected $chunkOpen = false;
-
     public function UNDEF($open, $name, $attrs, $props) {        
         if ($open) {
             trigger_error("No mapper found for '{$name}'", E_USER_WARNING);
@@ -53,6 +50,7 @@ abstract class Format_Abstract_Manpage extends Format {
 
     public function createLink($for, &$desc = null, $type = Format::SDESC) {
     }
+
 }
 
 /*
