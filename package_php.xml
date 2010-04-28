@@ -41,6 +41,7 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Added the Persian language for CHM builds (Philip)
+    - Made all &gt;refentry&lt; create a new manual page (Hannes)
   </notes>
 
   <contents>

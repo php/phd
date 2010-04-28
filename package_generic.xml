@@ -51,6 +51,7 @@
     - Fixed #50666 - Missing entries in table (man pages) (Hannes)
     - Fixed #51301 - Wrong escape sequence (man pages) (Hannes)
     - Several formatting fixes for the unix manual pages (Hannes)
+    - Added Generic Unix Manual pages output format (Hannes)
   </notes>
 
   <contents>
