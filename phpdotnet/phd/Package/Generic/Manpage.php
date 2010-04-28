@@ -117,7 +117,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'question'              => 'format_suppressed_tags',
         'answer'              => 'format_suppressed_tags',
         'quote'                 => 'format_suppressed_tags',
-        'refentry'              => 'format_refentry',
+        'refentry'              => 'format_chunk',
         'refentrytitle'         => '\\fB',
         'reference'             => 'format_suppressed_tags',
         'refname'               => 'format_refname',
@@ -383,7 +383,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
     }
 
 
-    public function format_refentry($open, $name, $attrs, $props) {
+    public function format_chunk($open, $name, $attrs, $props) {
         if ($open) {
             $this->notify(Render::CHUNK, self::OPEN_CHUNK);
         } else {
@@ -760,7 +760,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     // Convert the function name to a Unix valid filename
     public function toValidName($functionName) {
-        return str_replace(array("::", "->", "()", " "), array(".", ".", "", "-"), $functionName);
+        return str_replace(array("::", "->", "()", " ", '$'), array(".", ".", "", "-", ""), $functionName);
     }
 
     public function format_mediaobject($open, $name, $attrs, $props) {
