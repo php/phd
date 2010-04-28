@@ -55,7 +55,7 @@
               <file name="Web.php" role="php"/>
               <file name="PDF.php" role="php"/>
               <file name="BigXHTML.php" role="php"/>
-              <file name="Functions.php" role="php"/>
+              <file name="Manpage.php" role="php"/>
               <file name="BigPDF.php" role="php"/>
               <file name="KDevelop.php" role="php"/>
               <file name="ChunkedXHTML.php" role="php"/>

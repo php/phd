@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-class Package_PHP_Functions extends Package_Generic_Manpage {
+class Package_PHP_Manpage extends Package_Generic_Manpage {
 
     protected $elementmap = array(
     );

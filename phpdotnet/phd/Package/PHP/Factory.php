@@ -8,7 +8,7 @@ class Package_PHP_Factory extends Format_Factory {
         'bigxhtml'      => 'Package_PHP_BigXHTML',
         'php'           => 'Package_PHP_Web',
         'howto'         => 'Package_PHP_HowTo',
-        'manpage'       => 'Package_PHP_Functions',
+        'manpage'       => 'Package_PHP_Manpage',
         'pdf'           => 'Package_PHP_PDF',
         'bigpdf'        => 'Package_PHP_BigPDF',
         'kdevelop'      => 'Package_PHP_KDevelop',
