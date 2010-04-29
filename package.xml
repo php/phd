@@ -60,6 +60,8 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Added --ext command line option to specify filename extension (Paul M Jones)
+    - Added --saveconfig option to generate a config file to load (Hannes)
+    - Added 'package_dirs' config option to specify package directories to autoload from (Hannes)
     - Corrected grammar in Danish translation + fixed encoding (Daniel Egeberg)
     - Allow colored output on Windows, but not by default (Richard Quadling)
   </notes>
