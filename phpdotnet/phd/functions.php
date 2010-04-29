@@ -16,12 +16,13 @@ define('VERBOSE_PARTIAL_READING',        VERBOSE_RENDER_STYLE          << 1);
 define('VERBOSE_PARTIAL_CHILD_READING',  VERBOSE_PARTIAL_READING       << 1);
 define('VERBOSE_TOC_WRITING',            VERBOSE_PARTIAL_CHILD_READING << 1);
 define('VERBOSE_CHUNK_WRITING',          VERBOSE_TOC_WRITING           << 1);
+define('VERBOSE_MESSAGES',               VERBOSE_CHUNK_WRITING         << 1);
 
-define('VERBOSE_INFO',                   ((VERBOSE_CHUNK_WRITING       << 1) - 1) & ~VERBOSE_ERRORS);
+define('VERBOSE_INFO',                   ((VERBOSE_MESSAGES            << 1) - 1) & ~VERBOSE_ERRORS);
 
 
 // Warnings
-define('VERBOSE_NOVERSION',              VERBOSE_CHUNK_WRITING         << 1);
+define('VERBOSE_NOVERSION',              VERBOSE_MESSAGES              << 1);
 define('VERBOSE_BROKEN_LINKS',           VERBOSE_NOVERSION             << 1);
 define('VERBOSE_MISSING_ATTRIBUTES',     VERBOSE_BROKEN_LINKS          << 1);
 
@@ -79,6 +80,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         VERBOSE_PARTIAL_CHILD_READING => 'Partial Child Reading ',
         VERBOSE_TOC_WRITING           => 'Writing TOC           ',
         VERBOSE_CHUNK_WRITING         => 'Writing Chunk         ',
+        VERBOSE_MESSAGES              => 'Heads up              ',
 
         // PhD warnings
         VERBOSE_NOVERSION             => 'No version information',
@@ -111,6 +113,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         case VERBOSE_PARTIAL_CHILD_READING:
         case VERBOSE_TOC_WRITING:
         case VERBOSE_CHUNK_WRITING:
+        case VERBOSE_MESSAGES:
             $color = Config::phd_info_color();
             $output = Config::phd_info_output();
             $data = $msg;

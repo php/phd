@@ -8,9 +8,18 @@ namespace phpdotnet\phd;
 define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? __DIR__ : "@php_dir@");
 
 require __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
+require __INSTALLDIR__ . '/phpdotnet/phd/Config.php';
 require __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
 
 spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
+
+
+$conf = array();
+if (file_exists("phd.config.php")) {
+    v("Loading config from existing file", VERBOSE_MESSAGES);
+    $conf = include "phd.config.php";
+    Config::init($conf);
+}
 
 BuildOptionsParser::getopt();
 
@@ -27,13 +36,21 @@ if (!file_exists(Config::output_dir())) {
     v("Output directory is not a file?", E_USER_ERROR);
 }
 
-Config::init(array(
-    "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
-                    . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
-                    . "langs" . DIRECTORY_SEPARATOR,
-    "phpweb_version_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
-    "phpweb_acronym_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
-));
+// This needs to be moved. Preferably into the PHP package.
+if (!$conf) {
+    Config::init(array(
+        "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
+                        . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
+                        . "langs" . DIRECTORY_SEPARATOR,
+        "phpweb_version_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
+        "phpweb_acronym_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
+    ));
+}
+
+if (Config::saveconfig()) {
+    v("Writing the config file", VERBOSE_MESSAGES);
+    file_put_contents("phd.config.php", "<?php\nreturn " . var_export(Config::getAllFiltered(), 1) . ";");
+}
 
 $render = new Render();
 $reader = new Reader();

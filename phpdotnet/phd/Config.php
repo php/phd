@@ -2,6 +2,10 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
+if (!defined("__INSTALLDIR__")) {
+    define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? dirname(dirname(__DIR__)) : "@php_dir@");
+}
+
 class Config
 {
     const VERSION = 'phd-from-svn';
@@ -42,12 +46,30 @@ class Config
         'css'               => array(),
         'process_xincludes' => false,
         'ext'               => null,
+        'package_dirs'      => array(__INSTALLDIR__),
+        'saveconfig'        => false,
     );
 
     public static function init(array $a) {
         self::$optionArray = array_merge(self::$optionArray, (array)$a);
     }
 
+    public static function getAllFiltered() {
+        $retval = self::$optionArray;
+        return self::exportable($retval);
+    }
+    public static function exportable($val) {
+        foreach($val as $k => &$opt) {
+            if (is_array($opt)) {
+                $opt = self::exportable($opt);
+                continue;
+            }
+            if (is_resource($opt)) {
+                unset($val[$k]);
+            }
+        }
+        return $val;
+    }
     /**
      * Maps static function calls to config option setter/getters.
      *
@@ -119,6 +141,7 @@ class Config
     {
         trigger_error('Use setColor_output()', E_USER_DEPRECATED);
     }
+
 }
 
 /*

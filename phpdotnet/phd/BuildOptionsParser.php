@@ -35,6 +35,7 @@ class BuildOptionsParser
             'css:'         => 'C:',        // External CSS 
             'xinclude'     => 'x',         // Automatically process xinclude directives
             'ext:'         => 'e:',        // The file-format extension to use, including the dot
+            'saveconfig::' => 'S::',       // Save the generated config ?
         );
     }
 
@@ -169,6 +170,9 @@ class BuildOptionsParser
 
     public function option_s($k, $v)
     {
+        if ($k == "S") {
+            return $this->option_saveconfig($k, $v);
+        }
         $this->option_skip($k, $v);
     }
     public function option_skip($k, $v)
@@ -187,6 +191,24 @@ class BuildOptionsParser
             $skip_ids[$val] = $recursive;
         }
         Config::set_skip_ids($skip_ids);
+    }
+    public function option_saveconfig($k, $v)
+    {
+        if (is_array($v)) {
+            trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
+        }
+
+        // No arguments passed, default to 'true'
+        if (is_bool($v)) {
+            $v = "true";
+        }
+
+        $val = self::boolval($v);
+        if (is_bool($val)) {
+            Config::set_saveconfig($v);
+        } else {
+            trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
+        }
     }
 
     public function option_v($k, $v)
@@ -350,6 +372,8 @@ class BuildOptionsParser
   -e <extension>
   --ext <extension>          The alternative filename extension to use, including
                              the dot. Use 'false' for no extension.
+  -S <bool>
+  --saveconfig <bool>        Save the generated config (default: false).
 
 Most options can be passed multiple times for greater effect.
 ";

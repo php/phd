@@ -1,24 +1,27 @@
 <?php
 namespace phpdotnet\phd;
 
-if (!defined("__INSTALLDIR__")) {
-    define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? dirname(dirname(__DIR__)) : "@php_dir@");
-}
-
 class Autoloader
 {
     public static function autoload($name)
     {
         // Only try autoloading classes we know about (i.e. from our own namespace)
         if (strncmp('phpdotnet\phd\\', $name, 14) === 0) {
-            $file = __INSTALLDIR__ . DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $name) . '.php';
+            $filename = DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $name) . '.php';
+            foreach(Config::package_dirs() as $dir) {
+                $file = $dir . $filename;
 
-            // Using fopen() because it has use_include_path parameter.
-            if (!$fp = @fopen($file, 'r', true)) {
-                v('Cannot find file for %s: %s', $name, $file, E_USER_ERROR);
+                // Using fopen() because it has use_include_path parameter.
+                if (!$fp = @fopen($file, 'r', true)) {
+                    continue;
+                }
+
+                fclose($fp);
+                require $file;
+
+                return false;
             }
-            fclose($fp);
-            require $file;
+            v('Cannot find file for %s: %s', $name, $file, E_USER_ERROR);
         }
 
         return false;
