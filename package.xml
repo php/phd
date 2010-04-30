@@ -36,6 +36,12 @@
     <active>yes</active>
   </lead>
   <developer>
+    <name>Paul M Jones</name>
+    <user>pmjones</user>
+    <email>pmjones@php.net</email>
+    <active>yes</active>
+  </developer>
+  <developer>
     <name>Gwynne Raskind</name>
     <user>gwynne</user>
     <email>gwynne@php.net</email>
@@ -59,7 +65,8 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added --ext command line option to specify filename extension (Paul M Jones)
+    - Now searches the include-path for custom package classes in the \phpdotnet\phd namespace (pmjones)
+    - Added --ext command line option to specify filename extension (pmjones)
     - Added --saveconfig option to generate a config file to load (Hannes)
     - Added 'package_dirs' config option to specify package directories to autoload from (Hannes)
     - Corrected grammar in Danish translation + fixed encoding (Daniel Egeberg)
