@@ -51,7 +51,19 @@ class Config
     );
 
     public static function init(array $a) {
+        // add the include-path to the package dirs
+        $include_path = explode(PATH_SEPARATOR, get_include_path());
+        foreach ($include_path as $dir) {
+            if ($dir != __INSTALLDIR__) {
+                self::$optionArray['package_dirs'][] = $dir;
+            }
+        }
+        
+        // now merge other options
         self::$optionArray = array_merge(self::$optionArray, (array)$a);
+        
+        var_dump(self::$optionArray['package_dirs']);
+        die();
     }
 
     public static function getAllFiltered() {
