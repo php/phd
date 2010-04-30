@@ -61,9 +61,6 @@ class Config
         
         // now merge other options
         self::$optionArray = array_merge(self::$optionArray, (array)$a);
-        
-        var_dump(self::$optionArray['package_dirs']);
-        die();
     }
 
     public static function getAllFiltered() {
