@@ -34,6 +34,10 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Added IDE demo
+    - Added the json format
+    - Added the php format
+    - New Base class
+    - Added IDE demo
     - Fixed Bug #51482 - PhD_IDE generates invalid XML
   </notes>
 
@@ -46,6 +50,9 @@
               <file name="Factory.php" role="php"/>
               <file name="Funclist.php" role="php"/>
               <file name="Functions.php" role="php"/>
+              <file name="PHP.php" role="php"/>
+              <file name="JSON.php" role="php"/>
+              <file name="Base.php" role="php"/>
               <file name="API.php" role="php"/>
               <dir name="API">
                 <file name="Function.php" role="php"/>
