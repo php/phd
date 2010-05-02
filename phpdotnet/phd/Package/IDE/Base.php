@@ -92,12 +92,12 @@ abstract class Package_IDE_Base extends Format {
         $this->function['version'] = $this->versionInfo($this->function['name']);
         $data = $this->parseFunction();
 
-        $filename = $this->getOutputDir() . $this->function['name'] . '.' . $this->getExt();
+        $filename = $this->getOutputDir() . $this->function['name'] . $this->getExt();
         file_put_contents($filename, $data);
 
         $index = 0;
         while(isset($this->cchunk['funcname'][++$index])) {
-            $filename = $this->getOutputDir() . $this->cchunk['funcname'][$index] . '.' . $this->getExt();
+            $filename = $this->getOutputDir() . $this->cchunk['funcname'][$index] . $this->getExt();
             // Replace the default function name by the alternative one
             $content = preg_replace('/' . $this->cchunk['funcname'][0] . '/',
                 $this->cchunk['funcname'][$index], $data, 1);
