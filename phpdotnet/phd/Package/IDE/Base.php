@@ -103,8 +103,6 @@ abstract class Package_IDE_Base extends Format {
                 $this->cchunk['funcname'][$index], $data, 1);
             file_put_contents($filename, $content);
         }
-        $this->function = $this->dfunction;
-        $this->cchunk = $this->dchunk;
     }
 
     public function CHUNK($value) {
@@ -221,6 +219,9 @@ abstract class Package_IDE_Base extends Format {
             return;
         }
         if ($open) {
+            $this->function = $this->dfunction;
+            $this->cchunk = $this->dchunk;
+
             $this->function['manualid'] =  $attrs[Reader::XMLNS_XML]['id'];
             return;
         }
