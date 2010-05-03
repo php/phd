@@ -473,7 +473,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         $toc = '';
         if ($header) {
-            $toc .= '<strong>' . $this->autogen('toc', $props['lang']) . '</strong>';
+            $toc .= $this->getTocHeader($props);
         }
         $toc .= "<ul class=\"chunklist chunklist_$name\">\n"; 
         foreach ($this->getChildren($id) as $child) {
@@ -497,6 +497,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $toc;
     }
 
+    protected function getTocHeader($props)
+    {
+        return '<strong>' . $this->autogen('toc', $props['lang']) . '</strong>';
+    }
+    
     /**
     * Handle a <phd:toc> tag.
     */
