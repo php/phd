@@ -2,10 +2,10 @@
 namespace phpdotnet\phd;
 /* $Id$ */
 
-class Package_IDE_Functions extends Package_IDE_Base {
+class Package_IDE_XML extends Package_IDE_Base {
 
     public function __construct() {
-        $this->registerFormatName('IDE-Functions');
+        $this->registerFormatName('IDE-XML');
         $this->setExt(Config::ext() === null ? ".xml" : Config::ext());
     }
 

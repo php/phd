@@ -36,7 +36,7 @@ class Package_IDE_API
      *
      * @var string
      */
-    const FUNCTIONS_DIR = 'ide-functions';
+    const FUNCTIONS_DIR = 'ide-xml';
 
     /**
      * Output file of the funclist format in the IDE Package.
