@@ -24,22 +24,16 @@
 
   <date>2010-05-07</date>
   <version>
-    <release>1.1.0</release>
+    <release>1.1.1</release>
     <api>1.0.0</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - New Formats Available:
-        * json
-        * php
-    - functions format is now called xml
-    - New Base class
-    - Added IDE demo
-    - Fixed Bug #51482 - PhD_IDE generates invalid XML
+    - notes
   </notes>
 
   <contents>
@@ -118,6 +112,27 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Initial release
+      </notes>
+    </release>
+    <release>
+      <version>
+        <release>1.1.0</release>
+        <api>1.0.0</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2010-05-07</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - New Formats Available:
+            * json
+            * php
+        - functions format is now called xml
+        - New Base class
+        - Added IDE demo
+        - Fixed Bug #51482 - PhD_IDE generates invalid XML
       </notes>
     </release>
   </changelog>
