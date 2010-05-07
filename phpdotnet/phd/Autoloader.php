@@ -1,6 +1,8 @@
 <?php
 namespace phpdotnet\phd;
 
+require __DIR__ . DIRECTORY_SEPARATOR . 'Config.php';
+
 class Autoloader
 {
     public static function autoload($name)

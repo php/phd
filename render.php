@@ -8,7 +8,6 @@ namespace phpdotnet\phd;
 define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? __DIR__ : "@php_dir@");
 
 require __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
-require __INSTALLDIR__ . '/phpdotnet/phd/Config.php';
 require __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
 
 spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
