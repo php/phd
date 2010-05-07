@@ -22,20 +22,21 @@
     <active>yes</active>
   </lead>
 
-  <date>2010-03-11</date>
+  <date>2010-05-07</date>
   <version>
-    <release>1.0.1</release>
+    <release>1.1.0</release>
     <api>1.0.0</api>
   </version>
   <stability>
-    <release>snapshot</release>
-    <api>alpha</api>
+    <release>beta</release>
+    <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added IDE demo
-    - Added the json format
-    - Added the php format
+    - New Formats Available:
+        * json
+        * php
+    - functions format is now called xml
     - New Base class
     - Added IDE demo
     - Fixed Bug #51482 - PhD_IDE generates invalid XML
@@ -49,7 +50,7 @@
             <dir name="IDE">
               <file name="Factory.php" role="php"/>
               <file name="Funclist.php" role="php"/>
-              <file name="Functions.php" role="php"/>
+              <file name="XML.php" role="php"/>
               <file name="PHP.php" role="php"/>
               <file name="JSON.php" role="php"/>
               <file name="Base.php" role="php"/>
