@@ -10,7 +10,8 @@ class Package_IDE_XML extends Package_IDE_Base {
     }
 
     public function parseFunction() {
-        $str = '<function>' . PHP_EOL;
+        $str = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+        $str .= '<function>' . PHP_EOL;
         $str .= '<name>' . $this->function['name'] . '</name>' . PHP_EOL;
         $str .= '<purpose>' . $this->e($this->function['purpose']) . '</purpose>'  . PHP_EOL;
         $str .= '<manualid>' . $this->function['manualid'] . '</manualid>' . PHP_EOL;
