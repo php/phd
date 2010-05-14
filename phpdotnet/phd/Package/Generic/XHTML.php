@@ -240,6 +240,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'set'                   => 'format_container_chunk_top',
         'setindex'              => 'format_chunk',
         'shortaffil'            => 'format_suppressed_tags',
+        'sidebar'               => 'format_note',
         'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
         'simplesect'            => 'format_div',
         'simpara'               => array(
@@ -980,8 +981,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return "</tt></i>";
     }
 
-    public function format_void($open, $name, $attrs) {
-        return ' ( <span class="methodparam">void</span>';
+    public function format_void($open, $name, $attrs, $props) {
+        if ($props['sibling'] == 'methodname') {
+	        return ' ( <span class="methodparam">void</span>';
+	} else {
+	        return '<span class="type"><span class="type void">void</span></span>';
+	}
     }
     public function format_methodparam($open, $name, $attrs) {
         if ($open) {
