@@ -71,7 +71,8 @@
     - Added 'package_dirs' config option to specify package directories to autoload from (Hannes)
     - Corrected grammar in Danish translation + fixed encoding (Daniel Egeberg)
     - Allow colored output on Windows, but not by default (Richard Quadling)
-    - Allow &lt;void/&gt; as return type for methodsynopsis tags rather than &lt;type&gt;void&lt;\type&gt; (Richard Quadling)
+    - Allow &lt;void/&gt; as return type for methodsynopsis tags rather than &lt;type&gt;void&lt;/type&gt; (Richard Quadling)
+    - Added support for &lt;sidebar&gt; (Richard Quadling)
   </notes>
 
   <contents>
