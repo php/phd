@@ -167,7 +167,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'para'                  => array(
             /* DEFAULT */          'p',
             'example'           => 'format_example_content',
-            'note'              => 'format_note_content',
             'footnote'          => 'format_footnote_para',
             'refsect1'          => 'format_refsect1_para',
             'question'          => 'format_suppressed_tags',
@@ -1286,13 +1285,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return '<b>';
         }
         return '</b><br />';
-    }
-    public function format_note_content($open, $name, $attrs) {
-        if ($open) {
-            /* Ignore the open tag */
-            return "";
-        }
-        return "<br />";
     }
     public function format_example_title($open, $name, $attrs, $props) {
         if ($props["empty"]) {

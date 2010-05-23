@@ -52,6 +52,7 @@
     - Fixed #51301 - Wrong escape sequence (man pages) (Hannes)
     - Several formatting fixes for the unix manual pages (Hannes)
     - Added Generic Unix Manual pages output format (Hannes)
+    - Fixed #51833 - Multiple paragraphs in notes render incorrectly (Daniel Egeberg)
   </notes>
 
   <contents>
