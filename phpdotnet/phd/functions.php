@@ -30,7 +30,7 @@ define('VERBOSE_WARNINGS',               ((VERBOSE_MISSING_ATTRIBUTES  << 1) - 1
 
 
 define('VERBOSE_ALL',                    (VERBOSE_MISSING_ATTRIBUTES   << 1) - 1);
-define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_WARNINGS)));
+define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_WARNINGS|VERBOSE_TOC_WRITING)));
 
 $olderrrep = error_reporting();
 error_reporting($olderrrep | VERBOSE_DEFAULT);
@@ -52,6 +52,20 @@ function v($msg, $errno) {
 function term_color($text, $color)
 {
     return Config::color_output() && $color !== false ? "\033[" . $color . "m" . $text . "\033[m" : $text;
+}
+/* }}} */
+
+/* {{{ Removes a directory, recursively. Taken from: http://php.net/is_link */
+function removeDir($path) {
+    $dir = new \DirectoryIterator($path);
+    foreach ($dir as $fileinfo) {
+        if ($fileinfo->isFile() || $fileinfo->isLink()) {
+            unlink($fileinfo->getPathName());
+        } elseif (!$fileinfo->isDot() && $fileinfo->isDir()) {
+            removeDir($fileinfo->getPathName());
+        }
+    }
+    rmdir($path);
 }
 /* }}} */
 

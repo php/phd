@@ -18,6 +18,7 @@ class Config
         ),
         'no_index'          => false,
         'force_index'       => false,
+        'no_toc'            => false,
         'xml_root'          => '.',
         'xml_file'          => './.manual.xml',
         'lang_dir'          => './',

@@ -81,6 +81,9 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                 }
             }
             if ($this->getFormatName() == "PHP-Web") {
+                if (!Config::no_toc() && is_dir($this->getOutputDir() . 'toc')) {
+                    removeDir($this->getOutputDir() . 'toc');
+                }
                 if (!file_exists($this->getOutputDir() . "toc") || is_file($this->getOutputDir() . "toc")) {
                     mkdir($this->getOutputDir() . "toc") or die("Can't create the toc directory");
                 }

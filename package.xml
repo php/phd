@@ -73,6 +73,8 @@
     - Allow colored output on Windows, but not by default (Richard Quadling)
     - Allow &lt;void/&gt; as return type for methodsynopsis tags rather than &lt;type&gt;void&lt;/type&gt; (Richard Quadling)
     - Added support for &lt;sidebar&gt; (Richard Quadling)
+    - Now builds toc/* by default for the PHP package, and added --notoc option to use cached version (Philip)
+    - Changed the VERBOSE_DEFAULT error level to exclude VERBOSE_TOC_WRITING messages (Philip)
   </notes>
 
   <contents>

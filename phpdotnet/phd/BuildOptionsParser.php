@@ -20,6 +20,7 @@ class BuildOptionsParser
             'format:'      => 'f:',        // The format to render (xhtml, pdf...)
             'noindex'      => 'I',         // Do not re-index
             'forceindex'   => 'r',         // Force re-indexing under all circumstances
+            'notoc'        => 't',         // Do not re-create TOC
             'docbook:'     => 'd:',        // The Docbook XML file to render from (.manual.xml)
             'output:'      => 'o:',        // The output directory
             'partial:'     => 'p:',        // The ID to render (optionally ignoring its children)
@@ -97,6 +98,15 @@ class BuildOptionsParser
     public function option_forceindex($k, $v)
     {
         Config::set_force_index(true);
+    }
+
+    public function option_t($k, $v)
+    {
+        $this->option_notoc($k, 'true');
+    }
+    public function option_notoc($k, $v)
+    {
+        Config::set_no_toc(true);
     }
 
     public function option_d($k, $v)
@@ -339,6 +349,9 @@ class BuildOptionsParser
                              (default: false)
   -r
   --forceindex               Force re-indexing under all circumstances
+                             (default: false)
+  -t
+  --notoc                    Do not rewrite TOC before rendering but load from cache
                              (default: false)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
