@@ -22,6 +22,7 @@ class Config
         'xml_file'          => './.manual.xml',
         'lang_dir'          => './',
         'language'          => 'en',
+        'fallback_language' => 'en',
         'verbose'           => VERBOSE_DEFAULT,
         'date_format'       => 'H:i:s',
         'render_ids'        => array(
