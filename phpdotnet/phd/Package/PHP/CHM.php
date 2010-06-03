@@ -251,7 +251,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
     protected function appendChm($name, $ref, $hasChild) {
         if ($this->flags & Render::OPEN) {
             $charset = $this->LANGUAGES[Config::language()]["preferred_charset"];
-            $name = htmlspecialchars(iconv('UTF-8', $charset, html_entity_decode($name, ENT_QUOTES)), ENT_QUOTES);
+            $name = htmlspecialchars(iconv('UTF-8', $charset, html_entity_decode($name, ENT_QUOTES, 'UTF-8')), ENT_QUOTES);
 
             $this->currentTocDepth++;
             fwrite($this->hhpStream, "{$ref}\n");
