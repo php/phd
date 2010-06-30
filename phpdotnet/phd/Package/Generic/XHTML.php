@@ -162,7 +162,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         ),
         'interfacename'         => 'span',
         'exceptionname'         => 'span',
-        'option'                => 'span',
+        'option'                => 'format_option',
         'orderedlist'           => 'format_orderedlist',
         'para'                  => array(
             /* DEFAULT */          'p',
@@ -625,6 +625,18 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return $ret;
         }
         return "</a>";
+    }
+
+    public function format_option($open, $name, $attrs) {
+        if ($open) {
+            if(!isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $attrs[Reader::XMLNS_DOCBOOK]["role"] = "unknown";
+            }
+            $this->role = $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
+            return '<strong class="' .$name.' ' .$role. '">';
+        }
+        $this->role = null;
+        return "</strong>\n";
     }
 
     public function format_literal($open, $name, $attrs) {
