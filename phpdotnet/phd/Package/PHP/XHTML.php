@@ -83,8 +83,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
             ),
             'methodsynopsis'    => array(
-                /* DEFAULT */      'format_function_text',
-                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+                /* DEFAULT */      'format_classsynopsis_methodsynopsis_methodname_text',
             ),
             'destructorsynopsis' => array(
                 /* DEFAULT */      'format_function_text',
@@ -394,7 +393,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_function_text($value, $tag, $display_value = null) {
         if ($display_value === null) {
-            $display_value = $value;
+            $display_value = $value . "()";
         }
 
         $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
@@ -407,15 +406,15 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 }
 
                 if ($this->chunked) {
-                    return '<a href="'.$filename. $this->ext. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>'.$desc;
+                    return '<a href="'.$filename. $this->ext. '" class="' . $tag . '"'.$rel.'>' .$display_value. '</a>'.$desc;
                 }
-                return '<a href="#'.$filename. '" class="function"'.$rel.'>' .$display_value.($tag == "function" ? "()" : ""). '</a>'.$desc;
+                return '<a href="#'.$filename. '" class="' . $tag . '"'.$rel.'>' .$display_value. '</a>'.$desc;
             }
         } elseif ($this->CURRENT_ID !== $filename) {
             v("No link found for %s", $value, VERBOSE_BROKEN_LINKS);
         }
 
-        return '<b>' .$display_value.($tag == "function" ? "()" : ""). '</b>';
+        return '<b>' .$display_value. '</b>';
     }
 
     public function format_grep_classname_text($value, $tag) {
