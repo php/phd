@@ -43,6 +43,7 @@
     - Added the Persian language for CHM builds (Philip)
     - Made all &gt;refentry&lt; create a new Unix Manual Page (Hannes)
     - Create Unix Manual Page for the predefined variables too (Hannes)
+    - Fixed bug#51750 Add ()'s when rendering methodname elements (Hannes)
   </notes>
 
   <contents>
