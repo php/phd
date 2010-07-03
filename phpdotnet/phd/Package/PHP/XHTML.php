@@ -387,6 +387,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
+        if ($this->cchunk["classsynopsis"]["classname"]) {
+          if (strpos($value, "::") === false && strpos($value, "->") === false) {
+                $value = $this->cchunk["classsynopsis"]["classname"] . "::" . $value;
+                $this->cchunk["classsynopsis"]["classname"] = false;
+            }
+        }
+
         $display_value = parent::format_classsynopsis_methodsynopsis_methodname_text($value, $tag);
         return $this->format_function_text($value, $tag, $display_value);
     }
@@ -422,7 +429,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
-        return $this->format_classname_text(parent::format_classsynopsis_ooclass_classname_text($value, $tag), $tag);
+        /* intentionally not return the value, it will be printed out by <methodname> "soon" */
+        parent::format_classsynopsis_ooclass_classname_text($value, $tag);
     }
 
     public function format_classname_text($value, $tag) {
