@@ -54,13 +54,13 @@
     <active>no</active>
   </developer>
 
-  <date>2010-03-11</date>
+  <date>2010-08-10</date>
   <version>
     <release>1.0.1</release>
     <api>1.0.0</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>stable</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
