@@ -31,19 +31,16 @@
 
   <date>2010-08-10</date>
   <version>
-    <release>1.0.1</release>
+    <release>1.0.2</release>
     <api>1.0.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added the Persian language for CHM builds (Philip)
-    - Made all &gt;refentry&lt; create a new Unix Manual Page (Hannes)
-    - Create Unix Manual Page for the predefined variables too (Hannes)
-    - Fixed bug#51750 Add ()'s when rendering methodname elements (Hannes)
+    -notes
   </notes>
 
   <contents>
@@ -156,6 +153,25 @@
         - Stopped double encoding of entities in CHM TOC, Index and keyword lists (Richard Quadling)
       </notes>
     </release>
+    <release>
+      <version>
+        <release>1.0.1</release>
+        <api>1.0.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2010-08-10</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added the Persian language for CHM builds (Philip)
+        - Made all &gt;refentry&lt; create a new Unix Manual Page (Hannes)
+        - Create Unix Manual Page for the predefined variables too (Hannes)
+        - Fixed bug#51750 Add ()'s when rendering methodname elements (Hannes)
+      </notes>
+    </release>
+
   </changelog>
 
 </package>

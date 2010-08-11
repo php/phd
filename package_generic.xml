@@ -37,23 +37,16 @@
 
   <date>2010-08-10</date>
   <version>
-    <release>1.0.1</release>
+    <release>1.0.2</release>
     <api>1.0.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Fixed #51514 - Added tr, th and td mappings (Patch provided by Paul M Jones) (Richard Quadling)
-    - Fixed #51346 - Extra whitespace when using &lt;type&gt; and plural (Daniel Egeberg)
-    - Fixed #50666 - Missing entries in table (man pages) (Hannes)
-    - Fixed #51301 - Wrong escape sequence (man pages) (Hannes)
-    - Several formatting fixes for the unix manual pages (Hannes)
-    - Added Generic Unix Manual pages output format (Hannes)
-    - Fixed #51833 - Multiple paragraphs in notes render incorrectly (Daniel Egeberg)
-    - Added format_option to bold options (Philip)
+    -notes
   </notes>
 
   <contents>
@@ -165,6 +158,29 @@
         - Fixed bug #46413 Weird examples in Unix manual pages (Rudy)
       </notes>
     </release>
+    <release>
+      <version>
+        <release>1.0.1</release>
+        <api>1.0.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2010-08-10</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Fixed #51514 - Added tr, th and td mappings (Patch provided by Paul M Jones) (Richard Quadling)
+        - Fixed #51346 - Extra whitespace when using &lt;type&gt; and plural (Daniel Egeberg)
+        - Fixed #50666 - Missing entries in table (man pages) (Hannes)
+        - Fixed #51301 - Wrong escape sequence (man pages) (Hannes)
+        - Several formatting fixes for the unix manual pages (Hannes)
+        - Added Generic Unix Manual pages output format (Hannes)
+        - Fixed #51833 - Multiple paragraphs in notes render incorrectly (Daniel Egeberg)
+        - Added format_option to bold options (Philip)
+      </notes>
+    </release>
+
   </changelog>
 
 </package>
