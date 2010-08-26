@@ -259,7 +259,7 @@ Supported packages:
     </section>
 
     <section xml:id="render-phd-guide">
-      <title>Compile the PhD guide</title>
+      <title>Compiling the PhD guide</title>
 
       <para>The PhD guide is this manual you are reading currently. It lives
       in <acronym>PhD</acronym>'s SVN repository under
