@@ -30,7 +30,11 @@ require 'MediaWiki/geshi/geshi/geshi.php';
  * 2009. It will not work with geshi 1.1.x or 1.2.x.
  *
  * @example
- * phd -g 'phpdotnet\phd\Highlighter_GeSHi' -L en -P PEAR -f xhtml -o build/en -d .manual.xml
+ * Install geshi:
+ *  pear channel-discover mediawiki.googlecode.com/svn
+ *  pear install mediawiki/geshi
+ * Use it:
+ *  phd -g 'phpdotnet\phd\Highlighter_GeSHi' -L en -P PEAR -f xhtml -o build/en -d .manual.xml
  *
  * @category PhD
  * @package  PhD_GeSHi

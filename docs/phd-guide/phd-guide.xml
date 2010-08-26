@@ -288,7 +288,62 @@ $ phd -f bigxhtml -d phd-guide.xml
       <para>That's all to say. This way you can render your own docbook files,
       too.</para>
     </section>
+
+    <section xml:id="render-custom">
+      <title>Customizing the rendering results</title>
+
+      <para>PhD lets you specify a number of options to customize the
+      generated documentation files. The following sections describe
+      some of them.</para>
+
+      <section xml:id="render-custom-highlighter">
+	<title>Source code highlighter</title>
+
+	<para>Part of the documentation of programming languages
+	is source code examples. PhD is able to colorize the source
+	code of many types.</para>
+
+	<para>By default, PhD uses the source code highlighter that
+	is built into PHP itself. It is only able to highlight PHP code
+	and nothing else.</para>
+
+	<para>If your documentation contains other types of source code
+	or markup, like XML, HTML, Javascript or any other language,
+	you should try the
+	<link xlink:href="http://qbnz.com/highlighter/">GeSHi</link>
+	highlighter that is shipped with PhD:</para>
+
+	<orderedlist>
+	  <listitem>
+	   <para>
+	    Install GeSHi from the MediaWiki PEAR channel:
+	   </para>
+	   <screen><![CDATA[$ pear channel-discover mediawiki.googlecode.com/svn
+$ pear install mediawiki/geshi]]></screen>
+	  </listitem>
+
+	  <listitem>
+	   <para>
+	    Use the GeSHi syntax highlighting class when rendering your
+	    documentation:
+	   <screen><![CDATA[$ phd -g 'phpdotnet\phd\Highlighter_GeSHi' -d phd-guide.xml]]></screen>
+	   </para>
+	  </listitem>
+	</orderedlist>
+
+	<para>If you have GeSHi version 1.1.x installed, you should use
+	the <literal>phpdotnet\phd\Highlighter_GeSHi11x</literal> highlighter,
+	which is adapted to GeSHi's new API.
+	</para>
+
+	<para>Apart from using the highlighter shipped with PhD, you
+	can build your own highlighters.</para>
+      </section>
+
+    </section>
+
   </chapter>
+
 
   <chapter xml:id="docbook-extensions">
     <title>DocBook extensions</title>
