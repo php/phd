@@ -303,6 +303,27 @@ $ phd -f bigxhtml -d phd-guide.xml
 	is source code examples. PhD is able to colorize the source
 	code of many types.</para>
 
+	<para>To utilize syntax highlighting, your opening
+	<literal>&lt;programlisting&gt;</literal> tags need a
+	<literal>role</literal> attribute describing the type
+	of source code. Examples are <literal>php</literal>,
+	<literal>html</literal> and <literal>python</literal>.</para>
+
+	<note>
+	  <para>PhD currently only highlights the code if it is embedded
+	  in a <literal>CDATA</literal> section.</para>
+	</note>
+
+	<example>
+	  <title>A programlisting tag with a role</title>
+	  <programlisting role="xml"><![CDATA[<programlisting role="php"><![CDATA[
+<?php
+echo "Hello world!";
+?>
+]]>]]&gt;&lt;/programlisting&gt;
+	  </programlisting>
+	</example>
+
 	<para>By default, PhD uses the source code highlighter that
 	is built into PHP itself. It is only able to highlight PHP code
 	and nothing else.</para>
