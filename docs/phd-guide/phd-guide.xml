@@ -289,6 +289,7 @@ $ phd -f bigxhtml -d phd-guide.xml
       too.</para>
     </section>
 
+
     <section xml:id="render-custom">
       <title>Customizing the rendering results</title>
 
@@ -301,7 +302,8 @@ $ phd -f bigxhtml -d phd-guide.xml
 
 	<para>Part of the documentation of programming languages
 	is source code examples. PhD is able to colorize the source
-	code of many types.</para>
+	code of many types of source code with the help of
+	<emphasis>highlighters</emphasis>.</para>
 
 	<para>To utilize syntax highlighting, your opening
 	<literal>&lt;programlisting&gt;</literal> tags need a
@@ -358,7 +360,9 @@ $ pear install mediawiki/geshi]]></screen>
 	</para>
 
 	<para>Apart from using the highlighter shipped with PhD, you
-	can build your own highlighters.</para>
+	can
+	<link linkend="phd-extension-highlighter">build your own highlighters</link>.
+	</para>
       </section>
 
     </section>
@@ -589,6 +593,51 @@ $ pear install mediawiki/geshi]]></screen>
       </section>
     </section>
   </chapter>
+
+
+
+  <chapter xml:id="phd-extension">
+    <title>Extending PhD</title>
+
+    <para>Written in PHP, PhD is easy to hack on and easy to extend.
+    It provides command line parameters to use custom code
+    without changing PhD internals, like source code highlighters.</para>
+
+    <section xml:id="phd-extension-highlighter">
+      <title>Writing an own syntax highlighter</title>
+
+      <para>A syntax highlighter for PhD is nothing more than a simple
+      PHP class that has two methods, a <literal>factory</literal>
+      and <literal>highlight</literal>.</para>
+
+      <para><literal>factory</literal> is static and takes the format name
+      (i.e. <literal>pdf</literal>, <literal>xhtml</literal>,
+      <literal>troff</literal>) as only parameter. It returns
+      the highlighter instance object for the given format.
+      The method is called for each output format the documentation
+      is rendered to.</para>
+
+      <para><literal>highlight</literal> takes three parameters,
+      <literal>text</literal>, <literal>role</literal> and
+      <literal>format</literal>.
+      It is called whenever a piece of source code needs to be highlighted
+      and expects the highlighted source code to be returned in whatever
+      format the current rendering format is expected to be.</para>
+
+      <para>Take a look at the provided highlighters,
+      <literal>phpdotnet\phd\Highlighter</literal>,
+      <literal>phpdotnet\phd\Highlighter_GeSHi</literal> and
+      <literal>phpdotnet\phd\Highlighter_GeSHi11x</literal>.
+      They will serve as good examples how to implement your own
+      highlighter.</para>
+
+      <para>Once you wrote your custom source code highlighting
+      class, it's time to
+      <link linkend="render-custom-highlighter">try it out</link>.</para>
+    </section>
+  </chapter>
+
+
 
   <appendix xml:id="links">
     <title>Links</title>
