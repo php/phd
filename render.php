@@ -23,7 +23,7 @@ if (file_exists("phd.config.php")) {
     Config::init(array());
 }
 
-BuildOptionsParser::getopt();
+Options_Parser::getopt();
 
 /* If no docbook file was passed, die */
 if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
