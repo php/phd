@@ -40,7 +40,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    -notes
+    New output format Epub (Moacir)
   </notes>
 
   <contents>
@@ -61,6 +61,7 @@
               <file name="HowTo.php" role="php"/>
               <file name="XHTML.php" role="php"/>
               <file name="TocFeed.php" role="php"/>
+              <file name="Epub.php" role="php"/>
               <file name="README" role="doc"/>
               <file name="HOWTO.GENERATE_CHM" role="doc"/>
             </dir>
