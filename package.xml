@@ -65,7 +65,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    -notes
+    Added support for package cli options (Moacir)
   </notes>
 
   <contents>
@@ -99,6 +99,11 @@
             </dir>
             <file name="Factory.php" role="php"/>
           </dir>
+          <dir name="Options">
+            <file name="Handler.php" role="php"/>
+            <file name="Interface.php" role="php"/>
+            <file name="Parser.php" role="php"/>
+          </dir>
           <dir name="Reader">
             <file name="Partial.php" role="php"/>
           </dir>
@@ -106,7 +111,6 @@
             <file name="DBHTMLHandler.php" role="php"/>
           </dir>
           <file name="Autoloader.php" role="php"/>
-          <file name="BuildOptionsParser.php" role="php"/>
           <file name="Config.php" role="php">
             <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
           </file>
