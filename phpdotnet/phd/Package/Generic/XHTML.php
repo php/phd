@@ -1547,7 +1547,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($open) {
             return "<p><b>";
         }
-        return "</p></b>";
+        return "</b></p>";
     }
 
    /**
