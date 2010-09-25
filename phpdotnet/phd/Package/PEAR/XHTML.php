@@ -1084,7 +1084,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
                 
         if ($name == 'legalnotice') {
             if ($open) {
-                return '<div class="' . $name . '" ' . ($id ? "id=\"{$id}\"" : '') . '">';
+                return '<div class="' . $name . '" ' . ($id ? "id=\"{$id}\"" : '') . '>';
             }
         }
         return $open ? '<div class="'.$name.'" id="'.$id.'">' : "</div>\n"; 
