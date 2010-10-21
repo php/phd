@@ -1359,7 +1359,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["table"] = true;
-            return '<table class="doctable ' .$name. '">';
+            $idstr = '';
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+            	$idstr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
+            }
+            return '<table' . $idstr . ' class="doctable ' .$name. '">';
         }
         $this->cchunk["table"] = false;
         $str = "";
