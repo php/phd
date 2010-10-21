@@ -164,6 +164,9 @@
       <extension>
         <name>sqlite3</name>
       </extension>
+      <extension>
+        <name>zlib</name>
+      </extension>
     </required>
     <optional>
       <package>
