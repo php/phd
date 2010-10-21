@@ -147,7 +147,7 @@ $ svn co http://svn.php.net/repository/phpdoc/modules/doc-en phpdoc
 
       <screen>
 <![CDATA[
-$ phd -d .manual.xml -P PHP
+$ phd -d doc-base/.manual.xml -P PHP
 ... status messages
 ]]>
       </screen>
