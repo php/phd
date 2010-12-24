@@ -34,9 +34,15 @@
    </listitem>
   </varlistentry>
   <varlistentry>
+   <term>important</term>
+   <listitem>
+    <simpara>Важно</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
    <term>by</term>
    <listitem>
-    <simpara>by</simpara>
+    <simpara>от</simpara>
    </listitem>
   </varlistentry>
   <varlistentry>
@@ -49,6 +55,30 @@
    <term>example</term>
    <listitem>
     <simpara>Пример #</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>unknownversion</term>
+   <listitem>
+    <simpara>Информация о версии неизвестна, возможно, только в SVN</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>refname</term>
+   <listitem>
+    <simpara>ИМЯ</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>refsynopsis</term>
+   <listitem>
+    <simpara>СОДЕРЖАНИЕ</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>mediaobject</term>
+   <listitem>
+    <simpara>[НЕОТОБРАЖАЕМЫЙ МЕДИА-ФАЙЛ]</simpara>
    </listitem>
   </varlistentry>
  </variablelist>
