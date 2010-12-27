@@ -47,6 +47,7 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
    Allow xml:id on &lt;table&gt; (Richard Quadling)
+   Add class="note" to &lt;note&gt;s generated &lt;blockquote&gt; (Hannes)
   </notes>
 
   <contents>
