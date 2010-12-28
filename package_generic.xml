@@ -48,6 +48,7 @@
   <notes>
    Allow xml:id on &lt;table&gt; (Richard Quadling)
    Add class="note" to &lt;note&gt;s generated &lt;blockquote&gt; (Hannes)
+   Generate an ID for &lt;refsect1&gt; (Hannes)
   </notes>
 
   <contents>

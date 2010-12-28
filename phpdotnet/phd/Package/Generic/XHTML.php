@@ -855,7 +855,15 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 $attrs[Reader::XMLNS_DOCBOOK]["role"] = "unknown";
             }
             $this->role = $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
-            return '<div class="' .$name.' ' .$role. '">';
+
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["id"])) {
+                $id = $attrs[Reader::XMLNS_DOCBOOK]["id"];
+            }
+            else {
+                $id = $name. "-" . $this->CURRENT_CHUNK . "-" . $role;
+            }
+
+            return '<div class="' .$name.' ' .$role. '" id="' . $id . '">';
         }
         $this->role = null;
         return "</div>\n";
