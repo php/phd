@@ -22,7 +22,7 @@ abstract class Format_Abstract_XHTML extends Format {
             $idstr = "";
             if (isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $id = $attrs[Reader::XMLNS_XML]["id"];
-                $idstr = ' id="' .$id. '" name="' .$id. '"';
+                $idstr = ' id="' .$id. '"';
             }
             return '<' .$tag. ' class="' .$name. '"' . $idstr . ($props["empty"] ? '/' : "") . '>';
         }
