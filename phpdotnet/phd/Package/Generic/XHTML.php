@@ -100,7 +100,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'envar'                 => 'span',
         'errortype'             => 'span',
         'errorcode'             => 'span',
-        'example'               => 'format_div',
+        'example'               => 'format_example',
         'formalpara'            => 'p',
         'fieldsynopsis'         => array(
             /* DEFAULT */          'format_fieldsynopsis',
@@ -1305,6 +1305,17 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return '<b>';
         }
         return '</b><br />';
+    }
+    public function format_example($open, $name, $attrs, $props) {
+        static $n = 0;
+        if ($open) {
+            ++$n;
+            if (isset($props["id"])) {
+                return '<div class="' . $name . '" id="' . $props["id"] . '">';
+            }
+            return '<div class="' . $name . '" id="' . $this->getGeneratedExampleId($n-1) . '">';
+        }
+        return '</div>';
     }
     public function format_example_title($open, $name, $attrs, $props) {
         if ($props["empty"]) {

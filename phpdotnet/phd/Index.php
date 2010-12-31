@@ -62,6 +62,7 @@ class Index extends Format
     'refpurpose'            => 'format_ldesc',
     'refname'               => 'format_sdesc',
     'titleabbrev'           => 'format_sdesc',
+    'example'               => 'format_example',
     );
 
     private $mytextmap = array(
@@ -353,6 +354,26 @@ SQL;
         }
     }
     
+    public function format_example($open, $name, $attrs, $props) {
+        static $n = 0;
+
+        if ($open) {
+            ++$n;
+
+            if(isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $id = $attrs[Reader::XMLNS_XML]["id"];
+            }
+            else {
+                $id = "example-" . $n;
+            }
+
+            $this->storeInfo($name, $id, $this->currentchunk, false);            
+            return false;
+        }
+
+        $this->appendID();
+        return false;
+    }
     public function commit() {
         if (isset($this->commit) && $this->commit) {
             $this->db->exec('BEGIN TRANSACTION; '.$this->commit.' COMMIT');
@@ -372,6 +393,7 @@ SQL;
             $dbhtml->setAttribute("filename", false);
         }
     }
+
 }
 
 

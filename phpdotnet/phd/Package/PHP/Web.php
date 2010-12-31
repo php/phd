@@ -56,6 +56,10 @@ class Package_PHP_Web extends Package_PHP_XHTML {
 
     public function update($event, $val = null) {
         switch($event) {
+        case Render::FINALIZE:
+            $this->writeJsonIndex();
+            break;
+
         case Render::CHUNK:
             $this->flags = $val;
             break;
@@ -188,6 +192,19 @@ manual_header();
 
     public function footer($id) {
         return "<?php manual_footer(); ?>";
+    }
+
+    protected function writeJsonIndex() {
+        v("Writing search indexes..", VERBOSE_FORMAT_RENDERING);
+        $ids = array();
+        $desc = array();
+        foreach($this->indexes as $id => $index) {
+            $ids[$index["element"]][] = array($index["sdesc"], $index["filename"]);
+            $desc[$id] = $index["ldesc"];
+        }
+        file_put_contents($this->getOutputDir() . "search-index.json", json_encode($ids));
+        file_put_contents($this->getOutputDir() . "search-description.json", json_encode($desc));
+        v("Index written", VERBOSE_FORMAT_RENDERING);
     }
 
 }

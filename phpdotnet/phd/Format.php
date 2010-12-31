@@ -42,6 +42,7 @@ abstract class Format extends ObjectStorage
     protected $refs = array();
     protected $vars = array();
     protected $classes = array();
+    protected $examples = array();
 
     private static $autogen = array();
 
@@ -134,11 +135,13 @@ abstract class Format extends ObjectStorage
         $this->sqlite->createAggregate("refname", array($this, "SQLiteRefname"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->createAggregate("varname", array($this, "SQLiteVarname"), array($this, "SQLiteFinal"), 2);
         $this->sqlite->createAggregate("classname", array($this, "SQLiteClassname"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->createAggregate("example", array($this, "SQLiteExample"), array($this, "SQLiteFinal"), 1);
         $this->sqlite->query('SELECT indexes(docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) FROM ids');
         $this->sqlite->query('SELECT children(docbook_id, parent_id) FROM ids WHERE chunk != 0');
         $this->sqlite->query('SELECT refname(docbook_id, sdesc) FROM ids WHERE element=\'refentry\'');
         $this->sqlite->query('SELECT varname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:varentry\'');
         $this->sqlite->query('SELECT classname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:exceptionref\' OR element=\'phpdoc:classref\'');
+        $this->sqlite->query('SELECT example(docbook_id) FROM ids WHERE element=\'example\' OR element=\'informalexample\'');
     }
 
     public function SQLiteIndex(&$context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next, $chunk) {
@@ -176,6 +179,9 @@ abstract class Format extends ObjectStorage
 
     public function SQLiteClassname(&$context, $index, $id, $sdesc) {
         $this->classes[strtolower($sdesc)] = $id;
+    }
+    public function SQLiteExample(&$context, $index, $id) {
+        $this->examples[] = $id;
     }
 
     public static function SQLiteFinal(&$context) {
@@ -280,6 +286,9 @@ abstract class Format extends ObjectStorage
     }
     public function getVarnameLink($var) {
         return isset($this->vars[$var]) ? $this->vars[$var] : null;
+    }
+    public function getGeneratedExampleID($index) {
+        return $this->examples[$index];
     }
     final public function registerElementMap(array $map) {
         $this->elementmap = $map;
