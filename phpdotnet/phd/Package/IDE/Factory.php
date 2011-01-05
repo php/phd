@@ -8,6 +8,7 @@ class Package_IDE_Factory extends Format_Factory {
         'funclist'          => 'Package_IDE_Funclist',
         'json'              => 'Package_IDE_JSON',
         'php'               => 'Package_IDE_PHP',
+        'phpstub'           => 'Package_IDE_PHPStub'
     );
 
     public function __construct() {
