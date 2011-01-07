@@ -46,6 +46,7 @@
               <file name="Funclist.php" role="php"/>
               <file name="XML.php" role="php"/>
               <file name="PHP.php" role="php"/>
+              <file name="PHPStub.php" role="php"/>
               <file name="JSON.php" role="php"/>
               <file name="Base.php" role="php"/>
               <file name="API.php" role="php"/>
