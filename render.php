@@ -15,9 +15,9 @@ spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
 
 $conf = array();
 if (file_exists("phd.config.php")) {
-    v("Loading config from existing file", VERBOSE_MESSAGES);
     $conf = include "phd.config.php";
     Config::init($conf);
+    v("Loaded config from existing file", VERBOSE_MESSAGES);
 } else {
     // need to init regardless so we get package-dirs from the include-path
     Config::init(array());
