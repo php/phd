@@ -4,16 +4,6 @@ namespace phpdotnet\phd;
 
 class Options_Handler implements Options_Interface
 {
-    public function __construct()
-    {
-        // By default, Windows does not support colors on the console.
-        // ANSICON by Jason Hood can be used to provide colors at the console.
-        // Color output can still be set via the command line parameters.
-        if('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
-        	$this->option_color('color', 'off');
-        }
-    }
-
     public function optionList()
     {
         return array(
@@ -373,7 +363,7 @@ class Options_Handler implements Options_Interface
                              theme). (default: en)
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal
-                             (default: true; On Windows the default is false)
+                             (default: " . (Config::color_output() ? 'true' : 'false') . ")
   -C <filename>
   --css <filename>           Link for an external CSS file.
   -g <classname>

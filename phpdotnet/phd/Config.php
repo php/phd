@@ -10,7 +10,7 @@ class Config
 {
     const VERSION = 'phd-from-svn';
 
-    private static $optionArray = array(
+    private static $optionArrayDefault = array(
         'output_format'     => array(),
         'chunk_extra'       => array(
             'legalnotice'      => true,
@@ -52,7 +52,23 @@ class Config
         'saveconfig'        => false,
     );
 
+    private static $optionArray = null;
+
     public static function init(array $a) {
+        // Override any defaults due to operating system constraints
+        // and copy defaults to working optionArray
+        if (is_null(self::$optionArray)) {
+
+            // By default, Windows does not support colors on the console.
+            // ANSICON by Jason Hood can be used to provide colors at the console.
+            // Color output can still be enabled via the command line parameters --color
+            if('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
+        	self::$optionArrayDefault['color_output'] = false;
+            }
+
+            self::$optionArray = self::$optionArrayDefault;
+        }
+
         // add the include-path to the package dirs
         $include_path = explode(PATH_SEPARATOR, get_include_path());
         foreach ($include_path as $dir) {
