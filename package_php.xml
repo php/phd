@@ -41,6 +41,9 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     New output format Epub (Moacir)
+    Prepare CHM rendering to use the new CSS rules (Richard Quadling)
+    Disply a message when loading an external stylesheet (Richard Quadling)
+    Incorporate stylesheet names supplied at the command line into the CHM file (Richard Quadling)
   </notes>
 
   <contents>

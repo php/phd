@@ -238,7 +238,16 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             $this->hhcStream = fopen($this->chmdir . "php_manual_{$lang}.hhc", "w");
             $this->hhkStream = fopen($this->chmdir . "php_manual_{$lang}.hhk", "w");
 
-            file_put_contents($this->outputdir . "style.css", $this->fetchStylesheet() . PHP_EOL . 'body { padding : 3px;}');
+            $stylesheet = '';
+            if (Config::css()) {
+                foreach(Config::css() as $cssname) {
+                    $stylesheet .= $this->fetchStylesheet($cssname) . PHP_EOL;
+                }
+            } else {
+                $stylesheet = $this->fetchStylesheet() . PHP_EOL;
+            }
+
+            file_put_contents($this->outputdir . "style.css", $stylesheet . 'body { padding : 3px;}');
 
             self::headerChm();
             break;
@@ -391,11 +400,19 @@ res' . DIRECTORY_SEPARATOR . 'style.css
 
     public function header($id) {
         $header = parent::header($id);
-        // Add CSS link to <head>
-        $pattern = '/(.*)(\r|\n|\r\n|\n\r)(.*)<\/head>/';
-        $replacement = '$1  <link media="all" rel="stylesheet" type="text/css" href="style.css"/>$2$3</head>';
 
-        $header = preg_replace($pattern, $replacement, $header);
+        $patterns = array(
+            '/(.*)(\r|\n|\r\n|\n\r)(.*)<\/head>/', // Add CSS link to <head>
+            '/(<body)/',                           // Add 'docs' class to body - the new CSS styling requires a parent of class 'docs'.
+        );
+
+        $replacements = array(
+            '$1  <link media="all" rel="stylesheet" type="text/css" href="style.css"/>$2$3</head>',
+            '$1 class="docs"',
+        );
+
+        $header = preg_replace($patterns, $replacements, $header);
+
         return $header;
     }
 
@@ -412,10 +429,12 @@ res' . DIRECTORY_SEPARATOR . 'style.css
     }
 
     protected function fetchStylesheet($name = null) {
-        $stylesheet = file_get_contents("http://www.php.net/styles/site.css");
-        if ($stylesheet) return $stylesheet;
-        else {
-            v("Stylesheet not fetched. Uses default rendering style.", E_USER_WARNING);
+        $stylesheet = file_get_contents($name = "http://www.php.net/styles/" . (is_null($name) ? "site.css" : $name));
+        if ($stylesheet) {
+            v('Loaded %s stylesheet.', $name, VERBOSE_MESSAGES);
+            return $stylesheet;
+        } else {
+            v('Stylesheet %s not fetched. Uses default rendering style.', $name, E_USER_WARNING);
             return "";
         }
     }
