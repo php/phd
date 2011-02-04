@@ -24,7 +24,7 @@ class Config
         'lang_dir'          => './',
         'language'          => 'en',
         'fallback_language' => 'en',
-        'verbose'           => VERBOSE_ALL,
+        'verbose'           => VERBOSE_DEFAULT,
         'date_format'       => 'H:i:s',
         'render_ids'        => array(
         ),
