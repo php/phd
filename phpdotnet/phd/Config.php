@@ -24,7 +24,7 @@ class Config
         'lang_dir'          => './',
         'language'          => 'en',
         'fallback_language' => 'en',
-        'verbose'           => VERBOSE_DEFAULT,
+        'verbose'           => VERBOSE_ALL,
         'date_format'       => 'H:i:s',
         'render_ids'        => array(
         ),
@@ -57,7 +57,7 @@ class Config
     public static function init(array $a) {
         // Override any defaults due to operating system constraints
         // and copy defaults to working optionArray
-        if (is_null(self::$optionArray)) {
+        if ($newInit = is_null(self::$optionArray)) {
 
             // By default, Windows does not support colors on the console.
             // ANSICON by Jason Hood can be used to provide colors at the console.
@@ -79,6 +79,13 @@ class Config
         
         // now merge other options
         self::$optionArray = array_merge(self::$optionArray, (array)$a);
+
+        // Always set saveconfig to false for a new initialization, even after restoring
+        // a save configuration. This allows additional options to be added at the
+        // command line without them being automatically saved.
+        if ($newInit) {
+            self::$optionArrayDefault['saveconfig'] = false;
+        }
     }
 
     public static function getAllFiltered() {
