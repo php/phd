@@ -60,7 +60,8 @@ class Config
         if ($newInit = is_null(self::$optionArray)) {
 
             // By default, Windows does not support colors on the console.
-            // ANSICON by Jason Hood can be used to provide colors at the console.
+            // ANSICON by Jason Hood (http://adoxa.110mb.com/ansicon/index.html)
+            // can be used to provide colors at the console on Windows.
             // Color output can still be enabled via the command line parameters --color
             if('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
         	self::$optionArrayDefault['color_output'] = false;
@@ -76,7 +77,7 @@ class Config
                 self::$optionArray['package_dirs'][] = $dir;
             }
         }
-        
+
         // now merge other options
         self::$optionArray = array_merge(self::$optionArray, (array)$a);
 
@@ -84,7 +85,7 @@ class Config
         // a save configuration. This allows additional options to be added at the
         // command line without them being automatically saved.
         if ($newInit) {
-            self::$optionArrayDefault['saveconfig'] = false;
+            self::$optionArray['saveconfig'] = false;
         }
     }
 
@@ -155,7 +156,7 @@ class Config
 
     public static function setColor_output($color_output)
     {
-        // Disable colored output if the terminal doesn't support colours
+        // Disable colored output if the terminal doesn't support colors
         if ($color_output && function_exists('posix_isatty')) {
             if (!posix_isatty(Config::phd_info_output())) {
                 Config::setPhd_info_color(false);
