@@ -78,13 +78,6 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
             $this->haveNotes = true;
             v('Usernotes prepared.', VERBOSE_MESSAGES);
 
-            // Use classes rather than colors.
-            ini_set('highlight.comment', 'comment');
-            ini_set('highlight.default', 'default');
-            ini_set('highlight.keyword', 'keyword');
-            ini_set('highlight.string',  'string');
-            ini_set('highlight.html',    'html');
-
             break;
 
         default:
@@ -117,8 +110,12 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                     array(
                         '&nbsp;',
                         '<br />',
-                        '<font color="',        // for PHP 4
-                        '<span style="color: ', // from PHP 5.0.0RC1
+                        // Use classes rather than colors.
+                        '<span style="color: ' . ini_get('highlight.comment'),
+                        '<span style="color: ' . ini_get('highlight.default'),
+                        '<span style="color: ' . ini_get('highlight.keyword'),
+                        '<span style="color: ' . ini_get('highlight.string'),
+                        '<span style="color: ' . ini_get('highlight.html'),
                         '</font>',
                         "\n ",
                         '  ',
@@ -127,8 +124,11 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                     array(
                         ' ',
                         "<br />\n",
-                        '<span class="',
-                        '<span class="',
+                        '<span class="comment',
+                        '<span class="default',
+                        '<span class="keyword',
+                        '<span class="string',
+                        '<span class="html',
                         '</span>',
                         "\n&nbsp;",
                         '&nbsp; ',
