@@ -68,6 +68,7 @@
     Added support for package cli options (Moacir)
     Do not disable color configuration settings when loading from phd.config.php on Windows when saved setting is enabled (Richard Quadling)
     Using saveconfig once no longer saves the config on every call to render (Richard Quadling)
+    Restoring a saved config now correctly sets the error reporting level to the restored verbosity (Richard Quadling)
   </notes>
 
   <contents>

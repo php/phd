@@ -81,11 +81,14 @@ class Config
         // now merge other options
         self::$optionArray = array_merge(self::$optionArray, (array)$a);
 
-        // Always set saveconfig to false for a new initialization, even after restoring
-        // a save configuration. This allows additional options to be added at the
-        // command line without them being automatically saved.
         if ($newInit) {
+            // Always set saveconfig to false for a new initialization, even after restoring
+            // a save configuration. This allows additional options to be added at the
+            // command line without them being automatically saved.
             self::$optionArray['saveconfig'] = false;
+            
+            // Set the error reporting level to the restored level.
+            error_reporting($GLOBALS['olderrrep'] | self::$optionArray['verbose']);
         }
     }
 
