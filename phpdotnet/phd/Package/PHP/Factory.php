@@ -15,6 +15,7 @@ class Package_PHP_Factory extends Format_Factory {
         'chm'           => 'Package_PHP_CHM',
         'tocfeed'       => 'Package_PHP_TocFeed',
         'epub'          => 'Package_PHP_Epub',
+        'enhancedchm'   => 'Package_PHP_EnhancedCHM',
     );
     
     public function __construct() {

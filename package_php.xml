@@ -44,6 +44,7 @@
     Prepare CHM rendering to use the new CSS rules (Richard Quadling)
     Disply a message when loading an external stylesheet (Richard Quadling)
     Incorporate stylesheet names supplied at the command line into the CHM file (Richard Quadling)
+    New output format EnhancedCHM - the same as CHM but with the User Notes (Requires bzip2.exe) (Richard Quadling)
   </notes>
 
   <contents>
@@ -67,6 +68,7 @@
               <file name="Epub.php" role="php"/>
               <file name="README" role="doc"/>
               <file name="HOWTO.GENERATE_CHM" role="doc"/>
+              <file name="EnhancedCHM.php" role="php"/>
             </dir>
           </dir>
         </dir>

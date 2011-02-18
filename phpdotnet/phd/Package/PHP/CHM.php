@@ -199,7 +199,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 
     public function __construct() {
         parent::__construct();
-        $this->registerFormatName("PHP-CHM");        
+        $this->registerFormatName("PHP-CHM");
     }
 
     public function __destruct() {
@@ -247,7 +247,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
                 $stylesheet = $this->fetchStylesheet() . PHP_EOL;
             }
 
-            file_put_contents($this->outputdir . "style.css", $stylesheet . 'body { padding : 3px;}');
+            file_put_contents($this->outputdir . "style.css", $stylesheet . 'body {padding : 3px;}' . PHP_EOL . '#usernotes {margin-left : inherit;}' . PHP_EOL);
 
             self::headerChm();
             break;
@@ -402,12 +402,12 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         $header = parent::header($id);
 
         $patterns = array(
-            '/(.*)(\r|\n|\r\n|\n\r)(.*)<\/head>/', // Add CSS link to <head>
+            '/(.*)(\r|\n|\r\n|\n\r)(.*)<\/head>/', // Add CSS link and <meta http-equiv="X-UA-Compatible" content="IE=edge" /> to <head>.
             '/(<body)/',                           // Add 'docs' class to body - the new CSS styling requires a parent of class 'docs'.
         );
 
         $replacements = array(
-            '$1  <link media="all" rel="stylesheet" type="text/css" href="style.css"/>$2$3</head>',
+            '$1  <meta http-equiv="X-UA-Compatible" content="IE=edge" />$2  <link media="all" rel="stylesheet" type="text/css" href="style.css"/>$2$3</head>',
             '$1 class="docs"',
         );
 
