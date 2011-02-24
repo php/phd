@@ -42,9 +42,9 @@
   <notes>
     New output format Epub (Moacir)
     Prepare CHM rendering to use the new CSS rules (Richard Quadling)
-    Disply a message when loading an external stylesheet (Richard Quadling)
+    Display a message when loading an external stylesheet (Richard Quadling)
     Incorporate stylesheet names supplied at the command line into the CHM file (Richard Quadling)
-    New output format EnhancedCHM - the same as CHM but with the User Notes (Requires bzip2.exe) (Richard Quadling)
+    New output format EnhancedCHM - the same as CHM but with the User Notes (Requires ext/bz2) (Richard Quadling)
   </notes>
 
   <contents>
@@ -105,6 +105,9 @@
       </extension>
       <extension>
         <name>iconv</name>
+      </extension>
+      <extension>
+        <name>bz2</name>
       </extension>
     </optional>
   </dependencies>
