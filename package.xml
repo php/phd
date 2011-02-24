@@ -39,7 +39,7 @@
     <name>Paul M Jones</name>
     <user>pmjones</user>
     <email>pmjones@php.net</email>
-    <active>yes</active>
+    <active>no</active>
   </developer>
   <developer>
     <name>Gwynne Raskind</name>
