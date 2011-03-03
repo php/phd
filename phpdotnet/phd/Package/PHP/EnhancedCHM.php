@@ -21,7 +21,13 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
             parent::update($event, $val);
 
             // Use %TEMP%/usernotes as base directory for Usernotes.
-            $this->userNotesBaseDir = getenv('TEMP') . DIRECTORY_SEPARATOR . 'usernotes' . DIRECTORY_SEPARATOR;
+            $temp = sys_get_temp_dir();
+            if (!$temp || !is_dir($temp)) {
+                v('Unable to locate the systems temporary system directory for EnhancedCHM.', E_USER_ERROR);
+                break;
+            }
+
+            $this->userNotesBaseDir = $temp . DIRECTORY_SEPARATOR . 'usernotes' . DIRECTORY_SEPARATOR;
 
             // Make the usernotes directory.
             if(!file_exists($this->userNotesBaseDir) || is_file($this->userNotesBaseDir)) {
