@@ -92,6 +92,7 @@ zip -Xr9Dq {$epub_file} *
 BUILD;
 
         file_put_contents($dir . 'build.sh', $build);
+        chmod($dir . 'build.sh', 0755);
     }
 
     protected function createMimeTypeFile($dir) {
