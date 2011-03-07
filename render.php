@@ -30,7 +30,7 @@ if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
     trigger_error("No Docbook file given. Specify it on the command line with --docbook.", E_USER_ERROR);
 }
 if (!file_exists(Config::output_dir())) {
-    v("Creating output directory..", E_USER_NOTICE);
+    v("Creating output directory..", VERBOSE_MESSAGES);
     if (!mkdir(Config::output_dir())) {
         v("Can't create output directory", E_USER_ERROR);
     }
