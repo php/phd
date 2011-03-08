@@ -56,19 +56,16 @@
 
   <date>2011-03-07</date>
   <version>
-    <release>1.1.0</release>
+    <release>1.1.1</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    Added support for package cli options (Moacir)
-    Do not disable color configuration settings when loading from phd.config.php on Windows when saved setting is enabled (Richard Quadling)
-    Using saveconfig once no longer saves the config on every call to render (Richard Quadling)
-    Restoring a saved config now correctly sets the error reporting level to the restored verbosity (Richard Quadling)
+    - notes
   </notes>
 
   <contents>
@@ -777,6 +774,25 @@
         - Changed the VERBOSE_DEFAULT error level to exclude VERBOSE_TOC_WRITING messages (Philip)
         - Fixed encoding problems with the function iconv() in the CHM format (Moacir)
         - Fixed the --lang option that was creating an infinite recursion (Moacir)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>1.1.0</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2011-03-07</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added support for package cli options (Moacir)
+        - Do not disable color configuration settings when loading from phd.config.php on Windows when saved setting is enabled (Richard Quadling)
+        - Using saveconfig once no longer saves the config on every call to render (Richard Quadling)
+        - Restoring a saved config now correctly sets the error reporting level to the restored verbosity (Richard Quadling)
       </notes>
     </release>
 

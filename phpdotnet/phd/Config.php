@@ -8,7 +8,7 @@ if (!defined("__INSTALLDIR__")) {
 
 class Config
 {
-    const VERSION = '1.1.0';
+    const VERSION = 'phd-from-svn';
 
     private static $optionArrayDefault = array(
         'output_format'     => array(),

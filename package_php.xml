@@ -31,20 +31,16 @@
 
   <date>2011-03-07</date>
   <version>
-    <release>1.1.0</release>
+    <release>1.1.1</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    New output format Epub (Moacir)
-    Prepare CHM rendering to use the new CSS rules (Richard Quadling)
-    Display a message when loading an external stylesheet (Richard Quadling)
-    Incorporate stylesheet names supplied at the command line into the CHM file (Richard Quadling)
-    New output format EnhancedCHM - the same as CHM but with the User Notes (Requires ext/bz2) (Richard Quadling)
+    - notes
   </notes>
 
   <contents>
@@ -180,7 +176,25 @@
         - Fixed bug#51750 Add ()'s when rendering methodname elements (Hannes)
       </notes>
     </release>
-
+    <release>
+      <version>
+        <release>1.1.0</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2011-03-07</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - New output format Epub (Moacir)
+        - Prepare CHM rendering to use the new CSS rules (Richard Quadling)
+        - Display a message when loading an external stylesheet (Richard Quadling)
+        - Incorporate stylesheet names supplied at the command line into the CHM file (Richard Quadling)
+        - New output format EnhancedCHM - the same as CHM but with the User Notes (Requires ext/bz2) (Richard Quadling)
+      </notes>
+    </release>
   </changelog>
 
 </package>
