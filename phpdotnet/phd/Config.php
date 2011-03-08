@@ -182,6 +182,10 @@ class Config
         trigger_error('Use setColor_output()', E_USER_DEPRECATED);
     }
 
+    public static function copyright() {
+        return sprintf('Copyright(c) 2007-%s The PHP Documentation Group', date('Y'));
+    }
+
 }
 
 /*

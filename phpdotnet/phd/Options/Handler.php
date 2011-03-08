@@ -316,7 +316,7 @@ class Options_Handler implements Options_Interface
         $output = Config::phd_info_output();
         fprintf($output, "%s\n", term_color('PhD Version: ' . Config::VERSION, $color));
         fprintf($output, "%s\n", term_color('PHP Version: ' . phpversion(), $color));
-        fprintf($output, "%s\n", term_color('Copyright(c) 2007-2010 The PHP Documentation Group', $color));
+        fprintf($output, "%s\n", term_color(Config::copyright(), $color));
         exit(0);
     }
 
@@ -327,7 +327,7 @@ class Options_Handler implements Options_Interface
     public function option_help($k, $v)
     {
         echo "PhD version: " .Config::VERSION;
-        echo "\nCopyright (c) 2007-2010 The PHP Documentation Group\n
+        echo "\n" . Config::copyright() . "\n
   -v
   --verbose <int>            Adjusts the verbosity level
   -f <formatname>
