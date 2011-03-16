@@ -15,7 +15,7 @@ class Options_Handler implements Options_Interface
             'output:'      => 'o:',        // The output directory
             'partial:'     => 'p:',        // The ID to render (optionally ignoring its children)
             'skip:'        => 's:',        // The ID to skip (optionally skipping its children too)
-            'verbose:'     => 'v::',        // Adjust the verbosity level
+            'verbose:'     => 'v::',       // Adjust the verbosity level
             'list'         => 'l',         // List supported packages/formats
             'lang::'       => 'L:',        // Language hint (used by the CHM)
             'color:'       => 'c:',        // Use color output if possible
@@ -27,6 +27,7 @@ class Options_Handler implements Options_Interface
             'xinclude'     => 'x',         // Automatically process xinclude directives
             'ext:'         => 'e:',        // The file-format extension to use, including the dot
             'saveconfig::' => 'S::',       // Save the generated config ?
+            'quit'         => 'Q',         // Do not run the render. Use with -S to just save the config.
         );
     }
 
@@ -166,6 +167,15 @@ class Options_Handler implements Options_Interface
             }
         }
         Config::set_package($v);
+    }
+
+    public function option_q($k, $v)
+    {
+        $this->option_quit($k, $v);
+    }
+    public function option_quit($k, $v)
+    {
+        Config::set_quit(true);
     }
 
     public function option_s($k, $v)
@@ -341,8 +351,8 @@ class Options_Handler implements Options_Interface
   --forceindex               Force re-indexing under all circumstances
                              (default: false)
   -t
-  --notoc                    Do not rewrite TOC before rendering but load from cache
-                             (default: false)
+  --notoc                    Do not rewrite TOC before rendering but load from
+                             cache (default: false)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -x
@@ -373,10 +383,14 @@ class Options_Handler implements Options_Interface
   -h
   --help                     This help
   -e <extension>
-  --ext <extension>          The alternative filename extension to use, including
-                             the dot. Use 'false' for no extension.
+  --ext <extension>          The alternative filename extension to use,
+                             including the dot. Use 'false' for no extension.
   -S <bool>
   --saveconfig <bool>        Save the generated config (default: false).
+
+  -Q
+  --quit                     Don't run the build. Use with --saveconfig to
+                             just save the config.
 
 Most options can be passed multiple times for greater effect.
 ";

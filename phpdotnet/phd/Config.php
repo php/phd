@@ -50,6 +50,7 @@ class Config
         'ext'               => null,
         'package_dirs'      => array(__INSTALLDIR__),
         'saveconfig'        => false,
+        'quit'              => false,
     );
 
     private static $optionArray = null;
@@ -86,6 +87,9 @@ class Config
             // a save configuration. This allows additional options to be added at the
             // command line without them being automatically saved.
             self::$optionArray['saveconfig'] = false;
+            
+            // As well as the quit option.
+            self::$optionArray['quit'] = false;
             
             // Set the error reporting level to the restored level.
             error_reporting($GLOBALS['olderrrep'] | self::$optionArray['verbose']);

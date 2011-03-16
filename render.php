@@ -54,6 +54,10 @@ if (Config::saveconfig()) {
     file_put_contents("phd.config.php", "<?php\nreturn " . var_export(Config::getAllFiltered(), 1) . ";");
 }
 
+if (Config::quit()) {
+    exit(0);
+}
+
 $render = new Render();
 $reader = new Reader();
 
