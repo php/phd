@@ -1,6 +1,6 @@
 <?php
 namespace phpdotnet\phd;
-/*  $Id: EnhancedCHM.php 307979 2011-02-03 17:21:14Z rquadling $ */
+/*  $Id$ */
 
 class Package_PHP_EnhancedCHM extends Package_PHP_CHM
 {
@@ -31,7 +31,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
 
             // Make the usernotes directory.
             if(!file_exists($this->userNotesBaseDir) || is_file($this->userNotesBaseDir)) {
-                mkdir($this->userNotesBaseDir) or v("Can't create the usernotes directory : %s", $this->userNotesBaseDir, E_USER_ERROR);
+                mkdir($this->userNotesBaseDir, 0777, true) or v("Can't create the usernotes directory : %s", $this->userNotesBaseDir, E_USER_ERROR);
             }
 
             // Get the local last-updated value.
@@ -85,7 +85,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                     $sectionDir = $this->userNotesBaseDir . $sectionHash[0];
 
                     if (!file_exists($sectionDir)) {
-                        mkdir($sectionDir);
+                        mkdir($sectionDir, 0777, true);
                     }
 
                     file_put_contents($sectionDir . DIRECTORY_SEPARATOR . $sectionHash, implode('|', $userNote) . PHP_EOL, FILE_APPEND);

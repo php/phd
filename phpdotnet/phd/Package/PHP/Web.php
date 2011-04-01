@@ -80,7 +80,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                     v("Output directory is a file?", E_USER_ERROR);
                 }
             } else {
-                if (!mkdir($this->getOutputDir())) {
+                if (!mkdir($this->getOutputDir(), 0777, true)) {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
@@ -89,7 +89,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                     removeDir($this->getOutputDir() . 'toc');
                 }
                 if (!file_exists($this->getOutputDir() . "toc") || is_file($this->getOutputDir() . "toc")) {
-                    mkdir($this->getOutputDir() . "toc") or die("Can't create the toc directory");
+                    mkdir($this->getOutputDir() . "toc", 0777, true) or die("Can't create the toc directory");
                 }
             }
             if (Config::css()) {

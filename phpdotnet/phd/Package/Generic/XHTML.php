@@ -565,7 +565,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 v("The styles/ directory is a file?", E_USER_ERROR);
             }
         } else {
-            if (!mkdir($stylesDir)) {
+            if (!mkdir($stylesDir, 0777, true)) {
                 v("Can't create the styles/ directory.", E_USER_ERROR);
             }
         }

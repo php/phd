@@ -226,12 +226,12 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             $this->loadVersionAcronymInfo();
             $this->chmdir = Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
             if(!file_exists($this->chmdir) || is_file($this->chmdir)) {
-                mkdir($this->chmdir) or die("Can't create the CHM project directory");
+                mkdir($this->chmdir, 0777, true) or die("Can't create the CHM project directory");
             }
             $this->outputdir = Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
             $this->postConstruct();
             if(!file_exists($this->outputdir) || is_file($this->outputdir)) {
-                mkdir($this->outputdir) or die("Can't create the cache directory");
+                mkdir($this->outputdir, 0777, true) or die("Can't create the cache directory");
             }
             $lang = Config::language();
             $this->hhpStream = fopen($this->chmdir . "php_manual_{$lang}.hhp", "w");

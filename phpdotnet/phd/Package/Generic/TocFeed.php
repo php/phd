@@ -226,7 +226,7 @@ abstract class Package_Generic_TocFeed extends Format
                     v('Output directory is a file?', E_USER_ERROR);
                 }
             } else {
-                if (!mkdir($dir)) {
+                if (!mkdir($dir, 0777, true)) {
                     v('Cannot create output directory', E_USER_ERROR);
                 }
             }

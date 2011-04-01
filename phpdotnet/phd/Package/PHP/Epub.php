@@ -37,13 +37,13 @@ class Package_PHP_Epub extends Package_PHP_ChunkedXHTML
                 . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
 
             if(!file_exists($this->parentdir) || is_file($this->parentdir)) {
-                mkdir($this->parentdir) or die("Can't create the output directory");
+                mkdir($this->parentdir, 0777, true) or die("Can't create the output directory");
             }
 
             $this->setOutputDir($this->parentdir . 'OPS' . DIRECTORY_SEPARATOR);
 
             if(!file_exists($this->getOutputDir()) || is_file($this->getOutputDir())) {
-                mkdir($this->outputdir) or die("Can't create the cache directory");
+                mkdir($this->outputdir, 0777, true) or die("Can't create the cache directory");
             }
 
             $this->info = $this->initInfo();
@@ -108,7 +108,7 @@ BUILD;
         $root_file = 'OPS/' . $this->info['opf_file'];
         $meta_dir = $dir . 'META-INF' . DIRECTORY_SEPARATOR;
         if(!file_exists($meta_dir) || is_file($meta_dir)) {
-            mkdir($meta_dir) or die("Can't create the META-INF directory");
+            mkdir($meta_dir, 0777, true) or die("Can't create the META-INF directory");
         }
 
         $container = <<<CONTAINER

@@ -121,7 +121,7 @@ class Package_PHP_PDF extends Package_Generic_PDF {
         case Render::INIT:
             if (!class_exists("HaruDoc")) die ("PDF output needs libharu & haru/pecl extensions... Please install them and start PhD again.\n");
             $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR);
-            if(!file_exists($this->getOutputDir()) || is_file($this->getOutputDir())) mkdir($this->getOutputDir()) or die("Can't create the cache directory.\n");
+            if(!file_exists($this->getOutputDir()) || is_file($this->getOutputDir())) mkdir($this->getOutputDir(), 0777, true) or die("Can't create the cache directory.\n");
             break;
         case Render::VERBOSE:
         	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);

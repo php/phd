@@ -31,8 +31,8 @@ if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
 }
 if (!file_exists(Config::output_dir())) {
     v("Creating output directory..", VERBOSE_MESSAGES);
-    if (!mkdir(Config::output_dir())) {
-        v("Can't create output directory", E_USER_ERROR);
+    if (!mkdir(Config::output_dir(), 0777, True)) {
+        v("Can't create output directory : %s", Config::output_dir(), E_USER_ERROR);
     }
 } elseif (!is_dir(Config::output_dir())) {
     v("Output directory is not a file?", E_USER_ERROR);

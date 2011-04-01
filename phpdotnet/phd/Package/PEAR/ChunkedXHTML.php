@@ -75,7 +75,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
                     v("Output directory is a file?", E_USER_ERROR);
                 }
             } else {
-                if (!mkdir($this->getOutputDir())) {
+                if (!mkdir($this->getOutputDir(), 0777, true)) {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }

@@ -302,7 +302,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
                     v("Output directory is a file?", E_USER_ERROR);
                 }
             } else {
-                if (!mkdir($this->getOutputDir())) {
+                if (!mkdir($this->getOutputDir(), 0777, true)) {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
