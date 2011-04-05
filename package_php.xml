@@ -40,7 +40,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - notes
+    - Fixed Bug #54436 - gzip issues with -P PHP -f manpage (Moacir)
   </notes>
 
   <contents>
