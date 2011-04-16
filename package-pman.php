@@ -42,12 +42,14 @@ $packagexml->addExtensionDep("required", "zlib");
 
 $packagexml->addMaintainer("lead", "phpdoc", "The PHP Documentation team", "phpdoc@lists.php.net");
 
+rename("output/php-functions", "output/man3");
+copy(__DIR__ . "/pman.sh", "output/pman.sh");
+
 $packagexml->addReplacement("pman.sh", "pear-config", "@doc_dir@", "doc_dir");
 $packagexml->addInstallAs("pman.sh", "pman");
 
 
-rename("output/php-functions", "output/man3");
-copy(__DIR__ . "/pman.sh", "output/pman.sh");
+
 $packagexml->generateContents();
 $packagexml->writePackageFile();
 rename("output/pman.sh", "pman.sh");
