@@ -127,6 +127,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'refsection'            => 'format_refsect',
         'refsynopsisdiv'        => 'format_refsynopsisdiv',
         'replaceable'           => '\\fI',
+        'set'                   => 'format_bookname',
         'screen'                => 'format_verbatim',
         'section'               => 'format_suppressed_tags',
         'sect1'                 => 'format_suppressed_tags',
@@ -139,7 +140,6 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'seglistitem'           => 'format_seglistitem',
         'segmentedlist'         => 'format_segmentedlist',
         'segtitle'              => 'format_suppressed_tags',
-        'set'                   => 'format_suppressed_tags',
         'simpara'               => array(
             /* DEFAULT */          '.PP',
             'listitem'          => '',
@@ -216,10 +216,6 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
             /* DEFAULT */          false,
             'refsect'           => 'format_refsect_text',
             'refsect1'          => 'format_refsect_text',
-            'set'               => array(
-            /* DEFAULT */           'format_bookname',
-                'set'               => false,
-            ),
         ),
         'tag'                   => 'format_tag_text',
         'type'                  => array(
