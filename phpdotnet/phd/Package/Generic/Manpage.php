@@ -760,7 +760,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     // Convert the function name to a Unix valid filename
     public function toValidName($functionName) {
-        return str_replace(array("::", "->", "()", " ", '$'), array(".", ".", "", "-", ""), $functionName);
+        return str_replace(array("::", "->", "()", " ", '$', '/', '\\'), array(".", ".", "", "-", "", "", ""), $functionName);
     }
 
     public function format_mediaobject($open, $name, $attrs, $props) {
