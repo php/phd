@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+<package packagerversion="1.9.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
     http://pear.php.net/dtd/tasks-1.0.xsd
     http://pear.php.net/dtd/package-2.0
     http://pear.php.net/dtd/package-2.0.xsd">
@@ -13,10 +13,10 @@
   <email>phpdoc@lists.php.net</email>
   <active>yes</active>
  </lead>
- <date>2010-04-25</date>
- <time>19:59:09</time>
+ <date>2011-04-16</date>
+ <time>14:48:43</time>
  <version>
-  <release>2010.04.25</release>
+  <release>2011.04.16</release>
   <api>1.0.0</api>
  </version>
  <stability>
@@ -34,9 +34,7 @@ New release \o/
     <!-- [...] -->
     <file baseinstalldir="php.net/" name="__halt_compiler.3.gz" role="doc" />
    </dir> <!-- //man3 -->
-      <file baseinstalldir="" name="pman.sh" role="script">
-        <tasks:replace from="@doc_dir@" to="doc_dir" type="pear-config" />
-      </file>
+   <file baseinstalldir="" name="pman.sh" role="script" />
   </dir> <!-- / -->
  </contents>
  <dependencies>
@@ -60,14 +58,14 @@ New release \o/
  <changelog>
   <release>
    <version>
-    <release>2010.04.25</release>
+    <release>2011.04.16</release>
     <api>1.0.0</api>
    </version>
    <stability>
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2010-04-25</date>
+   <date>2011-04-16</date>
    <license uri="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0</license>
    <notes>
 New release \o/
