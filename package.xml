@@ -74,7 +74,7 @@
     - Added --quit option to quit after processing command line params. Useful when used with --saveconfig to just save the config (Richard Quadling)
     - Output directory can now be nested (for example /rendering/PHP/en) (Richard Quadling)
     - New translations:
-      - Spanis (Pablo Bangueses)
+      - Spanish (Pablo Bangueses)
       - Serbian (Nikola Smolenski)
   </notes>
 
