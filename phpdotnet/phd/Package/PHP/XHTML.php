@@ -462,12 +462,12 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_container_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"];
+        if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {            
+            $this->cchunk = $this->dchunk;
+        }
         
         if ($open) {
             $this->notify(Render::CHUNK, Render::OPEN);
-            if ($props["isChunk"]) {
-                $this->cchunk = $this->dchunk;
-            }
             if ($name != "reference") {
                 $chunks = Format::getChildren($id);
                 if (!count($chunks)) {

@@ -76,6 +76,7 @@
     - New translations:
       - Spanish (Pablo Bangueses)
       - Serbian (Nikola Smolenski)
+    - Fixed bug#52664 - "Missing" example#1. (Hannes)
   </notes>
 
   <contents>

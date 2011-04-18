@@ -829,7 +829,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             $str .= $note["str"];
             $str .= "</div>\n";
         }
-        $this->cchunk["footnote"] = $this->dchunk["footnote"];
+        $this->cchunk = $this->dchunk;
 
         return $str. "</div>";
     }
