@@ -108,7 +108,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
          'varname'               => array(
             /* DEFAULT */          'format_varname_text',
-            'fieldsynopsis'     => false,
+            'fieldsynopsis'     => array(
+                /* DEFAULT */      false,
+                'classsynopsis' => 'format_classsynopsis_fieldsynopsis_varname_text',
+            ),
         ),        
     );
 
@@ -386,6 +389,17 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return '<acronym>'.$value.'</acronym>';
     }
 
+    public function format_classsynopsis_fieldsynopsis_varname_text($value, $tag) {
+        if ($this->cchunk["classsynopsis"]["classname"]) {
+          if (strpos($value, "::") === false && strpos($value, "->") === false) {
+                $value = $this->cchunk["classsynopsis"]["classname"] . "->" . $value;
+                $this->cchunk["classsynopsis"]["classname"] = false;
+            }
+        }
+
+        $display_value = parent::format_classsynopsis_methodsynopsis_methodname_text($value, $tag);
+        return $this->format_varname_text($display_value, $tag);
+    }
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
         if ($this->cchunk["classsynopsis"]["classname"]) {
           if (strpos($value, "::") === false && strpos($value, "->") === false) {
