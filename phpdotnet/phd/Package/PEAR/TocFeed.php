@@ -10,7 +10,7 @@ namespace phpdotnet\phd;
  * @package  PhD_PEAR
  * @author   Christian Weiske <cweiske@php.net>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
- * @link     http://doc.php.net/phd/
+ * @link     https://doc.php.net/phd/
  */
 class Package_PEAR_TocFeed extends Package_Generic_TocFeed
 {

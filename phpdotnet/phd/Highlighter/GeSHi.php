@@ -9,7 +9,7 @@
  * @author   Christian Weiske <cweiske@php.net>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
  * @version  SVN: $Id$
- * @link     http://doc.php.net/phd/
+ * @link     https://doc.php.net/phd/
  */
 namespace phpdotnet\phd;
 
@@ -40,7 +40,7 @@ require 'MediaWiki/geshi/geshi/geshi.php';
  * @package  PhD_GeSHi
  * @author   Christian Weiske <cweiske@php.net>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
- * @link     http://doc.php.net/phd/
+ * @link     https://doc.php.net/phd/
  */
 class Highlighter_GeSHi extends Highlighter
 {

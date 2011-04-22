@@ -17,7 +17,7 @@ Rendering the documentations for the first time:
 This will create
 	"php" directory containing the "phpweb" files
 		NOTE: You CANNOT view these files without a phpweb mirror running.
-			  See http://doc.php.net/wiki/phd/view#viewing_the_phpfolder
+			  See https://doc.php.net/wiki/phd/view#viewing_the_phpfolder
 	"html" directory containing the "downloadable chunked html" files
 		NOTE: Do NOT move these files onto your webserver. Just double click
 			  them and your browser will open and show you the content

@@ -10,7 +10,7 @@ namespace phpdotnet\phd;
  * @package  PhD_Generic
  * @author   Christian Weiske <cweiske@php.net>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
- * @link     http://doc.php.net/phd/
+ * @link     https://doc.php.net/phd/
  */
 abstract class Package_Generic_TocFeed extends Format
 {
@@ -405,7 +405,7 @@ ATM;
  <id>{$atomid}</id>
  <link rel="self" type="application/atom+xml" href="{$selflink}" />
  <link rel="alternate" type="text/html" href="{$htmllink}" />
- <generator uri="http://doc.php.net/phd/">PhD</generator>
+ <generator uri="https://doc.php.net/phd/">PhD</generator>
  <author>
   <name>{$author}</name>
  </author>

@@ -9,7 +9,7 @@
  * @author   Moacir de Oliveira <moacir@php.net>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
  * @version  SVN: $Id$
- * @link     http://doc.php.net/phd/
+ * @link     https://doc.php.net/phd/
  */
 namespace phpdotnet\phd;
 
@@ -20,7 +20,7 @@ namespace phpdotnet\phd;
  * @package  PhD_IDE
  * @author   Moacir de Oliveira <moacir@php.net>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
- * @link     http://doc.php.net/phd/
+ * @link     https://doc.php.net/phd/
  */
 class Package_IDE_API_Function 
 {

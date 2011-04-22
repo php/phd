@@ -11,7 +11,7 @@ namespace phpdotnet\phd;
  * @author   Moacir de Oliveira Miranda Júnior <moacir@php.net>
  * @author   Rudy Nappée <loudi@php.net>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
- * @link     http://doc.php.net/phd/
+ * @link     https://doc.php.net/phd/
  */
 class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML
 {
