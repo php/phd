@@ -74,6 +74,9 @@ class Index extends Format
     private $chunks    = array();
     private $isChunk   = array();
     private $previousId = "";
+    private $commit     = array();
+    private $POST_REPLACEMENT_INDEXES = array();
+    private $POST_REPLACEMENT_VALUES  = array();
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
     }
@@ -227,15 +230,12 @@ SQL;
         );
         // Append "next" to the previously inserted row
         if ($isChunk) {
-            $this->commitAfter .= sprintf(
-                "UPDATE ids SET next = '%s' WHERE docbook_id = '%s';\n",
-                $this->db->escapeString($id),
-                $this->db->escapeString($this->previousId)
-            );
+            $this->POST_REPLACEMENT_VALUES[$this->previousId] = $this->db->escapeString($id);
             $this->previousId = $id;
         }
     }
     public function appendID() {
+        static $idx = -1;
         $lastChunkId = array_pop($this->ids);
         $parentid = end($this->ids);
         $this->currentid = $parentid;
@@ -249,8 +249,8 @@ SQL;
             $sdesc = $lastChunk["sdesc"];
         }
 
-        $this->commit .= sprintf(
-            "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '', %d);\n",
+        $this->commit[++$idx] = sprintf(
+            "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d);\n",
             $this->db->escapeString($lastChunkId),
             $this->db->escapeString($lastChunk["filename"]),
             $this->db->escapeString($this->currentchunk),
@@ -258,20 +258,26 @@ SQL;
             $this->db->escapeString($lastChunk["ldesc"]),
             $this->db->escapeString($lastChunk["element"]),
             $this->db->escapeString($lastChunk["previous"]),
+            $this->db->escapeString($lastChunk["chunk"] ? "POST-REPLACEMENT" : ""),
             $this->db->escapeString($lastChunk["chunk"])
         );
+        if ($lastChunk["chunk"]) {
+            $this->POST_REPLACEMENT_INDEXES[] = array("docbook_id" => $lastChunkId, "idx" => $idx);
+        }
         if ($array === true) {
             foreach($lastChunk["sdesc"] as $sdesc) {
-                $this->commit .= sprintf(
-                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '', 0);\n",
+                $this->commit[++$idx] = sprintf(
+                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 0);\n",
                     $this->db->escapeString($lastChunkId),
                     $this->db->escapeString($lastChunk["filename"]),
                     $this->db->escapeString($this->currentchunk),
                     $this->db->escapeString($sdesc),
                     $this->db->escapeString($lastChunk["ldesc"]),
                     $this->db->escapeString($lastChunk["element"]),
-                    $this->db->escapeString($lastChunk["previous"])
+                    $this->db->escapeString($lastChunk["previous"]),
+                    $this->db->escapeString($lastChunk["chunk"] ? "POST-REPLACEMENT" : "")
                 );
+                $this->POST_REPLACEMENT_INDEXES[] = array("docbook_id" => $lastChunkId, "idx" => $idx);
             }
         }
 
@@ -376,9 +382,22 @@ SQL;
     }
     public function commit() {
         if (isset($this->commit) && $this->commit) {
-            $this->db->exec('BEGIN TRANSACTION; '.$this->commit.' COMMIT');
-            $this->db->exec('BEGIN TRANSACTION; '.$this->commitAfter.' COMMIT');
-            $this->commit = $this->commitAfter = null;
+            $search = $this->db->escapeString("POST-REPLACEMENT");
+            $none = $this->db->escapeString("");
+
+            foreach($this->POST_REPLACEMENT_INDEXES as $a) {
+                if (isset($this->POST_REPLACEMENT_VALUES[$a["docbook_id"]])) {
+                    $replacement = $this->POST_REPLACEMENT_VALUES[$a["docbook_id"]];
+                    $this->commit[$a["idx"]] = str_replace($search, $replacement, $this->commit[$a["idx"]]);
+                } else {
+                    // If there are still post replacement, then they don't have 
+                    // any 'next' page
+                    $this->commit[$a["idx"]] = str_replace($search, $none, $this->commit[$a["idx"]]);
+                }
+            }
+
+            $this->db->exec('BEGIN TRANSACTION; '.join("", $this->commit).' COMMIT');
+            $this->commit = array();
         }
     }
 
