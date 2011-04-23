@@ -49,9 +49,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         $filename = $this->getOutputDir() . $id . $this->getExt();
 
         rewind($fp);
-        file_put_contents($filename, $this->header($id));
-        file_put_contents($filename, $fp, FILE_APPEND);
-        file_put_contents($filename, $this->footer($id), FILE_APPEND);
+        file_put_contents($filename, array($this->header($id), $fp, $this->footer($id)));
     }
 
     public function update($event, $val = null) {
