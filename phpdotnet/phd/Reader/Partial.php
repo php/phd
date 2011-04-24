@@ -6,6 +6,7 @@ class Reader_Partial extends Reader
 {
     protected $partial = array();
     protected $skip    = array();
+    protected $parents = array();
 
     public function __construct() {
         parent::__construct();
@@ -28,6 +29,22 @@ class Reader_Partial extends Reader
         } else {
             throw new \Exception("Didn't get any IDs to seek");
         }
+        $sqlite = new \SQLite3(Config::output_dir() . "index.sqlite");
+
+        // Fetch all ancestors of the ids we should render
+        foreach($render_ids as $p => $v) {
+            do {
+                $id = $sqlite->escapeString($p);
+                $row = $sqlite->query("SELECT parent_id FROM ids WHERE docbook_id = '$id'")->fetchArray(SQLITE3_ASSOC);
+                if ($row["parent_id"]) {
+                    $parents[] = $p = $row["parent_id"];
+                    continue;
+                }
+                break;
+            } while(1);
+        }
+
+        $this->parents = $parents;
     }
 
     public function read() {
@@ -92,6 +109,13 @@ class Reader_Partial extends Reader
             } elseif (empty($this->partial)) {
                 return false;
             } else {
+                if ($id) {
+                    // If this id isn't one of our ancestors we can jump 
+                    // completely over it
+                    if (!in_array($id, $this->parents)) {
+                        parent::next();
+                    }
+                }
                 $ignore = true;
             }
         }
