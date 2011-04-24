@@ -58,8 +58,22 @@ if (Config::quit()) {
     exit(0);
 }
 
+function make_reader() {
+    //Partial Rendering
+    $idlist = Config::render_ids() + Config::skip_ids();
+    if (!empty($idlist)) {
+        v("Running partial build", VERBOSE_RENDER_STYLE);
+        $reader = new Reader_Partial();
+    } else {
+        v("Running full build", VERBOSE_RENDER_STYLE);
+        $reader = new Reader();
+    }
+    return $reader;
+}
+
 $render = new Render();
-$reader = new Reader();
+$reader = make_reader();
+
 
 // Set reader LIBXML options
 $readerOpts = 0;
@@ -83,15 +97,6 @@ if (Index::requireIndexing()) {
     v("Skipping indexing", VERBOSE_INDEXING);
 }
 
-//Partial Rendering
-$idlist = Config::render_ids() + Config::skip_ids();
-if (!empty($idlist)) {
-    v("Running partial build", VERBOSE_RENDER_STYLE);
-    $reader = new Reader_Partial();
-} else {
-    v("Running full build", VERBOSE_RENDER_STYLE);
-}
-
 foreach((array)Config::package() as $package) {
     $factory = Format_Factory::createFactory($package);
 
@@ -107,6 +112,7 @@ foreach((array)Config::package() as $package) {
 }
 
 // Render formats
+$reader = make_reader();
 $reader->open(Config::xml_file(), NULL, $readerOpts);
 foreach($render as $format) {
     $format->notify(Render::VERBOSE, true);
