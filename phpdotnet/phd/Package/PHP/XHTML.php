@@ -172,9 +172,14 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($info) {
             return $info;
         }
+        if (!is_file($filename)) {
+            v("Can't find Version information file (%s), skipping!", $filename, E_USER_WARNING);
+            return array();
+        }
+
         $r = new \XMLReader;
         if (!$r->open($filename)) {
-            throw new \Exception("Could not open file for accessing version information: $filename");
+            v("Can't open the version info file (%s)", $filename, E_USER_ERROR);
         }
         $versions = array();
         while($r->read()) {
@@ -201,10 +206,16 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($info) {
             return $info;
         }
+        if (!is_file($filename)) {
+            v("Can't find acronym file (%s), skipping", $filename, E_USER_WARNING);
+            return array();
+        }
+
         $r = new \XMLReader;
         if (!$r->open($filename)) {
-            throw new \Exception("Could not open file for accessing acronym information:  $filename");
+            v("Could not open file for accessing acronym information (%s)", $filename, E_USER_ERROR);
         }
+
         $acronyms = array();
         while ($r->read()) {
             if ($r->nodeType != \XMLReader::ELEMENT) {
@@ -553,6 +564,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             if (isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $id = $attrs[Reader::XMLNS_XML]["id"];
             }
+            else {
+                $id = uniqid();
+                v("Uhm. Can't find an ID for a chunk? - Generating a random one (%s)", $id, E_USER_WARNING);
+            }
+
             $this->CURRENT_CHUNK = $this->CURRENT_ID = $id;
             if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {            
                 $this->cchunk = $this->dchunk;
