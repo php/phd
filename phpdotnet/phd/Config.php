@@ -51,6 +51,8 @@ class Config
         'package_dirs'      => array(__INSTALLDIR__),
         'saveconfig'        => false,
         'quit'              => false,
+        'indexcache'        => '',
+        'memoryindex'       => '',
     );
 
     private static $optionArray = null;

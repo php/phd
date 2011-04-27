@@ -149,13 +149,15 @@ class Index extends Format
                 break;
             case Render::INIT:
                 if ($value) {
-                    if (file_exists(Config::output_dir() . "index.sqlite")) {
-                        $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
-                        $db->exec('DELETE FROM ids');
-                        $db->exec('DELETE FROM indexing');
+                    if (Config::memoryindex()) {
+                        $db = new \SQLite3(":memory:");
                     } else {
                         $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
-                        $create = <<<SQL
+                        $db->exec('DROP TABLE IF EXISTS ids');
+                        $db->exec('DROP TABLE IF EXISTS indexing');
+                    }
+
+                    $create = <<<SQL
 CREATE TABLE ids (
     docbook_id TEXT,
     filename TEXT,
@@ -171,13 +173,16 @@ CREATE TABLE indexing (
     time INTEGER PRIMARY KEY
 );
 SQL;
-                        $db->exec('PRAGMA default_synchronous=OFF');
-                        $db->exec('PRAGMA count_changes=OFF');
-                        $db->exec('PRAGMA cache_size=100000');
-                        $db->exec($create);
-                    }
-                    $this->db = $db;
+                    $db->exec('PRAGMA default_synchronous=OFF');
+                    $db->exec('PRAGMA count_changes=OFF');
+                    $db->exec('PRAGMA cache_size=100000');
+                    $db->exec($create);
 
+                    if (Config::memoryindex()) {
+                        Config::set_indexcache($db);
+                    }
+
+                    $this->db = $db;
                     $this->chunks = array();
                 } else {
                     print_r($this->chunks);

@@ -53,8 +53,14 @@ abstract class Format extends ObjectStorage
     protected $buffer = "";
 
     public function __construct() {
-        if (file_exists(Config::output_dir() . "index.sqlite")) {
-            $this->sqlite = new \SQLite3(Config::output_dir() . 'index.sqlite');
+        $sqlite = Config::indexcache();
+        if (!$sqlite) {
+            if (file_exists(Config::output_dir() . "index.sqlite")) {
+                $sqlite = new \SQLite3(Config::output_dir() . 'index.sqlite');
+            }
+        }
+        if ($sqlite) {
+            $this->sqlite = $sqlite;
             $this->sortIDs();
         }
     }

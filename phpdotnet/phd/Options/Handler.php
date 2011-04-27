@@ -28,9 +28,19 @@ class Options_Handler implements Options_Interface
             'ext:'         => 'e:',        // The file-format extension to use, including the dot
             'saveconfig::' => 'S::',       // Save the generated config ?
             'quit'         => 'Q',         // Do not run the render. Use with -S to just save the config.
+            'memoryindex'  => 'M',         // Use sqlite in memory rather then file
         );
     }
 
+    public function option_M($k, $v)
+    {
+        $this->option_memoryindex($k, $v);
+    }
+    public function option_memoryindex($k, $v)
+    {
+        Config::set_memoryindex(true);
+    }
+    
     public function option_f($k, $v)
     {
         $this->option_format($k, $v);
@@ -346,6 +356,9 @@ class Options_Handler implements Options_Interface
   --package <packagename>    The package to use
   -I
   --noindex                  Do not index before rendering but load from cache
+                             (default: false)
+  -M
+  --memoryindex              Do not save indexing into a file, store it in memory.
                              (default: false)
   -r
   --forceindex               Force re-indexing under all circumstances
