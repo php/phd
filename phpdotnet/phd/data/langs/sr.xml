@@ -54,7 +54,7 @@
   <varlistentry>
    <term>example</term>
    <listitem>
-    <simpara>Пример бр.</simpara>
+    <simpara>Пример бр. </simpara><!-- Note: the previous node ends with a NBSP. -->
    </listitem>
   </varlistentry>
   <varlistentry>

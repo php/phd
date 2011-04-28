@@ -601,7 +601,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             elseif (isset($attrs[Reader::XMLNS_XLINK]["href"])) {
                 $link = $attrs[Reader::XMLNS_XLINK]["href"];
                 $class = " external";
-                $content = "&raquo; ";
+                $content = "&raquo;&nbsp;";
             }
             if ($props["empty"]) {
                 $content .= $link ."</a>";
