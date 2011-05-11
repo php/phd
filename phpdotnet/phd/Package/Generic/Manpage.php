@@ -699,9 +699,9 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         if ($open) {
             if ($this->cchunk["firstitem"]) {
                 $this->cchunk["firstitem"] = false;
-                return "T{\n";
+                return "\nT{\n";
             }
-            return "|T{\n";
+            return "\n|T{\n";
         }
         return "\n\nT}";
     }
