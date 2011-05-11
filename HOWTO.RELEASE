@@ -74,7 +74,7 @@ Appendix
 ------------------------------------
 A. Downloading Simple Channel Server into the docweb/www/ dir. 
    $ cd /path/to/docweb/www
-   $ wget -O pearscs.phar "http://svn.php.net/repository/pear2/sandbox/SimpleChannelServer/trunk/pearscs.phar" 
+   $ wget -O pearscs.phar "https://github.com/pear2/PEAR2_SimpleChannelServer/raw/master/pearscs.phar" 
 
 B. Installing PEAR_PackageFileManager2
    $ pear install PEAR_PackageFileManager2
