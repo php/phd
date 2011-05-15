@@ -14,7 +14,7 @@ function usage()
 {
     echo <<<USAGE
 Usage:
-    phd-ide -d <phd output dir> -f <function> [-a|-p|-s|-S]
+    phd-ide -d <phd output dir> -f <function> [-a|-p|-l|-s|-S]
     phd-ide -d <phd output dir> -c <class>
 
 Options:
@@ -23,6 +23,7 @@ Options:
     -c, --class             List the methods of a class.
     -a, --all               Show all information about a function (require -f).
     -p, --params            Show the params of a function (require -f).
+    -l, --changelog         Show the changelog of a function (require -f).
     -s, --seealso           Show the see also links of a function (require -f).
     -S, --signature         Show the signature of a function and exit (require -f).
     -h, --help              Show this info and exit.
@@ -34,6 +35,7 @@ $OPTION['dir']          = NULL;
 $OPTION['all']          = NULL;
 $OPTION['function']     = NULL;
 $OPTION['params']       = NULL;
+$OPTION['changelog']    = NULL;
 $OPTION['seealso']      = NULL;
 $OPTION['signature']    = NULL;
 $OPTION['class']        = NULL;
@@ -45,6 +47,7 @@ $opts = array(
     'function:'     => 'f:',
     'all'           => 'a',
     'params'        => 'p',
+    'changelog'     => 'l',
     'seealso'       => 's',
     'signature'     => 'S',
     'help'          => 'h',
@@ -82,6 +85,10 @@ foreach ($options as $k => $v) {
     case 'p':
     case 'params':
         $OPTION['params'] = true;
+        break;
+    case 'l':
+    case 'changelog':
+        $OPTION['changelog'] = true;
         break;
     case 's':
     case 'seealso':
@@ -153,6 +160,15 @@ if ($OPTION['all'] === true || $OPTION['params'] === true) {
         echo "\tType: "         . $param->getType()                             . PHP_EOL;
         echo "\tOptional: "     . ($param->isOptional() ? 'true' : 'false')     . PHP_EOL;
         echo "\tInitializer: "  . $param->getInitializer()                      . PHP_EOL;
+    }
+}
+
+if ($OPTION['all'] === true || $OPTION['changelog'] === true) {
+    echo 'Changelog: ';
+    foreach ($function->getChangelogEntries() as $entry) {
+        echo PHP_EOL;
+        echo "\tVersion: "         . $entry['version']                             . PHP_EOL;
+        echo "\tChange:  "         . $entry['change']                              . PHP_EOL;
     }
 }
 

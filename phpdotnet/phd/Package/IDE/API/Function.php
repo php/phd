@@ -89,6 +89,16 @@ class Package_IDE_API_Function
     private $seeAlsoEntries = array();
 
     /**
+     * Array with the changelog entries of the function.
+     * Indexes:
+     *     'version': PHP version of change
+     *     'change': The change
+     *
+     * @var array
+     */
+    private $changeLogEntries = array();
+
+    /**
      * Creates a new instance of Package_IDE_API_Function.
      *
      * @param SimpleXMLElement $xmlElement A new SimpleXMLElement
@@ -114,6 +124,13 @@ class Package_IDE_API_Function
                 $entryArray['type'] = $entry->type;
                 $entryArray['description'] = $entry->description;
                 $this->seeAlsoEntries[] = $entryArray;
+            }
+        }
+        if (isset($xmlElement->changelog->entry)) {
+            foreach ($xmlElement->changelog->entry as $entry) {
+                $entryArray['version'] = $entry->version;
+                $entryArray['change']  = $entry->change;
+                $this->changeLogEntries[] = $entryArray;
             }
         }
     }
@@ -224,6 +241,16 @@ class Package_IDE_API_Function
     public function getSeeAlsoEntries() 
     {
         return $this->seeAlsoEntries;
+    }
+
+    /**
+     * Array with the changelog entries of the function.
+     *
+     * @return array Array with the changelog entries.
+     */
+    public function getchangeLogEntries() 
+    {
+        return $this->changeLogEntries;
     }
 }
 
