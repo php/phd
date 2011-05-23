@@ -53,6 +53,13 @@ class Package_IDE_API_Param
     private $initializer;
 
     /**
+     * Detailed description of the parameter.
+     *
+     * @var string
+     */
+    private $description;
+
+    /**
      * Creates a new instance.
      *
      * @param SimpleXMLElement $xmlElement
@@ -63,6 +70,7 @@ class Package_IDE_API_Param
         $this->type         = $xmlElement->type;
         $this->optional     = $xmlElement->optional == 'true';
         $this->initializer  = $xmlElement->initializer;
+        $this->description  = $xmlElement->description;
     }
 
     /**
@@ -127,6 +135,17 @@ class Package_IDE_API_Param
     {
         return $this->initializer;
     }
+
+    /**
+     * Gets the parameter description.
+     *
+     * @return string Value of the parameter description.
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
 }
 
 /*

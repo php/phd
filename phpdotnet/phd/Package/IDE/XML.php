@@ -27,6 +27,11 @@ class Package_IDE_XML extends Package_IDE_Base {
             if (isset($param['initializer'])) {
                 $str .= '    <initializer>' . $param['initializer'] . '</initializer>'  . PHP_EOL;
             }
+            $str .= '    <description>' . PHP_EOL;
+            if (isset($param['description'])) {
+                $str .= $this->e($param['description']) . PHP_EOL;
+            }
+            $str .= '    </description>' . PHP_EOL;
             $str .= '  </param>' . PHP_EOL;
         }
         $str .= '</params>' . PHP_EOL;

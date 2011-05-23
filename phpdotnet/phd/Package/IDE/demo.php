@@ -10,6 +10,9 @@ require __INSTALLDIR__ . DS . 'phpdotnet' . DS . 'phd' . DS . 'functions.php';
 
 spl_autoload_register(array("phpdotnet\\phd\\Autoloader", "autoload"));
 
+//FIXME Remove this call to Config
+PhD\Config::init(array());
+
 function usage() 
 {
     echo <<<USAGE
@@ -160,6 +163,7 @@ if ($OPTION['all'] === true || $OPTION['params'] === true) {
         echo "\tType: "         . $param->getType()                             . PHP_EOL;
         echo "\tOptional: "     . ($param->isOptional() ? 'true' : 'false')     . PHP_EOL;
         echo "\tInitializer: "  . $param->getInitializer()                      . PHP_EOL;
+        echo "\tDescription: "  . $param->getDescription()                      . PHP_EOL;
     }
 }
 

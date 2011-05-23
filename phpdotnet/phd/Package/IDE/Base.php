@@ -7,6 +7,7 @@ abstract class Package_IDE_Base extends Format {
         'caution'               => 'format_notes',
         'entry'                 => 'format_changelog_entry',
         'function'              => 'format_seealso_entry',
+        'listitem'              => 'format_parameter_desc',
         'methodparam'           => 'format_methodparam',
         'methodname'            => 'format_seealso_entry',
         'member'                => 'format_member',
@@ -65,6 +66,7 @@ abstract class Package_IDE_Base extends Format {
         'manualid'              => null,
         'version'               => null,
         'params'                => array(),
+        'currentParam'          => null,
         'return'                => array(
             'type'              => null,
             'description'       => null,
@@ -286,7 +288,6 @@ abstract class Package_IDE_Base extends Format {
             }
             return;
         }
-        //TODO Render the description of params
         $param['name'] = $this->cchunk['param']['name'];
         $param['type'] = $this->cchunk['param']['type'];
         $param['optional'] = $this->cchunk['param']['opt'];
@@ -295,7 +296,7 @@ abstract class Package_IDE_Base extends Format {
         }
         $this->cchunk['methodparam'] = $this->dchunk['methodparam'];
         $this->cchunk['param'] = $this->dchunk['param'];
-        $this->function['params'][] = $param;
+        $this->function['params'][$param['name']] = $param;
     }
 
     public function format_parameter_text($value, $tag) {
@@ -304,6 +305,29 @@ abstract class Package_IDE_Base extends Format {
         }
         if (!empty($this->cchunk['methodparam'])) {
             $this->cchunk['param']['name'] = $value;
+        }
+        if ($this->role == 'parameters') {
+            $this->cchunk['currentParam'] = trim($value);
+        }
+    }
+
+    public function format_parameter_desc($open, $name, $attrs, $props) {
+        if ($this->role != 'parameters') {
+            return;
+        }
+        if ($open) {
+            //Read the description
+            $reader = ReaderKeeper::getReader();
+            $content = '';
+            do {
+                $reader->read();
+                if ($reader->nodeType === \XMLReader::ELEMENT) {
+                    $content .= trim($reader->readContent());
+                }
+            } while ($reader->name != $name);
+            if (isset($this->cchunk['currentParam']) && isset($this->function['params'][$this->cchunk['currentParam']])) {
+                $this->function['params'][$this->cchunk['currentParam']]['description'] = $content;
+            }
         }
     }
 
