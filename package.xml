@@ -78,6 +78,7 @@
       - Spanish (Pablo Bangueses)
       - Serbian (Nikola Smolenski)
     - Fixed bug#52664 - "Missing" example#1. (Hannes)
+    - Added --packagedir option to use external packages. (Moacir)
   </notes>
 
   <contents>
