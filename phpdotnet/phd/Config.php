@@ -73,14 +73,6 @@ class Config
             self::$optionArray = self::$optionArrayDefault;
         }
 
-        // add the include-path to the package dirs
-        $include_path = explode(PATH_SEPARATOR, get_include_path());
-        foreach ($include_path as $dir) {
-            if ($dir != __INSTALLDIR__) {
-                self::$optionArray['package_dirs'][] = $dir;
-            }
-        }
-
         // now merge other options
         self::$optionArray = array_merge(self::$optionArray, (array)$a);
 
@@ -149,14 +141,12 @@ class Config
     }
 
     public static function getSupportedPackages() {
-        static $packageList = array();
-        if (!$packageList) {
-            foreach(Config::package_dirs() as $dir) {
-                foreach (glob($dir . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
-                    $baseitem = basename($item);
-                    if ($baseitem[0] != '.') {
-                        $packageList[] = $baseitem;
-                    }
+        $packageList = array();
+        foreach(Config::package_dirs() as $dir) {
+            foreach (glob($dir . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
+                $baseitem = basename($item);
+                if ($baseitem[0] != '.') {
+                    $packageList[] = $baseitem;
                 }
             }
         }

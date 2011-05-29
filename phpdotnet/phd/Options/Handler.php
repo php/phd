@@ -29,6 +29,7 @@ class Options_Handler implements Options_Interface
             'saveconfig::' => 'S::',       // Save the generated config ?
             'quit'         => 'Q',         // Do not run the render. Use with -S to just save the config.
             'memoryindex'  => 'M',         // Use sqlite in memory rather then file
+            'packagedir'   => 'k:',        // Include path for external packages
         );
     }
 
@@ -315,6 +316,26 @@ class Options_Handler implements Options_Interface
         Config::set_css($styles);
     }
 
+    public function option_k($k, $v)
+    {
+        $this->option_packagedir($k, $v);
+    }
+
+    public function option_packagedir($k, $v)
+    {
+        $packages = Config::package_dirs();
+        foreach((array)$v as $key => $val) {
+            if ($path = realpath($val)) {
+                if (!in_array($path, $packages)) {
+                    $packages[] = $path;
+                }
+            } else {
+                v('Invalid path: %s', $val, E_USER_WARNING);
+            }
+        }
+        Config::set_package_dirs($packages);
+    }
+
     public function option_x($k, $v)
     {
         $this->option_xinclude($k, 'true');
@@ -404,6 +425,9 @@ class Options_Handler implements Options_Interface
   -Q
   --quit                     Don't run the build. Use with --saveconfig to
                              just save the config.
+  -k
+  --packagedir               Use an external package directory.
+
 
 Most options can be passed multiple times for greater effect.
 ";
