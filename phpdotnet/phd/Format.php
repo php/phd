@@ -558,6 +558,45 @@ abstract class Format extends ObjectStorage
         );
     }
 
+    /**
+    * Provide a nested list of IDs from the document root to the CURRENT_ID.
+    *
+    * @param string  $name  The name of the current element.
+    * @param mixed[] $props Properties relating to the current element.
+    *
+    * @return string A nested list of IDs from the root to the CURRENT_ID.
+    */
+    public function getTree($name, $props)
+    {
+        /* Build the list of IDs from the CURRENT_ID to the root. */
+        $ids = array();
+        $id = $this->CURRENT_ID;
+        while($id != '')
+            {
+            $ids[] = '<' . $this->indexes[$id]['element'] . ' id="' . $id . '">';
+            $id = $this->indexes[$id]['parent_id'];
+            }
+
+        /* Reverse the list so that it goes form the root to the CURRENT_ID. */
+        $ids = array_reverse($ids);
+
+        /* Build an indented tree view of the ids. */
+        $tree = '';
+        $indent = 0;
+        array_walk($ids, function($value, $key) use(&$tree, &$indent)
+        {
+            $tree .= str_repeat('    ', $indent++) . $value . PHP_EOL;
+        });
+
+	// Add the open and closed sibling and the current element.
+	$tree .=
+	    str_repeat('    ', $indent) . '<' . $props['sibling'] . '>' . PHP_EOL .
+	    str_repeat('    ', $indent) . '...' . PHP_EOL .
+    	    str_repeat('    ', $indent) . '</' . $props['sibling'] . '>' . PHP_EOL .
+	    str_repeat('    ', $indent) . '<' . $name . '>' . PHP_EOL;
+    	    
+        return $tree;
+    }
 }
 
 /*

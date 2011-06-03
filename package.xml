@@ -79,6 +79,7 @@
       - Serbian (Nikola Smolenski)
     - Fixed bug#52664 - "Missing" example#1. (Hannes)
     - Added --packagedir option to use external packages. (Moacir)
+    - Added Format::getTree() method to allow the current location in the tree to be reportable. (Richard Quadling)
   </notes>
 
   <contents>
