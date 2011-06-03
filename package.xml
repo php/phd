@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://pear.php.net/dtd/package-2.0"
   xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -79,7 +79,7 @@
       - Serbian (Nikola Smolenski)
     - Fixed bug#52664 - "Missing" example#1. (Hannes)
     - Added --packagedir option to use external packages. (Moacir)
-    - Added Format::getTree() method to allow the current location in the tree to be reportable. (Richard Quadling)
+    - Added Format::getDebugTree() method to allow the current location in the tree to be reportable. (Richard Quadling)
   </notes>
 
   <contents>

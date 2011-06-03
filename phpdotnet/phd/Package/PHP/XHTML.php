@@ -566,7 +566,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
             else {
                 $id = uniqid();
-                v("Uhm. Can't find an ID for a chunk? - Generating a random one (%s)\n%s", $id, $this->getTree($name, $props), E_USER_WARNING);
+                v("Uhm. Can't find an ID for a chunk? - Generating a random one (%s)\n%s", $id, $this->getDebugTree($name, $props), E_USER_WARNING);
             }
 
             $this->CURRENT_CHUNK = $this->CURRENT_ID = $id;

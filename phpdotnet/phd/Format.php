@@ -566,7 +566,7 @@ abstract class Format extends ObjectStorage
     *
     * @return string A nested list of IDs from the root to the CURRENT_ID.
     */
-    public function getTree($name, $props)
+    public function getDebugTree($name, $props)
     {
         /* Build the list of IDs from the CURRENT_ID to the root. */
         $ids = array();
@@ -588,7 +588,7 @@ abstract class Format extends ObjectStorage
             $tree .= str_repeat('    ', $indent++) . $value . PHP_EOL;
         });
 
-	// Add the open and closed sibling and the current element.
+	/* Add the open and closed sibling and the current element. */
 	$tree .=
 	    str_repeat('    ', $indent) . '<' . $props['sibling'] . '>' . PHP_EOL .
 	    str_repeat('    ', $indent) . '...' . PHP_EOL .
