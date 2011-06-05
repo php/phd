@@ -202,6 +202,16 @@ class Package_IDE_API_Function
     }
 
     /**
+     * Check if the function has parameters.
+     *
+     * @return bool True if the function has parameters
+     */
+    public function hasParams()
+    {
+        return sizeof($this->params) > 0;
+    }
+
+    /**
      * Gets an array with the function parameters.
      * Array of Package_IDE_API_Param.
      *
