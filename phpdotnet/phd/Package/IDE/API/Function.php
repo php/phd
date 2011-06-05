@@ -99,6 +99,14 @@ class Package_IDE_API_Function
     private $changeLogEntries = array();
 
     /**
+     * Description of the errors the function may throw.
+     * Content of the <refsect1 role="errors"> of the Manual.
+     *
+     * @var string
+     */
+    private $errors;
+
+    /**
      * Creates a new instance of Package_IDE_API_Function.
      *
      * @param SimpleXMLElement $xmlElement A new SimpleXMLElement
@@ -112,6 +120,7 @@ class Package_IDE_API_Function
         $this->manualid             = $xmlElement->manualid;
         $this->returnType           = $xmlElement->return->type;
         $this->returnDescription    = $xmlElement->return->description;
+        $this->errors               = $xmlElement->errors->description;
 
         if (isset($xmlElement->params->param)) {
             foreach ($xmlElement->params->param as $param) {
@@ -258,10 +267,21 @@ class Package_IDE_API_Function
      *
      * @return array Array with the changelog entries.
      */
-    public function getchangeLogEntries() 
+    public function getChangeLogEntries() 
     {
         return $this->changeLogEntries;
     }
+
+    /**
+     * Content of the <refsect1 role="errors"> of the function.
+     *
+     * @return string The description of the errors the function may throw.
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
 }
 
 /*
