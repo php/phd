@@ -429,7 +429,8 @@ res' . DIRECTORY_SEPARATOR . 'style.css
     }
 
     protected function fetchStylesheet($name = null) {
-        $stylesheet = file_get_contents($name = "http://www.php.net/styles/" . (is_null($name) ? "site.css" : $name));
+        /* Use a local CSS file if it can be found. If not, try and load it from http://www.php.net/styles. If no name is supplied then use the PHP default. */
+        $stylesheet = file_get_contents($name = realpath($name) ? realpath($name) : "http://www.php.net/styles/" . (is_null($name) ? "site.css" : $name));
         if ($stylesheet) {
             v('Loaded %s stylesheet.', $name, VERBOSE_MESSAGES);
             return $stylesheet;

@@ -42,6 +42,7 @@
   <notes>
     - Fixed Bug #54436 - gzip issues with -P PHP -f manpage (Moacir)
     - Fixed bug #53536 - Small display bug in attribute description for mysqli-&gt;insert_id
+    - Added support for local CSS files (Richard Quadling)
   </notes>
 
   <contents>
