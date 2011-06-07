@@ -71,7 +71,7 @@ class Package_IDE_API
                 $this->dir = substr($dir, -1) === DIRECTORY_SEPARATOR
                         ? $dir
                         : $dir . DIRECTORY_SEPARATOR;
-                $this->funclist = file($this->dir . self::FUNCLIST_FILE);
+                $this->funclist = file($this->dir . self::FUNCLIST_FILE, FILE_IGNORE_NEW_LINES);
             } else {
                 trigger_error('Is the PhD output directory a file?', E_USER_ERROR);
             }
