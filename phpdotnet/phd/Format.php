@@ -588,13 +588,13 @@ abstract class Format extends ObjectStorage
             $tree .= str_repeat('    ', $indent++) . $value . PHP_EOL;
         });
 
-	/* Add the open and closed sibling and the current element. */
-	$tree .=
-	    str_repeat('    ', $indent) . '<' . $props['sibling'] . '>' . PHP_EOL .
-	    str_repeat('    ', $indent) . '...' . PHP_EOL .
-    	    str_repeat('    ', $indent) . '</' . $props['sibling'] . '>' . PHP_EOL .
-	    str_repeat('    ', $indent) . '<' . $name . '>' . PHP_EOL;
-    	    
+        /* Add the open and closed sibling and the current element. */
+        $tree .=
+            str_repeat('    ', $indent) . '<' . $props['sibling'] . '>' . PHP_EOL .
+            str_repeat('    ', $indent) . '...' . PHP_EOL .
+            str_repeat('    ', $indent) . '</' . $props['sibling'] . '>' . PHP_EOL .
+            str_repeat('    ', $indent) . '<' . $name . '>' . PHP_EOL;
+
         return $tree;
     }
 }
