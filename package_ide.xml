@@ -33,8 +33,8 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added first version of PHPStub package format
-    - Added changelog information (philip)
+    - Added first version of PHPStub package format (Alexey Shein)
+    - Added changelog information (Philip)
     - Added the description of parameters (Moacir)
   </notes>
 
