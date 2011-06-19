@@ -215,7 +215,7 @@ class Package_IDE_API_Function
      *
      * @return bool True if the function has changelog entries
      */
-    public function hasChangeLog()
+    public function hasChangeLogEntries()
     {
         return sizeof($this->changeLogEntries) > 0;
     }
@@ -225,7 +225,7 @@ class Package_IDE_API_Function
      *
      * @return bool True if the function has seealso entries
      */
-    public function hasSeeAlso()
+    public function hasSeeAlsoEntries()
     {
         return sizeof($this->seeAlsoEntries) > 0;
     }
