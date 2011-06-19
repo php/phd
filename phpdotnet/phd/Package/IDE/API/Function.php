@@ -211,6 +211,26 @@ class Package_IDE_API_Function
     }
 
     /**
+     * Check if the function contains changelog entries.
+     *
+     * @return bool True if the function has changelog entries
+     */
+    public function hasChangeLog()
+    {
+        return sizeof($this->changeLogEntries) > 0;
+    }
+
+    /**
+     * Check if the function contains seealso entries.
+     *
+     * @return bool True if the function has seealso entries
+     */
+    public function hasSeeAlso()
+    {
+        return sizeof($this->seeAlsoEntries) > 0;
+    }
+
+    /**
      * Check if the function has parameters.
      *
      * @return bool True if the function has parameters
