@@ -61,6 +61,9 @@ class Package_IDE_Funclist extends Format {
     }
 
     public function format_refname_text($value, $tag) {
+        if (false !== strpos(trim($value), ' ')) {
+            return;
+        }
         return str_replace(array("::", "->", "()"), array(".", ".", ""), trim($value));
     }
 

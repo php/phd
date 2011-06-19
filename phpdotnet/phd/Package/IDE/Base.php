@@ -90,6 +90,9 @@ abstract class Package_IDE_Base extends Format {
         if (!isset($this->cchunk['funcname'][0])) {
              return;
         }
+        if (false !== strpos($this->cchunk['funcname'][0], ' ')) {
+            return;
+        }
         $this->function['name'] = $this->cchunk['funcname'][0];
         $this->function['version'] = $this->versionInfo($this->function['name']);
         $data = $this->parseFunction();
