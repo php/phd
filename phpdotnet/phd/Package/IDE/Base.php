@@ -195,8 +195,8 @@ abstract class Package_IDE_Base extends Format {
 
     public function versionInfo($funcname) {
         $funcname = str_replace(
-                array('::', '-&gt;', '->', '__', '_', '$', '()'),
-                array('-',  '-',     '-',  '-',  '-', '',  ''),
+                array('.', '::', '-&gt;', '->', '__', '_', '$', '()'),
+                array('-', '-',  '-',     '-',  '-',  '-', '',  ''),
                 strtolower($funcname));
         if(isset($this->versions[$funcname])) {
            return $this->versions[$funcname];
