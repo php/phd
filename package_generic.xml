@@ -37,16 +37,16 @@
 
   <date>2011-06-21</date>
   <version>
-    <release>1.1.1</release>
+    <release>1.1.2</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    Fixed bug#54705 (Tables in manpages not visible). (Hannes)
+    -notes
   </notes>
 
   <contents>
@@ -198,6 +198,22 @@
         - Generate IDS for all &lt;example&gt;s (Hannes)
       </notes>
     </release>
+    <release>
+      <version>
+         <release>1.1.1</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2011-06-21</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Fixed bug#54705 (Tables in manpages not visible). (Hannes)
+      </notes>
+    </release>
+
   </changelog>
 
 </package>

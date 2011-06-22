@@ -31,18 +31,16 @@
 
   <date>2011-06-21</date>
   <version>
-    <release>1.1.1</release>
+    <release>1.1.2</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Fixed Bug #54436 - gzip issues with -P PHP -f manpage (Moacir)
-    - Fixed bug #53536 - Small display bug in attribute description for mysqli-&gt;insert_id. (Hannes)
-    - Added support for local CSS files (Richard Quadling)
+    -notes
   </notes>
 
   <contents>
@@ -197,6 +195,24 @@
         - New output format EnhancedCHM - the same as CHM but with the User Notes (Requires ext/bz2) (Richard Quadling)
       </notes>
     </release>
+    <release>
+      <version>
+        <release>1.1.1</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2011-06-21</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Fixed Bug #54436 - gzip issues with -P PHP -f manpage (Moacir)
+        - Fixed bug #53536 - Small display bug in attribute description for mysqli-&gt;insert_id. (Hannes)
+        - Added support for local CSS files (Richard Quadling)
+      </notes>
+    </release>
+
   </changelog>
 
 </package>

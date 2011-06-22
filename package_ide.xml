@@ -24,18 +24,16 @@
 
   <date>2011-06-21</date>
   <version>
-    <release>1.1.1</release>
+    <release>1.1.2</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>beta</release>
+    <release>snapshot</release>
     <api>beta</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added first version of PHPStub package format (Alexey Shein)
-    - Added changelog information (Philip)
-    - Added the description of parameters (Moacir)
+    -notes
   </notes>
 
   <contents>
@@ -138,6 +136,24 @@
         - Fixed Bug #51482 - PhD_IDE generates invalid XML
       </notes>
     </release>
+    <release>
+      <version>
+        <release>1.1.1</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>beta</release>
+        <api>beta</api>
+      </stability>
+      <date>2011-06-21</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added first version of PHPStub package format (Alexey Shein)
+        - Added changelog information (Philip)
+        - Added the description of parameters (Moacir)
+      </notes>
+    </release>
+
   </changelog>
 
 </package>
