@@ -141,7 +141,7 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
 				   ),
 		"ro"    => array(
 					   "langcode" => "0x418 Romanian",
-					   "preferred_charset" => "Windows-1250",
+					   "preferred_charset" => "ASCII//TRANSLIT//IGNORE",
 					   "mime_charset_name" => "Windows-1250",
 					   "preferred_font" => self::DEFAULT_FONT
 				   ),
