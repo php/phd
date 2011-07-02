@@ -1322,7 +1322,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return "";
         }
         if ($open) {
-            return "<p><b>" . ($this->autogen('example', $props['lang']) . ++$this->cchunk["examples"]) . " ";
+            return "<p><b>" . ($this->autogen('example', $props['lang'])
+                . (isset($this->cchunk["examples"]) ? ++$this->cchunk["examples"] : "")) . " ";
         }
         return "</b></p>";
     }

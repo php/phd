@@ -67,6 +67,10 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
             break;
 
         case Render::INIT:
+            if ($this->appendToBuffer) {
+                return; //Don't create output dir when rendering to buffer
+            }
+
             $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
             $this->postConstruct();
             if (file_exists($this->getOutputDir())) {

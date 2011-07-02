@@ -110,6 +110,14 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
+    public function renderHTML() {
+        static $format = null;
+        if ($format == null) {
+            $format = new Package_Generic_ChunkedXHTML();
+        }
+        return $format->parse(ReaderKeeper::getReader()->readInnerXML());
+    }
+
     public function CHUNK($value) {
         $this->chunkFlags = $value;
     }
@@ -241,7 +249,7 @@ abstract class Package_IDE_Base extends Format {
 
     public function format_refpurpose($value, $tag) {
         if ($this->isFunctionRefSet) {
-            $this->function['purpose'] = str_replace("\n", '', trim(ReaderKeeper::getReader()->readContent()));
+            $this->function['purpose'] = str_replace("\n", '', trim(ReaderKeeper::getReader()->readString()));
         }
     }
 
@@ -320,14 +328,7 @@ abstract class Package_IDE_Base extends Format {
         }
         if ($open) {
             //Read the description
-            $reader = ReaderKeeper::getReader();
-            $content = '';
-            do {
-                $reader->read();
-                if ($reader->nodeType === \XMLReader::ELEMENT) {
-                    $content .= trim($reader->readContent());
-                }
-            } while ($reader->name != $name);
+            $content = $this->renderHTML();
             if (isset($this->cchunk['currentParam']) && isset($this->function['params'][$this->cchunk['currentParam']])) {
                 $this->function['params'][$this->cchunk['currentParam']]['description'] = $content;
             }
@@ -347,15 +348,7 @@ abstract class Package_IDE_Base extends Format {
     public function format_return($open, $name, $attrs, $props) {
         if ($open) {
             //Read the description
-            $reader = ReaderKeeper::getReader();
-            $content = '';
-            do {
-                $reader->read();
-                //Skipping the title
-                if ($reader->nodeType === \XMLReader::ELEMENT && $reader->name != 'title') {
-                    $content .= trim($reader->readContent());
-                }
-            } while ($reader->name != 'refsect1');
+            $content = $this->renderHTML();
             $this->function['return']['description'] = $content;
         }
     }
@@ -366,15 +359,7 @@ abstract class Package_IDE_Base extends Format {
         }
         if ($open) {
             //Read the description
-            $reader = ReaderKeeper::getReader();
-            $content = '';
-            do {
-                $reader->read();
-                //Skipping the title
-                if ($reader->nodeType === \XMLReader::ELEMENT && $reader->name != 'title') {
-                    $content .= trim($reader->readContent());
-                }
-            } while ($reader->name != $name);
+            $content = $this->renderHTML();
             $note = array();
             $note['type'] = $name;
             $note['description'] = $content;
@@ -385,16 +370,7 @@ abstract class Package_IDE_Base extends Format {
     public function format_errors($open, $name, $attrs, $props) {
         if ($open) {
             //Read the description
-            $reader = ReaderKeeper::getReader();
-            $content = '';
-            do {
-                $reader->read();
-                //Skipping the title
-                if ($reader->nodeType === \XMLReader::ELEMENT && $reader->name != 'title') {
-                    $content .= trim($reader->readContent());
-                }
-            } while ($reader->name != 'refsect1');
-            $this->function['errors'] = $content;
+            $this->function['errors'] = $this->renderHTML();;
         }
     }
 
@@ -421,7 +397,7 @@ abstract class Package_IDE_Base extends Format {
             $entryType = ($this->cchunk['changelog']['entry'] == 'version')
                     ? 'change'
                     : 'version';
-            $this->cchunk['changelog'][$entryType] = trim(ReaderKeeper::getReader()->readContent());
+            $this->cchunk['changelog'][$entryType] = trim(ReaderKeeper::getReader()->readString());
             $this->cchunk['changelog']['entry'] = $entryType;
         }
     }

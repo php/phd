@@ -27,7 +27,7 @@ class Package_IDE_XML extends Package_IDE_Base {
             if (isset($param['initializer'])) {
                 $str .= '    <initializer>' . $param['initializer'] . '</initializer>'  . PHP_EOL;
             }
-            $str .= '    <description>' . (isset($param['description']) ? $this->e($param['description']) : '') . '</description>' . PHP_EOL;
+            $str .= '    <description>' . (isset($param['description']) ? $this->cdata_str($param['description']) : '') . '</description>' . PHP_EOL;
             $str .= '  </param>' . PHP_EOL;
         }
         $str .= '</params>' . PHP_EOL;
@@ -35,12 +35,12 @@ class Package_IDE_XML extends Package_IDE_Base {
         //Return
         $str .= '<return>' . PHP_EOL;
         $str .= '  <type>' . $this->function['return']['type'] . '</type>' . PHP_EOL;
-        $str .= '  <description>' . $this->e($this->function['return']['description']) . '</description>' . PHP_EOL;
+        $str .= '  <description>' . $this->cdata_str($this->function['return']['description']) . '</description>' . PHP_EOL;
         $str .= '</return>' . PHP_EOL;
 
         //Errors
         $str .= '<errors>' . PHP_EOL;
-        $str .= '  <description>' . $this->e($this->function['errors']) . '</description>' . PHP_EOL;
+        $str .= '  <description>' . $this->cdata_str($this->function['errors']) . '</description>' . PHP_EOL;
         $str .= '</errors>' . PHP_EOL;
 
         //Notes
@@ -48,7 +48,7 @@ class Package_IDE_XML extends Package_IDE_Base {
         foreach ((array)$this->function['notes'] as $note) {
             $str .= '  <note>' . PHP_EOL;
             $str .= '    <type>' . $note['type'] . '</type>'  . PHP_EOL;
-            $str .= '    <description>' . $this->e($note['description']) . '</description>'  . PHP_EOL;
+            $str .= '    <description>' . $this->cdata_str($note['description']) . '</description>'  . PHP_EOL;
             $str .= '  </note>' . PHP_EOL;
         }
         $str .= '</notes>' . PHP_EOL;
@@ -79,6 +79,10 @@ class Package_IDE_XML extends Package_IDE_Base {
 
     protected function e($data) {
         return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+    }
+
+    protected function cdata_str($data) {
+        return "<![CDATA[$data]]>";
     }
 
 }
