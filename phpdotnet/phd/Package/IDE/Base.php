@@ -115,7 +115,7 @@ abstract class Package_IDE_Base extends Format {
         if ($format == null) {
             $format = new Package_Generic_ChunkedXHTML();
         }
-        return $format->parse(ReaderKeeper::getReader()->readInnerXML());
+        return $format->parse(trim(ReaderKeeper::getReader()->readInnerXML()));
     }
 
     public function CHUNK($value) {
@@ -128,21 +128,8 @@ abstract class Package_IDE_Base extends Format {
     }
 
     public function INIT($value) {
-        if (file_exists(Config::phpweb_version_filename())) {
-            $this->versions = self::generateVersionInfo(Config::phpweb_version_filename());
-        } else {
-            trigger_error("Can't load the versions file", E_USER_ERROR);
-        }
-        $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
-        if (file_exists($this->getOutputDir())) {
-            if (!is_dir($this->getOutputDir())) {
-                v('Output directory is a file?', E_USER_ERROR);
-            }
-        } else {
-            if (!mkdir($this->getOutputDir(), 0777, true)) {
-                v("Can't create output directory", E_USER_ERROR);
-            }
-        }
+        $this->loadVersionInfo();
+        $this->createOutputDirectory();
     }
 
     public function FINALIZE($value) {
@@ -211,6 +198,27 @@ abstract class Package_IDE_Base extends Format {
         }
         v('No version info for %s', $funcname, VERBOSE_NOVERSION);
         return false;
+    }
+
+    public function loadVersionInfo() {
+        if (file_exists(Config::phpweb_version_filename())) {
+            $this->versions = self::generateVersionInfo(Config::phpweb_version_filename());
+        } else {
+            trigger_error("Can't load the versions file", E_USER_ERROR);
+        }
+    }
+
+    public function createOutputDirectory() {
+        $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+        if (file_exists($this->getOutputDir())) {
+            if (!is_dir($this->getOutputDir())) {
+                v('Output directory is a file?', E_USER_ERROR);
+            }
+        } else {
+            if (!mkdir($this->getOutputDir(), 0777, true)) {
+                v("Can't create output directory", E_USER_ERROR);
+            }
+        }
     }
 
     public function format_suppressed_tags($open, $name, $attrs, $props) {
