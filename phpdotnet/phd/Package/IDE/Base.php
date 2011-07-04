@@ -425,6 +425,9 @@ abstract class Package_IDE_Base extends Format {
                 $seealso['type'] = $this->cchunk['seealso']['type'];
                 $seealso['name'] = $this->cchunk['seealso']['name'];
                 $this->cchunk['seealso'] = $this->dchunk['seealso'];
+                if ($seealso['name'] == '') {
+                    return false;
+                }
                 return $this->function['seealso'][] = $seealso;
             }
         }
