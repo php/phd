@@ -71,8 +71,8 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added phpdoc PI handler to handle manually added version information. (Hannes)
-    - Added the possiblity of adding version information for classes. (Hannes)
+    - Added phpdoc PI handler to handle manually added version information (bug#51853). (Hannes)
+    - Added the possiblity of adding version information for classes (bug#49927). (Hannes)
   </notes>
 
   <contents>
