@@ -16,6 +16,9 @@ class PI_PHPDOCHandler extends PIHandler {
             case "print-version-for":
                 // FIXME: Figureout a way to detect the current language (for unknownversion)
                 return $this->format->autogenVersionInfo($matches["value"], "en");
+            default:
+                trigger_error("Don't know how to handle {$matches["attr"]}", E_USER_WARNING);
+                break;
         }
     }
 
