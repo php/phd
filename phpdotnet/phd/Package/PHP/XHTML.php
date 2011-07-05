@@ -493,14 +493,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         
         if ($open) {
             $this->notify(Render::CHUNK, Render::OPEN);
-            if ($name == "reference") {
-                if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                    $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
-                } else {
-                    $this->cchunk["verinfo"] = true;
-                }
-            }
-            else {
+            if ($name != "reference") {
                 $chunks = Format::getChildren($id);
                 if (!count($chunks)) {
                     return '<div id="'.$id.'" class="'.$name.'">';
@@ -635,6 +628,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_class_chunk($open, $name, $attrs, $props) {
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
+            } else {
+                $this->cchunk["verinfo"] = true;
+            }
+        }
         return $this->format_container_chunk($open, "reference", $attrs, $props);
     }
 
