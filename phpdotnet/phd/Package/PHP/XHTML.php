@@ -13,6 +13,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'colophon'              => 'format_chunk',
         'legalnotice'           => 'format_chunk',
         'part'                  => 'format_container_chunk',
+        'partintro'             => 'format_partintro',
         'preface'               => 'format_chunk',
         'phpdoc:classref'       => 'format_class_chunk',
         'phpdoc:exceptionref'   => 'format_exception_chunk',
@@ -261,6 +262,17 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
         return "</span></p>\n";
     }
+    public function format_partintro($open, $tag, $attrs, $props) {
+        if ($open) {
+            $retval = "";
+            if ($this->cchunk["verinfo"]) {
+                $retval = $this->autogenVersionInfo($this->cchunk["phpdoc:classref"], $props["lang"]);
+            }
+            return '<div class="' . $tag . '">' . $retval;
+        }
+
+        return '</div>';
+    }
 
     public function format_refname_text($value, $tag) {
         $this->cchunk["refname"][] = $this->TEXT($value);
@@ -481,7 +493,14 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         
         if ($open) {
             $this->notify(Render::CHUNK, Render::OPEN);
-            if ($name != "reference") {
+            if ($name == "reference") {
+                if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                    $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
+                } else {
+                    $this->cchunk["verinfo"] = true;
+                }
+            }
+            else {
                 $chunks = Format::getChildren($id);
                 if (!count($chunks)) {
                     return '<div id="'.$id.'" class="'.$name.'">';
