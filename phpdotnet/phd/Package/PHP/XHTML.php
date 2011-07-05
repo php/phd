@@ -134,12 +134,18 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         "refname"                      => array(),
     );
 
+    protected $pihandlers = array(
+        'dbhtml'        => 'PI_DBHTMLHandler',
+        'dbtimestamp'   => 'PI_DBHTMLHandler',
+        'phpdoc'        => 'PI_PHPDOCHandler',
+    );
+
     public function __construct() {
         parent::__construct();               
         $this->myelementmap = array_merge(parent::getDefaultElementMap(), static::getDefaultElementMap());
         $this->mytextmap = array_merge(parent::getDefaultTextMap(), static::getDefaultTextMap());
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
-        $this->extraIndexInformation();
+        $this->registerPIHandlers($this->pihandlers);
     }
 
     public function getDefaultElementMap() {
@@ -152,14 +158,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function getDefaultChunkInfo() {
         return $this->dchunk;
-    }
-
-    public function extraIndexInformation() {
-        $this->addRefname("function.include", "include");
-        $this->addRefname("function.include-once", "include-once");
-        $this->addRefname("function.require", "require");
-        $this->addRefname("function.require-once", "require-once");
-        $this->addRefname("function.return", "return");
     }
 
     public function loadVersionAcronymInfo() {
@@ -234,23 +232,27 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return $acronyms;
     }
 
+    public function autogenVersionInfo($refnames, $lang) {
+        $verinfo = null;
+        foreach((array)$refnames as $refname) {
+            $verinfo = $this->versionInfo($refname);
+
+            if ($verinfo) {
+                break;
+            }
+        }
+        if (!$verinfo) {
+            $verinfo = $this->autogen("unknownversion", $lang);
+        }
+
+        $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
+        return $retval;
+    }
     public function format_refpurpose($open, $tag, $attrs, $props) {
         if ($open) {
             $retval = "";
             if ($this->cchunk["verinfo"]) {
-                $verinfo = "";
-                foreach((array)$this->cchunk["refname"] as $refname) {
-                    $verinfo = $this->versionInfo($refname);
-
-                    if ($verinfo) {
-                        break;
-                    }
-                }
-                if (!$verinfo) {
-                    $verinfo = $this->autogen("unknownversion", $props["lang"]);
-                }
-
-                $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
+                $retval = $this->autogenVersionInfo($this->cchunk["refname"], $props["lang"]);
             }
             $refnames = implode('</span> -- <span class="refname">', $this->cchunk["refname"]);
 

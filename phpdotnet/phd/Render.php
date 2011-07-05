@@ -173,7 +173,10 @@ class Render extends ObjectStorage
                 $target = $r->name;
                 $data = $r->value;
                 foreach ($this as $format) {
-                    $format->parsePI($target, $data);
+                    $retval = $format->parsePI($target, $data);
+                    if ($retval) {
+                        $format->appendData($retval);
+                    }
                 }
                 break;
             }

@@ -24,17 +24,17 @@
     <active>yes</active>
   </lead>
   <lead>
-    <name>Christian Weiske</name>
-    <user>cweiske</user>
-    <email>cweiske@php.net</email>
-    <active>yes</active>
-  </lead>
-  <lead>
     <name>Moacir de Oliveira</name>
     <user>moacir</user>
     <email>moacir@php.net</email>
     <active>yes</active>
   </lead>
+  <developer>
+    <name>Christian Weiske</name>
+    <user>cweiske</user>
+    <email>cweiske@php.net</email>
+    <active>yes</active>
+  </developer>
   <developer>
     <name>Paul M Jones</name>
     <user>pmjones</user>
@@ -71,7 +71,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    -notes
+    - Added phpdoc PI handler to handle manually added version information.
   </notes>
 
   <contents>
@@ -117,6 +117,7 @@
           </dir>
           <dir name="PI">
             <file name="DBHTMLHandler.php" role="php"/>
+            <file name="PHPDOCHandler.php" role="php"/>
           </dir>
           <file name="Autoloader.php" role="php"/>
           <file name="Config.php" role="php">
