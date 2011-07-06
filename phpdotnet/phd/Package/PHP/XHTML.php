@@ -16,7 +16,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'partintro'             => 'format_partintro',
         'preface'               => 'format_chunk',
         'phpdoc:classref'       => 'format_class_chunk',
-        'phpdoc:exceptionref'   => 'format_exception_chunk',
+        'phpdoc:exceptionref'   => 'format_class_chunk',
         'phpdoc:varentry'       => 'format_varentry_chunk',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
@@ -629,11 +629,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_class_chunk($open, $name, $attrs, $props) {
         if ($open) {
+            $retval = $this->format_container_chunk($open, "reference", $attrs, $props);
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
             } else {
                 $this->cchunk["verinfo"] = true;
             }
+            return $retval;
         }
         return $this->format_container_chunk($open, "reference", $attrs, $props);
     }
