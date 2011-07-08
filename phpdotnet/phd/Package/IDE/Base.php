@@ -255,8 +255,8 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_refpurpose($value, $tag) {
-        if ($this->isFunctionRefSet) {
+    public function format_refpurpose($open, $name, $attrs, $props) {
+        if ($this->isFunctionRefSet && $open) {
             $this->function['purpose'] = str_replace("\n", '', trim(ReaderKeeper::getReader()->readString()));
         }
     }
