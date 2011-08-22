@@ -247,9 +247,44 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
                 $stylesheet = $this->fetchStylesheet() . PHP_EOL;
             }
 
-            file_put_contents($this->outputdir . "style.css", $stylesheet . 'body {padding : 3px;}' . PHP_EOL . '#usernotes {margin-left : inherit;}' . PHP_EOL);
-
             self::headerChm();
+
+            // Find referenced content - background images, sprites, etc.
+            if (0 !== preg_match_all('`url\((([\'"]|)((?:(?!file:).)*)\2)\)`', $stylesheet, $stylesheet_urls)) {
+                foreach(array_unique($stylesheet_urls[3]) as $stylesheet_url) {
+
+                    // Parse the url, getting content from http://www.php.net if there is no scheme and host.
+                    if (False !== ($parsed_url = parse_url($stylesheet_url))) {
+
+                        if (!isset($parsed_url['scheme']) && !isset($parsed_url['host'])) {
+                            $url_content = file_get_contents('http://www.php.net/' . $stylesheet_url);
+                        } else {
+                            // Otherwise content is fully identified.
+                            $url_content = file_get_contents($stylesheet_url);
+                        }
+
+                        // Make sure the location to save the content is available.
+                        @mkdir(dirname($content_filename = $this->outputdir . $parsed_url['path']));
+
+                        // Save the referenced content to the new location.
+                        file_put_contents($content_filename, $url_content);
+
+                        // Add the content to the hpp file.
+                        fwrite($this->hhpStream, 'res' . DIRECTORY_SEPARATOR . ($relative_url = trim(substr(realpath($content_filename), strlen(realpath($this->outputdir))), DIRECTORY_SEPARATOR)) . PHP_EOL);
+
+                        // Force URLS to be relative to the "res" directory.
+                        $stylesheet = str_replace($stylesheet_url, $relative_url, $stylesheet);
+
+                        v('Saved content from css : %s.', $parsed_url['path'], VERBOSE_MESSAGES);
+                    } else {
+                        v('Unable to save content from css : %s.', $stylesheet_url, E_USER_WARNING);
+                    }
+                }
+
+            }
+
+            // Save the stylesheet.
+            file_put_contents($this->outputdir . "style.css", $stylesheet . 'body {padding : 3px;}' . PHP_EOL . '#usernotes {margin-left : inherit;}' . PHP_EOL);
             break;
         case Render::VERBOSE:
             parent::update($event, $val);

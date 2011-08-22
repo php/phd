@@ -40,7 +40,8 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Use transliteration for the Windows CHM TOC and Index - Romanian only - (Richard)
+    - Use transliteration for the Windows CHM TOC and Index - Romanian only - (Richard Q)
+    - Allow Windows CHM files to use the url() loaded content defined in the CSS files (Richard Q)
   </notes>
 
   <contents>

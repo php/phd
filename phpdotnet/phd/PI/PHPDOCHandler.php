@@ -1,6 +1,6 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id: PHPDOCHandler.php 293260 2010-01-08 10:41:19Z rquadling $ */
+/* $Id$ */
 
 class PI_PHPDOCHandler extends PIHandler {
 
