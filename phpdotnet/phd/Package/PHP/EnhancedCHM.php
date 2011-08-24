@@ -49,12 +49,12 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                 if (!extension_loaded('bz2')) {
                     dl((PHP_SHLIB_SUFFIX === 'dll' ? 'php_' : '') . 'bz2.' . PHP_SHLIB_SUFFIX);
                 }
-                
+
                 if (!extension_loaded('bz2')) {
                     v('The BZip2 extension is not available.', E_USER_ERROR);
                     break;
                 }
-                
+
                 // Remove any existing files.
                 foreach(glob($this->userNotesBaseDir . '*' . DIRECTORY_SEPARATOR . '*') as $sectionFile) {
                     unlink($sectionFile);
@@ -65,7 +65,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                     v('Failed to access the usernotes archive.', E_USER_ERROR);
                     break;
                 }
-                
+
                 $fpsfNotes = stream_filter_append($fpNotes, 'bzip2.decompress', STREAM_FILTER_READ, array('small' => true));
 
                 // Extract the usernotes and store them by page and date.
@@ -91,7 +91,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                     file_put_contents($sectionDir . DIRECTORY_SEPARATOR . $sectionHash, implode('|', $userNote) . PHP_EOL, FILE_APPEND);
                 }
 
-		stream_filter_remove($fpsfNotes);
+                stream_filter_remove($fpsfNotes);
                 fclose($fpNotes);
 
                 // Save the last-updated data.
