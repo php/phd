@@ -47,6 +47,7 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Added support for authorinitials, printhistory, revhistory, revision and revremark (Hannes)
+    - Added generate-index-for=(refentry,function,examples) support for the phpdoc PI handler (Hannes)
   </notes>
 
   <contents>

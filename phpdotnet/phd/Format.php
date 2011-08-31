@@ -284,6 +284,12 @@ abstract class Format extends ObjectStorage
     public function addVarname($id, $var) {
         $this->vars[$var] = $id;
     }
+    public function getRefs() {
+        return $this->refs;
+    }
+    public function getExamples() {
+        return $this->examples;
+    }
     public function getRefnameLink($ref) {
         return isset($this->refs[$ref]) ? $this->refs[$ref] : null;
     }

@@ -16,6 +16,55 @@ class PI_PHPDOCHandler extends PIHandler {
             case "print-version-for":
                 // FIXME: Figureout a way to detect the current language (for unknownversion)
                 return $this->format->autogenVersionInfo($matches["value"], "en");
+            case "generate-index-for":
+                switch($matches["value"]) {
+                    case "function":
+                    case "refentry":
+                        $ret = "<ul class='gen-index index-for-{$matches["value"]}'>";
+                        $tmp = $this->format->getRefs();
+                        $refs = array();
+                        $info = array();
+                        foreach($tmp as $id) {
+                            $filename = $this->format->createLink($id, $desc);
+                            $refs[$filename] = $desc;
+                            $info[$filename] = array($this->format->getLongDescription($id, $islong), $islong);
+                        }
+
+                        natcasesort($refs);
+
+                        // Workaround for 5.3 that doesn't allow func()[index]
+                        $current = current($refs);
+                        $char = $current[0];
+
+                        $ret .= "<li class='gen-index index-for-{$char}'>$char<ul class='index-for-{$char}'>\n";
+                        foreach($refs as $filename => $data) {
+                            if ($data[0] != $char && strtolower($data[0]) != $char) {
+                                $char = strtolower($data[0]);
+                                $ret .= "</ul></li>\n";
+                                $ret .= "<li class='gen-index index-for-{$char}'>$char<ul class='index-for-{$char}'>\n";
+                            }
+                            $longdesc = $info[$filename][1] ? " - {$info[$filename][0]}" : "";
+                            $ret .= '<li><a href="'.$filename. '" class="index">' .$data. '</a>' . $longdesc . '</li>'."\n";
+                        }
+                        $ret .= "</ul></li></ul>\n\n";
+                        return $ret;
+                        break;
+
+                    case "examples":
+                        $ret = "<ul class='gen-index index-for-{$matches["value"]}'>";
+                        foreach($this->format->getExamples() as $idx => $id) {
+                            $link = $this->format->createLink($id, $desc);
+                            $ret .= '<li><a href="'.$link.'" class="index">Example#' .$idx. ' - ' .$desc. '</a></li>'."\n";
+                        }
+                        $ret .= "</ul>";
+                        return $ret;
+                        break;
+                    default:
+                        trigger_error("Don't know how to handle {$matches["value"]} for {$matches["attr"]}", E_USER_WARNING);
+                        break;
+                }
+                break;
+
             default:
                 trigger_error("Don't know how to handle {$matches["attr"]}", E_USER_WARNING);
                 break;
