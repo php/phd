@@ -272,8 +272,8 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
                         // Add the content to the hpp file.
                         fwrite($this->hhpStream, 'res' . DIRECTORY_SEPARATOR . ($relative_url = trim(substr(realpath($content_filename), strlen(realpath($this->outputdir))), DIRECTORY_SEPARATOR)) . PHP_EOL);
 
-                        // Force URLS to be relative to the "res" directory.
-                        $stylesheet = str_replace($stylesheet_url, $relative_url, $stylesheet);
+                        // Force URLS to be relative to the "res" directory, but make them use the unix path separator as they will be processed by HTML.
+                        $stylesheet = str_replace($stylesheet_url, str_replace(DIRECTORY_SEPARATOR, '/', $relative_url), $stylesheet);
 
                         v('Saved content from css : %s.', $parsed_url['path'], VERBOSE_MESSAGES);
                     } else {
