@@ -16,6 +16,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'authorgroup'       => 'format_authorgroup_author',
         ),
         'authorgroup'           => 'div',
+        'authorinitials'        => 'format_entry',
         'appendix'              => 'format_container_chunk_top',
         'application'           => 'span',
         'blockquote'            => 'blockquote',
@@ -32,7 +33,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'co'                    => 'format_co',
         'colophon'              => 'format_chunk',
         'copyright'             => 'format_copyright',
-        'date'                  => 'p',
+        'date'                  => array(
+            /* DEFAULT */          'p',
+           'revision'           => 'format_entry', 
+        ),
         'editor'                => 'format_editor',
         'edition'               => 'format_suppressed_tags',
         'email'                 => 'format_suppressed_tags',
@@ -182,6 +186,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'personblurb'           => 'format_div',
         'phrase'                => 'span',
         'preface'               => 'format_chunk',
+        'printhistory'          => 'format_div',
         'primaryie'             => 'format_suppressed_tags',
         'procedure'             => 'format_procedure',
         'productname'           => 'span',
@@ -206,6 +211,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'refnamediv'            => 'div',
         'releaseinfo'           => 'div',
         'replaceable'           => 'span',
+        'revhistory'            => 'format_table',
+        'revision'              => 'format_row',
+        'revremark'             => 'format_entry',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
         'screenshot'            => 'format_div',
@@ -1379,6 +1387,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_table($open, $name, $attrs, $props) {
         if ($open) {
             $this->cchunk["table"] = true;
+            // Initialize an empty tgroup in case we never process such element
+            Format::tgroup(array());
             $idstr = '';
             if (isset($attrs[Reader::XMLNS_XML]["id"])) {
             	$idstr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
@@ -1485,7 +1495,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return '<td class="empty">&nbsp;</td>';
         }
         if ($open) {
-            $dbattrs = Format::getColspec($attrs[Reader::XMLNS_DOCBOOK]);
+            $dbattrs = (array)Format::getColspec($attrs[Reader::XMLNS_DOCBOOK]);
 
             $retval = "";
             if (isset($dbattrs["colname"])) {
