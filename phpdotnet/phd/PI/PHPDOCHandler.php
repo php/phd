@@ -20,8 +20,8 @@ class PI_PHPDOCHandler extends PIHandler {
                 switch($matches["value"]) {
                     case "function":
                     case "refentry":
-                        $ret = "<ul class='gen-index index-for-{$matches["value"]}'>";
                         $tmp = $this->format->getRefs();
+                        $ret   = "";
                         $refs = array();
                         $info = array();
                         foreach($tmp as $id) {
@@ -36,12 +36,13 @@ class PI_PHPDOCHandler extends PIHandler {
                         $current = current($refs);
                         $char = $current[0];
 
-                        $ret .= "<li class='gen-index index-for-{$char}'>$char<ul class='index-for-{$char}'>\n";
+                        $ret = "<ul class='gen-index index-for-{$matches["value"]}'>";
+                        $ret .= "<li class='gen-index index-for-{$char}'>$char<ul id='{$matches["value"]}-index-for-{$char}'>\n";
                         foreach($refs as $filename => $data) {
                             if ($data[0] != $char && strtolower($data[0]) != $char) {
                                 $char = strtolower($data[0]);
                                 $ret .= "</ul></li>\n";
-                                $ret .= "<li class='gen-index index-for-{$char}'>$char<ul class='index-for-{$char}'>\n";
+                                $ret .= "<li class='gen-index index-for-{$char}'>$char<ul id='{$matches["value"]}-index-for-{$char}'>\n";
                             }
                             $longdesc = $info[$filename][1] ? " - {$info[$filename][0]}" : "";
                             $ret .= '<li><a href="'.$filename. '" class="index">' .$data. '</a>' . $longdesc . '</li>'."\n";
