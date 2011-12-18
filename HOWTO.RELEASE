@@ -5,7 +5,7 @@ Releases are currently made from trunk/ (PHD_1_0)
 
 0. Check if all changes in trunk have been merged back to the release branch.
 
-1. Check if all changes have an entry in package.xml's <notes>.
+1. Check if all changes have an entry in package.xml's <notes>. And update the <stability> to stable!
 
 2. Check if the api version needs to be increased to match the release
    version. (This is the case when the API has changed. Normally the
@@ -37,7 +37,7 @@ ext/zlib enabled):
 
 10. Create a svn tag.
    $ cd /path/to/phd
-   $ svn cp http://svn.php.net/repository/phd/[trunk|branches/PHD_*] http://svn.php.net/repository/phd/tags/RELEASE_*
+   $ svn cp https://svn.php.net/repository/phd/[trunk|branches/PHD_*] https://svn.php.net/repository/phd/tags/RELEASE_*
 
 11. Test by installing from the channel:
    $ pear upgrade -f doc.php.net/phd-$previousversion
