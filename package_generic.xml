@@ -37,7 +37,7 @@
 
   <date>2011-06-21</date>
   <version>
-    <release>1.1.2</release>
+    <release>1.1.3</release>
     <api>1.1.0</api>
   </version>
   <stability>
@@ -46,8 +46,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Added support for authorinitials, printhistory, revhistory, revision and revremark (Hannes)
-    - Added generate-index-for=(refentry,function,examples) support for the phpdoc PI handler (Hannes)
+    - No changes yet
   </notes>
 
   <contents>
@@ -212,6 +211,22 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Fixed bug#54705 (Tables in manpages not visible). (Hannes)
+      </notes>
+    </release>
+    <release>
+      <version>
+         <release>1.1.2</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2011-12-18</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added support for authorinitials, printhistory, revhistory, revision and revremark (Hannes)
+        - Added generate-index-for=(refentry,function,examples) support for the phpdoc PI handler (Hannes)
       </notes>
     </release>
 

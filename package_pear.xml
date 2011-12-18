@@ -30,7 +30,7 @@
 
   <date>2011-03-07</date>
   <version>
-    <release>1.1.2</release>
+    <release>1.1.3</release>
     <api>1.1.0</api>
   </version>
   <stability>
@@ -39,7 +39,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Use transliteration for the Windows CHM TOC and Index - Romanian only - (Richard)
+    - No changes yet
   </notes>
 
   <contents>
@@ -167,6 +167,21 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Release 1.1.0
+      </notes>
+    </release>
+    <release>
+      <version>
+        <release>1.1.2</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2011-03-07</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Use transliteration for the Windows CHM TOC and Index - Romanian only - (Richard)
       </notes>
     </release>
   </changelog>
