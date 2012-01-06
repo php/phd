@@ -32,6 +32,7 @@ abstract class Format extends ObjectStorage
     protected $ext;
     protected $outputdir;
     protected $chunked;
+    protected $flags = 0;
 
     /* Processing Instructions Handlers */
     private $pihandlers = array();
