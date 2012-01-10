@@ -935,6 +935,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             $explode = '::';
         } elseif (strpos($value, '->')) {
             $explode = '->';
+        } elseif (strpos($value, '-&gt;')) {
+            $explode = '-&gt;';
         } else {
             return $value;
         }

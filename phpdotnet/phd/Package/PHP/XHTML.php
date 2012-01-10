@@ -418,7 +418,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($this->cchunk["classsynopsis"]["classname"]) {
           if (strpos($value, "::") === false && strpos($value, "->") === false) {
                 $value = $this->cchunk["classsynopsis"]["classname"] . "->" . $value;
-                $this->cchunk["classsynopsis"]["classname"] = false;
             }
         }
 
@@ -429,7 +428,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($this->cchunk["classsynopsis"]["classname"]) {
           if (strpos($value, "::") === false && strpos($value, "->") === false) {
                 $value = $this->cchunk["classsynopsis"]["classname"] . "::" . $value;
-                $this->cchunk["classsynopsis"]["classname"] = false;
             }
         }
 
