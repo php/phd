@@ -969,7 +969,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
             $this->params = array("count" => 0, "opt" => 0, "content" => "");
-            return '<div class="'.$name.' dc-description">';
+            $id = (isset($attrs[Reader::XMLNS_XML]["id"]) ? ' id="'.$attrs[Reader::XMLNS_XML]["id"].'"' : '');
+            return '<div class="'.$name.' dc-description"'.$id.'>';
         }
         $content = "";
         if ($this->params["opt"]) {
