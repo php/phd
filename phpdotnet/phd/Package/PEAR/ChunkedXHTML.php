@@ -4,7 +4,7 @@ namespace phpdotnet\phd;
 
 class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
     public function __construct() {
-        parent::__construct();        
+        parent::__construct();
         $this->registerFormatName("PEAR-Chunked-XHTML");
         $this->setTitle("PEAR Manual");
         $this->setExt(Config::ext() === null ? ".html" : Config::ext());
@@ -16,6 +16,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
     }
 
     public function appendData($data) {
+        $data = $this->mangleParagraphs($data);
     	if ($this->appendToBuffer) {
     		$this->buffer .= $data;
 
@@ -120,7 +121,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
             $this->next = array("href" => Format::getFilename($nextId) . $this->ext,
                 "desc" => $this->getShortDescription($nextId));
         }
-        $header = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        $header = '<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
  <head>
   <title>' . $title . '</title>
@@ -150,12 +151,12 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
 
         $nav = <<<NAV
 <div class="navheader">
- <table width="100%" summary="Navigation header">
+ <table style="width: 100%;">
   <tr><th colspan="3" style="text-align: center">{$title}</th></tr>
   <tr>
-   <td width="40%" align="left">{$strPrev}</td>
-   <td width="20%"></td>
-   <td width="40%" align="right">{$strNext}</td>
+   <td style="width: 40%; text-align: left;">{$strPrev}</td>
+   <td style="width: 20%;"></td>
+   <td style="width: 40%; text-align: right;">{$strNext}</td>
   </tr>
  </table>
  <hr/>
@@ -182,16 +183,16 @@ NAV;
         $nav = <<<NAV
 <div class="navfooter">
  <hr />
- <table width="100%" summary="Navigation footer">
+ <table style="width: 100%;">
   <tr>
-   <td width="40%" align="left">{$strPrev}</td>
-   <td width="20%" align="center">{$strUp}</td>
-   <td width="40%" align="right">{$strNext}</td>
+   <td style="width: 40%; text-align: left;">{$strPrev}</td>
+   <td style="width: 20%; text-align: center;">{$strUp}</td>
+   <td style="width: 40%; text-align: right;">{$strNext}</td>
   </tr>
   <tr>
-   <td width="40%" align="left" valign="top">{$this->prev["desc"]}</td>
-   <td width="20%" align="center">{$strHome}</td>
-   <td width="40%" align="right" valign="top">{$this->next["desc"]}</td>
+   <td style="text-align: right; vertical-align: top;">{$this->prev["desc"]}</td>
+   <td style="text-align: center;">{$strHome}</td>
+   <td style="text-align: right; vertical-align: top;">{$this->next["desc"]}</td>
   </tr>
  </table>
 </div>

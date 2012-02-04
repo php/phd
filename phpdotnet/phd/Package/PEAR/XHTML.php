@@ -9,7 +9,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         'acronym'               => 'span',
         'article'               => 'format_container_chunk',
         'alt'                   => 'format_suppressed_tags',
-        'answer'                => 'format_answer',
+        'answer'                => 'dd',
         'appendix'              => 'format_container_chunk',
         'application'           => 'span',
         'arg'                   => 'format_suppressed_tags',
@@ -54,10 +54,10 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         ),
         'example'               => 'format_div',
         'editor'                => 'format_div',
-        'email'                 => 'tt',
+        'email'                 => 'code',
         'figure'                => 'format_div',
         'filename'              => array(
-            /* DEFAULT */          'tt',
+            /* DEFAULT */          'code',
             'titleabbrev'       => 'format_suppressed_tags',
         ),
         'firstname'             => 'format_suppressed_tags',
@@ -95,10 +95,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             'part'              => 'format_chunk',
         ),
         'informalexample'       => 'format_div',
-        'informaltable'         => array(
-            /* DEFAULT */          'format_table',
-            'para'              => 'format_para_informaltable',
-        ),
+        'informaltable'         => 'format_table',
         'itemizedlist'          => 'format_itemizedlist',
         'initializer'           => 'format_initializer',
         'legalnotice'           => 'format_chunk',
@@ -108,22 +105,18 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             'varlistentry'      => 'dd',
             'itemizedlist'      => 'li',
         ),
-        'literal'               => 'tt',
+        'literal'               => 'code',
         'literallayout'         => 'format_literallayout',
         'mediaobject'           => 'format_mediaobject',
         'member'                => 'li',
         'menuchoice'            => 'format_suppressed_tags',
         'methodparam'           => 'format_methodparam',
-        'methodname'            => 'tt',
+        'methodname'            => 'code',
         'methodsynopsis'        => 'format_methodsynopsis',
         'modifier'              => 'span',
         'note'                  => 'format_admonition',
         'orderedlist'           => 'format_orderedlist',
         'package'               => 'strong',
-        'para'                  => array(
-            /* DEFAULT */          'format_para',
-            'question'          => 'span',//can't ignore it since it's defined in format
-        ),
         'paramdef'              => 'format_paramdef',
         'parameter'             => array(
             /* DEFAULT */          'format_parameter',
@@ -138,10 +131,10 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         'phd:pearapi'           => 'format_phd_pearapi',
         'preface'               => 'format_chunk',
         'programlisting'        => 'format_programlisting',
-        'prompt'                => 'tt',
+        'prompt'                => 'code',
         'pubdate'               => 'p',
         'qandadiv'              => 'format_div',
-        'qandaentry'            => 'format_qandaentry',
+        'qandaentry'            => 'dl',
         'qandaset'              => 'format_qandaset',
         'question'              => array(
             /* DEFAULT */          'format_question',
@@ -192,11 +185,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
 
         'set'                   => 'format_root_chunk',
         'setindex'              => 'format_chunk',
-        'simpara'               => array(
-            /* DEFAULT */          'format_para',
-            'entry'             => 'p',
-            'listitem'          => 'p',
-        ),
         'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
         'spanspec'              => 'format_suppressed_tags',
         'subtitle'              => 'format_subtitle',
@@ -279,15 +267,15 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             'warning'           => 'format_warning_title',
         ),
         'tip'                   => 'format_admonition',
-        'token'                 => 'tt',
+        'token'                 => 'code',
         'type'                  => 'span',
         'titleabbrev'           => 'format_suppressed_tags',
         'term'                  => 'dt',
-        'uri'                   => 'tt',
+        'uri'                   => 'code',
         'userinput'             => 'format_userinput',
         'variablelist'          => 'format_div',
         'varlistentry'          => 'format_dl',
-        'varname'               => 'tt',
+        'varname'               => 'code',
         'void'                  => 'format_void',
         'warning'               => 'format_warning',
         'xref'                  => 'format_link',
@@ -398,6 +386,31 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         'refname'                      => array(),
     );
 
+   /**
+    * Tags that may appear inside <p></p>, per HTML5 specification
+    * @var array
+    */
+    protected $html5PhrasingContent = array(
+        'a', 'abbr', 'area', 'audio', 'b', 'bdi', 'bdo', 'br', 'button', 'canvas',
+        'cite', 'code', 'command', 'datalist', 'del', 'dfn', 'em', 'embed', 'i',
+        'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'map', 'mark',
+        'math', 'meter', 'noscript', 'object', 'output', 'progress', 'q', 'ruby',
+        's', 'samp', 'script', 'select', 'small', 'span', 'strong', 'sub', 'sup',
+        'svg', 'textarea', 'time', 'u', 'var', 'video', 'wbr'
+    );
+
+   /**
+    * Open tags
+    * @var array
+    */
+    protected $tagStack = array();
+
+   /**
+    * Whether current <p> tag is open or closed
+    * @var bool
+    */
+    protected $openPara = false;
+
     /**
      * Constructor
      */
@@ -405,7 +418,112 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         parent::__construct();
         $this->myelementmap = array_merge(parent::getDefaultElementMap(), static::getDefaultElementMap());
         $this->mytextmap = array_merge(parent::getDefaultTextMap(), static::getDefaultTextMap());
-        $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());    
+        $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
+    }
+
+   /**
+    * Returns an opening <p> tag if a paragraph was opened before and closed due to non-phrasing content
+    *
+    * @return string
+    */
+    protected function reopenParagraph()
+    {
+        if (!$this->openPara && 'p' == end($this->tagStack)) {
+            $this->openPara = true;
+            return '<p>';
+        }
+
+        return '';
+    }
+
+
+   /**
+    * Opens and closes <p></p> tags as needed
+    *
+    * Unlike DocBook, where all stuff can be inside <para></para> tags, <p></p>
+    * tags in HTML can not contain block-level content like tables and lists.
+    * Therefore we need to close <p> before block-level tags and reopen it if
+    * some phrasing content goes after block-level.
+    *
+    * This is called from appendData() since this is about the only place
+    * where we can intercept all stuff that goes to the output. Unfortunately
+    * we have to [re-]parse the already generated tags which gives some
+    * noticeable performance hit. The other approach is to override all methods
+    * from Package_Generic_XHTML that generate non-phrasing content and that is
+    * much more verbose and error-prone.
+    *
+    * @param string $data
+    * @return string input string with <p> or </p> prepended when needed
+    */
+    public function mangleParagraphs($data)
+    {
+        if ('' === $data || ctype_space($data)) {
+            return $data;
+
+        // we need to reopen paragraph for text content
+        } elseif ('<' != $data[0]) {
+            return $this->reopenParagraph() . $data;
+
+        // if <p> was closed before and not reopened, skip closing tag
+        } elseif ('</p>' == trim($data) && !$this->openPara && 'p' == end($this->tagStack)) {
+            array_pop($this->tagStack);
+            return '';
+
+        }
+
+        $tagStack = array();
+        $phrasing = true;
+
+        // parse the input string extracting tags, need to find out whether to add <p> or </p>
+        foreach (preg_split('/(<[^>]+>)/', $data, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $item) {
+            if ('<' != $item[0]) {
+                continue;
+            }
+            $empty = '/' == substr($item, -2, 1);
+            list($tagName) = explode(' ', substr($item, 1, -1));
+            $tagName = rtrim($tagName, '/');
+
+            if (!in_array(ltrim($tagName, '/'), $this->html5PhrasingContent)) {
+                $phrasing = false;
+            }
+            if (!$empty && '/' != $tagName[0]) {
+                array_push($tagStack, $tagName);
+            } elseif (!$empty && '/' == $tagName[0]) {
+                if (!empty($tagStack) && substr($tagName, 1) == end($tagStack)) {
+                    array_pop($tagStack);
+                } else {
+                    array_push($tagStack, $tagName);
+                }
+            }
+        }
+
+        // adding tag stack to global tag stack
+        $openPara = $this->openPara && 'p' == end($this->tagStack);
+        $hasPara  = false;
+        foreach ($tagStack as $tagName) {
+            if ('p' == $tagName) {
+                $this->openPara = true;
+                $hasPara        = true;
+            } elseif ('/p' == $tagName) {
+                $this->openPara = false;
+                $hasPara        = true;
+            }
+            if ('/' == $tagName[0] && substr($tagName, 1) == end($this->tagStack)) {
+                array_pop($this->tagStack);
+            } elseif ('/' != $tagName[0]) {
+                array_push($this->tagStack, $tagName);
+            }
+        }
+        if ($hasPara) {
+            return $data;
+        } elseif ($phrasing) {
+            return $this->reopenParagraph() . $data;
+        } elseif ($openPara) {
+            $this->openPara = false;
+            return '</p>' . $data;
+        } else {
+            return $data;
+        }
     }
 
     public function getDefaultElementMap() {
@@ -420,33 +538,12 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         return $this->dchunk;
     }
 
-    /**
-    * Clean up HTML from empty paragraph tags (<p>).
-    *
-    * @param string $str String to clean up
-    *
-    * @return string Cleaned up string.
-    */
-    protected function cleanHtml($str)
-    {
-        return preg_replace('#<p>\\s*</p>#s', '', $str);
-    }
-
-    public function format_div($open, $name, $attrs, $props)
-    {
-       if ($open) {
-            return $this->escapePara()
-                . '<div class="' . $name . '">';
-        }
-        return '</div>' . $this->restorePara();
-    }
-    
     public function format_exception_chunk($open, $name, $attrs, $props)
     {
         return $this->format_container_chunk($open, 'reference', $attrs, $props);
     }
 
-    
+
     /**
      * Format a link for an element
      *
@@ -527,15 +624,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         return '</' .$tag. '>';
     }
 
-    public function format_para_informaltable($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            return $this->escapePara()
-                . $this->format_table($open, $name, $attrs, $props);
-        }
-        return $this->format_table($open, $name, $attrs, $props) . $this->restorePara();
-    }
-
     /**
     * Creates a link to the PEAR API documentation.
     * Uses the tag text as well as the optional attributes package, class,
@@ -603,6 +691,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     * Format a &lt;programlisting&gt; tag.
     * Highlighting an such is done in format_programlisting_text()
     *
+    *
     * @param string $value Value of the text to format.
     * @param string $tag   Tag name
     * @param array  $attrs Array of attributes
@@ -619,14 +708,13 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
                 $this->role = '';
             }
 
-            return $this->escapePara()
-                . '<div class="'. ($this->role ? $this->role . 'code' : 'programlisting')
-                . '">';
+            return '<div class="'. ($this->role ? $this->role . 'code' : 'programlisting')
+                   . '">';
         }
         $this->role = false;
         $this->trim = false;
 
-        return '</div>' . $this->restorePara();
+        return '</div>';
     }
 
     /**
@@ -657,24 +745,22 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     public function format_screen($open, $name, $attrs)
     {
         if ($open) {
-            return $this->escapePara()
-                . '<pre class="screen">';
+            return '<pre class="screen">';
         }
-        return "</pre>\n" . $this->restorePara();
+        return "</pre>\n";
     }
 
     public function format_screen_text($value, $tag) {
-        return ($this->TEXT($value));
+        return $this->TEXT($value);
     }
 
     public function format_literallayout($open, $name, $attrs)
     {
         //FIXME: add support for attributes like class, continuation etc
         if ($open) {
-            return $this->escapePara()
-                . '<p class="literallayout">';
+            return '<p class="literallayout">';
         }
-        return "</p>\n" . $this->restorePara();
+        return "</p>\n";
     }
 
     /**
@@ -728,8 +814,8 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     public function format_subtitle($open, $name, $attrs)
     {
         if ($open)
-            return '<p><font color="red">';
-        return '</font></p>';
+            return '<p><span style="color: red;">';
+        return '</span></p>';
     }
 
     public function format_editedby($open, $name, $attrs, $props)
@@ -774,39 +860,11 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     public function format_admonition($open, $name, $attrs, $props)
     {
         if ($open) {
-            return $this->escapePara()
-                . '<blockquote class="' . $name . '">';
+            return '<blockquote class="' . $name . '">';
         }
-        return "</blockquote>\n" . $this->restorePara();
+        return "</blockquote>\n";
     }
 
-    public function format_table($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            return $this->escapePara() . '<table class="' . $name . '">';
-        }
-        return "</table>\n" . $this->restorePara();
-    }
-
-    public function format_entry($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            if ($props['empty']) {
-                return '<td></td>';
-            }
-            return '<td>';
-        }
-        return '</td>';
-    }
-
-    public function format_th_entry($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            $colspan = Format::colspan($attrs[Reader::XMLNS_DOCBOOK]);
-            return '<th colspan="' .((int)$colspan). '">';
-        }
-        return '</th>';
-    }
 
     public function format_table_title($open, $name, $attrs, $props)
     {
@@ -818,29 +876,20 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         return '</caption>';
     }
 
-    public function format_userinput($open, $name, $attrs)
-    {
-        if ($open) {
-            return '<tt class="'.$name.'"><strong>';
-        }
-        return '</strong></tt>';
-    }
-
     public function format_replaceable($open, $name, $attrs, $props)
     {
         if ($open) {
-            return '<tt class="'.$name.'"><em>';
+            return '<code class="'.$name.'"><em>';
         }
-        return '</em></tt>';
+        return '</em></code>';
     }
 
     public function format_warning($open, $name, $attrs, $props)
     {
         if ($open) {
-            return $this->escapePara()
-                . '<blockquote class="warning">' . "\n";
+            return '<blockquote class="warning">' . "\n";
         }
-        return "</blockquote>\n" . $this->restorePara();
+        return "</blockquote>\n";
     }
 
     public function format_warning_title($open, $name, $attrs, $props)
@@ -933,30 +982,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         return '</i></span>';
     }
 
-    public function format_dl($open, $name, $attrs, $props)
-    {
-        if ($open) {
-            return $this->escapePara() . '<dl class="' . $name . '">';
-        }
-        return '</dl>' . $this->restorePara();
-    }
-
-    public function format_qandaentry($open, $name, $attrs)
-    {
-        if ($open) {
-            $this->cchunk['qandaentry'][] = $this->CURRENT_ID . '.entry' . count($this->cchunk['qandaentry']);
-            return '<dl>';
-        }
-        return '</dl>';
-    }
-
-    public function format_answer($open, $name, $attrs)
-    {
-        if ($open) {
-            return '<dd><a name="' .end($this->cchunk['qandaentry']).'"></a>';
-        }
-        return '</dd>';
-    }
 
     public function format_emphasis($open, $name, $attrs)
     {
@@ -985,36 +1010,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         return '</p></dd>';
     }
 
-    public function format_calloutlist($open, $name, $attrs)
-    {
-        if ($open) {
-            $this->cchunk['callouts'] = 0;
-            return $this->escapePara() . '<table>';
-        }
-        return '</table>' . $this->restorePara();
-    }
-
-    public function format_callout($open, $name, $attrs)
-    {
-        if ($open) {
-            return '<tr><td><a href="#'.$attrs[Reader::XMLNS_DOCBOOK]['arearefs'].'">(' .++$this->cchunk['callouts']. ')</a></td><td>';
-        }
-        return "</td></tr>\n";
-    }
-
-    public function format_para($open, $name, $attrs, $props) {    
-        if ($props['empty']) {
-            return '';
-        }
-        if ($open) {
-            ++$this->openPara;
-            return '<p class="' . $name . '">';
-        }
-
-        --$this->openPara;
-        return '</p>';
-    }
-
     public function format_cmdsynopsis($open, $name, $attrs)
     {
         if ($open) {
@@ -1024,7 +1019,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     }
 
 //Chunk Functions
-    
+
     /**
      * Formatting for the root element of a chunk.
      *
@@ -1062,7 +1057,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]['id'];
         }
 
-        $isChunk = isset($attrs[Reader::XMLNS_PHD]['chunk']) 
+        $isChunk = isset($attrs[Reader::XMLNS_PHD]['chunk'])
                     ? $attrs[Reader::XMLNS_PHD]['chunk'] == "true" : true;
 
         if ($isChunk) {
@@ -1081,13 +1076,13 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
                 $this->cchunk['verinfo'] = true;
             }
         }
-                
+
         if ($name == 'legalnotice') {
             if ($open) {
                 return '<div class="' . $name . '" ' . ($id ? "id=\"{$id}\"" : '') . '>';
             }
         }
-        return $open ? '<div class="'.$name.'" id="'.$id.'">' : "</div>\n"; 
+        return $open ? '<div class="'.$name.'" id="'.$id.'">' : "</div>\n";
     }
 
     public function format_container_chunk($open, $name, $attrs, $props)
@@ -1101,7 +1096,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         }
         $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]['id'];
 
-        $isChunk = isset($attrs[Reader::XMLNS_PHD]['chunk']) 
+        $isChunk = isset($attrs[Reader::XMLNS_PHD]['chunk'])
                     ? $attrs[Reader::XMLNS_PHD]['chunk'] == "true": true;
 
         if ($isChunk) {
@@ -1109,11 +1104,11 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             $this->CURRENT_CHUNK = $id;
             $this->notify(Render::CHUNK, $open ? Render::OPEN : Render::CLOSE);
         }
- 
+
         if (!$open) {
             return "</div>\n";
         }
- 
+
         $toc = $this->createTOC(
             $id, $name, $props,
             isset($attrs[Reader::XMLNS_PHD]['toc-depth'])

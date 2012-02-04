@@ -19,7 +19,7 @@ class Package_PEAR_BigXHTML extends Package_PEAR_XHTML {
         $style = $this->createCSSLinks();
         $style = $style ? "\n".$style : false;
         return <<<HEADER
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
  <head>
   <title>{$this->getTitle()}</title>
@@ -54,6 +54,7 @@ HEADER;
     }
 
     public function appendData($data) {
+        $data = $this->mangleParagraphs($data);
         if ($this->appendToBuffer) {
             $this->buffer .= $data;
             return;
@@ -82,7 +83,7 @@ HEADER;
             if ($val) {
                 $this->registerElementMap(parent::getDefaultElementMap());
                 $this->registerTextMap(parent::getDefaultTextMap());
-            }            
+            }
             break;
 
         case Render::INIT:
@@ -92,7 +93,7 @@ HEADER;
                     $this->fetchStylesheet();
                 }
                 $this->createOutputFile();
-            } 
+            }
             break;
 
         case Render::VERBOSE:
