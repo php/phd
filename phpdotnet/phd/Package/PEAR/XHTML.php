@@ -152,7 +152,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         'refname'               => 'format_refname',
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
-        'refsection'            => 'format_div',
+        'refsection'            => 'format_refsect',
         'refsynopsisdiv'        => 'format_refsynopsisdiv',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
