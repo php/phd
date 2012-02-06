@@ -28,7 +28,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         ),
         'book'                  => 'format_container_chunk_top',
         'chapter'               => 'format_container_chunk_top',
-        'citetitle'             => 'i',
+        'citetitle'             => 'em',
         'cmdsynopsis'           => 'format_cmdsynopsis',
         'co'                    => 'format_co',
         'colophon'              => 'format_chunk',
@@ -40,7 +40,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'editor'                => 'format_editor',
         'edition'               => 'format_suppressed_tags',
         'email'                 => 'format_suppressed_tags',
-        'errortext'             => 'tt',
+        'errortext'             => 'code',
         'firstname'             => 'format_name',
         'footnote'              => 'format_footnote',
         'footnoteref'           => 'format_footnoteref',
@@ -67,7 +67,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'classname'             => array(
             /* DEFAULT */          'span',
             'ooclass'           => array(
-                /* DEFAULT */      'b',
+                /* DEFAULT */      'strong',
                 'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
             ),
         ),
@@ -298,7 +298,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
             'phd:toc'           => 'strong',
-            'procedure'         => 'b',
+            'procedure'         => 'strong',
             'refsect1'          => 'h3',
             'refsect2'          => 'h4',
             'refsect3'          => 'h5',
@@ -318,12 +318,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'set'               => 'format_container_chunk_top_title',
         ),
         'titleabbrev'           => 'format_suppressed_tags',
-        'token'                 => 'tt',
+        'token'                 => 'code',
         'tr'                    => 'format_row',
         'trademark'             => 'format_trademark',
         'type'                  => 'span',
         'userinput'             => 'format_userinput',
-        'uri'                   => 'tt',
+        'uri'                   => 'code',
         'variablelist'          => 'format_variablelist',
         'varlistentry'          => 'format_varlistentry',
         'varname'               => array(
@@ -647,17 +647,18 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return "</strong>\n";
     }
 
-    public function format_literal($open, $name, $attrs) {
+    public function format_literal($open, $name, $attrs)
+    {
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             } else {
                 $this->role = false;
             }
-            return '<i>';
+            return '<em>';
         }
         $this->role = false;
-        return '</i>';
+        return '</em>';
     }
 
     public function format_literal_text($value, $tag) {
@@ -888,15 +889,16 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
         return "</span>";
     }
-    public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs) {
+    public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs)
+    {
         if ($open) {
             if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
                 $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
-                return ' class <b class="'.$name.'">';
+                return ' class <strong class="'.$name.'">';
             }
-            return '<b class="'.$name.'"> ';
+            return '<strong class="'.$name.'"> ';
         }
-        return "</b>";
+        return "</strong>";
     }
     public function format_classsynopsisinfo($open, $name, $attrs) {
         $this->cchunk["classsynopsisinfo"] = $this->dchunk["classsynopsisinfo"];
@@ -982,33 +984,39 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
         return $content;
     }
-    public function format_methodparam_parameter($open, $name, $attrs, $props) {
-        if ($props["empty"])
-            return;
+
+    public function format_methodparam_parameter($open, $name, $attrs, $props)
+    {
+        if ($props["empty"]) {
+            return '';
+        }
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return ' <tt class="parameter reference">&$';
+                return ' <code class="parameter reference">&$';
             }
-            return ' <tt class="parameter">$';
+            return ' <code class="parameter">$';
         }
-        return "</tt>";
+        return "</code>";
     }
+
     public function format_initializer($open, $name, $attrs) {
         if ($open) {
             return '<span class="'.$name.'"> = ';
         }
         return '</span>';
     }
-    public function format_parameter($open, $name, $attrs, $props) {
-        if ($props["empty"])
-            return;
+    public function format_parameter($open, $name, $attrs, $props)
+    {
+        if ($props["empty"]) {
+            return '';
+        }
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return '<i><tt class="parameter reference">&';
+                return '<em><code class="parameter reference">&';
             }
-            return '<i><tt class="parameter">';
+            return '<em><code class="parameter">';
         }
-        return "</tt></i>";
+        return "</code></em>";
     }
 
     public function format_void($open, $name, $attrs, $props) {
@@ -1277,14 +1285,16 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return '</div>';
     }
-    public function format_constant($open, $name, $attrs) {
+    public function format_constant($open, $name, $attrs)
+    {
         if ($open) {
-            return "<b><tt>";
+            return "<strong><code>";
         }
-        return "</tt></b>";
+        return "</code></strong>";
     }
-    public function admonition_title($title, $lang) {
-        return '<b class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</b>';
+    public function admonition_title($title, $lang)
+    {
+        return '<strong class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</strong>';
     }
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
@@ -1313,11 +1323,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return "</p></blockquote>";
     }
-    public function format_note_title($open, $name, $attrs) {
+    public function format_note_title($open, $name, $attrs)
+    {
         if ($open) {
-            return '<b>';
+            return '<strong>';
         }
-        return '</b><br />';
+        return '</strong><br />';
     }
     public function format_example($open, $name, $attrs, $props) {
         static $n = 0;
@@ -1330,24 +1341,26 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return '</div>';
     }
-    public function format_example_title($open, $name, $attrs, $props) {
+    public function format_example_title($open, $name, $attrs, $props)
+    {
         if ($props["empty"]) {
             return "";
         }
         if ($open) {
-            return "<p><b>" . ($this->autogen('example', $props['lang'])
+            return "<p><strong>" . ($this->autogen('example', $props['lang'])
                 . (isset($this->cchunk["examples"]) ? ++$this->cchunk["examples"] : "")) . " ";
         }
-        return "</b></p>";
+        return "</strong></p>";
     }
-    public function format_table_title($open, $name, $attrs, $props) {
+    public function format_table_title($open, $name, $attrs, $props)
+    {
         if ($props["empty"]) {
             return "";
         }
         if ($open) {
-            return "<caption><b>";
+            return "<caption><strong>";
         }
-        return "</b></caption>";
+        return "</strong></caption>";
     }
 
     public function format_mediaobject($open, $name, $attrs) {
@@ -1579,14 +1592,15 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '&lt;<a href="mailto:' . $value . '">' . $value . '</a>&gt;';
     }
 
-    public function format_bold_paragraph($open, $name, $attrs, $props) {
+    public function format_bold_paragraph($open, $name, $attrs, $props)
+    {
         if ($props["empty"]) {
             return "";
         }
         if ($open) {
-            return "<p><b>";
+            return "<p><strong>";
         }
-        return "</b></p>";
+        return "</strong></p>";
     }
 
    /**

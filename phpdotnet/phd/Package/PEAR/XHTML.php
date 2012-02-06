@@ -29,7 +29,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         'caution'               => 'format_admonition',
         'callout'               => 'format_callout',
         'calloutlist'           => 'format_calloutlist',
-        'citetitle'             => 'i',
         'colspec'               => 'format_colspec',
         'copyright'             => 'format_copyright',
         'coref'                 => 'format_suppressed_tags',
@@ -239,7 +238,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
             'phd:toc'           => 'strong',
-            'procedure'         => 'b',
+            'procedure'         => 'strong',
             'refsect1'          => 'h2',
             'refsect2'          => 'h3',
             'refsect3'          => 'h4',
@@ -902,13 +901,13 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
 
     public function format_refname_function_text($value)
     {
-        $this->cchunk['refname'][] = '<b class="function">' . $this->TEXT($value . '()') . '</b>';
+        $this->cchunk['refname'][] = '<strong class="function">' . $this->TEXT($value . '()') . '</strong>';
         return false;
     }
 
     public function format_refname_classname_text($value)
     {
-        $this->cchunk['refname'][] = '<b class="classname">' . $this->TEXT($value) . '</b>';
+        $this->cchunk['refname'][] = '<strong class="classname">' . $this->TEXT($value) . '</strong>';
         return false;
     }
 
@@ -976,18 +975,20 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     {
         if ($open) {
             if ($props['sibling'])
-                return '-&gt;<span class="guimenu"><i>';
-            return '<span class="guimenu"><i>';
+                return '-&gt;<span class="guimenu"><em>';
+            return '<span class="guimenu"><em>';
         }
-        return '</i></span>';
+        return '</em></span>';
     }
 
 
     public function format_emphasis($open, $name, $attrs)
     {
-        if (isset($attrs[Reader::XMLNS_DOCBOOK]['role']) && $attrs[Reader::XMLNS_DOCBOOK]['role'] == "bold")
-            $role = "b";
-        else $role = "i";
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]['role']) && $attrs[Reader::XMLNS_DOCBOOK]['role'] == "bold") {
+            $role = "strong";
+        } else {
+            $role = "em";
+        }
         if ($open) {
             return '<' . $role . ' class="' . $name . '">';
         }
