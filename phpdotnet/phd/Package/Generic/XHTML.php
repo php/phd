@@ -47,7 +47,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'funcdef'               => 'format_suppressed_tags',
         'funcsynopsis'          => 'div',
         'funcsynopsisinfo'      => 'pre',
-        'function'				=> 'span',
+        'function'              => 'span',
         'funcprototype'         => 'code',
         'surname'               => 'format_name',
         'othername'             => 'format_name',
@@ -782,7 +782,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
         $toc = '<ol>';
         $desc = "";
-    	if (!in_array($id, $this->TOC_WRITTEN)) {
+        if (!in_array($id, $this->TOC_WRITTEN)) {
             $toc = $this->createTOC($id, $name, $props);
         }
         $toc .= "</ol>\n";
@@ -985,7 +985,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_methodparam_parameter($open, $name, $attrs, $props) {
         if ($props["empty"])
             return;
-    	if ($open) {
+        if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 return ' <tt class="parameter reference">&$';
             }
@@ -1002,7 +1002,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_parameter($open, $name, $attrs, $props) {
         if ($props["empty"])
             return;
-    	if ($open) {
+        if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 return '<i><tt class="parameter reference">&';
             }
@@ -1013,11 +1013,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_void($open, $name, $attrs, $props) {
         if ($props['sibling'] == 'methodname') {
-	        return ' ( <span class="methodparam">void</span>';
-	} else {
-	        return '<span class="type"><span class="type void">void</span></span>';
-	}
+            return ' ( <span class="methodparam">void</span>';
+        } else {
+            return '<span class="type"><span class="type void">void</span></span>';
+        }
     }
+
     public function format_methodparam($open, $name, $attrs) {
         if ($open) {
             $content = '';
@@ -1040,6 +1041,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return "</span>";
     }
+
     public function format_methodname($open, $name, $attr) {
         if ($open) {
             return ' <span class="' .$name. '">';
@@ -1370,7 +1372,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             if ($curfile && '' === $width . $height) {
                 list(,,,$dimensions,,,,) = getimagesize($curfile);
             } else {
-            	$dimensions = $width . ' ' . $height;
+                $dimensions = $width . ' ' . $height;
             }
 
             // Generate warnings when only 1 dimension supplied or alt is not supplied.
@@ -1394,7 +1396,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             Format::tgroup(array());
             $idstr = '';
             if (isset($attrs[Reader::XMLNS_XML]["id"])) {
-            	$idstr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
+                $idstr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
             }
             return '<table' . $idstr . ' class="doctable ' .$name. '">';
         }

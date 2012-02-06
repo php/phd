@@ -99,7 +99,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         'itemizedlist'          => 'format_itemizedlist',
         'initializer'           => 'format_initializer',
         'legalnotice'           => 'format_chunk',
-        'link'					=> 'format_link',
+        'link'                  => 'format_link',
         'listitem'              => array(
             /* DEFAULT */          'li',
             'varlistentry'      => 'dd',
