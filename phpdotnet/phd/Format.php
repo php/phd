@@ -93,7 +93,7 @@ abstract class Format extends ObjectStorage
      * Possible events:
      * - Render::STANDALONE
      *     Always called with true as value from Render::attach()
-     *     
+     *
      *
      * - Render::INIT
      *     Called from Render::execute() when rendering
@@ -129,7 +129,7 @@ abstract class Format extends ObjectStorage
         foreach ($pihandlers as $target => $classname) {
             $class = __NAMESPACE__ . "\\" . $classname;
             $this->pihandlers[$target] = new $class($this);
-        } 
+        }
     }
 
     public function getPIHandler($target) {
@@ -207,7 +207,7 @@ abstract class Format extends ObjectStorage
     final public function notify($event, $val = null)
     {
         $this->update($event, $val);
-    }   
+    }
 
     public function setTitle($title) {
         $this->title = $title;
@@ -556,7 +556,7 @@ abstract class Format extends ObjectStorage
     public function highlight($text, $role = 'php', $format = 'xhtml')
     {
         if (!isset(self::$highlighters[$format])) {
-            $class = Config::highlighter();            
+            $class = Config::highlighter();
             self::$highlighters[$format] = $class::factory($format);
         }
 
