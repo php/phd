@@ -190,7 +190,7 @@ NAV;
    <td style="width: 40%; text-align: right;">{$strNext}</td>
   </tr>
   <tr>
-   <td style="text-align: right; vertical-align: top;">{$this->prev["desc"]}</td>
+   <td style="text-align: left; vertical-align: top;">{$this->prev["desc"]}</td>
    <td style="text-align: center;">{$strHome}</td>
    <td style="text-align: right; vertical-align: top;">{$this->next["desc"]}</td>
   </tr>
