@@ -46,67 +46,67 @@ Content:
 
         <div class="classsynopsisinfo">
             <span class="ooclass">
-                <b class="classname">SplStack</b>
+                <strong class="classname">SplStack</strong>
             </span>
 
              <span class="ooclass">
                 <span class="modifier">extends</span>
-                <b class="classname">SplDoublyLinkedList</b>
+                <strong class="classname">SplDoublyLinkedList</strong>
             </span>
 
             <span class="oointerface">implements 
-                <span class="interfacename"><b class="interfacename">Iterator</b></span>
+                <span class="interfacename"><strong class="interfacename">Iterator</strong></span>
             </span>
 
             <span class="oointerface">, 
-                <span class="interfacename"><b class="interfacename">ArrayAccess</b></span>
+                <span class="interfacename"><strong class="interfacename">ArrayAccess</strong></span>
             </span>
 
             <span class="oointerface">, 
-                <span class="interfacename"><b class="interfacename">Countable</b></span>
+                <span class="interfacename"><strong class="interfacename">Countable</strong></span>
             </span>
          {</div>
 
         <div class="classsynopsisinfo classsynopsisinfo_comment">/* Methods */</div>
         <div class="constructorsynopsis dc-description">
-             <span class="methodname"><b>__construct</b></span>
+             <span class="methodname"><strong>__construct</strong></span>
              ( <span class="methodparam">void</span>
          )</div>
 
         <div class="methodsynopsis dc-description">
-            <span class="type">void</span> <span class="methodname"><b>setIteratorMode</b></span>
+            <span class="type">void</span> <span class="methodname"><strong>setIteratorMode</strong></span>
              ( <span class="methodparam"><span class="type">int</span> <code class="parameter">$mode</code></span>
          )</div>
 
 
         <div class="classsynopsisinfo classsynopsisinfo_comment">/* Inherited methods */</div>
         <div class="methodsynopsis dc-description">
-            <span class="type">mixed</span> <span class="methodname"><b>SplDoublyLinkedList::bottom</b></span>
+            <span class="type">mixed</span> <span class="methodname"><strong>SplDoublyLinkedList::bottom</strong></span>
              ( <span class="methodparam">void</span>
          )</div>
 
         <div class="methodsynopsis dc-description">
-            <span class="type">int</span> <span class="methodname"><b>SplDoublyLinkedList::count</b></span>
+            <span class="type">int</span> <span class="methodname"><strong>SplDoublyLinkedList::count</strong></span>
              ( <span class="methodparam">void</span>
          )</div>
 
         <div class="methodsynopsis dc-description">
-            <span class="type">mixed</span> <span class="methodname"><b>SplDoublyLinkedList::current</b></span>
+            <span class="type">mixed</span> <span class="methodname"><strong>SplDoublyLinkedList::current</strong></span>
              ( <span class="methodparam">void</span>
          )</div>
 
         <div class="methodsynopsis dc-description">
-            <span class="type">int</span> <span class="methodname"><b>SplDoublyLinkedList::getIteratorMode</b></span>
+            <span class="type">int</span> <span class="methodname"><strong>SplDoublyLinkedList::getIteratorMode</strong></span>
              ( <span class="methodparam">void</span>
          )</div>
 
         <div class="methodsynopsis dc-description">
-            <span class="type">bool</span> <span class="methodname"><b>SplDoublyLinkedList::offsetExists</b></span>
+            <span class="type">bool</span> <span class="methodname"><strong>SplDoublyLinkedList::offsetExists</strong></span>
              ( <span class="methodparam"><span class="type"><a href="language.pseudo-types.html#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$index</code></span>
          )</div>
 
         <div class="methodsynopsis dc-description">
-            <span class="type">mixed</span> <span class="methodname"><b>SplDoublyLinkedList::offsetGet</b></span>
+            <span class="type">mixed</span> <span class="methodname"><strong>SplDoublyLinkedList::offsetGet</strong></span>
              ( <span class="methodparam"><span class="type"><a href="language.pseudo-types.html#language.types.mixed" class="type mixed">mixed</a></span> <code class="parameter">$index</code></span>
          )</div>
 

@@ -46,7 +46,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             'legalnotice'       => 'h4',
             'note'              => 'format_note_title',
             'phd:toc'           => 'strong',
-            'procedure'         => 'b',
+            'procedure'         => 'strong',
             'refsect1'          => 'h3',
             'refsect2'          => 'h4',
             'refsect3'          => 'h5',
@@ -383,9 +383,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return "";
         }
         if ($open) {
-            return "<p><b>" . ($this->autogen('example', $props['lang']) . ++$this->cchunk["examples"]) . " ";
+            return "<p><strong>" . ($this->autogen('example', $props['lang']) . ++$this->cchunk["examples"]) . " ";
         }
-        return "</b></p>";
+        return "</strong></p>";
     }
 
     public function versionInfo($funcname) {
@@ -454,7 +454,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             v("No link found for %s", $value, VERBOSE_BROKEN_LINKS);
         }
 
-        return '<b>' .$display_value. '</b>';
+        return '<strong>' .$display_value. '</strong>';
     }
 
     public function format_grep_classname_text($value, $tag) {
@@ -471,7 +471,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             $href = $this->chunked ? $filename.$this->ext : "#$filename";
             return '<a href="'.$href. '" class="' .$tag. '">' .$value. '</a>';
         }
-        return '<b class="' .$tag. '">' .$value. '</b>';
+        return '<strong class="' .$tag. '">' .$value. '</strong>';
     }
 
 
