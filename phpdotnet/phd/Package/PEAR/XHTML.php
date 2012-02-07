@@ -151,7 +151,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         'refname'               => 'format_refname',
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
-        'refsection'            => 'format_refsect',
+        'refsection'            => 'format_div',
         'refsynopsisdiv'        => 'format_refsynopsisdiv',
         'row'                   => 'format_row',
         'screen'                => 'format_screen',
@@ -1137,6 +1137,19 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         return "</h1>\n" .$ret;
     }
 
+    public function format_div($open, $name, $attrs, $props)
+    {
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $idstr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
+            } else {
+                $idstr = '';
+            }
+
+            return '<div class="' . $name . '"' . $idstr . '>';
+        }
+        return '</div>';
+    }
 }
 
 /*

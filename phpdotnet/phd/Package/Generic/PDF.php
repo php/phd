@@ -177,7 +177,7 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
         'colspec'               => 'format_colspec',
         'spanspec'              => 'format_suppressed_tags',
         'thead'                 => 'format_thead',
-        'tbody'                 => 'format_tbody',
+        'tbody'                 => 'format_suppressed_tags',
         'row'                   => 'format_row',
         'entry'                 => array (
             /* DEFAULT */          'format_entry',
@@ -726,23 +726,18 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
     }
     public function format_thead($open, $name, $attrs) {
         if ($open) {
-            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
             $this->pdfDoc->setFont(PdfWriter::FONT_BOLD);
         } else {
             $this->pdfDoc->revertFont();
         }
         return "";
     }
-    public function format_tbody($open, $name, $attrs) {
-        if ($open) {
-            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
-        }
-        return "";
-    }
+
     public function format_row($open, $name, $attrs) {
         if ($open) {
             Format::initRow();
-            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
+            $valign = isset($attrs[Reader::XMLNS_DOCBOOK]['valign'])
+                      ? $attrs[Reader::XMLNS_DOCBOOK]['valign'] : 'middle';
             $colCount = Format::getColCount();
             $this->pdfDoc->add(PdfWriter::TABLE_ROW, array($colCount, $valign));
         } else {

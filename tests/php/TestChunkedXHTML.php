@@ -19,7 +19,7 @@ class TestChunkedXHTML extends Package_PHP_ChunkedXHTML {
     }
 
     public function writeChunk($id, $fp) {
-        $filename = $this->getOutputDir() . $id . '.' .$this->getExt();
+        $filename = $this->getOutputDir() . $id . $this->getExt();
 
         rewind($fp);
         $content = "\n";

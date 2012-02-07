@@ -493,15 +493,11 @@ abstract class Format extends ObjectStorage
 /* defaults */
         $defaults["colname"] = count($this->TABLE["colspec"])+1;
         $defaults["colnum"]  = count($this->TABLE["colspec"])+1;
-        $defaults["align"]   = "left";
 
         return array_merge($defaults, $this->TABLE["defaults"], $attrs);
     }
     public function getColCount() {
         return $this->TABLE["cols"];
-    }
-    public function valign($attrs) {
-        return isset($attrs["valign"]) ? $attrs["valign"] : "middle";
     }
     public function initRow() {
         $this->TABLE["next_colnum"] = 1;

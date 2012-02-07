@@ -60,7 +60,7 @@ Content:
       Simple test question 05
      
     </a></li></ol></div>
-   <dl class="qandaentry" id="faq.001.01" name="faq.001.01">
+   <dl class="qandaentry" id="faq.001.01">
     <dt><strong>
      
       Simple test question 01
@@ -73,7 +73,7 @@ Content:
     </dd>
   </dl>
 
-  <dl class="qandaentry" id="faq.001.02" name="faq.001.02">
+  <dl class="qandaentry" id="faq.001.02">
     <dt><strong>
      
       Simple test question 02
@@ -86,7 +86,7 @@ Content:
     </dd>
   </dl>
 
-  <dl class="qandaentry" id="faq.001.03" name="faq.001.03">
+  <dl class="qandaentry" id="faq.001.03">
     <dt><strong>
      
       Simple test question 03
@@ -99,7 +99,7 @@ Content:
     </dd>
   </dl>
 
-  <dl class="qandaentry" id="faq.001.04" name="faq.001.04">
+  <dl class="qandaentry" id="faq.001.04">
     <dt><strong>
      
       Simple test question 04
@@ -112,7 +112,7 @@ Content:
     </dd>
   </dl>
 
-  <dl class="qandaentry" id="faq.001.05" name="faq.001.05">
+  <dl class="qandaentry" id="faq.001.05">
     <dt><strong>
      
       Simple test question 05

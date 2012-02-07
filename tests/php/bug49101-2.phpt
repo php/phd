@@ -38,15 +38,15 @@ Content:
  </head>
  <body><div id="bug49101" class="article"><hr />
 
-<table class="doctable table">
-<caption><b>Sample CALS Table</b></caption>
+<table id="ex.calstable" class="doctable table">
+<caption><strong>Sample CALS Table</strong></caption>
 
-<col align="left" />
-<col align="left" />
-<col align="left" />
-<col align="left" />
-<thead valign="middle">
-<tr valign="middle">
+<col style="text-align: left;" />
+<col style="text-align: left;" />
+<col style="text-align: left;" />
+<col style="text-align: left;" />
+<thead>
+<tr>
   <th colspan="2">Horizontal Span</th>
   <th>a3</th>
   <th>a4</th>
@@ -55,8 +55,8 @@ Content:
 
 </thead>
 
-<tfoot valign="middle">
-<tr valign="middle">
+<tfoot>
+<tr>
   <th>f1</th>
   <th>f2</th>
   <th>f3</th>
@@ -66,25 +66,25 @@ Content:
 
 </tfoot>
 
-<tbody valign="middle" class="tbody">
-<tr valign="middle">
-  <td align="left">b1</td>
-  <td align="left">b2</td>
-  <td align="left">b3</td>
-  <td align="left">b4</td>
-  <td rowspan="2" align="left" valign="middle"><p class="para">Vertical Span</p></td>
+<tbody class="tbody">
+<tr>
+  <td style="text-align: left;">b1</td>
+  <td style="text-align: left;">b2</td>
+  <td style="text-align: left;">b3</td>
+  <td style="text-align: left;">b4</td>
+  <td rowspan="2" style="text-align: left; vertical-align: middle;"><p class="para">Vertical Span</p></td>
 </tr>
 
-<tr valign="middle">
-  <td align="left">c1</td>
-  <td colspan="2" rowspan="2" align="center" valign="bottom">Span Both</td>
-  <td align="left">c4</td>
+<tr>
+  <td style="text-align: left;">c1</td>
+  <td colspan="2" rowspan="2" style="text-align: center; vertical-align: bottom;">Span Both</td>
+  <td style="text-align: left;">c4</td>
 </tr>
 
-<tr valign="middle">
-  <td align="left">d1</td>
-  <td align="left">d4</td>
-  <td align="left">d5</td>
+<tr>
+  <td style="text-align: left;">d1</td>
+  <td style="text-align: left;">d4</td>
+  <td style="text-align: left;">d5</td>
 </tr>
 
 </tbody>

@@ -1444,56 +1444,94 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return '';
     }
-    private function parse_table_entry_attributes($attrs) {
-        $retval = 'align="' .$attrs["align"]. '"';
-        if ($attrs["align"] == "char" && isset($attrs["char"])) {
-            $retval .= ' char="' .(htmlspecialchars($attrs["char"], ENT_QUOTES)). '"';
-            if (isset($attrs["charoff"])) {
-                $retval .= ' charoff="' .(htmlspecialchars($attrs["charoff"], ENT_QUOTES)). '"';
+
+    private static function parse_table_entry_attributes($attrs)
+    {
+        $style  = array();
+        $retval = '';
+        if (!empty($attrs['align'])) {
+            if ('char' != $attrs['align']) {
+                $style[] = 'text-align: ' . $attrs['align'];
+            } elseif (isset($attrs['char'])) {
+                // There's no analogue in CSS, but as this stuff isn't supported
+                // in any browser, it is unlikely to appear in DocBook anyway
+                $retval .= ' align="char" char="'
+                           . htmlspecialchars($attrs["char"], ENT_QUOTES) . '"';
+                if (isset($attrs['charoff'])) {
+                    $retval .= ' charoff="'
+                               . htmlspecialchars($attrs["charoff"], ENT_QUOTES) . '"';
+                }
             }
         }
         if (isset($attrs["valign"])) {
-            $retval .= ' valign="' .$attrs["valign"]. '"';
+            $style[] = 'vertical-align: ' . $attrs["valign"];
         }
         if (isset($attrs["colwidth"])) {
-            $retval .= ' width="' .((int)$attrs["colwidth"]). '"';
+            if (preg_match('/^\\d+\\*$/', $attrs['colwidth'])) {
+                // relative_length measure has no analogue in CSS and is
+                // unsupported in browsers, leave as is
+                $retval .= ' width="' . $attrs['colwidth'] . '"';
+            } else {
+                // probably fixed width, use inline styles
+                $style[] = 'width: ' . $attrs['colwidth'];
+            }
         }
-        return $retval;
+        return $retval . (empty($style) ? '' : ' style="' . implode('; ', $style) . ';"');
     }
-    public function format_colspec($open, $name, $attrs) {
+
+    public function format_colspec($open, $name, $attrs)
+    {
         if ($open) {
             $str = self::parse_table_entry_attributes(Format::colspec($attrs[Reader::XMLNS_DOCBOOK]));
-
-            return '<col '.$str. ' />';
+            return '<col' . $str . ' />';
         }
         /* noop */
     }
-    public function format_th($open, $name, $attrs) {
+
+    public function format_th($open, $name, $attrs)
+    {
         if ($open) {
-            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
-            return '<' .$name. ' valign="' .$valign. '">';
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['valign'])) {
+                return '<' . $name . ' style="vertical-align: '
+                       . $attrs[Reader::XMLNS_DOCBOOK]['valign'] . ';">';
+            } else {
+                return '<' . $name . '>';
+            }
         }
         return "</$name>\n";
     }
-    public function format_tbody($open, $name, $attrs) {
+
+    public function format_tbody($open, $name, $attrs)
+    {
         if ($open) {
-            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
-            return '<tbody valign="' .$valign. '" class="' .$name. '">';
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['valign'])) {
+                return '<tbody class="' . $name . '" style="vertical-align: '
+                       . $attrs[Reader::XMLNS_DOCBOOK]['valign'] . ';">';
+            } else {
+                return '<tbody class="' . $name . '">';
+            }
         }
         return "</tbody>";
     }
-    public function format_row($open, $name, $attrs) {
+
+    public function format_row($open, $name, $attrs)
+    {
         if ($open) {
             $idstr = '';
             if (isset($attrs[Reader::XMLNS_XML]['id'])) {
                 $idstr = ' id="'. $attrs[Reader::XMLNS_XML]['id']. '"';
             }
             Format::initRow();
-            $valign = Format::valign($attrs[Reader::XMLNS_DOCBOOK]);
-            return '<tr'.$idstr.' valign="' .$valign. '">';
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['valign'])) {
+                return '<tr' . $idstr . ' style="vertical-align: '
+                       . $attrs[Reader::XMLNS_DOCBOOK]['valign'] . ';">';
+            } else {
+                return '<tr' . $idstr . '>';
+            }
         }
         return "</tr>\n";
     }
+
     public function format_th_entry($open, $name, $attrs, $props) {
         if ($props["empty"]) {
             return '<th class="empty">&nbsp;</th>';
@@ -1537,7 +1575,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
             $sColspan = $colspan == 1 ? '' : ' colspan="' .((int)$colspan) . '"';
             $sRowspan = $rowspan == 1 ? '' : ' rowspan="' .((int)$rowspan). '"';
-            return $retval. '<td' . $sColspan . $sRowspan . ' ' . $moreattrs. '>';
+            return $retval. '<td' . $sColspan . $sRowspan . $moreattrs. '>';
         }
         return "</td>";
     }
