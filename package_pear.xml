@@ -39,7 +39,11 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - No changes yet
+    - Fixed #54208 - no attributes for table-related tags (Alexey Borzov)
+    - Allow linking to refsections (Alexey Borzov)
+    - Package now generates (almost) valid HTML5:
+      - Got rid of presentational tags: &lt;b&gt;, &lt;i&gt;, &lt;tt&gt; changed to &lt;strong&gt;, &lt;em&gt;, &lt;code&gt; (Alexey Borzov)
+      - &lt;p&gt; tags are now properly closed before block level tags and reopened after them if needed (Alexey Borzov)
   </notes>
 
   <contents>
