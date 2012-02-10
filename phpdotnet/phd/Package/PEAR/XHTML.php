@@ -421,22 +421,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     }
 
    /**
-    * Returns an opening <p> tag if a paragraph was opened before and closed due to non-phrasing content
-    *
-    * @return string
-    */
-    protected function reopenParagraph()
-    {
-        if (!$this->openPara && 'p' == end($this->tagStack)) {
-            $this->openPara = true;
-            return '<p>';
-        }
-
-        return '';
-    }
-
-
-   /**
     * Opens and closes <p></p> tags as needed
     *
     * Unlike DocBook, where all stuff can be inside <para></para> tags, <p></p>
@@ -461,7 +445,12 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
 
         // we need to reopen paragraph for text content
         } elseif ('<' != $data[0]) {
-            return $this->reopenParagraph() . $data;
+            if ($this->openPara || 'p' != end($this->tagStack)) {
+                return $data;
+            } else {
+                $this->openPara = true;
+                return '<p>' . $data;
+            }
 
         // if <p> was closed before and not reopened, skip closing tag
         } elseif ('</p>' == trim($data) && !$this->openPara && 'p' == end($this->tagStack)) {
@@ -497,7 +486,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         }
 
         // adding tag stack to global tag stack
-        $openPara = $this->openPara && 'p' == end($this->tagStack);
+        $lastPara = 'p' == end($this->tagStack);
         $hasPara  = false;
         foreach ($tagStack as $tagName) {
             if ('p' == $tagName) {
@@ -515,9 +504,10 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         }
         if ($hasPara) {
             return $data;
-        } elseif ($phrasing) {
-            return $this->reopenParagraph() . $data;
-        } elseif ($openPara) {
+        } elseif ($phrasing && $lastPara && !$this->openPara) {
+            $this->openPara = true;
+            return '<p>' . $data;
+        } elseif (!$phrasing && $lastPara && $this->openPara) {
             $this->openPara = false;
             return '</p>' . $data;
         } else {
