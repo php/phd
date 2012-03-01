@@ -25,15 +25,16 @@ Releases are currently made from trunk/ (PHD_1_0)
 
 7. Generate the appropriate xml entries using the Simple Channel Server packages. You need to be running PHP 5.3 (make sure you have ext/phar and
 ext/zlib enabled):
-   $ php -dphar.readonly=0 pearscs.phar release /path/to/PhD-*.tgz <username>
-   $ svn diff # Just quickly scan through the changed XML files
-   $ svn status # Check new files
-   $ svn add .... # all the files from svn status, except pearscs.phar
+   $ for i in /path/to/phd/PhD{_PHP,_PEAR,_Generic,}-1.1.3.tgz; do php -dphar.readonly=0 pearscs.phar release $i bjori; done
+   $ git add -A
+   $ git diff --staged # Scan through the changes
+   $ git commit
 
 8. Update the file in path/to/docweb/templates/all/phd/home.tpl.php and add a new <li></li> with info from package.xml.
 
 9. Commit the changes. 
-   $ svn commit -m "Release PhD *"
+   $ git commit templates/all/phd/home.tpl.php -m "Release PhD *"
+   $ git push # Push the release upstream
 
 10. Create a svn tag.
    $ cd /path/to/phd
