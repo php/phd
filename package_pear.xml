@@ -30,20 +30,16 @@
 
   <date>2012-03-01</date>
   <version>
-    <release>1.1.3</release>
+    <release>1.1.4</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Fixed #54208 - no attributes for table-related tags (Alexey Borzov)
-    - Allow linking to refsections (Alexey Borzov)
-    - Package now generates (almost) valid HTML5:
-      - Got rid of presentational tags: &lt;b&gt;, &lt;i&gt;, &lt;tt&gt; changed to &lt;strong&gt;, &lt;em&gt;, &lt;code&gt; (Alexey Borzov)
-      - &lt;p&gt; tags are now properly closed before block level tags and reopened after them if needed (Alexey Borzov)
+    - no changes yet
   </notes>
 
   <contents>
@@ -186,6 +182,25 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Use transliteration for the Windows CHM TOC and Index - Romanian only - (Richard)
+      </notes>
+    </release>
+    <release>
+      <version>
+        <release>1.1.3</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2012-03-01</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+    - Fixed #54208 - no attributes for table-related tags (Alexey Borzov)
+    - Allow linking to refsections (Alexey Borzov)
+    - Package now generates (almost) valid HTML5:
+      - Got rid of presentational tags: &lt;b&gt;, &lt;i&gt;, &lt;tt&gt; changed to &lt;strong&gt;, &lt;em&gt;, &lt;code&gt; (Alexey Borzov)
+      - &lt;p&gt; tags are now properly closed before block level tags and reopened after them if needed (Alexey Borzov)
       </notes>
     </release>
   </changelog>
