@@ -279,11 +279,12 @@ class Package_PHP_PDF extends Package_Generic_PDF {
         case "object":
         case "resource":
         case "null":
+        case "callable":
             $href = "language.types.$t";
             break;
         case "mixed":
         case "number":
-        case "callback":
+        case "callback": // old name for callable
             $href = "language.pseudo-types";
             $fragment = "language.types.$t";
             break;
