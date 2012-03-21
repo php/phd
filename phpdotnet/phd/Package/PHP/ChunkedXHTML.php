@@ -31,27 +31,24 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
  </head>
  <body>
 HEADER;
-        $parent = Format::getParent($id);
         $next = $prev = $up = array("href" => null, "desc" => null);
-        if ($parent && $parent != "ROOT") {
-            if ($prevId = Format::getPrevious($id)) {
-                $prev = array(
-                    "href" => $this->getFilename($prevId) . $this->getExt(),
-                    "desc" => $this->getShortDescription($prevId),
-                );
-            }
-            if ($nextId = Format::getNext($id)) {
-                $next = array(
-                    "href" => $this->getFilename($nextId) . $this->getExt(),
-                    "desc" => $this->getShortDescription($nextId),
-                );
-            }
-            if ($parentId = Format::getParent($id)) {
-                $up = array(
-                    "href" => $this->getFilename($parentId) . $this->getExt(),
-                    "desc" => $this->getShortDescription($parentId),
-                );
-            }
+        if ($prevId = Format::getPrevious($id)) {
+            $prev = array(
+                "href" => $this->getFilename($prevId) . $this->getExt(),
+                "desc" => $this->getShortDescription($prevId),
+            );
+        }
+        if ($nextId = Format::getNext($id)) {
+            $next = array(
+                "href" => $this->getFilename($nextId) . $this->getExt(),
+                "desc" => $this->getShortDescription($nextId),
+            );
+        }
+        if ($parentId = Format::getParent($id)) {
+            $up = array(
+                "href" => $this->getFilename($parentId) . $this->getExt(),
+                "desc" => $this->getShortDescription($parentId),
+            );
         }
 
         $nav = <<<NAV
