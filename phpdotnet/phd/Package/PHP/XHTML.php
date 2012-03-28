@@ -435,12 +435,27 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_function_text($value, $tag, $display_value = null) {
+        static $non_functions = array(
+            "echo" => true, "print" => true,
+            "include" => true, "include_once" => true,
+            "require" => true, "require_once" => true,
+            "return" => true,
+        );
+        
         if ($display_value === null) {
-            $display_value = $value . "()";
+            $display_value = $value;
+            if (!isset($non_functions[$value])) {
+                $display_value .= "()";
+            }
         }
 
-        $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
-        if (($filename = $this->getRefnameLink($ref)) !== null) {
+        if (isset($non_functions[$value])) {
+            $filename = "function." . str_replace("_", "-", $value);
+        } else {
+            $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
+            $filename = $this->getRefnameLink($ref);
+        }
+        if ($filename !== null) {
             if ($this->CURRENT_ID !== $filename) {
                 $rel = $desc = "";
                 if ($this->role == "seealso") {
