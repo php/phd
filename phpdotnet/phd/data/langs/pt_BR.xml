@@ -34,6 +34,12 @@
    </listitem>
   </varlistentry>
   <varlistentry>
+   <term>important</term>
+   <listitem>
+    <simpara>Importante</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
    <term>by</term>
    <listitem>
     <simpara>por</simpara>
@@ -49,6 +55,30 @@
    <term>example</term>
    <listitem>
     <simpara>Exemplo #</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>unknownversion</term>
+   <listitem>
+    <simpara>Não há informação de versão disponível, talvez apenas no SVN</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>refname</term>
+   <listitem>
+    <simpara>NOME</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>refsynopsis</term>
+   <listitem>
+    <simpara>SINOPSE</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>mediaobject</term>
+   <listitem>
+    <simpara>[MÍDIA NÃO DISPONÍVEL]</simpara>
    </listitem>
   </varlistentry>
  </variablelist>
