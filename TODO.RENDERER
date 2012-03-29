@@ -6,6 +6,11 @@ TODO:
 	- Implement method to generate markup for the default attributes
 	- Implement the remaining elements and attributes of the Docbook format
 
+Features:
+    - Auto generate ids for chunks, without requiring xml:id
+    - Create a generic and customizable indexer
+    - Automatically create "lists" (i.e. figures, tables, etc)
+
 
 - The PHP Documentation team
 
