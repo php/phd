@@ -10,9 +10,15 @@ class Package_PEAR_Factory extends Format_Factory {
         'chm'           => 'Package_PEAR_CHM',
         'tocfeed'       => 'Package_PEAR_TocFeed',
     );
+
+    /**
+     * The package version
+     */
+    private $version = '@phd_pear_version@';
     
     public function __construct() {
         parent::setPackageName("PEAR");
+        parent::setPackageVersion($this->version);
         parent::registerOutputFormats($this->formats);
     }
 }

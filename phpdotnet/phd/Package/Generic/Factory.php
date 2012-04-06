@@ -15,9 +15,15 @@ class Package_Generic_Factory extends Format_Factory
         'manpage'       => 'Package_Generic_Manpage',
     );
 
+    /**
+     * The package version
+     */
+    private $version = '@phd_generic_version@';
+
     public function __construct()
     {
         parent::setPackageName('Generic');
+        parent::setPackageVersion($this->version);
         parent::registerOutputFormats($this->formats);
     }
 }

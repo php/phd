@@ -51,7 +51,9 @@
 	      <file name="BigXHTML.php" role="php"/>
 	      <file name="CHM.php" role="php"/>
 	      <file name="ChunkedXHTML.php" role="php"/>
-	      <file name="Factory.php" role="php"/>
+	      <file name="Factory.php" role="php">
+	        <tasks:replace from="@phd_pear_version@" to="version" type="package-info" />
+	      </file>
 	      <file name="TocFeed.php" role="php"/>
 	      <file name="Web.php" role="php"/>
 	      <file name="XHTML.php" role="php"/>

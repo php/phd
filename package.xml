@@ -71,7 +71,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - No changes yet
+    - Show individual package version in --version
   </notes>
 
   <contents>
@@ -122,6 +122,7 @@
           <file name="Autoloader.php" role="php"/>
           <file name="Config.php" role="php">
             <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
+            <tasks:replace from="@phd_version@" to="version" type="package-info" />
           </file>
           <file name="Format.php" role="php"/>
           <file name="functions.php" role="php"/>

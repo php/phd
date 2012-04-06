@@ -12,8 +12,14 @@ class Package_IDE_Factory extends Format_Factory {
         'sqlite'            => 'Package_IDE_SQLite',
     );
 
+    /**
+     * The package version
+     */
+    private $version = '@phd_ide_version@';
+
     public function __construct() {
         parent::setPackageName("IDE");
+        parent::setPackageVersion($this->version);
         parent::registerOutputFormats($this->formats);
     }
 }

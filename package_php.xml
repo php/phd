@@ -49,7 +49,9 @@
         <dir name="phd">
           <dir name="Package">
             <dir name="PHP">
-              <file name="Factory.php" role="php"/>
+              <file name="Factory.php" role="php">
+                <tasks:replace from="@phd_php_version@" to="version" type="package-info" />
+              </file>
               <file name="CHM.php" role="php"/>
               <file name="Web.php" role="php"/>
               <file name="PDF.php" role="php"/>

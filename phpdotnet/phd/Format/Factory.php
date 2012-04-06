@@ -6,7 +6,14 @@ abstract class Format_Factory {
     private $formats     = array();
     private $packageName = "";
     private $optionsHandler = null;
+    private $pversion = "unknown";
 
+    public final function getPackageVersion() {
+        return $this->pversion;
+    }
+    public final function setPackageVersion($version) {
+        $this->pversion = $version;
+    }
     public final function getOutputFormats() {
         return array_keys($this->formats);
     }

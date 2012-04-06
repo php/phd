@@ -42,7 +42,9 @@
         <dir name="phd">
           <dir name="Package">
             <dir name="IDE">
-              <file name="Factory.php" role="php"/>
+              <file name="Factory.php" role="php">
+               <tasks:replace from="@phd_ide_version@" to="version" type="package-info" />
+              </file>
               <file name="Funclist.php" role="php"/>
               <file name="XML.php" role="php"/>
               <file name="PHP.php" role="php"/>

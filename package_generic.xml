@@ -55,7 +55,9 @@
         <dir name="phd">
           <dir name="Package">
             <dir name="Generic">
-              <file name="Factory.php" role="php"/>
+              <file name="Factory.php" role="php">
+                <tasks:replace from="@phd_generic_version@" to="version" type="package-info" />
+              </file>
               <file name="Manpage.php" role="php"/>
               <file name="PDF.php" role="php"/>
               <file name="BigXHTML.php" role="php"/>

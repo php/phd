@@ -17,9 +17,15 @@ class Package_PHP_Factory extends Format_Factory {
         'epub'          => 'Package_PHP_Epub',
         'enhancedchm'   => 'Package_PHP_EnhancedCHM',
     );
+
+    /**
+     * The package version
+     */
+    private $version = '@phd_php_version@';
     
     public function __construct() {
         parent::setPackageName("PHP");
+        parent::setPackageVersion($this->version);
         parent::registerOutputFormats($this->formats);
     }
 }

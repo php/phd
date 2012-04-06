@@ -358,6 +358,12 @@ class Options_Handler implements Options_Interface
         $color  = Config::phd_info_color();
         $output = Config::phd_info_output();
         fprintf($output, "%s\n", term_color('PhD Version: ' . Config::VERSION, $color));
+
+        $packageList = Config::getSupportedPackages();
+        foreach ($packageList as $package) {
+            $version = Format_Factory::createFactory($package)->getPackageVersion();
+            fprintf($output, "\t%s: %s\n", term_color($package, $color), term_color($version, $color));
+        }
         fprintf($output, "%s\n", term_color('PHP Version: ' . phpversion(), $color));
         fprintf($output, "%s\n", term_color(Config::copyright(), $color));
         exit(0);
