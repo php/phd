@@ -25,7 +25,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'citerefentry'          => 'format_suppressed_tags',
         'classname'             => 'format_suppressed_tags',
         'classsynopsis'         => '.PP',
-        'classsynopsisinfo'     => 'format_suppressed_tags',
+        'classsynopsisinfo'     => '.PP',
         'co'                    => 'format_suppressed_tags',
         'code'                  => 'format_suppressed_tags',
         'command'               => '\\fI',
@@ -124,6 +124,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
         'refsect1'              => 'format_refsect',
+        'refsect2'              => 'format_suppressed_tags',
         'refsection'            => 'format_refsect',
         'refsynopsisdiv'        => 'format_refsynopsisdiv',
         'replaceable'           => '\\fI',
@@ -158,6 +159,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
             'segmentedlist'     => '.B',
             'refsect1'          => 'format_refsect_title',
             'refsection'        => 'format_refsect_title',
+            'section'           => 'format_refsect_title',
         ),
         'tip'                   => 'format_admonition',
         'titleabbrev'           => 'format_suppressed_tags',
@@ -216,6 +218,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
             /* DEFAULT */          false,
             'refsect'           => 'format_refsect_text',
             'refsect1'          => 'format_refsect_text',
+            'section'           => 'format_refsect_text',
         ),
         'tag'                   => 'format_tag_text',
         'type'                  => array(
@@ -267,6 +270,10 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         case Render::CHUNK:
             switch($val) {
             case self::OPEN_CHUNK:
+                if ($this->getFileStream()) {
+                    /* I have an already open stream, back it up */
+                    $this->pChunk = $this->cchunk;
+                }
                 $this->pushFileStream(fopen("php://temp/maxmemory", "r+"));
                 $this->cchunk    = $this->dchunk;
                 $this->chunkOpen = true;
@@ -276,8 +283,14 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
                 $stream = $this->popFileStream();
                 $this->writeChunk($stream);
                 fclose($stream);
-                $this->cchunk    = array();
-                $this->chunkOpen = false;
+                /* Do I have a parent stream I need to resume? */
+                if ($this->getFileStream()) {
+                    $this->cchunk    = $this->pChunk;
+                    $this->chunkOpen = true;
+                } else {
+                    $this->cchunk    = array();
+                    $this->chunkOpen = false;
+                }
                 break;
 
             default:
@@ -609,7 +622,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         // write the formatted synopsis
         foreach ($this->cchunk['methodsynopsis']['params'] as $parameter) {
             array_push($params, ($parameter['optional'] ? "[" : "")
-                        . $parameter['type']
+                        . $parameter['type'] . " "
                         . ($parameter['reference'] ? " \\fI&\\fP" : " ")
                         . ($parameter['name'] ? "\\fI$" . $parameter['name'] . "\\fP" : "")
                         . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "")
