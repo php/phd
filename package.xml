@@ -73,6 +73,7 @@
   <notes>
     - Show individual package version in --version. (Hannes)
     - Fixed bug#54217 Warn about nonexisting parameters. (Moacir)
+    - Fixed bug#47392 Option to specify filename for bightmls. (Hannes)
   </notes>
 
   <contents>

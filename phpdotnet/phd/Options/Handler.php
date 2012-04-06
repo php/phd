@@ -13,6 +13,7 @@ class Options_Handler implements Options_Interface
             'notoc'        => 't',         // Do not re-create TOC
             'docbook:'     => 'd:',        // The Docbook XML file to render from (.manual.xml)
             'output:'      => 'o:',        // The output directory
+            'outputfilename:' => 'F:',     // The output filename (only useful for bightml/bigpdf)
             'partial:'     => 'p:',        // The ID to render (optionally ignoring its children)
             'skip:'        => 's:',        // The ID to skip (optionally skipping its children too)
             'verbose:'     => 'v::',       // Adjust the verbosity level
@@ -44,7 +45,11 @@ class Options_Handler implements Options_Interface
     
     public function option_f($k, $v)
     {
-        $this->option_format($k, $v);
+        if ($k == "f") {
+            return $this->option_format($k, $v);
+        } else {
+            return $this->option_outputfilename($k, $v);
+        }
     }
     public function option_format($k, $v)
     {
@@ -144,6 +149,16 @@ class Options_Handler implements Options_Interface
         }
         $v = (substr($v, strlen($v) - strlen(DIRECTORY_SEPARATOR)) == DIRECTORY_SEPARATOR) ? $v : ($v . DIRECTORY_SEPARATOR);
         Config::set_output_dir($v);
+    }
+
+    public function option_outputfilename($k, $v)
+    {
+        if (is_array($v)) {
+            trigger_error("Only a single output location can be supplied", E_USER_ERROR);
+        }
+        $file = basename($v);
+
+        Config::set_output_filename($file);
     }
 
     public function option_p($k, $v)
@@ -410,6 +425,9 @@ class Options_Handler implements Options_Interface
   --list                     Print out the supported packages and formats
   -o <directory>
   --output <directory>       The output directory (default: .)
+  -F filename
+  --outputfilename filename  Filename to use when writing standalone formats
+                             (default: <packagename>-<formatname>.<formatext>)
   -L <language>
   --lang <language>          The language of the source file (used by the CHM
                              theme). (default: en)

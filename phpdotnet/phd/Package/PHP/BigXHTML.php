@@ -40,7 +40,13 @@ HEADER;
     }
 
     public function createFileName() {
-        return Config::output_dir() . strtolower($this->getFormatName()) . $this->getExt(); 
+        $filename = Config::output_dir();
+        if (Config::output_filename()) {
+            $filename .= Config::output_filename();
+        } else {
+            $filename .= strtolower($this->getFormatName()) . $this->getExt();
+        }
+        return $filename;
     }
 
     public function createOutputFile() {
