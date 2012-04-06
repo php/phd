@@ -103,6 +103,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
     }
 
     public function header($id) {
+        static $written_toc = array();
         $ext = $this->getExt();
         $parent = Format::getParent($id);
         $filename = "toc" . DIRECTORY_SEPARATOR . $parent . ".inc";
@@ -112,7 +113,9 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         $next = $prev = array(null, null);
         if ($parent && $parent != "ROOT") {
             $siblings = Format::getChildren($parent);
-            if (!file_exists($this->getOutputDir() . $filename)) {
+            if (!isset($written_toc[$filename])) {
+                $written_toc[$filename] = true;
+
                 $toc = array();
 
                 foreach($siblings as $sid) {
