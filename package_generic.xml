@@ -37,16 +37,16 @@
 
   <date>2012-04-06</date>
   <version>
-    <release>1.1.4</release>
+    <release>1.1.5</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Version bump
+    - No changes, yet
   </notes>
 
   <contents>
@@ -245,6 +245,22 @@
         - Got rid of presentational tags: &lt;b&gt;, &lt;i&gt;, &lt;tt&gt; changed to &lt;strong&gt;, &lt;em&gt;, &lt;code&gt; (Alexey Borzov)
         - Make presentational attributes on table related-tags (align, valign, width) output as inline styles (Alexey Borzov)
         - Fixed ID generation for refsections (Alexey Borzov)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>1.1.4</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2012-04-06</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Bump version
       </notes>
     </release>
 
