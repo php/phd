@@ -258,7 +258,7 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Link callable types (Jakub)
-        - Link langauge constructs from &gt;function&lt; (Jakub)
+        - Link langauge constructs from &lt;function&gt; (Jakub)
         - Show "next" link on the frontpage (Moacir)
       </notes>
     </release>
