@@ -40,7 +40,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Nothing, yet
+    - Fix invalid ID on multiple unknown refsect roles. (Hannes)
   </notes>
 
   <contents>

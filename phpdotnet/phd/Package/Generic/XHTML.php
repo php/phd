@@ -859,9 +859,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '</p>';
     }
     public function format_refsect($open, $name, $attrs) {
+        static $role = 0;
+
         if ($open) {
             if(!isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $attrs[Reader::XMLNS_DOCBOOK]["role"] = "unknown";
+                $attrs[Reader::XMLNS_DOCBOOK]["role"] = "unknown-" . ++$role;
             }
             $this->role = $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
 
