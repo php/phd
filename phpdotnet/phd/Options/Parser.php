@@ -63,8 +63,39 @@ class Options_Parser
         return implode('', array_values($this->defaultHandler->optionList()));
     }
 
+    /**
+     * Checks if all options passed are valid.
+     *
+     * Fix Bug #54217 - Warn about nonexisting parameters
+     */
+    private function checkOptions() {
+        $argv = $_SERVER['argv'];
+        $argc = $_SERVER['argc'];
+
+        $short = str_split(str_replace(':', '', $this->getShortOptions()));
+        $long = array();
+        foreach ($this->getLongOptions() as $opt) {
+            $long[] = str_replace(':', '', $opt);
+        }
+
+        for ($i=1; $i < $argc; $i++) {
+            if (substr($argv[$i], 0, 2) == '--') {
+                if (!in_array(substr($argv[$i], 2), $long)) {
+                    trigger_error('Invalid long option ' . $argv[$i], E_USER_ERROR);
+                }
+            } elseif (substr($argv[$i], 0, 1) == '-') {
+                if (!in_array(substr($argv[$i], 1), $short)) {
+                    trigger_error('Invalid short option ' . $argv[$i], E_USER_ERROR);
+                }
+           }
+        }
+    }
+
     public static function getopt() {
         $self = self::instance();
+
+        //validate options
+        $self->checkOptions();
 
         $args = getopt($self->getShortOptions(), $self->getLongOptions());
         if ($args === false) {
