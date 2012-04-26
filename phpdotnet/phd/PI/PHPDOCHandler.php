@@ -32,11 +32,19 @@ class PI_PHPDOCHandler extends PIHandler {
 
                         natcasesort($refs);
 
+                        // Nav bar to jump directly to a character
+                        $chars = array_count_values(array_map(function($ref){ return strtolower($ref[0]); }, $refs));
+                        $ret = '<p class="gen-index index-for-'.$matches["value"].'-toc">'."\n";
+                        foreach ($chars as $char => $count) {
+                            $ret .= '<a href="#'.$matches["value"].'-index-for-'.$char.'">'.$char.'</a>'."\n";
+                        }
+                        $ret .= "</p>\n";
+
                         // Workaround for 5.3 that doesn't allow func()[index]
                         $current = current($refs);
                         $char = $current[0];
 
-                        $ret = "<ul class='gen-index index-for-{$matches["value"]}'>";
+                        $ret .= "<ul class='gen-index index-for-{$matches["value"]}'>";
                         $ret .= "<li class='gen-index index-for-{$char}'>$char<ul id='{$matches["value"]}-index-for-{$char}'>\n";
                         foreach($refs as $filename => $data) {
                             if ($data[0] != $char && strtolower($data[0]) != $char) {
