@@ -167,6 +167,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
             "up"   => $up,
             "prev" => $prev,
             "next" => $next,
+            "alternatives" => $this->cchunk["alternatives"],
         );
         if ($this->getChildren($id)) {
             $lang = Config::language();

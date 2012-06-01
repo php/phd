@@ -21,8 +21,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
         'refpurpose'            => 'format_refpurpose',
+        'refsynopsisdiv'        => 'format_refsynopsisdiv',
         'set'                   => 'format_root_chunk',
         'setindex'              => 'format_chunk',
+        'sidebar'               => 'blockquote',
         'title'                 => array(
             /* DEFAULT */          'h1',
             'article'           => 'format_container_chunk_title',
@@ -133,6 +135,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         "examples"                     => 0,
         "verinfo"                      => false,
         "refname"                      => array(),
+        "alternatives"                 => array(),
+        "refsynopsisdiv"               => null,
     );
 
     protected $pihandlers = array(
@@ -262,6 +266,22 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
         return "</span></p>\n";
     }
+    public function format_refsynopsisdiv($open, $tag, $attrs, $props) {
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->cchunk["refsynopsisdiv"] = $attrs[Reader::XMLNS_DOCBOOK]["role"];
+                $id = $this->CURRENT_ID . "-" . $attrs[Reader::XMLNS_DOCBOOK]["role"];
+                return '<div id="' . $id . '" class="' . $attrs[Reader::XMLNS_DOCBOOK]["role"] . '">';
+            }
+
+            $id = $this->CURRENT_ID . "-" . $tag;
+            return '<div id="' . $id . '">';
+        }
+        $this->cchunk["refsynopsisdiv"] = $this->dchunk["refsynopsisdiv"];
+
+        return "</div>";
+    }
+
     public function format_partintro($open, $tag, $attrs, $props) {
         if ($open) {
             $retval = "";
@@ -461,6 +481,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 if ($this->role == "seealso") {
                     $rel  = ' rel="rdfs-seeAlso"';
                     $desc = " - " . Format::getLongDescription($filename);
+                }
+                if ($this->cchunk["refsynopsisdiv"] === "soft-deprecation-notice") {
+                    $this->cchunk["alternatives"][] = $value;
                 }
 
                 $href = $this->chunked ? $filename.$this->ext : "#$filename";
