@@ -43,6 +43,7 @@
     - Fixed bug#46772 Add class reference pages to the man files. (Hannes)
     - Fixed bug#47650 Overwrite the TOC on changes. (Hannes)
     - Fix invalid ID on multiple unknown refsect roles. (Hannes)
+    - Added support for "soft-deprecation-notice" attribute on refsynopsisdiv to collect alternate suggestions into the $setup phpweb array. (Hannes)
   </notes>
 
   <contents>

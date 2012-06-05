@@ -73,6 +73,7 @@
   <notes>
     - Show individual package version in --version. (Hannes)
     - Fixed bug#54217 Warn about nonexisting parameters. (Moacir)
+    - Fixed bug#50725 Generate nav links at top of function index (Peter Cowburn)
     - Fixed bug#47392 Option to specify filename for bightmls. (Hannes)
   </notes>
 
@@ -673,7 +674,7 @@
       </stability>
       <date>2009-08-27</date>
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
-      <notes>    
+      <notes>
         - Add support for external troff highlighter in man pages (Christian).
         - Add title attribute to anchor tags so address can be seen in CHM files for external links (Richard Q.).
         - CVS-&gt;SVN langs migration (Philip).
