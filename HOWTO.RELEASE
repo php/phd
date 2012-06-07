@@ -1,21 +1,20 @@
 How to release a new version of PhD
 -----------------------------------
 
-Releases are currently made from master (PHD_1_0)
+Releases are currently made from the PHD_1_1 branch.
 
-0. Check if all changes in master have been merged back to the release branch.
+1. Check if all changes in PHD_1_1  have been merged upwards to master
+   (and the other way around if people committed to the wrong branch).
 
-1. Check if all changes have an entry in package.xml's <notes>
+2. Check if all changes have an entry in package.xml's <notes>
    Update the <stability> to stable!, and modify the <date>.
 
-2. Check if the api version needs to be increased to match the release
+3. Check if the api version needs to be increased to match the release
    version. (This is the case when the API has changed. Normally the
    committer has done that already when merging from trunk, but you
    never know).
-   
-3. Make sure all files are listed in package.xml's <content>.
 
-4. Edit config.php and set Config::VERSION to the current one (phpdotnet/phd/Config.php VERSION for 1_0).
+4. Make sure all files are listed in package.xml's <content>.
 
 5. $ pear package
    $ pear install PhD-*.tgz
