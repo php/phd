@@ -72,6 +72,7 @@
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
     - Fixed indexing of content with markup. (Hannes)
+    - Added support for generate-changelog-for phpdoc PI. (Hannes)
   </notes>
 
   <contents>
