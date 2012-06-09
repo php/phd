@@ -135,7 +135,7 @@ class PI_PHPDOCHandler extends PIHandler {
 
         $version = "";
         foreach($changelogs as $entry) {
-            if (!$this->_changelogSince || strnatcasecmp($entry["version"], $this->_changelogSince) >== 0) {
+            if (!$this->_changelogSince || strnatcasecmp($entry["version"], $this->_changelogSince) >= 0) {
                 $link = $this->format->createLink($entry["docbook_id"], $desc);
                 if ($version == $entry["version"]) {
                     $v = "&nbsp;";
