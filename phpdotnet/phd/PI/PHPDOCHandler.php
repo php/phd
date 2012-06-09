@@ -74,6 +74,32 @@ class PI_PHPDOCHandler extends PIHandler {
                 }
                 break;
 
+            case "generate-changelog-for":
+                $parents = explode(" ", $matches["value"]);
+                $changelogs = $this->format->getChangelogsForChildrenOf($parents);
+                $ret = "<table class='doctable table'><thead><tr>";
+                $ret .= "<th>" . $this->format->autogen("Version", "en") . "</th>";
+                $ret .= "<th>" . $this->format->autogen("Function", "en") . "</th>";
+                $ret .= "<th>" . $this->format->autogen("Description", "en") . "</th>";
+                $ret .= "</tr></thead><tbody>";
+
+                $version = "";
+                foreach($changelogs as $entry) {
+                    $link = $this->format->createLink($entry["docbook_id"], $desc);
+                    if ($version == $entry["version"]) {
+                        $v = "&nbsp;";
+                    }
+                    else {
+                        $version = $entry["version"];
+                        $v = $version;
+                    }
+                    $ret .= sprintf("<tr><td>%s</td><td><a href='%s'>%s</a></td><td>%s</td></tr>", $v, $link, $desc, $entry["description"]);
+                }
+
+                return $ret . "</tbody></table>";
+
+                break;
+
             default:
                 trigger_error("Don't know how to handle {$matches["attr"]}", E_USER_WARNING);
                 break;
