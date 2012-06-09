@@ -11,6 +11,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'classname'             => 'format_suppressed_tags',
         'chapter'               => 'format_container_chunk',
         'colophon'              => 'format_chunk',
+        'function'              => 'format_function',
+        'methodname'            => 'format_function',
         'legalnotice'           => 'format_chunk',
         'part'                  => 'format_container_chunk',
         'partintro'             => 'format_partintro',
@@ -126,6 +128,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     protected $dchunk          = array(
         "phpdoc:classref"              => null,
+        "args"                         => null,
         "fieldsynopsis"                => array(
             "modifier"                 => "public",
         ),
@@ -454,6 +457,18 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return $this->format_function_text($value, $tag, $display_value);
     }
 
+    public function format_function($open, $tag, $attrs, $props) {
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_PHD]["args"])) {
+                $this->cchunk["args"] = $attrs[Reader::XMLNS_PHD]["args"];
+            }
+            // Leading space intional for methodname as phpdoc doesn't have a
+            // space between <type> and the <methodname> in methodsynopsis
+            return ' <span class="' . $tag . '">';
+        }
+        return "</span>";
+    }
+
     public function format_function_text($value, $tag, $display_value = null) {
         static $non_functions = array(
             "echo" => true, "print" => true,
@@ -465,7 +480,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($display_value === null) {
             $display_value = $value;
             if (!isset($non_functions[$value])) {
-                $display_value .= "()";
+                $args = $this->cchunk["args"];
+                $this->cchunk["args"] = $this->dchunk["args"];
+                $display_value .= "($args)";
             }
         }
 
