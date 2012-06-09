@@ -81,6 +81,24 @@
     <simpara>[NOT DISPLAYABLE MEDIA]</simpara>
    </listitem>
   </varlistentry>
+  <varlistentry>
+   <term>Version</term>
+   <listitem>
+    <simpara>Version</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Function</term>
+   <listitem>
+    <simpara>Function</simpara>
+   </listitem>
+  </varlistentry>
+  <varlistentry>
+   <term>Description</term>
+   <listitem>
+    <simpara>Description</simpara>
+   </listitem>
+  </varlistentry>
  </variablelist>
 </section>
 

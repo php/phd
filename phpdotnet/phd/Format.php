@@ -285,6 +285,22 @@ abstract class Format extends ObjectStorage
     public function addVarname($id, $var) {
         $this->vars[$var] = $id;
     }
+    public function getChangelogsForChildrenOf($bookids) {
+        $ids = array();
+        foreach((array)$bookids as $bookid) {
+            $ids[] = "'" . $this->sqlite->escapeString($bookid) . "'";
+        }
+        $results = $this->sqlite->query("SELECT * FROM changelogs WHERE parent_id IN (" . join(", ", $ids) . ")");
+        if (!$results) {
+            return array();
+        }
+
+        $changelogs = array();
+        while ($row = $results->fetchArray()) {
+            $changelogs[] = $row;
+        }
+        return $changelogs;
+    }
     public function getRefs() {
         return $this->refs;
     }

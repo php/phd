@@ -63,6 +63,18 @@ class Index extends Format
     'refname'               => 'format_sdesc',
     'titleabbrev'           => 'format_sdesc',
     'example'               => 'format_example',
+    'refsect1'              => 'format_refsect1',
+    "row"                   => array(
+        /* DEFAULT */          null,
+        "tbody"             => 'format_row',
+    ),
+    'entry'                 => array(
+        /* DEFAULT */          null,
+        "row"               => array(
+            /* DEFAULT */      null,
+            "tbody"         => 'format_entry',
+        ),
+    ),
     );
 
     private $mytextmap = array(
@@ -74,6 +86,9 @@ class Index extends Format
     private $chunks    = array();
     private $isChunk   = array();
     private $previousId = "";
+    private $inChangelog = false;
+    private $currentChangelog = array();
+    private $changelog        = array();
     private $commit     = array();
     private $POST_REPLACEMENT_INDEXES = array();
     private $POST_REPLACEMENT_VALUES  = array();
@@ -155,6 +170,7 @@ class Index extends Format
                         $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
                         $db->exec('DROP TABLE IF EXISTS ids');
                         $db->exec('DROP TABLE IF EXISTS indexing');
+                        $db->exec('DROP TABLE IF EXISTS changelogs');
                     }
 
                     $create = <<<SQL
@@ -168,6 +184,12 @@ CREATE TABLE ids (
     previous TEXT,
     next TEXT,
     chunk INTEGER
+);
+CREATE TABLE changelogs (
+    docbook_id TEXT,
+    parent_id TEXT,
+    version TEXT,
+    description TEXT
 );
 CREATE TABLE indexing (
     time INTEGER PRIMARY KEY
@@ -385,6 +407,41 @@ SQL;
         $this->appendID();
         return false;
     }
+    public function format_refsect1($open, $name, $attrs, $props) {
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+                if ($attrs[Reader::XMLNS_DOCBOOK]['role'] == "changelog") {
+                    $this->inChangelog = true;
+                }
+            }
+            return;
+        }
+        $this->inChangelog = false;
+    }
+
+    public function format_entry($open, $name, $attrs, $props) {
+        if ($open) {
+            if ($this->inChangelog) {
+                /* FIXME: How can I mark that node with "reparse" flag? */
+                $this->currentChangelog[] = htmlentities(trim(ReaderKeeper::getReader()->readContent()), ENT_COMPAT, "UTF-8");
+            }
+        }
+    }
+    public function format_row($open, $name, $attrs, $props) {
+        if ($open) {
+            if ($this->inChangelog) {
+                end($this->ids); prev($this->ids);
+                $this->currentChangelog = array(current($this->ids));
+            }
+            return;
+        }
+        if ($this->inChangelog) {
+            $this->changelog[$this->currentid][] = $this->currentChangelog;
+        }
+    }
+
+
+
     public function commit() {
         if (isset($this->commit) && $this->commit) {
             $search = $this->db->escapeString("POST-REPLACEMENT");
@@ -402,6 +459,20 @@ SQL;
             }
 
             $this->db->exec('BEGIN TRANSACTION; '.join("", $this->commit).' COMMIT');
+            $log = "";
+            foreach($this->changelog as $id => $arr) {
+                foreach($arr as $entry) {
+                    $log .= sprintf(
+                        "INSERT INTO changelogs (docbook_id, parent_id, version, description) VALUES('%s', '%s', '%s', '%s');\n",
+                        $this->db->escapeString($id),
+                        $this->db->escapeString($entry[0]),
+                        $this->db->escapeString($entry[1]),
+                        $this->db->escapeString($entry[2])
+                    );
+                }
+            }
+            $this->db->exec('BEGIN TRANSACTION; ' . $log. ' COMMIT');
+            $this->log = "";
             $this->commit = array();
         }
     }
