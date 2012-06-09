@@ -291,6 +291,9 @@ abstract class Format extends ObjectStorage
             $ids[] = "'" . $this->sqlite->escapeString($bookid) . "'";
         }
         $results = $this->sqlite->query("SELECT * FROM changelogs WHERE parent_id IN (" . join(", ", $ids) . ")");
+        return $this->_returnChangelog($results);
+    }
+    public function _returnChangelog($results) {
         if (!$results) {
             return array();
         }
@@ -300,6 +303,11 @@ abstract class Format extends ObjectStorage
             $changelogs[] = $row;
         }
         return $changelogs;
+    }
+    public function getChangelogsForMembershipOf($membership) {
+        $membership = "'" . $this->sqlite->escapeString($membership) . "'";
+        $results = $this->sqlite->query("SELECT * FROM changelogs WHERE membership=$membership");
+        return $this->_returnChangelog($results);
     }
     public function getRefs() {
         return $this->refs;

@@ -81,6 +81,7 @@ class Index extends Format
     );
     private $pihandlers = array(
         'dbhtml'            => 'PI_DBHTMLHandler',
+        'phpdoc'            => 'PI_PHPDOCHandler',
     );
 
     private $chunks    = array();
@@ -89,6 +90,7 @@ class Index extends Format
     private $inChangelog = false;
     private $currentChangelog = array();
     private $changelog        = array();
+    private $currentMembership = null;
     private $commit     = array();
     private $POST_REPLACEMENT_INDEXES = array();
     private $POST_REPLACEMENT_VALUES  = array();
@@ -186,6 +188,7 @@ CREATE TABLE ids (
     chunk INTEGER
 );
 CREATE TABLE changelogs (
+    membership TEXT, -- How the extension in distributed (pecl, core, bundled with/out external dependencies..)
     docbook_id TEXT,
     parent_id TEXT,
     version TEXT,
@@ -324,6 +327,12 @@ SQL;
         return $this->UNDEF($open, $name, $attrs, $props);
     }
     public function format_container_chunk($open, $name, $attrs, $props) {
+        if ($open) {
+            if ($name == "book") {
+                $this->currentMembership = null;
+            }
+            return $this->format_chunk($open, $name, $attrs, $props);
+        }
         return $this->format_chunk($open, $name, $attrs, $props);
     }
     public function format_varentry_chunk($open, $name, $attrs, $props) {
@@ -431,7 +440,7 @@ SQL;
         if ($open) {
             if ($this->inChangelog) {
                 end($this->ids); prev($this->ids);
-                $this->currentChangelog = array(current($this->ids));
+                $this->currentChangelog = array($this->currentMembership, current($this->ids));
             }
             return;
         }
@@ -463,11 +472,12 @@ SQL;
             foreach($this->changelog as $id => $arr) {
                 foreach($arr as $entry) {
                     $log .= sprintf(
-                        "INSERT INTO changelogs (docbook_id, parent_id, version, description) VALUES('%s', '%s', '%s', '%s');\n",
-                        $this->db->escapeString($id),
+                        "INSERT INTO changelogs (membership, docbook_id, parent_id, version, description) VALUES('%s', '%s', '%s', '%s', '%s');\n",
                         $this->db->escapeString($entry[0]),
+                        $this->db->escapeString($id),
                         $this->db->escapeString($entry[1]),
-                        $this->db->escapeString($entry[2])
+                        $this->db->escapeString($entry[2]),
+                        $this->db->escapeString($entry[3])
                     );
                 }
             }
@@ -487,6 +497,10 @@ SQL;
             $this->nfo[end($this->chunks)]["filename"] = $filename;
             $dbhtml->setAttribute("filename", false);
         }
+    }
+
+    public function setMembership($membership) {
+        $this->currentMembership = $membership;
     }
 
 }

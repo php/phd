@@ -3,6 +3,7 @@ namespace phpdotnet\phd;
 /* $Id$ */
 
 class PI_PHPDOCHandler extends PIHandler {
+    protected $membership = null;
 
     public function __construct($format) {
         parent::__construct($format);
@@ -15,8 +16,14 @@ class PI_PHPDOCHandler extends PIHandler {
         switch($matches["attr"]) {
             case "print-version-for":
                 // FIXME: Figureout a way to detect the current language (for unknownversion)
-                return $this->format->autogenVersionInfo($matches["value"], "en");
+                if (!$this->format instanceof Index) {
+                    return $this->format->autogenVersionInfo($matches["value"], "en");
+                }
+                return;
             case "generate-index-for":
+                if ($this->format instanceof Index) {
+                    return;
+                }
                 switch($matches["value"]) {
                     case "function":
                     case "refentry":
@@ -74,32 +81,28 @@ class PI_PHPDOCHandler extends PIHandler {
                 }
                 break;
 
-            case "generate-changelog-for":
-                $parents = explode(" ", $matches["value"]);
-                $changelogs = $this->format->getChangelogsForChildrenOf($parents);
-                usort($changelogs, array(__CLASS__, "_sortByVersion"));
+            case "extension-membership":
+                if ($this->format instanceof Index) {
+                    return $this->format->setMembership($matches["value"]);
+                }
+                return;
 
-                $ret = "<table class='doctable table'><thead><tr>";
-                $ret .= "<th>" . $this->format->autogen("Version", "en") . "</th>";
-                $ret .= "<th>" . $this->format->autogen("Function", "en") . "</th>";
-                $ret .= "<th>" . $this->format->autogen("Description", "en") . "</th>";
-                $ret .= "</tr></thead><tbody>";
-
-                $version = "";
-                foreach($changelogs as $entry) {
-                    $link = $this->format->createLink($entry["docbook_id"], $desc);
-                    if ($version == $entry["version"]) {
-                        $v = "&nbsp;";
-                    }
-                    else {
-                        $version = $entry["version"];
-                        $v = $version;
-                    }
-                    $ret .= sprintf("<tr><td>%s</td><td><a href='%s'>%s</a></td><td>%s</td></tr>", $v, $link, $desc, $entry["description"]);
+            case "generate-changelog-for-membership":
+                if ($this->format instanceof Index) {
+                    return;
                 }
 
-                return $ret . "</tbody></table>";
+                $changelogs = $this->format->getChangelogsForMembershipOf($matches["value"]);
+                return $this->generateChangelogMarkup($changelogs);
+                break;
 
+            case "generate-changelog-for":
+                if ($this->format instanceof Index) {
+                    return;
+                }
+                $parents = explode(" ", $matches["value"]);
+                $changelogs = $this->format->getChangelogsForChildrenOf($parents);
+                return $this->generateChangelogMarkup($changelogs);
                 break;
 
             default:
@@ -115,6 +118,31 @@ class PI_PHPDOCHandler extends PIHandler {
         return -1 * strnatcasecmp($a["version"], $b["version"]);
     }
 
+    protected function generateChangelogMarkup($changelogs) {
+
+        usort($changelogs, array(__CLASS__, "_sortByVersion"));
+
+        $ret = "<table class='doctable table'><thead><tr>";
+        $ret .= "<th>" . $this->format->autogen("Version", "en") . "</th>";
+        $ret .= "<th>" . $this->format->autogen("Function", "en") . "</th>";
+        $ret .= "<th>" . $this->format->autogen("Description", "en") . "</th>";
+        $ret .= "</tr></thead><tbody>";
+
+        $version = "";
+        foreach($changelogs as $entry) {
+            $link = $this->format->createLink($entry["docbook_id"], $desc);
+            if ($version == $entry["version"]) {
+                $v = "&nbsp;";
+            }
+            else {
+                $version = $entry["version"];
+                $v = $version;
+            }
+            $ret .= sprintf("<tr><td>%s</td><td><a href='%s'>%s</a></td><td>%s</td></tr>", $v, $link, $desc, $entry["description"]);
+        }
+
+        return $ret . "</tbody></table>";
+    }
 }
 
 /*
