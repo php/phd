@@ -23,8 +23,8 @@ class Options_Handler implements Options_Interface
             'highlighter:' => 'g:',        // Class used as source code highlighter
             'version'      => 'V',         // Print out version information
             'help'         => 'h',         // Print out help
-            'package:'     => 'P:',        // The package of formats            
-            'css:'         => 'C:',        // External CSS 
+            'package:'     => 'P:',        // The package of formats
+            'css:'         => 'C:',        // External CSS
             'xinclude'     => 'x',         // Automatically process xinclude directives
             'ext:'         => 'e:',        // The file-format extension to use, including the dot
             'saveconfig::' => 'S::',       // Save the generated config ?
@@ -42,7 +42,7 @@ class Options_Handler implements Options_Interface
     {
         Config::set_memoryindex(true);
     }
-    
+
     public function option_f($k, $v)
     {
         if ($k == "f") {
@@ -61,7 +61,7 @@ class Options_Handler implements Options_Interface
         }
         Config::set_output_format($formats);
     }
-    
+
     public function option_e($k, $v)
     {
         $this->option_ext($k, $v);
@@ -79,7 +79,7 @@ class Options_Handler implements Options_Interface
             Config::setExt($v);
         }
     }
-    
+
     public function option_g($k, $v)
     {
         $this->option_highlighter($k, $v);
@@ -187,7 +187,7 @@ class Options_Handler implements Options_Interface
     }
 
     public function option_package($k, $v) {
-        
+
         foreach((array)$v as $package) {
             if (!in_array($package, Config::getSupportedPackages())) {
                 $supported = implode(', ', Config::getSupportedPackages());
@@ -290,13 +290,13 @@ class Options_Handler implements Options_Interface
     public function option_list($k, $v)
     {
         $packageList = Config::getSupportedPackages();
-        
+
         echo "Supported packages:\n";
         foreach ($packageList as $package) {
             $formats = Format_Factory::createFactory($package)->getOutputFormats();
             echo "\t" . $package . "\n\t\t" . implode("\n\t\t", $formats) . "\n";
         }
-      
+
         exit(0);
     }
 
@@ -464,8 +464,8 @@ Most options can be passed multiple times for greater effect.
      * Makes a string into a boolean (i.e. on/off, yes/no, ..)
      *
      * Returns boolean true/false on success, null on failure
-     * 
-     * @param string $val 
+     *
+     * @param string $val
      * @return bool
      */
     public static function boolval($val) {

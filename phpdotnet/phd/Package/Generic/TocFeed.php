@@ -92,7 +92,7 @@ abstract class Package_Generic_TocFeed extends Format
      * Author string used in atom feed files.
      *
      * Inheriting classes should change this.
-     * 
+     *
      * @var    string
      * @usedby header()
      */
@@ -162,7 +162,7 @@ abstract class Package_Generic_TocFeed extends Format
     /**
      * Closes all open file streams
      *
-     * @return void 
+     * @return void
      *
      * @uses getFileStream()
      */

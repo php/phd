@@ -44,7 +44,7 @@ class PI_DBHTMLHandler extends PIHandler {
         for ($i = 0; $i < count($matches["attr"]); $i++) {
             $attr = trim($matches["attr"][$i]);
             $value = trim($matches["value"][$i]);
-            $this->setAttribute($attr, $value); 
+            $this->setAttribute($attr, $value);
         }
         //Hack for stop-chunking
         if ($data == "stop-chunking") {

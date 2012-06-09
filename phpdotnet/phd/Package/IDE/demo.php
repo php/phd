@@ -13,7 +13,7 @@ spl_autoload_register(array("phpdotnet\\phd\\Autoloader", "autoload"));
 //FIXME Remove this call to Config
 PhD\Config::init(array());
 
-function usage() 
+function usage()
 {
     echo <<<USAGE
 Usage:

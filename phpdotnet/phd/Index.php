@@ -232,7 +232,7 @@ SQL;
         if ($open) {
             if(isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $id = $attrs[Reader::XMLNS_XML]["id"];
-                $this->storeInfo($name, $id, $this->currentchunk, false);            
+                $this->storeInfo($name, $id, $this->currentchunk, false);
                 if ($props["empty"]) {
                     $this->appendID();
                 }
@@ -323,7 +323,7 @@ SQL;
         }
         if (array_pop($this->isSectionChunk)) {
             return $this->format_chunk($open, $name, $attrs, $props);
-        }        
+        }
         return $this->UNDEF($open, $name, $attrs, $props);
     }
     public function format_container_chunk($open, $name, $attrs, $props) {
@@ -361,7 +361,7 @@ SQL;
             }
             return false;
         }
-        if (array_pop($this->isChunk)) { 
+        if (array_pop($this->isChunk)) {
             $lastchunk = array_pop($this->chunks);
             $this->currentchunk = end($this->chunks);
             $this->appendID();
@@ -390,12 +390,12 @@ SQL;
                 if (!is_array($this->nfo[$this->currentid]["sdesc"])) {
                     $this->nfo[$this->currentid]["sdesc"] = (array)$this->nfo[$this->currentid]["sdesc"];
                 }
-                //In the beginning of the array to stay compatible with 0.4 
+                //In the beginning of the array to stay compatible with 0.4
                 array_unshift($this->nfo[$this->currentid]["sdesc"], $s);
             }
         }
     }
-    
+
     public function format_example($open, $name, $attrs, $props) {
         static $n = 0;
 
@@ -409,7 +409,7 @@ SQL;
                 $id = "example-" . $n;
             }
 
-            $this->storeInfo($name, $id, $this->currentchunk, false);            
+            $this->storeInfo($name, $id, $this->currentchunk, false);
             return false;
         }
 
@@ -461,7 +461,7 @@ SQL;
                     $replacement = $this->POST_REPLACEMENT_VALUES[$a["docbook_id"]];
                     $this->commit[$a["idx"]] = str_replace($search, $replacement, $this->commit[$a["idx"]]);
                 } else {
-                    // If there are still post replacement, then they don't have 
+                    // If there are still post replacement, then they don't have
                     // any 'next' page
                     $this->commit[$a["idx"]] = str_replace($search, $none, $this->commit[$a["idx"]]);
                 }
@@ -489,10 +489,10 @@ SQL;
 
     public function processFilename() {
         static $dbhtml = null;
-        if ($dbhtml == null) {            
+        if ($dbhtml == null) {
             $dbhtml = $this->getPIHandler("dbhtml");
         }
-        $filename = $dbhtml->getAttribute("filename"); 
+        $filename = $dbhtml->getAttribute("filename");
         if ($filename) {
             $this->nfo[end($this->chunks)]["filename"] = $filename;
             $dbhtml->setAttribute("filename", false);

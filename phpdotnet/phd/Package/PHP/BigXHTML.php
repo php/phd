@@ -4,7 +4,7 @@ namespace phpdotnet\phd;
 
 class Package_PHP_BigXHTML extends Package_PHP_XHTML {
     public function __construct() {
-        parent::__construct();        
+        parent::__construct();
         $this->registerFormatName("PHP-BigXHTML");
         $this->setTitle("PHP Manual");
         $this->setChunked(false);
@@ -84,7 +84,7 @@ HEADER;
             if ($val) {
                 $this->registerElementMap(parent::getDefaultElementMap());
                 $this->registerTextMap(parent::getDefaultTextMap());
-            }            
+            }
             break;
 
         case Render::INIT:
@@ -95,7 +95,7 @@ HEADER;
                     $this->fetchStylesheet();
                 }
                 $this->createOutputFile();
-            } 
+            }
             break;
 
         case Render::VERBOSE:

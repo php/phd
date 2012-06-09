@@ -85,7 +85,7 @@ manualHeader("index.php"'
                 Format::getFilename($prevID).$ext,
                 Format::getLongDescription($prevID),
             );
-        }        
+        }
         if ($nextID = Format::getNext($id)) {
             $next = array(
                 Format::getFilename($nextID).$ext,
@@ -102,7 +102,7 @@ manualHeader("index.php"'
                 Format::getLongDescription($parent)
             ),
             'toc'  => $toc
-        );        
+        );
         return "<?php \n" .
             "sendManualHeaders(\"UTF-8\", \"{$this->lang}\");\n" .
             "setupNavigation(" . var_export($nav, true) . ");\n" .

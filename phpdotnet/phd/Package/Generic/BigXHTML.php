@@ -71,7 +71,7 @@ HEADER;
             if ($val) {
                 $this->registerElementMap(parent::getDefaultElementMap());
                 $this->registerTextMap(parent::getDefaultTextMap());
-            }            
+            }
             break;
 
         case Render::INIT:
@@ -91,7 +91,7 @@ HEADER;
                     $this->setFileStream(fopen($filename, "w+"));
                     fwrite($this->getFileStream(), $this->header());
                 }
-            } 
+            }
             break;
 
         case Render::VERBOSE:

@@ -29,7 +29,7 @@ namespace phpdotnet\phd;
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
  * @link     https://doc.php.net/phd/
  */
-class Package_IDE_API 
+class Package_IDE_API
 {
     /**
      * Output directory of the functions format in the IDE Package.
@@ -64,7 +64,7 @@ class Package_IDE_API
      *
      * @param string $dir PhD output directory.
      */
-    public function __construct($dir) 
+    public function __construct($dir)
     {
         if (file_exists($dir)) {
             if (is_dir($dir)) {
@@ -86,7 +86,7 @@ class Package_IDE_API
      * @param string $filename File of the function.
      * @return Package_IDE_API_Function Object representing the function.
      */
-    private function loadFunction($filename) 
+    private function loadFunction($filename)
     {
         if (!file_exists($filename)) {
             return NULL;
@@ -101,7 +101,7 @@ class Package_IDE_API
      * @param string $function Function name.
      * @return string File name.
      */
-    private function functionToFilename($function) 
+    private function functionToFilename($function)
     {
         return str_replace(
             array('->', '::', '()'),
@@ -113,7 +113,7 @@ class Package_IDE_API
      *
      * @return array Functions list.
      */
-    public function getFunctionList() 
+    public function getFunctionList()
     {
         return $this->funclist;
     }
@@ -125,7 +125,7 @@ class Package_IDE_API
      * @param string $class TODO.
      * @return Package_IDE_API_Function A function object.
      */
-    public function getFunctionByName($functionName, $class = null) 
+    public function getFunctionByName($functionName, $class = null)
     {
         return $this->loadFunction($this->dir
             . self::FUNCTIONS_DIR
@@ -139,7 +139,7 @@ class Package_IDE_API
      * @param string $className Name of the class.
      * @return array An array of Package_IDE_API_Function.
      */
-    public function getMethodsByClass($className) 
+    public function getMethodsByClass($className)
     {
         $methods = array();
         $class = $className . '.';

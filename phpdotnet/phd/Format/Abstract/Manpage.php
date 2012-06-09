@@ -5,12 +5,12 @@ namespace phpdotnet\phd;
 abstract class Format_Abstract_Manpage extends Format {
     public $role = false;
 
-    public function UNDEF($open, $name, $attrs, $props) {        
+    public function UNDEF($open, $name, $attrs, $props) {
         if ($open) {
             trigger_error("No mapper found for '{$name}'", E_USER_WARNING);
         }
-        return "\n.B [NOT PROCESSED] $name [/NOT PROCESSED]";        
-    }    
+        return "\n.B [NOT PROCESSED] $name [/NOT PROCESSED]";
+    }
 
     public function CDATA($str) {
         return $this->highlight(trim($str), $this->role, 'troff');
@@ -26,7 +26,7 @@ abstract class Format_Abstract_Manpage extends Format {
         if (in_array($ret[0], array(",", ";", ":", "."))) {
             return $ret;
         }
-        
+
         return $ret;
     }
 

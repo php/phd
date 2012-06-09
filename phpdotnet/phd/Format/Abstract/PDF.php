@@ -4,7 +4,7 @@ namespace phpdotnet\phd;
 
 abstract class Format_Abstract_PDF extends Format {
     protected $pdfDoc;
-   
+
     public function getPdfDoc() {
         return $this->pdfDoc;
     }

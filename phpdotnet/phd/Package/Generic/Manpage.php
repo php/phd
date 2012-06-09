@@ -3,8 +3,8 @@ namespace phpdotnet\phd;
 /* $Id$ */
 
 class Package_Generic_Manpage extends Format_Abstract_Manpage {
-    const OPEN_CHUNK    = 0x01; 
-    const CLOSE_CHUNK   = 0x02; 
+    const OPEN_CHUNK    = 0x01;
+    const CLOSE_CHUNK   = 0x02;
 
      private $elementmap = array( /* {{{ */
         'acronym'               => 'format_suppressed_tags',
@@ -255,13 +255,13 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         "funcname"              => array(),
         "firstrefname"          => true,
     );
-        
+
     public function __construct() {
         parent::__construct();
 
         $this->registerFormatName("Generic Unix Manual Pages");
         $this->setExt(Config::ext() === null ? ".3.gz" : Config::ext());
-        $this->setChunked(true); 
+        $this->setChunked(true);
         $this->cchunk = $this->dchunk;
     }
 
@@ -782,7 +782,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         }
         return "";
     }
-  
+
     public function format_pubdate_text($value, $tag) {
         $this->date = $value;
         return false;

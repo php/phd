@@ -120,7 +120,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
 
                 foreach($siblings as $sid) {
                     $toc[] = array(
-                        Format::getFilename($sid).$ext, 
+                        Format::getFilename($sid).$ext,
                         Format::getShortDescription($sid),
                     );
                 }
@@ -129,7 +129,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                 $p = $parent;
                 while (($p = Format::getParent($p)) && $p != "ROOT") {
                     $parents[] = array(
-                        Format::getFilename($p).$ext, 
+                        Format::getFilename($p).$ext,
                         Format::getShortDescription($p),
                     );
                 }

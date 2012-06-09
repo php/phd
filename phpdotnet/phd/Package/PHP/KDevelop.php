@@ -91,14 +91,14 @@ class Package_PHP_KDevelop extends Format {
             if ($val) {
                 $this->registerElementMap($this->elementmap);
                 $this->registerTextMap($this->textmap);
-            }            
+            }
             break;
         case Render::INIT:
             if ($val) {
                 $this->setOutputDir(Config::output_dir());
                 $this->setFileStream(fopen($this->getOutputDir() . strtolower($this->getFormatName()), "w"));
                 self::headerToc();
-            } 
+            }
             break;
         case Render::VERBOSE:
             v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);

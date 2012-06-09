@@ -27,7 +27,7 @@ abstract class Format_Abstract_XHTML extends Format {
             return '<' .$tag. ' class="' .$name. '"' . $idstr . ($props["empty"] ? '/' : "") . '>';
         }
         return '</' .$tag. '>';
-    }    
+    }
 
     public function TEXT($str) {
         return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
@@ -39,7 +39,7 @@ abstract class Format_Abstract_XHTML extends Format {
         }
     }
 
-    public function CDATA($str) {    
+    public function CDATA($str) {
         switch($this->role) {
         case '':
             return '<div class="cdata"><pre>'
@@ -52,8 +52,8 @@ abstract class Format_Abstract_XHTML extends Format {
         }
     }
 
-    /* Functions from PhDThemeXhtml */    
-    
+    /* Functions from PhDThemeXhtml */
+
     /**
     * Called after the constructor finished.
     * This is needed since themes set their outputdir and outputfile
@@ -66,7 +66,7 @@ abstract class Format_Abstract_XHTML extends Format {
     *
     * @return void
     */
-    public function postConstruct() {    
+    public function postConstruct() {
         $this->mediamanager = new MediaManager(Config::xml_root());
         $outputdir = $this->getOutputDir();
         if (isset($outputdir) && $outputdir) {

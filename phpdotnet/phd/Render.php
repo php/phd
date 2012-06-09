@@ -84,7 +84,7 @@ class Render extends ObjectStorage
 
                 if ($name == "notatag")
                     continue;
-                
+
                 foreach($this as $format) {
                     $map = $this[$format][\XMLReader::ELEMENT];
 

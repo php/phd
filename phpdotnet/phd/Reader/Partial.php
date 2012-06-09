@@ -93,29 +93,29 @@ class Reader_Partial extends Reader
                     $ignore = true;
                     $arraySkip[] = $id;
                 }
-            } elseif ($currently_skipping && $this->skip[$currently_skipping]) {                
+            } elseif ($currently_skipping && $this->skip[$currently_skipping]) {
                 if ($currentSkip == $id) {
                     v("Skipping child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
                 } else {
                     v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
                 }
-                 
+
                 $ignore = true;
-            } elseif ($currently_reading && $this->partial[$currently_reading]) {                
+            } elseif ($currently_reading && $this->partial[$currently_reading]) {
                 if ($currentPartial == $id) {
                     v("Rendering child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
                 } else {
                     v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
                 }
- 
+
                 return $ret;
             } elseif (empty($this->partial)) {
                 return false;
             } else {
-                // If we are used by the indexer then we have no clue about the 
+                // If we are used by the indexer then we have no clue about the
                 // parents :)
                 if ($id && $this->parents) {
-                    // If this id isn't one of our ancestors we can jump 
+                    // If this id isn't one of our ancestors we can jump
                     // completely over it
                     if (!in_array($id, $this->parents)) {
                         parent::next();

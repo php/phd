@@ -23,8 +23,8 @@ class Package_IDE_Funclist extends Format {
     public function createLink($for, &$desc = null, $type = Format::SDESC) {}
     public function UNDEF($open, $name, $attrs, $props) {}
     public function TEXT($value) {}
-    public function CDATA($value) {}        
-    public function transformFromMap($open, $tag, $name, $attrs, $props) {}    
+    public function CDATA($value) {}
+    public function transformFromMap($open, $tag, $name, $attrs, $props) {}
 
     public function appendData($data) {
         if ($data && $this->isFunctionRefSet && $this->isRefname) {
@@ -42,7 +42,7 @@ class Package_IDE_Funclist extends Format {
             $filename = Config::output_dir() . strtolower($this->getFormatName()) . $this->getExt();
             file_put_contents($filename, $this->buffer);
             break;
-        case Render::VERBOSE:            
+        case Render::VERBOSE:
             v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
             break;
         }
@@ -57,7 +57,7 @@ class Package_IDE_Funclist extends Format {
 
     public function format_refname($open, $name, $attrs, $props) {
         $this->isRefname = $open;
-        return ""; 
+        return "";
     }
 
     public function format_refname_text($value, $tag) {

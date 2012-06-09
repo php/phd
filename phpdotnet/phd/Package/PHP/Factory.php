@@ -22,7 +22,7 @@ class Package_PHP_Factory extends Format_Factory {
      * The package version
      */
     private $version = '@phd_php_version@';
-    
+
     public function __construct() {
         parent::setPackageName("PHP");
         parent::setPackageVersion($this->version);

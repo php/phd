@@ -22,7 +22,7 @@ namespace phpdotnet\phd;
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
  * @link     https://doc.php.net/phd/
  */
-class Package_IDE_API_Function 
+class Package_IDE_API_Function
 {
     /**
      * Function name.
@@ -149,7 +149,7 @@ class Package_IDE_API_Function
      * Example for the fread() function:
      *     resource fread(resource $handle, int $length)
      */
-    public function __toString() 
+    public function __toString()
     {
         $str = $this->getReturnType() . ' ' . $this->getName() . '(';
         $p = $opts = 0;
@@ -173,7 +173,7 @@ class Package_IDE_API_Function
      *
      * @return string Function name
      */
-    public function getName() 
+    public function getName()
     {
         return $this->name;
     }
@@ -184,7 +184,7 @@ class Package_IDE_API_Function
      *
      * @return string Function version
      */
-    public function getVersion() 
+    public function getVersion()
     {
         return $this->version;
     }
@@ -195,7 +195,7 @@ class Package_IDE_API_Function
      *
      * @return string Function purpose
      */
-    public function getPurpose() 
+    public function getPurpose()
     {
         return $this->purpose;
     }
@@ -205,7 +205,7 @@ class Package_IDE_API_Function
      *
      * @return string The xml:id of the function
      */
-    public function getManualID() 
+    public function getManualID()
     {
         return $this->manualid;
     }
@@ -246,7 +246,7 @@ class Package_IDE_API_Function
      *
      * @return array Array with the function parameters
      */
-    public function getParams() 
+    public function getParams()
     {
         return $this->params;
     }
@@ -256,7 +256,7 @@ class Package_IDE_API_Function
      *
      * @return string Function return type
      */
-    public function getReturnType() 
+    public function getReturnType()
     {
         return $this->returnType;
     }
@@ -267,7 +267,7 @@ class Package_IDE_API_Function
      *
      * @return string Description of the return value of the function
      */
-    public function getReturnDescription() 
+    public function getReturnDescription()
     {
         return $this->returnDescription;
     }
@@ -277,7 +277,7 @@ class Package_IDE_API_Function
      *
      * @return array Array with the see also entries.
      */
-    public function getSeeAlsoEntries() 
+    public function getSeeAlsoEntries()
     {
         return $this->seeAlsoEntries;
     }
@@ -287,7 +287,7 @@ class Package_IDE_API_Function
      *
      * @return array Array with the changelog entries.
      */
-    public function getChangeLogEntries() 
+    public function getChangeLogEntries()
     {
         return $this->changeLogEntries;
     }

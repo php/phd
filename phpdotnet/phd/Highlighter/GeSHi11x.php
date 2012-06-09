@@ -118,7 +118,7 @@ class Highlighter_GeSHi11x extends Highlighter
      * @internal
      * GeSHi currently triggers a fatal error when detecting a language
      * is not supported. This here is the only way to circumvent this.
-     * 
+     *
      * @param string $role   Source code role to use (php, xml, html, ...)
      *
      * @return string Language name for GeSHi or null if not found.

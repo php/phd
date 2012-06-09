@@ -65,7 +65,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 /* DEFAULT */          'format_suppressed_tags',
                 'fieldsynopsis'     => 'format_fieldsynopsis_varname',
             ),
-        ),        
+        ),
     );
     private $mytextmap = array(
         'acronym'               => 'format_acronym_text',
@@ -93,7 +93,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
             ),
         ),
-        'refname'               => 'format_refname_text', 
+        'refname'               => 'format_refname_text',
         'type'                  => array(
             /* DEFAULT */          'format_type_text',
             'classsynopsisinfo' => false,
@@ -115,7 +115,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 /* DEFAULT */      false,
                 'classsynopsis' => 'format_classsynopsis_fieldsynopsis_varname_text',
             ),
-        ),        
+        ),
     );
 
     private $versions = array();
@@ -146,7 +146,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     );
 
     public function __construct() {
-        parent::__construct();               
+        parent::__construct();
         $this->myelementmap = array_merge(parent::getDefaultElementMap(), static::getDefaultElementMap());
         $this->mytextmap = array_merge(parent::getDefaultTextMap(), static::getDefaultTextMap());
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
@@ -461,7 +461,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             "require" => true, "require_once" => true,
             "return" => true,
         );
-        
+
         if ($display_value === null) {
             $display_value = $value;
             if (!isset($non_functions[$value])) {
@@ -518,10 +518,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_container_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"];
-        if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {            
+        if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {
             $this->cchunk = $this->dchunk;
         }
-        
+
         if ($open) {
             $this->notify(Render::CHUNK, Render::OPEN);
             if ($name != "reference") {
@@ -609,7 +609,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
 
             $this->CURRENT_CHUNK = $this->CURRENT_ID = $id;
-            if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {            
+            if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {
                 $this->cchunk = $this->dchunk;
                 $this->notify(Render::CHUNK, Render::OPEN);
             }

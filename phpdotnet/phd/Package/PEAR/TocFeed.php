@@ -60,7 +60,7 @@ class Package_PEAR_TocFeed extends Package_Generic_TocFeed
      * Author string used in atom feed files.
      *
      * Inheriting classes should change this.
-     * 
+     *
      * @var    string
      * @usedby header()
      */

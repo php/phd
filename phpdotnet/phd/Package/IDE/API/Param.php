@@ -22,7 +22,7 @@ namespace phpdotnet\phd;
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
  * @link     https://doc.php.net/phd/
  */
-class Package_IDE_API_Param 
+class Package_IDE_API_Param
 {
     /**
      * Parameter name.
@@ -64,7 +64,7 @@ class Package_IDE_API_Param
      *
      * @param SimpleXMLElement $xmlElement
      */
-    public function __construct(\SimpleXMLElement $xmlElement) 
+    public function __construct(\SimpleXMLElement $xmlElement)
     {
         $this->name         = $xmlElement->name;
         $this->type         = $xmlElement->type;
@@ -79,7 +79,7 @@ class Package_IDE_API_Param
      *
      * @return string The parameter signature
      */
-    public function __toString() 
+    public function __toString()
     {
         $str = $this->getType();
         $str .= (substr($this->getName(), 0, 1) != '$') ? ' $' : ' ';
@@ -101,7 +101,7 @@ class Package_IDE_API_Param
      *
      * @return string Parameter name.
      */
-    public function getName() 
+    public function getName()
     {
         return $this->name;
     }
@@ -111,7 +111,7 @@ class Package_IDE_API_Param
      *
      * @return string Parameter type.
      */
-    public function getType() 
+    public function getType()
     {
         return $this->type;
     }
@@ -121,7 +121,7 @@ class Package_IDE_API_Param
      *
      * @return bool TRUE if the parameter is optional, FALSE otherwise.
      */
-    public function isOptional() 
+    public function isOptional()
     {
         return $this->optional;
     }
@@ -131,7 +131,7 @@ class Package_IDE_API_Param
      *
      * @return string Value of the parameter initializer.
      */
-    public function getInitializer() 
+    public function getInitializer()
     {
         return $this->initializer;
     }
