@@ -132,11 +132,11 @@ class PI_PHPDOCHandler extends PIHandler {
 
         usort($changelogs, array(__CLASS__, "_sortByVersion"));
 
-        $ret = "<table class='doctable table'><thead><tr>";
+        $ret = "<table class='doctable table' rules='groups'><thead><tr>";
         $ret .= "<th>" . $this->format->autogen("Version", "en") . "</th>";
         $ret .= "<th>" . $this->format->autogen("Function", "en") . "</th>";
         $ret .= "<th>" . $this->format->autogen("Description", "en") . "</th>";
-        $ret .= "</tr></thead><tbody>";
+        $ret .= "</tr></thead>";
 
         $version = "";
         foreach($changelogs as $entry) {
@@ -146,6 +146,10 @@ class PI_PHPDOCHandler extends PIHandler {
                     $v = "&nbsp;";
                 }
                 else {
+                    if ($version) {
+                        $ret .= "</tbody>";
+                    }
+                    $ret .= '<tbody class="gen-changelog v' . str_replace(".", "-", $version) . '">';
                     $version = $entry["version"];
                     $v = $version;
                 }
