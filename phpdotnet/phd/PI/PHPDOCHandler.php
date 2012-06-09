@@ -3,7 +3,7 @@ namespace phpdotnet\phd;
 /* $Id$ */
 
 class PI_PHPDOCHandler extends PIHandler {
-    protected $membership = null;
+    protected $_changelogSince = null;
 
     public function __construct($format) {
         parent::__construct($format);
@@ -87,12 +87,17 @@ class PI_PHPDOCHandler extends PIHandler {
                 }
                 return;
 
+            case "changelog-config-since":
+                $this->_changelogSince = $matches["value"];
+                break;
+
             case "generate-changelog-for-membership":
                 if ($this->format instanceof Index) {
                     return;
                 }
 
-                $changelogs = $this->format->getChangelogsForMembershipOf($matches["value"]);
+                $members = explode(" ", $matches["value"]);
+                $changelogs = $this->format->getChangelogsForMembershipOf($members);
                 return $this->generateChangelogMarkup($changelogs);
                 break;
 
@@ -130,16 +135,19 @@ class PI_PHPDOCHandler extends PIHandler {
 
         $version = "";
         foreach($changelogs as $entry) {
-            $link = $this->format->createLink($entry["docbook_id"], $desc);
-            if ($version == $entry["version"]) {
-                $v = "&nbsp;";
+            if (!$this->_changelogSince || strnatcasecmp($entry["version"], $this->_changelogSince) >== 0) {
+                $link = $this->format->createLink($entry["docbook_id"], $desc);
+                if ($version == $entry["version"]) {
+                    $v = "&nbsp;";
+                }
+                else {
+                    $version = $entry["version"];
+                    $v = $version;
+                }
+                $ret .= sprintf("<tr><td>%s</td><td><a href='%s'>%s</a></td><td>%s</td></tr>", $v, $link, $desc, $entry["description"]);
             }
-            else {
-                $version = $entry["version"];
-                $v = $version;
-            }
-            $ret .= sprintf("<tr><td>%s</td><td><a href='%s'>%s</a></td><td>%s</td></tr>", $v, $link, $desc, $entry["description"]);
         }
+        $this->_changelogSince= null;
 
         return $ret . "</tbody></table>";
     }
