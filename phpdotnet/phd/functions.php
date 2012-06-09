@@ -25,11 +25,12 @@ define('VERBOSE_INFO',                   ((VERBOSE_MESSAGES            << 1) - 1
 define('VERBOSE_NOVERSION',              VERBOSE_MESSAGES              << 1);
 define('VERBOSE_BROKEN_LINKS',           VERBOSE_NOVERSION             << 1);
 define('VERBOSE_MISSING_ATTRIBUTES',     VERBOSE_BROKEN_LINKS          << 1);
+define('VERBOSE_OLD_LIBXML',             VERBOSE_MISSING_ATTRIBUTES    << 1);
 
-define('VERBOSE_WARNINGS',               ((VERBOSE_MISSING_ATTRIBUTES  << 1) - 1) & ~VERBOSE_ERRORS & ~VERBOSE_INFO);
+define('VERBOSE_WARNINGS',               ((VERBOSE_OLD_LIBXML  << 1) - 1) & ~VERBOSE_ERRORS & ~VERBOSE_INFO);
 
 
-define('VERBOSE_ALL',                    (VERBOSE_MISSING_ATTRIBUTES   << 1) - 1);
+define('VERBOSE_ALL',                    (VERBOSE_OLD_LIBXML   << 1) - 1);
 define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_WARNINGS|VERBOSE_TOC_WRITING)));
 
 $olderrrep = error_reporting();
@@ -99,6 +100,7 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
         // PhD warnings
         VERBOSE_NOVERSION             => 'No version information',
         VERBOSE_BROKEN_LINKS          => 'Broken links          ',
+        VERBOSE_OLD_LIBXML            => 'Old libxml2           ',
         VERBOSE_MISSING_ATTRIBUTES    => 'Missing attributes    ',
     );
     static $recursive = false;

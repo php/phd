@@ -21,8 +21,15 @@ class Reader extends \XMLReader
             return $retval;
         }
         if (!$node) {
+            // We need libxml2.6.20 to be able to read the textual content of the node without skipping over the markup too
+            if (\LIBXML_VERSION >= 20620) {
+                return self::readString();
+            }
+            v("You are using libxml2 v%d, but v20620 or newer is preferred", \LIBXML_VERSION, VERBOSE_OLD_LIBXML);
+
             $node = $this->name;
         }
+
         $retval = "";
         while (self::readNode($node)) {
             $retval .= $this->value;
