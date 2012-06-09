@@ -77,6 +77,8 @@ class PI_PHPDOCHandler extends PIHandler {
             case "generate-changelog-for":
                 $parents = explode(" ", $matches["value"]);
                 $changelogs = $this->format->getChangelogsForChildrenOf($parents);
+                usort($changelogs, array(__CLASS__, "_sortByVersion"));
+
                 $ret = "<table class='doctable table'><thead><tr>";
                 $ret .= "<th>" . $this->format->autogen("Version", "en") . "</th>";
                 $ret .= "<th>" . $this->format->autogen("Function", "en") . "</th>";
@@ -104,6 +106,13 @@ class PI_PHPDOCHandler extends PIHandler {
                 trigger_error("Don't know how to handle {$matches["attr"]}", E_USER_WARNING);
                 break;
         }
+
+    }
+
+    // usort() callback function used in generate-changelog-for, higest (newest) version first
+    // 1.2.11 comes before 1.2.2
+    protected static function _sortByVersion($a, $b) {
+        return -1 * strnatcasecmp($a["version"], $b["version"]);
     }
 
 }

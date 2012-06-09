@@ -290,7 +290,7 @@ abstract class Format extends ObjectStorage
         foreach((array)$bookids as $bookid) {
             $ids[] = "'" . $this->sqlite->escapeString($bookid) . "'";
         }
-        $results = $this->sqlite->query("SELECT * FROM changelogs WHERE parent_id IN (" . join(", ", $ids) . ") ORDER BY version DESC");
+        $results = $this->sqlite->query("SELECT * FROM changelogs WHERE parent_id IN (" . join(", ", $ids) . ")");
         if (!$results) {
             return array();
         }
