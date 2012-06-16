@@ -62,17 +62,16 @@
 
   <date>2012-06-16</date>
   <version>
-    <release>1.1.6</release>
+    <release>1.1.7</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Fixed indexing of content with markup. (Hannes)
-    - Added support for generate-changelog-for, extension-membership and related phpdoc PI. (Hannes)
+    - ...
   </notes>
 
   <contents>
@@ -896,6 +895,23 @@
         - Fixed bug#54217 Warn about nonexisting parameters. (Moacir)
         - Fixed bug#50725 Generate nav links at top of function index (Peter Cowburn)
         - Fixed bug#47392 Option to specify filename for bightmls. (Hannes)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>1.1.6</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2012-06-16</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+    - Fixed indexing of content with markup. (Hannes)
+    - Added support for generate-changelog-for, extension-membership and related phpdoc PI. (Hannes)
       </notes>
     </release>
 
