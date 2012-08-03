@@ -36,7 +36,7 @@ Content:
  <h1 class="title">The SplStack class</h1>
  
 
- <div class="partintro"><p class="verinfo">(No version information available, might only be in SVN)</p>
+ <div class="partintro"><p class="verinfo">(No version information available, might only be in Git)</p>
 
     <div class="section" id="splstack.synopsis">
         <h2 class="title">Class synopsis</h2>
