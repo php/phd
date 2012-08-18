@@ -30,7 +30,7 @@ class Render extends ObjectStorage
 
     public function attach($obj, $inf = array()) { /* {{{ */
         if (!($obj instanceof Format)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'All formats *MUST* inherit ' . __NAMESPACE__ . '\\Format'
             );
         }

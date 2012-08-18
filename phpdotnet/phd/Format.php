@@ -338,7 +338,7 @@ abstract class Format extends ObjectStorage
     }
     final public function attach($obj, $inf = array()) {
         if (!($obj instanceof $this) && get_class($obj) != get_class($this)) {
-            throw new InvalidArgumentException(get_class($this) . " themes *MUST* _inherit_ " .get_class($this). ", got " . get_class($obj));
+            throw new \InvalidArgumentException(get_class($this) . " themes *MUST* _inherit_ " .get_class($this). ", got " . get_class($obj));
         }
         $obj->notify(Render::STANDALONE, false);
         return parent::attach($obj, $inf);

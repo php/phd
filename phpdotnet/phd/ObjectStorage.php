@@ -6,7 +6,7 @@ class ObjectStorage extends \SplObjectStorage
 {
 	public function attach($obj, $inf = array()) {
 		if (!($obj instanceof Format)) {
-			throw new InvalidArgumentException(
+			throw new \InvalidArgumentException(
                 'Only classess inheriting ' . __NAMESPACE__ . '\\Format supported'
             );
 		}
