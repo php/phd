@@ -106,9 +106,9 @@ class Render extends ObjectStorage
                     }
 
                     if (strncmp($tag, "format_", 7) !== 0) {
-                        $data = $retval = $format->transformFromMap($open, $tag, $name, $attrs, $props);
+                        $data = $format->transformFromMap($open, $tag, $name, $attrs, $props);
                     } else {
-                        $data = $retval = $format->{$tag}($open, $name, $attrs, $props);
+                        $data = $format->{$tag}($open, $name, $attrs, $props);
                     }
                     $format->appendData($data);
                 }
@@ -132,12 +132,12 @@ class Render extends ObjectStorage
                         }
 
                         if ($tag !== false) {
-                            $data = $retval = $format->{$tag}($value, $name);
+                            $data = $format->{$tag}($value, $name);
                         } else {
-                            $data = $retval = $format->TEXT($value);
+                            $data = $format->TEXT($value);
                         }
                     } else {
-                        $data = $retval = $format->TEXT($value);
+                        $data = $format->TEXT($value);
                     }
 
                     if ($data === false) {
