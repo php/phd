@@ -422,7 +422,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
     }
 
     public function format_refsect_text($value, $tag) {
-        if ($this->cchunk["appendlater"] && isset($this->cchunk["buffer"]))
+        if (isset($this->cchunk["appendlater"]) && $this->cchunk["appendlater"] && isset($this->cchunk["buffer"]))
             array_push($this->cchunk["buffer"], strtoupper('"'.$value.'"'));
         else
             return strtoupper('"'.$value.'"');
@@ -430,7 +430,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     public function format_refsect_title($open, $name, $attrs, $props) {
         if ($open) {
-            if ($this->cchunk["appendlater"] && isset($this->cchunk["buffer"]))
+            if (isset($this->cchunk["appendlater"]) && $this->cchunk["appendlater"] && isset($this->cchunk["buffer"]))
                 array_push($this->cchunk["buffer"], "\n.SH ");
             else return "\n.SH ";
         }
