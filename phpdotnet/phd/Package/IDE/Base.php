@@ -357,7 +357,9 @@ abstract class Package_IDE_Base extends Format {
         if ($open) {
             //Read the description
             $content = $this->renderHTML();
-            $this->function['return']['description'] = $content;
+            //Remove default title
+            $content = str_replace('<h1 class="title">Return Values</h1>', '', $content);
+            $this->function['return']['description'] = trim($content);
         }
     }
 
@@ -378,7 +380,10 @@ abstract class Package_IDE_Base extends Format {
     public function format_errors($open, $name, $attrs, $props) {
         if ($open) {
             //Read the description
-            $this->function['errors'] = $this->renderHTML();;
+            $content = $this->renderHTML();
+            //Remove default title
+            $content = str_replace('<h1 class="title">Errors/Exceptions</h1>', '', $content);
+            $this->function['errors'] = trim($content);
         }
     }
 
