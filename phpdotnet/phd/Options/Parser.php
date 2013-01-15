@@ -79,12 +79,13 @@ class Options_Parser
         }
 
         for ($i=1; $i < $argc; $i++) {
-            if (substr($argv[$i], 0, 2) == '--') {
-                if (!in_array(substr($argv[$i], 2), $long)) {
-                    trigger_error('Invalid long option ' . $argv[$i], E_USER_ERROR);
+            $checkArgv = explode('=', $argv[$i]);
+            if (substr($checkArgv[0], 0, 2) == '--') {
+                if (!in_array(substr($checkArgv[0], 2), $long)) {
+                    trigger_error('Invalid long option ' . $argv[$i] . ' ' . $check, E_USER_ERROR);
                 }
-            } elseif (substr($argv[$i], 0, 1) == '-') {
-                if (!in_array(substr($argv[$i], 1), $short)) {
+            } elseif (substr($checkArgv[0], 0, 1) == '-') {
+                if (!in_array(substr($checkArgv[0], 1), $short)) {
                     trigger_error('Invalid short option ' . $argv[$i], E_USER_ERROR);
                 }
            }
