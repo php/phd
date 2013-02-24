@@ -161,8 +161,8 @@ $ phd -d doc-base/.manual.xml -P PHP
       <screen>
 <![CDATA[
 $ phd --help
-PhD version: 1.0.0-stable
-Copyright (c) 2007-2010 The PHP Documentation Group
+PhD version: 1.1.6
+Copyright(c) 2007-2013 The PHP Documentation Group
 
   -v
   --verbose <int>            Adjusts the verbosity level
@@ -173,9 +173,15 @@ Copyright (c) 2007-2010 The PHP Documentation Group
   -I
   --noindex                  Do not index before rendering but load from cache
                              (default: false)
+  -M
+  --memoryindex              Do not save indexing into a file, store it in memory.
+                             (default: false)
   -r
   --forceindex               Force re-indexing under all circumstances
                              (default: false)
+  -t
+  --notoc                    Do not rewrite TOC before rendering but load from
+                             cache (default: false)
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -x
@@ -191,6 +197,9 @@ Copyright (c) 2007-2010 The PHP Documentation Group
   --list                     Print out the supported packages and formats
   -o <directory>
   --output <directory>       The output directory (default: .)
+  -F filename
+  --outputfilename filename  Filename to use when writing standalone formats
+                             (default: <packagename>-<formatname>.<formatext>)
   -L <language>
   --lang <language>          The language of the source file (used by the CHM
                              theme). (default: en)
@@ -205,6 +214,18 @@ Copyright (c) 2007-2010 The PHP Documentation Group
   --version                  Print the PhD version information
   -h
   --help                     This help
+  -e <extension>
+  --ext <extension>          The alternative filename extension to use,
+                             including the dot. Use 'false' for no extension.
+  -S <bool>
+  --saveconfig <bool>        Save the generated config (default: false).
+
+  -Q
+  --quit                     Don't run the build. Use with --saveconfig to
+                             just save the config.
+  -k
+  --packagedir               Use an external package directory.
+
 
 Most options can be passed multiple times for greater effect.
 ]]>
@@ -218,32 +239,45 @@ Most options can be passed multiple times for greater effect.
 <![CDATA[
 $ phd --list
 Supported packages:
-       Generic
-              xhtml
-              bigxhtml
-       IDE
-              functions
-              funclist
-       PEAR
-              xhtml
-              bigxhtml
-              php
-              chm
-              tocfeed
-       PHP
-              xhtml
-              bigxhtml
-              php
-              howto
-              manpage
-              pdf
-              bigpdf
-              kdevelop
-              chm
-              tocfeed
-
+        Generic
+                xhtml
+                bigxhtml
+                manpage
+        IDE
+                xml
+                funclist
+                json
+                php
+                phpstub
+        PEAR
+                xhtml
+                bigxhtml
+                php
+                chm
+                tocfeed
+        PHP
+                xhtml
+                bigxhtml
+                php
+                howto
+                manpage
+                pdf
+                bigpdf
+                kdevelop
+                chm
+                tocfeed
+                epub
+                enhancedchm
 ]]>
       </screen>
+
+      <note>
+        <para>The format packages are provided by separate PEAR packages 
+        (doc.php.net/PhD_Generic, doc.php.net/PhD_IDE, doc.php.net/PhD_PEAR and 
+        doc.php.net/PhD_PHP) where only the Generic is installed by default.
+        </para>
+      </note>
+
 
       <para>You can tell by the output of the <literal>--list</literal> option
       that PhD can also be used to render the docs as a PDF file, or as Unix
