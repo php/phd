@@ -68,6 +68,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 'fieldsynopsis'     => 'format_fieldsynopsis_varname',
             ),
         ),
+        'type'                  => array(
+            /* DEFAULT */          'span',
+            'methodsynopsis'    => array(
+                /* DEFAULT */      'format_type_tag_methodsynopsis',
+                'classsynopsis' => 'span',
+            ),
+        ),
     );
     private $mytextmap = array(
         'acronym'               => 'format_acronym_text',
@@ -350,6 +357,15 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     }
 
+    public function format_type_tag_methodsynopsis($open, $tag, $attrs, $props) {
+        if ($open) {
+            return '<span class="type">';
+        }
+
+        // Trailing space intentional as phpdoc doesn't have a
+        // space between <type> and the <methodname> in methodsynopsis
+        return '</span> ';
+    }
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
         if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
             return false;
@@ -462,9 +478,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             if (isset($attrs[Reader::XMLNS_PHD]["args"])) {
                 $this->cchunk["args"] = $attrs[Reader::XMLNS_PHD]["args"];
             }
-            // Leading space intional for methodname as phpdoc doesn't have a
-            // space between <type> and the <methodname> in methodsynopsis
-            return ' <span class="' . $tag . '">';
+            return '<span class="' . $tag . '">';
         }
         return "</span>";
     }
