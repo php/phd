@@ -267,7 +267,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'tag'                   => 'code',
         'table'                 => 'format_table',
         'firstterm'             => 'format_term',
-        'term'                  => 'format_term',
+        'term'                  => array(
+            /* DEFAULT */          'format_term',
+            'varlistentry'      => 'format_varlistentry_term'
+        ),
         'tfoot'                 => 'format_th',
         'tbody'                 => 'format_tbody',
         'td'                    => 'format_th',
@@ -1216,7 +1219,23 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
-            return isset($attrs[Reader::XMLNS_XML]["id"]) ? '<dt id="'.$attrs[Reader::XMLNS_XML]["id"]. '">' : "<dt>\n";
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $this->cchunk['varlistentry']['id'] = $attrs[Reader::XMLNS_XML]["id"];
+            } else {
+                unset($this->cchunk['varlistentry']['id']);
+            }
+        }
+        return '';
+    }
+    public function format_varlistentry_term($open, $name, $attrs, $props) {
+        if ($open) {
+            if (isset($this->cchunk['varlistentry']['id'])) {
+                $id = $this->cchunk['varlistentry']['id'];
+                unset($this->cchunk['varlistentry']['id']);
+                return '<dt id="'.$id.'">';
+            } else {
+                return "<dt>\n";
+            }
         }
         return "</dt>\n";
     }
