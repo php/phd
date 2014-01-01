@@ -35,9 +35,9 @@
     <active>yes</active>
   </lead>
 
-  <date>2012-06-16</date>
+  <date>2014-01-01</date>
   <version>
-    <release>1.1.7</release>
+    <release>1.1.8</release>
     <api>1.1.0</api>
   </version>
   <stability>
