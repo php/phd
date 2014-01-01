@@ -60,18 +60,21 @@
     <active>yes</active>
   </developer>
 
-  <date>2012-06-16</date>
+  <date>2013-01-01</date>
   <version>
     <release>1.1.7</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>stable</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - ...
+    - Fixed bug#64850 (move placement of space between &lt;type&gt; and &lt;methodname&gt; (Peter)
+    - Fixed bug#66316 (HTML is malformed) (Peter)
+    - Fixed bug PhD generates garbled chm on PHP 5.4.0 or later. (Yoshinari)
+    - Change the unknown version reference to Git, not SVN. (Adam)
   </notes>
 
   <contents>
