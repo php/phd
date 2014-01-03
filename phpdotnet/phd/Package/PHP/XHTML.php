@@ -70,10 +70,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'type'                  => array(
             /* DEFAULT */          'span',
-            'methodsynopsis'    => array(
-                /* DEFAULT */      'format_type_tag_methodsynopsis',
-                'classsynopsis' => 'span',
-            ),
+            'methodsynopsis'    => 'format_type_tag_methodsynopsis',
         ),
     );
     private $mytextmap = array(
