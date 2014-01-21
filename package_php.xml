@@ -29,18 +29,18 @@
     <active>yes</active>
   </lead>
 
-  <date>2014-01-01</date>
+  <date>2014-01-21</date>
   <version>
     <release>1.1.8</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>stable</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - ...
+    - Fixed bug#66400 (Class synopsis missing space between type and method name) (Peter)
   </notes>
 
   <contents>
@@ -304,7 +304,7 @@
         <release>stable</release>
         <api>stable</api>
       </stability>
-      <date>2013-01-01</date>
+      <date>2014-01-01</date>
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Added phd:args support for &lt;function;&gt; and &lt;methodname&gt;. (Hannes)
