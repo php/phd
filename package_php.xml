@@ -31,7 +31,7 @@
 
   <date>2014-01-01</date>
   <version>
-    <release>1.1.7</release>
+    <release>1.1.8</release>
     <api>1.1.0</api>
   </version>
   <stability>
@@ -40,7 +40,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Bump version
+    - ...
   </notes>
 
   <contents>
@@ -290,6 +290,21 @@
         <api>stable</api>
       </stability>
       <date>2012-06-16</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Added phd:args support for &lt;function;&gt; and &lt;methodname&gt;. (Hannes)
+      </notes>
+    </release>
+    <release>
+      <version>
+        <release>1.1.7</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2013-01-01</date>
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Added phd:args support for &lt;function;&gt; and &lt;methodname&gt;. (Hannes)
