@@ -62,16 +62,16 @@
 
   <date>2014-01-21</date>
   <version>
-    <release>1.1.8</release>
+    <release>1.1.9</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
+    <release>snapshot</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Fixed bug#66400 (Class synopsis missing space between type and method name) (Peter)
+    - ...
   </notes>
 
   <contents>
@@ -931,6 +931,22 @@
         - Fixed bug#66316 (HTML is malformed) (Peter)
         - Fixed bug PhD generates garbled chm on PHP 5.4.0 or later. (Yoshinari)
         - Change the unknown version reference to Git, not SVN. (Adam)
+      </notes>
+    </release>
+
+    <release>
+      <version>
+        <release>1.1.8</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <date>2014-01-21</date>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Fixed bug#66400 (Class synopsis missing space between type and method name) (Peter)
       </notes>
     </release>
 
