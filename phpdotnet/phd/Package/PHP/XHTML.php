@@ -88,15 +88,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'methodname'            => array(
             /* DEFAULT */          'format_function_text',
             'constructorsynopsis' => array(
-                /* DEFAULT */      'format_function_text',
-                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+                /* DEFAULT */      'format_classsynopsis_methodsynopsis_methodname_text',
             ),
             'methodsynopsis'    => array(
                 /* DEFAULT */      'format_classsynopsis_methodsynopsis_methodname_text',
             ),
             'destructorsynopsis' => array(
-                /* DEFAULT */      'format_function_text',
-                'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+                /* DEFAULT */      'format_classsynopsis_methodsynopsis_methodname_text',
             ),
         ),
         'refname'               => 'format_refname_text',
