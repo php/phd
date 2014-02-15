@@ -13,10 +13,8 @@ require __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
 spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
 
 
-$conf = array();
 if (file_exists("phd.config.php")) {
-    $conf = include "phd.config.php";
-    Config::init($conf);
+    Config::init(include "phd.config.php");
     v("Loaded config from existing file", VERBOSE_MESSAGES);
 } else {
     // need to init regardless so we get package-dirs from the include-path
@@ -39,7 +37,10 @@ if (!file_exists(Config::output_dir())) {
 }
 
 // This needs to be moved. Preferably into the PHP package.
-if (!$conf) {
+if (!is_dir(Config::lang_dir()) ||
+    !file_exists(Config::phpweb_version_filename()) ||
+    !file_exists(Config::phpweb_acronym_filename()) ||
+) {
     Config::init(array(
         "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
                         . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
