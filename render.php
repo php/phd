@@ -5,7 +5,7 @@ namespace phpdotnet\phd;
 
 // @php_dir@ gets replaced by pear with the install dir. use __DIR__ when 
 // running from SVN
-define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? __DIR__ : "@php_dir@");
+define('__INSTALLDIR__', '@php_dir@' == '@'.'php_dir@' ? __DIR__ : '@php_dir@');
 
 require __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
 require __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
