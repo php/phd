@@ -39,7 +39,7 @@ if (!file_exists(Config::output_dir())) {
 // This needs to be moved. Preferably into the PHP package.
 if (!is_dir(Config::lang_dir()) ||
     !file_exists(Config::phpweb_version_filename()) ||
-    !file_exists(Config::phpweb_acronym_filename()) ||
+    !file_exists(Config::phpweb_acronym_filename())
 ) {
     Config::init(array(
         "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
