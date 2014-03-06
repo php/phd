@@ -1017,11 +1017,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return '<em><code class="parameter reference">&';
+                return '<code class="parameter reference">&';
             }
-            return '<em><code class="parameter">';
+            return '<code class="parameter">';
         }
-        return "</code></em>";
+        return "</code>";
     }
 
     public function format_void($open, $name, $attrs, $props) {
