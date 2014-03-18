@@ -59,7 +59,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             'sect2'             => 'h3',
             'sect3'             => 'h4',
             'sect4'             => 'h5',
-            'segmentedlist'     => 'strong',
+            'segmentedlist'     => 'format_table_title',
             'simplesect'        => 'h3',
             'table'             => 'format_table_title',
             'variablelist'      => 'strong',

@@ -310,7 +310,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'sect2'             => 'h3',
             'sect3'             => 'h4',
             'sect4'             => 'h5',
-            'segmentedlist'     => 'strong',
+            'segmentedlist'     => 'format_table_title',
             'table'             => 'format_table_title',
             'variablelist'      => 'strong',
             'article'           => 'format_container_chunk_top_title',
@@ -430,9 +430,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         "co"                       => 0,
         "callouts"                 => 0,
         "segmentedlist"            => array(
-            "seglistitem"                   => 0,
-            "segtitle"                      => array(
-            ),
+            "segtitleclosed"       => false,
+            "segtitleopened"       => false,
         ),
         "table"                    => false,
         "procedure"                => false,
@@ -1171,27 +1170,40 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_segmentedlist($open, $name, $attrs) {
         $this->cchunk["segmentedlist"] = $this->dchunk["segmentedlist"];
         if ($open) {
-            return '<div class="'.$name.'">';
+            return '<table class="'.$name.'">';
         }
-        return '</div>';
+        return '</tbody></table>';
     }
     public function format_segtitle_text($value, $tag) {
-        $this->cchunk["segmentedlist"]["segtitle"][count($this->cchunk["segmentedlist"]["segtitle"])] = $value;
-        /* Suppress the text */
-        return "";
+        $html = '';
+        if (!$this->cchunk["segmentedlist"]["segtitleopened"]) {
+            $html .= '<thead><tr>';
+        }
+        $html .= '<th>'.$this->TEXT($value).'</th>';
+        $this->cchunk["segmentedlist"]["segtitleopened"] = true;
+
+        // Don't close the row; we'll have to do that in the first seglistitem.
+        return $html;
     }
     public function format_seglistitem($open, $name, $attrs) {
         if ($open) {
-            $this->cchunk["segmentedlist"]["seglistitem"] = 0;
-            return '<div class="'.$name.'">';
+            $html = '';
+
+            if (!$this->cchunk["segmentedlist"]["segtitleclosed"]) {
+                $html .= '</tr></thead><tbody>';
+                $this->cchunk["segmentedlist"]["segtitleclosed"] = true;
+            }
+
+            $html .= '<tr class="'.$name.'">';
+            return $html;
         }
-        return '</div>';
+        return '</tr>';
     }
     public function format_seg($open, $name, $attrs) {
         if ($open) {
-            return '<div class="seg"><strong><span class="segtitle">' .$this->cchunk["segmentedlist"]["segtitle"][$this->cchunk["segmentedlist"]["seglistitem"]++]. ':</span></strong>';
+            return '<td class="seg">';
         }
-        return '</div>';
+        return '</td>';
     }
     public function format_procedure($open, $name, $attrs) {
         $this->cchunk["procedure"] = false;
