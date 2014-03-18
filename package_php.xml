@@ -31,16 +31,16 @@
 
   <date>2014-03-06</date>
   <version>
-    <release>1.1.9</release>
+    <release>1.1.10</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
-    <api>stable</api>
+    <release>snapshot</release>
+    <api>snapshot</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-      - Fixed bug#66644 (Remove ()'s when rendering methodname in constructorsynopsis/destructorsynopsis) (Peter)
+    ...
   </notes>
 
   <contents>
@@ -323,6 +323,22 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Fixed bug#66400 (Class synopsis missing space between type and method name) (Peter)
+      </notes>
+    </release>
+
+    <release>
+      <date>2014-03-06</date>
+      <version>
+        <release>1.1.9</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+          - Fixed bug#66644 (Remove ()'s when rendering methodname in constructorsynopsis/destructorsynopsis) (Peter)
       </notes>
     </release>
 
