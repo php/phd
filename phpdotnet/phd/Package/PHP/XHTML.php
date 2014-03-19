@@ -654,7 +654,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
             return '<div id="'.$id.'" class="'.$name.'">';
         }
-        $this->notify(Render::CHUNK, Render::CLOSE);
+        if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {
+            $this->notify(Render::CHUNK, Render::CLOSE);
+        }
         return '</div>';
     }
 

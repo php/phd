@@ -40,6 +40,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
+    - Fix phd:chunk="false" (Adam)
     - Render segmentedlist elements as XHTML tables (Adam)
   </notes>
 
