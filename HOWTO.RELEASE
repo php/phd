@@ -23,20 +23,25 @@ Releases are currently made from the PHD_1_1 branch.
 6. Download Simple Channel Server in the docweb/www/ dir. 
    - See Appendix A and D below
 
-7. Generate the appropriate xml entries using the Simple Channel Server packages. You need to be running PHP 5.3 (make sure you have ext/phar and
-ext/zlib enabled):
+7. In the docweb/www/ dir, generate the appropriate xml entries using
+   the Simple Channel Server packages. You need to be running PHP 5.3
+   (make sure you have ext/phar and ext/zlib enabled):
    $ for i in /path/to/phd/PhD{_PHP,_PEAR,_Generic,}-*.tgz; do php -dphar.readonly=0 pearscs.phar release $i bjori; done
    $ git add -A
    $ git diff --staged # Scan through the changes
-   $ git commit
+   $ git commit -m "PhD * channel files"
 
-8. Update the file in path/to/docweb/templates/all/phd/home.tpl.php and add a new <li></li> with info from package.xml.
+8. Update the file in path/to/docweb/www/phd.php and add a new <li></li> with info from package.xml.
 
 9. Commit the changes. 
-   $ git commit templates/all/phd/home.tpl.php -m "Release PhD *"
+   $ git commit www/phd.php -m "PhD * news"
    $ git push # Push the release upstream
 
-10. Create a GIT tag.
+10. Create a GIT tag for this release.
+   First, commit the package*.xml changes.
+   $ git add package*.xml
+   $ git commit -m 'Prep for * release'
+   Then, tag it.
    $ cd /path/to/phd
    $ git tag RELEASE_1_1_X
    $ git push --tags
@@ -49,7 +54,7 @@ ext/zlib enabled):
 12. Send release mail to phpdoc@ and pear-doc@lists.php.net
 
 A. Remove all contents from <notes> and increase version/release.
-   Change stability back to "snapshot". Revert PHD_VERSION in
+   Change stability back to "snapshot". If needed, revert PHD_VERSION in
    config.php (VERSION in phpdotnet/phd/Config) back to "phd-from-svn".
 
 B. Hack on.
