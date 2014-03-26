@@ -238,59 +238,60 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             $this->hhcStream = fopen($this->chmdir . "php_manual_{$lang}.hhc", "w");
             $this->hhkStream = fopen($this->chmdir . "php_manual_{$lang}.hhk", "w");
 
-            $stylesheet = '';
-            if (Config::css()) {
-                foreach(Config::css() as $cssname) {
-                    $stylesheet .= $this->fetchStylesheet($cssname) . PHP_EOL;
-                }
-            } else {
-                $stylesheet = $this->fetchStylesheet() . PHP_EOL;
-            }
-
-            self::headerChm();
-
-            // Find referenced content - background images, sprites, etc.
-            if (0 !== preg_match_all('`url\((([\'"]|)((?:(?!file:).)*)\2)\)`', $stylesheet, $stylesheet_urls)) {
-                foreach(array_unique($stylesheet_urls[3]) as $stylesheet_url) {
-
-                    // Parse the url, getting content from http://www.php.net if there is no scheme and host.
-                    if (False !== ($parsed_url = parse_url($stylesheet_url))) {
-
-                        if (!isset($parsed_url['scheme']) && !isset($parsed_url['host'])) {
-                            $url_content = file_get_contents('http://www.php.net/' . $stylesheet_url);
-                        } else {
-                            // Otherwise content is fully identified.
-                            $url_content = file_get_contents($stylesheet_url);
-                        }
-
-                        // Make sure the location to save the content is available.
-                        @mkdir(dirname($content_filename = $this->outputdir . $parsed_url['path']));
-
-                        // Save the referenced content to the new location.
-                        file_put_contents($content_filename, $url_content);
-
-                        // Add the content to the hpp file.
-                        fwrite($this->hhpStream, 'res' . DIRECTORY_SEPARATOR . ($relative_url = trim(substr(realpath($content_filename), strlen(realpath($this->outputdir))), DIRECTORY_SEPARATOR)) . PHP_EOL);
-
-                        // Force URLS to be relative to the "res" directory, but make them use the unix path separator as they will be processed by HTML.
-                        $stylesheet = str_replace($stylesheet_url, str_replace(DIRECTORY_SEPARATOR, '/', $relative_url), $stylesheet);
-
-                        v('Saved content from css : %s.', $parsed_url['path'], VERBOSE_MESSAGES);
-                    } else {
-                        v('Unable to save content from css : %s.', $stylesheet_url, E_USER_WARNING);
-                    }
-                }
-
-            }
-
+            $stylesheet	= $this->generateStylesheet ();
+            $this->headerChm();
+			
             // Save the stylesheet.
-            file_put_contents($this->outputdir . "style.css", $stylesheet . 'body {padding : 3px;}' . PHP_EOL . '#usernotes {margin-left : inherit;}' . PHP_EOL);
+            file_put_contents($this->outputdir . "style.css", $stylesheet . 
+				'body {padding : 3px; margin: 0px;}' . PHP_EOL . 
+				'#usernotes {margin-left : inherit;}' . PHP_EOL . 
+				'#layout-content {width: 100%;}' . PHP_EOL
+			);
             break;
         case Render::VERBOSE:
             parent::update($event, $val);
             break;
         }
     }
+	
+	
+	/**
+	 * Save stylesheet resources such as images, font files etc locally
+	 * Also add resources to the CHM hhp file
+	 * @param string $stylesheet Stylesheet data
+	 * @return string
+	 */
+	
+	protected function processStylesheetResources ($stylesheet)
+	{
+		
+		// Find content
+		
+		$content	= preg_match_all('`url\((([\'"]|)((?:(?!file:).)*?)\2)\)`', $stylesheet, $stylesheet_urls);
+		
+		// Call parent
+		
+		$stylesheet	= parent::processStylesheetResources ($stylesheet);
+		
+		// Add to hhp file
+		
+		if ($content !== 0)
+		{
+			foreach (array_unique ($stylesheet_urls[3]) as $stylesheet_url)
+			{
+				if (FALSE !== ($parsed_url = parse_url ($stylesheet_url)))
+				{
+					$content_filename	= $this->outputdir . $parsed_url['path'];
+					$relative_url		= trim (substr (realpath ($content_filename), strlen (realpath ($this->outputdir))), DIRECTORY_SEPARATOR);
+					fwrite ($this->hhpStream, 'res' . DIRECTORY_SEPARATOR . $relative_url . PHP_EOL);
+					v ('Resource saved to hhp: %s.', $parsed_url['path'], VERBOSE_MESSAGES);
+				}
+			}
+		}
+		
+		return $stylesheet;
+
+	}
 
     protected function appendChm($name, $ref, $hasChild) {
         if ($this->flags & Render::OPEN) {
@@ -460,18 +461,6 @@ res' . DIRECTORY_SEPARATOR . 'style.css
                     (Format::getFilename($id) ? Format::getFilename($id) : $id) . $this->ext,
                 "hasChild" => (count(Format::getChildren($id)) > 0)
             );
-        }
-    }
-
-    protected function fetchStylesheet($name = null) {
-        /* Use a local CSS file if it can be found. If not, try and load it from http://www.php.net/styles. If no name is supplied then use the PHP default. */
-        $stylesheet = file_get_contents($name = !is_null($name) && realpath($name) ? realpath($name) : "http://www.php.net/styles/" . (is_null($name) ? "site.css" : $name));
-        if ($stylesheet) {
-            v('Loaded %s stylesheet.', $name, VERBOSE_MESSAGES);
-            return $stylesheet;
-        } else {
-            v('Stylesheet %s not fetched. Uses default rendering style.', $name, E_USER_WARNING);
-            return "";
         }
     }
 
