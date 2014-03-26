@@ -442,22 +442,26 @@ abstract class Format extends ObjectStorage
         return $this->indexes[$id]["parent_id"];
     }
     final public function getLongDescription($id, &$isLDesc = null) {
-        if ($this->indexes[$id]["ldesc"]) {
+        if (isset ($this->indexes[$id]["ldesc"]) && $this->indexes[$id]["ldesc"]) {
             $isLDesc = true;
             return $this->indexes[$id]["ldesc"];
-        } else {
+        } else if (isset ($this->indexes[$id]["sdesc"])) {
             $isLDesc = false;
             return $this->indexes[$id]["sdesc"];
-        }
+        } else {
+			return '';
+		}
     }
     final public function getShortDescription($id, &$isSDesc = null) {
-        if ($this->indexes[$id]["sdesc"]) {
+        if (isset ($this->indexes[$id]["sdesc"]) && $this->indexes[$id]["sdesc"]) {
             $isSDesc = true;
             return $this->indexes[$id]["sdesc"];
-        } else {
+        } else if (isset ($this->indexes[$id]["ldesc"])) {
             $isSDesc = false;
             return $this->indexes[$id]["ldesc"];
-        }
+        } else {
+			return '';
+		}
     }
 
     /**
