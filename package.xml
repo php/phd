@@ -60,9 +60,9 @@
     <active>yes</active>
   </developer>
 
-  <date>2014-01-21</date>
+  <date>2014-03-21</date>
   <version>
-    <release>1.1.9</release>
+    <release>1.1.11</release>
     <api>1.1.0</api>
   </version>
   <stability>
@@ -71,7 +71,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - ...
+    Fixed bug#66408 (Wrong style file in chm documentation). (Andy Burton)
   </notes>
 
   <contents>
@@ -947,6 +947,40 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Fixed bug#66400 (Class synopsis missing space between type and method name) (Peter)
+      </notes>
+    </release>
+
+    <release>
+      <date>2014-03-06</date>
+      <version>
+        <release>1.1.9</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Fixed bug#66644 (Remove ()'s when rendering methodname in constructorsynopsis/destructorsynopsis) (Peter)
+        - Removed &lt;em&gt; wrapper around parameters (Levi)
+      </notes>
+    </release>
+
+    <release>
+      <date>2014-03-21</date>
+      <version>
+        <release>1.1.10</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Fix phd:chunk="false" (Adam)
+        - Render segmentedlist elements as XHTML tables (Adam)
       </notes>
     </release>
 

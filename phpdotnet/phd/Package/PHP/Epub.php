@@ -100,8 +100,10 @@ BUILD;
     }
 
     protected function createCSSFile($dir) {
-        file_put_contents($dir . "style.css",
-            $this->fetchStylesheet() . PHP_EOL . 'body { padding : 3px;}');
+        file_put_contents($dir . "style.css", $this->generateStylesheet () . PHP_EOL . 
+				'body {padding : 3px; margin: 0px;}' . PHP_EOL . 
+				'#layout-content {width: 100%;}' . PHP_EOL
+		);
     }
 
     protected function createContainerFile($dir) {
@@ -294,11 +296,12 @@ MANIFEST;
 {$cssLinks}
   </head>
   <body>
+  <section id="layout-content">
 XHTML;
     }
 
     public function footer($id) {
-        return '</body></html>';
+        return '</section></body></html>';
     }
 
     protected function collectContent($attrs, $class, $child) {
@@ -311,15 +314,6 @@ XHTML;
                 'class' => $class,
                 'child' => $child,
             );
-        }
-    }
-
-    protected function fetchStylesheet($name = null) {
-        $stylesheet = file_get_contents("http://www.php.net/styles/site.css");
-        if ($stylesheet) return $stylesheet;
-        else {
-            v("Stylesheet not fetched. Uses default rendering style.", E_USER_WARNING);
-            return "";
         }
     }
 

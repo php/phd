@@ -28,9 +28,9 @@
     <active>yes</active>
   </lead>
 
-  <date>2014-01-21</date>
+  <date>2014-03-21</date>
   <version>
-    <release>1.1.9</release>
+    <release>1.1.11</release>
     <api>1.1.0</api>
   </version>
   <stability>
@@ -39,7 +39,7 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - ...
+    ...
   </notes>
 
   <contents>
@@ -283,6 +283,38 @@
       <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
       <notes>
         - Bump version
+      </notes>
+    </release>
+
+    <release>
+      <date>2014-01-21</date>
+      <version>
+        <release>1.1.9</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Bump version
+      </notes>
+    </release>
+
+    <release>
+      <date>2014-03-21</date>
+      <version>
+        <release>1.1.10</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Render segmentedlist elements as XHTML tables (Adam)
       </notes>
     </release>
 
