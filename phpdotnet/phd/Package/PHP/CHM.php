@@ -243,9 +243,11 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 			
             // Save the stylesheet.
             file_put_contents($this->outputdir . "style.css", $stylesheet . 
-				'body {padding : 3px; margin: 0px;}' . PHP_EOL . 
 				'#usernotes {margin-left : inherit;}' . PHP_EOL . 
-				'#layout-content {width: 100%;}' . PHP_EOL
+                // Fix responsive layout
+				'#layout-content {width: 100% !important;}' . PHP_EOL . 
+				'#breadcrumbs {display: block !important;}' . PHP_EOL . 
+				'.nav {max-height: 800px !important;}' . PHP_EOL
 			);
             break;
         case Render::VERBOSE:
@@ -289,6 +291,9 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 			}
 		}
 		
+        // Fix CSS in IE8
+        $stylesheet = preg_replace('/([0-9\.])rem/', '\1em', $stylesheet);
+        
 		return $stylesheet;
 
 	}
