@@ -29,46 +29,58 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
   <title>$title</title>
 {$cssLinks}
  </head>
- <body>
- <section id="layout-content">
+ <body class="docs">
 HEADER;
         $next = $prev = $up = array("href" => null, "desc" => null);
+        $nextLink = $prevLink = $upLink = '';
         if ($prevId = Format::getPrevious($id)) {
             $prev = array(
                 "href" => $this->getFilename($prevId) . $this->getExt(),
                 "desc" => $this->getShortDescription($prevId),
             );
+            $prevLink = "<li style=\"float: left;\"><a href=\"{$prev["href"]}\">« {$prev["desc"]}</a></li>";
         }
         if ($nextId = Format::getNext($id)) {
             $next = array(
                 "href" => $this->getFilename($nextId) . $this->getExt(),
                 "desc" => $this->getShortDescription($nextId),
             );
+            $nextLink = "<li style=\"float: right;\"><a href=\"{$next["href"]}\">{$next["desc"]} »</a></li>";
         }
         if ($parentId = Format::getParent($id)) {
             $up = array(
                 "href" => $this->getFilename($parentId) . $this->getExt(),
                 "desc" => $this->getShortDescription($parentId),
             );
+            $upLink = "<li><a href=\"{$up["href"]}\">{$up["desc"]}</a></li>";
         }
 
         $nav = <<<NAV
-<div class="manualnavbar" style="text-align: center;">
- <div class="prev" style="text-align: left; float: left;"><a href="{$prev["href"]}">{$prev["desc"]}</a></div>
- <div class="next" style="text-align: right; float: right;"><a href="{$next["href"]}">{$next["desc"]}</a></div>
- <div class="up"><a href="{$up["href"]}">{$up["desc"]}</a></div>
- <div class="home"><a href="index.html">PHP Manual</a></div>
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner clearfix">
+    <ul class="nav" style="width: 100%">
+      {$prevLink}
+      {$nextLink}
+    </ul>
+  </div>
 </div>
+<div id="breadcrumbs" class="clearfix">
+  <ul class="breadcrumbs-container">
+    <li><a href="index.html">PHP Manual</a></li>
+    {$upLink}
+    <li><a href="#">{$title}</a></li>
+  </div>
+</div>
+<div id="layout">
+  <div id="layout-content">
 NAV;
-        $header .= $nav . "<hr />";
-        $this->nav = $nav;
+        $header .= $nav;
         return $header;
     }
 
-    public function footer($id) {
-        $nav = $this->nav;
-        $this->nav = "";
-        return "<hr />$nav</section></body></html>\n";
+    public function footer($id)
+    {
+        return '</div></div></body></html>';
     }
 	
 	
