@@ -52,7 +52,9 @@ HEADER;
                 "href" => $this->getFilename($parentId) . $this->getExt(),
                 "desc" => $this->getShortDescription($parentId),
             );
-            $upLink = "<li><a href=\"{$up["href"]}\">{$up["desc"]}</a></li>";
+            if ($up['href'] != 'index.html') {
+                $upLink = "<li><a href=\"{$up["href"]}\">{$up["desc"]}</a></li>";
+            }
         }
 
         $nav = <<<NAV
@@ -68,7 +70,7 @@ HEADER;
   <ul class="breadcrumbs-container">
     <li><a href="index.html">PHP Manual</a></li>
     {$upLink}
-    <li><a href="#">{$title}</a></li>
+    <li>{$title}</li>
   </div>
 </div>
 <div id="layout">

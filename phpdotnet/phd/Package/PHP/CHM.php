@@ -244,10 +244,9 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             // Save the stylesheet.
             file_put_contents($this->outputdir . "style.css", $stylesheet . 
 				'#usernotes {margin-left : inherit;}' . PHP_EOL . 
+				'#to-top { position: fixed; right: 10px; bottom: 10px; }' . PHP_EOL . 
                 // Fix responsive layout
-				'#layout-content {width: 100% !important;}' . PHP_EOL . 
-				'#breadcrumbs {display: block !important;}' . PHP_EOL . 
-				'.nav {max-height: 800px !important;}' . PHP_EOL
+				'#layout-content { width: 100% !important; }' . PHP_EOL
 			);
             break;
         case Render::VERBOSE:
@@ -293,6 +292,22 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 		
         // Fix CSS in IE8
         $stylesheet = preg_replace('/([0-9\.])rem/', '\1em', $stylesheet);
+        
+        // Remove responsive CSS, reserve 768px to 1200px
+        $stylesheet = preg_replace_callback(
+            '/@media([^\{]+)\{(([^\{\}]*\{[^\}\{]*\})+[^\}]+)\}/', 
+            function ($matches) {
+                if (strpos($matches[1], 'print') !== false ||
+                    (preg_match('/min-width: *([0-9]+)px/', $matches[1], $minWidth) && (int)$minWidth[1] >= 980) ||
+                    (preg_match('/max-width: *([0-9]+)px/', $matches[1], $maxWidth) && (int)$maxWidth[1] < 768)
+                ) {
+                    return '';
+                }
+                
+                return $matches[2];
+            }, 
+            $stylesheet
+        );
         
 		return $stylesheet;
 
