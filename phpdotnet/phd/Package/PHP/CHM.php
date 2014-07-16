@@ -292,7 +292,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
         // Fix CSS in IE8
         $stylesheet = preg_replace('/([0-9\.])rem/', '\1em', $stylesheet);
         
-        // Remove responsive CSS, reserve 768px to 1200px
+        // Remove responsive CSS, reserve 768px to 979px
         $stylesheet = preg_replace_callback(
             '/@media([^\{]+)\{(([^\{\}]*\{[^\}\{]*\})+[^\}]+)\}/', 
             function ($matches) {
@@ -304,7 +304,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
                 }
                 
                 return $matches[2];
-            }, 
+            },
             $stylesheet
         );
         
