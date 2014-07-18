@@ -71,7 +71,7 @@ HEADER;
     <li><a href="index.html">PHP Manual</a></li>
     {$upLink}
     <li>{$title}</li>
-  </div>
+  </ul>
 </div>
 <div id="layout">
   <div id="layout-content">
