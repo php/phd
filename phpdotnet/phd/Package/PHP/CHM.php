@@ -177,6 +177,12 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             "mime_charset_name" => "Windows-1254",
             "preferred_font" => self::DEFAULT_FONT
         ),
+        "uk"    => array(
+                   "langcode" => "0x422 Ukrainian",
+                   "preferred_charset" => "Windows-1251",
+                   "mime_charset_name" => "Windows-1251",
+                   "preferred_font" => self::DEFAULT_FONT
+         ),
         "zh"    => array(
             "langcode" => "0x804 Simplified Chinese",
             "preferred_charset" => "CP936",
@@ -238,57 +244,57 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             $this->hhcStream = fopen($this->chmdir . "php_manual_{$lang}.hhc", "w");
             $this->hhkStream = fopen($this->chmdir . "php_manual_{$lang}.hhk", "w");
 
-            $stylesheet	= $this->generateStylesheet ();
+            $stylesheet  = $this->generateStylesheet ();
             $this->headerChm();
-			
+      
             // Save the stylesheet.
             file_put_contents($this->outputdir . "style.css", $stylesheet . 
-				'#usernotes {margin-left : inherit;}' . PHP_EOL . 
-				// Fix responsive layout
-				'#layout-content { width: 100% !important; }' . PHP_EOL
-			);
+        '#usernotes {margin-left : inherit;}' . PHP_EOL . 
+        // Fix responsive layout
+        '#layout-content { width: 100% !important; }' . PHP_EOL
+      );
             break;
         case Render::VERBOSE:
             parent::update($event, $val);
             break;
         }
     }
-	
-	
-	/**
-	 * Save stylesheet resources such as images, font files etc locally
-	 * Also add resources to the CHM hhp file
-	 * @param string $stylesheet Stylesheet data
-	 * @return string
-	 */
-	
-	protected function processStylesheetResources ($stylesheet)
-	{
-		
-		// Find content
-		
-		$content	= preg_match_all('`url\((([\'"]|)((?:(?!file:).)*?)\2)\)`', $stylesheet, $stylesheet_urls);
-		
-		// Call parent
-		
-		$stylesheet	= parent::processStylesheetResources ($stylesheet);
-		
-		// Add to hhp file
-		
-		if ($content !== 0)
-		{
-			foreach (array_unique ($stylesheet_urls[3]) as $stylesheet_url)
-			{
-				if (FALSE !== ($parsed_url = parse_url ($stylesheet_url)))
-				{
-					$content_filename	= $this->outputdir . $parsed_url['path'];
-					$relative_url		= trim (substr (realpath ($content_filename), strlen (realpath ($this->outputdir))), DIRECTORY_SEPARATOR);
-					fwrite ($this->hhpStream, 'res' . DIRECTORY_SEPARATOR . $relative_url . PHP_EOL);
-					v ('Resource saved to hhp: %s.', $parsed_url['path'], VERBOSE_MESSAGES);
-				}
-			}
-		}
-		
+  
+  
+  /**
+   * Save stylesheet resources such as images, font files etc locally
+   * Also add resources to the CHM hhp file
+   * @param string $stylesheet Stylesheet data
+   * @return string
+   */
+  
+  protected function processStylesheetResources ($stylesheet)
+  {
+    
+    // Find content
+    
+    $content  = preg_match_all('`url\((([\'"]|)((?:(?!file:).)*?)\2)\)`', $stylesheet, $stylesheet_urls);
+    
+    // Call parent
+    
+    $stylesheet  = parent::processStylesheetResources ($stylesheet);
+    
+    // Add to hhp file
+    
+    if ($content !== 0)
+    {
+      foreach (array_unique ($stylesheet_urls[3]) as $stylesheet_url)
+      {
+        if (FALSE !== ($parsed_url = parse_url ($stylesheet_url)))
+        {
+          $content_filename  = $this->outputdir . $parsed_url['path'];
+          $relative_url    = trim (substr (realpath ($content_filename), strlen (realpath ($this->outputdir))), DIRECTORY_SEPARATOR);
+          fwrite ($this->hhpStream, 'res' . DIRECTORY_SEPARATOR . $relative_url . PHP_EOL);
+          v ('Resource saved to hhp: %s.', $parsed_url['path'], VERBOSE_MESSAGES);
+        }
+      }
+    }
+    
         // Fix CSS in IE8
         $stylesheet = preg_replace('/([0-9\.])rem/', '\1em', $stylesheet);
         
@@ -308,9 +314,9 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             $stylesheet
         );
         
-		return $stylesheet;
+    return $stylesheet;
 
-	}
+  }
 
     protected function appendChm($name, $ref, $hasChild) {
         if ($this->flags & Render::OPEN) {
