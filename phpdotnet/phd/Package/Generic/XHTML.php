@@ -101,7 +101,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 'tbody'         => 'format_entry',
             ),
         ),
-        'envar'                 => 'span',
+        'envar'                 => 'var',
         'errortype'             => 'span',
         'errorcode'             => 'span',
         'example'               => 'format_example',
