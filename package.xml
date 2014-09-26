@@ -97,6 +97,7 @@
               <file name="cs.xml" role="php"/>
               <file name="es.xml" role="php"/>
               <file name="sr.xml" role="php"/>
+              <file name="uk.xml" role="php"/>
             </dir>
           </dir>
           <dir name="Format">
