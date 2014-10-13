@@ -177,6 +177,12 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             "mime_charset_name" => "Windows-1254",
             "preferred_font" => self::DEFAULT_FONT
         ),
+        "uk"    => array(
+            "langcode" => "0x422 Ukrainian",
+            "preferred_charset" => "Windows-1251",
+            "mime_charset_name" => "Windows-1251",
+            "preferred_font" => self::DEFAULT_FONT
+        ),
         "zh"    => array(
             "langcode" => "0x804 Simplified Chinese",
             "preferred_charset" => "CP936",
