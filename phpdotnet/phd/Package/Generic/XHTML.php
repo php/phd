@@ -337,7 +337,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'warning'               => 'format_admonition',
         'xref'                  => 'format_xref',
         'year'                  => 'span',
-        'quote'                 => 'format_quote',
+        'quote'                 => 'q',
         'qandaset'              => 'format_qandaset',
         'qandaentry'            => 'dl',
         'question'              => array(
@@ -1155,12 +1155,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return "</td></tr>\n";
     }
 
-    public function format_quote($open, $name, $attrs) {
-        if ($open) {
-            return '"<span class="'.$name.'">';
-        }
-        return '</span>"';
-    }
     public function format_manvolnum($open, $name, $attrs) {
         if ($open) {
             return '<span class="'.$name.'">(';
