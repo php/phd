@@ -288,6 +288,10 @@ class Package_PHP_PDF extends Package_Generic_PDF {
             $href = "language.pseudo-types";
             $fragment = "language.types.$t";
             break;
+        case "array|object":
+            $href = "language.pseudo-types";
+            $fragment = "language.types.array-object";
+            break;
         default:
             /* Check if its a classname. */
             $t = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $t));
