@@ -116,13 +116,21 @@ class Package_PHP_Web extends Package_PHP_XHTML {
             if (!isset($written_toc[$filename])) {
                 $written_toc[$filename] = true;
 
-                $toc = array();
+                $toc = $toc_deprecated = array();
 
                 foreach($siblings as $sid) {
-                    $toc[] = array(
+                    $sibling_short_desc = Format::getShortDescription($sid);
+
+                    $entry = array(
                         Format::getFilename($sid).$ext,
-                        Format::getShortDescription($sid),
+                        $sibling_short_desc,
                     );
+
+                    if (isset($this->deprecated[$sibling_short_desc])) {
+                        $toc_deprecated[] = $entry;
+                    } else {
+                        $toc[] = $entry;
+                    }
                 }
 
                 $parents = array();
@@ -136,6 +144,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
 
                 $content = '<?php
 $TOC = ' . var_export($toc, true) . ';
+$TOC_DEPRECATED = ' . var_export($toc_deprecated, true) . ';
 $PARENTS = ' . var_export($parents, true) . ';';
 
                 file_put_contents($this->getOutputDir() . $filename, $content);
@@ -186,6 +195,7 @@ $PARENTS = array();
 '.$incl.'
 $setup = '.$var.';
 $setup["toc"] = $TOC;
+$setup["toc_deprecated"] = $TOC_DEPRECATED;
 $setup["parents"] = $PARENTS;
 manual_setup($setup);
 

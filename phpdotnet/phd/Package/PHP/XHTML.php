@@ -124,6 +124,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     private $versions = array();
     private $acronyms = array();
+    protected $deprecated = array();
     /* Current Chunk settings */
     protected $cchunk          = array();
     /* Default Chunk settings */
@@ -172,6 +173,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function loadVersionAcronymInfo() {
         $this->versions = self::generateVersionInfo(Config::phpweb_version_filename());
+        $this->deprecated = self::generateDeprecatedInfo(Config::phpweb_version_filename());
         $this->acronyms = self::generateAcronymInfo(Config::phpweb_acronym_filename());
     }
 
@@ -207,6 +209,43 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $r->close();
         $info = $versions;
         return $versions;
+    }
+
+    // Note that this function differs from generateVersionInfo()!
+    // Special characters in functions names are replaced to underscores (_),
+    // not hyphens (-).
+    protected static function generateDeprecatedInfo($filename) {
+        static $info;
+        if ($info) {
+            return $info;
+        }
+        if (!is_file($filename)) {
+            v("Can't find Version information file (%s), skipping!", $filename, E_USER_WARNING);
+            return array();
+        }
+
+        $r = new \XMLReader;
+        if (!$r->open($filename)) {
+            v("Can't open the version info file (%s)", $filename, E_USER_ERROR);
+        }
+        $deprecated = array();
+        while($r->read()) {
+            if (
+                $r->moveToAttribute("name")
+                && ($funcname = str_replace(
+                    array("::", "->", "__", "_", '$'),
+                    array("_",  "_",  "_",  "_", ""),
+                    $r->value))
+                && $r->moveToAttribute("deprecated")
+                && ($value = $r->value)
+            ) {
+                $deprecated[strtolower($funcname)] = $value;
+                $r->moveToElement();
+            }
+        }
+        $r->close();
+        $info = $deprecated;
+        return $deprecated;
     }
 
     public static function generateAcronymInfo($filename) {
