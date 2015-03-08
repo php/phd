@@ -388,30 +388,9 @@ abstract class Format extends ObjectStorage
             return self::autogen($text, Config::fallback_language());
         }
 
-        $filename = Config::lang_dir() . $lang . ".xml";
+        $filename = Config::lang_dir() . $lang . ".ini";
 
-        $r = new \XMLReader;
-        if (!file_exists($filename) || !$r->open($filename)) {
-            if ($lang == Config::fallback_language()) {
-                throw new \Exception("Cannot open $filename");
-            }
-            return self::autogen($text, Config::fallback_language());
-        }
-        $autogen = array();
-        while ($r->read()) {
-            if ($r->nodeType != \XMLReader::ELEMENT) {
-                continue;
-            }
-            if ($r->name == "term") {
-                $r->read();
-                $k = $r->value;
-                $autogen[$k] = "";
-            } else if ($r->name == "simpara") {
-                $r->read();
-                $autogen[$k] = $r->value;
-            }
-        }
-        self::$autogen[$lang] = $autogen;
+        self::$autogen[$lang] = parse_ini_file($filename);
         return self::autogen($text, $lang);
     }
 
