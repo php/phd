@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
     const DEFAULT_FONT = "Arial,10,0";

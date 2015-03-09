@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_PHP_Manpage extends Package_Generic_Manpage {
 

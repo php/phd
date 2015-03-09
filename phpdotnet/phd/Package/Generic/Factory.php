@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_Generic_Factory extends Format_Factory
 {

@@ -1,6 +1,5 @@
 PhD - PHP DocBook
 Copyright(c) 2007-2012 The PHP Documentation Team
-$Revision$
 
 Installing the PhD renderer:
     From a PEAR channel:

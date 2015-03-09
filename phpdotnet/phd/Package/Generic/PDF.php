@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 abstract class Package_Generic_PDF extends Format_Abstract_PDF {
     private $elementmap = array( /* {{{ */

@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_IDE_Funclist extends Format {
     protected $elementmap   = array(

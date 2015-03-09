@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class PI_PHPDOCHandler extends PIHandler {
     protected $_changelogSince = null;

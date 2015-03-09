@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     private $myelementmap = array(

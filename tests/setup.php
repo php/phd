@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 function autoload($name) {
     $file = __DIR__ . "/../" . str_replace(array('\\', '_'), '/', $name) . '.php';

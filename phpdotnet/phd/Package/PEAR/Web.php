@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 /**
  * Renders the pear documentation visible on the PEAR website.

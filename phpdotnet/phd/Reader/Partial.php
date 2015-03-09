@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/*  $Id$ */
 
 class Reader_Partial extends Reader
 {

@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_PEAR_Factory extends Format_Factory {
     private $formats = array(

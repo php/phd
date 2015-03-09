@@ -1,7 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
-
 class Package_IDE_PHPStub extends Package_IDE_Base {
 
     public function __construct() {

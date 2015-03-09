@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class TestBigXHTML extends Package_PHP_BigXHTML {
     public function update($event, $val = null) {

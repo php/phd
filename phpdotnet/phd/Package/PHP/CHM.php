@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/*  $Id$ */
 
 class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 {

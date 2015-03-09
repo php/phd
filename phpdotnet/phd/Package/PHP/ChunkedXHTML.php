@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
     private $nav = "";

@@ -1,7 +1,6 @@
 #!@php_bin@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 // @php_dir@ gets replaced by pear with the install dir. use __DIR__ when 
 // running from SVN

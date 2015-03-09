@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 abstract class Format_Abstract_XHTML extends Format {
     public $role = false;

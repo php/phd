@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/*  $Id$ */
 
 class Package_PHP_EnhancedCHM extends Package_PHP_CHM
 {

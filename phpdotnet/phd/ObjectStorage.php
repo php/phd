@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class ObjectStorage extends \SplObjectStorage
 {

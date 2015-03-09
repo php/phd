@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 if (!defined("__INSTALLDIR__")) {
     define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? dirname(dirname(__DIR__)) : "@php_dir@");

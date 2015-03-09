@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_PHP_BigPDF extends Package_PHP_PDF {
     public function __construct() {

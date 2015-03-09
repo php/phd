@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 /**
 * Handles images (and other media objects) referenced in the docbook files.

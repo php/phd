@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_Generic_Manpage extends Format_Abstract_Manpage {
     const OPEN_CHUNK    = 0x01;

@@ -8,7 +8,6 @@
  * @package  PhD_IDE
  * @author   Moacir de Oliveira <moacir@php.net>
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD Style
- * @version  SVN: $Id$
  * @link     https://doc.php.net/phd/
  */
 namespace phpdotnet\phd;

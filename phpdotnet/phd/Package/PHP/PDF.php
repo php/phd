@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_PHP_PDF extends Package_Generic_PDF {
     protected $elementmap = array(

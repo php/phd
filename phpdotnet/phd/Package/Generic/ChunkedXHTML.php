@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
     public function __construct() {

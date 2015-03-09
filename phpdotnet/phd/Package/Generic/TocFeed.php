@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 /**
  * Generates Atom feed of Table of Contents for

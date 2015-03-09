@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-/* $Id$ */
 
 class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
     public function __construct() {
