@@ -81,23 +81,23 @@
           <dir name="data">
             <dir name="langs">
               <!-- Translations -->
-              <file name="fr.xml" role="php"/>
-              <file name="de.xml" role="php"/>
-              <file name="ja.xml" role="php"/>
-              <file name="ru.xml" role="php"/>
-              <file name="sv.xml" role="php"/>
-              <file name="ro.xml" role="php"/>
-              <file name="en.xml" role="php"/>
-              <file name="tr.xml" role="php"/>
-              <file name="it.xml" role="php"/>
-              <file name="pl.xml" role="php"/>
-              <file name="da.xml" role="php"/>
-              <file name="bg.xml" role="php"/>
-              <file name="pt_BR.xml" role="php"/>
-              <file name="cs.xml" role="php"/>
-              <file name="es.xml" role="php"/>
-              <file name="sr.xml" role="php"/>
-              <file name="uk.xml" role="php"/>
+              <file name="fr.ini" role="php"/>
+              <file name="de.ini" role="php"/>
+              <file name="ja.ini" role="php"/>
+              <file name="ru.ini" role="php"/>
+              <file name="sv.ini" role="php"/>
+              <file name="ro.ini" role="php"/>
+              <file name="en.ini" role="php"/>
+              <file name="tr.ini" role="php"/>
+              <file name="it.ini" role="php"/>
+              <file name="pl.ini" role="php"/>
+              <file name="da.ini" role="php"/>
+              <file name="bg.ini" role="php"/>
+              <file name="pt_BR.ini" role="php"/>
+              <file name="cs.ini" role="php"/>
+              <file name="es.ini" role="php"/>
+              <file name="sr.ini" role="php"/>
+              <file name="uk.ini" role="php"/>
             </dir>
           </dir>
           <dir name="Format">
