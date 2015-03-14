@@ -280,7 +280,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return $acronyms;
     }
 
-    public function autogenVersionInfo($refnames, $lang) {
+    public function autogenVersionInfo($refnames) {
         $verinfo = null;
         foreach((array)$refnames as $refname) {
             $verinfo = $this->versionInfo($refname);
@@ -290,7 +290,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
         }
         if (!$verinfo) {
-            $verinfo = $this->autogen("unknownversion", $lang);
+            $verinfo = $this->autogen("unknownversion");
         }
 
         $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
@@ -300,7 +300,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($open) {
             $retval = "";
             if ($this->cchunk["verinfo"]) {
-                $retval = $this->autogenVersionInfo($this->cchunk["refname"], $props["lang"]);
+                $retval = $this->autogenVersionInfo($this->cchunk["refname"]);
             }
             $refnames = implode('</span> -- <span class="refname">', $this->cchunk["refname"]);
 
@@ -329,7 +329,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($open) {
             $retval = "";
             if ($this->cchunk["verinfo"]) {
-                $retval = $this->autogenVersionInfo($this->cchunk["phpdoc:classref"], $props["lang"]);
+                $retval = $this->autogenVersionInfo($this->cchunk["phpdoc:classref"]);
             }
             return '<div class="' . $tag . '">' . $retval;
         }

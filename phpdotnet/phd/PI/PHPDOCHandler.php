@@ -14,9 +14,8 @@ class PI_PHPDOCHandler extends PIHandler {
         preg_match($pattern, $data, $matches);
         switch($matches["attr"]) {
             case "print-version-for":
-                // FIXME: Figureout a way to detect the current language (for unknownversion)
                 if (!$this->format instanceof Index) {
-                    return $this->format->autogenVersionInfo($matches["value"], "en");
+                    return $this->format->autogenVersionInfo($matches["value"]);
                 }
                 return;
             case "generate-index-for":
@@ -132,9 +131,9 @@ class PI_PHPDOCHandler extends PIHandler {
         usort($changelogs, array(__CLASS__, "_sortByVersion"));
 
         $ret = "<table class='doctable table' rules='groups'><thead><tr>";
-        $ret .= "<th>" . $this->format->autogen("Version", "en") . "</th>";
-        $ret .= "<th>" . $this->format->autogen("Function", "en") . "</th>";
-        $ret .= "<th>" . $this->format->autogen("Description", "en") . "</th>";
+        $ret .= "<th>" . $this->format->autogen("Version") . "</th>";
+        $ret .= "<th>" . $this->format->autogen("Function") . "</th>";
+        $ret .= "<th>" . $this->format->autogen("Description") . "</th>";
         $ret .= "</tr></thead>";
 
         $version = "";

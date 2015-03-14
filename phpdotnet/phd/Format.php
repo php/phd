@@ -373,7 +373,7 @@ abstract class Format extends ObjectStorage
         return $parsed;
     }
 
-    final public static function autogen($text, $lang) {
+    final public static function autogen($text, $lang = null) {
         if ($lang == NULL) {
             $lang = Config::language();
         }
