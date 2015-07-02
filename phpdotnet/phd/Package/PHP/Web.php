@@ -190,6 +190,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
         return '<?php
 include_once $_SERVER[\'DOCUMENT_ROOT\'] . \'/include/shared-manual.inc\';
 $TOC = array();
+$TOC_DEPRECATED = array();
 $PARENTS = array();
 '.$incl.'
 $setup = '.$var.';
