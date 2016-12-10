@@ -32,9 +32,6 @@ class Package_PHP_HowTo extends Package_PHP_Web {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
-            if (Config::css()) {
-                $this->fetchStylesheet();
-            }
             break;
         }
     }
@@ -68,11 +65,11 @@ class Package_PHP_HowTo extends Package_PHP_Web {
 </div>
 NAV;
 
-        return "<?php include_once '../include/init.inc.php'; echo site_header('$title');?>\n" . $this->nav . "<hr />\n";
+        return "<?php require '../../include/init.inc.php'; site_header();?>\n" . $this->nav . "<hr>\n";
     }
 
     public function footer($id) {
-        return "<hr />\n" . $this->nav . "<br />\n<?php echo site_footer(); ?>\n";
+        return "<hr>\n" . $this->nav . "<br>\n<?php site_footer(); ?>\n";
     }
 }
 
