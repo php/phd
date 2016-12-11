@@ -6,7 +6,7 @@
       xmlns:mml="http://www.w3.org/1998/Math/MathML"
       xmlns:html="http://www.w3.org/1999/xhtml"
       xmlns:db="http://docbook.org/ns/docbook"
-      xml:id="phd-guide">
+      xml:id="index">
   <title>PhD: The definitive guide to PHP's DocBook Rendering System</title>
 
   <preface xml:id="preface">

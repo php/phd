@@ -37,7 +37,6 @@ class Package_PHP_HowTo extends Package_PHP_Web {
     }
 
     public function header($id) {
-        $title = Format::getShortDescription($id);
         $parent = Format::getParent($id);
         $next = $prev = $up = array(null, null);
         if ($parent && $parent != "ROOT") {
@@ -65,11 +64,26 @@ class Package_PHP_HowTo extends Package_PHP_Web {
 </div>
 NAV;
 
-        return "<?php require '../../include/init.inc.php'; site_header();?>\n" . $this->nav . "<hr>\n";
+        // Do not put empty navigation container on the main page
+        if (empty($prev[0]) && empty($next[0]) && empty($up[0])) {
+            $nav = '';
+            $this->nav = '';
+        } else {
+            $nav = $this->nav . "<hr>\n";
+        }
+
+        return "<?php require '../../../include/init.inc.php'; site_header();?>\n$nav";
     }
 
     public function footer($id) {
-        return "<hr>\n" . $this->nav . "<br>\n<?php site_footer(); ?>\n";
+        // Do not put empty navigation container on the main page
+        if (empty($this->nav)) {
+            $nav = '';
+        } else {
+            $nav = "<hr>\n" . $this->nav . "<br>\n";
+        }
+
+        return "$nav<?php site_footer(); ?>\n";
     }
 }
 
@@ -77,4 +91,3 @@ NAV;
 * vim600: sw=4 ts=4 syntax=php et
 * vim<600: sw=4 ts=4
 */
-
