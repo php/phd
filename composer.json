@@ -1,0 +1,34 @@
+{
+    "name": "php/phd",
+    "type": "project",
+    "description": "PHP DocBook Rendering System",
+    "homepage": "http://doc.php.net/phd.php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hannes Magnusson",
+            "email": "bjori@php.net",
+            "homepage": "http://people.php.net/bjori",
+            "role": "Lead Developer"
+        },
+        {
+            "name": "The PHP Documentation Team",
+            "email": "phpdoc@lists.php.net",
+            "homepage": "https://github.com/php/phd/graphs/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "ext-dom": "*",
+        "ext-sqlite3": "*",
+        "ext-xmlreader": "*"
+    },
+    "suggest": {
+        "easybook/geshi": "For using GeSHi as code highlighter"
+    },
+    "autoload": {
+        "psr-0": {
+            "phpdotnet\\": "."
+        }
+    }
+}
