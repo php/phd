@@ -99,10 +99,8 @@ BUILD;
     }
 
     protected function createCSSFile($dir) {
-        file_put_contents($dir . "style.css", $this->generateStylesheet () . PHP_EOL . 
-				'body {padding : 3px; margin: 0px;}' . PHP_EOL . 
-				'#layout-content {width: 100%;}' . PHP_EOL
-		);
+        file_put_contents($dir . "style.css",
+            $this->fetchStylesheet() . PHP_EOL . 'body { padding : 3px;}');
     }
 
     protected function createContainerFile($dir) {

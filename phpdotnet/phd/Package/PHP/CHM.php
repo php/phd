@@ -243,7 +243,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             $this->hhcStream = fopen($this->chmdir . "php_manual_{$lang}.hhc", "w");
             $this->hhkStream = fopen($this->chmdir . "php_manual_{$lang}.hhk", "w");
 
-            $stylesheet	= $this->generateStylesheet ();
+            $stylesheet	= $this->fetchStylesheet();
             $this->headerChm();
 			
             // Save the stylesheet.
@@ -258,64 +258,6 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
             break;
         }
     }
-	
-	
-	/**
-	 * Save stylesheet resources such as images, font files etc locally
-	 * Also add resources to the CHM hhp file
-	 * @param string $stylesheet Stylesheet data
-	 * @return string
-	 */
-	
-	protected function processStylesheetResources ($stylesheet)
-	{
-		
-		// Find content
-		
-		$content	= preg_match_all('`url\((([\'"]|)((?:(?!file:).)*?)\2)\)`', $stylesheet, $stylesheet_urls);
-		
-		// Call parent
-		
-		$stylesheet	= parent::processStylesheetResources ($stylesheet);
-		
-		// Add to hhp file
-		
-		if ($content !== 0)
-		{
-			foreach (array_unique ($stylesheet_urls[3]) as $stylesheet_url)
-			{
-				if (FALSE !== ($parsed_url = parse_url ($stylesheet_url)))
-				{
-					$content_filename	= $this->outputdir . $parsed_url['path'];
-					$relative_url		= trim (substr (realpath ($content_filename), strlen (realpath ($this->outputdir))), DIRECTORY_SEPARATOR);
-					fwrite ($this->hhpStream, 'res' . DIRECTORY_SEPARATOR . $relative_url . PHP_EOL);
-					v ('Resource saved to hhp: %s.', $parsed_url['path'], VERBOSE_MESSAGES);
-				}
-			}
-		}
-		
-        // Fix CSS in IE8
-        $stylesheet = preg_replace('/([0-9\.])rem/', '\1em', $stylesheet);
-        
-        // Remove responsive CSS, reserve 768px to 979px
-        $stylesheet = preg_replace_callback(
-            '/@media([^\{]+)\{(([^\{\}]*\{[^\}\{]*\})+[^\}]+)\}/', 
-            function ($matches) {
-                if (strpos($matches[1], 'print') !== false ||
-                    (preg_match('/min-width: *([0-9]+)px/', $matches[1], $minWidth) && (int)$minWidth[1] >= 980) ||
-                    (preg_match('/max-width: *([0-9]+)px/', $matches[1], $maxWidth) && (int)$maxWidth[1] < 768)
-                ) {
-                    return '';
-                }
-                
-                return $matches[2];
-            },
-            $stylesheet
-        );
-        
-		return $stylesheet;
-
-	}
 
     protected function appendChm($name, $ref, $hasChild) {
         if ($this->flags & Render::OPEN) {
