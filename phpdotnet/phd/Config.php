@@ -45,11 +45,7 @@ class Config
         'package'           => array(
             'Generic',
         ),
-        'css'               => array (
-			'theme-base.css', 
-			'theme-medium.css',
-			'http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,400italic,600italic|Source+Code+Pro&amp;subset=latin,latin-ext'
-		),
+        'css'               => array(),
         'process_xincludes' => false,
         'ext'               => null,
         'package_dirs'      => array(__INSTALLDIR__),

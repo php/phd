@@ -8,6 +8,11 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
         parent::__construct();
         $this->registerFormatName("PHP-Chunked-XHTML");
         $this->setExt(Config::ext() === null ? ".html" : Config::ext());
+
+        Config::setCss(array(
+            'http://www.php.net/styles/theme-base.css',
+            'http://www.php.net/styles/theme-medium.css',
+        ));
     }
 
     public function __destruct() {
@@ -83,126 +88,6 @@ NAV;
     {
         return '</div></div></body></html>';
     }
-	
-	
-	/**
-	 * Generate css stylesheet for the project
-	 * @return string
-	 */
-	
-	protected function generateStylesheet ()
-	{
-		$stylesheet = $this->loadStylesheets ();
-		$stylesheet	= $this->processStylesheetResources ($stylesheet);
-		return $stylesheet;
-	}
-	
-	
-	/**
-	 * Load stylesheets from the config to include in the project stylesheet
-	 * @return string
-	 */
-	
-	protected function loadStylesheets ()
-	{
-		$stylesheet	= '';
-		if (Config::css()) {
-			foreach(Config::css() as $cssname) {
-				$stylesheet .= $this->fetchStylesheet($cssname) . PHP_EOL;
-			}
-		} else {
-			$stylesheet = $this->fetchStylesheet() . PHP_EOL;
-		}
-		return $stylesheet;
-	}
-	
-	
-	/* 
-	 * Load and return stylesheet
-	 * If the path is relative http://www.php.net/styles/ will be prepended
-	 * @return string Stylesheet path
-	 */
-	
-    protected function fetchStylesheet ($name = null) {
-		
-		// Set to default theme is none is specified
-		
-		if (is_null ($name))
-		{
-			$name	= 'theme-base.css';
-		}
-		
-		// Use php URL if path is relative
-		
-		$url = parse_url ($name);
-		
-		if (!isset ($url['host']) || !$url['host'])
-		{
-			$name	= 'http://www.php.net/styles/' . $name;
-		}
-		
-		// Load stylesheet
-		
-		$stylesheet = file_get_contents ($name);
-       
-		if ($stylesheet) {
-            v('Loaded %s stylesheet.', $name, VERBOSE_MESSAGES);
-            return $stylesheet;
-        } else {
-            v('Stylesheet %s not fetched. Uses default rendering style.', $name, E_USER_WARNING);
-            return "";
-        }
-    }
-	
-	
-	/**
-	 * Save stylesheet resources such as images, font files etc locally
-	 * @param string $stylesheet Stylesheet data
-	 * @return string
-	 */
-	
-	protected function processStylesheetResources ($stylesheet)
-	{
-		
-		// Find referenced content - background images, sprites, etc.
-		if (0 !== preg_match_all('`url\((([\'"]|)((?:(?!file:).)*?)\2)\)`', $stylesheet, $stylesheet_urls)) {
-
-			foreach(array_unique($stylesheet_urls[3]) as $stylesheet_url) {
-
-				// Parse the url, getting content from http://www.php.net if there is no scheme and host.
-				if (False !== ($parsed_url = parse_url($stylesheet_url))) {
-
-					if (!isset($parsed_url['scheme']) && !isset($parsed_url['host'])) {
-						$url_content = file_get_contents('http://www.php.net/' . $stylesheet_url);
-					} else {
-						// Otherwise content is fully identified.
-						$url_content = file_get_contents($stylesheet_url);
-					}
-
-					// Make sure the location to save the content is available.
-					$content_filename = $this->outputdir . $parsed_url['path'];
-					@mkdir(dirname($content_filename), 0777, true);
-
-					// Save the referenced content to the new location.
-					file_put_contents($content_filename, $url_content);
-
-					// Force URLS to be relative to the "res" directory, but make them use the unix path separator as they will be processed by HTML.
-					$relative_url = trim (substr (realpath ($content_filename), strlen (realpath ($this->outputdir))), DIRECTORY_SEPARATOR);
-					$stylesheet = str_replace($stylesheet_url, str_replace(DIRECTORY_SEPARATOR, '/', $relative_url), $stylesheet);
-
-					v('Saved content from css : %s.', $parsed_url['path'], VERBOSE_MESSAGES);
-				} else {
-					v('Unable to save content from css : %s.', $stylesheet_url, E_USER_WARNING);
-				}
-			}
-
-		}
-		
-		return $stylesheet;
-		
-	}
-	
-	
 }
 
 /*
