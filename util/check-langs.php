@@ -40,8 +40,11 @@ function check_language($path, $englishKeys) {
     }
 
     if ($missing) {
-        $missing = implode(", ", $missing);
-        echo "\n\tMissing: $missing\n";
+        echo "\n\tMissing (" . sizeof($missing) . "):\n";
+
+        foreach ($missing as $text) {
+            echo "\t\t$text\n";
+        }
     }
 
     if ($redundant) {
