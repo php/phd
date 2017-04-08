@@ -279,6 +279,7 @@ class Package_PHP_PDF extends Package_Generic_PDF {
         case "resource":
         case "null":
         case "callable":
+        case "iterable":
             $href = "language.types.$t";
             break;
         case "mixed":

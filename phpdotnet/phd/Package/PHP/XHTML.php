@@ -429,6 +429,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         case "resource":
         case "null":
         case "callable":
+        case "iterable":
             $href = "language.types.$t";
             break;
         case "mixed":
