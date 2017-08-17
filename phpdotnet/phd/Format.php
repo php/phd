@@ -451,7 +451,7 @@ abstract class Format extends ObjectStorage
             || !is_array($this->children[$id])
             || count($this->children[$id]) == 0
         ) {
-            return null;
+            return [];
         }
         return $this->children[$id];
     }
