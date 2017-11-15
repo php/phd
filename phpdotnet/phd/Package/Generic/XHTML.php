@@ -426,6 +426,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         "fieldsynopsis"            => array(
             "modifier"                      => "public",
         ),
+        "methodsynopsis"           => array(
+            "returntype"           => false,
+        ),
         "co"                       => 0,
         "callouts"                 => 0,
         "segmentedlist"            => array(

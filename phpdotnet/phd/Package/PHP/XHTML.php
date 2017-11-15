@@ -12,6 +12,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'colophon'              => 'format_chunk',
         'function'              => 'format_function',
         'methodname'            => 'format_function',
+        'methodsynopsis'        => 'format_methodsynopsis',
         'legalnotice'           => 'format_chunk',
         'part'                  => 'format_container_chunk',
         'partintro'             => 'format_partintro',
@@ -69,7 +70,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'type'                  => array(
             /* DEFAULT */          'span',
-            'methodsynopsis'    => 'format_type_tag_methodsynopsis',
+            'methodsynopsis'    => 'format_suppressed_tags',
         ),
     );
     private $mytextmap = array(
@@ -102,10 +103,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             'classsynopsisinfo' => false,
             'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
             'methodparam'       => 'format_type_if_object_or_pseudo_text',
-            'methodsynopsis'    => array(
-                /* DEFAULT */      'format_type_if_object_or_pseudo_text',
-                'classsynopsis' => false,
-            ),
+            'methodsynopsis'    => 'format_type_methodsynopsis_text',
         ),
         'titleabbrev'           => array(
             /* DEFAULT */          'format_suppressed_text',
@@ -390,15 +388,37 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     }
 
-    public function format_type_tag_methodsynopsis($open, $tag, $attrs, $props) {
+    public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
-            return '<span class="type">';
+            return parent::format_methodsynopsis($open, $name, $attrs);
         }
 
-        // Trailing space intentional as phpdoc doesn't have a
-        // space between <type> and the <methodname> in methodsynopsis
-        return '</span> ';
+        $content = "";
+        if ($this->params["opt"]) {
+            $content = str_repeat("]", $this->params["opt"]);
+        }
+        $content .= " )";
+
+        if ($this->cchunk["methodsynopsis"]["returntype"]) {
+            $return_type = $this->cchunk["methodsynopsis"]["returntype"];
+            $formatted_type = self::format_type_if_object_or_pseudo_text($return_type, "type");
+            if ($formatted_type === false) {
+                $formatted_type = $return_type;
+            }
+            $content .= ' : <span class="type">' . $formatted_type . '</span>';
+        }
+
+        $content .= "</div>\n";
+        $this->cchunk["methodsynopsis"] = $this->dchunk["methodsynopsis"];
+
+        return $content;
     }
+
+    public function format_type_methodsynopsis_text($type, $tagname) {
+        $this->cchunk["methodsynopsis"]["returntype"] = $type;
+        return "";
+    }
+
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
         if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
             return false;
