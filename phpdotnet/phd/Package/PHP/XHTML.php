@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace phpdotnet\phd;
 
 abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
@@ -19,7 +19,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'phpdoc:classref'       => 'format_class_chunk',
         'phpdoc:exceptionref'   => 'format_class_chunk',
         'phpdoc:varentry'       => 'format_varentry_chunk',
-	'programlisting'	=> 'format_programlisting',
         'refentry'              => 'format_chunk',
         'reference'             => 'format_container_chunk',
         'refpurpose'            => 'format_refpurpose',
@@ -737,19 +736,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return $this->format_container_chunk($open, "reference", $attrs, $props);
     }
 
-    public function format_programlisting($open, $name, $attrs) {
-        if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
-            } else {
-                $this->role = false;
-            }
-
-            return '<div class="example-contents" dir="ltr">';
-        }
-        $this->role = false;
-        return "</div>\n";
-    }
 }
 
 /*
