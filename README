@@ -7,7 +7,7 @@ Installing the PhD renderer:
 
         To install the PHP Package:
             pear install doc.php.net/phd_php
-        
+
         To install the PEAR Package:
             pear install doc.php.net/phd_pear
 

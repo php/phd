@@ -20,7 +20,7 @@ Releases are currently made from the PHD_1_1 branch.
    $ pear install PhD-*.tgz
    .. try phd on phpdoc and peardoc ..
 
-6. Download Simple Channel Server in the docweb/www/ dir. 
+6. Download Simple Channel Server in the docweb/www/ dir.
    - See Appendix A and D below
 
 7. In the docweb/www/ dir, generate the appropriate xml entries using
@@ -33,7 +33,7 @@ Releases are currently made from the PHD_1_1 branch.
 
 8. Update the file in path/to/docweb/www/phd.php and add a new <li></li> with info from package.xml.
 
-9. Commit the changes. 
+9. Commit the changes.
    $ git commit www/phd.php -m "PhD * news"
    $ git push # Push the release upstream
 
@@ -79,9 +79,9 @@ $ git push
 
 Appendix
 ------------------------------------
-A. Downloading Simple Channel Server into the docweb/www/ dir. 
+A. Downloading Simple Channel Server into the docweb/www/ dir.
    $ cd /path/to/docweb/www
-   $ wget -O pearscs.phar "https://github.com/pyrus/Pyrus_SimpleChannelServer/blob/master/pearscs.phar?raw=true" 
+   $ wget -O pearscs.phar "https://github.com/pyrus/Pyrus_SimpleChannelServer/blob/master/pearscs.phar?raw=true"
 
 B. Installing PEAR_PackageFileManager2
    $ pear install PEAR_PackageFileManager2

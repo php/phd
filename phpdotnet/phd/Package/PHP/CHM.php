@@ -245,10 +245,10 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 
             $stylesheet	= $this->fetchStylesheet();
             $this->headerChm();
-			
+
             // Save the stylesheet.
-            file_put_contents($this->outputdir . "style.css", $stylesheet . 
-				'#usernotes {margin-left : inherit;}' . PHP_EOL . 
+            file_put_contents($this->outputdir . "style.css", $stylesheet .
+				'#usernotes {margin-left : inherit;}' . PHP_EOL .
 				// Fix responsive layout
 				'#layout-content { width: 100% !important; }' . PHP_EOL
 			);
