@@ -35,4 +35,3 @@ example above would change to:
 or
 	svn checkout http://svn.php.net/repository/phpdoc/modules/doc-pt_BR
 The XML files to edit will be in doc-pt/pt or doc-pt_BR/pt_BR directories.
-

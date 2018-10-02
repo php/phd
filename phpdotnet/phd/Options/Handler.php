@@ -497,4 +497,3 @@ Most options can be passed multiple times for greater effect.
 * vim600: sw=4 ts=4 syntax=php et
 * vim<600: sw=4 ts=4
 */
-

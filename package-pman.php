@@ -66,5 +66,3 @@ system("pear package package_pman.xml");
 
 rename("man3", "output/php-functions");
 unlink("pman.sh");
-
-

@@ -93,4 +93,3 @@ C. Using package-pman.php
 
 D. Docweb is in GIT here, so to checkout:
     $ git clone git@git.php.net:/web/doc.git
-
