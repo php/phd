@@ -31,22 +31,16 @@
 
   <date>2018-11-13</date>
   <version>
-    <release>1.1.11</release>
+    <release>1.1.12</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>stable</release>
-    <api>stable</api>
+    <release>snapshot</release>
+    <api>snapshot</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    - Render return type in PHP 7 style (PHP package) (Peter)
-    - Add support for &lt;type&gt;iterable&lt;/type&gt; (Jiří Pudil)
-    - Fixes for rendering PhD's guide as PHP/HowTo (Maciej)
-    - Better handling for deprecated functions (Maciej)
-    - Link to the array|object docs (Hannes)
-    - Fixed breadcrumbs HTML markup (PHP: chunked xhtml) (Maciej)
-    - Fixed bug#66408 (Wrong style file in chm documentation) (Andy Burton)
+    ...
   </notes>
 
   <contents>
@@ -362,6 +356,28 @@
       <notes>
         - Fix phd:chunk="false" (Adam)
         - Render segmentedlist elements as XHTML tables (Adam)
+      </notes>
+    </release>
+
+    <release>
+      <date>2018-11-13</date>
+      <version>
+        <release>1.1.11</release>
+        <api>1.1.0</api>
+      </version>
+      <stability>
+        <release>stable</release>
+        <api>stable</api>
+      </stability>
+      <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
+      <notes>
+        - Render return type in PHP 7 style (PHP package) (Peter)
+        - Add support for &lt;type&gt;iterable&lt;/type&gt; (Jiří Pudil)
+        - Fixes for rendering PhD's guide as PHP/HowTo (Maciej)
+        - Better handling for deprecated functions (Maciej)
+        - Link to the array|object docs (Hannes)
+        - Fixed breadcrumbs HTML markup (PHP: chunked xhtml) (Maciej)
+        - Fixed bug#66408 (Wrong style file in chm documentation) (Andy Burton)
       </notes>
     </release>
 
