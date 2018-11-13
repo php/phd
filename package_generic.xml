@@ -35,18 +35,20 @@
     <active>yes</active>
   </lead>
 
-  <date>2014-03-21</date>
+  <date>2018-11-13</date>
   <version>
     <release>1.1.11</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>stable</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    ...
+    - simplesect elements should use the same formatting as sect[2-5] (Adam)
+    - Use html5 q for quoting (Hannes)
+    - Use var HTML tag for envar DocBook tag (Simion Onea)
   </notes>
 
   <contents>
