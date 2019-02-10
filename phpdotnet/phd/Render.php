@@ -82,7 +82,7 @@ class Render extends ObjectStorage
                 $this->STACK[$depth] = $name;
 
                 if ($name == "notatag")
-                    continue;
+                    break;
 
                 foreach($this as $format) {
                     $map = $this[$format][\XMLReader::ELEMENT];
