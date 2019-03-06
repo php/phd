@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://pear.php.net/dtd/package-2.0"
   xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -60,23 +60,37 @@
     <active>yes</active>
   </developer>
 
-  <date>2014-03-21</date>
+  <date>2018-11-13</date>
   <version>
     <release>1.1.11</release>
     <api>1.1.0</api>
   </version>
   <stability>
-    <release>snapshot</release>
+    <release>stable</release>
     <api>stable</api>
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    Added new language translations: (Kalle)
-     - Norwegian (Bokmål)
-    Updated language translations: (Kalle)
-     - Danish
-     - Swedish
-    Fixed bug#66408 (Wrong style file in chm documentation). (Andy Burton)
+    - Added new language translations: Norwegian (Bokmål) (Kalle), Ukrainian (KostyaTretyak)
+    - Updated language translations: Danish, Swedish (Kalle), Polish (Maciej)
+    - File formatting and style consistency changes (Peter Kokot)
+    - Render return type in PHP 7 style (PHP package) (Peter)
+    - PHP 7.2 compatibility fixes (Thomas Punt)
+    - Add support for &lt;type&gt;iterable&lt;/type&gt; (Jiří Pudil)
+    - Add a tool for checking language files (Maciej)
+    - Initial work on composer support for PhD (Maciej, Peter)
+    - Fixes for rendering PhD's guide as PHP/HowTo (Maciej)
+    - Fixing undefined variable notice when $TOC_DEPRECATED is not available (Ben)
+    - Improve PHP 7 compatibility by handling highlight_string exceptions. (Adam)
+    - Convert SVN -&gt; Git in existing translations (Maciej)
+    - Convert language files to INI (Maciej)
+    - Better handling for deprecated functions (Maciej)
+    - simplesect elements should use the same formatting as sect[2-5] (Adam)
+    - Use html5 q for quoting (Hannes)
+    - Link to the array|object docs (Hannes)
+    - Use var HTML tag for envar DocBook tag (Simion Onea)
+    - Fixed breadcrumbs HTML markup (PHP: chunked xhtml) (Maciej)
+    - Fixed bug#66408 (Wrong style file in chm documentation) (Andy Burton)
   </notes>
 
   <contents>
