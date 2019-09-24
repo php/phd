@@ -648,7 +648,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return '<strong class="' .$name.' ' .$role. '">';
         }
         $this->role = null;
-        return "</strong>\n";
+        return "</strong>";
     }
 
     public function format_literal($open, $name, $attrs)
