@@ -627,7 +627,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
                         . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "")
                         . ($parameter['optional'] ? "]" : "") );
         }
-        $ret = "\n(" . join($params, ", ") . ")";
+        $ret = "\n(" . join(", ", $params) . ")";
         $this->cchunk['methodsynopsis']['params'] = array();
 
         // finally write what is in the buffer
