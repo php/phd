@@ -420,13 +420,20 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
-        if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
+        $mandatory = $type[0] === '?' ? substr($type, 1) : $type;
+        if (in_array(strtolower($mandatory), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
             return false;
         }
         return self::format_type_text($type, $tagname);
     }
 
     public function format_type_text($type, $tagname) {
+        if ($type[0] === '?') {
+            $prefix = '?';
+            $type = substr($type, 1);
+        } else {
+            $prefix = '';
+        }
         $t = strtr(strtolower($type), "_", "-");
         $href = $fragment = "";
 
@@ -468,12 +475,12 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
 
         if ($href && $this->chunked) {
-            return '<a href="' .$href. $this->getExt().($fragment ? "#$fragment" : ""). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
+            return $prefix. '<a href="' .$href. $this->getExt().($fragment ? "#$fragment" : ""). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
         }
         if ($href) {
-            return '<a href="#' .($fragment ? $fragment : $href). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
+            return $prefix. '<a href="#' .($fragment ? $fragment : $href). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
         }
-        return '<span class="' .$tagname. ' ' .$type. '">' .$type. '</span>';
+        return $prefix. '<span class="' .$tagname. ' ' .$type. '">' .$type. '</span>';
     }
 
     public function format_example_title($open, $name, $attrs, $props) {
