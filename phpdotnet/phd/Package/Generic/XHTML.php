@@ -996,13 +996,24 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($props["empty"]) {
             return '';
         }
+
         if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return ' <code class="parameter reference">&$';
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+                $role = $attrs[Reader::XMLNS_DOCBOOK]['role'];
+                switch ($role) {
+                    case 'reference':
+                        return ' <code class="parameter reference">&$';
+                    case 'vararglist':
+                        return ' <code class="parameter">...$';
+                    case 'reference_vararglist':
+                        return ' <code class="parameter">&...$';
+                }
             }
+
             return ' <code class="parameter">$';
         }
-        return "</code>";
+
+        return '</code>';
     }
 
     public function format_initializer($open, $name, $attrs) {
@@ -1011,18 +1022,30 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return '</span>';
     }
+
     public function format_parameter($open, $name, $attrs, $props)
     {
         if ($props["empty"]) {
             return '';
         }
+
         if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return '<code class="parameter reference">&';
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+                $role = $attrs[Reader::XMLNS_DOCBOOK]['role'];
+                switch ($role) {
+                    case 'reference':
+                        return '<code class="parameter reference">&';
+                    case 'vararglist':
+                        return ' <code class="parameter">...';
+                    case 'reference_vararglist':
+                        return '<code class="parameter">&...';
+                }
             }
+
             return '<code class="parameter">';
         }
-        return "</code>";
+
+        return '</code>';
     }
 
     public function format_void($open, $name, $attrs, $props) {

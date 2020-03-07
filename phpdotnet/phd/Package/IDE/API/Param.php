@@ -12,6 +12,8 @@
  */
 namespace phpdotnet\phd;
 
+use function substr;
+
 /**
  * Class to parse the function parameters.
  *
@@ -81,8 +83,15 @@ class Package_IDE_API_Param
     public function __toString()
     {
         $str = $this->getType();
-        $str .= (substr($this->getName(), 0, 1) != '$') ? ' $' : ' ';
-        $str .= $this->getName();
+        $str .= ' ';
+        if (substr($this->getName(), 0, 3) === '...') {
+            $str .= str_replace('...', '...$', $this->getName());
+        } elseif (substr($this->getName(), 0, 1) === '$') {
+            $str .= $this->getName();
+        } else {
+            $str .= '$';
+            $str .= $this->getName();
+        }
 
         if ($this->isOptional()) {
             $str .= ' = ';

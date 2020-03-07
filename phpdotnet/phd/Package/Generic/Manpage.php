@@ -583,10 +583,29 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
     }
 
     public function format_parameter_method($open, $name, $attrs, $props) {
-        if ($open && isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "reference") {
-            $this->cchunk['methodsynopsis']['params'][count($this->cchunk['methodsynopsis']['params'])-1]['reference'] = true;
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+                $role = $attrs[Reader::XMLNS_DOCBOOK]['role'];
+                switch ($role) {
+                    case 'reference':
+                        $this->cchunk['methodsynopsis']['params'][count($this->cchunk['methodsynopsis']['params'])-1]['role_symbol'] = '&';
+
+                        return '';
+                    case 'vararglist':
+                        $this->cchunk['methodsynopsis']['params'][count($this->cchunk['methodsynopsis']['params'])-1]['role_symbol'] = '...';
+
+                        return '';
+                    case 'reference_vararglist':
+                        $this->cchunk['methodsynopsis']['params'][count($this->cchunk['methodsynopsis']['params'])-1]['role_symbol'] = '&...';
+
+                        return '';
+                }
+            }
+
+            $this->cchunk['methodsynopsis']['params'][count($this->cchunk['methodsynopsis']['params'])-1]['role_symbol'] = '';
         }
-        return "";
+
+        return '';
     }
 
     public function format_parameter_method_text($value, $tag) {
@@ -622,7 +641,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         foreach ($this->cchunk['methodsynopsis']['params'] as $parameter) {
             array_push($params, ($parameter['optional'] ? "[" : "")
                         . $parameter['type'] . " "
-                        . ($parameter['reference'] ? " \\fI&\\fP" : " ")
+                        . ' \\fI' . $parameter['role_symbol'] , '\\fP'
                         . ($parameter['name'] ? "\\fI$" . $parameter['name'] . "\\fP" : "")
                         . ($parameter['initializer'] ? " = " . $parameter['initializer'] : "")
                         . ($parameter['optional'] ? "]" : "") );

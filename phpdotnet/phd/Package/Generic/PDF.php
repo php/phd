@@ -849,31 +849,66 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
 
     public function format_methodparam_parameter($open, $name, $attrs, $props) {
         if ($props["empty"]) return '';
+
         if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM, 10);
-                $this->pdfDoc->appendText(" &$");
-                return '';
-            }
             $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM, 10);
-            $this->pdfDoc->appendText(" $");
+
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+                $role = $attrs[Reader::XMLNS_DOCBOOK]['role'];
+                switch ($role) {
+                    case 'reference':
+                        $this->pdfDoc->appendText('&$');
+
+                        return '';
+                    case 'vararglist':
+                        $this->pdfDoc->appendText('...$');
+
+                        return '';
+                    case 'reference_vararglist':
+                        $this->pdfDoc->appendText('&...$');
+
+                        return '';
+                }
+            }
+
+            $this->pdfDoc->appendText(' $');
+
             return '';
         }
+
         $this->pdfDoc->revertFont();
         return '';
     }
 
     public function format_parameter($open, $name, $attrs, $props) {
         if ($props["empty"]) return '';
+
         if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM_ITALIC, 10);
-                $this->pdfDoc->appendText(" &");
-                return '';
+            $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM, 10);
+
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+                $role = $attrs[Reader::XMLNS_DOCBOOK]['role'];
+                switch ($role) {
+                    case 'reference':
+                        $this->pdfDoc->appendText('&$');
+
+                        return '';
+                    case 'vararglist':
+                        $this->pdfDoc->appendText('...$');
+
+                        return '';
+                    case 'reference_vararglist':
+                        $this->pdfDoc->appendText('&...$');
+
+                        return '';
+                }
             }
-            $this->pdfDoc->setFont(PdfWriter::FONT_VERBATIM_ITALIC, 10);
+
+            $this->pdfDoc->appendText(' $');
+
             return '';
         }
+
         $this->pdfDoc->revertFont();
         return '';
     }
