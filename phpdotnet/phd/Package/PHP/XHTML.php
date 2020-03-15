@@ -420,10 +420,15 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
-        if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
-            return false;
+        $res = [];
+        foreach (explode('|', $type) as $t) {
+            if (in_array(strtolower($t), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
+                $res[] = $t;
+            } else {
+                $res[] = self::format_type_text($t, $tagname);
+            }
         }
-        return self::format_type_text($type, $tagname);
+        return implode('|', $res);
     }
 
     public function format_type_text($type, $tagname) {
