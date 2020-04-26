@@ -71,7 +71,9 @@
   </stability>
   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD Style</license>
   <notes>
-    ...
+    - Support namespaced classes in &lt;type&gt; elements (Christoph M. Becker)
+    - Fix deprecation notice about incorrect argument order for join() in PHP 7.4. (Yoshinari)
+    - Remove trailing newline from HTML generated from &lt;option&gt; XML tags (Peter)
   </notes>
 
   <contents>
