@@ -72,6 +72,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             /* DEFAULT */          'span',
             'methodsynopsis'    => 'format_suppressed_tags',
         ),
+        'varname'               => array(
+            /* DEFAULT */          'format_suppressed_tags',
+        ),
     );
     private $mytextmap = array(
         'acronym'               => 'format_acronym_text',
