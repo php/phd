@@ -659,10 +659,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             } else {
                 $this->role = false;
             }
-            return '<em>';
+            return '<code class="literal">';
         }
         $this->role = false;
-        return '</em>';
+        return '</code>';
     }
 
     public function format_literal_text($value, $tag) {
