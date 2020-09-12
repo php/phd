@@ -997,10 +997,19 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return '';
         }
         if ($open) {
+            $class = 'parameter';
+            $et = $ellipsis = '';
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return ' <code class="parameter reference">&$';
+                $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
+                if (preg_match('/\breference\b/', $role)) {
+                    $class .= ' reference';
+                    $et = '&';
+                }
+                if (preg_match('/\bvariadic\b/', $role)) {
+                    $ellipsis = '...';
+                }
             }
-            return ' <code class="parameter">$';
+            return " <code class=\"{$class}\">{$et}{$ellipsis}$";
         }
         return "</code>";
     }
@@ -1017,10 +1026,19 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return '';
         }
         if ($open) {
+            $class = 'parameter';
+            $et = $ellipsis = '';
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return '<code class="parameter reference">&';
+                $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
+                if (preg_match('/\breference\b/', $role)) {
+                    $class .= ' reference';
+                    $et = '&';
+                }
+                if (preg_match('/\bvariadic\b/', $role)) {
+                    $ellipsis = '...';
+                }
             }
-            return '<code class="parameter">';
+            return " <code class=\"{$class}\">{$et}{$ellipsis}";
         }
         return "</code>";
     }
