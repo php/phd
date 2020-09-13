@@ -976,7 +976,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
-            $this->params = array("count" => 0, "opt" => 0, "content" => "");
+            $this->params = array("count" => 0, "opt" => 0, "content" => "", "ellipsis" => '');
             $id = (isset($attrs[Reader::XMLNS_XML]["id"]) ? ' id="'.$attrs[Reader::XMLNS_XML]["id"].'"' : '');
             return '<div class="'.$name.' dc-description"'.$id.'>';
         }
@@ -998,9 +998,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                return ' <code class="parameter reference">&$';
+                return ' <code class="parameter reference">&' . $this->params["ellipsis"] . '$';
             }
-            return ' <code class="parameter">$';
+            return ' <code class="parameter">' . $this->params["ellipsis"] . '$';
         }
         return "</code>";
     }
@@ -1051,6 +1051,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 }
                 $content .= ' <span class="methodparam">';
                 ++$this->params["count"];
+                if (isset($attrs[Reader::XMLNS_DOCBOOK]["rep"]) && $attrs[Reader::XMLNS_DOCBOOK]["rep"] == "repeat") {
+                    $this->params["ellipsis"] = '...';
+                } else {
+                    $this->params["ellipsis"] = '';
+                }
                 return $content;
         }
         return "</span>";
