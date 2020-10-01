@@ -69,7 +69,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             ),
         ),
         'type'                  => array(
-            /* DEFAULT */          'span',
+            /* DEFAULT */          'format_type',
             'methodsynopsis'    => 'format_suppressed_tags',
         ),
         'varname'               => array(
@@ -128,6 +128,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     /* Current Chunk settings */
     protected $cchunk          = array();
     /* Default Chunk settings */
+    private $types = null;
+    /* Support for compound types */
 
     protected $dchunk          = array(
         "phpdoc:classref"              => null,
@@ -295,6 +297,24 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
 
         $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
+        return $retval;
+    }
+    public function format_type($open, $tag, $attrs, $props) {
+        $retval = '';
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
+                $this->types = 0;
+            } elseif (isset($this->types)) {
+                if ($this->types > 0) $retval .= '|';
+                $this->types++;
+            }
+            $retval .= '<span type="class">';
+        } else {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
+                $this->types = null;
+            }
+            $retval .= '</span>';
+        }
         return $retval;
     }
     public function format_refpurpose($open, $tag, $attrs, $props) {
