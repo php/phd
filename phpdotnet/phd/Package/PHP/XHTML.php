@@ -125,12 +125,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     private $versions = array();
     private $acronyms = array();
     protected $deprecated = array();
+
     /* Current Chunk settings */
     protected $cchunk          = array();
-    /* Default Chunk settings */
-    private $types = null;
-    /* Support for compound types */
 
+    /* Default Chunk settings */
     protected $dchunk          = array(
         "phpdoc:classref"              => null,
         "args"                         => null,
@@ -146,6 +145,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         "alternatives"                 => array(),
         "refsynopsisdiv"               => null,
     );
+
+    /* Support for compound types */
+    private $types = null;
 
     protected $pihandlers = array(
         'dbhtml'        => 'PI_DBHTMLHandler',
