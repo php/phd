@@ -483,10 +483,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             $href = "language.pseudo-types";
             $fragment = "language.types.$t";
             break;
-        case "array|object":
-            $href = "language.pseudo-types";
-            $fragment = "language.types.array-object";
-            break;
         default:
             /* Check if its a classname. */
             $href = Format::getFilename("class.$t");
