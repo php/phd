@@ -74,6 +74,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'varname'               => array(
             /* DEFAULT */          'format_suppressed_tags',
+            'fieldsynopsis'     => 'format_fieldsynopsis_varname',
         ),
     );
     private $mytextmap = array(
