@@ -154,7 +154,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         "refsynopsisdiv"               => null,
     );
 
-    /* Support for compound types */
+    /* Support for union types */
     private $types = null;
 
     protected $pihandlers = array(
