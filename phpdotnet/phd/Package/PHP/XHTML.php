@@ -70,7 +70,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'type'                  => array(
             /* DEFAULT */          'format_type',
-            'methodsynopsis'    => 'format_suppressed_tags',
+            'methodsynopsis'    => 'format_methodsynopsis_type',
+            'type'              => array(
+                /* DEFAULT */       'format_type',
+                'methodsynopsis' => 'format_methodsynopsis_type',
+            ),
         ),
         'varname'               => array(
             /* DEFAULT */          'format_suppressed_tags',
@@ -107,6 +111,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
             'methodparam'       => 'format_type_if_object_or_pseudo_text',
             'methodsynopsis'    => 'format_type_methodsynopsis_text',
+            'type'              => array(
+                /* DEFAULT */       'format_type_text',
+                'methodsynopsis' => 'format_type_methodsynopsis_text',
+            ),
         ),
         'titleabbrev'           => array(
             /* DEFAULT */          'format_suppressed_text',
@@ -301,23 +309,29 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
         return $retval;
     }
-    public function format_type($open, $tag, $attrs, $props) {
+    private function do_format_type($open, $attrs, $is_return_type) {
         $retval = '';
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->types = 0;
             } elseif (isset($this->types)) {
-                if ($this->types > 0) $retval .= '|';
+                if (!$is_return_type && $this->types > 0) $retval .= '|';
                 $this->types++;
             }
-            $retval .= '<span type="class">';
+            if (!$is_return_type) $retval .= '<span type="class">';
         } else {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->types = null;
             }
-            $retval .= '</span>';
+            if (!$is_return_type) $retval .= '</span>';
         }
         return $retval;
+    }
+    public function format_type($open, $tag, $attrs, $props) {
+        return $this->do_format_type($open, $attrs, false);
+    }
+    public function format_methodsynopsis_type($open, $tag, $attrs, $props) {
+        return $this->do_format_type($open, $attrs, true);
     }
     public function format_refpurpose($open, $tag, $attrs, $props) {
         if ($open) {
@@ -424,13 +438,20 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
         $content .= " )";
 
-        if ($this->cchunk["methodsynopsis"]["returntype"]) {
-            $return_type = $this->cchunk["methodsynopsis"]["returntype"];
-            $formatted_type = self::format_type_if_object_or_pseudo_text($return_type, "type");
-            if ($formatted_type === false) {
-                $formatted_type = $return_type;
+        if ($this->cchunk["methodsynopsis"]["returntypes"]) {
+            $types = [];
+            foreach ($this->cchunk["methodsynopsis"]["returntypes"] as $return_type) {
+                $formatted_type = self::format_type_if_object_or_pseudo_text($return_type, "type");
+                if ($formatted_type === false) {
+                    $formatted_type = $return_type;
+                }
+                $types[] = '<span class="type">' . $formatted_type . '</span>';
             }
-            $content .= ' : <span class="type">' . $formatted_type . '</span>';
+            $type = implode('|', $types);
+            if (count($types) > 1) {
+                $type = '<span class="type">' . $type . '</span>';
+            }
+            $content .= ' : ' . $type;
         }
 
         $content .= "</div>\n";
@@ -440,7 +461,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_type_methodsynopsis_text($type, $tagname) {
-        $this->cchunk["methodsynopsis"]["returntype"] = $type;
+        $this->cchunk["methodsynopsis"]["returntypes"][] = $type;
         return "";
     }
 
