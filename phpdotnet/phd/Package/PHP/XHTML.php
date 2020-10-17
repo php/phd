@@ -106,13 +106,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'refname'               => 'format_refname_text',
         'type'                  => array(
-            /* DEFAULT */          'format_type_text',
+            /* DEFAULT */          'format_type_if_object_or_pseudo_text',
             'classsynopsisinfo' => false,
             'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
             'methodparam'       => 'format_type_if_object_or_pseudo_text',
             'methodsynopsis'    => 'format_type_methodsynopsis_text',
             'type'              => array(
-                /* DEFAULT */       'format_type_text',
+                /* DEFAULT */       'format_type_if_object_or_pseudo_text',
                 'methodsynopsis' => 'format_type_methodsynopsis_text',
             ),
         ),
