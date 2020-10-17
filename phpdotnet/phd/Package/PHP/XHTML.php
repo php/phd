@@ -318,7 +318,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 if (!$is_return_type && $this->types > 0) $retval .= '|';
                 $this->types++;
             }
-            if (!$is_return_type) $retval .= '<span type="class">';
+            if (!$is_return_type) $retval .= '<span class="type">';
         } else {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->types = null;
