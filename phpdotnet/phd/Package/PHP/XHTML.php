@@ -70,10 +70,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'type'                  => array(
             /* DEFAULT */          'format_type',
-            'methodsynopsis'    => 'format_methodsynopsis_type',
+            'methodsynopsis'    => 'format_suppressed_tags',
             'type'              => array(
                 /* DEFAULT */       'format_type',
-                'methodsynopsis' => 'format_methodsynopsis_type',
+                'methodsynopsis' => 'format_suppressed_tags',
             ),
         ),
         'varname'               => array(
@@ -309,29 +309,23 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
         return $retval;
     }
-    private function do_format_type($open, $attrs, $is_return_type) {
+    public function format_type($open, $tag, $attrs, $props) {
         $retval = '';
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->num_types = 0;
             } elseif (isset($this->num_types)) {
-                if (!$is_return_type && $this->num_types > 0) $retval .= '|';
+                if ($this->num_types > 0) $retval .= '|';
                 $this->num_types++;
             }
-            if (!$is_return_type) $retval .= '<span class="type">';
+            $retval .= '<span class="type">';
         } else {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->num_types = null;
             }
-            if (!$is_return_type) $retval .= '</span>';
+            $retval .= '</span>';
         }
         return $retval;
-    }
-    public function format_type($open, $tag, $attrs, $props) {
-        return $this->do_format_type($open, $attrs, false);
-    }
-    public function format_methodsynopsis_type($open, $tag, $attrs, $props) {
-        return $this->do_format_type($open, $attrs, true);
     }
     public function format_refpurpose($open, $tag, $attrs, $props) {
         if ($open) {
