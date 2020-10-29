@@ -69,8 +69,12 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             ),
         ),
         'type'                  => array(
-            /* DEFAULT */          'span',
+            /* DEFAULT */          'format_type',
             'methodsynopsis'    => 'format_suppressed_tags',
+            'type'              => array(
+                /* DEFAULT */       'format_type',
+                'methodsynopsis' => 'format_suppressed_tags',
+            ),
         ),
         'varname'               => array(
             /* DEFAULT */          'format_suppressed_tags',
@@ -103,11 +107,15 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'refname'               => 'format_refname_text',
         'type'                  => array(
-            /* DEFAULT */          'format_type_text',
+            /* DEFAULT */          'format_type_if_object_or_pseudo_text',
             'classsynopsisinfo' => false,
             'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
             'methodparam'       => 'format_type_if_object_or_pseudo_text',
             'methodsynopsis'    => 'format_type_methodsynopsis_text',
+            'type'              => array(
+                /* DEFAULT */       'format_type_if_object_or_pseudo_text',
+                'methodsynopsis' => 'format_type_methodsynopsis_text',
+            ),
         ),
         'titleabbrev'           => array(
             /* DEFAULT */          'format_suppressed_text',
@@ -126,10 +134,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     private $versions = array();
     private $acronyms = array();
     protected $deprecated = array();
+
     /* Current Chunk settings */
     protected $cchunk          = array();
-    /* Default Chunk settings */
 
+    /* Default Chunk settings */
     protected $dchunk          = array(
         "phpdoc:classref"              => null,
         "args"                         => null,
@@ -145,6 +154,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         "alternatives"                 => array(),
         "refsynopsisdiv"               => null,
     );
+
+    /** @var int|null Number of already formatted types in the current union type */
+    private $num_types = null;
 
     protected $pihandlers = array(
         'dbhtml'        => 'PI_DBHTMLHandler',
@@ -298,6 +310,24 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
         return $retval;
     }
+    public function format_type($open, $tag, $attrs, $props) {
+        $retval = '';
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
+                $this->num_types = 0;
+            } elseif (isset($this->num_types)) {
+                if ($this->num_types > 0) $retval .= '|';
+                $this->num_types++;
+            }
+            $retval .= '<span class="type">';
+        } else {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
+                $this->num_types = null;
+            }
+            $retval .= '</span>';
+        }
+        return $retval;
+    }
     public function format_refpurpose($open, $tag, $attrs, $props) {
         if ($open) {
             $retval = "";
@@ -403,13 +433,20 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
         $content .= " )";
 
-        if ($this->cchunk["methodsynopsis"]["returntype"]) {
-            $return_type = $this->cchunk["methodsynopsis"]["returntype"];
-            $formatted_type = self::format_type_if_object_or_pseudo_text($return_type, "type");
-            if ($formatted_type === false) {
-                $formatted_type = $return_type;
+        if ($this->cchunk["methodsynopsis"]["returntypes"]) {
+            $types = [];
+            foreach ($this->cchunk["methodsynopsis"]["returntypes"] as $return_type) {
+                $formatted_type = self::format_type_if_object_or_pseudo_text($return_type, "type");
+                if ($formatted_type === false) {
+                    $formatted_type = $return_type;
+                }
+                $types[] = '<span class="type">' . $formatted_type . '</span>';
             }
-            $content .= ' : <span class="type">' . $formatted_type . '</span>';
+            $type = implode('|', $types);
+            if (count($types) > 1) {
+                $type = '<span class="type">' . $type . '</span>';
+            }
+            $content .= ' : ' . $type;
         }
 
         $content .= "</div>\n";
@@ -419,7 +456,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_type_methodsynopsis_text($type, $tagname) {
-        $this->cchunk["methodsynopsis"]["returntype"] = $type;
+        $this->cchunk["methodsynopsis"]["returntypes"][] = $type;
         return "";
     }
 
@@ -461,10 +498,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         case "callback": // old name for callable
             $href = "language.pseudo-types";
             $fragment = "language.types.$t";
-            break;
-        case "array|object":
-            $href = "language.pseudo-types";
-            $fragment = "language.types.array-object";
             break;
         default:
             /* Check if its a classname. */
