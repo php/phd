@@ -154,8 +154,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         "refsynopsisdiv"               => null,
     );
 
-    /* Support for union types */
-    private $types = null;
+    /** @var int|null Number of already formatted types in the current union type */
+    private $num_types = null;
 
     protected $pihandlers = array(
         'dbhtml'        => 'PI_DBHTMLHandler',
@@ -313,15 +313,15 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $retval = '';
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
-                $this->types = 0;
-            } elseif (isset($this->types)) {
-                if (!$is_return_type && $this->types > 0) $retval .= '|';
-                $this->types++;
+                $this->num_types = 0;
+            } elseif (isset($this->num_types)) {
+                if (!$is_return_type && $this->num_types > 0) $retval .= '|';
+                $this->num_types++;
             }
             if (!$is_return_type) $retval .= '<span class="type">';
         } else {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
-                $this->types = null;
+                $this->num_types = null;
             }
             if (!$is_return_type) $retval .= '</span>';
         }
