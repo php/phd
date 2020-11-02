@@ -1027,7 +1027,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_void($open, $name, $attrs, $props) {
         if ($props['sibling'] == 'methodname') {
-            return ' ( <span class="methodparam">void</span>';
+            return ' (';
         } else {
             return '<span class="type"><span class="type void">void</span></span>';
         }
