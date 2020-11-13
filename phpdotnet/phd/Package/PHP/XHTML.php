@@ -107,13 +107,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'refname'               => 'format_refname_text',
         'type'                  => array(
-            /* DEFAULT */          'format_type_if_object_or_pseudo_text',
+            /* DEFAULT */          'format_type_text',
             'classsynopsisinfo' => false,
-            'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
-            'methodparam'       => 'format_type_if_object_or_pseudo_text',
+            'fieldsynopsis'     => 'format_type_text',
+            'methodparam'       => 'format_type_text',
             'methodsynopsis'    => 'format_type_methodsynopsis_text',
             'type'              => array(
-                /* DEFAULT */       'format_type_if_object_or_pseudo_text',
+                /* DEFAULT */       'format_type_text',
                 'methodsynopsis' => 'format_type_methodsynopsis_text',
             ),
         ),
@@ -486,7 +486,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
 
             foreach ($this->cchunk["methodsynopsis"]["returntypes"] as $return_type) {
-                $formatted_type = self::format_type_if_object_or_pseudo_text($return_type, "type");
+                $formatted_type = self::format_type_text($return_type, "type");
                 if ($formatted_type === false) {
                     $formatted_type = $return_type;
                 }
