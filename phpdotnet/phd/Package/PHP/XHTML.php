@@ -107,13 +107,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'refname'               => 'format_refname_text',
         'type'                  => array(
-            /* DEFAULT */          'format_type_if_object_or_pseudo_text',
+            /* DEFAULT */          'format_type_text',
             'classsynopsisinfo' => false,
-            'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
-            'methodparam'       => 'format_type_if_object_or_pseudo_text',
+            'fieldsynopsis'     => 'format_type_text',
+            'methodparam'       => 'format_type_text',
             'methodsynopsis'    => 'format_type_methodsynopsis_text',
             'type'              => array(
-                /* DEFAULT */       'format_type_if_object_or_pseudo_text',
+                /* DEFAULT */       'format_type_text',
                 'methodsynopsis' => 'format_type_methodsynopsis_text',
             ),
         ),
@@ -436,7 +436,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($this->cchunk["methodsynopsis"]["returntypes"]) {
             $types = [];
             foreach ($this->cchunk["methodsynopsis"]["returntypes"] as $return_type) {
-                $formatted_type = self::format_type_if_object_or_pseudo_text($return_type, "type");
+                $formatted_type = self::format_type_text($return_type, "type");
                 if ($formatted_type === false) {
                     $formatted_type = $return_type;
                 }
@@ -481,6 +481,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         case "double":
             $href = "language.types.float";
             break;
+        // old name for callable
+        case "callback":
+            $href = "language.types.callable";
+            break;
         case "boolean":
         case "integer":
         case "float":
@@ -494,10 +498,12 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             $href = "language.types.$t";
             break;
         case "mixed":
-        case "number":
-        case "callback": // old name for callable
-            $href = "language.pseudo-types";
-            $fragment = "language.types.$t";
+            $href = "language.types.declarations";
+            $fragment = "language.types.declarations.base";
+            break;
+        case "void":
+            $href = "language.types.declarations";
+            $fragment = "language.types.declarations.void";
             break;
         default:
             /* Check if its a classname. */
