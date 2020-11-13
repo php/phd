@@ -541,6 +541,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         case "double":
             $href = "language.types.float";
             break;
+        // old name for callable
+        case "callback":
+            $href = "language.types.callable";
+            break;
         case "boolean":
         case "integer":
         case "float":
@@ -557,6 +561,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             $href = "language.types.$t";
             break;
         case "mixed":
+        case "void":
+        case "static":
             $href = "language.types.declarations";
             $fragment = "language.types.declarations.$t";
             break;
