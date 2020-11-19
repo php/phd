@@ -535,6 +535,18 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return false;
     }
 
+    public function deprecationInfo($funcname) {
+        $funcname = str_replace(
+                array("::", "-&gt;", "->", "__", "_", '$', '()'),
+                array("_",  "_",     "_",  "_",  "_", "",  ''),
+                strtolower($funcname));
+        if(isset($this->deprecated[$funcname])) {
+           return $this->deprecated[$funcname];
+        }
+        return false;
+    }
+
+
     public function acronymInfo($acronym) {
         return isset($this->acronyms[$acronym]) ? $this->acronyms[$acronym] : false;
     }
