@@ -125,7 +125,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                         $sibling_short_desc,
                     );
 
-                    if (isset($this->deprecated[$sibling_short_desc])) {
+                    if ($this->deprecationInfo($sibling_short_desc) !== false) {
                         $toc_deprecated[] = $entry;
                     } else {
                         $toc[] = $entry;
