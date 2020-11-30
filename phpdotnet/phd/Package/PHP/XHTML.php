@@ -494,8 +494,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             $href = "language.types.$t";
             break;
         case "mixed":
-        case "number":
-        case "callback": // old name for callable
             $href = "language.pseudo-types";
             $fragment = "language.types.$t";
             break;
