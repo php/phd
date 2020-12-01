@@ -80,15 +80,15 @@ install ok: channel://doc.php.net/PhD_PEAR-1.0.0
         <para>That's it!</para>
       </section>
 
-      <section xml:base="" xml:id="installation-svn">
-        <title>Installation from SVN</title>
+      <section xml:base="" xml:id="installation-git">
+        <title>Installation from Git</title>
 
         <para>To get the latest and greatest features that have not been
-        released yet, you can use PhD from SVN.</para>
+        released yet, you can use PhD from Git.</para>
 
         <screen>
 <![CDATA[
-$ svn checkout http://svn.php.net:/repository/phd/trunk phd
+$ git clone https://github.com/php/phd.git
 ... output
 
 pear install package.xml package_generic.xml package_php.xml package_pear.xml
@@ -296,9 +296,9 @@ Supported packages:
       <title>Compiling the PhD guide</title>
 
       <para>The PhD guide is this manual you are reading currently. It lives
-      in <acronym>PhD</acronym>'s SVN repository under
+      in <acronym>PhD</acronym>'s Git repository under
       <filename>docs/phd-guide/phd-guide.xml</filename>. If you installed PhD
-      from SVN, you already have it. Otherwise, get it:</para>
+      from Git, you already have it. Otherwise, get it:</para>
 
       <screen>
 <![CDATA[
