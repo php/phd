@@ -283,8 +283,8 @@ class Package_PHP_PDF extends Package_Generic_PDF {
             $href = "language.types.$t";
             break;
         case "mixed":
-            $href = "language.pseudo-types";
-            $fragment = "language.types.$t";
+            $href = "language.types.declarations";
+            $fragment = "language.types.declarations.$t";
             break;
         default:
             /* Check if its a classname. */
