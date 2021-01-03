@@ -976,14 +976,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_methodsynopsis($open, $name, $attrs) {
         if ($open) {
-            $this->params = array("count" => 0, "opt" => 0, "content" => "", "ellipsis" => '');
+            $this->params = array("count" => 0, "opt" => false, "init" => false, "content" => "", "ellipsis" => '');
             $id = (isset($attrs[Reader::XMLNS_XML]["id"]) ? ' id="'.$attrs[Reader::XMLNS_XML]["id"].'"' : '');
             return '<div class="'.$name.' dc-description"'.$id.'>';
         }
         $content = "";
-        if ($this->params["opt"]) {
-            $content = str_repeat("]", $this->params["opt"]);
-        }
         $content .= " )";
 
         $content .= "</div>\n";
@@ -1007,6 +1004,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_initializer($open, $name, $attrs) {
         if ($open) {
+            $this->params["init"] = true;
             return '<span class="'.$name.'"> = ';
         }
         return '</span>';
@@ -1040,11 +1038,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                     $content .= " (";
                 }
                 if (isset($attrs[Reader::XMLNS_DOCBOOK]["choice"]) && $attrs[Reader::XMLNS_DOCBOOK]["choice"] == "opt") {
-                    $this->params["opt"]++;
-                    $content .= "[";
-                } else if($this->params["opt"]) {
-                    $content .= str_repeat("]", $this->params["opt"]);
-                    $this->params["opt"] = 0;
+                    $this->params["opt"] = true;
+                } else {
+                    $this->params["opt"] = false;
                 }
                 if ($this->params["count"]) {
                     $content .= ",";
@@ -1058,6 +1054,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 }
                 return $content;
         }
+        if ($this->params["opt"] && !$this->params["init"]) {
+            return " = ?</span>";
+        }
+        $this->params["init"] = false;
         return "</span>";
     }
 
