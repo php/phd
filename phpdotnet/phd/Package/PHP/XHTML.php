@@ -427,7 +427,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return parent::format_methodsynopsis($open, $name, $attrs);
         }
 
-        $content = ")";
+        $content = " )";
 
         if ($this->cchunk["methodsynopsis"]["returntypes"]) {
             $types = [];
@@ -442,7 +442,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             if (count($types) > 1) {
                 $type = '<span class="type">' . $type . '</span>';
             }
-            $content .= ': ' . $type;
+            $content .= ' : ' . $type;
         }
 
         $content .= "</div>\n";
