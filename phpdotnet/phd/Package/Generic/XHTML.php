@@ -1054,7 +1054,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 return $content;
         }
         if ($this->params["opt"] && !$this->params["init"]) {
-            return " = ?</span>";
+            return '<span class="initializer"> = ?</span></span>';
         }
         $this->params["init"] = false;
         return "</span>";
