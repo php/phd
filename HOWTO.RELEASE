@@ -92,4 +92,4 @@ C. Using package-pman.php
    $ php /path/to/phd/package-pman.php
 
 D. Docweb is in GIT here, so to checkout:
-    $ git clone git@git.php.net:/web/doc.git
+    $ git clone git@github.com:php/phd.git

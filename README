@@ -17,7 +17,7 @@ Installing the PhD renderer:
     From GIT:
         Note: Do not install anything from PEAR above.
 
-        git clone https://git.php.net/repository/phd.git
+        git clone https://github.com/php/phd.git
         cd phd
         pear install package.xml package_generic.xml
 
