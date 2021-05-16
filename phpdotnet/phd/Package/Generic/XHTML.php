@@ -974,14 +974,28 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $this->TEXT($value);
     }
 
-    public function format_methodsynopsis($open, $name, $attrs) {
+    public function format_methodsynopsis($open, $name, $attrs, $props) {
         if ($open) {
-            $this->params = array("count" => 0, "opt" => false, "init" => false, "content" => "", "ellipsis" => '');
+
+            $this->params = array(
+                "count" => 0,
+                "opt" => false,
+                "init" => false,
+                "content" => "",
+                "ellipsis" => '',
+                "paramCount" => substr_count($props["innerXml"], "<methodparam")
+            );
+
             $id = (isset($attrs[Reader::XMLNS_XML]["id"]) ? ' id="'.$attrs[Reader::XMLNS_XML]["id"].'"' : '');
             return '<div class="'.$name.' dc-description"'.$id.'>';
         }
+
         $content = "";
-        $content .= " )";
+        if ($this->params["paramCount"] > 3) {
+            $content .= "<br>";
+        }
+
+        $content .= ")";
 
         $content .= "</div>\n";
 
@@ -1025,7 +1039,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_void($open, $name, $attrs, $props) {
         if ($props['sibling'] == 'methodname') {
-            return ' (';
+            return '(';
         } else {
             return '<span class="type"><span class="type void">void</span></span>';
         }
@@ -1034,8 +1048,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_methodparam($open, $name, $attrs) {
         if ($open) {
             $content = '';
-                if ($this->params["count"] == 0) {
-                    $content .= " (";
+                if ($this->params["count"] === 0) {
+                    $content .= "(";
+                    if ($this->params["paramCount"] > 3) {
+                        $content .= "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
+                    }
                 }
                 if (isset($attrs[Reader::XMLNS_DOCBOOK]["choice"]) && $attrs[Reader::XMLNS_DOCBOOK]["choice"] == "opt") {
                     $this->params["opt"] = true;
@@ -1044,8 +1061,13 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 }
                 if ($this->params["count"]) {
                     $content .= ",";
+                    if ($this->params["paramCount"] > 3) {
+                        $content .= "<br>&nbsp;&nbsp;&nbsp;&nbsp;";
+                    } else {
+                        $content .= " ";
+                    }
                 }
-                $content .= ' <span class="methodparam">';
+                $content .= '<span class="methodparam">';
                 ++$this->params["count"];
                 if (isset($attrs[Reader::XMLNS_DOCBOOK]["rep"]) && $attrs[Reader::XMLNS_DOCBOOK]["rep"] == "repeat") {
                     $this->params["ellipsis"] = '...';
