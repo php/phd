@@ -55,7 +55,6 @@ class Reader_Partial extends Reader
         static $currently_skipping = false;
         static $arrayPartial = array();
         static $arraySkip = array();
-        $ignore = false;
 
         while($ret = parent::read()) {
             $id = $this->getAttributeNs("id", self::XMLNS_XML);
@@ -83,13 +82,11 @@ class Reader_Partial extends Reader
 
                     unset($this->skip[$id]);
                     $currently_skipping = false;
-                    $ignore = false;
                     array_pop($arraySkip);
                 } else {
                     v("Skipping %s...", $id, VERBOSE_PARTIAL_READING);
 
                     $currently_skipping = $id;
-                    $ignore = true;
                     $arraySkip[] = $id;
                 }
             } elseif ($currently_skipping && $this->skip[$currently_skipping]) {
@@ -99,7 +96,6 @@ class Reader_Partial extends Reader
                     v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
                 }
 
-                $ignore = true;
             } elseif ($currently_reading && $this->partial[$currently_reading]) {
                 if ($currentPartial == $id) {
                     v("Rendering child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
@@ -120,7 +116,6 @@ class Reader_Partial extends Reader
                         parent::next();
                     }
                 }
-                $ignore = true;
             }
         }
         return $ret;

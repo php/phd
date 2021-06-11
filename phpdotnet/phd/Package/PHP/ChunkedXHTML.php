@@ -2,8 +2,6 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
-    private $nav = "";
-
     public function __construct() {
         parent::__construct();
         $this->registerFormatName("PHP-Chunked-XHTML");
