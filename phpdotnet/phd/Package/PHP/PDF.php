@@ -256,7 +256,7 @@ class Package_PHP_PDF extends Package_Generic_PDF {
     public function format_type_text($type, $tagname) {
         $type = trim(preg_replace('/[ \n\t]+/', ' ', $type));
         $t = strtolower($type);
-        $href = $fragment = "";
+        $href = "";
 
         switch($t) {
         case "bool":
@@ -284,7 +284,6 @@ class Package_PHP_PDF extends Package_Generic_PDF {
             break;
         case "mixed":
             $href = "language.types.declarations";
-            $fragment = "language.types.declarations.$t";
             break;
         default:
             /* Check if its a classname. */
