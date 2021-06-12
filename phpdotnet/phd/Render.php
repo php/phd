@@ -160,7 +160,12 @@ class Render extends ObjectStorage
 
                 case \XMLReader::WHITESPACE: /* {{{ */
                 case \XMLReader::SIGNIFICANT_WHITESPACE:
-                            /* WS is always WS */
+                /* The following if is to skip whitespace before closing semicolon after property name */
+                if (in_array($this->STACK[$r->depth - 1], ["fieldsynopsis"], true) &&
+                    in_array($this->STACK[$r->depth], ["varname"], true)
+                ) {
+                    break;
+                }
                 $retval  = $r->value;
                 foreach($this as $format) {
                     $format->appendData($retval);
