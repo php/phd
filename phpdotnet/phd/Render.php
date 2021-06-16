@@ -70,12 +70,18 @@ class Render extends ObjectStorage
                     $r->moveToElement();
                 }
 
+                $innerXml = null;
+                if ($r->name === "methodsynopsis" && $open) {
+                    $innerXml = $r->readInnerXml();
+                }
+
                 $props    = array(
                     "empty"    => $r->isEmptyElement,
                     "isChunk"  => false,
                     "lang"     => $r->xmlLang,
                     "ns"       => $r->namespaceURI,
                     "sibling"  => $lastdepth >= $depth ? $this->STACK[$depth] : "",
+                    "innerXml"  => $innerXml,
                     "depth"    => $depth,
                 );
 
@@ -160,10 +166,16 @@ class Render extends ObjectStorage
 
                 case \XMLReader::WHITESPACE: /* {{{ */
                 case \XMLReader::SIGNIFICANT_WHITESPACE:
-                /* The following if is to skip whitespace before closing semicolon after property name */
-                if (in_array($this->STACK[$r->depth - 1], ["fieldsynopsis"], true) &&
-                    in_array($this->STACK[$r->depth], ["varname"], true)
+
+                /* The following if is to skip unnecessary whitespaces in the parameter list */
+                if (in_array($this->STACK[$r->depth - 1], ['methodsynopsis', 'constructorsynopsis', 'destructorsynopsis'], true) &&
+                    in_array($this->STACK[$r->depth], ["methodname", "methodparam", "type", "void"], true)
                 ) {
+                    break;
+                }
+
+                /* The following if is to skip whitespace before closing semicolon after property name */
+                if ($this->STACK[$r->depth - 1] === "fieldsynopsis" && $this->STACK[$r->depth] === "varname") {
                     break;
                 }
                 $retval  = $r->value;
