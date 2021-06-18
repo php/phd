@@ -170,7 +170,7 @@ class Options_Handler implements Options_Interface
     public function option_partial($k, $v)
     {
         $render_ids = Config::render_ids();
-        foreach((array)$v as $i => $val) {
+        foreach((array)$v as $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
                 list($val, $recursive) = explode("=", $val);
@@ -215,7 +215,7 @@ class Options_Handler implements Options_Interface
     public function option_skip($k, $v)
     {
         $skip_ids = Config::skip_ids();
-        foreach((array)$v as $i => $val) {
+        foreach((array)$v as $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
                 list($val, $recursive) = explode("=", $val);
@@ -261,7 +261,7 @@ class Options_Handler implements Options_Interface
     {
         static $verbose = 0;
 
-        foreach((array)$v as $i => $val) {
+        foreach((array)$v as $val) {
             foreach(explode("|", $val) as $const) {
                 if (defined($const)) {
                     $verbose |= (int)constant($const);

@@ -448,14 +448,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
         return "";
     }
-    /*
-    public function format_refname($open, $name, $attrs, $props) {
-        if ($open) {
-            return "\n.SH " . $this->autogen($name, $props["lang"]) . "\n";
-        }
-        return "";
-    }
-    */
+
     public function format_refname_text($value, $tag) {
         $this->cchunk["funcname"][] = $this->toValidName(trim($value));
 

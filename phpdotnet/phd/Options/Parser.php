@@ -81,7 +81,7 @@ class Options_Parser
             $checkArgv = explode('=', $argv[$i]);
             if (substr($checkArgv[0], 0, 2) == '--') {
                 if (!in_array(substr($checkArgv[0], 2), $long)) {
-                    trigger_error('Invalid long option ' . $argv[$i] . ' ' . $check, E_USER_ERROR);
+                    trigger_error('Invalid long option ' . $argv[$i], E_USER_ERROR);
                 }
             } elseif (substr($checkArgv[0], 0, 1) == '-') {
                 if (!in_array(substr($checkArgv[0], 1), $short)) {
