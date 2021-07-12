@@ -150,7 +150,7 @@ abstract class Format extends ObjectStorage
         $this->sqlite->query('SELECT example(docbook_id) FROM ids WHERE element=\'example\' OR element=\'informalexample\'');
     }
 
-    public function SQLiteIndex(&$context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next, $chunk) {
+    public function SQLiteIndex($context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next, $chunk) {
         $this->indexes[$id] = array(
             "docbook_id" => $id,
             "filename"   => $filename,
@@ -164,7 +164,7 @@ abstract class Format extends ObjectStorage
         );
     }
 
-    public function SQLiteChildren(&$context, $index, $id, $parent)
+    public function SQLiteChildren($context, $index, $id, $parent)
     {
         if (!isset($this->children[$parent])
             || !is_array($this->children[$parent])
@@ -174,23 +174,23 @@ abstract class Format extends ObjectStorage
         $this->children[$parent][] = $id;
     }
 
-    public function SQLiteRefname(&$context, $index, $id, $sdesc) {
+    public function SQLiteRefname($context, $index, $id, $sdesc) {
         $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), html_entity_decode($sdesc, ENT_QUOTES, 'UTF-8')));
         $this->refs[$ref] = $id;
     }
 
-    public function SQLiteVarname(&$context, $index, $id, $sdesc) {
+    public function SQLiteVarname($context, $index, $id, $sdesc) {
         $this->vars[$sdesc] = $id;
     }
 
-    public function SQLiteClassname(&$context, $index, $id, $sdesc) {
+    public function SQLiteClassname($context, $index, $id, $sdesc) {
         $this->classes[strtolower($sdesc)] = $id;
     }
-    public function SQLiteExample(&$context, $index, $id) {
+    public function SQLiteExample($context, $index, $id) {
         $this->examples[] = $id;
     }
 
-    public static function SQLiteFinal(&$context) {
+    public static function SQLiteFinal($context) {
         return $context;
     }
 
