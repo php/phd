@@ -155,8 +155,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         "refsynopsisdiv"               => null,
     );
 
-    /** @var int|null Number of already formatted types in the current union type */
+    /** @var int|null Number of already formatted types in the current compound type */
     private $num_types = null;
+
+    /** @var string|null The character to separate the current compound type, i.e. "|" or "&" */
+    private $type_separator = null;
 
     protected $pihandlers = array(
         'dbhtml'        => 'PI_DBHTMLHandler',
@@ -315,14 +318,16 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->num_types = 0;
+                $this->type_separator = $attrs[Reader::XMLNS_DOCBOOK]["class"] === "union" ? "|" : "&";
             } elseif (isset($this->num_types)) {
-                if ($this->num_types > 0) $retval .= '|';
+                if ($this->num_types > 0) $retval .= $this->type_separator;
                 $this->num_types++;
             }
             $retval .= '<span class="type">';
         } else {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->num_types = null;
+                $this->type_separator = null;
             }
             $retval .= '</span>';
         }
@@ -443,7 +448,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 }
                 $types[] = '<span class="type">' . $formatted_type . '</span>';
             }
-            $type = implode('|', $types);
+            $type = implode($this->type_separator, $types);
             if (count($types) > 1) {
                 $type = '<span class="type">' . $type . '</span>';
             }
