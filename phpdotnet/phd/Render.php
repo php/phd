@@ -178,6 +178,12 @@ class Render extends ObjectStorage
                 if ($this->STACK[$r->depth - 1] === "fieldsynopsis" && $this->STACK[$r->depth] === "varname") {
                     break;
                 }
+
+                /* The following if is to skip whitespace inside type elements */
+                if ($this->STACK[$r->depth - 1] === "type") {
+                    break;
+                }
+
                 $retval  = $r->value;
                 foreach($this as $format) {
                     $format->appendData($retval);
