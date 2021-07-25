@@ -174,13 +174,21 @@ class Render extends ObjectStorage
                     break;
                 }
 
-                /* The following if is to skip whitespace before closing semicolon after property name */
-                if ($this->STACK[$r->depth - 1] === "fieldsynopsis" && $this->STACK[$r->depth] === "varname") {
+                /* The following if is to skip whitespace before closing semicolon after property/class constant */
+                if ($this->STACK[$r->depth - 1] === "fieldsynopsis" && (in_array($this->STACK[$r->depth], ["varname", "initializer"], true))) {
                     break;
                 }
 
                 /* The following if is to skip whitespace inside type elements */
                 if ($this->STACK[$r->depth - 1] === "type") {
+                    break;
+                }
+
+                /* The following if is to skip unnecessary whitespaces in the implements list */
+                if (
+                    ($this->STACK[$r->depth - 1] === 'classsynopsisinfo' && $this->STACK[$r->depth] === 'oointerface') ||
+                    ($this->STACK[$r->depth - 1] === 'oointerface' && $this->STACK[$r->depth] === 'interfacename')
+                ) {
                     break;
                 }
 
