@@ -70,7 +70,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'type'                  => array(
             /* DEFAULT */          'format_type',
-            'methodsynopsis'    => 'format_suppressed_tags',
+            'methodsynopsis'    => 'format_methodsynopsis_type',
             'type'              => array(
                 /* DEFAULT */       'format_type',
                 'methodsynopsis' => 'format_suppressed_tags',
@@ -160,6 +160,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     /** @var string|null The character to separate the current compound type, i.e. "|" or "&" */
     private $type_separator = null;
+
+    /** @var bool|null Decides whether the union type can be displayed by using "?" */
+    private $simple_nullable = null;
 
     protected $pihandlers = array(
         'dbhtml'        => 'PI_DBHTMLHandler',
@@ -313,26 +316,55 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $retval = '<p class="verinfo">(' .(htmlspecialchars($verinfo, ENT_QUOTES, "UTF-8")). ')</p>';
         return $retval;
     }
+
     public function format_type($open, $tag, $attrs, $props) {
         $retval = '';
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->num_types = 0;
-                $this->type_separator = $attrs[Reader::XMLNS_DOCBOOK]["class"] === "union" ? "|" : "&";
+                $this->simple_nullable = false;
+                $isUnionType = $attrs[Reader::XMLNS_DOCBOOK]["class"] === "union";
+                if (
+                    $isUnionType &&
+                    substr_count($props["innerXml"], '<type xmlns="http://docbook.org/ns/docbook">') === 2 &&
+                    strpos($props["innerXml"], '<type xmlns="http://docbook.org/ns/docbook">null</type>') !== false
+                ) {
+                    $this->simple_nullable = true;
+                    $this->type_separator = "";
+                    $retval .= '<span class="type">?</span>';
+                } else {
+                    $this->type_separator = $isUnionType ? "|" : "&";
+                }
             } elseif (isset($this->num_types)) {
-                if ($this->num_types > 0) $retval .= $this->type_separator;
+                if ($this->num_types > 0) {
+                    $retval .= $this->type_separator;
+                }
+
                 $this->num_types++;
             }
+
             $retval .= '<span class="type">';
         } else {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->num_types = null;
                 $this->type_separator = null;
+                $this->simple_nullable = null;
             }
             $retval .= '</span>';
         }
+
         return $retval;
     }
+
+    public function format_methodsynopsis_type($open, $tag, $attrs)
+    {
+        if ($open && isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
+            $this->cchunk["methodsynopsis"]["type_separator"] = $attrs[Reader::XMLNS_DOCBOOK]["class"] === "union" ? "|" : "&";
+        }
+
+        return "";
+    }
+
     public function format_refpurpose($open, $tag, $attrs, $props) {
         if ($open) {
             $retval = "";
@@ -441,18 +473,34 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
         if ($this->cchunk["methodsynopsis"]["returntypes"]) {
             $types = [];
+            $this->type_separator = $this->cchunk["methodsynopsis"]["type_separator"];
+
+            if (
+                $this->type_separator === "|" &&
+                count($this->cchunk["methodsynopsis"]["returntypes"]) === 2 &&
+                in_array("null", $this->cchunk["methodsynopsis"]["returntypes"], true)
+            ) {
+                $this->simple_nullable = true;
+                $this->type_separator = "";
+                $types[] = '<span class="type">?</span>';
+            }
+
             foreach ($this->cchunk["methodsynopsis"]["returntypes"] as $return_type) {
                 $formatted_type = self::format_type_if_object_or_pseudo_text($return_type, "type");
                 if ($formatted_type === false) {
                     $formatted_type = $return_type;
                 }
-                $types[] = '<span class="type">' . $formatted_type . '</span>';
+                if ($formatted_type !== "") {
+                    $types[] = '<span class="type">' . $formatted_type . '</span>';
+                }
             }
-            $type = implode("|", $types);
+
+            $type = implode($this->type_separator, $types);
             if (count($types) > 1) {
                 $type = '<span class="type">' . $type . '</span>';
             }
             $content .= ': ' . $type;
+            $this->simple_nullable = null;
         }
 
         $content .= "</div>\n";
@@ -463,13 +511,19 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_type_methodsynopsis_text($type, $tagname) {
         $this->cchunk["methodsynopsis"]["returntypes"][] = $type;
+
         return "";
     }
 
     public function format_type_if_object_or_pseudo_text($type, $tagname) {
+        if (strtolower($type) === "null" && $this->simple_nullable) {
+            return "";
+        }
+
         if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
             return false;
         }
+
         return self::format_type_text($type, $tagname);
     }
 
@@ -495,6 +549,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         case "object":
         case "resource":
         case "null":
+            if ($this->simple_nullable) {
+                return "";
+            }
         case "callable":
         case "iterable":
             $href = "language.types.$t";

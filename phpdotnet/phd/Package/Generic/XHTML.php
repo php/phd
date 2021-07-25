@@ -428,6 +428,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         ),
         "methodsynopsis"           => array(
             "returntypes"           => [],
+            "type_separator"        => null,
         ),
         "co"                       => 0,
         "callouts"                 => 0,
