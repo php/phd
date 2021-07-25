@@ -163,7 +163,13 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             /* DEFAULT */          'span',
             'classsynopsisinfo'    => 'format_classsynopsisinfo_oointerface',
         ),
-        'interfacename'         => 'span',
+        'interfacename'         => array(
+            /* DEFAULT */          'span',
+            'oointerface'       => array(
+                /* DEFAULT */          'span',
+                'classsynopsisinfo' => 'format_classsynopsisinfo_oointerface_interfacename',
+            ),
+        ),
         'exceptionname'         => 'span',
         'option'                => 'format_option',
         'orderedlist'           => 'format_orderedlist',
@@ -887,32 +893,57 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_classsynopsisinfo_oointerface($open, $name, $attrs) {
         if ($open) {
+            if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
+                return '<span class="' . $name . '">';
+            }
+
             if ($this->cchunk["classsynopsisinfo"]["implements"] === false) {
                 $this->cchunk["classsynopsisinfo"]["implements"] = true;
                 return '<span class="'.$name.'"><span class="modifier">implements</span> ';
             }
+
             return '<span class="'.$name.'">, ';
         }
 
         return "</span>";
     }
+
     public function format_classsynopsisinfo_ooclass_classname($open, $name, $attrs)
     {
         if ($open) {
             if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
                 $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
-                return ' class <strong class="'.$name.'">';
+                return '<span class="modifier">class</span> <strong class="'.$name.'">';
             }
+
             return '<strong class="'.$name.'"> ';
         }
+
         return "</strong>";
     }
-    public function format_classsynopsisinfo($open, $name, $attrs) {
+
+    public function format_classsynopsisinfo_oointerface_interfacename($open, $name, $attrs)
+    {
+        if ($open) {
+            if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
+                $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
+                return '<span class="modifier">interface</span> <strong class="classname">';
+            }
+
+            return ' <strong class="'.$name.'">';
+        }
+
+        return "</strong>";
+    }
+
+    public function format_classsynopsisinfo($open, $name, $attrs)
+    {
         $this->cchunk["classsynopsisinfo"] = $this->dchunk["classsynopsisinfo"];
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
                 return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
             }
+
             return '<div class="'.$name.'">';
         }
 

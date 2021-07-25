@@ -7,7 +7,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'appendix'              => 'format_container_chunk',
         'article'               => 'format_container_chunk',
         'book'                  => 'format_root_chunk',
-        'classname'             => 'format_suppressed_tags',
+        'classname'             => array(
+            /* DEFAULT */          'span',
+            'ooclass'           => array(
+                /* DEFAULT */      'strong',
+                'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
+            ),
+        ),
         'chapter'               => 'format_container_chunk',
         'colophon'              => 'format_chunk',
         'function'              => 'format_function',
