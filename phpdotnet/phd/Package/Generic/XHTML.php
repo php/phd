@@ -888,7 +888,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($open) {
             if ($this->cchunk["classsynopsisinfo"]["implements"] === false) {
                 $this->cchunk["classsynopsisinfo"]["implements"] = true;
-                return '<span class="'.$name.'">implements ';
+                return '<span class="'.$name.'"><span class="modifier">implements</span> ';
             }
             return '<span class="'.$name.'">, ';
         }
