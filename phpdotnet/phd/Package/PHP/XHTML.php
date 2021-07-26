@@ -482,7 +482,12 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             ) {
                 $this->simple_nullable = true;
                 $this->type_separator = "";
-                $types[] = '<span class="type">?</span>';
+
+                if ($this->chunked) {
+                    $types[] = '<a href="language.types.null' . $this->getExt(). '" class="type null">?</a>';
+                } else {
+                    $types[] = '<a href="#language.types.null" class="type null">?</a>';
+                }
             }
 
             foreach ($this->cchunk["methodsynopsis"]["returntypes"] as $return_type) {
