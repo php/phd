@@ -515,18 +515,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return "";
     }
 
-    public function format_type_if_object_or_pseudo_text($type, $tagname) {
-        if (strtolower($type) === "null" && $this->simple_nullable) {
-            return "";
-        }
-
-        if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
-            return false;
-        }
-
-        return self::format_type_text($type, $tagname);
-    }
-
     public function format_type_text($type, $tagname) {
         $t = strtr(strtolower($type), ["_" => "-", "\\" => "-"]);
         $href = $fragment = "";
