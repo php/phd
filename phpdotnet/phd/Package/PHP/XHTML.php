@@ -331,7 +331,12 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 ) {
                     $this->simple_nullable = true;
                     $this->type_separator = "";
-                    $retval .= '<span class="type">?</span>';
+
+                    if ($this->chunked) {
+                        $retval .= '<a href="language.types.null' . $this->getExt(). '" class="type null">?</a>';
+                    } else {
+                        $retval .= '<a href="#language.types.null" class="type null">?</a>';
+                    }
                 } else {
                     $this->type_separator = $isUnionType ? "|" : "&";
                 }
