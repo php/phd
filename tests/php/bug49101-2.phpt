@@ -8,7 +8,8 @@ use phpdotnet\phd\Tests\TestRender;
 
 require_once __DIR__ . "/../setup.php";
 
-$formatclass = "TestBigXHTML";
+/* Need partial namespaced Class therefore we cannot use ::class */
+$formatclass = TestBigXHTML::class;
 $xml_file = __DIR__ . "/data/bug49101-1.xml";
 
 $opts = array(

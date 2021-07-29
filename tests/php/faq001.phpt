@@ -8,7 +8,7 @@ use phpdotnet\phd\Tests\TestRender;
 
 require_once __DIR__ . "/../setup.php";
 
-$formatclass = "TestChunkedXHTML";
+$formatclass = TestChunkedXHTML::class;
 $xml_file = __DIR__ . "/data/faq001.xml";
 
 $opts = array(

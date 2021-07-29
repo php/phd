@@ -8,7 +8,7 @@ use phpdotnet\phd\Tests\TestRender;
 
 require_once __DIR__ . "/../setup.php";
 
-$formatclass = "TestChunkedXHTML";
+$formatclass = TestChunkedXHTML::class;
 $xml_file = __DIR__ . "/data/bug49101-1.xml";
 
 $opts = array(
