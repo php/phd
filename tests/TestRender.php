@@ -1,5 +1,10 @@
 <?php
-namespace phpdotnet\phd;
+namespace phpdotnet\phd\Tests;
+
+use phpdotnet\phd\Config;
+use phpdotnet\phd\Index;
+use phpdotnet\phd\Reader;
+use phpdotnet\phd\Render;
 
 class TestRender {
     protected $format;

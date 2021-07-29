@@ -30,5 +30,10 @@
         "psr-4": {
             "phpdotnet\\phd\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "phpdotnet\\phd\\Tests\\": "tests/"
+        }
     }
 }

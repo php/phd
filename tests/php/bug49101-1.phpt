@@ -2,11 +2,11 @@
 Bug #49101 - Thick border again
 --FILE--
 <?php
-namespace phpdotnet\phd;
+namespace phpdotnet\phd\Tests\php;
+
+use phpdotnet\phd\Tests\TestRender;
 
 require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/../TestRender.php";
-require_once __DIR__ . "/TestChunkedXHTML.php";
 
 $formatclass = "TestChunkedXHTML";
 $xml_file = __DIR__ . "/data/bug49101-1.xml";
@@ -19,7 +19,7 @@ $opts = array(
 );
 
 $extra = array(
-    "lang_dir" => __DIR__ . "/../../phpdotnet/phd/data/langs/",
+    "lang_dir" => __DIR__ . "/../../src/data/langs/",
     "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
     "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
 );
