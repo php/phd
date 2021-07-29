@@ -41,9 +41,8 @@ if (!file_exists(Config::output_dir())) {
 // This needs to be moved. Preferably into the PHP package.
 if (!$conf) {
     Config::init(array(
-        "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
-                        . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
-                        . "langs" . DIRECTORY_SEPARATOR,
+        "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR
+            . "data" . DIRECTORY_SEPARATOR . "langs" . DIRECTORY_SEPARATOR,
         "phpweb_version_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
         "phpweb_acronym_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
     ));

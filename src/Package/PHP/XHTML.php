@@ -1,10 +1,12 @@
 <?php
 namespace phpdotnet\phd\Package\PHP;
 
+use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
 use phpdotnet\phd\Package\Generic\XHTML as GenericXHTML;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 abstract class XHTML extends GenericXHTML
 {

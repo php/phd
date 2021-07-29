@@ -7,6 +7,7 @@ use phpdotnet\phd\Format\Abstract\XHTML as AbstractXHTML;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\ReaderKeeper;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 abstract class XHTML extends AbstractXHTML {
     private $myelementmap = array( /* {{{ */
