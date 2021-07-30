@@ -6,6 +6,7 @@ use phpdotnet\phd\Format;
 use phpdotnet\phd\Format\Manpage as ManpageAbstract;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 class Manpage extends ManpageAbstract {
     const OPEN_CHUNK    = 0x01;

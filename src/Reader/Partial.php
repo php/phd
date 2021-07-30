@@ -3,6 +3,7 @@ namespace phpdotnet\phd\Reader;
 
 use phpdotnet\phd\Config;
 use phpdotnet\phd\Reader;
+use function phpdotnet\phd\v;
 
 class Partial extends Reader
 {

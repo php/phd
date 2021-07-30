@@ -4,6 +4,7 @@ namespace phpdotnet\phd\Package\Generic;
 use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 class ChunkedXHTML extends XHTML {
     public function __construct() {

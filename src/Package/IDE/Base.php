@@ -7,6 +7,7 @@ use phpdotnet\phd\Package\Generic\ChunkedXHTML;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\ReaderKeeper;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 abstract class Base extends Format {
     protected $elementmap = array(

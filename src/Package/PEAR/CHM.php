@@ -5,6 +5,7 @@ use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 class CHM extends ChunkedXHTML {
     const DEFAULT_FONT = "Arial,10,0";

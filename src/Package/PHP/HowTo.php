@@ -4,6 +4,7 @@ namespace phpdotnet\phd\Package\PHP;
 use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 class HowTo extends Web {
     private $nav = "";

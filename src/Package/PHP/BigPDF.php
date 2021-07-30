@@ -6,6 +6,7 @@ use phpdotnet\phd\Format;
 use phpdotnet\phd\Format\PdfWriter;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 class BigPDF extends PDF {
     public function __construct() {

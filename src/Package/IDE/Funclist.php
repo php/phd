@@ -5,6 +5,7 @@ use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 class Funclist extends Format {
     protected $elementmap   = array(

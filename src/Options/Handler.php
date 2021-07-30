@@ -2,6 +2,7 @@
 namespace phpdotnet\phd\Options;
 
 use phpdotnet\phd\Config;
+use function phpdotnet\phd\v;
 
 class Handler implements OptionsInterface
 {

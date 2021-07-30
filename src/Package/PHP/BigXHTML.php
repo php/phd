@@ -3,6 +3,7 @@ namespace phpdotnet\phd\Package\PHP;
 
 use phpdotnet\phd\Config;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 class BigXHTML extends XHTML {
     public function __construct() {

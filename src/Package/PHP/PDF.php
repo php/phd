@@ -7,6 +7,7 @@ use phpdotnet\phd\Format\PdfWriter;
 use phpdotnet\phd\Package\Generic\PDF as GenericPDF;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 class PDF extends GenericPDF
 {

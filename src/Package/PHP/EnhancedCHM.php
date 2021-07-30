@@ -2,6 +2,7 @@
 namespace phpdotnet\phd\Package\PHP;
 
 use phpdotnet\phd\Render;
+use function phpdotnet\phd\v;
 
 class EnhancedCHM extends CHM
 {
