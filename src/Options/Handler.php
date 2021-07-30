@@ -2,6 +2,8 @@
 namespace phpdotnet\phd\Options;
 
 use phpdotnet\phd\Config;
+use phpdotnet\phd\Format\Factory;
+use function phpdotnet\phd\term_color;
 use function phpdotnet\phd\v;
 
 class Handler implements OptionsInterface
@@ -295,7 +297,7 @@ class Handler implements OptionsInterface
 
         echo "Supported packages:\n";
         foreach ($packageList as $package) {
-            $formats = Format_Factory::createFactory($package)->getOutputFormats();
+            $formats = Factory::createFactory($package)->getOutputFormats();
             echo "\t" . $package . "\n\t\t" . implode("\n\t\t", $formats) . "\n";
         }
 
@@ -378,7 +380,7 @@ class Handler implements OptionsInterface
 
         $packageList = Config::getSupportedPackages();
         foreach ($packageList as $package) {
-            $version = Format_Factory::createFactory($package)->getPackageVersion();
+            $version = Factory::createFactory($package)->getPackageVersion();
             fprintf($output, "\t%s: %s\n", term_color($package, $color), term_color($version, $color));
         }
         fprintf($output, "%s\n", term_color('PHP Version: ' . phpversion(), $color));
