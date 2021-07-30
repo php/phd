@@ -62,15 +62,7 @@ class Highlighter
         }
 
         if ($role == 'php') {
-            try {
-                return highlight_string($text, 1);
-            } catch (\ParseException $e) {
-                v("Parse error while highlighting PHP code: %s\nText: %s", (string) $e, $text, E_USER_WARNING);
-
-                return '<pre class="'. ($role ? $role . 'code' : 'programlisting') .'">'
-                    . htmlspecialchars($text, ENT_QUOTES, 'UTF-8')
-                    . "</pre>\n";
-            }
+            return highlight_string($text, 1);
         } else {
             return '<pre class="'. ($role ? $role . 'code' : 'programlisting') .'">'
                 . htmlspecialchars($text, ENT_QUOTES, 'UTF-8')
