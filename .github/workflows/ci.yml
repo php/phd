@@ -1,0 +1,19 @@
+name: Smoke test
+on: [push, pull_request]
+jobs:
+  ubuntu:
+    strategy:
+      matrix:
+          version: ['5.6', '7.2', '7.4', '8.1']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PhD
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{matrix.version}}
+
+      - name: List packages and formats
+        run: php render.php --list
