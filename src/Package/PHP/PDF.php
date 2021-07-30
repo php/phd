@@ -3,7 +3,7 @@ namespace phpdotnet\phd\Package\PHP;
 
 use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
-use phpdotnet\phd\Format\Abstract\PdfWriter;
+use phpdotnet\phd\Format\PdfWriter;
 use phpdotnet\phd\Package\Generic\PDF as GenericPDF;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\Render;

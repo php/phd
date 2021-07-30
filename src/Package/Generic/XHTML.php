@@ -3,7 +3,7 @@ namespace phpdotnet\phd\Package\Generic;
 
 use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
-use phpdotnet\phd\Format\Abstract\XHTML as AbstractXHTML;
+use phpdotnet\phd\Format\XHTML as AbstractXHTML;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\ReaderKeeper;
 use phpdotnet\phd\Render;

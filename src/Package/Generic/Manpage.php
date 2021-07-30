@@ -3,7 +3,7 @@ namespace phpdotnet\phd\Package\Generic;
 
 use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
-use phpdotnet\phd\Format\Abstract\Manpage as ManpageAbstract;
+use phpdotnet\phd\Format\Manpage as ManpageAbstract;
 use phpdotnet\phd\Reader;
 use phpdotnet\phd\Render;
 

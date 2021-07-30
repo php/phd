@@ -1,5 +1,5 @@
 <?php
-namespace phpdotnet\phd\Format\Abstract;
+namespace phpdotnet\phd\Format;
 
 class PdfWriter {
     // Font type constants (for setFont())

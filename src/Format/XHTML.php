@@ -1,5 +1,5 @@
 <?php
-namespace phpdotnet\phd\Format\Abstract;
+namespace phpdotnet\phd\Format;
 
 use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;

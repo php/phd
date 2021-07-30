@@ -3,8 +3,8 @@ namespace phpdotnet\phd\Package\Generic;
 
 use phpdotnet\phd\Config;
 use phpdotnet\phd\Format;
-use phpdotnet\phd\Format\Abstract\PDF as AbstractPDF;
-use phpdotnet\phd\Format\Abstract\PdfWriter;
+use phpdotnet\phd\Format\PDF as AbstractPDF;
+use phpdotnet\phd\Format\PdfWriter;
 use phpdotnet\phd\Reader;
 
 abstract class PDF extends AbstractPDF {
