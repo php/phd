@@ -11,7 +11,6 @@ use phpdotnet\phd\Reader\Partial;
 define("__INSTALLDIR__", '@php_dir@' == '@'.'php_dir@' ? __DIR__ : '@php_dir@');
 
 require_once __INSTALLDIR__ . '/vendor/autoload.php';
-require __INSTALLDIR__ . '/src/functions.php';
 
 $conf = array();
 if (file_exists("phd.config.php")) {

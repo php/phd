@@ -27,6 +27,7 @@
         "easybook/geshi": "For using GeSHi as code highlighter"
     },
     "autoload": {
+        "files": ["src/functions.php"],
         "psr-4": {
             "phpdotnet\\phd\\": "src/"
         }
