@@ -913,13 +913,17 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($open) {
             if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
                 $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
-                return '<span class="modifier">class</span> <strong class="'.$name.'">';
+                return '<span class="modifier">class</span> ';
             }
 
-            return '<strong class="'.$name.'"> ';
+            return ' ';
         }
 
-        return "</strong>";
+        if ($this->cchunk["classsynopsisinfo"]["ooclass"] === true) {
+            $this->cchunk["classsynopsisinfo"]["ooclass"] = null;
+        }
+
+        return "";
     }
 
     public function format_classsynopsisinfo_oointerface_interfacename($open, $name, $attrs)
@@ -927,13 +931,17 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($open) {
             if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
                 $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
-                return '<span class="modifier">interface</span> <strong class="classname">';
+                return '<span class="modifier">interface</span> ';
             }
 
-            return ' <strong class="'.$name.'">';
+            return ' ';
         }
 
-        return "</strong>";
+        if ($this->cchunk["classsynopsisinfo"]["ooclass"] === true) {
+            $this->cchunk["classsynopsisinfo"]["ooclass"] = null;
+        }
+
+        return "";
     }
 
     public function format_classsynopsisinfo($open, $name, $attrs)

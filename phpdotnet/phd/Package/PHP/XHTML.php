@@ -10,7 +10,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'classname'             => array(
             /* DEFAULT */          'span',
             'ooclass'           => array(
-                /* DEFAULT */      'strong',
+                /* DEFAULT */      'format_suppressed_tags',
                 'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
             ),
         ),
