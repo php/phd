@@ -1,10 +1,15 @@
 <?php
-namespace phpdotnet\phd;
+namespace phpdotnet\phd\Tests;
+
+use phpdotnet\phd\Config;
+use phpdotnet\phd\Index;
+use phpdotnet\phd\Reader;
+use phpdotnet\phd\Render;
 
 class TestRender {
     protected $format;
 
-    public function __construct($formatclass, $opts, $extra = array()) {
+    public function __construct($formatClass, $opts, $extra = array()) {
         foreach ($opts as $k => $v) {
             $method = "set_$k";
             Config::$method($v);
@@ -12,8 +17,7 @@ class TestRender {
         if (count($extra) != 0) {
             Config::init($extra);
         }
-        $classname = __NAMESPACE__ . "\\" . $formatclass;
-        $this->format = new $classname();
+        $this->format = new $formatClass();
     }
 
     public function run() {

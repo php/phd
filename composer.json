@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.6",
         "ext-dom": "*",
         "ext-sqlite3": "*",
         "ext-xmlreader": "*"
@@ -27,8 +27,14 @@
         "easybook/geshi": "For using GeSHi as code highlighter"
     },
     "autoload": {
-        "psr-0": {
-            "phpdotnet\\": "."
+        "files": ["src/functions.php"],
+        "psr-4": {
+            "phpdotnet\\phd\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "phpdotnet\\phd\\Tests\\": "tests/"
         }
     }
 }

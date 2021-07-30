@@ -2,13 +2,14 @@
 Bug #49101 - Thick border again - Big XHTML
 --FILE--
 <?php
-namespace phpdotnet\phd;
+namespace phpdotnet\phd\Tests\php;
+
+use phpdotnet\phd\Tests\TestRender;
 
 require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/../TestRender.php";
-require_once __DIR__ . "/TestBigXHTML.php";
 
-$formatclass = "TestBigXHTML";
+/* Need partial namespaced Class therefore we cannot use ::class */
+$formatclass = TestBigXHTML::class;
 $xml_file = __DIR__ . "/data/bug49101-1.xml";
 
 $opts = array(
@@ -19,7 +20,7 @@ $opts = array(
 );
 
 $extra = array(
-    "lang_dir" => __DIR__ . "/../../phpdotnet/phd/data/langs/",
+    "lang_dir" => __DIR__ . "/../../src/data/langs/",
     "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
     "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
 );

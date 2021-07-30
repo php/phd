@@ -4,13 +4,16 @@ namespace phpdotnet\phd;
 
 // @php_dir@ gets replaced by pear with the install dir. use __DIR__ when
 // running from SVN
+use phpdotnet\phd\Format\Factory;
+use phpdotnet\phd\Options\Parser;
+use phpdotnet\phd\Reader\Partial;
+
 define("__INSTALLDIR__", '@php_dir@' == '@'.'php_dir@' ? __DIR__ : '@php_dir@');
 
-require __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
-require __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
+require_once __INSTALLDIR__ . '/vendor/autoload.php';
 
-spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
-
+$olderrrep = error_reporting();
+error_reporting($olderrrep | VERBOSE_DEFAULT);
 
 $conf = array();
 if (file_exists("phd.config.php")) {
@@ -22,7 +25,7 @@ if (file_exists("phd.config.php")) {
     Config::init(array());
 }
 
-Options_Parser::getopt();
+Parser::getopt();
 
 /* If no docbook file was passed, die */
 if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
@@ -40,9 +43,8 @@ if (!file_exists(Config::output_dir())) {
 // This needs to be moved. Preferably into the PHP package.
 if (!$conf) {
     Config::init(array(
-        "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
-                        . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
-                        . "langs" . DIRECTORY_SEPARATOR,
+        "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR
+            . "data" . DIRECTORY_SEPARATOR . "langs" . DIRECTORY_SEPARATOR,
         "phpweb_version_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
         "phpweb_acronym_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
     ));
@@ -62,7 +64,7 @@ function make_reader() {
     $idlist = Config::render_ids() + Config::skip_ids();
     if (!empty($idlist)) {
         v("Running partial build", VERBOSE_RENDER_STYLE);
-        $reader = new Reader_Partial();
+        $reader = new Partial();
     } else {
         v("Running full build", VERBOSE_RENDER_STYLE);
         $reader = new Reader();
@@ -97,7 +99,7 @@ if (Index::requireIndexing()) {
 }
 
 foreach((array)Config::package() as $package) {
-    $factory = Format_Factory::createFactory($package);
+    $factory = Factory::createFactory($package);
 
     // Default to all output formats specified by the package
     if (count(Config::output_format()) == 0) {
