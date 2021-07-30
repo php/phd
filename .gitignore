@@ -1,6 +1,5 @@
 output
 tags
-vendor
 *.swp
 *.tgz
 *.tar
