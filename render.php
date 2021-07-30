@@ -12,6 +12,9 @@ define("__INSTALLDIR__", '@php_dir@' == '@'.'php_dir@' ? __DIR__ : '@php_dir@');
 
 require_once __INSTALLDIR__ . '/vendor/autoload.php';
 
+$olderrrep = error_reporting();
+error_reporting($olderrrep | VERBOSE_DEFAULT);
+
 $conf = array();
 if (file_exists("phd.config.php")) {
     $conf = include "phd.config.php";

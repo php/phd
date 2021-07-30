@@ -32,9 +32,6 @@ define('VERBOSE_WARNINGS',               ((VERBOSE_OLD_LIBXML  << 1) - 1) & ~VER
 define('VERBOSE_ALL',                    (VERBOSE_OLD_LIBXML   << 1) - 1);
 define('VERBOSE_DEFAULT',                (VERBOSE_ALL^(VERBOSE_PARTIAL_CHILD_READING|VERBOSE_CHUNK_WRITING|VERBOSE_WARNINGS|VERBOSE_TOC_WRITING)));
 
-$olderrrep = error_reporting();
-error_reporting($olderrrep | VERBOSE_DEFAULT);
-
 /* {{{ Print info messages: v("printf-format-text" [, $arg1, ...], $verbose-level) */
 // trigger_error() only accepts E_USER_* errors :(
 function v($msg, $errno) {

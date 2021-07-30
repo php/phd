@@ -9,6 +9,9 @@ define('DS', DIRECTORY_SEPARATOR);
 
 require __INSTALLDIR__ . DS . 'vendor' . DS . 'autoload.php';
 
+$olderrrep = error_reporting();
+error_reporting($olderrrep | VERBOSE_DEFAULT);
+
 //FIXME Remove this call to Config
 Config::init(array());
 
