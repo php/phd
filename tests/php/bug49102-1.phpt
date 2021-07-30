@@ -42,20 +42,20 @@ Content:
         <h2 class="title">Class synopsis</h2>
 
     <div class="classsynopsis">
-        <div class="ooclass"></div>
+        <div class="ooclass"><strong class="classname"></strong></div>
 
         <div class="classsynopsisinfo">
             <span class="ooclass">
-                <strong class="classname">SplStack</strong>
+                <span class="modifier">class</span> <strong class="classname"><strong class="classname">SplStack</strong></strong>
             </span>
 
              <span class="ooclass">
                 <span class="modifier">extends</span>
-                <strong class="classname">SplDoublyLinkedList</strong>
+                <strong class="classname"> <strong class="classname">SplDoublyLinkedList</strong></strong>
             </span>
 
             <span class="oointerface"><span class="modifier">implements</span> 
-                <span class="interfacename"><strong class="interfacename">Iterator</strong></span></span><span class="oointerface">, <span class="interfacename"><strong class="interfacename">ArrayAccess</strong></span></span><span class="oointerface">, <span class="interfacename"><strong class="interfacename">Countable</strong></span></span> {</div>
+                 <strong class="interfacename"><strong class="interfacename">Iterator</strong></strong></span><span class="oointerface">,  <strong class="interfacename"><strong class="interfacename">ArrayAccess</strong></strong></span><span class="oointerface">,  <strong class="interfacename"><strong class="interfacename">Countable</strong></strong></span> {</div>
 
         <div class="classsynopsisinfo classsynopsisinfo_comment">/* Methods */</div>
         <div class="constructorsynopsis dc-description">
