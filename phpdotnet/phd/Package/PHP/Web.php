@@ -2,6 +2,9 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_Web extends Package_PHP_XHTML {
+
+    protected $sources = array();
+
     public function __construct() {
         parent::__construct();
         $this->registerFormatName("PHP-Web");
@@ -72,6 +75,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
 
         case Render::INIT:
             $this->loadVersionAcronymInfo();
+            $this->loadSourcesInfo();
             $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
             $this->postConstruct();
             if (file_exists($this->getOutputDir())) {
@@ -176,6 +180,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
             "prev" => $prev,
             "next" => $next,
             "alternatives" => $this->cchunk["alternatives"],
+            "source" => $this->sourceInfo($id),
         );
         if ($this->getChildren($id)) {
             $lang = Config::language();
@@ -221,6 +226,49 @@ manual_header();
         v("Index written", VERBOSE_FORMAT_RENDERING);
     }
 
+    public function loadSourcesInfo() {
+        $this->sources = self::generateSourcesInfo(Config::phpweb_sources_filename());
+    }
+
+    public static function generateSourcesInfo($filename) {
+        static $info;
+        if ($info) {
+            return $info;
+        }
+        if (!is_file($filename)) {
+            v("Can't find sources file (%s), skipping!", $filename, E_USER_NOTICE);
+            return array();
+        }
+
+        $r = new \XMLReader;
+        if (!$r->open($filename)) {
+            v("Can't open the sources file (%s)", $filename, E_USER_ERROR);
+        }
+        $info = array();
+        $r->read();
+        while($r->read()) {
+            if (
+                $r->moveToAttribute("id")
+                && ($id = $r->value)
+                && $r->moveToAttribute("lang")
+                && ($lang = $r->value)
+                && $r->moveToAttribute("path")
+                && ($path = $r->value)
+            ) {
+                $info[$id] = array("lang" => $lang, "path" => $path);
+                $r->moveToElement();
+            }
+        }
+        $r->close();
+        return $info;
+    }
+
+    public function sourceInfo($id) {
+        if (!isset($this->sources[$id])) {
+            v("Missing source for: %s", $id, E_USER_WARNING);
+        }
+        return isset($this->sources[$id]) ? $this->sources[$id] : null;
+    }
 }
 
 /*
