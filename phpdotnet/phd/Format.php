@@ -147,7 +147,7 @@ abstract class Format extends ObjectStorage
         $this->sqlite->query('SELECT refname(docbook_id, sdesc) FROM ids WHERE element=\'refentry\'');
         $this->sqlite->query('SELECT varname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:varentry\'');
         $this->sqlite->query('SELECT classname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:exceptionref\' OR element=\'phpdoc:classref\'');
-        $this->sqlite->query('SELECT example(docbook_id) FROM ids WHERE element=\'example\' OR element=\'informalexample\'');
+        $this->sqlite->query('SELECT example(docbook_id) FROM ids WHERE element=\'example\'');
     }
 
     public function SQLiteIndex($context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next, $chunk) {
