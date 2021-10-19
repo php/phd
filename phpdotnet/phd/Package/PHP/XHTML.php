@@ -501,7 +501,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 }
             }
 
-            $type = implode($this->type_separator, $types);
+            $type = implode($this->type_separator ?? '', $types);
             if (count($types) > 1) {
                 $type = '<span class="type">' . $type . '</span>';
             }

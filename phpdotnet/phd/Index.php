@@ -466,13 +466,13 @@ SQL;
                 }
             }
 
-            $this->db->exec('BEGIN TRANSACTION; '.join("", $this->commit).' COMMIT');
+            $this->db->exec('BEGIN TRANSACTION; '.implode("", $this->commit).' COMMIT');
             $log = "";
             foreach($this->changelog as $id => $arr) {
                 foreach($arr as $entry) {
                     $log .= sprintf(
                         "INSERT INTO changelogs (membership, docbook_id, parent_id, version, description) VALUES('%s', '%s', '%s', '%s', '%s');\n",
-                        $this->db->escapeString($entry[0]),
+                        $this->db->escapeString($entry[0] ?? ''),
                         $this->db->escapeString($id),
                         $this->db->escapeString($entry[1]),
                         $this->db->escapeString($entry[2]),

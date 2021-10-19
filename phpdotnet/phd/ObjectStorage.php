@@ -3,6 +3,8 @@ namespace phpdotnet\phd;
 
 class ObjectStorage extends \SplObjectStorage
 {
+    // @todo This is a bug, as attach() has a return type of void.
+    #[\ReturnTypeWillChange]
 	public function attach($obj, $inf = array()) {
 		if (!($obj instanceof Format)) {
 			throw new \InvalidArgumentException(
