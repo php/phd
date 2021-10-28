@@ -27,7 +27,7 @@ class Package_Generic_BigXHTML extends Package_Generic_XHTML {
         } elseif ($this->flags & Render::OPEN) {
             fwrite($this->getFileStream(), "\n".$data);
             $this->flags ^= Render::OPEN;
-        } else {
+        } elseif ($data !== null) {
             fwrite($this->getFileStream(), $data);
         }
 

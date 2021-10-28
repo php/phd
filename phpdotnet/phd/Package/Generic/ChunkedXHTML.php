@@ -31,7 +31,7 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
             $this->pushFileStream($fp);
 
             $this->flags ^= Render::OPEN;
-        } else {
+        } elseif ($data !== null) {
             $fp = $this->getFileStream();
             fwrite(end($fp), $data);
         }

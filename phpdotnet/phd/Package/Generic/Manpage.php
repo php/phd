@@ -327,7 +327,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
 
     public function appendData($data) {
         if ($this->chunkOpen) {
-            if (trim($data) === "") {
+            if ($data === null || trim($data) === "") {
                 return 0;
             }
 

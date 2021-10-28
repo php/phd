@@ -67,7 +67,7 @@ HEADER;
         } elseif ($this->flags & Render::OPEN) {
             fwrite($this->getFileStream(), $data."<hr />");
             $this->flags ^= Render::OPEN;
-        } else {
+        } elseif ($data !== null) {
             fwrite($this->getFileStream(), $data);
         }
 

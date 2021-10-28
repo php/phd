@@ -45,9 +45,9 @@ class Package_IDE_SQLite extends Package_IDE_Base {
             $this->db->escapeString($this->function['purpose']),
             $this->db->escapeString($this->function['manualid']),
             $this->db->escapeString($this->function['version']),
-            $this->db->escapeString($this->function['return']['type']),
-            $this->db->escapeString($this->function['return']['description']),
-            $this->db->escapeString($this->function['errors'])
+            $this->db->escapeString($this->function['return']['type'] ?? ''),
+            $this->db->escapeString($this->function['return']['description'] ?? ''),
+            $this->db->escapeString($this->function['errors'] ?? '')
         );
 
         foreach ((array)$this->function['params'] as $param) {

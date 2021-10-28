@@ -172,7 +172,7 @@ class Render extends ObjectStorage
 
                 /* The following if is to skip unnecessary whitespaces in the parameter list */
                 if (in_array($this->STACK[$r->depth - 1], ['methodsynopsis', 'constructorsynopsis', 'destructorsynopsis'], true) &&
-                    in_array($this->STACK[$r->depth], ["methodname", "methodparam", "type", "void"], true)
+                    in_array($this->STACK[$r->depth] ?? "", ["methodname", "methodparam", "type", "void"], true)
                 ) {
                     break;
                 }

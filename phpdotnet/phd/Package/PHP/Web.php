@@ -41,7 +41,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
             $this->pushFileStream($fp);
 
             $this->flags ^= Render::OPEN;
-        } elseif ($data) {
+        } elseif ($data !== null) {
             $fp = $this->getFileStream();
             fwrite(end($fp), $data);
         }

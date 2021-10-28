@@ -53,7 +53,7 @@ EOD;
     }
 
     private function renderReturnDocBlock() {
-        $description = preg_replace('/\n\s+/', "\n * ", $this->function['return']['description']);
+        $description = preg_replace('/\n\s+/', "\n * ", $this->function['return']['description'] ?? '');
         return " * @return {$this->function['return']['type']} $description";
     }
 
