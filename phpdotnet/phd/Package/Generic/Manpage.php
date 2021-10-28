@@ -38,6 +38,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         'envar'                 => 'format_suppressed_tags',
         'errortype'             => 'format_suppressed_tags',
         'example'               => 'format_example',
+        'exceptionname'         => 'format_suppressed_tags',
         'fieldsynopsis'         => 'format_suppressed_tags',
         'figure'                => 'format_suppressed_tags',
         'firstname'             => 'format_suppressed_tags',
