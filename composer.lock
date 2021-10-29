@@ -13,7 +13,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.0",
+        "php": ">=7.1.0",
         "ext-dom": "*",
         "ext-sqlite3": "*",
         "ext-xmlreader": "*"

@@ -85,7 +85,8 @@ if (Config::process_xincludes()) {
 if (Index::requireIndexing()) {
     v("Indexing...", VERBOSE_INDEXING);
     // Create indexer
-    $format = $render->attach(new Index);
+    $format = new Index;
+    $render->attach($format);
 
     $reader->open(Config::xml_file(), NULL, $readerOpts);
     $render->execute($reader);

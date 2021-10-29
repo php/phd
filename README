@@ -25,7 +25,7 @@ Installing the PhD renderer:
             for i in package_*.xml; do pear install $i; done
 
 Requirements:
-    - PHP 5.3
+    - PHP 7.1
     - DOM, libXML2, XMLReader and SQLite3.
 
 After installing PhD you can use the `phd` command

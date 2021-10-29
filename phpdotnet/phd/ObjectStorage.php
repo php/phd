@@ -3,9 +3,7 @@ namespace phpdotnet\phd;
 
 class ObjectStorage extends \SplObjectStorage
 {
-	// @todo This is a bug, as attach() has a return type of void.
-	#[\ReturnTypeWillChange]
-	public function attach($obj, $inf = array()) {
+	public function attach($obj, $inf = array()): void {
 		if (!($obj instanceof Format)) {
 			throw new \InvalidArgumentException(
                 'Only classess inheriting ' . __NAMESPACE__ . '\\Format supported'
@@ -18,7 +16,6 @@ class ObjectStorage extends \SplObjectStorage
 			);
 		}
 		parent::attach($obj, $inf);
-		return $obj;
 	}
 }
 

@@ -27,7 +27,7 @@ class Render extends ObjectStorage
         return $tag;
     } /* }}} */
 
-    public function attach($obj, $inf = array()) { /* {{{ */
+    public function attach($obj, $inf = array()): void { /* {{{ */
         if (!($obj instanceof Format)) {
             throw new \InvalidArgumentException(
                 'All formats *MUST* inherit ' . __NAMESPACE__ . '\\Format'
@@ -35,7 +35,7 @@ class Render extends ObjectStorage
         }
         $obj->notify(Render::STANDALONE, true);
 
-        return parent::attach($obj, $inf);
+        parent::attach($obj, $inf);
     } /* }}} */
 
     public function execute(Reader $r) { /* {{{ */

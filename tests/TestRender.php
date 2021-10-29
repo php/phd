@@ -20,7 +20,8 @@ class TestRender {
         $reader = new Reader();
         $render = new Render();
         if (Index::requireIndexing()) {
-           $format = $render->attach(new Index);
+           $format = new Index;
+           $render->attach($format);
            $reader->open(Config::xml_file());
            $render->execute($reader);
            $render->detach($format);
