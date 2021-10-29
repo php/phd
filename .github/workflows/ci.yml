@@ -4,7 +4,7 @@ jobs:
   ubuntu:
     strategy:
       matrix:
-          version: ['5.6', '7.2', '7.4', '8.1']
+          version: ['7.1', '7.2', '7.4', '8.1']
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PhD
