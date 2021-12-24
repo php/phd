@@ -2,13 +2,12 @@
 Testing a simple FAQ
 --FILE--
 <?php
-namespace phpdotnet\phd\tests\php;
+namespace phpdotnet\phd\test\php;
+use phpdotnet\phd\test\TestRender;
 
-require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/../TestRender.php";
-require_once __DIR__ . "/TestChunkedXHTML.php";
+require_once __DIR__ . "/../../vendor/autoload.php";
 
-$formatclass = "TestChunkedXHTML";
+$formatclass = TestChunkedXHTML::class;
 $xml_file = __DIR__ . "/data/faq001.xml";
 
 $opts = array(

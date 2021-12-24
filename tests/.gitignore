@@ -1,0 +1,8 @@
+*.sh
+*.php
+*.out
+*.exp
+*.log
+*.diff
+!/setup.php
+!/TestRender.php

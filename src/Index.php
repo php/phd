@@ -171,6 +171,7 @@ class Index extends Format
                     if (Config::memoryindex()) {
                         $db = new \SQLite3(":memory:");
                     } else {
+                        var_dump(Config::output_dir() . 'index.sqlite');
                         $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
                         $db->exec('DROP TABLE IF EXISTS ids');
                         $db->exec('DROP TABLE IF EXISTS indexing');

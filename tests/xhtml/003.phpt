@@ -2,12 +2,14 @@
 CALS Table rendering#003
 --FILE--
 <?php
+namespace phpdotnet\phd\test\xhtml;
+use phpdotnet\phd\test\TestRender;
+use phpdotnet\phd\Reader;
+use XMLReader;
 
-require "include/PhDReader.class.php";
-require "include/PhDFormat.class.php";
-require "formats/xhtml.php";
+require_once __DIR__ . "/../../vendor/autoload.php";
 
-$reader = new PhDReader(dirname(__FILE__) ."/data/003.xml");
+$reader = new Reader(dirname(__FILE__) ."/data/003.xml");
 $format = new XHTMLPhDFormat($reader, array(), array());
 
 $map = $format->getMap();

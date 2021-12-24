@@ -1,7 +1,8 @@
 <?php
-namespace phpdotnet\phd;
+namespace phpdotnet\phd\test\php;
 
 use phpdotnet\phd\Package\PHP\BigXHTML;
+use phpdotnet\phd\Render;
 
 class TestBigXHTML extends BigXHTML {
     public function update($event, $val = null) {

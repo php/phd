@@ -2,13 +2,13 @@
 Bug #49101 - Thick border again - Big XHTML
 --FILE--
 <?php
-namespace phpdotnet\phd\tests\php;
+namespace phpdotnet\phd\test\php;
+use phpdotnet\phd\test\TestRender;
 
-require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/../TestRender.php";
-require_once __DIR__ . "/TestBigXHTML.php";
+require_once __DIR__ . "/../../vendor/autoload.php";
 
-$formatclass = "TestBigXHTML";
+
+$formatclass = TestBigXHTML::class;
 $xml_file = __DIR__ . "/data/bug49101-1.xml";
 
 $opts = array(
