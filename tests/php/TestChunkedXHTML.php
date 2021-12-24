@@ -1,7 +1,9 @@
 <?php
 namespace phpdotnet\phd;
 
-class TestChunkedXHTML extends Package_PHP_ChunkedXHTML {
+use phpdotnet\phd\Package\PHP\ChunkedXHTML;
+
+class TestChunkedXHTML extends ChunkedXHTML {
     public function update($event, $val = null) {
         switch($event) {
         case Render::CHUNK:

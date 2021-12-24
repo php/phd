@@ -97,7 +97,7 @@
 
   <phprelease>
     <filelist>
-      <install name="phpdotnet/phd/Package/IDE/demo.php" as="phd-ide"/>
+      <install name="src/Package/IDE/demo.php" as="phd-ide"/>
     </filelist>
   </phprelease>
 

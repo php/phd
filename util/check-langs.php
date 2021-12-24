@@ -6,7 +6,7 @@ if ($argc != 2 || (isset($argv[1]) && in_array($argv[1], array('--help', '-h')))
     exit;
 }
 
-chdir('../phpdotnet/phd/data/langs/');
+chdir('../src/data/langs/');
 
 if ($argv[1] === 'all') {
     $languages = glob('*.ini');

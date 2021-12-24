@@ -12,7 +12,7 @@ class TestRender {
         if (count($extra) != 0) {
             Config::init($extra);
         }
-        $classname = __NAMESPACE__ . "\\" . $formatclass;
+        $classname = $formatclass;
         $this->format = new $classname();
     }
 

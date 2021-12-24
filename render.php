@@ -4,13 +4,11 @@ namespace phpdotnet\phd;
 
 // @php_dir@ gets replaced by pear with the install dir. use __DIR__ when
 // running from SVN
-define("__INSTALLDIR__", '@php_dir@' == '@'.'php_dir@' ? __DIR__ : '@php_dir@');
+use phpdotnet\phd\Format\Factory;
+use phpdotnet\phd\Options\Parser;
+use phpdotnet\phd\Reader\Partial;
 
-require __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
-require __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
-
-spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
-
+require_once __DIR__ . "/vendor/autoload.php";
 
 $conf = array();
 if (file_exists("phd.config.php")) {
@@ -22,7 +20,7 @@ if (file_exists("phd.config.php")) {
     Config::init(array());
 }
 
-Options_Parser::getopt();
+Parser::getopt();
 
 /* If no docbook file was passed, die */
 if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
@@ -63,7 +61,7 @@ function make_reader() {
     $idlist = Config::render_ids() + Config::skip_ids();
     if (!empty($idlist)) {
         v("Running partial build", VERBOSE_RENDER_STYLE);
-        $reader = new Reader_Partial();
+        $reader = new Partial();
     } else {
         v("Running full build", VERBOSE_RENDER_STYLE);
         $reader = new Reader();
@@ -99,7 +97,7 @@ if (Index::requireIndexing()) {
 }
 
 foreach((array)Config::package() as $package) {
-    $factory = Format_Factory::createFactory($package);
+    $factory = Factory::createFactory($package);
 
     // Default to all output formats specified by the package
     if (count(Config::output_format()) == 0) {

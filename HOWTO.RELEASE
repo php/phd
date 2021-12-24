@@ -55,7 +55,7 @@ Releases are currently made from the PHD_1_1 branch.
 
 A. Remove all contents from <notes> and increase version/release.
    Change stability back to "snapshot". If needed, revert PHD_VERSION in
-   config.php (VERSION in phpdotnet/phd/Config) back to "phd-from-svn".
+   config.php (VERSION in src/Config) back to "phd-from-svn".
 
 B. Hack on.
 

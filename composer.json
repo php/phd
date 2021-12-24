@@ -21,14 +21,23 @@
         "php": ">=7.1.0",
         "ext-dom": "*",
         "ext-sqlite3": "*",
-        "ext-xmlreader": "*"
+        "ext-xmlreader": "*",
+        "ext-simplexml": "*"
     },
     "suggest": {
         "easybook/geshi": "For using GeSHi as code highlighter"
     },
     "autoload": {
-        "psr-0": {
-            "phpdotnet\\": "."
+        "psr-4": {
+            "phpdotnet\\phd\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "phpdotnet\\phd\\test\\": "tests/"
         }
     }
 }

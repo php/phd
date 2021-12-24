@@ -1,7 +1,9 @@
 <?php
 namespace phpdotnet\phd;
 
-class TestBigXHTML extends Package_PHP_BigXHTML {
+use phpdotnet\phd\Package\PHP\BigXHTML;
+
+class TestBigXHTML extends BigXHTML {
     public function update($event, $val = null) {
         switch($event) {
         case Render::CHUNK:
