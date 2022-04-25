@@ -621,7 +621,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_acronym_text($value, $tag) {
         $resolved = $this->acronymInfo($value);
         if ($resolved) {
-            return '<addr title="' .$resolved. '">' .$value. '</addr>';
+            return '<abbr title="' .$resolved. '">' .$value. '</abbr>';
         }
         return '<abbr>'.$value.'</abbr>';
     }
