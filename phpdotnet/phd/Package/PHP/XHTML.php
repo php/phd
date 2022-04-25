@@ -621,9 +621,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_acronym_text($value, $tag) {
         $resolved = $this->acronymInfo($value);
         if ($resolved) {
-            return '<acronym title="' .$resolved. '">' .$value. '</acronym>';
+            return '<abbr title="' .$resolved. '">' .$value. '</abbr>';
         }
-        return '<acronym>'.$value.'</acronym>';
+        return '<abbr>'.$value.'</abbr>';
     }
 
     public function format_classsynopsis_fieldsynopsis_varname_text($value, $tag) {
