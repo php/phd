@@ -393,7 +393,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'constructorsynopsis' => array(
                 /* DEFAULT */     false,
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
-                'interfacesynopsis' => 'format_interfacesynopsis_methodsynopsis_methodname_text',
             ),
             'methodsynopsis'    => array(
                 /* DEFAULT */     false,
@@ -403,7 +402,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'destructorsynopsis' => array(
                 /* DEFAULT */     false,
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
-                'interfacesynopsis' => 'format_interfacesynopsis_methodsynopsis_methodname_text',
             ),
         ),
         'para'                  => array(
