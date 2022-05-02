@@ -11,7 +11,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             /* DEFAULT */          'span',
             'ooclass'           => array(
                 /* DEFAULT */      'format_suppressed_tags',
-                'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
+                'classsynopsisinfo'     => 'format_classsynopsisinfo_ooclass_classname',
+                'interfacesynopsisinfo' => 'format_interfacesynopsisinfo_ooclass_classname',
             ),
         ),
         'chapter'               => 'format_container_chunk',
@@ -96,7 +97,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             /* DEFAULT */         'format_classname_text',
             'ooclass'          => array(
                 /* DEFAULT */     'format_classname_text',
-                'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
+                'classsynopsis'     => 'format_classsynopsis_ooclass_classname_text',
+                'interfacesynopsis' => 'format_interfacesynopsis_ooclass_classname_text',
             ),
         ),
         'methodname'            => array(
@@ -708,6 +710,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
         /* intentionally not return the value, it will be printed out by <methodname> "soon" */
         parent::format_classsynopsis_ooclass_classname_text($value, $tag);
+    }
+
+    public function format_interfacesynopsis_ooclass_classname_text($value, $tag) {
+        /* intentionally not return the value, it will be printed out by <methodname> "soon" */
+        parent::format_interfacesynopsis_ooclass_classname_text($value, $tag);
     }
 
     public function format_classname_text($value, $tag) {

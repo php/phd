@@ -67,7 +67,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             /* DEFAULT */          'span',
             'ooclass'           => array(
                 /* DEFAULT */      'strong',
-                'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
+                'classsynopsisinfo'     => 'format_classsynopsisinfo_ooclass_classname',
+                'interfacesynopsisinfo' => 'format_interfacesynopsisinfo_ooclass_classname',
             ),
         ),
         'classsynopsis'         => 'format_classsynopsis',
@@ -134,6 +135,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'indexdiv'              => 'format_dl',
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
+        'interfacesynopsis'     => 'format_interfacesynopsis',
+        'interfacesynopsisinfo' => 'format_interfacesynopsisinfo',
         'itemizedlist'          => 'format_itemizedlist',
         'legalnotice'           => 'format_chunk',
         'listitem'              => array(
@@ -381,7 +384,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             /* DEFAULT */         false,
             'ooclass'          => array(
                 /* DEFAULT */     false,
-                'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
+                'classsynopsis'     => 'format_classsynopsis_ooclass_classname_text',
+                'interfacesynopsis' => 'format_interfacesynopsis_ooclass_classname_text',
             ),
         ),
         'methodname'           => array(
@@ -431,6 +435,14 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         "examples"                 => 0,
         "fieldsynopsis"            => array(
             "modifier"                      => "public",
+        ),
+        "interfacesynopsis"        => array(
+            "close"                         => false,
+            "classname"                     => false,
+        ),
+        "interfacesynopsisinfo"    => array(
+            "extends"                       => false,
+            "oointerface"                   => false,
         ),
         "methodsynopsis"           => array(
             "returntypes"           => [],
@@ -974,6 +986,59 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return "</div>";
     }
 
+    public function format_interfacesynopsisinfo_ooclass_classname($open, $name, $attrs)
+    {
+        if ($open) {
+            if ($this->cchunk["interfacesynopsisinfo"]["oointerface"] === false) {
+                $this->cchunk["interfacesynopsisinfo"]["oointerface"] = true;
+                return '<span class="modifier">interface</span> ';
+            }
+
+            return "";
+        }
+
+        if ($this->cchunk["interfacesynopsisinfo"]["oointerface"] === true) {
+            $this->cchunk["interfacesynopsisinfo"]["oointerface"] = null;
+        }
+
+        return "";
+    }
+
+    public function format_interfacesynopsisinfo($open, $name, $attrs)
+    {
+        $this->cchunk["interfacesynopsisinfo"] = $this->dchunk["interfacesynopsisinfo"];
+        if ($open) {
+            $name .= ' classsynopsisinfo';
+
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
+                return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
+            }
+
+            return '<div class="'.$name.'">';
+        }
+
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
+            return ' */</div>';
+        }
+        $this->cchunk["interfacesynopsis"]["close"] = true;
+
+        return ' {</div>';
+    }
+
+    public function format_interfacesynopsis($open, $name, $attrs) {
+        if ($open) {
+            $name .= ' classsynopsis';
+            return '<div class="'.$name.'">';
+        }
+
+        if ($this->cchunk["interfacesynopsis"]["close"] === true) {
+            $this->cchunk["interfacesynopsis"]["close"] = false;
+            return "}</div>";
+        }
+
+        return "</div>";
+    }
+
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
         $value = $this->TEXT($value);
         if ($this->cchunk["classsynopsis"]["classname"] === false) {
@@ -998,6 +1063,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
         $this->cchunk["classsynopsis"]["classname"] = $value;
+        return $this->TEXT($value);
+    }
+
+    public function format_interfacesynopsis_ooclass_classname_text($value, $tag) {
+        $this->cchunk["interfacesynopsis"]["classname"] = $value;
         return $this->TEXT($value);
     }
 
