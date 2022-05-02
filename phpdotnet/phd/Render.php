@@ -189,6 +189,7 @@ class Render extends ObjectStorage
 
                 /* The following if is to skip unnecessary whitespaces in the implements list */
                 if (
+                    ($this->STACK[$r->depth - 1] === 'interfacesynopsisinfo' && $this->STACK[$r->depth] === 'oointerface') ||
                     ($this->STACK[$r->depth - 1] === 'classsynopsisinfo' && $this->STACK[$r->depth] === 'oointerface') ||
                     ($this->STACK[$r->depth - 1] === 'oointerface' && $this->STACK[$r->depth] === 'interfacename')
                 ) {

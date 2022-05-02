@@ -165,12 +165,14 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'oointerface'           => array(
             /* DEFAULT */          'span',
             'classsynopsisinfo'    => 'format_classsynopsisinfo_oointerface',
+            'interfacesynopsisinfo'    => 'format_interfacesynopsisinfo_oointerface',
         ),
         'interfacename'         => array(
             /* DEFAULT */          'span',
             'oointerface'       => array(
-                /* DEFAULT */          'span',
-                'classsynopsisinfo' => 'format_classsynopsisinfo_oointerface_interfacename',
+                /* DEFAULT */          'format_suppressed_tags',
+                'classsynopsisinfo'     => 'format_classsynopsisinfo_oointerface_interfacename',
+                'interfacesynopsisinfo' => 'format_suppressed_tags',
             ),
         ),
         'exceptionname'         => 'span',
@@ -1003,6 +1005,19 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
 
         return "";
+    }
+
+    public function format_interfacesynopsisinfo_oointerface($open, $name, $attrs) {
+        if ($open) {
+            if ($this->cchunk["interfacesynopsisinfo"]["extends"] === false) {
+                $this->cchunk["interfacesynopsisinfo"]["extends"] = true;
+                return '<span class="' . $name . '">';
+            }
+
+            return '<span class="'.$name.'">, ';
+        }
+
+        return "</span>";
     }
 
     public function format_interfacesynopsisinfo($open, $name, $attrs)
