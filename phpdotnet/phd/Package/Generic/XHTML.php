@@ -393,14 +393,17 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'constructorsynopsis' => array(
                 /* DEFAULT */     false,
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+                'interfacesynopsis' => 'format_interfacesynopsis_methodsynopsis_methodname_text',
             ),
             'methodsynopsis'    => array(
                 /* DEFAULT */     false,
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+                'interfacesynopsis' => 'format_interfacesynopsis_methodsynopsis_methodname_text',
             ),
             'destructorsynopsis' => array(
                 /* DEFAULT */     false,
                 'classsynopsis' => 'format_classsynopsis_methodsynopsis_methodname_text',
+                'interfacesynopsis' => 'format_interfacesynopsis_methodsynopsis_methodname_text',
             ),
         ),
         'para'                  => array(
@@ -1023,6 +1026,28 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         $this->cchunk["interfacesynopsis"]["close"] = true;
 
         return ' {</div>';
+    }
+
+    public function format_interfacesynopsis_methodsynopsis_methodname_text($value, $tag) {
+        $value = $this->TEXT($value);
+        if ($this->cchunk["interfacesynopsis"]["classname"] === false) {
+            return $value;
+        }
+        if (strpos($value, '::')) {
+            $explode = '::';
+        } elseif (strpos($value, '->')) {
+            $explode = '->';
+        } elseif (strpos($value, '-&gt;')) {
+            $explode = '-&gt;';
+        } else {
+            return $value;
+        }
+
+        list($class, $method) = explode($explode, $value);
+        if ($class !== $this->cchunk["interfacesynopsis"]["classname"]) {
+            return $value;
+        }
+        return $method;
     }
 
     public function format_interfacesynopsis($open, $name, $attrs) {

@@ -108,6 +108,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             ),
             'methodsynopsis'    => array(
                 /* DEFAULT */      'format_classsynopsis_methodsynopsis_methodname_text',
+                'interfacesynopsis' => 'format_interfacesynopsis_methodsynopsis_methodname_text',
             ),
             'destructorsynopsis' => array(
                 /* DEFAULT */      'format_classsynopsis_methodsynopsis_methodname_text',
@@ -710,6 +711,17 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
         /* intentionally not return the value, it will be printed out by <methodname> "soon" */
         parent::format_classsynopsis_ooclass_classname_text($value, $tag);
+    }
+
+    public function format_interfacesynopsis_methodsynopsis_methodname_text($value, $tag) {
+        if ($this->cchunk["interfacesynopsis"]["classname"]) {
+            if (strpos($value, "::") === false && strpos($value, "->") === false) {
+                $value = $this->cchunk["interfacesynopsis"]["classname"] . "::" . $value;
+            }
+        }
+
+        $display_value = parent::format_interfacesynopsis_methodsynopsis_methodname_text($value, $tag);
+        return $this->format_function_text($value, $tag, $display_value);
     }
 
     public function format_interfacesynopsis_ooclass_classname_text($value, $tag) {
