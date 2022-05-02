@@ -1063,6 +1063,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return '</span>';
     }
+
     public function format_parameter($open, $name, $attrs, $props)
     {
         if ($props["empty"]) {
