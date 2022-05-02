@@ -725,7 +725,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_interfacesynopsis_ooclass_classname_text($value, $tag) {
-        /* intentionally not return the value, it will be printed out by <methodname> "soon" */
+        /* intentionally not return the value */
         parent::format_interfacesynopsis_ooclass_classname_text($value, $tag);
     }
 
