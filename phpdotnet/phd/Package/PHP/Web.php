@@ -204,7 +204,6 @@ $setup["toc_deprecated"] = $TOC_DEPRECATED;
 $setup["parents"] = $PARENTS;
 manual_setup($setup);
 
-manual_header();
 ?>
 ';
     }
