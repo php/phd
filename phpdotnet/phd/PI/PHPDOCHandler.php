@@ -60,9 +60,9 @@ class PI_PHPDOCHandler extends PIHandler {
                             $longdesc = $info[$filename][1] ? " - {$info[$filename][0]}" : "";
                             $ret .= '<li><a href="'.$filename. '" class="index">' .$data. '</a>' . $longdesc . '</li>'."\n";
                         }
-                        $ret .= "</ul></li></ul>\n\n";
+                        $ret .= "</ul></li></ul>\n";
+                        $ret .= "<p>Total number of functions and methods: " . count($refs) . "</p>\n\n";
                         return $ret;
-                        break;
 
                     case "examples":
                         $ret = "<ul class='gen-index index-for-{$matches["value"]}'>";
