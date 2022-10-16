@@ -134,10 +134,10 @@ class PdfWriter {
 
     function __construct($pageWidth = 210, $pageHeight = 297) {
     	// Initialization of properties
-    	$this->haruDoc = new \HaruDoc;
-    	$this->haruDoc->addPageLabel(1, \HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
+    	$this->haruDoc = new Haru_HaruDoc;
+    	$this->haruDoc->addPageLabel(1, Haru_HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
 
-        $this->haruDoc->setPageMode(\HaruDoc::PAGE_MODE_USE_OUTLINE);
+        $this->haruDoc->setPageMode(Haru_HaruDoc::PAGE_MODE_USE_OUTLINE);
         $this->haruDoc->setPagesConfiguration(2);
 
     	// Page format
@@ -157,7 +157,7 @@ class PdfWriter {
     	$this->currentFontSize = 12;
     	$this->currentFontColor = array(0, 0, 0); // Black
     	$this->nextPage();
-    	$this->haruDoc->addPageLabel(1, \HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
+    	$this->haruDoc->addPageLabel(1, Haru_HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
     }
 
     public function getCurrentPage() {
@@ -531,7 +531,7 @@ class PdfWriter {
         } else {
             $this->pages[$this->currentPageNumber] = $this->haruDoc->addPage();
             $this->currentPage = $this->pages[$this->currentPageNumber];
-            $this->currentPage->setTextRenderingMode(\HaruPage::FILL);
+            $this->currentPage->setTextRenderingMode(Haru_HaruPage::FILL);
             $this->vOffset = $this->currentFontSize;
             $this->hOffset = ($this->hOffset ? $this->hOffset : 0);
             $footerToAppend = true;
