@@ -858,18 +858,18 @@ class PdfWriter {
             }
 
             $this->currentPage->moveTo($x, $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["vOffset"]));
-            $this->currentPage->lineTo($x, $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
+            $this->currentPage->lineTo($x, $this->PAGE_HEIGHT - self::VMARGIN - ((int)$this->current["row"]["vPosition"] % (int)$this->PAGE_HEIGHT));
             $this->currentPage->stroke();
             $this->current["vOffset"] = $vOffset;
         }
         // Horizontal line
-        $this->currentPage->moveTo(self::HMARGIN + $this->current["leftSpacing"], $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
+        $this->currentPage->moveTo(self::HMARGIN + $this->current["leftSpacing"], $this->PAGE_HEIGHT - self::VMARGIN - ((int)$this->current["row"]["vPosition"] % (int)$this->PAGE_HEIGHT));
         $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->current["rightSpacing"],
-            $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
+            $this->PAGE_HEIGHT - self::VMARGIN - ((int)$this->current["row"]["vPosition"] % (int)$this->PAGE_HEIGHT));
         $this->currentPage->stroke();
 
         // Store position
-        $this->vOffset = $this->current["row"]["vPosition"] % $this->PAGE_HEIGHT;
+        $this->vOffset = (int)$this->current["row"]["vPosition"] % (int)$this->PAGE_HEIGHT;
 
         // Store pages
         $last = array_pop($this->old);
