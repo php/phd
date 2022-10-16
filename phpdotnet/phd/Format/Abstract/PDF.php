@@ -241,7 +241,7 @@ class PdfWriter {
                     $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
             }
             if ($textToAppend)
-                $this->current["char"] = $textToAppend{strlen($textToAppend)-1};
+                $this->current["char"] = $textToAppend[strlen($textToAppend)-1];
 
             // Offsets for next line
             if (!$isLastLine) {
@@ -302,7 +302,7 @@ class PdfWriter {
         $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing,
             $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
         if ($textToAppend)
-            $this->current["char"] = $textToAppend{strlen($textToAppend)-1};
+            $this->current["char"] = $textToAppend[strlen($textToAppend)-1];
 
         $this->hOffset += $this->currentPage->getTextWidth($textToAppend);
 
