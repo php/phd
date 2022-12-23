@@ -63,7 +63,7 @@ class Highlighter
 
         if ($role == 'php') {
             try {
-                return highlight_string($text, 1);
+                return str_replace('&nbsp;', ' ', highlight_string($text, 1));
             } catch (\ParseException $e) {
                 v("Parse error while highlighting PHP code: %s\nText: %s", (string) $e, $text, E_USER_WARNING);
 
