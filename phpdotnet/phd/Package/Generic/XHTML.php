@@ -950,6 +950,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
                 return '<div class="'.$name.' classsynopsisinfo_comment">/* ';
+            } elseif (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "phpdoc") {
+                return '<div class="'.$name.' classsynopsisinfo_phpdoc">';
             }
 
             return '<div class="'.$name.'">';
@@ -957,6 +959,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
         if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
             return ' */</div>';
+        } elseif (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "phpdoc") {
+            return '</div>';
         }
         $this->cchunk["classsynopsis"]["close"] = true;
         return ' {</div>';
