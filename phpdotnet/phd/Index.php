@@ -83,8 +83,15 @@ class Index extends Format
         'phpdoc'            => 'PI_PHPDOCHandler',
     );
 
+    private $db;
+    private $currentchunk;
+    private $ids       = array();
+    private $currentid;
     private $chunks    = array();
     private $isChunk   = array();
+    private $nfo       = array();
+    private $isSectionChunk = array();
+    private $log = '';
     private $previousId = "";
     private $inChangelog = false;
     private $currentChangelog = array();

@@ -52,6 +52,9 @@ abstract class Format extends ObjectStorage
     protected $appendToBuffer = false;
     protected $buffer = "";
 
+    /* Table handling */
+    protected $TABLE = array();
+
     public function __construct() {
         $sqlite = Config::indexcache();
         if (!$sqlite) {
