@@ -24,6 +24,15 @@ Installing the PhD renderer:
         To install the standalone Packages:
             for i in package_*.xml; do pear install $i; done
 
+Running from the source, assuming that the PHP documentation tree is at
+dev/php/phpdoc/doc-base and dev/php/phpdoc/en:
+
+    cd dev/php
+    git clone https://github.com/php/phd.git
+    cd phpdoc
+    php doc-base/configure.php --disable-segfault-error
+    php ../phd/render.php --docbook doc-base/.manual.xml --output=/tmp/docs --package PHP --format xhtml
+
 Requirements:
     - PHP 7.1
     - DOM, libXML2, XMLReader and SQLite3.
