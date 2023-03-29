@@ -135,6 +135,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'indexentry'            => 'dd',
         'initializer'           => 'format_initializer',
         'itemizedlist'          => 'format_itemizedlist',
+        'keycap'                => 'format_keycap',
+        'keycombo'              => 'format_keycombo',
         'legalnotice'           => 'format_chunk',
         'listitem'              => array(
             /* DEFAULT */          'li',
@@ -1845,6 +1847,32 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return '</ol>';
     }
+
+    /* Support for key inputs is coded like junk */
+    public function format_keycap($open, $name, $attrs, $props) {
+        if ($open) {
+            $content = '';
+            if ($props['sibling']) {
+                $content = ' + ';
+            }
+            return $content . '<kbd class="' . $name . '">';
+        }
+        return '</kbd>';
+    }
+
+    public function format_keycombo($open, $name, $attrs, $props) {
+
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["action"])) {
+            if ($attrs[Reader::XMLNS_DOCBOOK]["action"] !== "simul") {
+                v('No support for keycombo action = ' . $attrs[Reader::XMLNS_DOCBOOK]["action"],E_USER_WARNING);
+            }
+        }
+        if ($open) {
+            return '<kbd class="' . $name . '">';
+        }
+        return '</kbd>';
+    }
+
 
 }
 
