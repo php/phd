@@ -1853,7 +1853,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($open) {
             $content = '';
             if ($props['sibling']) {
-                $content = ' + ';
+                $content = '+';
             }
             return $content . '<kbd class="' . $name . '">';
         }
