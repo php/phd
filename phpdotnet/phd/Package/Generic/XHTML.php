@@ -1864,7 +1864,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
         if (isset($attrs[Reader::XMLNS_DOCBOOK]["action"])) {
             if ($attrs[Reader::XMLNS_DOCBOOK]["action"] !== "simul") {
-                v('No support for keycombo action = ' . $attrs[Reader::XMLNS_DOCBOOK]["action"],E_USER_WARNING);
+                v('No support for keycombo action = %s', $attrs[Reader::XMLNS_DOCBOOK]["action"], E_USER_WARNING);
             }
         }
         if ($open) {
