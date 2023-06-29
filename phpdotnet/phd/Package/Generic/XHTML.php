@@ -425,6 +425,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         "classsynopsis"            => array(
             "close"                         => false,
             "classname"                     => false,
+            "interface"                     => false, // bool: true when in interface
         ),
         "classsynopsisinfo"        => array(
             "implements"                    => false,
@@ -903,6 +904,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
             if ($this->cchunk["classsynopsisinfo"]["implements"] === false) {
                 $this->cchunk["classsynopsisinfo"]["implements"] = true;
+                if ($this->cchunk["classsynopsis"]["interface"]) {
+                    return '<span class="'.$name.'"><span class="modifier">extends</span> ';
+                }
+
                 return '<span class="'.$name.'"><span class="modifier">implements</span> ';
             }
 
@@ -917,6 +922,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($open) {
             if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
                 $this->cchunk["classsynopsisinfo"]["ooclass"] = true;
+                if ($this->cchunk["classsynopsis"]["interface"]) {
+                    return '<span class="modifier">interface</span> ';
+                }
+
                 return '<span class="modifier">class</span> ';
             }
 
@@ -968,6 +977,14 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_classsynopsis($open, $name, $attrs) {
         if ($open) {
+            // Think this just needs to be set on open and it will persist
+            if (
+                isset($attrs[Reader::XMLNS_DOCBOOK]["class"]) &&
+                $attrs[Reader::XMLNS_DOCBOOK]["class"] == 'interface'
+            ) {
+                $this->cchunk["classsynopsis"]["interface"] = true;
+            }
+
             return '<div class="'.$name.'">';
         }
 
