@@ -951,7 +951,7 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
         if ($open) {
             if (
                 isset($attrs[Reader::XMLNS_DOCBOOK]["class"]) &&
-                $attrs[Reader::XMLNS_DOCBOOK]["class"] == 'interface'
+                $attrs[Reader::XMLNS_DOCBOOK]["class"] == "interface"
             ) {
                 $this->cchunk["classsynopsis"]["interface"] = true;
             }

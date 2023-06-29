@@ -978,9 +978,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_classsynopsis($open, $name, $attrs) {
         if ($open) {
             // Think this just needs to be set on open and it will persist
+            // Will remove comment after review
             if (
                 isset($attrs[Reader::XMLNS_DOCBOOK]["class"]) &&
-                $attrs[Reader::XMLNS_DOCBOOK]["class"] == 'interface'
+                $attrs[Reader::XMLNS_DOCBOOK]["class"] == "interface"
             ) {
                 $this->cchunk["classsynopsis"]["interface"] = true;
             }
