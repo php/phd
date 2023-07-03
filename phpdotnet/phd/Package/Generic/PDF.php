@@ -277,6 +277,7 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
         "classsynopsis"         => array(
             "close"             => false,
             "classname"         => false,
+            "interface"         => false, // bool: true when in interface
         ),
         "classsynopsisinfo"     => array(
             "implements"        => false,
@@ -932,7 +933,12 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
         if ($open) {
             if ($this->cchunk["classsynopsisinfo"]["implements"] === false) {
                 $this->cchunk["classsynopsisinfo"]["implements"] = true;
-                $this->pdfDoc->appendText(" implements");
+                if ($this->cchunk["classsynopsis"]["interface"]) {
+                    $this->pdfDoc->appendText(" extends");
+                } else {
+                    $this->pdfDoc->appendText(" implements");
+                }
+
                 return '';
             }
             $this->pdfDoc->appendText(",");
@@ -943,6 +949,13 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
 
     public function format_classsynopsis($open, $name, $attrs, $props) {
         if ($open) {
+            if (
+                isset($attrs[Reader::XMLNS_DOCBOOK]["class"]) &&
+                $attrs[Reader::XMLNS_DOCBOOK]["class"] == "interface"
+            ) {
+                $this->cchunk["classsynopsis"]["interface"] = true;
+            }
+
             return $this->format_para($open, $name, $attrs, $props);
         }
 
