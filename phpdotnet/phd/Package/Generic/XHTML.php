@@ -66,7 +66,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'classname'             => array(
             /* DEFAULT */          'span',
             'ooclass'           => array(
-                /* DEFAULT */      'strong',
+                'classsynopsis'         => 'format_classsynopsis_ooclass_classname',
                 'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
             ),
         ),
@@ -159,16 +159,18 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'othercredit'           => 'format_div',
         'ooclass'               => array(
             /* DEFAULT */          'span',
-            'classsynopsis'     => 'format_div',
+            'classsynopsis'     => 'format_classsynopsis_ooclass',//'format_div',//
         ),
         'oointerface'           => array(
             /* DEFAULT */          'span',
+            'classsynopsis' => 'format_classsynopsis_oointerface',
             'classsynopsisinfo'    => 'format_classsynopsisinfo_oointerface',
         ),
         'interfacename'         => array(
             /* DEFAULT */          'span',
             'oointerface'       => array(
                 /* DEFAULT */          'span',
+                'classsynopsis' => 'format_classsynopsis_oointerface_interfacename',
                 'classsynopsisinfo' => 'format_classsynopsisinfo_oointerface_interfacename',
             ),
         ),
@@ -383,6 +385,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             /* DEFAULT */         false,
             'ooclass'          => array(
                 /* DEFAULT */     false,
+                // We keep this to work around the legacy behaviour of not displaying it
                 'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
             ),
         ),
@@ -422,11 +425,14 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     protected $cchunk      = array();
     /* Default Chunk variables */
     private $dchunk      = array(
-        "classsynopsis"            => array(
-            "close"                         => false,
-            "classname"                     => false,
-            "interface"                     => false, // bool: true when in interface
-        ),
+        "classsynopsis" => [
+            "close"        => false,
+            "classname"    => false,
+            "interface"    => false, // bool: true when in interface
+            "ooclass"      => false,
+            "oointerface"  => false,
+            "legacy"       => true, // legacy rendering
+        ],
         "classsynopsisinfo"        => array(
             "implements"                    => false,
             "ooclass"                       => false,
@@ -896,6 +902,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return "</div>\n";
     }
 
+    /** Legacy rendering functions for class synopsis tags that wraps the definition in a class synopsis info tag */
     public function format_classsynopsisinfo_oointerface($open, $name, $attrs) {
         if ($open) {
             if ($this->cchunk["classsynopsisinfo"]["ooclass"] === false) {
@@ -971,29 +978,139 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"]) && $attrs[Reader::XMLNS_DOCBOOK]["role"] == "comment") {
             return ' */</div>';
         }
+
+        assert($this->cchunk["classsynopsis"]["legacy"] === true);
         $this->cchunk["classsynopsis"]["close"] = true;
         return ' {</div>';
     }
 
-    public function format_classsynopsis($open, $name, $attrs) {
+    /** Class synopsis rendering for new/better markup */
+    public function format_classsynopsis_oointerface_interfacename($open, $name, $attrs, $props)
+    {
+        if ($this->cchunk["classsynopsis"]["legacy"] === true) {
+            return $this->transformFromMap($open, 'strong', $name, $attrs, $props);
+        }
+
         if ($open) {
-            // Think this just needs to be set on open and it will persist
-            // Will remove comment after review
-            if (
-                isset($attrs[Reader::XMLNS_DOCBOOK]["class"]) &&
-                $attrs[Reader::XMLNS_DOCBOOK]["class"] == "interface"
-            ) {
-                $this->cchunk["classsynopsis"]["interface"] = true;
+            /* If there has been a class prior this means that we are the first implementing interface
+             * thus mark the oointerface as already been rendered as the primary tag */
+            if ($this->cchunk["classsynopsis"]["ooclass"] === true) {
+                $this->cchunk["classsynopsis"]["oointerface"] = true;
+            }
+            /** Actual interface name in bold */
+            if ($this->cchunk["classsynopsis"]["oointerface"] === false) {
+
+                return '<span class="modifier">interface</span> ' . $this->transformFromMap($open, 'strong', $name, $attrs, $props);
+            }
+            /* Whitespace for next word */
+            return ' ';
+        }
+        /** Actual interface name in bold */
+        if ($this->cchunk["classsynopsis"]["oointerface"] === false) {
+            $this->cchunk["classsynopsis"]["oointerface"] = true;
+            return '</strong>';
+        }
+        /** We don't wrap extended interface in a tag */
+        if ($this->cchunk["classsynopsis"]['nb_list'] > 1) {
+            return ',';
+        }
+        return '';
+    }
+
+    public function format_classsynopsis_ooclass_classname($open, $name, $attrs, $props)
+    {
+        if ($this->cchunk["classsynopsis"]["legacy"] === true) {
+            return $this->transformFromMap($open, 'strong', $name, $attrs, $props);
+        }
+
+        if ($open) {
+            /** Actual class name in bold */
+            if ($this->cchunk["classsynopsis"]["ooclass"] === false) {
+
+                return '<span class="modifier">class</span> ' . $this->transformFromMap($open, 'strong', $name, $attrs, $props);
+            }
+            /* Whitespace for next word */
+            return ' ';
+        }
+        /** Actual class name in bold */
+        if ($this->cchunk["classsynopsis"]["ooclass"] === false) {
+            $this->cchunk["classsynopsis"]["ooclass"] = true;
+            return '</strong>';
+        }
+        /** We don't wrap extended class in a tag */
+        return '';
+    }
+
+    public function format_classsynopsis_ooclass($open, $name, $attrs, $props)
+    {
+        if ($this->cchunk["classsynopsis"]["legacy"] === true) {
+            return $this->format_div($open, $name, $attrs, $props);
+        }
+
+        /* Close list of classes + interfaces by "opening" class def with { */
+        if (!$open && --$this->cchunk["classsynopsis"]['nb_list'] === 0) {
+            return ' {</div>';
+        }
+        return '';
+    }
+
+    public function format_classsynopsis_oointerface($open, $name, $attrs, $props)
+    {
+        /* Used to be converted to a span */
+        if ($this->cchunk["classsynopsis"]["legacy"] === true) {
+            return $this->transformFromMap($open, 'span', $name, $attrs, $props);
+        }
+
+        /* Close list of classes + interfaces by "opening" class def with { */
+        if (!$open) {
+            if (--$this->cchunk["classsynopsis"]['nb_list'] === 0) {
+                return ' {</div>';
+            }
+        }
+        return '';
+    }
+
+    public function format_classsynopsis($open, $name, $attrs, $props) {
+        $this->cchunk["classsynopsis"] = $this->dchunk["classsynopsis"];
+
+        /** Legacy presentation does not use the class attribute */
+        $this->cchunk["classsynopsis"]['legacy'] = !isset($attrs[Reader::XMLNS_DOCBOOK]["class"]);
+
+        if ($this->cchunk["classsynopsis"]['legacy']) {
+            if ($open) {
+                // Think this just needs to be set on open and it will persist
+                // Will remove comment after review
+                if (
+                    isset($attrs[Reader::XMLNS_DOCBOOK]["class"]) &&
+                    $attrs[Reader::XMLNS_DOCBOOK]["class"] == "interface"
+                ) {
+                    $this->cchunk["classsynopsis"]["interface"] = true;
+                }
+
+                return '<div class="'.$name.'">';
             }
 
-            return '<div class="'.$name.'">';
-        }
-
-        if ($this->cchunk["classsynopsis"]["close"] === true) {
-            $this->cchunk["classsynopsis"]["close"] = false;
+            /* Just always force the ending } to close the class as an opening { should always be present
+            if ($this->cchunk["classsynopsis"]["close"] === true) {
+                $this->cchunk["classsynopsis"]["close"] = false;
+                return "}</div>";
+            }
+            return "</div>";
+            */
             return "}</div>";
         }
-        return "</div>";
+
+        /* New rendering for more sensible markup:
+         * We open a fake classsynopsisinfo div to not break the CSS expectations */
+        if ($open) {
+            $occurrences = substr_count($props['innerXml'], '</ooclass>')
+                + substr_count($props['innerXml'], '</oointerface>')
+                + substr_count($props['innerXml'], '</ooexception>');
+            $this->cchunk["classsynopsis"]['nb_list'] = $occurrences;
+            return '<div class="classsynopsis"><div class="classsynopsisinfo">';
+        } else {
+            return '}</div>';
+        }
     }
 
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
@@ -1020,6 +1137,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
         $this->cchunk["classsynopsis"]["classname"] = $value;
+        // Do not render outside ooclass class name in legacy rendering.
+        if ($this->cchunk["classsynopsis"]["legacy"]) {
+            return '';
+        }
         return $this->TEXT($value);
     }
 

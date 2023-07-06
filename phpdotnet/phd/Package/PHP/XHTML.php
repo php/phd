@@ -11,6 +11,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             /* DEFAULT */          'span',
             'ooclass'           => array(
                 /* DEFAULT */      'format_suppressed_tags',
+                'classsynopsis'     => 'format_classsynopsis_ooclass_classname',
                 'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
             ),
         ),
@@ -708,8 +709,12 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
-        /* intentionally not return the value, it will be printed out by <methodname> "soon" */
-        parent::format_classsynopsis_ooclass_classname_text($value, $tag);
+        $content = parent::format_classsynopsis_ooclass_classname_text($value, $tag);
+        /** Legacy behaviour for crappy markup */
+        if ($content === '') {
+            return '';
+        }
+        return $this->format_classname_text($content, $tag);
     }
 
     public function format_classname_text($value, $tag) {
