@@ -7,14 +7,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'appendix'              => 'format_container_chunk',
         'article'               => 'format_container_chunk',
         'book'                  => 'format_root_chunk',
-        'classname'             => array(
-            /* DEFAULT */          'span',
-            'ooclass'           => array(
-                /* DEFAULT */      'format_suppressed_tags',
-                'classsynopsis'     => 'format_classsynopsis_ooclass_classname',
-                'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
-            ),
-        ),
         'chapter'               => 'format_container_chunk',
         'colophon'              => 'format_chunk',
         'function'              => 'format_function',
@@ -91,15 +83,29 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     private $mytextmap = array(
         'acronym'               => 'format_acronym_text',
         'function'              => 'format_function_text',
-        'interfacename'         => 'format_classname_text',
-        'exceptionname'         => 'format_classname_text',
-        'classname'            => array(
-            /* DEFAULT */         'format_classname_text',
-            'ooclass'          => array(
-                /* DEFAULT */     'format_classname_text',
+        /** Those are used to retrieve the class/interface name to be able to remove it from method names */
+        'classname' => [
+            /* DEFAULT */ 'format_classname_text',
+            'ooclass' => [
+                /* DEFAULT */ 'format_classname_text',
+                /** This is also used by the legacy display to not display the class name at all */
                 'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
-            ),
-        ),
+            ]
+        ],
+        'exceptionname' => [
+            /* DEFAULT */ 'format_classname_text',
+            'ooexception' => [
+                /* DEFAULT */     'format_classname_text',
+                'classsynopsis' => 'format_classsynopsis_oo_name_text',
+            ]
+        ],
+        'interfacename' => [
+            /* DEFAULT */ 'format_classname_text',
+            'oointerface' => [
+                /* DEFAULT */     'format_classname_text',
+                'classsynopsis' => 'format_classsynopsis_oo_name_text',
+            ]
+        ],
         'methodname'            => array(
             /* DEFAULT */          'format_function_text',
             'constructorsynopsis' => array(
@@ -714,6 +720,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($content === '') {
             return '';
         }
+        return $this->format_classname_text($content, $tag);
+    }
+
+    public function format_classsynopsis_oo_name_text($value, $tag) {
+        $content = parent::format_classsynopsis_oo_name_text($value, $tag);
         return $this->format_classname_text($content, $tag);
     }
 

@@ -63,15 +63,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'caution'               => 'format_admonition',
         'citation'              => 'format_citation',
         'citerefentry'          => 'span',
-        'classname'             => array(
-            /* DEFAULT */          'span',
-            'ooclass'           => array(
-                'classsynopsis'         => 'format_classsynopsis_ooclass_classname',
-                'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
-            ),
-        ),
-        'classsynopsis'         => 'format_classsynopsis',
-        'classsynopsisinfo'     => 'format_classsynopsisinfo',
         'code'                  => 'code',
         'collab'                => 'span',
         'collabname'            => 'span',
@@ -157,15 +148,37 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'note'                  => 'format_note',
         'orgname'               => 'span',
         'othercredit'           => 'format_div',
+        /** Class Synopsis related tags */
+        'classsynopsis'         => 'format_classsynopsis',
+        'classsynopsisinfo'     => 'format_classsynopsisinfo',
         'ooclass'               => array(
             /* DEFAULT */          'span',
-            'classsynopsis'     => 'format_classsynopsis_ooclass',//'format_div',//
+            'classsynopsis'     => 'format_classsynopsis_generic_oo_tag',
         ),
+        'ooexception'           => [
+            /* DEFAULT */          'span',
+            'classsynopsis'     => 'format_classsynopsis_generic_oo_tag',
+        ],
         'oointerface'           => array(
             /* DEFAULT */          'span',
-            'classsynopsis' => 'format_classsynopsis_oointerface',
-            'classsynopsisinfo'    => 'format_classsynopsisinfo_oointerface',
+            'classsynopsis'     => 'format_classsynopsis_generic_oo_tag',
+            'classsynopsisinfo' => 'format_classsynopsisinfo_oointerface',
         ),
+        'classname'             => [
+            /* DEFAULT */          'span',
+            'ooclass'           => [
+                /* DEFAULT */          'span',
+                'classsynopsis'     => 'format_classsynopsis_ooclass_classname',
+                'classsynopsisinfo' => 'format_classsynopsisinfo_ooclass_classname',
+            ],
+        ],
+        'exceptionname'             => [
+            /* DEFAULT */          'span',
+            'ooexception'           => [
+                /* DEFAULT */          'span',
+                'classsynopsis'     => 'format_classsynopsis_ooclass_classname',
+            ],
+        ],
         'interfacename'         => array(
             /* DEFAULT */          'span',
             'oointerface'       => array(
@@ -174,7 +187,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 'classsynopsisinfo' => 'format_classsynopsisinfo_oointerface_interfacename',
             ),
         ),
-        'exceptionname'         => 'span',
         'option'                => 'format_option',
         'orderedlist'           => 'format_orderedlist',
         'para'                  => array(
@@ -381,14 +393,29 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             /* DEFAULT */         false,
             'fieldsynopsis'    => 'format_fieldsynopsis_modifier_text',
         ),
-        'classname'            => array(
-            /* DEFAULT */         false,
-            'ooclass'          => array(
+        /** Those are used to retrieve the class/interface name to be able to remove it from method names */
+        'classname' => [
+            /* DEFAULT */ false,
+            'ooclass' => [
                 /* DEFAULT */     false,
-                // We keep this to work around the legacy behaviour of not displaying it
+                /** This is also used by the legacy display to not display the class name at all */
                 'classsynopsis' => 'format_classsynopsis_ooclass_classname_text',
-            ),
-        ),
+            ]
+        ],
+        'exceptionname' => [
+            /* DEFAULT */ false,
+            'ooexception' => [
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_oo_name_text',
+            ]
+        ],
+        'interfacename' => [
+            /* DEFAULT */ false,
+            'oointerface' => [
+                /* DEFAULT */     false,
+                'classsynopsis' => 'format_classsynopsis_oo_name_text',
+            ]
+        ],
         'methodname'           => array(
             /* DEFAULT */         false,
             'constructorsynopsis' => array(
@@ -984,7 +1011,32 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return ' {</div>';
     }
 
+    /** This method is common between both legacy and new rendering for setting up the classname in the current chunk */
+    public function format_classsynopsis_ooclass_classname_text($value, $tag) {
+        /** If this is not defined this is the first ooclass/oointerface/ooexception and thus needs to
+         *  set the class name to be able to remove it from the methods
+         */
+        if (!$this->cchunk["classsynopsis"]["classname"]) {
+            $this->cchunk["classsynopsis"]["classname"] = $value;
+        }
+        // Do not render outside ooclass class name in legacy rendering.
+        if ($this->cchunk["classsynopsis"]["legacy"]) {
+            return '';
+        }
+        return $this->TEXT($value);
+    }
+
     /** Class synopsis rendering for new/better markup */
+    public function format_classsynopsis_oo_name_text($value, $tag) {
+        /** If this is not defined this is the first ooclass/oointerface/ooexception and thus needs to
+         *  set the class name to be able to remove it from the methods
+         */
+        if (!$this->cchunk["classsynopsis"]["classname"]) {
+            $this->cchunk["classsynopsis"]["classname"] = $value;
+        }
+        return $this->TEXT($value);
+    }
+
     public function format_classsynopsis_oointerface_interfacename($open, $name, $attrs, $props)
     {
         if ($this->cchunk["classsynopsis"]["legacy"] === true) {
@@ -1026,8 +1078,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($open) {
             /** Actual class name in bold */
             if ($this->cchunk["classsynopsis"]["ooclass"] === false) {
-
-                return '<span class="modifier">class</span> ' . $this->transformFromMap($open, 'strong', $name, $attrs, $props);
+                /** We force the name: parameter to 'classname' to not break CSS expectations for exceptionanme tags */
+                return '<span class="modifier">class</span> ' . $this->transformFromMap($open, 'strong', 'classname', $attrs, $props);
             }
             /* Whitespace for next word */
             return ' ';
@@ -1041,22 +1093,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '';
     }
 
-    public function format_classsynopsis_ooclass($open, $name, $attrs, $props)
+    public function format_classsynopsis_generic_oo_tag($open, $name, $attrs, $props)
     {
-        if ($this->cchunk["classsynopsis"]["legacy"] === true) {
-            return $this->format_div($open, $name, $attrs, $props);
-        }
-
-        /* Close list of classes + interfaces by "opening" class def with { */
-        if (!$open && --$this->cchunk["classsynopsis"]['nb_list'] === 0) {
-            return ' {</div>';
-        }
-        return '';
-    }
-
-    public function format_classsynopsis_oointerface($open, $name, $attrs, $props)
-    {
-        /* Used to be converted to a span */
         if ($this->cchunk["classsynopsis"]["legacy"] === true) {
             return $this->transformFromMap($open, 'span', $name, $attrs, $props);
         }
@@ -1135,14 +1173,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $method;
     }
 
-    public function format_classsynopsis_ooclass_classname_text($value, $tag) {
-        $this->cchunk["classsynopsis"]["classname"] = $value;
-        // Do not render outside ooclass class name in legacy rendering.
-        if ($this->cchunk["classsynopsis"]["legacy"]) {
-            return '';
-        }
-        return $this->TEXT($value);
-    }
 
     public function format_fieldsynopsis($open, $name, $attrs) {
         $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
