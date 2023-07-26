@@ -72,8 +72,12 @@ class Render extends ObjectStorage
 
                 $innerXml = "";
                 if (
-                    ($open && $r->name === "type") ||
-                    ($open && in_array($r->name, ["methodsynopsis", "constructorsynopsis", "destructorsynopsis"], true))
+                    $open &&
+                    (
+                        $r->name === "type" ||
+                        $r->name === "classsynopsis" ||
+                        in_array($r->name, ["methodsynopsis", "constructorsynopsis", "destructorsynopsis"], true)
+                    )
                 ) {
                     $innerXml = $r->readInnerXml();
                 }
@@ -113,7 +117,7 @@ class Render extends ObjectStorage
                         continue;
                     }
 
-                    if (strncmp($tag ?? '', "format_", 7) !== 0) {
+                    if (/* !($tag instanceof \Closure) && */ !str_starts_with($tag ?? '', "format_")) {
                         $data = $format->transformFromMap($open, $tag, $name, $attrs, $props);
                     } else {
                         $data = $format->{$tag}($open, $name, $attrs, $props);
