@@ -117,7 +117,9 @@ class Render extends ObjectStorage
                         continue;
                     }
 
-                    if (/* !($tag instanceof \Closure) && */ !str_starts_with($tag ?? '', "format_")) {
+                    // Current doc box uses PHP 7.3 so cannot use PHP 8 functions
+                    //if (/* !($tag instanceof \Closure) && */ !str_starts_with($tag ?? '', "format_")) {
+                    if (strncmp($tag ?? '', "format_", 7) !== 0) {
                         $data = $format->transformFromMap($open, $tag, $name, $attrs, $props);
                     } else {
                         $data = $format->{$tag}($open, $name, $attrs, $props);
