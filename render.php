@@ -76,7 +76,7 @@ $reader = make_reader();
 
 
 // Set reader LIBXML options
-$readerOpts = 0;
+$readerOpts = LIBXML_PARSEHUGE;
 if (Config::process_xincludes()) {
     $readerOpts |= LIBXML_XINCLUDE;
 }
