@@ -80,7 +80,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         ),
         'constructorsynopsis'   => 'format_methodsynopsis',
         'destructorsynopsis'    => 'format_methodsynopsis',
-        'emphasis'              => 'em',
+        'emphasis'              => 'format_emphasis',
         'enumname'              => 'span',
         'entry'                 => array (
             /* DEFAULT */          'format_entry',
@@ -1173,6 +1173,23 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $method;
     }
 
+    public function format_emphasis($open, $name, $attrs)
+    {
+        $name = "em";
+
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+            $role = $attrs[Reader::XMLNS_DOCBOOK]['role'];
+            if ( $role == "strong" || $role == "bold" ) {
+                $name = "strong";
+            }
+        }
+
+        if ($open) {
+            return "<{$name}>";
+        } else {
+            return "</{$name}>";
+        }
+    }
 
     public function format_fieldsynopsis($open, $name, $attrs) {
         $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
