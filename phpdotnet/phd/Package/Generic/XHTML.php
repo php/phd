@@ -1179,14 +1179,16 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
         if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
             $role = $attrs[Reader::XMLNS_DOCBOOK]['role'];
-            if ( $role == "strong" || $role == "bold" )
+            if ( $role == "strong" || $role == "bold" ) {
                 $name = "strong";
+            }
         }
 
-        if ($open)
+        if ($open) {
             return "<{$name}>";
-        else
+        } else {
             return "</{$name}>";
+        }
     }
 
     public function format_fieldsynopsis($open, $name, $attrs) {
