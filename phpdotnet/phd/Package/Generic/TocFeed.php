@@ -311,9 +311,14 @@ abstract class Package_Generic_TocFeed extends Format
             return '';
         }
 
-        if (isset($attrs[Reader::XMLNS_PHD]['chunk'])
-            && $attrs[Reader::XMLNS_PHD]['chunk'] == 'false'
-        ) {
+        $isChunked = true;
+        /* Legacy way to mark chunks */
+        if (isset($attrs[Reader::XMLNS_PHD]['chunk'])) {
+            $isChunked = $attrs[Reader::XMLNS_PHD]['chunk'] != 'false';
+        } elseif (isset($attrs[Reader::XMLNS_DOCBOOK]['annotations'])) {
+            $isChunked = !str_contains($attrs[Reader::XMLNS_DOCBOOK]['annotations'], 'chunk:false');
+        }
+        if (!$isChunked) {
             //not chunked? no feed!
             return '';
         }

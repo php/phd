@@ -658,6 +658,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_function($open, $tag, $attrs, $props) {
         if ($open) {
+            /* TODO Drop support when https://github.com/php/doc-en/pull/2864 has made its way to translations */
             if (isset($attrs[Reader::XMLNS_PHD]["args"])) {
                 $this->cchunk["args"] = $attrs[Reader::XMLNS_PHD]["args"];
             }
@@ -738,10 +739,23 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
 
     /*Chunk Functions*/
+    private function isChunkedByAttributes(array $attributes): bool {
+        /* Legacy way to mark chunks */
+        if (isset($attributes[Reader::XMLNS_PHD]['chunk'])) {
+            return $attributes[Reader::XMLNS_PHD]['chunk'] != 'false';
+        } elseif (isset($attributes[Reader::XMLNS_DOCBOOK]['annotations'])) {
+            /** Annotations attribute is a standard DocBook attribute and could be used for various things */
+            return !str_contains($attributes[Reader::XMLNS_DOCBOOK]['annotations'], 'chunk:false');
+        } else {
+            /* Chunked by default */
+            return true;
+        }
+    }
 
     public function format_container_chunk($open, $name, $attrs, $props) {
         $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"];
-        if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {
+
+        if ($this->isChunkedByAttributes($attrs)) {
             $this->cchunk = $this->dchunk;
         }
 
@@ -832,7 +846,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
 
             $this->CURRENT_CHUNK = $this->CURRENT_ID = $id;
-            if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {
+            if ($this->isChunkedByAttributes($attrs)) {
                 $this->cchunk = $this->dchunk;
                 $this->notify(Render::CHUNK, Render::OPEN);
             }
@@ -851,7 +865,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
             return '<div id="'.$id.'" class="'.$name.'">';
         }
-        if (!isset($attrs[Reader::XMLNS_PHD]["chunk"]) || $attrs[Reader::XMLNS_PHD]["chunk"] == "true") {
+        if ($this->isChunkedByAttributes($attrs)) {
             $this->notify(Render::CHUNK, Render::CLOSE);
         }
         return '</div>';
