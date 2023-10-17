@@ -330,7 +330,10 @@ abstract class Format extends ObjectStorage
         return isset($this->vars[$var]) ? $this->vars[$var] : null;
     }
     public function getGeneratedExampleID($index) {
-        return $this->examples[$index];
+        if (array_key_exists($index, $this->examples)) {
+            return $this->examples[$index];
+        }
+        return null;
     }
     final public function registerElementMap(array $map) {
         $this->elementmap = $map;
