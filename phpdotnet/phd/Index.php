@@ -32,7 +32,7 @@ class Index extends Format
     'phpdoc:exception'      => 'format_container_chunk',
     'phpdoc:exceptionref'   => 'format_container_chunk',
     'phpdoc:classref'       => 'format_container_chunk',
-    'phpdoc:varentry'       => 'format_varentry_chunk',
+    'phpdoc:varentry'       => 'format_chunk',
     'preface'               => 'format_chunk',
     'refentry'              => 'format_chunk',
     'reference'             => 'format_container_chunk',
@@ -341,9 +341,7 @@ SQL;
         }
         return $this->format_chunk($open, $name, $attrs, $props);
     }
-    public function format_varentry_chunk($open, $name, $attrs, $props) {
-        return $this->format_chunk($open, $name, $attrs, $props);
-    }
+
     public function format_chunk($open, $name, $attrs, $props) {
         if ($props["empty"]) {
             return false;
