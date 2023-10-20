@@ -357,8 +357,15 @@ SQL;
                 $this->isChunk[] = false;
                 return false;
             }
-            $this->isChunk[] = isset($attrs[Reader::XMLNS_PHD]['chunk'])
-                    ? $attrs[Reader::XMLNS_PHD]['chunk'] == "true" : true;
+
+            /* Legacy way to mark chunks */
+            if (isset($attrs[Reader::XMLNS_PHD]['chunk'])) {
+                $this->isChunk[] = $attrs[Reader::XMLNS_PHD]['chunk'] == "true";
+            } elseif (isset($attrs[Reader::XMLNS_DOCBOOK]['annotations'])) {
+                $this->isChunk[] = !str_contains($attrs[Reader::XMLNS_DOCBOOK]['annotations'], 'chunk:false');
+            } else {
+                $this->isChunk[] = true;
+            }
 
             if (end($this->isChunk)) {
                 $this->chunks[] = $id;
