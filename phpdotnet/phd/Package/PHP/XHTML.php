@@ -19,7 +19,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'phpdoc:classref'       => 'format_class_chunk',
         'phpdoc:exceptionref'   => 'format_class_chunk',
         'phpdoc:varentry'       => 'format_varentry_chunk',
-        'refentry'              => 'format_chunk',
+        'refentry'              => 'format_refentry',
         'reference'             => 'format_container_chunk',
         'refpurpose'            => 'format_refpurpose',
         'refsynopsisdiv'        => 'format_refsynopsisdiv',
@@ -134,6 +134,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             /* DEFAULT */          'format_suppressed_text',
             'phpdoc:classref'   => 'format_grep_classname_text',
             'phpdoc:exceptionref'  => 'format_grep_classname_text',
+            'refentry' => 'format_grep_classname_text',
         ),
          'varname'               => array(
             /* DEFAULT */          'format_varname_text',
@@ -155,7 +156,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     /* Default Chunk settings */
     protected $dchunk          = array(
-        "phpdoc:classref"              => null,
+        "class_name_ref"               => null,
         "args"                         => null,
         "fieldsynopsis"                => array(
             "modifier"                 => "public",
@@ -413,7 +414,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($open) {
             $retval = "";
             if ($this->cchunk["verinfo"]) {
-                $retval = $this->autogenVersionInfo($this->cchunk["phpdoc:classref"]);
+                $retval = $this->autogenVersionInfo($this->cchunk["class_name_ref"]);
             }
             return '<div class="' . $tag . '">' . $retval;
         }
@@ -712,7 +713,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_grep_classname_text($value, $tag) {
-        $this->cchunk["phpdoc:classref"] = strtolower($value);
+        $this->cchunk["class_name_ref"] = strtolower($value);
     }
 
     public function format_classsynopsis_ooclass_classname_text($value, $tag) {
@@ -730,7 +731,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_classname_text($value, $tag) {
-        if (($filename = $this->getClassnameLink(strtolower($value))) !== null && $this->cchunk["phpdoc:classref"] !== strtolower($value)) {
+        if (($filename = $this->getClassnameLink(strtolower($value))) !== null && $this->cchunk["class_name_ref"] !== strtolower($value)) {
             $href = $this->chunked ? $filename.$this->ext : "#$filename";
             return '<a href="'.$href. '" class="' .$tag. '">' .$value. '</a>';
         }
@@ -853,13 +854,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             if (isset($props["lang"])) {
                 $this->lang = $props["lang"];
             }
-            if ($name == "refentry") {
-                if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                    $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
-                } else {
-                    $this->cchunk["verinfo"] = true;
-                }
-            }
             if ($name == "legalnotice") {
                 return '<div id="legalnotice">';
             }
@@ -889,6 +883,26 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_exception_chunk($open, $name, $attrs, $props) {
         return $this->format_container_chunk($open, "reference", $attrs, $props);
+    }
+
+    public function format_refentry($open, $name, $attrs, $props) {
+        /* Note role attribute also has usage with "noversion" to not check version availability */
+        /* TODO This should be migrated to the annotations attribute */
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+            $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
+        } else {
+            $this->cchunk["verinfo"] = true;
+        }
+
+        /* We overwrite the tag name to continue working with the usual indexing */
+        if (array_key_exists('role', $attrs)) {
+            return match ($attrs['role']) {
+                'class', 'enum', 'exception' => $this->format_class_chunk($open, 'reference', $attrs, $props),
+                'variable' => $this->format_chunk($open, 'refentry', $attrs, $props),
+                default => $this->format_chunk($open, $name, $attrs, $props),
+            };
+        }
+        return $this->format_chunk($open, $name, $attrs, $props);
     }
 
     public function format_class_chunk($open, $name, $attrs, $props) {
