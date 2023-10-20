@@ -27,7 +27,7 @@ class Index extends Format
         'book'              => 'format_chunk',
         'part'              => 'format_chunk',
     ),
-    'legalnotice'           => 'format_legalnotice_chunk',
+    'legalnotice'           => 'format_chunk',
     'part'                  => 'format_container_chunk',
     'phpdoc:exception'      => 'format_container_chunk',
     'phpdoc:exceptionref'   => 'format_container_chunk',
@@ -379,9 +379,7 @@ SQL;
         }
         return false;
     }
-    public function format_legalnotice_chunk($open, $name, $attrs, $props) {
-        return $this->format_chunk($open, $name, $attrs, $props);
-    }
+
     public function format_ldesc($open, $name, $attrs, $props) {
         if ($open) {
             if (empty($this->nfo[$this->currentid]["ldesc"])) {
