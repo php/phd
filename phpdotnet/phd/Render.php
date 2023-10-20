@@ -76,6 +76,7 @@ class Render extends ObjectStorage
                     (
                         $r->name === "type" ||
                         $r->name === "classsynopsis" ||
+                        $r->name === "simplelist" ||
                         in_array($r->name, ["methodsynopsis", "constructorsynopsis", "destructorsynopsis"], true)
                     )
                 ) {
@@ -102,7 +103,7 @@ class Render extends ObjectStorage
 
                     if (isset($map[$name]) === false) {
                         $data = $format->UNDEF($open, $name, $attrs, $props);
-                        $format->appendData($data);
+                            $format->appendData($data);
                         continue;
                     }
 

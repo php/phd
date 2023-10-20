@@ -143,7 +143,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'methodparam'           => 'format_methodparam',
         'methodsynopsis'        => 'format_methodsynopsis',
         'methodname'            => 'format_methodname',
-        'member'                => 'li',
+        'member'                => 'format_member_chunk',
         'modifier'              => 'span',
         'note'                  => 'format_note',
         'orgname'               => 'span',
@@ -269,7 +269,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'setindex'              => 'format_chunk',
         'shortaffil'            => 'format_suppressed_tags',
         'sidebar'               => 'format_note',
-        'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
+        'simplelist'            => 'format_simplelist',
         'simplesect'            => 'div',
         'simpara'               => array(
             /* DEFAULT */          'p',
@@ -491,6 +491,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         "varlistentry"             => array(
             "listitems"                     => array(),
         ),
+        'simplelist_members_nb' => -1,
     );
 
     protected $pihandlers = array(
@@ -2032,6 +2033,40 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return '<ol type="' .$numeration. '">';
         }
         return '</ol>';
+    }
+
+    public function format_member_chunk($open, $name, $attrs, $props) {
+        if ($this->cchunk['simplelist_members_nb'] == -1) {
+            return $this->transformFromMap($open, 'li', $name, $attrs, $props);
+        }
+        /* INLINE LIST */
+        if ($open) {
+            return '';
+        }
+
+        echo 'Occurrence nb(', $open, '): ', $this->cchunk['simplelist_members_nb'], \PHP_EOL;
+        if (--$this->cchunk['simplelist_members_nb'] != 0) {
+            return ', ';
+        }
+
+        var_dump("out");
+        return '';
+    }
+
+    /* FIXME: simplelists has few attributes that need to be implemented */
+    public function format_simplelist($open, $name, $attrs, $props) {
+        $this->cchunk['simplelist_members_nb'] = -1;
+        $listType = $attrs[Reader::XMLNS_DOCBOOK]['type'] ?? 'itemizedlist';
+
+        if ($open && $listType == 'inline') {
+            $occurrences = substr_count($props['innerXml'], '</member>');
+            $this->cchunk['simplelist_members_nb'] = $occurrences;
+        }
+
+        return match ($listType) {
+            'itemizedlist' => $this->format_itemizedlist($open, $name, $attrs, $props),
+            'inline' => '',
+        };
     }
 
     /* Support for key inputs is coded like junk */
