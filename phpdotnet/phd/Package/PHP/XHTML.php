@@ -888,15 +888,17 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_refentry($open, $name, $attrs, $props) {
         /* Note role attribute also has usage with "noversion" to not check version availability */
         /* TODO This should be migrated to the annotations attribute */
-        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["annotations"])) {
+            $this->cchunk["verinfo"] = !str_contains($attrs[Reader::XMLNS_DOCBOOK]["annotations"], 'verify_info:false');
+        } else if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
             $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
         } else {
             $this->cchunk["verinfo"] = true;
         }
 
         /* We overwrite the tag name to continue working with the usual indexing */
-        if (array_key_exists('role', $attrs)) {
-            return match ($attrs['role']) {
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+            return match ($attrs[Reader::XMLNS_DOCBOOK]['role']) {
                 'class', 'enum', 'exception' => $this->format_class_chunk($open, 'reference', $attrs, $props),
                 'variable' => $this->format_chunk($open, 'refentry', $attrs, $props),
                 default => $this->format_chunk($open, $name, $attrs, $props),
@@ -908,11 +910,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_class_chunk($open, $name, $attrs, $props) {
         if ($open) {
             $retval = $this->format_container_chunk($open, "reference", $attrs, $props);
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
-            } else {
-                $this->cchunk["verinfo"] = true;
-            }
+            /* Classes must have version availability information */
+            $this->cchunk["verinfo"] = true;
             return $retval;
         }
         return $this->format_container_chunk($open, "reference", $attrs, $props);

@@ -345,8 +345,8 @@ SQL;
     public function format_refentry($open, $name, $attrs, $props) {
         /* Note role attribute also has usage with "noversion" to not check version availability */
         /* We overwrite the tag name to continue working with the usual indexing */
-        if (array_key_exists('role', $attrs)) {
-            return match ($attrs['role']) {
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+            return match ($attrs[Reader::XMLNS_DOCBOOK]['role']) {
                 'class', 'enum' => $this->format_container_chunk($open, 'phpdoc:classref', $attrs, $props),
                 'exception' => $this->format_container_chunk($open, 'phpdoc:exceptionref', $attrs, $props),
                 'variable' => $this->format_chunk($open, 'phpdoc:varentry', $attrs, $props),
