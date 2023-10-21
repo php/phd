@@ -24,6 +24,7 @@ class Package_PHP_TocFeed extends Package_Generic_TocFeed
         'phpdoc:classref'       => 'format_chunk',
         'phpdoc:exceptionref'   => 'format_chunk',
         'phpdoc:varentry'       => 'format_chunk',
+        'refentry'              => 'format_chunk',
         'section'               => array(
             /* DEFAULT */          false,
             'sect1'                => 'format_chunk',
