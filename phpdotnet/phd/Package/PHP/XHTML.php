@@ -903,14 +903,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_refentry($open, $name, $attrs, $props) {
        $this->configureVerInfoAttribute($attrs);
 
-        /* We overwrite the tag name to continue working with the usual indexing */
-        if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
-            return match ($attrs[Reader::XMLNS_DOCBOOK]['role']) {
-                'class', 'enum', 'exception' => $this->format_class_chunk($open, 'reference', $attrs, $props),
-                'variable' => $this->format_chunk($open, 'refentry', $attrs, $props),
-                default => $this->format_chunk($open, $name, $attrs, $props),
-            };
-        }
         return $this->format_chunk($open, $name, $attrs, $props);
     }
 

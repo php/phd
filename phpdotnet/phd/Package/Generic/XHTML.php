@@ -227,6 +227,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'refsect1'              => 'format_refsect',
         'refsect2'              => 'format_refsect',
         'refsect3'              => 'format_refsect',
+        'refsection'            => 'format_refsect',
         'refsynopsisdiv'        => 'div',
         'refname'               => 'h1',
         'refnamediv'            => 'div',
