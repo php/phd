@@ -34,8 +34,8 @@ class Index extends Format
     'phpdoc:classref'       => 'format_container_chunk',
     'phpdoc:varentry'       => 'format_chunk',
     'preface'               => 'format_chunk',
-    'refentry'              => 'format_refentry',
-    'reference'             => 'format_container_chunk',
+    'refentry'              => 'format_reference_entry_with_role',
+    'reference'             => 'format_reference_entry_with_role',
     'sect1'                 => 'format_chunk',
     'section'               => array(
         /* DEFAULT */          false,
@@ -342,13 +342,13 @@ SQL;
         return $this->format_chunk($open, $name, $attrs, $props);
     }
 
-    public function format_refentry($open, $name, $attrs, $props) {
+    public function format_reference_entry_with_role($open, $name, $attrs, $props) {
         /* Note role attribute also has usage with "noversion" to not check version availability */
         /* We overwrite the tag name to continue working with the usual indexing */
         if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
             return match ($attrs[Reader::XMLNS_DOCBOOK]['role']) {
-                'class', 'enum' => $this->format_container_chunk($open, 'phpdoc:classref', $attrs, $props),
-                'exception' => $this->format_container_chunk($open, 'phpdoc:exceptionref', $attrs, $props),
+                'class', 'enum' => $this->format_chunk($open, 'phpdoc:classref', $attrs, $props),
+                'exception' => $this->format_chunk($open, 'phpdoc:exceptionref', $attrs, $props),
                 'variable' => $this->format_chunk($open, 'phpdoc:varentry', $attrs, $props),
                 default => $this->format_chunk($open, $name, $attrs, $props),
             };
