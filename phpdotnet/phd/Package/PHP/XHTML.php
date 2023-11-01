@@ -600,6 +600,18 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return "</strong></p>";
     }
 
+    public function configureVerInfoAttribute($attrs) {
+        /* Note role attribute also has usage with "noversion" to not check version availability */
+        /* TODO This should be migrated to the annotations attribute */
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["annotations"])) {
+            $this->cchunk["verinfo"] = !str_contains($attrs[Reader::XMLNS_DOCBOOK]["annotations"], 'verify_info:false');
+        } else if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+            $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
+        } else {
+            $this->cchunk["verinfo"] = true;
+        }
+    }
+
     public function versionInfo($funcname) {
         $funcname = str_replace(
                 array("::", "-&gt;", "->", "__", "_", '$', '()'),
@@ -854,6 +866,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             if (isset($props["lang"])) {
                 $this->lang = $props["lang"];
             }
+            if ($name == "refentry") {
+                $this->configureVerInfoAttribute($attrs);
+            }
             if ($name == "legalnotice") {
                 return '<div id="legalnotice">';
             }
@@ -886,15 +901,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_refentry($open, $name, $attrs, $props) {
-        /* Note role attribute also has usage with "noversion" to not check version availability */
-        /* TODO This should be migrated to the annotations attribute */
-        if (isset($attrs[Reader::XMLNS_DOCBOOK]["annotations"])) {
-            $this->cchunk["verinfo"] = !str_contains($attrs[Reader::XMLNS_DOCBOOK]["annotations"], 'verify_info:false');
-        } else if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-            $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
-        } else {
-            $this->cchunk["verinfo"] = true;
-        }
+       $this->configureVerInfoAttribute($attrs);
 
         /* We overwrite the tag name to continue working with the usual indexing */
         if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
