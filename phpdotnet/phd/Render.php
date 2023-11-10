@@ -88,7 +88,7 @@ class Render extends ObjectStorage
                     "lang"     => $r->xmlLang,
                     "ns"       => $r->namespaceURI,
                     "sibling"  => $lastdepth >= $depth ? $this->STACK[$depth] : "",
-                    "innerXml"  => $innerXml,
+                    "innerXml" => $innerXml,
                     "depth"    => $depth,
                 );
 
