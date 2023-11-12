@@ -220,7 +220,7 @@ SQL;
                 }
                 break;
             case Render::FINALIZE:
-                $retval = $this->db->exec("BEGIN TRANSACTION; INSERT INTO indexing (time) VALUES ('" . time() . "'); COMMIT");
+                $this->db->exec("BEGIN TRANSACTION; INSERT INTO indexing (time) VALUES ('" . time() . "'); COMMIT");
                 $this->commit();
                 if ($this->db->lastErrorCode()) {
                     trigger_error($this->db->lastErrorMsg(), E_USER_WARNING);
@@ -387,7 +387,7 @@ SQL;
             return false;
         }
         if (array_pop($this->isChunk)) {
-            $lastchunk = array_pop($this->chunks);
+            array_pop($this->chunks);
             $this->currentchunk = end($this->chunks);
             $this->appendID();
         }

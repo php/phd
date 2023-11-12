@@ -94,7 +94,6 @@ class PdfWriter {
     private $currentFontColor;
     private $fonts;
     private $oldFonts = array();
-    private $text;
 
     private $vOffset = 0;
     private $hOffset = 0;

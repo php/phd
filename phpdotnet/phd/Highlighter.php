@@ -79,8 +79,6 @@ class Highlighter
                 . htmlspecialchars($text, ENT_QUOTES, 'UTF-8')
                 . "</pre>\n";
         }
-
-        return $retval;
     }//public function highlight(..)
 
 }
