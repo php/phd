@@ -1476,7 +1476,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return '</li>';
     }
-    public function format_variablelist($open, $name, $attrs) {
+    public function format_variablelist($open, $name, $attrs, $props) {
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
@@ -1488,7 +1488,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             if ($this->role === 'constant_list') {
                 $tagName = 'table';
                 $classStr = ' class="doctable table"';
-                $headerStr = "\n<tr>\n<th>Constants</th>\n<th>Description</th>\n</tr>";
+                $headerStr = "\n<tr>\n<th>" . $this->autogen('Constants', $props['lang']) . "</th>\n<th>" . $this->autogen('Description', $props['lang']) . "</th>\n</tr>";
             } else {
                 $tagName = 'dl';
             }
