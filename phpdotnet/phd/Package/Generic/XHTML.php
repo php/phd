@@ -333,7 +333,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'sect4'             => 'h5',
             'segmentedlist'     => 'format_table_title',
             'table'             => 'format_table_title',
-            'variablelist'      => 'strong',
+            'variablelist'      => 'format_variablelist_title',
             'article'           => 'format_container_chunk_top_title',
             'appendix'          => 'format_container_chunk_top_title',
             'book'              => 'format_container_chunk_top_title',
@@ -1478,14 +1478,25 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_variablelist($open, $name, $attrs) {
         if ($open) {
-            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
-                $id = $attrs[Reader::XMLNS_XML]["id"];
-                return '<dl id="'.$id.'">';
-            } else {
-                return '<dl>';
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
             }
+            $classStr = $headerStr = $idStr = '';
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $idStr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
+            }
+            if ($this->role === 'constant_list') {
+                $tagName = 'table';
+                $classStr = ' class="doctable table"';
+                $headerStr = "\n<tr>\n<th>Constants</th>\n<th>Description</th>\n</tr>";
+            } else {
+                $tagName = 'dl';
+            }
+            return '<' . $tagName . $idStr . $classStr . '>' . $headerStr;
         }
-        return "</dl>\n";
+        $tagName = ($this->role === 'constant_list') ? 'table' : 'dl';
+        $this->role = false;
+        return "</" . $tagName . ">\n";
     }
     public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
@@ -1494,26 +1505,29 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             } else {
                 unset($this->cchunk['varlistentry']['id']);
             }
+            return ($this->role === 'constant_list') ? '<tr>' : '';
         }
-        return '';
+        return ($this->role === 'constant_list') ? '</tr>' : '';
     }
     public function format_varlistentry_term($open, $name, $attrs, $props) {
+        $tagName = ($this->role === 'constant_list') ? 'td' : 'dt';
         if ($open) {
             if (isset($this->cchunk['varlistentry']['id'])) {
                 $id = $this->cchunk['varlistentry']['id'];
                 unset($this->cchunk['varlistentry']['id']);
-                return '<dt id="'.$id.'">';
+                return '<' . $tagName . ' id="' . $id . '">';
             } else {
-                return "<dt>\n";
+                return "<" . $tagName . ">\n";
             }
         }
-        return "</dt>\n";
+        return "</" . $tagName . ">\n";
     }
     public function format_varlistentry_listitem($open, $name, $attrs) {
+        $tagName = ($this->role === 'constant_list') ? 'td' : 'dd';
         if ($open) {
-            return "<dd>\n";
+            return "<" . $tagName . ">\n";
         }
-        return "</dd>\n";
+        return "</" . $tagName . ">\n";
     }
     public function format_term($open, $name, $attrs, $props) {
         if ($open) {
@@ -1652,6 +1666,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return "<caption><strong>";
         }
         return "</strong></caption>";
+    }
+    public function format_variablelist_title($open, $name, $attrs, $props) {
+        if ($open) {
+            return ($this->role === 'constant_list') ? "<caption><strong>" : "<strong>";
+        }
+        return ($this->role === 'constant_list') ? "</strong></caption>" : "</strong>";
     }
 
     public function format_mediaobject($open, $name, $attrs) {
