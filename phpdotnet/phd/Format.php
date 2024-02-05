@@ -395,6 +395,10 @@ abstract class Format extends ObjectStorage
 
         $filename = Config::lang_dir() . $lang . ".ini";
 
+        if (!file_exists($filename) && strncmp(basename($filename), 'doc-', 4) === 0) {
+            $filename = dirname($filename) . DIRECTORY_SEPARATOR . substr(basename($filename), 4);
+        }
+
         self::$autogen[$lang] = parse_ini_file($filename);
         return self::autogen($text, $lang);
     }
