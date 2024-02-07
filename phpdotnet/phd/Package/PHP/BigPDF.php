@@ -74,7 +74,4 @@ class Package_PHP_BigPDF extends Package_PHP_PDF {
     }
 }
 
-/*
-* vim600: sw=4 ts=4 syntax=php et
-* vim<600: sw=4 ts=4
-*/
+
