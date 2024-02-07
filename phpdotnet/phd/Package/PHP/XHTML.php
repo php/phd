@@ -766,7 +766,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_container_chunk($open, $name, $attrs, $props) {
-        $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"];
+        $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"] ?? '';
 
         if ($this->isChunkedByAttributes($attrs)) {
             $this->cchunk = $this->dchunk;
@@ -809,7 +809,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_root_chunk($open, $name, $attrs) {
-        $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"];
+        $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"] ?? '';
         if ($open) {
             $this->notify(Render::CHUNK, Render::OPEN);
             return '<div id="'.$id.'" class="'.$name.'">';

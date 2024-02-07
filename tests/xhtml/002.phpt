@@ -2,470 +2,210 @@
 CALS Table rendering#002
 --FILE--
 <?php
+namespace phpdotnet\phd;
 
-require "include/PhDReader.class.php";
-require "include/PhDFormat.class.php";
-require "formats/xhtml.php";
+require_once __DIR__ . "/../setup.php";
+require_once __DIR__ . "/TestChunkedXHTML.php";
 
-$reader = new PhDReader(dirname(__FILE__) ."/data/002.xml");
-$format = new XHTMLPhDFormat($reader, array(), array());
+$formatclass = "TestChunkedXHTML";
+$xml_file = __DIR__ . "/data/002.xml";
 
-$map = $format->getMap();
+$opts = array(
+    "index"             => true,
+    "xml_root"          => dirname($xml_file),
+    "xml_file"          => $xml_file,
+    "output_dir"        => __DIR__ . "/output/",
+);
 
-while($reader->read()) {
-    $type = $reader->nodeType;
-    $name = $reader->name;
+$extra = array(
+    "lang_dir" => __PHDDIR__ . "phpdotnet/phd/data/langs/",
+    "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
+    "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
+);
 
-    switch($type) {
-    case XMLReader::ELEMENT:
-    case XMLReader::END_ELEMENT:
-        $open = $type == XMLReader::ELEMENT;
+$render = new TestRender($formatclass, $opts, $extra);
 
-        $funcname = "format_$name";
-        if (isset($map[$name])) {
-            $tag = $map[$name];
-            if (is_array($tag)) {
-                $tag = $reader->notXPath($tag);
-            }
-            if (strncmp($tag, "format_", 7)) {
-                $retval = $format->transformFromMap($open, $tag, $name);
-                break;
-            }
-            $funcname = $tag;
-        }
-
-        $retval = $format->{$funcname}($open, $name);
-        break;
-
-    case XMLReader::TEXT:
-        $retval = htmlspecialchars($reader->value, ENT_QUOTES);
-        break;
-
-    case XMLReader::CDATA:
-        $retval = $format->CDATA($reader->value);
-        break;
-
-    case XMLReader::COMMENT:
-    case XMLReader::WHITESPACE:
-    case XMLReader::SIGNIFICANT_WHITESPACE:
-    case XMLReader::DOC_TYPE:
-        /* swallow it */
-        continue 2;
-
-    default:
-        trigger_error("Don't know how to handle {$name} {$type}", E_USER_ERROR);
-        return;
-    }
-    echo $retval, "\n";
+if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
+    mkdir($opts["output_dir"], 0755);
 }
 
-$reader->close();
+$render->run();
 ?>
 --EXPECT--
+Filename: function.db2-set-option.html
+Content:
 <div id="function.db2-set-option" class="article">
-<table border="5">
-<h1 class="title">
-Resource-Parameter Matrix
-</h1>
-<colgroup>
+ <table class="doctable table">
+   <caption><strong>Resource-Parameter Matrix</strong></caption>
+   
+     <col style="text-align: center;" />
+     <col style="text-align: center;" />
+     <col style="text-align: center;" />
+     <col style="text-align: center;" />
+     <col style="text-align: center;" />
+     <thead>
+       <tr>
+         <th>Key</th>
+         <th>Value</th>
+         <th colspan="3">Resource Type</th>
+       </tr>
 
-<col align="center" />
-<col align="center" />
-<col align="center" />
-<col align="center" />
-<col align="center" />
-<thead valign="middle">
-<tr valign="middle">
-<th colspan="1">
-Key
-</th>
-<th colspan="1">
-Value
-</th>
-<th colspan="3">
-Resource Type
-</th>
-</tr>
+     </thead>
 
-</thead>
 
-<tbody valign="middle">
-<tr valign="middle">
-<td class="empty">&nbsp;</td><td class="empty">&nbsp;</td><td colspan="1" rowspan="1" align="left">
-Connection
-</td>
-<td colspan="1" rowspan="1" align="left">
-Statement
-</td>
-<td colspan="1" rowspan="1" align="left">
-Result Set
-</td>
-</tr>
+     <tbody class="tbody">
+       <tr>
+         <td class="empty">&nbsp;</td><td class="empty">&nbsp;</td><td>Connection</td>
+         <td>Statement</td>
+         <td>Result Set</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-autocommit
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_AUTOCOMMIT_ON
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>autocommit</td>
+         <td><code class="literal">DB2_AUTOCOMMIT_ON</code></td>
+         <td>X</td>
+         <td>-</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-autocommit
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_AUTOCOMMIT_OFF
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>autocommit</td>
+         <td><code class="literal">DB2_AUTOCOMMIT_OFF</code></td>
+         <td>X</td>
+         <td>-</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-cursor
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_SCROLLABLE
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>cursor</td>
+         <td><code class="literal">DB2_SCROLLABLE</code></td>
+         <td>-</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-cursor
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_FORWARD_ONLY
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>cursor</td>
+         <td><code class="literal">DB2_FORWARD_ONLY</code></td>
+         <td>-</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-binmode
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_BINARY
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>binmode</td>
+         <td><code class="literal">DB2_BINARY</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-binmode
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_CONVERT
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>binmode</td>
+         <td><code class="literal">DB2_CONVERT</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-binmode
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_PASSTHRU
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>binmode</td>
+         <td><code class="literal">DB2_PASSTHRU</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-db2_attr_case
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_CASE_LOWER
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>db2_attr_case</td>
+         <td><code class="literal">DB2_CASE_LOWER</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-db2_attr_case
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_CASE_UPPER
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>db2_attr_case</td>
+         <td><code class="literal">DB2_CASE_UPPER</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-db2_attr_case
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_CASE_NATURAL
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>db2_attr_case</td>
+         <td><code class="literal">DB2_CASE_NATURAL</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-deferred_prepare
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_DEFERRED_PREPARE_ON
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>deferred_prepare</td>
+         <td><code class="literal">DB2_DEFERRED_PREPARE_ON</code></td>
+         <td>-</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-deferred_prepare
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_DEFERRED_PREPARE_OFF
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>deferred_prepare</td>
+         <td><code class="literal">DB2_DEFERRED_PREPARE_OFF</code></td>
+         <td>-</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-i5_fetch_only
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_I5_FETCH_ON
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>i5_fetch_only</td>
+         <td><code class="literal">DB2_I5_FETCH_ON</code></td>
+         <td>-</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-i5_fetch_only
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-DB2_I5_FETCH_OFF
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>i5_fetch_only</td>
+         <td><code class="literal">DB2_I5_FETCH_OFF</code></td>
+         <td>-</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-userid
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-SQL_ATTR_INFO_USERID
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>userid</td>
+         <td><code class="literal">SQL_ATTR_INFO_USERID</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-acctstr
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-SQL_ATTR_INFO_ACCTSTR
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>acctstr</td>
+         <td><code class="literal">SQL_ATTR_INFO_ACCTSTR</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-applname
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-SQL_ATTR_INFO_APPLNAME
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>applname</td>
+         <td><code class="literal">SQL_ATTR_INFO_APPLNAME</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-wrkstnname
-</td>
-<td colspan="1" rowspan="1" align="left">
-<span class="literal">
-SQL_ATTR_INFO_WRKSTNNAME
-</span>
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
-X
-</td>
-<td colspan="1" rowspan="1" align="left">
--
-</td>
-</tr>
+       <tr>
+         <td>wrkstnname</td>
+         <td><code class="literal">SQL_ATTR_INFO_WRKSTNNAME</code></td>
+         <td>X</td>
+         <td>X</td>
+         <td>-</td>
+       </tr>
 
-</tbody>
-</colgroup>
-
-</table>
+     </tbody>
+   
+ </table>
 
 </div>
-
