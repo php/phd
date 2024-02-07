@@ -2,167 +2,93 @@
 CALS Table rendering
 --FILE--
 <?php
+namespace phpdotnet\phd;
 
-require "include/PhDReader.class.php";
-require "include/PhDFormat.class.php";
-require "formats/xhtml.php";
+require_once __DIR__ . "/../setup.php";
+require_once __DIR__ . "/TestChunkedXHTML.php";
 
-$reader = new PhDReader(dirname(__FILE__) ."/data/001-1.xml");
-$format = new XHTMLPhDFormat($reader, array(), array());
+$formatclass = "TestChunkedXHTML";
+$xml_file = __DIR__ . "/data/001-1.xml";
 
-$map = $format->getMap();
+$opts = array(
+    "index"             => true,
+    "xml_root"          => dirname($xml_file),
+    "xml_file"          => $xml_file,
+    "output_dir"        => __DIR__ . "/output/",
+);
 
-while($reader->read()) {
-    $type = $reader->nodeType;
-    $name = $reader->name;
+$extra = array(
+    "lang_dir" => __PHDDIR__ . "phpdotnet/phd/data/langs/",
+    "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
+    "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
+);
 
-    switch($type) {
-    case XMLReader::ELEMENT:
-    case XMLReader::END_ELEMENT:
-        $open = $type == XMLReader::ELEMENT;
+$render = new TestRender($formatclass, $opts, $extra);
 
-        $funcname = "format_$name";
-        if (isset($map[$name])) {
-            $tag = $map[$name];
-            if (is_array($tag)) {
-                $tag = $reader->notXPath($tag);
-            }
-            if (strncmp($tag, "format_", 7)) {
-                $retval = $format->transformFromMap($open, $tag, $name);
-                break;
-            }
-            $funcname = $tag;
-        }
-
-        $retval = $format->{$funcname}($open, $name);
-        break;
-
-    case XMLReader::TEXT:
-        $retval = htmlspecialchars($reader->value, ENT_QUOTES);
-        break;
-
-    case XMLReader::CDATA:
-        $retval = $format->CDATA($reader->value);
-        break;
-
-    case XMLReader::COMMENT:
-    case XMLReader::WHITESPACE:
-    case XMLReader::SIGNIFICANT_WHITESPACE:
-    case XMLReader::DOC_TYPE:
-        /* swallow it */
-        continue 2;
-
-    default:
-        trigger_error("Don't know how to handle {$name} {$type}", E_USER_ERROR);
-        return;
-    }
-    echo $retval, "\n";
+if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
+    mkdir($opts["output_dir"], 0755);
 }
 
-$reader->close();
+$render->run();
 ?>
---EXPECT--
-<div id="" class="article">
-<h1 class="title">
-Example table
-</h1>
-<table border="5">
-<h1 class="title">
-Sample CALS Table
-</h1>
-<colgroup>
+--EXPECTF--
+Filename: %s.html
+Content:
+<div id="%s" class="article">
+<h1>Example table</h1>
 
-<col align="left" />
-<col align="left" />
-<col align="left" />
-<col align="left" />
-<thead valign="middle">
-<tr valign="middle">
-<th colspan="2">
-Horizontal Span
-</th>
-<th colspan="1">
-a3
-</th>
-<th colspan="1">
-a4
-</th>
-<th colspan="1">
-a5
-</th>
+<table id="ex.calstable" class="doctable table">
+<caption><strong>Sample CALS Table</strong></caption>
+
+<col style="text-align: left;" />
+<col style="text-align: left;" />
+<col style="text-align: left;" />
+<col style="text-align: left;" />
+<thead>
+<tr>
+  <th colspan="2">Horizontal Span</th>
+  <th>a3</th>
+  <th>a4</th>
+  <th>a5</th>
 </tr>
 
 </thead>
 
-<tfoot valign="middle">
-<tr valign="middle">
-<th colspan="1">
-f1
-</th>
-<th colspan="1">
-f2
-</th>
-<th colspan="1">
-f3
-</th>
-<th colspan="1">
-f4
-</th>
-<th colspan="1">
-f5
-</th>
+<tfoot>
+<tr>
+  <th>f1</th>
+  <th>f2</th>
+  <th>f3</th>
+  <th>f4</th>
+  <th>f5</th>
 </tr>
 
 </tfoot>
 
-<tbody valign="middle">
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-b1
-</td>
-<td colspan="1" rowspan="1" align="left">
-b2
-</td>
-<td colspan="1" rowspan="1" align="left">
-b3
-</td>
-<td colspan="1" rowspan="1" align="left">
-b4
-</td>
-<td colspan="1" rowspan="2" align="left" valign="middle">
-<p class="para">
-Vertical Span
-</p>
-</td>
+<tbody class="tbody">
+<tr>
+  <td style="text-align: left;">b1</td>
+  <td style="text-align: left;">b2</td>
+  <td style="text-align: left;">b3</td>
+  <td style="text-align: left;">b4</td>
+  <td rowspan="2" style="text-align: left; vertical-align: middle;"><p class="para">Vertical Span</p></td>
 </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-c1
-</td>
-<td colspan="2" rowspan="2" align="center" valign="bottom">
-Span Both
-</td>
-<td colspan="1" rowspan="1" align="left">
-c4
-</td>
+<tr>
+  <td style="text-align: left;">c1</td>
+  <td colspan="2" rowspan="2" style="text-align: center; vertical-align: bottom;">Span Both</td>
+  <td style="text-align: left;">c4</td>
 </tr>
 
-<tr valign="middle">
-<td colspan="1" rowspan="1" align="left">
-d1
-</td>
-<td colspan="1" rowspan="1" align="left">
-d4
-</td>
-<td colspan="1" rowspan="1" align="left">
-d5
-</td>
+<tr>
+  <td style="text-align: left;">d1</td>
+  <td style="text-align: left;">d4</td>
+  <td style="text-align: left;">d5</td>
 </tr>
 
 </tbody>
-</colgroup>
 
 </table>
+
 
 </div>

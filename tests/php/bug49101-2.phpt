@@ -5,7 +5,6 @@ Bug #49101 - Thick border again - Big XHTML
 namespace phpdotnet\phd;
 
 require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/../TestRender.php";
 require_once __DIR__ . "/TestBigXHTML.php";
 
 $formatclass = "TestBigXHTML";
@@ -25,6 +24,11 @@ $extra = array(
 );
 
 $render = new TestRender($formatclass, $opts, $extra);
+
+if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
+    mkdir($opts["output_dir"], 0755);
+}
+
 $render->run();
 ?>
 --EXPECTF--
