@@ -32,8 +32,6 @@ class Package_PHP_Manpage extends Package_Generic_Manpage {
         ),
     );
 
-    protected $CURRENT_ID = "";
-
     /* Current Chunk settings */
     protected $cchunk          = array();
     /* Default Chunk settings */

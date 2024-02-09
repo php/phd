@@ -362,13 +362,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     */
     public $phd_pearapi_urlprefix = 'http://pear.php.net/package/';
 
-    /**
-    * Name of the ID currently being processed
-    *
-    * @var string
-    */
-    protected $CURRENT_ID = "";
-
     /* Current Chunk settings */
     protected $cchunk          = array();
     /* Default Chunk settings */

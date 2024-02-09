@@ -55,6 +55,13 @@ abstract class Format extends ObjectStorage
     /* Table handling */
     protected $TABLE = array();
 
+    /**
+    * Name of the ID currently being processed
+    *
+    * @var string
+    */
+    protected $CURRENT_ID = "";
+
     public function __construct() {
         $sqlite = Config::indexcache();
         if (!$sqlite) {

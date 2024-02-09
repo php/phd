@@ -1,7 +1,6 @@
 <?php
 namespace phpdotnet\phd;
 
-#[\AllowDynamicProperties]
 abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     private $myelementmap = array( /* {{{ */
         'abstract'              => 'div', /* Docbook-xsl prints "abstract"... */
@@ -448,6 +447,15 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'email'                 => 'format_email_text',
         'titleabbrev'           => 'format_suppressed_text',
     );
+
+    /** @var array */
+    protected $TOC_WRITTEN = [];
+
+    /** @var string */
+    protected $CURRENT_LANG = "";
+
+    /** @var string */
+    protected $CURRENT_CHUNK = "";
 
      /* Current Chunk variables */
     protected $cchunk      = array();
