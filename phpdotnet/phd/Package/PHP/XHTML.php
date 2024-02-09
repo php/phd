@@ -148,8 +148,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     private $versions = array();
     private $acronyms = array();
     protected $deprecated = array();
-    protected $CURRENT_ID;
-    protected $CURRENT_CHUNK;
 
     /* Current Chunk settings */
     protected $cchunk          = array();
