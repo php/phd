@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="type-rendering-methodsynopsis-parameters">
+
+ <section>
+  <para>1. Function/method with no parameters</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>2. Function/method with one parameter</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam><type>mixed</type><parameter>anything</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>3. Function/method with one parameter with whitespace in type tag</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam><type>  bool  </type><parameter>yesOrNo</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>4. Function/method with optional parameter</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam choice="opt"><type>int</type><parameter>count</parameter><initializer>0</initializer></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>5. Function/method with nullable parameter</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam><type class="union"><type>float</type><type>null</type></type><parameter>value</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>6. Function/method with nullable optional parameter</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam choice="opt"><type class="union"><type>string</type><type>null</type></type><parameter>options</parameter><initializer>""</initializer></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>7. Function/method with reference parameter</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam><type>array</type><parameter role="reference">reference</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>8. Function/method with union type parameter</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam><type class="union"><type>iterable</type><type>resource</type><type>callable</type><type>null</type></type><parameter>option</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>9. Function/method with more than three parameters</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam><type>int</type><parameter>count</parameter></methodparam>
+   <methodparam><type>string</type><parameter>name</parameter></methodparam>
+   <methodparam><type>bool</type><parameter>isSomething</parameter></methodparam>
+   <methodparam><type>array</type><parameter>list</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+</chapter>

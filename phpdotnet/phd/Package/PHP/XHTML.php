@@ -11,8 +11,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'colophon'              => 'format_chunk',
         'function'              => 'format_function',
         'methodname'            => 'format_function',
+        'methodparam'           => 'format_methodparam',
         'methodsynopsis'        => 'format_methodsynopsis',
         'legalnotice'           => 'format_chunk',
+        'parameter'             => array(
+            /* DEFAULT */          'format_parameter',
+            'methodparam'       => 'format_methodparam_parameter',
+        ),
         'part'                  => 'format_container_chunk',
         'partintro'             => 'format_partintro',
         'preface'               => 'format_chunk',
@@ -70,9 +75,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'type'                  => array(
             /* DEFAULT */          'format_type',
             'methodsynopsis'    => 'format_methodsynopsis_type',
+            'methodparam'       => 'format_type_methodparam',
             'type'              => array(
                 /* DEFAULT */       'format_type',
                 'methodsynopsis' => 'format_suppressed_tags',
+                'methodparam'   => 'format_suppressed_tags',
             ),
         ),
         'varname'               => array(
@@ -120,14 +127,15 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ),
         'refname'               => 'format_refname_text',
         'type'                  => array(
-            /* DEFAULT */          'format_type_if_object_or_pseudo_text',
+            /* DEFAULT */          'format_type_text',
             'classsynopsisinfo' => false,
-            'fieldsynopsis'     => 'format_type_if_object_or_pseudo_text',
-            'methodparam'       => 'format_type_if_object_or_pseudo_text',
+            'fieldsynopsis'     => 'format_type_text',
+            'methodparam'       => 'format_type_methodparam_text',
             'methodsynopsis'    => 'format_type_methodsynopsis_text',
             'type'              => array(
-                /* DEFAULT */       'format_type_if_object_or_pseudo_text',
+                /* DEFAULT */       'format_type_text',
                 'methodsynopsis' => 'format_type_methodsynopsis_text',
+                'methodparam'   => 'format_type_methodparam_text',
             ),
         ),
         'titleabbrev'           => array(
@@ -481,40 +489,19 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $content = "";
         if ($this->params["paramCount"] > 3) {
             $content .= "<br>";
+        } else if ($this->params["paramCount"] === 0) {
+            $content .= "(";
         }
 
         $content .= ")";
 
         if ($this->cchunk["methodsynopsis"]["returntypes"]) {
-            $types = [];
-            $this->type_separator = $this->cchunk["methodsynopsis"]["type_separator"];
+            $type = $this->format_types(
+                $this->cchunk["methodsynopsis"]["type_separator"],
+                $this->cchunk["methodsynopsis"]["returntypes"]
+            );
 
-            if (
-                $this->type_separator === "|" &&
-                count($this->cchunk["methodsynopsis"]["returntypes"]) === 2 &&
-                in_array("null", $this->cchunk["methodsynopsis"]["returntypes"], true)
-            ) {
-                $this->simple_nullable = true;
-                $this->type_separator = "";
-                $types[] = '<span class="type">?</span>';
-            }
-
-            foreach ($this->cchunk["methodsynopsis"]["returntypes"] as $return_type) {
-                $formatted_type = self::format_type_if_object_or_pseudo_text($return_type, "type");
-                if ($formatted_type === false) {
-                    $formatted_type = $return_type;
-                }
-                if ($formatted_type !== "") {
-                    $types[] = '<span class="type">' . $formatted_type . '</span>';
-                }
-            }
-
-            $type = implode($this->type_separator ?? '', $types);
-            if (count($types) > 1) {
-                $type = '<span class="type">' . $type . '</span>';
-            }
             $content .= ': ' . $type;
-            $this->simple_nullable = null;
         }
 
         $content .= "</div>\n";
@@ -523,29 +510,109 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return $content;
     }
 
+    private function format_types($type_separator, $paramOrReturnType) {
+        $types = [];
+        $this->type_separator = $type_separator;
+
+        if (
+            $this->type_separator === "|" &&
+            count($paramOrReturnType) === 2 &&
+            in_array("null", $paramOrReturnType, true)
+        ) {
+            $this->simple_nullable = true;
+            $this->type_separator = "";
+            $formatted_type = self::format_type_text("?", "type");
+            $types[] = '<span class="type">' . $formatted_type .'</span>';
+        }
+
+        foreach ($paramOrReturnType as $individualType) {
+            $formatted_type = self::format_type_text($individualType, "type");
+            if ($formatted_type === false) {
+                $formatted_type = $individualType;
+            }
+            if ($formatted_type !== "") {
+                if ($individualType === "void") {
+                    $types[] = $formatted_type;
+                } else {
+                    $types[] = '<span class="type">' . $formatted_type . '</span>';
+                }
+            }
+        }
+
+        $type = implode($this->type_separator ?? '', $types);
+        if (count($types) > 1) {
+            $type = '<span class="type">' . $type . '</span>';
+        }
+        $this->simple_nullable = null;
+
+        return $type;
+    }
+
     public function format_type_methodsynopsis_text($type, $tagname) {
         $this->cchunk["methodsynopsis"]["returntypes"][] = $type;
 
         return "";
     }
 
-    public function format_type_if_object_or_pseudo_text($type, $tagname) {
-        if (strtolower($type) === "null" && $this->simple_nullable) {
-            return "";
+    public function format_methodparam_parameter($open, $name, $attrs, $props) {
+        $type = "";
+        if ($open) {
+            if ($this->cchunk["methodparam"]["paramtypes"]) {
+                $type = $this->format_types(
+                    $this->cchunk["methodparam"]["type_separator"],
+                    $this->cchunk["methodparam"]["paramtypes"]
+                );
+            }
+            $this->cchunk["methodparam"]["type_separator"] = "";
+            $this->cchunk["methodparam"]["paramtypes"] = [];
+        }
+        return $type . parent::format_methodparam_parameter($open, $name, $attrs, $props);
+    }
+
+    public function format_methodparam($open, $name, $attrs) {
+        if ($open) {
+            $this->cchunk["methodparam"]["paramtypes"] = [];
+            $this->cchunk["methodparam"]["type_separator"] = "";
+            return parent::format_methodparam($open, $name, $attrs);
         }
 
-        if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
-            return false;
+        if ($this->params["opt"] && !$this->params["init"]) {
+            return '<span class="initializer"> = ?</span></span>';
         }
+        $this->params["init"] = false;
+        $this->cchunk["methodparam"]["paramtypes"] = [];
+        $this->cchunk["methodparam"]["type_separator"] = "";
+        return "</span>";
+    }
 
-        return self::format_type_text($type, $tagname);
+    public function format_type_methodparam($open, $tag, $attrs) {
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
+                if ($attrs[Reader::XMLNS_DOCBOOK]["class"] === "union") {
+                    $this->cchunk["methodparam"]["type_separator"] = "|";
+                } else {
+                    $this->cchunk["methodparam"]["type_separator"] = "&";
+                }
+            }
+            $this->cchunk["methodparam"]["paramtypes"] = [];
+        }
+        return "";
+    }
+
+    public function format_type_methodparam_text($type, $tagname) {
+        $this->cchunk["methodparam"]["paramtypes"][] = $type;
+
+        return "";
     }
 
     public function format_type_text($type, $tagname) {
+        $type = trim($type);
         $t = strtr(strtolower($type), ["_" => "-", "\\" => "-"]);
         $href = $fragment = "";
 
         switch($t) {
+        case "void":
+            return $this->format_void(false, '', [], []);
         case "bool":
             $href = "language.types.boolean";
             break;
@@ -555,6 +622,17 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         case "double":
             $href = "language.types.float";
             break;
+        case "?":
+            $href = "language.types.null";
+            break;
+        case "false":
+        case "true":
+            $href = "language.types.value";
+            break;
+        case "null":
+            if ($this->simple_nullable) {
+                return "";
+            }
         case "boolean":
         case "integer":
         case "float":
@@ -562,30 +640,36 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         case "array":
         case "object":
         case "resource":
-        case "null":
-            if ($this->simple_nullable) {
-                return "";
-            }
         case "callable":
         case "iterable":
-            $href = "language.types.$t";
-            break;
         case "mixed":
-            $href = "language.types.declarations";
-            $fragment = "language.types.declarations.$t";
+        case "never":
+            $href = "language.types.$t";
             break;
         default:
             /* Check if its a classname. */
             $href = Format::getFilename("class.$t");
         }
 
+        if ($href === false) {
+            return false;
+        }
+
+        $classNames = ($type === "?") ? ($tagname . ' null') : ($tagname . ' ' . $type);
         if ($href && $this->chunked) {
-            return '<a href="' .$href. $this->getExt().($fragment ? "#$fragment" : ""). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
+            return '<a href="' .$href. $this->getExt().($fragment ? "#$fragment" : ""). '" class="' . $classNames . '">' .$type. '</a>';
         }
         if ($href) {
-            return '<a href="#' .($fragment ? $fragment : $href). '" class="' .$tagname. ' ' .$type. '">' .$type. '</a>';
+            return '<a href="#' .($fragment ? $fragment : $href). '" class="' . $classNames . '">' .$type. '</a>';
         }
-        return '<span class="' .$tagname. ' ' .$type. '">' .$type. '</span>';
+        return '<span class="' . $classNames . '">' .$type. '</span>';
+    }
+
+    public function format_void($open, $name, $attrs, $props) {
+        if (isset($props['sibling']) && $props['sibling'] == 'methodname') {
+            return '';
+        }
+        return parent::format_void($open, $name, $attrs, $props);
     }
 
     public function format_example_title($open, $name, $attrs, $props) {
