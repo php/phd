@@ -667,6 +667,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_void($open, $name, $attrs, $props) {
         if (isset($props['sibling']) && $props['sibling'] == 'methodname') {
+            $this->cchunk["methodsynopsis"]["returntypes"][] = "void";
             return '';
         }
         return parent::format_void($open, $name, $attrs, $props);
