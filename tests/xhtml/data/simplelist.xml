@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="simpelist" xmlns="http://docbook.org/ns/docbook">
+
+ <section>
+  <para>1. Simplelist with no type</para>
+  <simplelist>
+   <member>First</member>
+   <member>Second</member>
+   <member>Third</member>
+   <member>Fourth</member>
+   <member>Fifth</member>
+   <member>Sixth</member>
+   <member>Seventh</member>
+  </simplelist>
+ </section>
+
+ <section>
+  <para>2. Simplelist with "inline" type</para>
+  <simplelist type="inline">
+   <member>First</member>
+   <member>Second</member>
+   <member>Third</member>
+   <member>Fourth</member>
+   <member>Fifth</member>
+   <member>Sixth</member>
+   <member>Seventh</member>
+  </simplelist>
+ </section>
+
+ <section>
+  <para>3. Simplelist with "vert" type, 3 columns</para>
+  <simplelist type="vert" columns="3">
+   <member>First</member>
+   <member>Second</member>
+   <member>Third</member>
+   <member>Fourth</member>
+   <member>Fifth</member>
+   <member>Sixth</member>
+   <member>Seventh</member>
+  </simplelist>
+ </section>
+
+ <section>
+  <para>4. Simplelist with "horiz" type, 4 columns</para>
+  <simplelist type="horiz" columns="4">
+   <member>First</member>
+   <member>Second</member>
+   <member>Third</member>
+   <member>Fourth</member>
+   <member>Fifth</member>
+   <member>Sixth</member>
+   <member>Seventh</member>
+  </simplelist>
+ </section>
+
+</chapter>
