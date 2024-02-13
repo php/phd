@@ -68,31 +68,25 @@ Content:
  </div>
 
  <div class="section">
-  <p class="para">6. Function/method with one return type with whitespace in type tag</p>
-  <div class="methodsynopsis dc-description"><span class="methodname"><strong>function_name</strong></span>(): <span class="type"><a href="language.types.boolean.html" class="type bool">bool</a></span></div>
-
- </div>
-
- <div class="section">
-  <p class="para">7. Function/method with union return type</p>
+  <p class="para">6. Function/method with union return type</p>
   <div class="methodsynopsis dc-description"><span class="methodname"><strong>function_name</strong></span>(): <span class="type"><span class="type"><a href="language.types.integer.html" class="type int">int</a></span>|<span class="type"><a href="language.types.float.html" class="type float">float</a></span>|<span class="type"><a href="language.types.value.html" class="type false">false</a></span></span></div>
 
  </div>
 
  <div class="section">
-  <p class="para">8. Function/method with nullable return type</p>
+  <p class="para">7. Function/method with nullable return type</p>
   <div class="methodsynopsis dc-description"><span class="methodname"><strong>function_name</strong></span>(): <span class="type"><span class="type"><a href="language.types.null.html" class="type null">?</a></span><span class="type"><a href="language.types.object.html" class="type object">object</a></span></span></div>
 
  </div>
 
  <div class="section">
-  <p class="para">9. Function/method with nullable union return type</p>
+  <p class="para">8. Function/method with nullable union return type</p>
   <div class="methodsynopsis dc-description"><span class="methodname"><strong>function_name</strong></span>(): <span class="type"><span class="type"><a href="language.types.string.html" class="type string">string</a></span>|<span class="type"><a href="language.types.array.html" class="type array">array</a></span>|<span class="type"><a href="language.types.resource.html" class="type resource">resource</a></span>|<span class="type"><a href="language.types.callable.html" class="type callable">callable</a></span>|<span class="type"><a href="language.types.iterable.html" class="type iterable">iterable</a></span>|<span class="type"><a href="language.types.value.html" class="type true">true</a></span>|<span class="type"><a href="language.types.null.html" class="type null">null</a></span></span></div>
 
  </div>
 
  <div class="section">
-  <p class="para">10. Function/method with unknown return type</p>
+  <p class="para">9. Function/method with unknown return type</p>
   <div class="methodsynopsis dc-description"><span class="methodname"><strong>function_name</strong></span>(): <span class="type">UnknownType</span></div>
 
  </div>

@@ -175,6 +175,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         "refname"                      => array(),
         "alternatives"                 => array(),
         "refsynopsisdiv"               => null,
+        "methodparam"                  => array(
+            "type_separator"           => "",
+            "paramtypes"               => array(),
+        ),
     );
 
     /** @var int|null Number of already formatted types in the current compound type */
@@ -563,16 +567,14 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                     $this->cchunk["methodparam"]["paramtypes"]
                 );
             }
-            $this->cchunk["methodparam"]["type_separator"] = "";
-            $this->cchunk["methodparam"]["paramtypes"] = [];
+            $this->cchunk["methodparam"] = $this->dchunk["methodparam"];
         }
         return $type . parent::format_methodparam_parameter($open, $name, $attrs, $props);
     }
 
     public function format_methodparam($open, $name, $attrs) {
         if ($open) {
-            $this->cchunk["methodparam"]["paramtypes"] = [];
-            $this->cchunk["methodparam"]["type_separator"] = "";
+            $this->cchunk["methodparam"] = $this->dchunk["methodparam"];
             return parent::format_methodparam($open, $name, $attrs);
         }
 
@@ -580,21 +582,19 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return '<span class="initializer"> = ?</span></span>';
         }
         $this->params["init"] = false;
-        $this->cchunk["methodparam"]["paramtypes"] = [];
-        $this->cchunk["methodparam"]["type_separator"] = "";
+        $this->cchunk["methodparam"] = $this->dchunk["methodparam"];
         return "</span>";
     }
 
     public function format_type_methodparam($open, $tag, $attrs) {
         if ($open) {
+            $this->cchunk["methodparam"] = $this->dchunk["methodparam"];
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
-                if ($attrs[Reader::XMLNS_DOCBOOK]["class"] === "union") {
-                    $this->cchunk["methodparam"]["type_separator"] = "|";
-                } else {
-                    $this->cchunk["methodparam"]["type_separator"] = "&";
-                }
+                $this->cchunk["methodparam"]["type_separator"] = match ($attrs[Reader::XMLNS_DOCBOOK]["class"]) {
+                    "union"        => "|",
+                    "intersection" => "&amp;",
+                };
             }
-            $this->cchunk["methodparam"]["paramtypes"] = [];
         }
         return "";
     }
@@ -606,7 +606,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_type_text($type, $tagname) {
-        $type = trim($type);
         $t = strtr(strtolower($type), ["_" => "-", "\\" => "-"]);
         $href = $fragment = "";
 
