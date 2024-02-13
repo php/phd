@@ -2088,6 +2088,42 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '</kbd>';
     }
 
+    public function format_whitespace($whitespace, $elementStack, $currentDepth) {
+        /* The following if is to skip unnecessary whitespaces in the parameter list */
+        if (
+            in_array($elementStack[$currentDepth - 1], ['methodsynopsis', 'constructorsynopsis', 'destructorsynopsis'], true)
+            && (in_array($elementStack[$currentDepth] ?? "", ["methodname", "methodparam", "type", "void"], true)
+            || count($elementStack) === $currentDepth)
+        ) {
+            return false;
+        }
+
+        /* The following if is to skip whitespace before closing semicolon after property/class constant */
+        if ($elementStack[$currentDepth - 1] === "fieldsynopsis" && (in_array($elementStack[$currentDepth], ["varname", "initializer"], true))) {
+            return false;
+        }
+
+        /*
+        TODO: add trim() in type_text handling method and remove the below
+              as it doesn't work due to XMLReader including all whitespace
+              inside the tag in the text
+              hence no separate significant whitespace here
+          */
+        /* The following if is to skip whitespace inside type elements */
+        if ($elementStack[$currentDepth - 1] === "type") {
+            return false;
+        }
+
+        /* The following if is to skip unnecessary whitespaces in the implements list */
+        if (
+            ($elementStack[$currentDepth - 1] === 'classsynopsisinfo' && $elementStack[$currentDepth] === 'oointerface') ||
+            ($elementStack[$currentDepth - 1] === 'oointerface' && $elementStack[$currentDepth] === 'interfacename')
+        ) {
+            return false;
+        }
+
+        return $whitespace;
+    }
 
 }
 
