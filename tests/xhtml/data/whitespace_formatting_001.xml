@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="whitespace-formatting-001">
+
+ <section>
+  <para>1. Function/method with whitespace between name, parameters and return types</para>
+  <methodsynopsis>
+   <type class="union"><type>int</type><type>float</type><type>false</type></type>
+   <methodname>function_name</methodname>
+   <methodparam><type class="union"><type>iterable</type><type>resource</type><type>callable</type><type>null</type></type><parameter>option</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>2. Constructor with whitespace between name, parameters and return types</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type class="union"><type>iterable</type><type>resource</type><type>callable</type><type>null</type></type><parameter>option</parameter></methodparam>
+   <void/>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>3. Destructor with whitespace between name, parameters and return types</para>
+  <destructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type class="union"><type>iterable</type><type>resource</type><type>callable</type><type>null</type></type><parameter>option</parameter></methodparam>
+   <void/>
+  </destructorsynopsis>
+ </section>
+
+ <section>
+  <para>4. Class constant with whitespace after varname and initializer</para>
+  <fieldsynopsis>
+   <modifier>const</modifier>
+   <type>int</type>
+   <varname>CONSTANT_NAME</varname>
+   <initializer>1</initializer>
+  </fieldsynopsis>
+ </section>
+
+ <section>
+  <para>5. Implements list with whitespace</para>
+  <classsynopsisinfo>
+   <ooclass>
+    <classname>SomeClass</classname>
+   </ooclass>
+   <oointerface>
+    <interfacename>FirstInterface</interfacename>
+   </oointerface>
+   <oointerface>
+    <interfacename>SecondInterface</interfacename>
+   </oointerface>
+   <oointerface>
+    <interfacename>ThirdInterface</interfacename>
+   </oointerface>
+  </classsynopsisinfo>
+ </section>
+
+</chapter>
