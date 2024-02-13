@@ -216,6 +216,3 @@ class Render extends ObjectStorage
     } /* }}} */
 
 }
-
-
-
