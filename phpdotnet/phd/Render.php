@@ -176,17 +176,33 @@ class Render extends ObjectStorage
                 case \XMLReader::WHITESPACE: /* {{{ */
                 case \XMLReader::SIGNIFICANT_WHITESPACE:
 
+                /* The following if is to skip unnecessary whitespaces in the parameter list */
+                if (in_array($this->STACK[$r->depth - 1], ['methodsynopsis', 'constructorsynopsis', 'destructorsynopsis'], true) &&
+                    in_array($this->STACK[$r->depth] ?? "", ["methodname", "methodparam", "type", "void"], true)
+                ) {
+                    break;
+                }
+
+                /* The following if is to skip whitespace before closing semicolon after property/class constant */
+                if ($this->STACK[$r->depth - 1] === "fieldsynopsis" && (in_array($this->STACK[$r->depth], ["varname", "initializer"], true))) {
+                    break;
+                }
+
+                /* The following if is to skip whitespace inside type elements */
+                if ($this->STACK[$r->depth - 1] === "type") {
+                    break;
+                }
+
+                /* The following if is to skip unnecessary whitespaces in the implements list */
+                if (
+                    ($this->STACK[$r->depth - 1] === 'classsynopsisinfo' && $this->STACK[$r->depth] === 'oointerface') ||
+                    ($this->STACK[$r->depth - 1] === 'oointerface' && $this->STACK[$r->depth] === 'interfacename')
+                ) {
+                    break;
+                }
+
                 $retval  = $r->value;
                 foreach($this as $format) {
-
-                    if (method_exists($format, 'format_whitespace')) {
-                        $retval = $format->format_whitespace($retval, $this->STACK, $r->depth);
-
-                        if ($retval === false) {
-                            continue;
-                        }
-                    }
-
                     $format->appendData($retval);
                 }
                 break;

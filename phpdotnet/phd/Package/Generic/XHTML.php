@@ -143,7 +143,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'methodparam'           => 'format_methodparam',
         'methodsynopsis'        => 'format_methodsynopsis',
         'methodname'            => 'format_methodname',
-        'member'                => 'format_member',
+        'member'                => 'li',
         'modifier'              => 'span',
         'note'                  => 'format_note',
         'orgname'               => 'span',
@@ -269,7 +269,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'setindex'              => 'format_chunk',
         'shortaffil'            => 'format_suppressed_tags',
         'sidebar'               => 'format_note',
-        'simplelist'            => 'format_simplelist', /* FIXME: simplelists has few attributes that need to be implemented */
+        'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
         'simplesect'            => 'div',
         'simpara'               => array(
             /* DEFAULT */          'p',
@@ -446,7 +446,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'literal'               => 'format_literal_text',
         'email'                 => 'format_email_text',
         'titleabbrev'           => 'format_suppressed_text',
-        'member'                => 'format_member_text',
     );
 
     /** @var array */
@@ -500,11 +499,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         "chunk_id"                 => null,
         "varlistentry"             => array(
             "listitems"                     => array(),
-        ),
-        "simplelist"               => array(
-            "members"              => array(),
-            "type"                 => null,
-            "columns"              => null,
         ),
     );
 
@@ -2045,110 +2039,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '</ul>';
     }
 
-    public function format_simplelist($open, $name, $attrs, $props) {
-        if ($open) {
-            $this->cchunk["simplelist"]["type"] = $attrs[Reader::XMLNS_DOCBOOK]["type"] ?? "";
-            $this->cchunk["simplelist"]["columns"] = $attrs[Reader::XMLNS_DOCBOOK]["columns"] ?? 1;
-
-            if ($this->cchunk["simplelist"]["columns"] < 1) {
-                $this->cchunk["simplelist"]["columns"] = 1;
-            }
-
-            if ($this->cchunk["simplelist"]["type"] === "inline") {
-                return '<span class="' . $name . '">';
-            } else if ($this->cchunk["simplelist"]["type"] === "vert" || $this->cchunk["simplelist"]["type"] === "horiz") {
-                return '<table class="' . $name . '">' . "\n" . str_repeat(" ", $props["depth"] + 1) . "<tbody>\n";
-            }
-
-            return '<ul class="' . $name . '">';
-        }
-
-        if ($this->cchunk["simplelist"]["type"] === "inline") {
-            $list = "";
-            foreach ($this->cchunk["simplelist"]["members"] as $member) {
-                $list .= $member . ", ";
-            }
-            $list = rtrim($list, ", ");
-
-            $this->cchunk["simplelist"] = $this->dchunk["simplelist"];
-            return $list . '</span>';
-
-        }
-
-        if ($this->cchunk["simplelist"]["type"] === "horiz") {
-
-            $table = "";
-            for ($i = 0; $i < count($this->cchunk["simplelist"]["members"]); $i++) {
-                if ($i % $this->cchunk["simplelist"]["columns"] === 0) {
-                    $table .= str_repeat(" ", $props["depth"] + 2) . "<tr>\n";
-                }
-
-                $table .= str_repeat(" ", $props["depth"] + 3) . "<td>" . $this->cchunk["simplelist"]["members"][$i] . "</td>\n";
-
-                if ($i % $this->cchunk["simplelist"]["columns"] === $this->cchunk["simplelist"]["columns"] - 1) {
-                    $table .= str_repeat(" ", $props["depth"] + 2) . "</tr>\n";
-                }
-            }
-            if ($i % $this->cchunk["simplelist"]["columns"] !== 0) {
-                $numOfMissingCells = $this->cchunk["simplelist"]["columns"] - ($i % $this->cchunk["simplelist"]["columns"]);
-                $oneRow = str_repeat(" ", $props["depth"] + 3) . "<td></td>\n";
-                $table .= str_repeat($oneRow, $numOfMissingCells);
-                $table .= str_repeat(" ", $props["depth"] + 2) . "</tr>\n";
-            }
-
-            $this->cchunk["simplelist"] = $this->dchunk["simplelist"];
-
-            return $table . str_repeat(" ", $props["depth"] + 1) . "</tbody>\n" . str_repeat(" ", $props["depth"]) . "</table>";
-
-        }
-
-        if ($this->cchunk["simplelist"]["type"] === "vert") {
-
-            $table = "";
-            $numOfRows = ceil(count($this->cchunk["simplelist"]["members"]) / $this->cchunk["simplelist"]["columns"]);
-            for ($row = 0; $row < $numOfRows; $row++) {
-                $table .= str_repeat(" ", $props["depth"] + 2) . "<tr>\n";
-                for ($col = 0; $col < $this->cchunk["simplelist"]["columns"]; $col++) {
-                    $memberIndex = ($numOfRows * $col) + $row;
-                    $table .= str_repeat(" ", $props["depth"] + 3) . "<td>";
-                    if ($memberIndex < count($this->cchunk["simplelist"]["members"])) {
-                        $table .= $this->cchunk["simplelist"]["members"][$memberIndex];
-                    }
-                    $table .= "</td>\n";
-                }
-                $table .= str_repeat(" ", $props["depth"] + 2) . "</tr>\n";
-            }
-            $this->cchunk["simplelist"] = $this->dchunk["simplelist"];
-
-            return $table . str_repeat(" ", $props["depth"] + 1) . "</tbody>\n" . str_repeat(" ", $props["depth"]) . "</table>";
-        }
-
-        $this->cchunk["simplelist"] = $this->dchunk["simplelist"];
-        return '</ul>';
-    }
-
-    public function format_member($open, $name, $attrs, $props) {
-        if ($this->cchunk["simplelist"]["type"] === "inline"
-            || $this->cchunk["simplelist"]["type"] === "vert"
-            || $this->cchunk["simplelist"]["type"] === "horiz") {
-            return '';
-        }
-        if ($open) {
-            return '<li>';
-        }
-        return '</li>';
-    }
-
-    public function format_member_text($value, $tag) {
-        if ($this->cchunk["simplelist"]["type"] === "inline"
-            || $this->cchunk["simplelist"]["type"] === "vert"
-            || $this->cchunk["simplelist"]["type"] === "horiz") {
-            $this->cchunk["simplelist"]["members"][] = $value;
-            return '';
-        }
-        return $value;
-    }
-
     public function format_orderedlist($open, $name, $attrs, $props) {
         if ($open) {
             $numeration = "1";
@@ -2198,51 +2088,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '</kbd>';
     }
 
-    public function format_whitespace($whitespace, $elementStack, $currentDepth) {
-        /* The following if is to skip unnecessary whitespaces in the parameter list */
-        if (
-            in_array($elementStack[$currentDepth - 1], ['methodsynopsis', 'constructorsynopsis', 'destructorsynopsis'], true)
-            && (in_array($elementStack[$currentDepth] ?? "", ["methodname", "methodparam", "type", "void"], true)
-            || count($elementStack) === $currentDepth)
-        ) {
-            return false;
-        }
-
-        /* The following if is to skip whitespace before closing semicolon after property/class constant */
-        if ($elementStack[$currentDepth - 1] === "fieldsynopsis" && (in_array($elementStack[$currentDepth], ["varname", "initializer"], true))) {
-            return false;
-        }
-
-        /*
-        TODO: add trim() in type_text handling method and remove the below
-              as it doesn't work due to XMLReader including all whitespace
-              inside the tag in the text
-              hence no separate significant whitespace here
-          */
-        /* The following if is to skip whitespace inside type elements */
-        if ($elementStack[$currentDepth - 1] === "type") {
-            return false;
-        }
-
-        if (
-            $elementStack[$currentDepth - 1] === "simplelist"
-            && ($this->cchunk["simplelist"]["type"] === "inline"
-                || $this->cchunk["simplelist"]["type"] === "vert"
-                || $this->cchunk["simplelist"]["type"] === "horiz")
-            ) {
-            return false;
-        }
-
-        /* The following if is to skip unnecessary whitespaces in the implements list */
-        if (
-            ($elementStack[$currentDepth - 1] === 'classsynopsisinfo' && $elementStack[$currentDepth] === 'oointerface') ||
-            ($elementStack[$currentDepth - 1] === 'oointerface' && $elementStack[$currentDepth] === 'interfacename')
-        ) {
-            return false;
-        }
-
-        return $whitespace;
-    }
 
 }
 
