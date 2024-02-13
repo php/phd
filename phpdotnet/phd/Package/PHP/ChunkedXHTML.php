@@ -8,11 +8,6 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
         parent::__construct();
         $this->registerFormatName("PHP-Chunked-XHTML");
         $this->setExt(Config::ext() === null ? ".html" : Config::ext());
-
-        Config::setCss(array(
-            'http://www.php.net/styles/theme-base.css',
-            'http://www.php.net/styles/theme-medium.css',
-        ));
     }
 
     public function __destruct() {
