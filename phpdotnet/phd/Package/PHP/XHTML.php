@@ -190,6 +190,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $this->mytextmap = array_merge(parent::getDefaultTextMap(), static::getDefaultTextMap());
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
         $this->registerPIHandlers($this->pihandlers);
+
+        if (Config::css() === []) {
+            Config::setCss(array(
+                "http://www.php.net/styles/theme-base.css",
+                "http://www.php.net/styles/theme-medium.css",
+            ));
+        }
     }
 
     public function getDefaultElementMap() {
