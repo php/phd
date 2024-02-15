@@ -2057,75 +2057,71 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
             if ($this->cchunk["simplelist"]["type"] === "inline") {
                 return '<span class="' . $name . '">';
-            } else if ($this->cchunk["simplelist"]["type"] === "vert" || $this->cchunk["simplelist"]["type"] === "horiz") {
+            }
+
+            if ($this->cchunk["simplelist"]["type"] === "vert"
+                || $this->cchunk["simplelist"]["type"] === "horiz") {
                 return '<table class="' . $name . '">' . "\n" . str_repeat(" ", $props["depth"] + 1) . "<tbody>\n";
             }
 
             return '<ul class="' . $name . '">';
         }
 
-        if ($this->cchunk["simplelist"]["type"] === "inline") {
-            $list = "";
-            foreach ($this->cchunk["simplelist"]["members"] as $member) {
-                $list .= $member . ", ";
-            }
-            $list = rtrim($list, ", ");
-
-            $this->cchunk["simplelist"] = $this->dchunk["simplelist"];
-            return $list . '</span>';
-
-        }
-
-        if ($this->cchunk["simplelist"]["type"] === "horiz") {
-
-            $table = "";
-            for ($i = 0; $i < count($this->cchunk["simplelist"]["members"]); $i++) {
-                if ($i % $this->cchunk["simplelist"]["columns"] === 0) {
-                    $table .= str_repeat(" ", $props["depth"] + 2) . "<tr>\n";
-                }
-
-                $table .= str_repeat(" ", $props["depth"] + 3) . "<td>" . $this->cchunk["simplelist"]["members"][$i] . "</td>\n";
-
-                if ($i % $this->cchunk["simplelist"]["columns"] === $this->cchunk["simplelist"]["columns"] - 1) {
-                    $table .= str_repeat(" ", $props["depth"] + 2) . "</tr>\n";
-                }
-            }
-            if ($i % $this->cchunk["simplelist"]["columns"] !== 0) {
-                $numOfMissingCells = $this->cchunk["simplelist"]["columns"] - ($i % $this->cchunk["simplelist"]["columns"]);
-                $oneRow = str_repeat(" ", $props["depth"] + 3) . "<td></td>\n";
-                $table .= str_repeat($oneRow, $numOfMissingCells);
-                $table .= str_repeat(" ", $props["depth"] + 2) . "</tr>\n";
-            }
-
-            $this->cchunk["simplelist"] = $this->dchunk["simplelist"];
-
-            return $table . str_repeat(" ", $props["depth"] + 1) . "</tbody>\n" . str_repeat(" ", $props["depth"]) . "</table>";
-
-        }
-
-        if ($this->cchunk["simplelist"]["type"] === "vert") {
-
-            $table = "";
-            $numOfRows = ceil(count($this->cchunk["simplelist"]["members"]) / $this->cchunk["simplelist"]["columns"]);
-            for ($row = 0; $row < $numOfRows; $row++) {
-                $table .= str_repeat(" ", $props["depth"] + 2) . "<tr>\n";
-                for ($col = 0; $col < $this->cchunk["simplelist"]["columns"]; $col++) {
-                    $memberIndex = ($numOfRows * $col) + $row;
-                    $table .= str_repeat(" ", $props["depth"] + 3) . "<td>";
-                    if ($memberIndex < count($this->cchunk["simplelist"]["members"])) {
-                        $table .= $this->cchunk["simplelist"]["members"][$memberIndex];
-                    }
-                    $table .= "</td>\n";
-                }
-                $table .= str_repeat(" ", $props["depth"] + 2) . "</tr>\n";
-            }
-            $this->cchunk["simplelist"] = $this->dchunk["simplelist"];
-
-            return $table . str_repeat(" ", $props["depth"] + 1) . "</tbody>\n" . str_repeat(" ", $props["depth"]) . "</table>";
-        }
+        $list = match ($this->cchunk["simplelist"]["type"]) {
+            "inline" => $this->format_inline_simplelist(),
+            "horiz"  => $this->format_horizontal_simplelist($props),
+            "vert"   => $this->format_vertical_simplelist($props),
+            default  => "</ul>",
+        };
 
         $this->cchunk["simplelist"] = $this->dchunk["simplelist"];
-        return '</ul>';
+
+        return $list;
+    }
+
+    private function format_inline_simplelist() {
+        return implode(", ", $this->cchunk["simplelist"]["members"]) . '</span>';
+    }
+
+    private function format_horizontal_simplelist($props) {
+        $this->cchunk["simplelist"]["members"] = array_merge($this->cchunk["simplelist"]["members"], $this->get_simplelist_members_padding());
+
+        $table = "";
+        $trPadding = str_repeat(" ", $props["depth"] + 2);
+        $tdPadding = str_repeat(" ", $props["depth"] + 3);
+        for ($i = 0; $i < count($this->cchunk["simplelist"]["members"]); $i++) {
+            $trOpen = ($i % $this->cchunk["simplelist"]["columns"] === 0) ? ($trPadding . "<tr>\n") : "";
+            $trClose = ($i % $this->cchunk["simplelist"]["columns"] === $this->cchunk["simplelist"]["columns"] - 1)  ? ($trPadding . "</tr>\n") : "";
+
+            $table .= $trOpen . $tdPadding . "<td>" . $this->cchunk["simplelist"]["members"][$i] . "</td>\n" . $trClose;
+        }
+
+        return $table . str_repeat(" ", $props["depth"] + 1) . "</tbody>\n" . str_repeat(" ", $props["depth"]) . "</table>";
+    }
+
+    private function get_simplelist_members_padding() {
+        $numOfRows = ceil(count($this->cchunk["simplelist"]["members"]) / $this->cchunk["simplelist"]["columns"]);
+
+        return array_fill(0, ($this->cchunk["simplelist"]["columns"] * $numOfRows) - count($this->cchunk["simplelist"]["members"]), "");
+    }
+
+    private function format_vertical_simplelist($props) {
+        $numOfRows = ceil(count($this->cchunk["simplelist"]["members"]) / $this->cchunk["simplelist"]["columns"]);
+
+        $this->cchunk["simplelist"]["members"] = array_merge($this->cchunk["simplelist"]["members"], $this->get_simplelist_members_padding());
+
+        $table = "";
+        $trPadding = str_repeat(" ", $props["depth"] + 2);
+        $tdPadding = str_repeat(" ", $props["depth"] + 3);
+        for ($row = 0; $row < $numOfRows; $row++) {
+            $table .= $trPadding . "<tr>\n";
+            for ($col = 0; $col < $this->cchunk["simplelist"]["columns"]; $col++) {
+                $table .= $tdPadding . "<td>" . $this->cchunk["simplelist"]["members"][($numOfRows * $col) + $row] . "</td>\n";
+            }
+            $table .= $trPadding . "</tr>\n";
+        }
+
+        return $table . str_repeat(" ", $props["depth"] + 1) . "</tbody>\n" . str_repeat(" ", $props["depth"]) . "</table>";
     }
 
     public function format_member($open, $name, $attrs, $props) {
