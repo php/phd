@@ -2069,8 +2069,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
         $list = match ($this->cchunk["simplelist"]["type"]) {
             "inline" => $this->format_inline_simplelist(),
-            "horiz"  => $this->format_horizontal_simplelist($props),
-            "vert"   => $this->format_vertical_simplelist($props),
+            "horiz"  => $this->format_horizontal_simplelist($props["depth"]),
+            "vert"   => $this->format_vertical_simplelist($props["depth"]),
             default  => "</ul>",
         };
 
@@ -2083,45 +2083,58 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return implode(", ", $this->cchunk["simplelist"]["members"]) . '</span>';
     }
 
-    private function format_horizontal_simplelist($props) {
-        $this->cchunk["simplelist"]["members"] = array_merge($this->cchunk["simplelist"]["members"], $this->get_simplelist_members_padding());
-
-        $table = "";
-        $trPadding = str_repeat(" ", $props["depth"] + 2);
-        $tdPadding = str_repeat(" ", $props["depth"] + 3);
-        for ($i = 0; $i < count($this->cchunk["simplelist"]["members"]); $i++) {
-            $trOpen = ($i % $this->cchunk["simplelist"]["columns"] === 0) ? ($trPadding . "<tr>\n") : "";
-            $trClose = ($i % $this->cchunk["simplelist"]["columns"] === $this->cchunk["simplelist"]["columns"] - 1)  ? ($trPadding . "</tr>\n") : "";
-
-            $table .= $trOpen . $tdPadding . "<td>" . $this->cchunk["simplelist"]["members"][$i] . "</td>\n" . $trClose;
-        }
-
-        return $table . str_repeat(" ", $props["depth"] + 1) . "</tbody>\n" . str_repeat(" ", $props["depth"]) . "</table>";
+    private function format_horizontal_simplelist($depth) {
+        return $this->chunkReduceTable(
+            $this->processTabular(
+                $this->cchunk["simplelist"]["members"],
+                $this->cchunk["simplelist"]["columns"],
+                $depth),
+            $this->cchunk["simplelist"]["columns"],
+            $depth
+        );
     }
 
-    private function get_simplelist_members_padding() {
-        $numOfRows = ceil(count($this->cchunk["simplelist"]["members"]) / $this->cchunk["simplelist"]["columns"]);
-
-        return array_fill(0, ($this->cchunk["simplelist"]["columns"] * $numOfRows) - count($this->cchunk["simplelist"]["members"]), "");
+    /** Return formatted table */
+    private function chunkReduceTable(array $members, int $cols, int $depth): string
+    {
+        $trPadding = str_repeat(' ', $depth + 2);
+        return array_reduce(
+                array_chunk(
+                    $members,
+                    $cols,
+                ),
+                fn (string $carry, array $entry) => $carry . $trPadding . "<tr>\n" . implode('', $entry) . $trPadding . "</tr>\n",
+                ''
+            )
+            . str_repeat(' ', $depth + 1) . "</tbody>\n" . str_repeat(' ', $depth) . "</table>";
     }
 
-    private function format_vertical_simplelist($props) {
-        $numOfRows = ceil(count($this->cchunk["simplelist"]["members"]) / $this->cchunk["simplelist"]["columns"]);
+    /** Pads $members so that number of members = columns x rows */
+    private function processTabular(array $members, int $cols, int $depth): array
+    {
+        $tdPadding = str_repeat(' ', $depth + 3);
+        return array_map(
+            fn (string $member) => $tdPadding . "<td>$member</td>\n",
+            /** The padding is done by getting the additive modular inverse which is
+             * ``-nb_arr mod columns`` but because PHP gives us the mod in negative we need to
+             * add $cols back to get the positive
+             */
+            [...$members, ...array_fill(0, (-\count($members) % $cols) + $cols, '')]
+        );
+    }
 
-        $this->cchunk["simplelist"]["members"] = array_merge($this->cchunk["simplelist"]["members"], $this->get_simplelist_members_padding());
-
-        $table = "";
-        $trPadding = str_repeat(" ", $props["depth"] + 2);
-        $tdPadding = str_repeat(" ", $props["depth"] + 3);
-        for ($row = 0; $row < $numOfRows; $row++) {
-            $table .= $trPadding . "<tr>\n";
-            for ($col = 0; $col < $this->cchunk["simplelist"]["columns"]; $col++) {
-                $table .= $tdPadding . "<td>" . $this->cchunk["simplelist"]["members"][($numOfRows * $col) + $row] . "</td>\n";
-            }
-            $table .= $trPadding . "</tr>\n";
-        }
-
-        return $table . str_repeat(" ", $props["depth"] + 1) . "</tbody>\n" . str_repeat(" ", $props["depth"]) . "</table>";
+    private function format_vertical_simplelist($depth) {
+        $members = $this->processTabular(
+            $this->cchunk["simplelist"]["members"],
+            $this->cchunk["simplelist"]["columns"],
+            $depth
+        );
+        // Sort elements so that we get each correct element for the rows to display vertically
+        uksort(
+            $members,
+            fn (int $l, int $r) => $l % $this->cchunk["simplelist"]["columns"] <=> $r % $this->cchunk["simplelist"]["columns"]
+        );
+        return $this->chunkReduceTable($members, $this->cchunk["simplelist"]["columns"], $depth);
     }
 
     public function format_member($open, $name, $attrs, $props) {
