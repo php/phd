@@ -65,7 +65,23 @@
  </section>
 
  <section>
-  <para>9. Constructor with more than three parameters</para>
+  <para>9. Constructor with intersection type parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type class="intersection"><type>Countable</type><type>Traversable</type></type><parameter>option</parameter></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>10. Constructor with DNF (Disjunctive Normal Form) type parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type class="union"><type class="intersection"><type>Countable</type><type>Traversable</type></type><type>DOMAttr</type></type><parameter>option</parameter></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>11. Constructor with more than three parameters</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>private</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam><type>int</type><parameter>count</parameter></methodparam>

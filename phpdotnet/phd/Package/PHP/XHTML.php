@@ -78,8 +78,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             'methodparam'       => 'format_type_methodparam',
             'type'              => array(
                 /* DEFAULT */       'format_type',
-                'methodsynopsis' => 'format_suppressed_tags',
-                'methodparam'   => 'format_suppressed_tags',
+                'methodsynopsis' => 'format_methodsynopsis_type',
+                'methodparam'   => 'format_type_methodparam',
+                'type'              => array(
+                    /* DEFAULT */       'format_type',
+                    'methodsynopsis' => 'format_methodsynopsis_type',
+                    'methodparam'   => 'format_type_methodparam',
+                ),
             ),
         ),
         'varname'               => array(
@@ -136,6 +141,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 /* DEFAULT */       'format_type_text',
                 'methodsynopsis' => 'format_type_methodsynopsis_text',
                 'methodparam'   => 'format_type_methodparam_text',
+                'type'              => array(
+                    /* DEFAULT */       'format_type_text',
+                    'methodsynopsis' => 'format_type_methodsynopsis_text',
+                    'methodparam'   => 'format_type_methodparam_text',
+                ),
             ),
         ),
         'titleabbrev'           => array(
@@ -176,7 +186,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         "alternatives"                 => array(),
         "refsynopsisdiv"               => null,
         "methodparam"                  => array(
-            "type_separator"           => "",
+            "type_separator"           => array(),
+            "type_separator_stack"     => array(),
             "paramtypes"               => array(),
         ),
     );
@@ -184,8 +195,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     /** @var int|null Number of already formatted types in the current compound type */
     private $num_types = null;
 
-    /** @var string|null The character to separate the current compound type, i.e. "|" or "&" */
-    private $type_separator = null;
+    /** @var array<string> The characters to separate the current compound types, i.e. "|" or "&amp;" */
+    private $type_separator = [];
 
     /** @var bool|null Decides whether the union type can be displayed by using "?" */
     private $simple_nullable = null;
@@ -356,14 +367,19 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                     strpos($props["innerXml"], '<type xmlns="http://docbook.org/ns/docbook">null</type>') !== false
                 ) {
                     $this->simple_nullable = true;
-                    $this->type_separator = "";
+                    $this->type_separator[] = "";
                     $retval .= '<span class="type">?</span>';
                 } else {
-                    $this->type_separator = $isUnionType ? "|" : "&";
+                    $typeSeparator = match ($attrs[Reader::XMLNS_DOCBOOK]["class"]) {
+                        "union"        => "|",
+                        "intersection" => "&amp;",
+                        default        => "",
+                    };
+                    $this->type_separator[] = $typeSeparator;
                 }
             } elseif (isset($this->num_types)) {
                 if ($this->num_types > 0) {
-                    $retval .= $this->type_separator;
+                    $retval .= end($this->type_separator);
                 }
 
                 $this->num_types++;
@@ -373,7 +389,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         } else {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
                 $this->num_types = null;
-                $this->type_separator = null;
+                array_pop($this->type_separator);
                 $this->simple_nullable = null;
             }
             $retval .= '</span>';
@@ -382,10 +398,23 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return $retval;
     }
 
-    public function format_methodsynopsis_type($open, $tag, $attrs)
-    {
-        if ($open && isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
-            $this->cchunk["methodsynopsis"]["type_separator"] = $attrs[Reader::XMLNS_DOCBOOK]["class"] === "union" ? "|" : "&";
+    public function format_methodsynopsis_type($open, $tag, $attrs) {
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
+                $this->cchunk["methodsynopsis"]["type_separator_stack"][] = match ($attrs[Reader::XMLNS_DOCBOOK]["class"]) {
+                    "union"        => "|",
+                    "intersection" => "&amp;",
+                };
+            }
+        } else {
+            if (
+                isset($attrs[Reader::XMLNS_DOCBOOK]["class"])
+                && ($attrs[Reader::XMLNS_DOCBOOK]["class"] === "union"
+                || $attrs[Reader::XMLNS_DOCBOOK]["class"] === "intersection")
+                ) {
+                $lastSeparator = array_pop($this->cchunk["methodsynopsis"]["type_separator_stack"]);
+                $this->cchunk["methodsynopsis"]["type_separator"][count($this->cchunk["methodsynopsis"]["type_separator"]) - 1] = end($this->cchunk["methodsynopsis"]["type_separator_stack"]) ?: $lastSeparator;
+            }
         }
 
         return "";
@@ -514,17 +543,16 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return $content;
     }
 
-    private function format_types($type_separator, $paramOrReturnType) {
+    private function format_types($type_separators, $paramOrReturnType) {
         $types = [];
-        $this->type_separator = $type_separator;
 
         if (
-            $this->type_separator === "|" &&
+            $type_separators[0] === "|" &&
             count($paramOrReturnType) === 2 &&
             in_array("null", $paramOrReturnType, true)
         ) {
             $this->simple_nullable = true;
-            $this->type_separator = "";
+            $type_separators[0] = "";
             $formatted_type = self::format_type_text("?", "type");
             $types[] = '<span class="type">' . $formatted_type .'</span>';
         }
@@ -543,7 +571,17 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
         }
 
-        $type = implode($this->type_separator ?? '', $types);
+        $type = "";
+        $isDnfType = (in_array("&amp;", $type_separators, true) && in_array("|", $type_separators, true));
+        for ($i = 0; $i < count($types); $i++) {
+            $previousSeparator = ($i > 0 ) ? $type_separators[$i - 1] : "";
+            $openingParenthesis = ($isDnfType && $type_separators[$i] === "&amp;" && $previousSeparator !== "&amp;") ? "(" : "";
+            $closingParenthesis = ($isDnfType && $type_separators[$i] !== "&amp;" && $previousSeparator === "&amp;") ? ")" : "";
+
+            $type .= $openingParenthesis . $types[$i] . $closingParenthesis . $type_separators[$i];
+        }
+        $type = rtrim($type, end($type_separators));
+
         if (count($types) > 1) {
             $type = '<span class="type">' . $type . '</span>';
         }
@@ -554,6 +592,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_type_methodsynopsis_text($type, $tagname) {
         $this->cchunk["methodsynopsis"]["returntypes"][] = $type;
+        $this->cchunk["methodsynopsis"]["type_separator"][] = end($this->cchunk["methodsynopsis"]["type_separator_stack"]);
 
         return "";
     }
@@ -588,19 +627,29 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_type_methodparam($open, $tag, $attrs) {
         if ($open) {
-            $this->cchunk["methodparam"] = $this->dchunk["methodparam"];
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["class"])) {
-                $this->cchunk["methodparam"]["type_separator"] = match ($attrs[Reader::XMLNS_DOCBOOK]["class"]) {
+                $this->cchunk["methodparam"]["type_separator_stack"][] = match ($attrs[Reader::XMLNS_DOCBOOK]["class"]) {
                     "union"        => "|",
                     "intersection" => "&amp;",
                 };
             }
+        } else {
+            if (
+                isset($attrs[Reader::XMLNS_DOCBOOK]["class"])
+                && ($attrs[Reader::XMLNS_DOCBOOK]["class"] === "union"
+                || $attrs[Reader::XMLNS_DOCBOOK]["class"] === "intersection")
+            ) {
+                $lastSeparator = array_pop($this->cchunk["methodparam"]["type_separator_stack"]);
+                $this->cchunk["methodparam"]["type_separator"][count($this->cchunk["methodparam"]["type_separator"]) - 1] = end($this->cchunk["methodparam"]["type_separator_stack"]) ?: $lastSeparator;
+            }
         }
+
         return "";
     }
 
     public function format_type_methodparam_text($type, $tagname) {
         $this->cchunk["methodparam"]["paramtypes"][] = $type;
+        $this->cchunk["methodparam"]["type_separator"][] = end($this->cchunk["methodparam"]["type_separator_stack"]);
 
         return "";
     }
@@ -667,6 +716,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_void($open, $name, $attrs, $props) {
         if (isset($props['sibling']) && $props['sibling'] == 'methodname') {
             $this->cchunk["methodsynopsis"]["returntypes"][] = "void";
+            $this->cchunk["methodsynopsis"]["type_separator"][] = "";
             return '';
         }
         return parent::format_void($open, $name, $attrs, $props);

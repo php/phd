@@ -57,7 +57,23 @@
  </section>
 
  <section>
-  <para>8. Function/method with more than three parameters</para>
+  <para>8. Function/method with intersection type parameter</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam><type class="intersection"><type>Countable</type><type>Traversable</type></type><parameter>option</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>9. Function/method with DNF (Disjunctive Normal Form) type parameter</para>
+  <methodsynopsis>
+   <methodname>function_name</methodname>
+   <methodparam><type class="union"><type class="intersection"><type>Countable</type><type>Traversable</type></type><type>DOMAttr</type></type><parameter>option</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>10. Function/method with more than three parameters</para>
   <methodsynopsis>
    <methodname>function_name</methodname>
    <methodparam><type>int</type><parameter>count</parameter></methodparam>
