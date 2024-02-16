@@ -1,0 +1,23 @@
+name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    name: test
+    strategy:
+      matrix:
+        version: ['8.0', '8.1', '8.2', '8.3']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PhD
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{matrix.version}}
+
+      - name: Get run-test.php
+        run: wget https://raw.githubusercontent.com/php/php-src/master/run-tests.php
+
+      - name: Run tests
+        run: php run-tests.php -P  -q --no-progress --offline --show-diff --show-slow 1000 --set-timeout 120 -g FAIL,BORK,LEAK,XLEAK tests/
