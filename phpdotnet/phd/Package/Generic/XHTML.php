@@ -478,8 +478,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             "modifier"                      => "public",
         ),
         "methodsynopsis"           => array(
-            "returntypes"           => [],
-            "type_separator"        => null,
+            "returntypes"          => array(),
+            "type_separator"       => array(),
+            "type_separator_stack" => array(),
         ),
         "co"                       => 0,
         "callouts"                 => 0,
@@ -1277,10 +1278,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
 
     public function format_void($open, $name, $attrs, $props) {
-        if ($props['sibling'] == 'methodname') {
+        if (isset($props['sibling']) && $props['sibling'] == 'methodname') {
             return '(';
         } else {
-            return '<span class="type"><span class="type void">void</span></span>';
+            return '<span class="type"><a href="language.types.void.html" class="type void">void</a></span>';
         }
     }
 

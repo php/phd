@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="type-rendering-constructorsynopsis-parameters-and-return-type">
+
+ <section>
+  <para>1. Constructor with no parameters, no return type</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>2. Constructor with no parameters, void (element) return type</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <void/>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>3. Constructor with one parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>private</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type>mixed</type><parameter>anything</parameter></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>4. Constructor with optional parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>protected</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam choice="opt"><type>int</type><parameter>count</parameter><initializer>0</initializer></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>5. Constructor with nullable parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type class="union"><type>float</type><type>null</type></type><parameter>value</parameter></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>6. Constructor with nullable optional parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>private</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam choice="opt"><type class="union"><type>string</type><type>null</type></type><parameter>options</parameter><initializer>""</initializer></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>7. Constructor with reference parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>protected</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type>array</type><parameter role="reference">reference</parameter></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>8. Constructor with union type parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type class="union"><type>iterable</type><type>resource</type><type>callable</type><type>null</type></type><parameter>option</parameter></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>9. Constructor with intersection type parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type class="intersection"><type>Countable</type><type>Traversable</type></type><parameter>option</parameter></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>10. Constructor with DNF (Disjunctive Normal Form) type parameter</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type class="union"><type class="intersection"><type>Countable</type><type>Traversable</type></type><type>DOMAttr</type></type><parameter>option</parameter></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>11. Constructor with more than three parameters</para>
+  <constructorsynopsis>
+   <modifier>final</modifier> <modifier>private</modifier> <methodname>ClassName::__construct</methodname>
+   <methodparam><type>int</type><parameter>count</parameter></methodparam>
+   <methodparam><type>string</type><parameter>name</parameter></methodparam>
+   <methodparam><type>bool</type><parameter>isSomething</parameter></methodparam>
+   <methodparam><type>array</type><parameter>list</parameter></methodparam>
+  </constructorsynopsis>
+ </section>
+
+</chapter>
