@@ -44,13 +44,13 @@ Content:
 
  <div class="section">
   <p class="para">2. Constructor with whitespace between name, parameters and return types</p>
-  <div class="constructorsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span>  <span class="methodname">ClassName::__construct</span>(<span class="methodparam"><span class="type"><span class="type">iterable</span><span class="type">resource</span><span class="type">callable</span><span class="type">null</span></span> <code class="parameter">$option</code></span><span class="type"><span class="type void">void</span></span>)</div>
+  <div class="constructorsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span>  <span class="methodname">ClassName::__construct</span>(<span class="methodparam"><span class="type"><span class="type">iterable</span><span class="type">resource</span><span class="type">callable</span><span class="type">null</span></span> <code class="parameter">$option</code></span><span class="type"><a href="language.types.void.html" class="type void">void</a></span>)</div>
 
  </div>
 
  <div class="section">
   <p class="para">3. Destructor with whitespace between name, parameters and return types</p>
-  <div class="destructorsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span>  <span class="methodname">ClassName::__construct</span>(<span class="methodparam"><span class="type"><span class="type">iterable</span><span class="type">resource</span><span class="type">callable</span><span class="type">null</span></span> <code class="parameter">$option</code></span><span class="type"><span class="type void">void</span></span>)</div>
+  <div class="destructorsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span>  <span class="methodname">ClassName::__construct</span>(<span class="methodparam"><span class="type"><span class="type">iterable</span><span class="type">resource</span><span class="type">callable</span><span class="type">null</span></span> <code class="parameter">$option</code></span><span class="type"><a href="language.types.void.html" class="type void">void</a></span>)</div>
 
  </div>
 

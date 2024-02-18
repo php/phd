@@ -38,8 +38,7 @@ Content:
 
  <div class="section">
   <p class="para">1. Function/method with no return type</p>
-  <div class="methodsynopsis dc-description">
-   <span class="methodname"><strong>function_name</strong></span>()</div>
+  <div class="methodsynopsis dc-description"><span class="methodname"><strong>function_name</strong></span>()</div>
 
  </div>
 
