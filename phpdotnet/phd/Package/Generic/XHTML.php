@@ -269,7 +269,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'setindex'              => 'format_chunk',
         'shortaffil'            => 'format_suppressed_tags',
         'sidebar'               => 'format_note',
-        'simplelist'            => 'format_simplelist', /* FIXME: simplelists has few attributes that need to be implemented */
+        'simplelist'            => 'format_simplelist',
         'simplesect'            => 'div',
         'simpara'               => array(
             /* DEFAULT */          'p',
@@ -2061,16 +2061,20 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
             if ($this->cchunk["simplelist"]["type"] === "vert"
                 || $this->cchunk["simplelist"]["type"] === "horiz") {
-                return '<table class="' . $name . '">' . "\n" . str_repeat(" ", $props["depth"] + 1) . "<tbody>\n";
+                return '<table class="' . $name . '">' . "\n" . $this->indent($props["depth"] + 1) . "<tbody>\n";
             }
 
             return '<ul class="' . $name . '">';
         }
 
         $list = match ($this->cchunk["simplelist"]["type"]) {
-            "inline" => $this->format_inline_simplelist(),
-            "horiz"  => $this->format_horizontal_simplelist($props["depth"]),
-            "vert"   => $this->format_vertical_simplelist($props["depth"]),
+            "inline" => $this->simplelist_format_inline(),
+            "horiz"  => $this->simplelist_format_horizontal($props["depth"])
+                        . $this->indent($props["depth"] + 1) . "</tbody>\n"
+                        . $this->indent($props["depth"]) . "</table>",
+            "vert"   => $this->simplelist_format_vertical($props["depth"])
+                        . $this->indent($props["depth"] + 1) . "</tbody>\n"
+                        . $this->indent($props["depth"]) . "</table>",
             default  => "</ul>",
         };
 
@@ -2079,11 +2083,15 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $list;
     }
 
-    private function format_inline_simplelist() {
+    private function indent($depth): string {
+        return $depth > 0 ? str_repeat(' ', $depth) : '';
+    }
+
+    private function simplelist_format_inline() {
         return implode(", ", $this->cchunk["simplelist"]["members"]) . '</span>';
     }
 
-    private function format_horizontal_simplelist($depth) {
+    private function simplelist_format_horizontal($depth) {
         return $this->chunkReduceTable(
             $this->processTabular(
                 $this->cchunk["simplelist"]["members"],
@@ -2094,10 +2102,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         );
     }
 
-    /** Return formatted table */
+    /** Return formatted rows */
     private function chunkReduceTable(array $members, int $cols, int $depth): string
     {
-        $trPadding = str_repeat(' ', $depth + 2);
+        $trPadding = $this->indent($depth + 2);
         return array_reduce(
                 array_chunk(
                     $members,
@@ -2105,25 +2113,24 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 ),
                 fn (string $carry, array $entry) => $carry . $trPadding . "<tr>\n" . implode('', $entry) . $trPadding . "</tr>\n",
                 ''
-            )
-            . str_repeat(' ', $depth + 1) . "</tbody>\n" . str_repeat(' ', $depth) . "</table>";
+            );
     }
 
     /** Pads $members so that number of members = columns x rows */
     private function processTabular(array $members, int $cols, int $depth): array
     {
-        $tdPadding = str_repeat(' ', $depth + 3);
+        $tdPadding = $this->indent($depth + 3);
         return array_map(
             fn (string $member) => $tdPadding . "<td>$member</td>\n",
             /** The padding is done by getting the additive modular inverse which is
-             * ``-nb_arr mod columns`` but because PHP gives us the mod in negative we need to
+             * ``-\count($members) % $cols`` but because PHP gives us the mod in negative we need to
              * add $cols back to get the positive
              */
             [...$members, ...array_fill(0, (-\count($members) % $cols) + $cols, '')]
         );
     }
 
-    private function format_vertical_simplelist($depth) {
+    private function simplelist_format_vertical($depth) {
         $members = $this->processTabular(
             $this->cchunk["simplelist"]["members"],
             $this->cchunk["simplelist"]["columns"],
