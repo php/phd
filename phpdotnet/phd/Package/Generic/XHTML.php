@@ -1287,7 +1287,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if (isset($props['sibling']) && $props['sibling'] == 'methodname') {
             return '(';
         } else {
-            return '<span class="type"><a href="language.types.void.html" class="type void">void</a></span>';
+            return '<span class="type"><a href="language.types.void' . $this->getExt() . '" class="type void">void</a></span>';
         }
     }
 
