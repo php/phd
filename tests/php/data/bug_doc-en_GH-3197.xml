@@ -1,0 +1,8 @@
+<refentry xml:id="bug_doc-en_GH-3179">
+ <refsect1>
+  <methodsynopsis>
+   <type>void</type><methodname>method_name</methodname>
+   <void/>
+  </methodsynopsis>
+ </refsect1>
+</refentry>

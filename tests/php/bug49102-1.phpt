@@ -63,19 +63,19 @@ Content:
 
         <div class="classsynopsisinfo classsynopsisinfo_comment">/* Methods */</div>
         <div class="constructorsynopsis dc-description">
-            <span class="methodname"><strong>__construct</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+            <span class="methodname"><strong>__construct</strong></span>()</div>
 
         <div class="methodsynopsis dc-description"><span class="methodname"><strong>setIteratorMode</strong></span>(<span class="methodparam"><span class="type"><a href="language.types.integer.html" class="type int">int</a></span> <code class="parameter">$mode</code></span>): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
 
 
         <div class="classsynopsisinfo classsynopsisinfo_comment">/* Inherited methods */</div>
-        <div class="methodsynopsis dc-description"><span class="methodname"><strong>SplDoublyLinkedList::bottom</strong></span>(): <span class="type"><span class="type"><a href="language.types.mixed.html" class="type mixed">mixed</a></span><span class="type"><a href="language.types.void.html" class="type void">void</a></span></span></div>
+        <div class="methodsynopsis dc-description"><span class="methodname"><strong>SplDoublyLinkedList::bottom</strong></span>(): <span class="type"><a href="language.types.mixed.html" class="type mixed">mixed</a></span></div>
 
-        <div class="methodsynopsis dc-description"><span class="methodname"><strong>SplDoublyLinkedList::count</strong></span>(): <span class="type"><span class="type"><a href="language.types.integer.html" class="type int">int</a></span><span class="type"><a href="language.types.void.html" class="type void">void</a></span></span></div>
+        <div class="methodsynopsis dc-description"><span class="methodname"><strong>SplDoublyLinkedList::count</strong></span>(): <span class="type"><a href="language.types.integer.html" class="type int">int</a></span></div>
 
-        <div class="methodsynopsis dc-description"><span class="methodname"><strong>SplDoublyLinkedList::current</strong></span>(): <span class="type"><span class="type"><a href="language.types.mixed.html" class="type mixed">mixed</a></span><span class="type"><a href="language.types.void.html" class="type void">void</a></span></span></div>
+        <div class="methodsynopsis dc-description"><span class="methodname"><strong>SplDoublyLinkedList::current</strong></span>(): <span class="type"><a href="language.types.mixed.html" class="type mixed">mixed</a></span></div>
 
-        <div class="methodsynopsis dc-description"><span class="methodname"><strong>SplDoublyLinkedList::getIteratorMode</strong></span>(): <span class="type"><span class="type"><a href="language.types.integer.html" class="type int">int</a></span><span class="type"><a href="language.types.void.html" class="type void">void</a></span></span></div>
+        <div class="methodsynopsis dc-description"><span class="methodname"><strong>SplDoublyLinkedList::getIteratorMode</strong></span>(): <span class="type"><a href="language.types.integer.html" class="type int">int</a></span></div>
 
         <div class="methodsynopsis dc-description"><span class="methodname"><strong>SplDoublyLinkedList::offsetExists</strong></span>(<span class="methodparam"><span class="type"><a href="language.types.mixed.html" class="type mixed">mixed</a></span> <code class="parameter">$index</code></span>): <span class="type"><a href="language.types.boolean.html" class="type bool">bool</a></span></div>
 

@@ -23,50 +23,42 @@
  </section>
 
  <section>
-  <para>4. Function/method with one return type - void element</para>
-  <methodsynopsis>
-   <methodname>function_name</methodname>
-   <void/>
-  </methodsynopsis>
- </section>
-
- <section>
-  <para>5. Function/method with one return type - mixed</para>
+  <para>4. Function/method with one return type - mixed</para>
   <methodsynopsis>
    <type>mixed</type><methodname>function_name</methodname>
   </methodsynopsis>
  </section>
 
  <section>
-  <para>6. Function/method with union return type</para>
+  <para>5. Function/method with union return type</para>
   <methodsynopsis>
    <type class="union"><type>int</type><type>float</type><type>false</type></type><methodname>function_name</methodname>
   </methodsynopsis>
  </section>
 
  <section>
-  <para>7. Function/method with nullable return type</para>
+  <para>6. Function/method with nullable return type</para>
   <methodsynopsis>
    <type class="union"><type>object</type><type>null</type></type><methodname>function_name</methodname>
   </methodsynopsis>
  </section>
 
  <section>
-  <para>8. Function/method with nullable union return type</para>
+  <para>7. Function/method with nullable union return type</para>
   <methodsynopsis>
    <type class="union"><type>string</type><type>array</type><type>resource</type><type>callable</type><type>iterable</type><type>true</type><type>null</type></type><methodname>function_name</methodname>
   </methodsynopsis>
  </section>
 
  <section>
-  <para>9. Function/method with unknown return type</para>
+  <para>8. Function/method with unknown return type</para>
   <methodsynopsis>
    <type>UnknownType</type><methodname>function_name</methodname>
   </methodsynopsis>
  </section>
 <!-- TODO: fix known class return type - need to add a class to the index
  <section role="description">
-  <para>10. Function/method with known class return type</para>
+  <para>9. Function/method with known class return type</para>
   <methodsynopsis>
    <type>stdClass</type><methodname>function_name</methodname>
   </methodsynopsis>
