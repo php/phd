@@ -9,15 +9,7 @@
  </section>
 
  <section>
-  <para>2. Constructor with no parameters, void (element) return type</para>
-  <constructorsynopsis>
-   <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
-   <void/>
-  </constructorsynopsis>
- </section>
-
- <section>
-  <para>3. Constructor with one parameter</para>
+  <para>2. Constructor with one parameter</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>private</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam><type>mixed</type><parameter>anything</parameter></methodparam>
@@ -25,7 +17,7 @@
  </section>
 
  <section>
-  <para>4. Constructor with optional parameter</para>
+  <para>3. Constructor with optional parameter</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>protected</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam choice="opt"><type>int</type><parameter>count</parameter><initializer>0</initializer></methodparam>
@@ -33,7 +25,7 @@
  </section>
 
  <section>
-  <para>5. Constructor with nullable parameter</para>
+  <para>4. Constructor with nullable parameter</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam><type class="union"><type>float</type><type>null</type></type><parameter>value</parameter></methodparam>
@@ -41,7 +33,7 @@
  </section>
 
  <section>
-  <para>6. Constructor with nullable optional parameter</para>
+  <para>5. Constructor with nullable optional parameter</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>private</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam choice="opt"><type class="union"><type>string</type><type>null</type></type><parameter>options</parameter><initializer>""</initializer></methodparam>
@@ -49,7 +41,7 @@
  </section>
 
  <section>
-  <para>7. Constructor with reference parameter</para>
+  <para>6. Constructor with reference parameter</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>protected</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam><type>array</type><parameter role="reference">reference</parameter></methodparam>
@@ -57,7 +49,7 @@
  </section>
 
  <section>
-  <para>8. Constructor with union type parameter</para>
+  <para>7. Constructor with union type parameter</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam><type class="union"><type>iterable</type><type>resource</type><type>callable</type><type>null</type></type><parameter>option</parameter></methodparam>
@@ -65,7 +57,7 @@
  </section>
 
  <section>
-  <para>9. Constructor with intersection type parameter</para>
+  <para>8. Constructor with intersection type parameter</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam><type class="intersection"><type>Countable</type><type>Traversable</type></type><parameter>option</parameter></methodparam>
@@ -73,7 +65,7 @@
  </section>
 
  <section>
-  <para>10. Constructor with DNF (Disjunctive Normal Form) type parameter</para>
+  <para>9. Constructor with DNF (Disjunctive Normal Form) type parameter</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam><type class="union"><type class="intersection"><type>Countable</type><type>Traversable</type></type><type>DOMAttr</type></type><parameter>option</parameter></methodparam>
@@ -81,7 +73,7 @@
  </section>
 
  <section>
-  <para>11. Constructor with more than three parameters</para>
+  <para>10. Constructor with more than three parameters</para>
   <constructorsynopsis>
    <modifier>final</modifier> <modifier>private</modifier> <methodname>ClassName::__construct</methodname>
    <methodparam><type>int</type><parameter>count</parameter></methodparam>
