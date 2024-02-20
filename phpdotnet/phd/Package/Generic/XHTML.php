@@ -143,7 +143,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'methodparam'           => 'format_methodparam',
         'methodsynopsis'        => 'format_methodsynopsis',
         'methodname'            => 'format_methodname',
-        'member'                => 'li',
+        'member'                => 'format_member',
         'modifier'              => 'span',
         'note'                  => 'format_note',
         'orgname'               => 'span',
@@ -269,7 +269,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'setindex'              => 'format_chunk',
         'shortaffil'            => 'format_suppressed_tags',
         'sidebar'               => 'format_note',
-        'simplelist'            => 'format_itemizedlist', /* FIXME: simplelists has few attributes that need to be implemented */
+        'simplelist'            => 'format_simplelist',
         'simplesect'            => 'div',
         'simpara'               => array(
             /* DEFAULT */          'p',
@@ -446,6 +446,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'literal'               => 'format_literal_text',
         'email'                 => 'format_email_text',
         'titleabbrev'           => 'format_suppressed_text',
+        'member'                => 'format_member_text',
     );
 
     /** @var array */
@@ -500,6 +501,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         "chunk_id"                 => null,
         "varlistentry"             => array(
             "listitems"                     => array(),
+        ),
+        "simplelist"               => array(
+            "members"              => array(),
+            "type"                 => null,
+            "columns"              => null,
         ),
     );
 
@@ -2040,6 +2046,126 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '</ul>';
     }
 
+    public function format_simplelist($open, $name, $attrs, $props) {
+        if ($open) {
+            $this->cchunk["simplelist"]["type"] = $attrs[Reader::XMLNS_DOCBOOK]["type"] ?? "";
+            $this->cchunk["simplelist"]["columns"] = $attrs[Reader::XMLNS_DOCBOOK]["columns"] ?? 1;
+
+            if ($this->cchunk["simplelist"]["columns"] < 1) {
+                $this->cchunk["simplelist"]["columns"] = 1;
+            }
+
+            if ($this->cchunk["simplelist"]["type"] === "inline") {
+                return '<span class="' . $name . '">';
+            }
+
+            if ($this->cchunk["simplelist"]["type"] === "vert"
+                || $this->cchunk["simplelist"]["type"] === "horiz") {
+                return '<table class="' . $name . '">' . "\n" . $this->indent($props["depth"] + 1) . "<tbody>\n";
+            }
+
+            return '<ul class="' . $name . '">';
+        }
+
+        $list = match ($this->cchunk["simplelist"]["type"]) {
+            "inline" => $this->simplelist_format_inline(),
+            "horiz"  => $this->simplelist_format_horizontal($props["depth"])
+                        . $this->indent($props["depth"] + 1) . "</tbody>\n"
+                        . $this->indent($props["depth"]) . "</table>",
+            "vert"   => $this->simplelist_format_vertical($props["depth"])
+                        . $this->indent($props["depth"] + 1) . "</tbody>\n"
+                        . $this->indent($props["depth"]) . "</table>",
+            default  => "</ul>",
+        };
+
+        $this->cchunk["simplelist"] = $this->dchunk["simplelist"];
+
+        return $list;
+    }
+
+    private function indent($depth): string {
+        return $depth > 0 ? str_repeat(' ', $depth) : '';
+    }
+
+    private function simplelist_format_inline() {
+        return implode(", ", $this->cchunk["simplelist"]["members"]) . '</span>';
+    }
+
+    private function simplelist_format_horizontal($depth) {
+        return $this->chunkReduceTable(
+            $this->processTabular(
+                $this->cchunk["simplelist"]["members"],
+                $this->cchunk["simplelist"]["columns"],
+                $depth),
+            $this->cchunk["simplelist"]["columns"],
+            $depth
+        );
+    }
+
+    /** Return formatted rows */
+    private function chunkReduceTable(array $members, int $cols, int $depth): string
+    {
+        $trPadding = $this->indent($depth + 2);
+        return array_reduce(
+                array_chunk(
+                    $members,
+                    $cols,
+                ),
+                fn (string $carry, array $entry) => $carry . $trPadding . "<tr>\n" . implode('', $entry) . $trPadding . "</tr>\n",
+                ''
+            );
+    }
+
+    /** Pads $members so that number of members = columns x rows */
+    private function processTabular(array $members, int $cols, int $depth): array
+    {
+        $tdPadding = $this->indent($depth + 3);
+        return array_map(
+            fn (string $member) => $tdPadding . "<td>$member</td>\n",
+            /** The padding is done by getting the additive modular inverse which is
+             * ``-\count($members) % $cols`` but because PHP gives us the mod in negative we need to
+             * add $cols back to get the positive
+             */
+            [...$members, ...array_fill(0, (-\count($members) % $cols) + $cols, '')]
+        );
+    }
+
+    private function simplelist_format_vertical($depth) {
+        $members = $this->processTabular(
+            $this->cchunk["simplelist"]["members"],
+            $this->cchunk["simplelist"]["columns"],
+            $depth
+        );
+        // Sort elements so that we get each correct element for the rows to display vertically
+        uksort(
+            $members,
+            fn (int $l, int $r) => $l % $this->cchunk["simplelist"]["columns"] <=> $r % $this->cchunk["simplelist"]["columns"]
+        );
+        return $this->chunkReduceTable($members, $this->cchunk["simplelist"]["columns"], $depth);
+    }
+
+    public function format_member($open, $name, $attrs, $props) {
+        if ($this->cchunk["simplelist"]["type"] === "inline"
+            || $this->cchunk["simplelist"]["type"] === "vert"
+            || $this->cchunk["simplelist"]["type"] === "horiz") {
+            return '';
+        }
+        if ($open) {
+            return '<li>';
+        }
+        return '</li>';
+    }
+
+    public function format_member_text($value, $tag) {
+        if ($this->cchunk["simplelist"]["type"] === "inline"
+            || $this->cchunk["simplelist"]["type"] === "vert"
+            || $this->cchunk["simplelist"]["type"] === "horiz") {
+            $this->cchunk["simplelist"]["members"][] = $value;
+            return '';
+        }
+        return $value;
+    }
+
     public function format_orderedlist($open, $name, $attrs, $props) {
         if ($open) {
             $numeration = "1";
@@ -2115,6 +2241,15 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return false;
         }
 
+        if (
+            $elementStack[$currentDepth - 1] === "simplelist"
+            && ($this->cchunk["simplelist"]["type"] === "inline"
+                || $this->cchunk["simplelist"]["type"] === "vert"
+                || $this->cchunk["simplelist"]["type"] === "horiz")
+            ) {
+            return false;
+        }
+
         /* The following if is to skip unnecessary whitespaces in the implements list */
         if (
             ($elementStack[$currentDepth - 1] === 'classsynopsisinfo' && $elementStack[$currentDepth] === 'oointerface') ||
@@ -2127,5 +2262,3 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
 
 }
-
-

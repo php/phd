@@ -38,8 +38,7 @@ Content:
 
  <div class="section">
   <p class="para">1. Constructor with no parameters, no return type</p>
-  <div class="constructorsynopsis dc-description">
-   <span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><strong>ClassName::__construct</strong></span>()</div>
+  <div class="constructorsynopsis dc-description"><span class="modifier">final</span> <span class="modifier">public</span> <span class="methodname"><strong>ClassName::__construct</strong></span>()</div>
 
  </div>
 
