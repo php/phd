@@ -437,9 +437,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         ),
         /* FIXME: This is one crazy stupid workaround for footnotes */
         'constant'              => array(
-            /* DEFAULT */          false,
+            /* DEFAULT */          'format_constant_text',
             'para'              => array(
-                /* DEFAULT */      false,
+                /* DEFAULT */      'format_constant_text',
                 'footnote'      => 'format_footnote_constant_text',
             ),
         ),
@@ -1612,6 +1612,25 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return "<strong><code>";
         }
         return "</code></strong>";
+    }
+    public function format_constant_text($value, $tag) {
+        if (str_contains($value, '::')) {
+            // class constant
+            $normalizedLinkFormat = str_replace(
+                array("::", "\\", "_"),
+                array(".constants.", "-", "-"),
+                strtolower($value)
+            );
+        } else {
+            $normalizedLinkFormat = 'constant.' . str_replace('_', '-', strtolower($value));
+        }
+        $link = $this->createLink($normalizedLinkFormat);
+
+        if ($link === null) {
+            return $value;
+        }
+
+        return '<a href="' . $link . '">' . $value . '</a>';
     }
     public function admonition_title($title, $lang)
     {

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="constant_links">
+
+ <section>
+  <para>1. Existing constants</para>
+  <constant>DEFINITELY_EXISTS</constant>
+  <para>
+   <constant>Vendor\Namespace::DEFINITELY_EXISTS2</constant>
+  </para>
+ </section>
+
+ <section>
+  <para>2. Nonexistent constants</para>
+  <constant>THIS_DOES_NOT_EXIST</constant>
+  <para>
+   <constant>Vendor\Namespace::THIS_DOES_NOT_EXIST_EITHER</constant>
+  </para>
+ </section>
+
+</chapter>
