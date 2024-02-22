@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 
 abstract class Format_Abstract_XHTML extends Format {
-    public $role = false;
+    public $role = [];
 
     /* XHTMLPhDFormat */
     protected $openPara = 0;
@@ -39,14 +39,14 @@ abstract class Format_Abstract_XHTML extends Format {
     }
 
     public function CDATA($str) {
-        switch($this->role) {
+        switch(end($this->role)) {
         case '':
             return '<div class="cdata"><pre>'
                 . htmlspecialchars($str, ENT_QUOTES, "UTF-8")
                 . '</pre></div>';
         default:
-            return '<div class="' . $this->role . 'code">'
-                . $this->highlight(trim($str), $this->role, 'xhtml')
+            return '<div class="' . end($this->role) . 'code">'
+                . $this->highlight(trim($str), end($this->role), 'xhtml')
                 . '</div>';
         }
     }

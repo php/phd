@@ -684,15 +684,15 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         if ($open) {
             $this->trim = true;
             if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
-                $this->role = $attrs[Reader::XMLNS_DOCBOOK]['role'];
+                $this->role[] = $attrs[Reader::XMLNS_DOCBOOK]['role'];
             } else {
-                $this->role = '';
+                $this->role[] = '';
             }
 
-            return '<div class="'. ($this->role ? $this->role . 'code' : 'programlisting')
+            return '<div class="'. (end($this->role) ? end($this->role) . 'code' : 'programlisting')
                    . '">';
         }
-        $this->role = false;
+        array_pop($this->role);
         $this->trim = false;
 
         return '</div>';
@@ -710,7 +710,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     */
     public function format_programlisting_text($value, $tag)
     {
-        switch($this->role) {
+        switch(end($this->role)) {
         case 'php':
             if (strrpos($value, '<?php') || strrpos($value, '?>')) {
                 return $this->highlight(trim($value), 'php', 'xhtml');
@@ -719,7 +719,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             }
             break;
         default:
-            return $this->highlight(trim($value), $this->role, 'xhtml');
+            return $this->highlight(trim($value), end($this->role), 'xhtml');
         }
     }
 
@@ -760,26 +760,26 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         if ($this->trim) {
             $str = rtrim($str);
         }
-        if (!$this->role) {
+        if (!end($this->role)) {
             return str_replace(
                 array("\n", ' '), array('<br/>', '&nbsp;'),
                 htmlspecialchars($str, ENT_QUOTES, 'UTF-8')
             );
         }
 
-        switch ($this->role) {
+        switch (end($this->role)) {
         case 'php':
             if (strrpos($str, '<?php') || strrpos($str, '?>')) {
-                $str = $this->highlight(trim($str), $this->role, 'xhtml');
+                $str = $this->highlight(trim($str), end($this->role), 'xhtml');
             } else {
-                $str = $this->highlight("<?php\n" . trim($str) . "\n?>", $this->role, 'xhtml');
+                $str = $this->highlight("<?php\n" . trim($str) . "\n?>", end($this->role), 'xhtml');
             }
             break;
         case '':
             $str = htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
             break;
         default:
-            $str = $this->highlight($str, $this->role, 'xhtml');
+            $str = $this->highlight($str, end($this->role), 'xhtml');
             break;
         }
 

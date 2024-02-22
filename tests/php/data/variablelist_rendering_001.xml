@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="variablelist-rendering">
+
+ <section>
+  <para>1. Variablelist with no role</para>
+  <variablelist>
+   <varlistentry xml:id="constant.variablelist-test-constant">
+    <term><constant>VARIABLELIST_TEST_CONSTANT</constant></term>
+    <listitem>
+     <simpara>
+      Description of constant
+     </simpara>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </section>
+
+ <section>
+  <para>2. Variablelist with role="constant_list"</para>
+  <variablelist role="constant_list">
+   <varlistentry xml:id="constant.variablelist-test-constant-in-constant-list">
+    <term><constant>VARIABLELIST_TEST_CONSTANT_IN_CONSTANT_LIST</constant></term>
+    <listitem>
+     <simpara>
+      <literal>literal</literal> will add its own "role"
+     </simpara>
+    </listitem>
+   </varlistentry>
+   <varlistentry xml:id="constant.variablelist-test-constant-in-constant-list2">
+    <term><constant>VARIABLELIST_TEST_CONSTANT_IN_CONSTANT_LIST2</constant></term>
+    <listitem>
+     <simpara>
+      Role should have not been overwritten by literal
+     </simpara>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </section>
+
+</chapter>
