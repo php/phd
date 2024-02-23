@@ -2,7 +2,9 @@
 namespace phpdotnet\phd;
 
 abstract class Format_Abstract_XHTML extends Format {
-    public $role = [];
+
+    /** @var array<?string> Last In First Out stack of roles */
+    private array $role = [];
 
     /* XHTMLPhDFormat */
     protected $openPara = 0;
@@ -39,14 +41,14 @@ abstract class Format_Abstract_XHTML extends Format {
     }
 
     public function CDATA($str) {
-        switch(end($this->role)) {
+        switch($this->getRole()) {
         case '':
             return '<div class="cdata"><pre>'
                 . htmlspecialchars($str, ENT_QUOTES, "UTF-8")
                 . '</pre></div>';
         default:
-            return '<div class="' . end($this->role) . 'code">'
-                . $this->highlight(trim($str), end($this->role), 'xhtml')
+            return '<div class="' . $this->getRole() . 'code">'
+                . $this->highlight(trim($str), $this->getRole(), 'xhtml')
                 . '</div>';
         }
     }
@@ -123,6 +125,15 @@ abstract class Format_Abstract_XHTML extends Format {
         }
     }
 
+    protected function pushRole(?string $role): void {
+        $this->role[] = $role;
+    }
+
+    protected function getRole(): ?string {
+        return end($this->role);
+    }
+
+    protected function popRole(): ?string {
+        return array_pop($this->role);
+    }
 }
-
-
