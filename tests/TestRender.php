@@ -1,7 +1,7 @@
 <?php
 namespace phpdotnet\phd;
 
-class TestRender {
+class TestRender extends Render {
     protected ?Format $format = null;
 
     protected Config $config;
@@ -45,19 +45,18 @@ class TestRender {
 
     public function run() {
         $reader = new Reader();
-        $render = new Render();
 
         if ($this->index !== null && $this->index::requireIndexing()) {
-           $render->attach($this->index);
+           $this->attach($this->index);
            $reader->open($this->config::xml_file());
-           $render->execute($reader);
-           $render->detach($this->index);
+           $this->execute($reader);
+           $this->detach($this->index);
         }
 
         if ($this->format !== null) {
-            $render->attach($this->format);
+            $this->attach($this->format);
             $reader->open($this->config::xml_file());
-            $render->execute($reader);
+            $this->execute($reader);
         }
     }
 }
