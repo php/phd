@@ -8,7 +8,7 @@ require_once __DIR__ . "/../setup.php";
 require_once __DIR__ . "/TestChunkedXHTML.php";
 
 $formatclass = "TestChunkedXHTML";
-$xml_file = __DIR__ . "/data/Bug_doc-en_GH-3197.xml";
+$xml_file = __DIR__ . "/data/bug_doc-en_GH-3197.xml";
 
 $opts = array(
     "index"             => true,
