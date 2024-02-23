@@ -9,21 +9,18 @@ require_once __DIR__ . "/TestChunkedXHTML.php";
 
 $xml_file = __DIR__ . "/data/bug_doc-en_GH-3197.xml";
 
-$opts = array(
+Config::init([
     "index"             => true,
     "xml_root"          => dirname($xml_file),
     "xml_file"          => $xml_file,
     "output_dir"        => __DIR__ . "/output/",
-);
-
-$extra = array(
     "lang_dir" => __PHDDIR__ . "phpdotnet/phd/data/langs/",
     "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
     "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
-);
+]);
 
 $format = new TestChunkedXHTML;
-$render = new TestRender($format, $opts, $extra);
+$render = new TestRender($format, new Config);
 
 if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
     mkdir($opts["output_dir"], 0755);
