@@ -7,7 +7,6 @@ namespace phpdotnet\phd;
 require_once __DIR__ . "/../setup.php";
 require_once __DIR__ . "/TestChunkedXHTML.php";
 
-$formatclass = "TestChunkedXHTML";
 $xml_file = __DIR__ . "/data/constant_links.xml";
 
 $opts = array(
@@ -34,7 +33,8 @@ $indeces = [
     ],
 ];
 
-$render = new TestRender($formatclass, $opts, $extra, $indeces);
+$format = new TestChunkedXHTML;
+$render = new TestRender($format, $opts, $extra, $indeces);
 
 if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
     mkdir($opts["output_dir"], 0755);

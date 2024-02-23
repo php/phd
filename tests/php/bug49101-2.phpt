@@ -1,5 +1,5 @@
 --TEST--
-Bug #49101 - Thick border again - Big XHTML
+Bug #49101-2 - Thick border again - Big XHTML
 --FILE--
 <?php
 namespace phpdotnet\phd;
@@ -7,7 +7,6 @@ namespace phpdotnet\phd;
 require_once __DIR__ . "/../setup.php";
 require_once __DIR__ . "/TestBigXHTML.php";
 
-$formatclass = "TestBigXHTML";
 $xml_file = __DIR__ . "/data/bug49101-1.xml";
 
 $opts = array(
@@ -23,7 +22,8 @@ $extra = array(
     "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
 );
 
-$render = new TestRender($formatclass, $opts, $extra);
+$format = new TestBigXHTML;
+$render = new TestRender($format, $opts, $extra);
 
 if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
     mkdir($opts["output_dir"], 0755);

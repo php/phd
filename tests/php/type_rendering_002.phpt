@@ -7,7 +7,6 @@ namespace phpdotnet\phd;
 require_once __DIR__ . "/../setup.php";
 require_once __DIR__ . "/TestChunkedXHTML.php";
 
-$formatclass = "TestChunkedXHTML";
 $xml_file = __DIR__ . "/data/type_rendering_methodsynopsis_parameters.xml";
 
 $opts = array(
@@ -23,7 +22,8 @@ $extra = array(
     "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
 );
 
-$render = new TestRender($formatclass, $opts, $extra);
+$format = new TestChunkedXHTML;
+$render = new TestRender($format, $opts, $extra);
 
 if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
     mkdir($opts["output_dir"], 0755);
