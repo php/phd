@@ -6,10 +6,13 @@ class TestRender {
 
     protected Config $config;
 
+    protected ?Index $index = null;
+
     public function __construct(
-        ?Format $format,
+        ?Format $format = null,
         Config $config,
         ?array $indices = [],
+        ?Index $index = null,
     ) {
         if ($format !== null) {
             $this->format = $format;
@@ -34,18 +37,21 @@ class TestRender {
         }
 
         $this->config = $config;
+
+        if ($index !== null) {
+            $this->index = $index;
+        }
     }
 
     public function run() {
         $reader = new Reader();
         $render = new Render();
 
-        if (Index::requireIndexing()) {
-           $format = new Index;
-           $render->attach($format);
+        if ($this->index !== null && $this->index::requireIndexing()) {
+           $render->attach($this->index);
            $reader->open($this->config::xml_file());
            $render->execute($reader);
-           $render->detach($format);
+           $render->detach($this->index);
         }
 
         if ($this->format !== null) {
