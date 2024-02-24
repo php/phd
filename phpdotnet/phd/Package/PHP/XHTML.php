@@ -843,7 +843,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($filename !== null) {
             if ($this->CURRENT_ID !== $filename) {
                 $rel = $desc = "";
-                if ($this->role == "seealso") {
+                if ($this->getRole() === "seealso") {
                     $rel  = ' rel="rdfs-seeAlso"';
                     $desc = " - " . Format::getLongDescription($filename);
                 }

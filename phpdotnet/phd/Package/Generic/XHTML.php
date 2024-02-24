@@ -705,29 +705,25 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             if(!isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 $attrs[Reader::XMLNS_DOCBOOK]["role"] = "unknown";
             }
-            $this->role = $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
-            return '<strong class="' .$name.' ' .$role. '">';
+            $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"]);
+            return '<strong class="' . $name . ' ' . $this->getRole() . '">';
         }
-        $this->role = null;
+        $this->popRole();
         return "</strong>";
     }
 
     public function format_literal($open, $name, $attrs)
     {
         if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
-            } else {
-                $this->role = false;
-            }
+            $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"] ?? null);
             return '<code class="literal">';
         }
-        $this->role = false;
+        $this->popRole();
         return '</code>';
     }
 
     public function format_literal_text($value, $tag) {
-        switch ($this->role) {
+        switch ($this->getRole()) {
             case 'infdec':
                 $value = (float)$value;
                 $p = strpos($value, '.');
@@ -930,18 +926,18 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             if(!isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 $attrs[Reader::XMLNS_DOCBOOK]["role"] = "unknown-" . ++$role;
             }
-            $this->role = $role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
+            $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"]);
 
             if (isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $id = $attrs[Reader::XMLNS_XML]["id"];
             }
             else {
-                $id = $name. "-" . $this->CURRENT_CHUNK . "-" . $role;
+                $id = $name. "-" . $this->CURRENT_CHUNK . "-" . $this->getRole();
             }
 
-            return '<div class="' .$name.' ' .$role. '" id="' . $id . '">';
+            return '<div class="' .$name.' ' .$this->getRole(). '" id="' . $id . '">';
         }
-        $this->role = null;
+        $this->popRole();
         return "</div>\n";
     }
 
@@ -1495,24 +1491,29 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_variablelist($open, $name, $attrs, $props) {
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
+                $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"]);
             }
             $classStr = $headerStr = $idStr = '';
             if (isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $idStr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
             }
-            if ($this->role === 'constant_list') {
+            if ($this->getRole() === 'constant_list') {
                 $tagName = 'table';
                 $classStr = ' class="doctable table"';
-                $headerStr = "\n<tr>\n<th>" . $this->autogen('Constants', $props['lang']) . "</th>\n<th>" . $this->autogen('Description', $props['lang']) . "</th>\n</tr>";
+                $headerStr = "\n" . $this->indent($props["depth"] + 1) . "<tr>\n"
+                    . $this->indent($props["depth"] + 2) . "<th>"
+                    . $this->autogen('Constants', $props['lang']) . "</th>\n"
+                    . $this->indent($props["depth"] + 2) . "<th>"
+                    . $this->autogen('Description', $props['lang']) . "</th>\n"
+                    . $this->indent($props["depth"] + 1) . "</tr>";
             } else {
                 $tagName = 'dl';
             }
             return '<' . $tagName . $idStr . $classStr . '>' . $headerStr;
         }
-        $tagName = ($this->role === 'constant_list') ? 'table' : 'dl';
-        $this->role = false;
-        return "</" . $tagName . ">\n";
+        $tagName = ($this->getRole() === 'constant_list') ? 'table' : 'dl';
+        $this->popRole();
+        return "</" . $tagName . ">";
     }
     public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
@@ -1521,29 +1522,29 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             } else {
                 unset($this->cchunk['varlistentry']['id']);
             }
-            return ($this->role === 'constant_list') ? '<tr>' : '';
+            return ($this->getRole() === 'constant_list') ? '<tr>' : '';
         }
-        return ($this->role === 'constant_list') ? '</tr>' : '';
+        return ($this->getRole() === 'constant_list') ? '</tr>' : '';
     }
     public function format_varlistentry_term($open, $name, $attrs, $props) {
-        $tagName = ($this->role === 'constant_list') ? 'td' : 'dt';
+        $tagName = ($this->getRole() === 'constant_list') ? 'td' : 'dt';
         if ($open) {
             if (isset($this->cchunk['varlistentry']['id'])) {
                 $id = $this->cchunk['varlistentry']['id'];
                 unset($this->cchunk['varlistentry']['id']);
                 return '<' . $tagName . ' id="' . $id . '">';
             } else {
-                return "<" . $tagName . ">\n";
+                return "<" . $tagName . ">";
             }
         }
-        return "</" . $tagName . ">\n";
+        return "</" . $tagName . ">";
     }
     public function format_varlistentry_listitem($open, $name, $attrs) {
-        $tagName = ($this->role === 'constant_list') ? 'td' : 'dd';
+        $tagName = ($this->getRole() === 'constant_list') ? 'td' : 'dd';
         if ($open) {
-            return "<" . $tagName . ">\n";
+            return "<" . $tagName . ">";
         }
-        return "</" . $tagName . ">\n";
+        return "</" . $tagName . ">";
     }
     public function format_term($open, $name, $attrs, $props) {
         if ($open) {
@@ -1586,15 +1587,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_programlisting($open, $name, $attrs) {
         if ($open) {
-            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
-                $this->role = $attrs[Reader::XMLNS_DOCBOOK]["role"];
-            } else {
-                $this->role = false;
-            }
-
+            $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"] ?? null);
             return '<div class="example-contents">';
         }
-        $this->role = false;
+        $this->popRole();
         return "</div>\n";
     }
     public function format_programlisting_text($value, $tag) {
@@ -1704,9 +1700,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_variablelist_title($open, $name, $attrs, $props) {
         if ($open) {
-            return ($this->role === 'constant_list') ? "<caption><strong>" : "<strong>";
+            return ($this->getRole() === 'constant_list') ? "<caption><strong>" : "<strong>";
         }
-        return ($this->role === 'constant_list') ? "</strong></caption>" : "</strong>";
+        return ($this->getRole() === 'constant_list') ? "</strong></caption>" : "</strong>";
     }
 
     public function format_mediaobject($open, $name, $attrs) {
