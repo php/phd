@@ -1,37 +1,30 @@
 --TEST--
-Bug #49101-1 - Thick border again
+Bug #49101-2 - Thick border again - Big XHTML
 --FILE--
 <?php
 namespace phpdotnet\phd;
 
-require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/TestChunkedXHTML.php";
+require_once __DIR__ . "/../../setup.php";
 
 $xml_file = __DIR__ . "/data/bug49101-1.xml";
 
-Config::init([
-    "index"             => true,
-    "xml_root"          => dirname($xml_file),
-    "xml_file"          => $xml_file,
-    "output_dir"        => __DIR__ . "/output/",
-    "lang_dir" => __DIR__ . "/../../phpdotnet/phd/data/langs/",
-    "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
-    "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
-]);
+Config::init(["xml_file" => $xml_file]);
 
-$format = new TestChunkedXHTML;
-$render = new TestRender($format, new Config);
-
-if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
-    mkdir($opts["output_dir"], 0755);
-}
+$format = new TestPHPBigXHTML;
+$render = new TestRender(new Reader, new Config, $format);
 
 $render->run();
 ?>
---EXPECT--
-Filename: bug49101.html
+--EXPECTF--
+Filename: %s/output/php-bigxhtml.html
 Content:
-<div id="bug49101" class="article">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <title>PHP Manual</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+ </head>
+ <body><div id="bug49101" class="article"><hr />
 
 <table id="ex.calstable" class="doctable table">
 <caption><strong>Sample CALS Table</strong></caption>
@@ -88,3 +81,7 @@ Content:
 
 
 </div>
+
+<hr />
+</body>
+</html>

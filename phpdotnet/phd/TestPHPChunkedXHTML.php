@@ -1,7 +1,7 @@
 <?php
 namespace phpdotnet\phd;
 
-class TestChunkedXHTML extends Package_PHP_ChunkedXHTML {
+class TestPHPChunkedXHTML extends Package_PHP_ChunkedXHTML {
     public function update($event, $val = null) {
         switch($event) {
         case Render::CHUNK:
@@ -32,5 +32,3 @@ class TestChunkedXHTML extends Package_PHP_ChunkedXHTML {
         echo "Content:" . $content . "\n";
     }
 }
-
-

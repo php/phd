@@ -4,20 +4,11 @@ Constant links 001
 <?php
 namespace phpdotnet\phd;
 
-require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/TestChunkedXHTML.php";
+require_once __DIR__ . "/../../setup.php";
 
 $xml_file = __DIR__ . "/data/constant_links.xml";
 
-Config::init([
-    "index"             => true,
-    "xml_root"          => dirname($xml_file),
-    "xml_file"          => $xml_file,
-    "output_dir"        => __DIR__ . "/output/",
-    "lang_dir" => __PHDDIR__ . "phpdotnet/phd/data/langs/",
-    "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
-    "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
-]);
+Config::init(["xml_file" => $xml_file]);
 
 $indices = [
     [
@@ -30,12 +21,25 @@ $indices = [
     ],
 ];
 
-$format = new TestChunkedXHTML;
-$render = new TestRender($format, new Config, $indices);
+$format = new TestPHPChunkedXHTML;
 
-if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
-    mkdir($opts["output_dir"], 0755);
+foreach ($indices as $index) {
+    $format->SQLiteIndex(
+        null, // $context,
+        null, // $index,
+        $index["docbook_id"] ?? "", // $id,
+        $index["filename"] ?? "", // $filename,
+        $index["parent_id"] ?? "", // $parent,
+        $index["sdesc"] ?? "", // $sdesc,
+        $index["ldesc"] ?? "", // $ldesc,
+        $index["element"] ?? "", // $element,
+        $index["previous"] ?? "", // $previous,
+        $index["next"] ?? "", // $next,
+        $index["chunk"] ?? 0, // $chunk
+    );
 }
+
+$render = new TestRender(new Reader, new Config, $format);
 
 $render->run();
 ?>

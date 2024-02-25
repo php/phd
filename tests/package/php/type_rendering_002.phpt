@@ -4,27 +4,14 @@ Type rendering 002 - Methodsynopsis parameters and parameter types
 <?php
 namespace phpdotnet\phd;
 
-require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/TestChunkedXHTML.php";
+require_once __DIR__ . "/../../setup.php";
 
 $xml_file = __DIR__ . "/data/type_rendering_methodsynopsis_parameters.xml";
 
-Config::init([
-    "index"             => true,
-    "xml_root"          => dirname($xml_file),
-    "xml_file"          => $xml_file,
-    "output_dir"        => __DIR__ . "/output/",
-    "lang_dir" => __PHDDIR__ . "phpdotnet/phd/data/langs/",
-    "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
-    "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
-]);
+Config::init(["xml_file" => $xml_file]);
 
-$format = new TestChunkedXHTML;
-$render = new TestRender($format, new Config);
-
-if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
-    mkdir($opts["output_dir"], 0755);
-}
+$format = new TestPHPChunkedXHTML;
+$render = new TestRender(new Reader, new Config, $format);
 
 $render->run();
 ?>
