@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- copy&paste from http://www.docbook.org/tdg5/en/html/cals.table.html -->
-<article xmlns='http://docbook.org/ns/docbook'>
+<article xml:id="test_article" xmlns='http://docbook.org/ns/docbook'>
 <title>Example table</title>
 
 <table xml:id="ex.calstable" frame='all'>

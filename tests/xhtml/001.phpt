@@ -31,10 +31,10 @@ if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
 
 $render->run();
 ?>
---EXPECTF--
-Filename: %s.html
+--EXPECT--
+Filename: test_article.html
 Content:
-<div id="%s" class="article">
+<div id="test_article" class="article">
 <h1>Example table</h1>
 
 <table id="ex.calstable" class="doctable table">
