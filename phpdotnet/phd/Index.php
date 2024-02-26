@@ -383,6 +383,9 @@ SQL;
                 $this->chunks[] = $id;
                 $this->currentchunk = $id;
                 $this->storeInfo($name, $id, $id);
+            } else {
+                $this->storeInfo($name, $id, $this->currentchunk, false);
+                $this->appendID();
             }
             return false;
         }
