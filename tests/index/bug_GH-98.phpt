@@ -9,7 +9,7 @@ require_once __DIR__ . "/../setup.php";
 $xml_file = __DIR__ . "/data/bug_GH-98.xml";
 
 Config::init([
-    "index"    => true,
+    "force_index"    => true,
     "xml_file" => $xml_file,
 ]);
 
@@ -18,7 +18,7 @@ $render = new TestRender(new Reader, new Config, null, $index);
 
 $render->run();
 
-$indexes = array_keys($index->getIndexes());
+$indexes = array_keys($index->getNfo());
 
 echo "Indexes stored:\n";
 

@@ -89,7 +89,7 @@ class Index extends Format
     private $currentid;
     private $chunks    = array();
     private $isChunk   = array();
-    private $nfo       = array();
+    protected $nfo       = array();
     private $isSectionChunk = array();
     private $log = '';
     private $previousId = "";
