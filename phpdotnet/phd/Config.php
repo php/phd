@@ -140,6 +140,10 @@ class Config
             : NULL;
     }
 
+    public function __call($name, $params) {
+        return self::__callStatic($name, $params);
+    }
+
     public static function getSupportedPackages() {
         $packageList = array();
         foreach(Config::package_dirs() as $dir) {
@@ -183,5 +187,3 @@ class Config
     }
 
 }
-
-

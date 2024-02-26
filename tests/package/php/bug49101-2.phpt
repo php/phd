@@ -1,41 +1,30 @@
 --TEST--
-CALS Table rendering
+Bug #49101-2 - Thick border again - Big XHTML
 --FILE--
 <?php
 namespace phpdotnet\phd;
 
-require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/TestChunkedXHTML.php";
+require_once __DIR__ . "/../../setup.php";
 
-$formatclass = "TestChunkedXHTML";
-$xml_file = __DIR__ . "/data/001-1.xml";
+$xml_file = __DIR__ . "/data/bug49101-1.xml";
 
-$opts = array(
-    "index"             => true,
-    "xml_root"          => dirname($xml_file),
-    "xml_file"          => $xml_file,
-    "output_dir"        => __DIR__ . "/output/",
-);
+Config::init(["xml_file" => $xml_file]);
 
-$extra = array(
-    "lang_dir" => __PHDDIR__ . "phpdotnet/phd/data/langs/",
-    "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
-    "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
-);
-
-$render = new TestRender($formatclass, $opts, $extra);
-
-if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
-    mkdir($opts["output_dir"], 0755);
-}
+$format = new TestPHPBigXHTML;
+$render = new TestRender(new Reader, new Config, $format);
 
 $render->run();
 ?>
---EXPECT--
-Filename: test_article.html
+--EXPECTF--
+Filename: %s/output/php-bigxhtml.html
 Content:
-<div id="test_article" class="article">
-<h1>Example table</h1>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <title>PHP Manual</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+ </head>
+ <body><div id="bug49101" class="article"><hr />
 
 <table id="ex.calstable" class="doctable table">
 <caption><strong>Sample CALS Table</strong></caption>
@@ -92,3 +81,7 @@ Content:
 
 
 </div>
+
+<hr />
+</body>
+</html>

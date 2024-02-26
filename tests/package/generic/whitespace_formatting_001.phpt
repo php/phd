@@ -4,30 +4,14 @@ Whitespace formatting 001
 <?php
 namespace phpdotnet\phd;
 
-require_once __DIR__ . "/../setup.php";
-require_once __DIR__ . "/TestChunkedXHTML.php";
+require_once __DIR__ . "/../../setup.php";
 
-$formatclass = "TestChunkedXHTML";
 $xml_file = __DIR__ . "/data/whitespace_formatting_001.xml";
 
-$opts = array(
-    "index"             => true,
-    "xml_root"          => dirname($xml_file),
-    "xml_file"          => $xml_file,
-    "output_dir"        => __DIR__ . "/output/",
-);
+Config::init(["xml_file" => $xml_file]);
 
-$extra = array(
-    "lang_dir" => __PHDDIR__ . "phpdotnet/phd/data/langs/",
-    "phpweb_version_filename" => dirname($xml_file) . '/version.xml',
-    "phpweb_acronym_filename" => dirname($xml_file) . '/acronyms.xml',
-);
-
-$render = new TestRender($formatclass, $opts, $extra);
-
-if (Index::requireIndexing() && !file_exists($opts["output_dir"])) {
-    mkdir($opts["output_dir"], 0755);
-}
+$format = new TestGenericChunkedXHTML;
+$render = new TestRender(new Reader, new Config, $format);
 
 $render->run();
 ?>
