@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="bug-GH-98">
+
+ <sect1 xmlns="http://docbook.org/ns/docbook" annotations="chunk:false" xml:id="non-chunked.element.id">
+  <para>
+   Content to ensure this elements is indexed
+  </para>
+ </sect1>
+
+ <section xmlns="http://docbook.org/ns/docbook" annotations="chunk:false" xml:id="another.non-chunked.element.id">
+  <para>
+   Content to ensure this elements is indexed too
+  </para>
+ </section>
+
+ <sect1 xmlns="http://docbook.org/ns/docbook" xml:id="chunked.element.id">
+  <para>
+   Content to ensure this elements is indexed as well
+  </para>
+ </sect1>
+
+ <section xmlns="http://docbook.org/ns/docbook" xml:id="another.chunked.element.id">
+  <para>
+   Content to ensure this elements is also indexed
+  </para>
+ </section>
+
+</chapter>

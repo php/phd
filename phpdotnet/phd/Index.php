@@ -89,7 +89,7 @@ class Index extends Format
     private $currentid;
     private $chunks    = array();
     private $isChunk   = array();
-    private $nfo       = array();
+    protected $nfo       = array();
     private $isSectionChunk = array();
     private $log = '';
     private $previousId = "";
@@ -383,6 +383,9 @@ SQL;
                 $this->chunks[] = $id;
                 $this->currentchunk = $id;
                 $this->storeInfo($name, $id, $id);
+            } else {
+                $this->storeInfo($name, $id, $this->currentchunk, false);
+                $this->appendID();
             }
             return false;
         }
