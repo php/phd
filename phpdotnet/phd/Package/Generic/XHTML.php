@@ -1612,13 +1612,17 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_constant_text($value, $tag) {
         if (str_contains($value, '::')) {
             // class constant
-            $normalizedLinkFormat = str_replace(
-                array("::", "\\", "_"),
-                array(".constants.", "-", "-"),
-                strtolower($value)
+            list($extensionAndClass, $constant) = explode(
+                "::",
+                str_replace(
+                    array("\\", "_"),
+                    array("-", "-"),
+                    strtolower($value)
+                )
             );
+            $normalizedLinkFormat = $extensionAndClass . ".constants." . trim($constant, "-");
         } else {
-            $normalizedLinkFormat = 'constant.' . str_replace('_', '-', strtolower($value));
+            $normalizedLinkFormat = 'constant.' . str_replace('_', '-', strtolower(trim($value, "_")));
         }
         $link = $this->createLink($normalizedLinkFormat);
 

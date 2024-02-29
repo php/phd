@@ -17,4 +17,12 @@
   </para>
  </section>
 
+ <section>
+  <para>3. Constant with leading and trailing underscores in ID</para>
+  <constant>__LEADING_AND_TRAILING_UNDESCORES__</constant>
+  <para>
+   <constant>Extension\Class::__LEADING_AND_TRAILING_UNDESCORES2__</constant>
+  </para>
+ </section>
+
 </chapter>
