@@ -3,7 +3,6 @@ namespace phpdotnet\phd;
 
 interface Options_Interface {
 
-    function optionList();
+    public function optionList(): array;
 
 }
-

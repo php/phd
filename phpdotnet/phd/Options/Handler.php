@@ -3,7 +3,10 @@ namespace phpdotnet\phd;
 
 class Options_Handler implements Options_Interface
 {
-    public function optionList()
+    /**
+     * @return array<string, string>
+     */
+    public function optionList(): array
     {
         return array(
             'format:'      => 'f:',        // The format to render (xhtml, pdf...)
