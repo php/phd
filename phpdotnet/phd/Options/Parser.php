@@ -8,7 +8,7 @@ class Options_Parser
     private array $packageHandlers = [];
 
     /**
-     * @param array<?Options_Interface> $packageHandlers
+     * @param ?array<Options_Interface> $packageHandlers
      */
     public function __construct(Options_Interface $defaultHandler, ?array $packageHandlers = []) {
         $this->defaultHandler = $defaultHandler;
@@ -17,9 +17,7 @@ class Options_Parser
     }
 
     /**
-     * @param array<?Options_Interface> $packageHandlers
-     *
-     * @return array<?Options_Interface>
+     * @param array<Options_Interface> $packageHandlers
      */
     private function validatePackageHandlers(array $packageHandlers): void {
         foreach ($packageHandlers as $handler) {
@@ -31,9 +29,9 @@ class Options_Parser
     }
 
     /**
-     * @return ?array<Options_Interface, string>
+     * @return array<Options_Interface, string>
      */
-    private function handlerForOption(string $option): ?array {
+    private function handlerForOption(string $option): array {
         if (method_exists($this->defaultHandler, "option_{$option}")) {
             return [$this->defaultHandler, "option_{$option}"];
         }
@@ -46,7 +44,7 @@ class Options_Parser
                 return [$this->packageHandlers[$package], "option_{$opt[1]}"];
             }
         }
-        return null;
+        return [];
     }
 
     /**
@@ -64,7 +62,15 @@ class Options_Parser
     }
 
     private function getShortOptions(): string {
-        return implode('', array_values($this->defaultHandler->optionList()));
+        $defaultOptions = array_values($this->defaultHandler->optionList());
+        $packageOptions = [];
+        foreach ($this->packageHandlers as $handler) {
+            foreach ($handler->optionList() as $opt) {
+                $packageOptions[] = $opt;
+            }
+        }
+        $options = array_merge($defaultOptions, $packageOptions);
+        return implode('', array_values($options));
     }
 
     /**
@@ -84,11 +90,11 @@ class Options_Parser
 
         for ($i=1; $i < $argc; $i++) {
             $checkArgv = explode('=', $argv[$i]);
-            if (substr($checkArgv[0], 0, 2) == '--') {
+            if (substr($checkArgv[0], 0, 2) === '--') {
                 if (!in_array(substr($checkArgv[0], 2), $long)) {
                     trigger_error('Invalid long option ' . $argv[$i], E_USER_ERROR);
                 }
-            } elseif (substr($checkArgv[0], 0, 1) == '-') {
+            } elseif (substr($checkArgv[0], 0, 1) === '-') {
                 if (!in_array(substr($checkArgv[0], 1), $short)) {
                     trigger_error('Invalid short option ' . $argv[$i], E_USER_ERROR);
                 }
@@ -107,7 +113,7 @@ class Options_Parser
         foreach ($args as $k => $v) {
             $handler = $this->handlerForOption((string) $k);
             if (is_callable($handler)) {
-                call_user_func($handler, $k, $v);
+                call_user_func($handler, (string) $k, $v);
             } else {
                 var_dump($k, $v);
                 trigger_error("Hmh, something weird has happend, I don't know this option", E_USER_ERROR);
