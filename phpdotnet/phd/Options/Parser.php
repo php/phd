@@ -7,17 +7,9 @@ class Options_Parser
     private $defaultHandler;
     private $packageHandlers = array();
 
-    private function __construct() {
+    public function __construct() {
         $this->defaultHandler = new Options_Handler();
         $this->packageHandlers = $this->loadPackageHandlers();
-    }
-
-    public static function instance() {
-        static $instance = null;
-        if ($instance == null) {
-            $instance = new self();
-        }
-        return $instance;
     }
 
     private function loadPackageHandlers() {
@@ -91,19 +83,17 @@ class Options_Parser
         }
     }
 
-    public static function getopt() {
-        $self = self::instance();
-
+    public function getopt() {
         //validate options
-        $self->checkOptions();
+        $this->checkOptions();
 
-        $args = getopt($self->getShortOptions(), $self->getLongOptions());
+        $args = getopt($this->getShortOptions(), $this->getLongOptions());
         if ($args === false) {
             trigger_error("Something happend with getopt(), please report a bug", E_USER_ERROR);
         }
 
         foreach ($args as $k => $v) {
-            $handler = $self->handlerForOption($k);
+            $handler = $this->handlerForOption($k);
             if (is_callable($handler)) {
                 call_user_func($handler, $k, $v);
             } else {
