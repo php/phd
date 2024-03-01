@@ -4,23 +4,30 @@ namespace phpdotnet\phd;
 class Options_Parser
 {
 
-    private $defaultHandler;
-    private $packageHandlers = array();
+    private Options_Interface $defaultHandler;
+    private array $packageHandlers = [];
 
-    public function __construct() {
-        $this->defaultHandler = new Options_Handler();
-        $this->packageHandlers = $this->loadPackageHandlers();
+    /**
+     * @param array<?Options_Interface> $packageHandlers
+     */
+    public function __construct(Options_Interface $defaultHandler, ?array $packageHandlers = []) {
+        $this->defaultHandler = $defaultHandler;
+        $this->validatePackageHandlers($packageHandlers);
+        $this->packageHandlers = $packageHandlers;
     }
 
-    private function loadPackageHandlers() {
-        $packageList = Config::getSupportedPackages();
-        $list = array();
-        foreach ($packageList as $package) {
-            if ($handler = Format_Factory::createFactory($package)->getOptionsHandler()) {
-                $list[strtolower($package)] = $handler;
+    /**
+     * @param array<?Options_Interface> $packageHandlers
+     *
+     * @return array<?Options_Interface>
+     */
+    private function validatePackageHandlers(array $packageHandlers): void {
+        foreach ($packageHandlers as $handler) {
+            if (!($handler instanceof Options_Interface)) {
+                trigger_error("All package handlers must implement Options_Interface", E_USER_ERROR);
+                break;
             }
         }
-        return $list;
     }
 
     public function handlerForOption($option) {
