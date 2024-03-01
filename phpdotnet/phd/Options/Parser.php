@@ -30,9 +30,12 @@ class Options_Parser
         }
     }
 
-    public function handlerForOption($option) {
+    /**
+     * @return ?array<Options_Interface, string>
+     */
+    private function handlerForOption(string $option): ?array {
         if (method_exists($this->defaultHandler, "option_{$option}")) {
-            return array($this->defaultHandler, "option_{$option}");
+            return [$this->defaultHandler, "option_{$option}"];
         }
 
         $opt = explode('-', $option);
@@ -40,15 +43,18 @@ class Options_Parser
 
         if (isset($this->packageHandlers[$package])) {
             if (method_exists($this->packageHandlers[$package], "option_{$opt[1]}")) {
-                return array($this->packageHandlers[$package], "option_{$opt[1]}");
+                return [$this->packageHandlers[$package], "option_{$opt[1]}"];
             }
         }
-        return NULL;
+        return null;
     }
 
-    public function getLongOptions() {
+    /**
+     * @return array<string>
+     */
+    private function getLongOptions(): array {
         $defaultOptions = array_keys($this->defaultHandler->optionList());
-        $packageOptions = array();
+        $packageOptions = [];
         foreach ($this->packageHandlers as $package => $handler) {
             foreach ($handler->optionList() as $opt) {
                 $packageOptions[] = $package . '-' . $opt;
@@ -57,7 +63,7 @@ class Options_Parser
         return array_merge($defaultOptions, $packageOptions);
     }
 
-    public function getShortOptions() {
+    private function getShortOptions(): string {
         return implode('', array_values($this->defaultHandler->optionList()));
     }
 
@@ -66,12 +72,12 @@ class Options_Parser
      *
      * Fix Bug #54217 - Warn about nonexisting parameters
      */
-    private function checkOptions() {
+    private function validateOptions(): void {
         $argv = $_SERVER['argv'];
         $argc = $_SERVER['argc'];
 
         $short = str_split(str_replace(':', '', $this->getShortOptions()));
-        $long = array();
+        $long = [];
         foreach ($this->getLongOptions() as $opt) {
             $long[] = str_replace(':', '', $opt);
         }
@@ -91,8 +97,7 @@ class Options_Parser
     }
 
     public function getopt() {
-        //validate options
-        $this->checkOptions();
+        $this->validateOptions();
 
         $args = getopt($this->getShortOptions(), $this->getLongOptions());
         if ($args === false) {
@@ -100,7 +105,7 @@ class Options_Parser
         }
 
         foreach ($args as $k => $v) {
-            $handler = $this->handlerForOption($k);
+            $handler = $this->handlerForOption((string) $k);
             if (is_callable($handler)) {
                 call_user_func($handler, $k, $v);
             } else {
@@ -109,7 +114,4 @@ class Options_Parser
             }
         }
     }
-
 }
-
-
