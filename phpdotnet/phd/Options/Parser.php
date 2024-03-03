@@ -5,27 +5,15 @@ class Options_Parser
 {
 
     private Options_Interface $defaultHandler;
+    /** @var array<Options_Interface> */
     private array $packageHandlers = [];
 
-    /**
-     * @param ?array<Options_Interface> $packageHandlers
-     */
-    public function __construct(Options_Interface $defaultHandler, ?array $packageHandlers = []) {
+    public function __construct(
+        Options_Interface $defaultHandler,
+        Options_Interface ...$packageHandlers
+    ) {
         $this->defaultHandler = $defaultHandler;
-        $this->validatePackageHandlers($packageHandlers);
         $this->packageHandlers = $packageHandlers;
-    }
-
-    /**
-     * @param array<Options_Interface> $packageHandlers
-     */
-    private function validatePackageHandlers(array $packageHandlers): void {
-        foreach ($packageHandlers as $handler) {
-            if (!($handler instanceof Options_Interface)) {
-                trigger_error("All package handlers must implement Options_Interface", E_USER_ERROR);
-                break;
-            }
-        }
     }
 
     /**
@@ -111,9 +99,9 @@ class Options_Parser
         }
 
         foreach ($args as $k => $v) {
-            $handler = $this->handlerForOption((string) $k);
+            $handler = $this->handlerForOption($k);
             if (is_callable($handler)) {
-                call_user_func($handler, (string) $k, $v);
+                call_user_func($handler, $k, $v);
             } else {
                 var_dump($k, $v);
                 trigger_error("Hmh, something weird has happend, I don't know this option", E_USER_ERROR);

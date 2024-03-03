@@ -28,7 +28,7 @@ foreach (Config::getSupportedPackages() as $package) {
         $packageHandlers[strtolower($package)] = $handler;
     }
 }
-$optionsParser = new Options_Parser(new Options_Handler, $packageHandlers);
+$optionsParser = new Options_Parser(new Options_Handler, ...$packageHandlers);
 $optionsParser->getopt();
 
 /* If no docbook file was passed, die */
