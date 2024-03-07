@@ -4,36 +4,24 @@ namespace phpdotnet\phd;
 class Options_Parser
 {
 
-    private $defaultHandler;
-    private $packageHandlers = array();
+    private Options_Interface $defaultHandler;
+    /** @var array<Options_Interface> */
+    private array $packageHandlers = [];
 
-    private function __construct() {
-        $this->defaultHandler = new Options_Handler();
-        $this->packageHandlers = $this->loadPackageHandlers();
+    public function __construct(
+        Options_Interface $defaultHandler,
+        Options_Interface ...$packageHandlers
+    ) {
+        $this->defaultHandler = $defaultHandler;
+        $this->packageHandlers = $packageHandlers;
     }
 
-    public static function instance() {
-        static $instance = null;
-        if ($instance == null) {
-            $instance = new self();
-        }
-        return $instance;
-    }
-
-    private function loadPackageHandlers() {
-        $packageList = Config::getSupportedPackages();
-        $list = array();
-        foreach ($packageList as $package) {
-            if ($handler = Format_Factory::createFactory($package)->getOptionsHandler()) {
-                $list[strtolower($package)] = $handler;
-            }
-        }
-        return $list;
-    }
-
-    public function handlerForOption($option) {
+    /**
+     * @return array<Options_Interface, string>
+     */
+    private function handlerForOption(string $option): array {
         if (method_exists($this->defaultHandler, "option_{$option}")) {
-            return array($this->defaultHandler, "option_{$option}");
+            return [$this->defaultHandler, "option_{$option}"];
         }
 
         $opt = explode('-', $option);
@@ -41,15 +29,18 @@ class Options_Parser
 
         if (isset($this->packageHandlers[$package])) {
             if (method_exists($this->packageHandlers[$package], "option_{$opt[1]}")) {
-                return array($this->packageHandlers[$package], "option_{$opt[1]}");
+                return [$this->packageHandlers[$package], "option_{$opt[1]}"];
             }
         }
-        return NULL;
+        return [];
     }
 
-    public function getLongOptions() {
+    /**
+     * @return array<string>
+     */
+    private function getLongOptions(): array {
         $defaultOptions = array_keys($this->defaultHandler->optionList());
-        $packageOptions = array();
+        $packageOptions = [];
         foreach ($this->packageHandlers as $package => $handler) {
             foreach ($handler->optionList() as $opt) {
                 $packageOptions[] = $package . '-' . $opt;
@@ -58,8 +49,16 @@ class Options_Parser
         return array_merge($defaultOptions, $packageOptions);
     }
 
-    public function getShortOptions() {
-        return implode('', array_values($this->defaultHandler->optionList()));
+    private function getShortOptions(): string {
+        $defaultOptions = array_values($this->defaultHandler->optionList());
+        $packageOptions = [];
+        foreach ($this->packageHandlers as $handler) {
+            foreach ($handler->optionList() as $opt) {
+                $packageOptions[] = $opt;
+            }
+        }
+        $options = array_merge($defaultOptions, $packageOptions);
+        return implode('', array_values($options));
     }
 
     /**
@@ -67,23 +66,23 @@ class Options_Parser
      *
      * Fix Bug #54217 - Warn about nonexisting parameters
      */
-    private function checkOptions() {
+    private function validateOptions(): void {
         $argv = $_SERVER['argv'];
         $argc = $_SERVER['argc'];
 
         $short = str_split(str_replace(':', '', $this->getShortOptions()));
-        $long = array();
+        $long = [];
         foreach ($this->getLongOptions() as $opt) {
             $long[] = str_replace(':', '', $opt);
         }
 
         for ($i=1; $i < $argc; $i++) {
             $checkArgv = explode('=', $argv[$i]);
-            if (substr($checkArgv[0], 0, 2) == '--') {
+            if (substr($checkArgv[0], 0, 2) === '--') {
                 if (!in_array(substr($checkArgv[0], 2), $long)) {
                     trigger_error('Invalid long option ' . $argv[$i], E_USER_ERROR);
                 }
-            } elseif (substr($checkArgv[0], 0, 1) == '-') {
+            } elseif (substr($checkArgv[0], 0, 1) === '-') {
                 if (!in_array(substr($checkArgv[0], 1), $short)) {
                     trigger_error('Invalid short option ' . $argv[$i], E_USER_ERROR);
                 }
@@ -91,19 +90,16 @@ class Options_Parser
         }
     }
 
-    public static function getopt() {
-        $self = self::instance();
+    public function getopt() {
+        $this->validateOptions();
 
-        //validate options
-        $self->checkOptions();
-
-        $args = getopt($self->getShortOptions(), $self->getLongOptions());
+        $args = getopt($this->getShortOptions(), $this->getLongOptions());
         if ($args === false) {
             trigger_error("Something happend with getopt(), please report a bug", E_USER_ERROR);
         }
 
         foreach ($args as $k => $v) {
-            $handler = $self->handlerForOption($k);
+            $handler = $this->handlerForOption($k);
             if (is_callable($handler)) {
                 call_user_func($handler, $k, $v);
             } else {
@@ -112,7 +108,4 @@ class Options_Parser
             }
         }
     }
-
 }
-
-

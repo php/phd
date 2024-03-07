@@ -3,9 +3,12 @@ namespace phpdotnet\phd;
 
 class Options_Handler implements Options_Interface
 {
-    public function optionList()
+    /**
+     * @return array<string, string>
+     */
+    public function optionList(): array
     {
-        return array(
+        return [
             'format:'      => 'f:',        // The format to render (xhtml, pdf...)
             'noindex'      => 'I',         // Do not re-index
             'forceindex'   => 'r',         // Force re-indexing under all circumstances
@@ -30,29 +33,31 @@ class Options_Handler implements Options_Interface
             'quit'         => 'Q',         // Do not run the render. Use with -S to just save the config.
             'memoryindex'  => 'M',         // Use sqlite in memory rather then file
             'packagedir'   => 'k:',        // Include path for external packages
-        );
+        ];
     }
 
-    public function option_M($k, $v)
+    public function option_M(string $k, mixed $v): void
     {
         $this->option_memoryindex($k, $v);
     }
-    public function option_memoryindex($k, $v)
+
+    public function option_memoryindex(string $k, mixed $v): void
     {
         Config::set_memoryindex(true);
     }
 
-    public function option_f($k, $v)
+    public function option_f(string $k, mixed $v): void
     {
-        if ($k == "f") {
-            return $this->option_format($k, $v);
-        } else {
-            return $this->option_outputfilename($k, $v);
+        if ($k === "f") {
+            $this->option_format($k, $v);
+            return;
         }
+        $this->option_outputfilename($k, $v);
     }
-    public function option_format($k, $v)
+
+    public function option_format(string $k, mixed $v): void
     {
-        $formats = array();
+        $formats = [];
         foreach((array)$v as $i => $val) {
             if (!in_array($val, $formats)) {
                 $formats[] = $val;
@@ -61,11 +66,12 @@ class Options_Handler implements Options_Interface
         Config::set_output_format($formats);
     }
 
-    public function option_e($k, $v)
+    public function option_e(string $k, mixed $v): void
     {
         $this->option_ext($k, $v);
     }
-    public function option_ext($k, $v)
+
+    public function option_ext(string $k, mixed $v): void
     {
         $bool = self::boolval($v);
         if ($bool === false) {
@@ -79,47 +85,52 @@ class Options_Handler implements Options_Interface
         }
     }
 
-    public function option_g($k, $v)
+    public function option_g(string $k, mixed $v): void
     {
         $this->option_highlighter($k, $v);
     }
-    public function option_highlighter($k, $v)
+
+    public function option_highlighter(string $k, mixed $v): void
     {
         Config::setHighlighter($v);
     }
 
-    public function option_i($k, $v)
+    public function option_i(string $k, mixed $v): void
     {
         $this->option_noindex($k, 'true');
     }
-    public function option_noindex($k, $v)
+
+    public function option_noindex(string $k, mixed $v): void
     {
         Config::set_no_index(true);
     }
 
-    public function option_r($k, $v)
+    public function option_r(string $k, mixed $v): void
     {
         $this->option_forceindex($k, 'true');
     }
-    public function option_forceindex($k, $v)
+
+    public function option_forceindex(string $k, mixed $v): void
     {
         Config::set_force_index(true);
     }
 
-    public function option_t($k, $v)
+    public function option_t(string $k, mixed $v): void
     {
         $this->option_notoc($k, 'true');
     }
-    public function option_notoc($k, $v)
+
+    public function option_notoc(string $k, mixed $v): void
     {
         Config::set_no_toc(true);
     }
 
-    public function option_d($k, $v)
+    public function option_d(string $k, mixed $v): void
     {
         $this->option_docbook($k, $v);
     }
-    public function option_docbook($k, $v)
+
+    public function option_docbook(string $k, mixed $v): void
     {
         if (is_array($v)) {
             trigger_error("Can only parse one file at a time", E_USER_ERROR);
@@ -131,11 +142,12 @@ class Options_Handler implements Options_Interface
         Config::set_xml_file($v);
     }
 
-    public function option_o($k, $v)
+    public function option_o(string $k, mixed $v): void
     {
         $this->option_output($k, $v);
     }
-    public function option_output($k, $v)
+
+    public function option_output(string $k, mixed $v): void
     {
         if (is_array($v)) {
             trigger_error("Only a single output location can be supplied", E_USER_ERROR);
@@ -146,11 +158,11 @@ class Options_Handler implements Options_Interface
         if (!is_dir($v) || !is_readable($v)) {
             trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
         }
-        $v = (substr($v, strlen($v) - strlen(DIRECTORY_SEPARATOR)) == DIRECTORY_SEPARATOR) ? $v : ($v . DIRECTORY_SEPARATOR);
+        $v = (substr($v, strlen($v) - strlen(DIRECTORY_SEPARATOR)) === DIRECTORY_SEPARATOR) ? $v : ($v . DIRECTORY_SEPARATOR);
         Config::set_output_dir($v);
     }
 
-    public function option_outputfilename($k, $v)
+    public function option_outputfilename(string $k, mixed $v): void
     {
         if (is_array($v)) {
             trigger_error("Only a single output location can be supplied", E_USER_ERROR);
@@ -160,14 +172,16 @@ class Options_Handler implements Options_Interface
         Config::set_output_filename($file);
     }
 
-    public function option_p($k, $v)
+    public function option_p(string $k, mixed $v): void
     {
-        if ($k == "P") {
-            return $this->option_package($k, $v);
+        if ($k === "P") {
+            $this->option_package($k, $v);
+            return;
         }
         $this->option_partial($k, $v);
     }
-    public function option_partial($k, $v)
+
+    public function option_partial(string $k, mixed $v): void
     {
         $render_ids = Config::render_ids();
         foreach((array)$v as $i => $val) {
@@ -185,8 +199,8 @@ class Options_Handler implements Options_Interface
         Config::set_render_ids($render_ids);
     }
 
-    public function option_package($k, $v) {
-
+    public function option_package(string $k, mixed $v): void
+    {
         foreach((array)$v as $package) {
             if (!in_array($package, Config::getSupportedPackages())) {
                 $supported = implode(', ', Config::getSupportedPackages());
@@ -196,23 +210,26 @@ class Options_Handler implements Options_Interface
         Config::set_package($v);
     }
 
-    public function option_q($k, $v)
+    public function option_q(string $k, mixed $v): void
     {
         $this->option_quit($k, $v);
     }
-    public function option_quit($k, $v)
+
+    public function option_quit(string $k, mixed $v): void
     {
         Config::set_quit(true);
     }
 
-    public function option_s($k, $v)
+    public function option_s(string $k, mixed $v): void
     {
-        if ($k == "S") {
-            return $this->option_saveconfig($k, $v);
+        if ($k === "S") {
+            $this->option_saveconfig($k, $v);
+            return;
         }
         $this->option_skip($k, $v);
     }
-    public function option_skip($k, $v)
+
+    public function option_skip(string $k, mixed $v): void
     {
         $skip_ids = Config::skip_ids();
         foreach((array)$v as $i => $val) {
@@ -229,7 +246,8 @@ class Options_Handler implements Options_Interface
         }
         Config::set_skip_ids($skip_ids);
     }
-    public function option_saveconfig($k, $v)
+
+    public function option_saveconfig(string $k, mixed $v): void
     {
         if (is_array($v)) {
             trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
@@ -248,7 +266,7 @@ class Options_Handler implements Options_Interface
         }
     }
 
-    public function option_v($k, $v)
+    public function option_v(string $k, mixed $v): void
     {
         if ($k[0] === 'V') {
             $this->option_version($k, $v);
@@ -257,7 +275,7 @@ class Options_Handler implements Options_Interface
         $this->option_verbose($k, $v);
     }
 
-    public function option_verbose($k, $v)
+    public function option_verbose(string $k, mixed $v): void
     {
         static $verbose = 0;
 
@@ -279,14 +297,16 @@ class Options_Handler implements Options_Interface
         error_reporting($GLOBALS['olderrrep'] | $verbose);
     }
 
-    public function option_l($k, $v)
+    public function option_l(string $k, mixed $v): void
     {
-        if ($k == "L") {
-            return $this->option_lang($k, $v);
+        if ($k === "L") {
+            $this->option_lang($k, $v);
+            return;
         }
         $this->option_list($k, $v);
     }
-    public function option_list($k, $v)
+
+    public function option_list(string $k, mixed $v): never
     {
         $packageList = Config::getSupportedPackages();
 
@@ -299,18 +319,21 @@ class Options_Handler implements Options_Interface
         exit(0);
     }
 
-    public function option_lang($k, $v)
+    public function option_lang(string $k, mixed $v): void
     {
         Config::set_language($v);
     }
-    public function option_c($k, $v)
+
+    public function option_c(string $k, mixed $v): void
     {
-        if ($k == "C") {
-            return $this->option_css($k, $v);
+        if ($k === "C") {
+            $this->option_css($k, $v);
+            return;
         }
         $this->option_color($k, $v);
     }
-    public function option_color($k, $v)
+
+    public function option_color(string $k, mixed $v): void
     {
         if (is_array($v)) {
             trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
@@ -322,8 +345,10 @@ class Options_Handler implements Options_Interface
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
     }
-    public function option_css($k, $v) {
-        $styles = array();
+
+    public function option_css(string $k, mixed $v): void
+    {
+        $styles = [];
         foreach((array)$v as $key => $val) {
             if (!in_array($val, $styles)) {
                 $styles[] = $val;
@@ -332,12 +357,12 @@ class Options_Handler implements Options_Interface
         Config::set_css($styles);
     }
 
-    public function option_k($k, $v)
+    public function option_k(string $k, mixed $v): void
     {
         $this->option_packagedir($k, $v);
     }
 
-    public function option_packagedir($k, $v)
+    public function option_packagedir(string $k, mixed $v): void
     {
         $packages = Config::package_dirs();
         foreach((array)$v as $key => $val) {
@@ -352,11 +377,12 @@ class Options_Handler implements Options_Interface
         Config::set_package_dirs($packages);
     }
 
-    public function option_x($k, $v)
+    public function option_x(string $k, mixed $v): void
     {
-        $this->option_xinclude($k, 'true');
+        $this->option_xinclude($k, true);
     }
-    public function option_xinclude($k, $v)
+
+    public function option_xinclude(string $k, mixed $v): void
     {
         Config::set_process_xincludes(true);
     }
@@ -365,9 +391,9 @@ class Options_Handler implements Options_Interface
      * Prints out the current PhD and PHP version.
      * Exits directly.
      *
-     * @return void
+     * @return never
      */
-    public function option_version($k, $v)
+    public function option_version(string $k, mixed $v): never
     {
         $color  = Config::phd_info_color();
         $output = Config::phd_info_output();
@@ -383,11 +409,12 @@ class Options_Handler implements Options_Interface
         exit(0);
     }
 
-    public function option_h($k, $v)
+    public function option_h(string $k, mixed $v): never
     {
         $this->option_help($k, $v);
     }
-    public function option_help($k, $v)
+
+    public function option_help(string $k, mixed $v): never
     {
         echo "PhD version: " .Config::VERSION;
         echo "\n" . Config::copyright() . "\n
@@ -464,33 +491,32 @@ Most options can be passed multiple times for greater effect.
      *
      * Returns boolean true/false on success, null on failure
      *
-     * @param string $val
-     * @return bool
+     * @param mixed $val
+     * @return ?bool
      */
-    public static function boolval($val) {
+    public static function boolval(mixed $val): ?bool
+    {
         if (!is_string($val)) {
             return null;
         }
 
         switch ($val) {
             case "on":
-                case "yes":
-                case "true":
-                case "1":
+            case "yes":
+            case "true":
+            case "1":
                 return true;
             break;
 
             case "off":
-                case "no":
-                case "false":
-                case "0":
+            case "no":
+            case "false":
+            case "0":
                 return false;
             break;
 
             default:
-            return null;
+                return null;
         }
     }
 }
-
-

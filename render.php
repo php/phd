@@ -22,7 +22,14 @@ if (file_exists("phd.config.php")) {
     Config::init(array());
 }
 
-Options_Parser::getopt();
+$packageHandlers = array();
+foreach (Config::getSupportedPackages() as $package) {
+    if ($handler = Format_Factory::createFactory($package)->getOptionsHandler()) {
+        $packageHandlers[strtolower($package)] = $handler;
+    }
+}
+$optionsParser = new Options_Parser(new Options_Handler, ...$packageHandlers);
+$optionsParser->getopt();
 
 /* If no docbook file was passed, die */
 if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
