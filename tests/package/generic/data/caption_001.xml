@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="caption_001" xmlns="http://docbook.org/ns/docbook">
+
+ <section>
+  <mediaobject>
+   <imageobject>
+   </imageobject>
+   <caption>
+    <para>
+     Insightful caption
+    </para>
+   </caption>
+  </mediaobject>
+ </section>
+
+</chapter>
