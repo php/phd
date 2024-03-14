@@ -28,8 +28,13 @@ foreach (Config::getSupportedPackages() as $package) {
         $packageHandlers[strtolower($package)] = $handler;
     }
 }
-$optionsParser = new Options_Parser(new Options_Handler, ...$packageHandlers);
-$optionsParser->getopt();
+$optionsParser = new Options_Parser(
+    new Options_Handler(new Config, new Package_Generic_Factory),
+    ...$packageHandlers
+);
+$commandLineOptions = $optionsParser->getopt();
+
+Config::init($commandLineOptions);
 
 /* If no docbook file was passed, die */
 if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {

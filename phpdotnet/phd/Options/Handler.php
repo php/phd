@@ -3,6 +3,11 @@ namespace phpdotnet\phd;
 
 class Options_Handler implements Options_Interface
 {
+    public function __construct(
+        private Config $config,
+        private Format_Factory $formatFactory
+    ) {}
+
     /**
      * @return array<string, string>
      */
@@ -36,26 +41,37 @@ class Options_Handler implements Options_Interface
         ];
     }
 
-    public function option_M(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_M(string $k, mixed $v): array
     {
-        $this->option_memoryindex($k, $v);
+        return $this->option_memoryindex($k, $v);
     }
 
-    public function option_memoryindex(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_memoryindex(string $k, mixed $v): array
     {
-        Config::set_memoryindex(true);
+        return ['memoryindex' => true];
     }
 
-    public function option_f(string $k, mixed $v): void
+    /**
+     * @return array<string, string|array<string>>
+     */
+    public function option_f(string $k, mixed $v): array
     {
         if ($k === "f") {
-            $this->option_format($k, $v);
-            return;
+            return $this->option_format($k, $v);
         }
-        $this->option_outputfilename($k, $v);
+        return $this->option_outputfilename($k, $v);
     }
 
-    public function option_format(string $k, mixed $v): void
+    /**
+     * @return array<string, array<string>>
+     */
+    public function option_format(string $k, mixed $v): array
     {
         $formats = [];
         foreach((array)$v as $i => $val) {
@@ -63,74 +79,108 @@ class Options_Handler implements Options_Interface
                 $formats[] = $val;
             }
         }
-        Config::set_output_format($formats);
+        return ['output_format' => $formats];
     }
 
-    public function option_e(string $k, mixed $v): void
+    /**
+     * @return array<string, mixed>
+     */
+    public function option_e(string $k, mixed $v): array
     {
-        $this->option_ext($k, $v);
+        return $this->option_ext($k, $v);
     }
 
-    public function option_ext(string $k, mixed $v): void
+    /**
+     * @return array<string, mixed>
+     */
+    public function option_ext(string $k, mixed $v): array
     {
-        $bool = self::boolval($v);
-        if ($bool === false) {
-            // `--ext=false` means no extension will be used
-            $v = "";
-            Config::setExt($v);
-        } elseif ($bool === null) {
-            // `--ext=true` means use the default extension,
-            // `--ext=".foo"` means use ".foo" as the extension
-            Config::setExt($v);
-        }
+        // `--ext=false`: no extension will be used
+        // `--ext=true`: use the default extension
+        // `--ext=".foo"`: use the ".foo" extension
+        return match (self::boolval($v)) {
+            false => ['ext' => ''],
+            true => ['ext' => null],
+            null => ['ext' => $v]
+        };
     }
 
-    public function option_g(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_g(string $k, mixed $v): array
     {
-        $this->option_highlighter($k, $v);
+        return $this->option_highlighter($k, $v);
     }
 
-    public function option_highlighter(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_highlighter(string $k, mixed $v): array
     {
-        Config::setHighlighter($v);
+        return ['highlighter' => $v];
     }
 
-    public function option_i(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_i(string $k, mixed $v): array
     {
-        $this->option_noindex($k, 'true');
+        return $this->option_noindex($k, $v);
     }
 
-    public function option_noindex(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_noindex(string $k, mixed $v): array
     {
-        Config::set_no_index(true);
+        return ['no_index' => true];
     }
 
-    public function option_r(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_r(string $k, mixed $v): array
     {
-        $this->option_forceindex($k, 'true');
+        return $this->option_forceindex($k, $v);
     }
 
-    public function option_forceindex(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_forceindex(string $k, mixed $v): array
     {
-        Config::set_force_index(true);
+        return ['force_index' => true];
     }
 
-    public function option_t(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_t(string $k, mixed $v): array
     {
-        $this->option_notoc($k, 'true');
+        return $this->option_notoc($k, $v);
     }
 
-    public function option_notoc(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_notoc(string $k, mixed $v): array
     {
-        Config::set_no_toc(true);
+        return ['no_toc' => true];
     }
 
-    public function option_d(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_d(string $k, mixed $v): array
     {
-        $this->option_docbook($k, $v);
+        return $this->option_docbook($k, $v);
     }
 
-    public function option_docbook(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_docbook(string $k, mixed $v): array
     {
         if (is_array($v)) {
             trigger_error("Can only parse one file at a time", E_USER_ERROR);
@@ -138,16 +188,24 @@ class Options_Handler implements Options_Interface
         if (!file_exists($v) || is_dir($v) || !is_readable($v)) {
             trigger_error(sprintf("'%s' is not a readable docbook file", $v), E_USER_ERROR);
         }
-        Config::set_xml_root(dirname($v));
-        Config::set_xml_file($v);
+        return [
+            'xml_root' => dirname($v),
+            'xml_file' => $v,
+        ];
     }
 
-    public function option_o(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_o(string $k, mixed $v): array
     {
-        $this->option_output($k, $v);
+        return $this->option_output($k, $v);
     }
 
-    public function option_output(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_output(string $k, mixed $v): array
     {
         if (is_array($v)) {
             trigger_error("Only a single output location can be supplied", E_USER_ERROR);
@@ -159,32 +217,41 @@ class Options_Handler implements Options_Interface
             trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
         }
         $v = (substr($v, strlen($v) - strlen(DIRECTORY_SEPARATOR)) === DIRECTORY_SEPARATOR) ? $v : ($v . DIRECTORY_SEPARATOR);
-        Config::set_output_dir($v);
+
+        return ['output_dir' => $v];
     }
 
-    public function option_outputfilename(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_outputfilename(string $k, mixed $v): array
     {
         if (is_array($v)) {
             trigger_error("Only a single output location can be supplied", E_USER_ERROR);
         }
         $file = basename($v);
 
-        Config::set_output_filename($file);
+        return ['output_filename' => $file];
     }
 
-    public function option_p(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_p(string $k, mixed $v): array
     {
         if ($k === "P") {
-            $this->option_package($k, $v);
-            return;
+            return $this->option_package($k, $v);
         }
-        $this->option_partial($k, $v);
+        return $this->option_partial($k, $v);
     }
 
-    public function option_partial(string $k, mixed $v): void
+    /**
+     * @return array<string, array<string>>
+     */
+    public function option_partial(string $k, mixed $v): array
     {
-        $render_ids = Config::render_ids();
-        foreach((array)$v as $i => $val) {
+        $render_ids = $this->config->render_ids();
+        foreach((array)$v as $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
                 list($val, $recursive) = explode("=", $val);
@@ -196,42 +263,56 @@ class Options_Handler implements Options_Interface
             }
             $render_ids[$val] = $recursive;
         }
-        Config::set_render_ids($render_ids);
+        return ['render_ids' => $render_ids];
     }
 
-    public function option_package(string $k, mixed $v): void
+    /**
+     * @return array<string, array<string>>
+     */
+    public function option_package(string $k, mixed $v): array
     {
         foreach((array)$v as $package) {
-            if (!in_array($package, Config::getSupportedPackages())) {
-                $supported = implode(', ', Config::getSupportedPackages());
+            if (!in_array($package, $this->config->getSupportedPackages())) {
+                $supported = implode(', ', $this->config->getSupportedPackages());
                 trigger_error("Invalid Package (Tried: '$package' Supported: '$supported')", E_USER_ERROR);
             }
         }
-        Config::set_package($v);
+        return ['package' => (array) $v];
     }
 
-    public function option_q(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_q(string $k, mixed $v): array
     {
-        $this->option_quit($k, $v);
+        return $this->option_quit($k, $v);
     }
 
-    public function option_quit(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_quit(string $k, mixed $v): array
     {
-        Config::set_quit(true);
+        return ['quit' => true];
     }
 
-    public function option_s(string $k, mixed $v): void
+    /**
+     * @return array<string, bool|array<string>>
+     */
+    public function option_s(string $k, mixed $v): array
     {
         if ($k === "S") {
-            $this->option_saveconfig($k, $v);
-            return;
+            return $this->option_saveconfig($k, $v);
         }
-        $this->option_skip($k, $v);
+        return $this->option_skip($k, $v);
     }
 
-    public function option_skip(string $k, mixed $v): void
+    /**
+     * @return array<string, array<string>>
+     */
+    public function option_skip(string $k, mixed $v): array
     {
-        $skip_ids = Config::skip_ids();
+        $skip_ids = $this->config->skip_ids();
         foreach((array)$v as $i => $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
@@ -244,38 +325,42 @@ class Options_Handler implements Options_Interface
             }
             $skip_ids[$val] = $recursive;
         }
-        Config::set_skip_ids($skip_ids);
+        return ['skip_ids' => $skip_ids];
     }
 
-    public function option_saveconfig(string $k, mixed $v): void
+    /**
+     * @return array<string, bool>
+     */
+    public function option_saveconfig(string $k, mixed $v): array
     {
         if (is_array($v)) {
             trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
         }
 
-        // No arguments passed, default to 'true'
-        if (is_bool($v)) {
-            $v = "true";
-        }
+        $val = is_bool($v) ? true : self::boolval($v);
 
-        $val = self::boolval($v);
-        if (is_bool($val)) {
-            Config::set_saveconfig($v);
-        } else {
+        if (!is_bool($val)) {
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
+
+        return ['saveconfig' => $val];
     }
 
-    public function option_v(string $k, mixed $v): void
+    /**
+     * @return array<string, int>
+     */
+    public function option_v(string $k, mixed $v): array
     {
         if ($k[0] === 'V') {
-            $this->option_version($k, $v);
-            return;
+            return $this->option_version($k, $v);
         }
-        $this->option_verbose($k, $v);
+        return $this->option_verbose($k, $v);
     }
 
-    public function option_verbose(string $k, mixed $v): void
+    /**
+     * @return array<string, int>
+     */
+    public function option_verbose(string $k, mixed $v): array
     {
         static $verbose = 0;
 
@@ -293,60 +378,72 @@ class Options_Handler implements Options_Interface
                 }
             }
         }
-        Config::set_verbose($verbose);
         error_reporting($GLOBALS['olderrrep'] | $verbose);
+        return ['verbose' => $verbose];
     }
 
-    public function option_l(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_l(string $k, mixed $v): array
     {
         if ($k === "L") {
-            $this->option_lang($k, $v);
-            return;
+            return $this->option_lang($k, $v);
         }
-        $this->option_list($k, $v);
+        return $this->option_list($k, $v);
     }
 
     public function option_list(string $k, mixed $v): never
     {
-        $packageList = Config::getSupportedPackages();
+        $packageList = $this->config->getSupportedPackages();
 
         echo "Supported packages:\n";
         foreach ($packageList as $package) {
-            $formats = Format_Factory::createFactory($package)->getOutputFormats();
+            $formats = $this->formatFactory::createFactory($package)->getOutputFormats();
             echo "\t" . $package . "\n\t\t" . implode("\n\t\t", $formats) . "\n";
         }
 
         exit(0);
     }
 
-    public function option_lang(string $k, mixed $v): void
+    /**
+     * @return array<string, string>
+     */
+    public function option_lang(string $k, mixed $v): array
     {
-        Config::set_language($v);
+        return ['language' => $v];
     }
 
-    public function option_c(string $k, mixed $v): void
+    /**
+     * @return array<string, bool|array<string>>
+     */
+    public function option_c(string $k, mixed $v): array
     {
         if ($k === "C") {
-            $this->option_css($k, $v);
-            return;
+            return $this->option_css($k, $v);
         }
-        $this->option_color($k, $v);
+        return $this->option_color($k, $v);
     }
 
-    public function option_color(string $k, mixed $v): void
+    /**
+     * @return array<string, bool>
+     */
+    public function option_color(string $k, mixed $v): array
     {
         if (is_array($v)) {
             trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
         }
         $val = self::boolval($v);
-        if (is_bool($val)) {
-            Config::setColor_output($val);
-        } else {
+        if (!is_bool($val)) {
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
+        return ['color_output' => $val];
     }
 
-    public function option_css(string $k, mixed $v): void
+    /**
+     * @return array<string, array<string>>
+     */
+    public function option_css(string $k, mixed $v): array
     {
         $styles = [];
         foreach((array)$v as $key => $val) {
@@ -354,17 +451,23 @@ class Options_Handler implements Options_Interface
                 $styles[] = $val;
             }
         }
-        Config::set_css($styles);
+        return ['css' => $styles];
     }
 
-    public function option_k(string $k, mixed $v): void
+    /**
+     * @return array<string, array<string>>
+     */
+    public function option_k(string $k, mixed $v): array
     {
-        $this->option_packagedir($k, $v);
+        return $this->option_packagedir($k, $v);
     }
 
-    public function option_packagedir(string $k, mixed $v): void
+    /**
+     * @return array<string, array<string>>
+     */
+    public function option_packagedir(string $k, mixed $v): array
     {
-        $packages = Config::package_dirs();
+        $packages = $this->config->package_dirs();
         foreach((array)$v as $key => $val) {
             if ($path = realpath($val)) {
                 if (!in_array($path, $packages)) {
@@ -374,17 +477,23 @@ class Options_Handler implements Options_Interface
                 v('Invalid path: %s', $val, E_USER_WARNING);
             }
         }
-        Config::set_package_dirs($packages);
+        return ['package_dirs' => $packages];
     }
 
-    public function option_x(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_x(string $k, mixed $v): array
     {
-        $this->option_xinclude($k, true);
+        return $this->option_xinclude($k, true);
     }
 
-    public function option_xinclude(string $k, mixed $v): void
+    /**
+     * @return array<string, true>
+     */
+    public function option_xinclude(string $k, mixed $v): array
     {
-        Config::set_process_xincludes(true);
+        return ['process_xincludes' => true];
     }
 
     /**
@@ -395,17 +504,17 @@ class Options_Handler implements Options_Interface
      */
     public function option_version(string $k, mixed $v): never
     {
-        $color  = Config::phd_info_color();
-        $output = Config::phd_info_output();
-        fprintf($output, "%s\n", term_color('PhD Version: ' . Config::VERSION, $color));
+        $color  = $this->config->phd_info_color();
+        $output = $this->config->phd_info_output();
+        fprintf($output, "%s\n", term_color('PhD Version: ' . $this->config::VERSION, $color));
 
-        $packageList = Config::getSupportedPackages();
+        $packageList = $this->config->getSupportedPackages();
         foreach ($packageList as $package) {
-            $version = Format_Factory::createFactory($package)->getPackageVersion();
+            $version = $this->formatFactory::createFactory($package)->getPackageVersion();
             fprintf($output, "\t%s: %s\n", term_color($package, $color), term_color($version, $color));
         }
         fprintf($output, "%s\n", term_color('PHP Version: ' . phpversion(), $color));
-        fprintf($output, "%s\n", term_color(Config::copyright(), $color));
+        fprintf($output, "%s\n", term_color($this->config->copyright(), $color));
         exit(0);
     }
 
@@ -416,8 +525,8 @@ class Options_Handler implements Options_Interface
 
     public function option_help(string $k, mixed $v): never
     {
-        echo "PhD version: " .Config::VERSION;
-        echo "\n" . Config::copyright() . "\n
+        echo "PhD version: " .$this->config::VERSION;
+        echo "\n" . $this->config->copyright() . "\n
   -v
   --verbose <int>            Adjusts the verbosity level
   -f <formatname>
@@ -459,7 +568,7 @@ class Options_Handler implements Options_Interface
                              theme). (default: en)
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal
-                             (default: " . (Config::color_output() ? 'true' : 'false') . ")
+                             (default: " . ($this->config->color_output() ? 'true' : 'false') . ")
   -C <filename>
   --css <filename>           Link for an external CSS file.
   -g <classname>
@@ -487,36 +596,21 @@ Most options can be passed multiple times for greater effect.
     }
 
     /**
-     * Makes a string into a boolean (i.e. on/off, yes/no, ..)
+     * Makes one of the following strings into a boolean:
+     * "on", "off", "yes", "no", "false", "true", "0", "1"
      *
      * Returns boolean true/false on success, null on failure
-     *
-     * @param mixed $val
-     * @return ?bool
      */
-    public static function boolval(mixed $val): ?bool
+    private static function boolval(mixed $val): ?bool
     {
         if (!is_string($val)) {
             return null;
         }
 
-        switch ($val) {
-            case "on":
-            case "yes":
-            case "true":
-            case "1":
-                return true;
-            break;
-
-            case "off":
-            case "no":
-            case "false":
-            case "0":
-                return false;
-            break;
-
-            default:
-                return null;
-        }
+        return match ($val) {
+            "on", "yes", "true", "1" => true,
+            "off", "no", "false", "0" => false,
+            default => null
+        };
     }
 }
