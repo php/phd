@@ -23,9 +23,9 @@ class Options_Handler implements Options_Interface
             'outputfilename:' => 'F:',     // The output filename (only useful for bightml/bigpdf)
             'partial:'     => 'p:',        // The ID to render (optionally ignoring its children)
             'skip:'        => 's:',        // The ID to skip (optionally skipping its children too)
-            'verbose:'     => 'v::',       // Adjust the verbosity level
+            'verbose::'    => 'v::',       // Adjust the verbosity level
             'list'         => 'l',         // List supported packages/formats
-            'lang::'       => 'L:',        // Language hint (used by the CHM)
+            'lang:'        => 'L:',        // Language hint (used by the CHM)
             'color:'       => 'c:',        // Use color output if possible
             'highlighter:' => 'g:',        // Class used as source code highlighter
             'version'      => 'V',         // Print out version information
@@ -37,7 +37,7 @@ class Options_Handler implements Options_Interface
             'saveconfig::' => 'S::',       // Save the generated config ?
             'quit'         => 'Q',         // Do not run the render. Use with -S to just save the config.
             'memoryindex'  => 'M',         // Use sqlite in memory rather then file
-            'packagedir'   => 'k:',        // Include path for external packages
+            'packagedir:'  => 'k:',        // Include path for external packages
         ];
     }
 
