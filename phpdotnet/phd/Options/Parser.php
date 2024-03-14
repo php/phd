@@ -106,7 +106,6 @@ class Options_Parser
             $handler = $this->handlerForOption($k);
 
             if (!is_callable($handler)) {
-                var_dump($k, $v);
                 trigger_error("Hmh, something weird has happend, I don't know this option", E_USER_ERROR);
             }
 
