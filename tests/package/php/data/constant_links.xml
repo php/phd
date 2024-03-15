@@ -3,7 +3,7 @@
 
  <section>
   <para>1. Existing constants</para>
-  <constant>DEFINITELY_EXISTS</constant>
+  <constant>Extension\Namespace\DEFINITELY_EXISTS</constant>
   <para>
    <constant>Vendor\Namespace::DEFINITELY_EXISTS2</constant>
   </para>

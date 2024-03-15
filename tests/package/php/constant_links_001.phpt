@@ -12,7 +12,7 @@ Config::init(["xml_file" => $xml_file]);
 
 $indices = [
     [
-        "docbook_id" => "constant.definitely-exists",
+        "docbook_id" => "constant.extension-namespace-definitely-exists",
         "filename"   => "extensionname.constantspage",
     ],
     [
@@ -58,7 +58,7 @@ Content:
 
  <div class="section">
   <p class="para">%d. Existing constants</p>
-  <strong><code><a href="extensionname.constantspage.html#constant.definitely-exists">DEFINITELY_EXISTS</a></code></strong>
+  <strong><code><a href="extensionname.constantspage.html#constant.extension-namespace-definitely-exists">Extension\Namespace\DEFINITELY_EXISTS</a></code></strong>
   <p class="para">
    <strong><code><a href="extensionname2.constantspage2.html#vendor-namespace.constants.definitely-exists2">Vendor\Namespace::DEFINITELY_EXISTS2</a></code></strong>
   </p>
