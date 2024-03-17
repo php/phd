@@ -5,7 +5,7 @@ class Options_Parser
 {
 
     private Options_Interface $defaultHandler;
-    /** @var array<Options_Interface> */
+	/** @var array<Options_Interface> */
     private array $packageHandlers = [];
 
     public function __construct(
@@ -90,7 +90,10 @@ class Options_Parser
         }
     }
 
-    public function getopt() {
+    /**
+     * @return array<string, mixed>
+     */
+    public function getopt(): array {
         $this->validateOptions();
 
         $args = getopt($this->getShortOptions(), $this->getLongOptions());
@@ -98,14 +101,19 @@ class Options_Parser
             trigger_error("Something happend with getopt(), please report a bug", E_USER_ERROR);
         }
 
+        $parsedOptions = [];
         foreach ($args as $k => $v) {
             $handler = $this->handlerForOption($k);
-            if (is_callable($handler)) {
-                call_user_func($handler, $k, $v);
-            } else {
-                var_dump($k, $v);
+
+            if (!is_callable($handler)) {
                 trigger_error("Hmh, something weird has happend, I don't know this option", E_USER_ERROR);
             }
+
+            $retVal = call_user_func($handler, $k, $v);
+            if (is_array($retVal)) {
+                $parsedOptions = array_merge($parsedOptions, $retVal);
+            }
         }
+        return $parsedOptions;
     }
 }

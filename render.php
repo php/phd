@@ -4,10 +4,12 @@ namespace phpdotnet\phd;
 
 // @php_dir@ gets replaced by pear with the install dir. use __DIR__ when
 // running from SVN
-define("__INSTALLDIR__", '@php_dir@' == '@'.'php_dir@' ? __DIR__ : '@php_dir@');
+if (!defined("__INSTALLDIR__")) {
+    define("__INSTALLDIR__", '@php_dir@' == '@'.'php_dir@' ? __DIR__ : '@php_dir@');
+}
 
-require __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
-require __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
+require_once __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
+require_once __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
 
 spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
 
@@ -28,8 +30,13 @@ foreach (Config::getSupportedPackages() as $package) {
         $packageHandlers[strtolower($package)] = $handler;
     }
 }
-$optionsParser = new Options_Parser(new Options_Handler, ...$packageHandlers);
-$optionsParser->getopt();
+$optionsParser = new Options_Parser(
+    new Options_Handler(new Config, new Package_Generic_Factory),
+    ...$packageHandlers
+);
+$commandLineOptions = $optionsParser->getopt();
+
+Config::init($commandLineOptions);
 
 /* If no docbook file was passed, die */
 if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
