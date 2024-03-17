@@ -26,6 +26,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'part'              => 'format_chunk',
         ),
         'book'                  => 'format_container_chunk_top',
+        'caption'               => 'format_caption',
         'chapter'               => 'format_container_chunk_top',
         'citetitle'             => 'em',
         'cmdsynopsis'           => 'format_cmdsynopsis',
@@ -2280,4 +2281,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $whitespace;
     }
 
+    public function format_caption($open, $name, $attrs, $props) {
+        return $open ? '<div class="caption">' : '</div>';
+    }
 }
