@@ -1,6 +1,5 @@
 <?php
 namespace phpdotnet\phd;
-//6271
 
 class Reader extends \XMLReader
 {
@@ -13,12 +12,13 @@ class Reader extends \XMLReader
     }
 
     /* Get the content of a named node, or the current node. */
-    public function readContent($node = null) { /* {{{ */
+    public function readContent(?string $node = null): string {
         $retval = "";
 
         if($this->isEmptyElement) {
             return $retval;
         }
+
         if (!$node) {
             // We need libxml2.6.20 to be able to read the textual content of the node without skipping over the markup too
             if (\LIBXML_VERSION >= 20620) {
@@ -29,18 +29,13 @@ class Reader extends \XMLReader
             $node = $this->name;
         }
 
-        $retval = "";
         while (self::readNode($node)) {
             $retval .= $this->value;
         }
         return $retval;
-    } /* }}} */
-    /* Read $nodeName until END_ELEMENT */
-    public function readNode($nodeName) { /* {{{ */
-        return self::read() && !($this->nodeType === self::END_ELEMENT && $this->name == $nodeName);
-    } /* }}} */
+    }
 
+    private function readNode(string $nodeName): bool {
+        return self::read() && !($this->nodeType === self::END_ELEMENT && $this->name === $nodeName);
+    }
 }
-
-
-
