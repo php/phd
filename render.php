@@ -77,7 +77,29 @@ function make_reader() {
     $idlist = Config::render_ids() + Config::skip_ids();
     if (!empty($idlist)) {
         v("Running partial build", VERBOSE_RENDER_STYLE);
-        $reader = new Reader_Partial();
+
+        $parents = [];
+        if (file_exists(Config::output_dir() . "index.sqlite")) {
+            $sqlite = new \SQLite3(Config::output_dir() . "index.sqlite");
+            // Fetch all ancestors of the ids we should render
+            foreach(Config::render_ids() as $p => $v) {
+                do {
+                    $id = $sqlite->escapeString($p);
+                    $row = $sqlite->query("SELECT parent_id FROM ids WHERE docbook_id = '$id'")->fetchArray(SQLITE3_ASSOC);
+                    if ($row["parent_id"]) {
+                        $parents[] = $p = $row["parent_id"];
+                        continue;
+                    }
+                    break;
+                } while(1);
+            }
+        }
+
+        $reader = new Reader_Partial(
+            Config::render_ids(),
+            Config::skip_ids(),
+            $parents
+        );
     } else {
         v("Running full build", VERBOSE_RENDER_STYLE);
         $reader = new Reader();
@@ -86,8 +108,6 @@ function make_reader() {
 }
 
 $render = new Render();
-$reader = make_reader();
-
 
 // Set reader LIBXML options
 $readerOpts = LIBXML_PARSEHUGE;
@@ -102,6 +122,7 @@ if (Index::requireIndexing()) {
     $format = new Index;
     $render->attach($format);
 
+    $reader = make_reader();
     $reader->open(Config::xml_file(), NULL, $readerOpts);
     $render->execute($reader);
 
@@ -135,6 +156,3 @@ foreach($render as $format) {
 $render->execute($reader);
 
 v("Finished rendering", VERBOSE_FORMAT_RENDERING);
-
-
-

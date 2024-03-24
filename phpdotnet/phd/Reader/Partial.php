@@ -7,55 +7,27 @@ class Reader_Partial extends Reader
     protected $skip    = array();
     protected $parents = array();
 
-    public function __construct() {
+    public function __construct(
+        array $render_ids,
+        ?array $skip_ids   = [],
+        ?array $parents    = [],
+    ) {
         parent::__construct();
 
-        $render_ids = Config::render_ids();
-        if ($render_ids !== NULL) {
-            if (is_array($render_ids)) {
-                $this->partial = $render_ids;
-            } else {
-                $this->partial[$render_ids] = 1;
-            }
-            $skip_ids = Config::skip_ids();
-            if ($skip_ids !== NULL) {
-                if (is_array($skip_ids)) {
-                    $this->skip = $skip_ids;
-                } else {
-                    $this->skip[$skip_ids] = 1;
-                }
-            }
-        } else {
+        if ($render_ids === []) {
             throw new \Exception("Didn't get any IDs to seek");
         }
-        $parents = array();
-        if (file_exists(Config::output_dir() . "index.sqlite")) {
-            $sqlite = new \SQLite3(Config::output_dir() . "index.sqlite");
 
-            // Fetch all ancestors of the ids we should render
-            foreach($render_ids as $p => $v) {
-                do {
-                    $id = $sqlite->escapeString($p);
-                    $row = $sqlite->query("SELECT parent_id FROM ids WHERE docbook_id = '$id'")->fetchArray(SQLITE3_ASSOC);
-                    if ($row["parent_id"]) {
-                        $parents[] = $p = $row["parent_id"];
-                        continue;
-                    }
-                    break;
-                } while(1);
-            }
-        }
-
+        $this->partial = $render_ids;
+        $this->skip = $skip_ids;
         $this->parents = $parents;
     }
 
-    public function read() {
-        static $seeked = 0;
+    public function read(): bool {
         static $currently_reading = false;
         static $currently_skipping = false;
         static $arrayPartial = array();
         static $arraySkip = array();
-        $ignore = false;
 
         while($ret = parent::read()) {
             $id = $this->getAttributeNs("id", self::XMLNS_XML);
@@ -66,14 +38,12 @@ class Reader_Partial extends Reader
                     v("%s done", $id, VERBOSE_PARTIAL_READING);
 
                     unset($this->partial[$id]);
-                    --$seeked;
                     $currently_reading = false;
                     array_pop($arrayPartial);
                 } else {
                     v("Starting %s...", $id, VERBOSE_PARTIAL_READING);
 
                     $currently_reading = $id;
-                    ++$seeked;
                     $arrayPartial[] = $id;
                 }
                 return $ret;
@@ -83,13 +53,11 @@ class Reader_Partial extends Reader
 
                     unset($this->skip[$id]);
                     $currently_skipping = false;
-                    $ignore = false;
                     array_pop($arraySkip);
                 } else {
                     v("Skipping %s...", $id, VERBOSE_PARTIAL_READING);
 
                     $currently_skipping = $id;
-                    $ignore = true;
                     $arraySkip[] = $id;
                 }
             } elseif ($currently_skipping && $this->skip[$currently_skipping]) {
@@ -99,7 +67,6 @@ class Reader_Partial extends Reader
                     v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
                 }
 
-                $ignore = true;
             } elseif ($currently_reading && $this->partial[$currently_reading]) {
                 if ($currentPartial == $id) {
                     v("Rendering child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
@@ -120,7 +87,6 @@ class Reader_Partial extends Reader
                         parent::next();
                     }
                 }
-                $ignore = true;
             }
         }
         return $ret;
