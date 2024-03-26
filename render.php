@@ -115,8 +115,14 @@ if (Config::process_xincludes()) {
     $readerOpts |= LIBXML_XINCLUDE;
 }
 
+if (file_exists(Config::output_dir() . 'index.sqlite')) {
+    $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
+} else {
+    $db = null;
+}
+
 // Indexing
-if (Index::requireIndexing()) {
+if (requireIndexing(new Config, $db)) {
     v("Indexing...", VERBOSE_INDEXING);
     // Create indexer
     $format = new Index;

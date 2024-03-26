@@ -182,4 +182,49 @@ function errh($errno, $msg, $file, $line, $ctx = null) {
 set_error_handler(__NAMESPACE__ . '\\errh');
 /* }}} */
 
+/**
+ * Checks if indexing is needed.
+ *
+ * This is determined the following way:
+ * 0. If no index file exists, indexing is required.
+ * 1. If the config option --no-index is supplied, nothing is indexed
+ * 2. If the config option --force-index is supplied, indexing is required
+ * 3. If no option is given, the file modification time of the index and
+ *    the manual docbook file are compared. If the index is older than
+ *    the docbook file, indexing will be done.
+ *
+ * @return boolean True if indexing is required.
+ */
+function requireIndexing(Config $config, ?\SQLite3 $db = null): bool {
+    if ($db === null) {
+        $indexfile = $config->output_dir() . 'index.sqlite';
+        if (!file_exists($indexfile)) {
+            return true;
+        }
+    }
 
+    if ($config->no_index()) {
+        return false;
+    }
+
+    if ($config->force_index()) {
+        return true;
+    }
+
+    if ($db === null) {
+        $db = new \SQLite3($indexfile);
+    }
+    $indexingCount = $db->query('SELECT COUNT(time) FROM indexing')
+        ->fetchArray(SQLITE3_NUM);
+    if ($indexingCount[0] == 0) {
+        return true;
+    }
+
+    $indexing = $db->query('SELECT time FROM indexing')
+        ->fetchArray(SQLITE3_ASSOC);
+    $xmlLastModification = filemtime($config->xml_file());
+    if ($indexing['time'] > $xmlLastModification) {
+        return false;
+    }
+    return true;
+}
