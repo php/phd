@@ -13,10 +13,7 @@ Config::init([
     "xml_file" => $xml_file,
 ]);
 
-$indexRepository = new IndexRepository(new \SQLite3(
-    Config::output_dir() . 'index.sqlite',
-    \SQLITE3_OPEN_READWRITE | \SQLITE3_OPEN_CREATE
-));
+$indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
 
 $index = new TestIndex($indexRepository);
@@ -33,8 +30,6 @@ var_dump(in_array("another.non-chunked.element.id", $indexes));
 var_dump(in_array("chunked.element.id", $indexes));
 var_dump(in_array("another.chunked.element.id", $indexes));
 var_dump(in_array("bug-GH-98", $indexes));
-
-unlink(Config::output_dir() . 'index.sqlite');
 ?>
 --EXPECT--
 Indexes stored:
