@@ -124,13 +124,23 @@ if (file_exists(Config::output_dir() . 'index.sqlite')) {
 // Indexing
 if (requireIndexing(new Config, $db)) {
     v("Indexing...", VERBOSE_INDEXING);
+    if (Config::memoryindex()) {
+        $db = new \SQLite3(":memory:");
+    } else {
+        $db = $db ?? new \SQLite3(Config::output_dir() . 'index.sqlite');
+    }
     // Create indexer
-    $format = new Index;
+    $indexRepository = new IndexRepository($db);
+    $format = new Index($indexRepository);
     $render->attach($format);
 
     $reader = make_reader();
     $reader->open(Config::xml_file(), NULL, $readerOpts);
     $render->execute($reader);
+
+    if (Config::memoryindex()) {
+        Config::set_indexcache($db);
+    }
 
     $render->detach($format);
 

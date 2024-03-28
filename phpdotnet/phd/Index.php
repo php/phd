@@ -83,7 +83,7 @@ class Index extends Format
         'phpdoc'            => 'PI_PHPDOCHandler',
     );
 
-    private $db;
+    private IndexRepository $indexRepository;
     private $currentchunk;
     private $ids       = array();
     private $currentid;
@@ -91,7 +91,6 @@ class Index extends Format
     private $isChunk   = array();
     protected $nfo       = array();
     private $isSectionChunk = array();
-    private $log = '';
     private $previousId = "";
     private $inChangelog = false;
     private $currentChangelog = array();
@@ -100,6 +99,11 @@ class Index extends Format
     private $commit     = array();
     private $POST_REPLACEMENT_INDEXES = array();
     private $POST_REPLACEMENT_VALUES  = array();
+
+    public function __construct(IndexRepository $indexRepository) {
+        $this->indexRepository = $indexRepository;
+        parent::__construct();
+    }
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
     }
@@ -128,58 +132,24 @@ class Index extends Format
                 break;
             case Render::INIT:
                 if ($value) {
-                    if (Config::memoryindex()) {
-                        $db = new \SQLite3(":memory:");
-                    } else {
-                        $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
-                        $db->exec('DROP TABLE IF EXISTS ids');
-                        $db->exec('DROP TABLE IF EXISTS indexing');
-                        $db->exec('DROP TABLE IF EXISTS changelogs');
-                    }
-
-                    $create = <<<SQL
-CREATE TABLE ids (
-    docbook_id TEXT,
-    filename TEXT,
-    parent_id TEXT,
-    sdesc TEXT,
-    ldesc TEXT,
-    element TEXT,
-    previous TEXT,
-    next TEXT,
-    chunk INTEGER
-);
-CREATE TABLE changelogs (
-    membership TEXT, -- How the extension in distributed (pecl, core, bundled with/out external dependencies..)
-    docbook_id TEXT,
-    parent_id TEXT,
-    version TEXT,
-    description TEXT
-);
-CREATE TABLE indexing (
-    time INTEGER PRIMARY KEY
-);
-SQL;
-                    $db->exec('PRAGMA default_synchronous=OFF');
-                    $db->exec('PRAGMA count_changes=OFF');
-                    $db->exec('PRAGMA cache_size=100000');
-                    $db->exec($create);
-
-                    if (Config::memoryindex()) {
-                        Config::set_indexcache($db);
-                    }
-
-                    $this->db = $db;
+                    $this->indexRepository->init();
                     $this->chunks = array();
                 } else {
                     print_r($this->chunks);
                 }
                 break;
             case Render::FINALIZE:
-                $retval = $this->db->exec("BEGIN TRANSACTION; INSERT INTO indexing (time) VALUES ('" . time() . "'); COMMIT");
-                $this->commit();
-                if ($this->db->lastErrorCode()) {
-                    trigger_error($this->db->lastErrorMsg(), E_USER_WARNING);
+                $this->indexRepository->saveIndexingTime(time());
+                if ($this->indexRepository->commit(
+                    $this->commit,
+                    $this->POST_REPLACEMENT_INDEXES,
+                    $this->POST_REPLACEMENT_VALUES,
+                    $this->changelog,
+                )) {
+                    $this->commit = [];
+                }
+                if ($this->indexRepository->lastErrorCode()) {
+                    trigger_error($this->indexRepository->lastErrorMsg(), E_USER_WARNING);
                 }
                 break;
         }
@@ -222,7 +192,7 @@ SQL;
         );
         // Append "next" to the previously inserted row
         if ($isChunk) {
-            $this->POST_REPLACEMENT_VALUES[$this->previousId] = $this->db->escapeString($id);
+            $this->POST_REPLACEMENT_VALUES[$this->previousId] = $id;
             $this->previousId = $id;
         }
     }
@@ -241,34 +211,33 @@ SQL;
             $sdesc = $lastChunk["sdesc"];
         }
 
-        $this->commit[++$idx] = sprintf(
-            "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d);\n",
-            $this->db->escapeString($lastChunkId),
-            $this->db->escapeString($lastChunk["filename"]),
-            $this->db->escapeString($this->currentchunk),
-            $this->db->escapeString($sdesc),
-            $this->db->escapeString($lastChunk["ldesc"]),
-            $this->db->escapeString($lastChunk["element"]),
-            $this->db->escapeString($lastChunk["previous"]),
-            $this->db->escapeString($lastChunk["chunk"] ? "POST-REPLACEMENT" : ""),
-            $this->db->escapeString($lastChunk["chunk"])
-        );
+        $this->commit[++$idx] = [
+            "docbook_id" => $lastChunkId,
+            "filename" => $lastChunk["filename"],
+            "parent_id" => $this->currentchunk,
+            "sdesc" => $sdesc,
+            "ldesc" => $lastChunk["ldesc"],
+            "element" => $lastChunk["element"],
+            "previous" => $lastChunk["previous"],
+            "next" => ($lastChunk["chunk"] ? "POST-REPLACEMENT" : ""),
+            "chunk" => $lastChunk["chunk"],
+        ];
         if ($lastChunk["chunk"]) {
             $this->POST_REPLACEMENT_INDEXES[] = array("docbook_id" => $lastChunkId, "idx" => $idx);
         }
         if ($array === true) {
             foreach($lastChunk["sdesc"] as $sdesc) {
-                $this->commit[++$idx] = sprintf(
-                    "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 0);\n",
-                    $this->db->escapeString($lastChunkId),
-                    $this->db->escapeString($lastChunk["filename"]),
-                    $this->db->escapeString($this->currentchunk),
-                    $this->db->escapeString($sdesc),
-                    $this->db->escapeString($lastChunk["ldesc"]),
-                    $this->db->escapeString($lastChunk["element"]),
-                    $this->db->escapeString($lastChunk["previous"]),
-                    $this->db->escapeString($lastChunk["chunk"] ? "POST-REPLACEMENT" : "")
-                );
+                $this->commit[++$idx] = [
+                    "docbook_id" => $lastChunkId,
+                    "filename" => $lastChunk["filename"],
+                    "parent_id" => $this->currentchunk,
+                    "sdesc" => $sdesc,
+                    "ldesc" => $lastChunk["ldesc"],
+                    "element" => $lastChunk["element"],
+                    "previous" => $lastChunk["previous"],
+                    "next" => ($lastChunk["chunk"] ? "POST-REPLACEMENT" : ""),
+                    "chunk" => 0,
+                ];
                 $this->POST_REPLACEMENT_INDEXES[] = array("docbook_id" => $lastChunkId, "idx" => $idx);
             }
         }
@@ -428,44 +397,6 @@ SQL;
         }
         if ($this->inChangelog) {
             $this->changelog[$this->currentid][] = $this->currentChangelog;
-        }
-    }
-
-
-
-    public function commit() {
-        if (isset($this->commit) && $this->commit) {
-            $search = $this->db->escapeString("POST-REPLACEMENT");
-            $none = $this->db->escapeString("");
-
-            foreach($this->POST_REPLACEMENT_INDEXES as $a) {
-                if (isset($this->POST_REPLACEMENT_VALUES[$a["docbook_id"]])) {
-                    $replacement = $this->POST_REPLACEMENT_VALUES[$a["docbook_id"]];
-                    $this->commit[$a["idx"]] = str_replace($search, $replacement, $this->commit[$a["idx"]]);
-                } else {
-                    // If there are still post replacement, then they don't have
-                    // any 'next' page
-                    $this->commit[$a["idx"]] = str_replace($search, $none, $this->commit[$a["idx"]]);
-                }
-            }
-
-            $this->db->exec('BEGIN TRANSACTION; '.implode("", $this->commit).' COMMIT');
-            $log = "";
-            foreach($this->changelog as $id => $arr) {
-                foreach($arr as $entry) {
-                    $log .= sprintf(
-                        "INSERT INTO changelogs (membership, docbook_id, parent_id, version, description) VALUES('%s', '%s', '%s', '%s', '%s');\n",
-                        $this->db->escapeString($entry[0] ?? ''),
-                        $this->db->escapeString($id),
-                        $this->db->escapeString($entry[1]),
-                        $this->db->escapeString($entry[2]),
-                        $this->db->escapeString($entry[3])
-                    );
-                }
-            }
-            $this->db->exec('BEGIN TRANSACTION; ' . $log. ' COMMIT');
-            $this->log = "";
-            $this->commit = array();
         }
     }
 

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<set xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="index" xml:lang="en">
+ <title>PHP Manual</title>
+
+ <info xmlns="http://docbook.org/ns/docbook" xml:id="bookinfo">
+  <authorgroup xmlns="http://docbook.org/ns/docbook" xml:id="authors">
+   <author>
+    <personname>
+     <firstname>A</firstname><surname>B</surname>
+    </personname>
+   </author>
+  </authorgroup>
+
+  <copyright>
+   <year>1997-<?dbtimestamp format="Y"?></year>
+   <holder>the PHP Documentation Group</holder>
+  </copyright>
+
+  <legalnotice xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="copyright">
+   <info><title>Copyright</title></info>
+   <simpara>
+    If you are interested in redistribution or republishing of this document
+    in whole or in part, either modified or unmodified, and you have questions,
+    please contact the Copyright holders at
+    <link xlink:href="mailto:doc-license@lists.php.net">doc-license@lists.php.net</link>.
+    Note that this address is mapped to a publicly archived mailing list.
+   </simpara>
+  </legalnotice>
+ </info>
+
+ <book xml:id="manual">
+  <title>PHP Manual</title>
+
+  <preface xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://docbook.org/ns/docbook" xml:id="preface">
+   <info>
+    <title>Preface</title>
+    <abstract>
+     <simpara>
+      <acronym>PHP</acronym>, which stands for "<literal>PHP: Hypertext
+      Preprocessor</literal>" is a widely-used Open Source general-purpose
+      scripting language
+     </simpara>
+    </abstract>
+   </info>
+
+   <section xmlns="http://docbook.org/ns/docbook" annotations="chunk:false" xml:id="contributors">
+    <info><title>Authors and Contributors</title></info>
+
+    <section>
+     <info><title>Authors and Editors</title></info>
+     <para>
+      The following contributors should be
+      recognized for the impact they have made and/or continue to make by adding
+      content to the manual:
+     </para>
+    </section>
+   </section>
+  </preface>
+ </book>
+
+ <book xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="mongodb.setup">
+  <title xmlns="http://docbook.org/ns/docbook">Installing/Configuring</title>
+  <article xml:id="mongodb.requirements">
+   <title xmlns="http://docbook.org/ns/docbook">Requirements</title>
+   <para>
+    As of version 1.16.0, the driver requires PHP 7.2 or higher. Previous
+    versions of the driver allow compatibility with older PHP versions.
+   </para>
+  </article>
+ </book>
+
+ <book xml:id="chapterInBook">
+  <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="introduction">
+   <info><title>Introduction</title></info>
+
+   <section xml:id="intro-whatis">
+    <info><title>What is PHP?</title></info>
+    <para>
+     <acronym>PHP</acronym> (recursive acronym for <literal>PHP: Hypertext
+     Preprocessor</literal>) is a widely-used open source general-purpose
+     scripting language that is especially suited for web
+     development and can be embedded into HTML.
+    </para>
+   </section>
+  </chapter>
+ </book>
+
+ <appendix xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="apcu.constants">
+  <title xmlns="http://docbook.org/ns/docbook">Predefined Constants</title>
+  <simpara xmlns="http://docbook.org/ns/docbook">
+   The constants below are defined by this extension, and
+   will only be available when the extension has either
+   been compiled into PHP or dynamically loaded at runtime.
+  </simpara>
+ </appendix>
+
+ <part xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="reserved.interfaces">
+  <title>Predefined Interfaces and Classes</title>
+  <partintro>
+   <para>
+    See also the <link linkend="spl.interfaces">SPL Interfaces</link> and <link linkend="reserved.classes">reserved classes</link>.
+   </para>
+  </partintro>
+ </part>
+
+ <phpdoc:classref xmlns:phpdoc="http://php.net/ns/phpdoc" xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="class.traversable">
+  <title>The <interfacename>Traversable</interfacename> interface</title>
+  <titleabbrev>Traversable</titleabbrev>
+  <partintro>
+   <section role="changelog">
+    <title xmlns="http://docbook.org/ns/docbook">Changelog</title>
+    <para>
+     Changes
+    </para>
+   </section>
+  </partintro>
+ </phpdoc:classref>
+
+</set>
