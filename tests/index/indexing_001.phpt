@@ -13,10 +13,7 @@ Config::init([
     "xml_file" => $xml_file,
 ]);
 
-$indexRepository = new IndexRepository(new \SQLite3(
-    Config::output_dir() . 'index.sqlite',
-    \SQLITE3_OPEN_READWRITE | \SQLITE3_OPEN_CREATE
-));
+$indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
 
 $index = new TestIndex($indexRepository);
@@ -29,8 +26,6 @@ $indexes = array_keys($index->getNfo());
 echo "Indexes stored:\n";
 
 var_dump($indexes);
-
-unlink(Config::output_dir() . 'index.sqlite');
 ?>
 --EXPECT--
 Indexes stored:
