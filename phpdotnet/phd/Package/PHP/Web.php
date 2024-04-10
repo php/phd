@@ -209,7 +209,7 @@ manual_setup($setup);
     }
 
     public function footer($id) {
-        return "<?php manual_footer(); ?>";
+        return '<?php manual_footer($setup); ?>';
     }
 
     protected function writeJsonIndex() {
