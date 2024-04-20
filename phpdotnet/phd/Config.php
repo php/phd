@@ -20,6 +20,7 @@ class Config
         'no_toc'            => false,
         'xml_root'          => '.',
         'xml_file'          => './.manual.xml',
+        'history_file'      => './fileModHistory.php',
         'lang_dir'          => './',
         'language'          => 'en',
         'fallback_language' => 'en',

@@ -60,6 +60,7 @@ if (!$conf) {
         "phpweb_version_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
         "phpweb_acronym_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
         "phpweb_sources_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'sources.xml',
+        "phpweb_history_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'fileModHistory.php',
     ));
 }
 

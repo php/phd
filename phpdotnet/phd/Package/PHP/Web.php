@@ -5,6 +5,9 @@ class Package_PHP_Web extends Package_PHP_XHTML {
 
     protected $sources = array();
 
+    /** $var array<string, array<string, mixed>> */
+    protected array $history = [];
+
     public function __construct() {
         parent::__construct();
         $this->registerFormatName("PHP-Web");
@@ -78,6 +81,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
             $this->loadSourcesInfo();
             $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
             $this->postConstruct();
+            $this->loadHistoryInfo();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
                     v("Output directory is a file?", E_USER_ERROR);
@@ -182,6 +186,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
             "alternatives" => $this->cchunk["alternatives"],
             "source" => $this->sourceInfo($id),
         );
+        $setup["history"] = $this->history[$setup["source"]["path"]] ?? [];
         if ($this->getChildren($id)) {
             $lang = Config::language();
             $setup["extra_header_links"] = array(
@@ -203,6 +208,8 @@ $setup["toc"] = $TOC;
 $setup["toc_deprecated"] = $TOC_DEPRECATED;
 $setup["parents"] = $PARENTS;
 manual_setup($setup);
+
+contributors($setup);
 
 ?>
 ';
@@ -268,6 +275,15 @@ manual_setup($setup);
         }
         return isset($this->sources[$id]) ? $this->sources[$id] : null;
     }
+
+    public function loadHistoryInfo() {
+        if (!is_file(Config::phpweb_history_filename())) {
+            $this->history = [];
+            return;
+        }
+
+        $history = include Config::phpweb_history_filename();
+
+        $this->history = (is_array($history)) ? $history : [];
+    }
 }
-
-
