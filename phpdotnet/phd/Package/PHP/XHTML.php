@@ -1019,7 +1019,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_container_chunk_title($open, $name, $attrs, $props) {
         if ($open) {
-            return $props["empty"] ? '' : '<h1>';
+            return $props["empty"] ? '' : '<h1 class="title">';
         }
         $ret = "";
         if (isset($this->cchunk["container_chunk"]) && $this->cchunk["container_chunk"]) {

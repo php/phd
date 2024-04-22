@@ -19,7 +19,7 @@ $render->run();
 Filename: faq.001.html
 Content:
 <div id="faq.001" class="chapter">
-  <h1>FAQ Test 001</h1>
+  <h1 class="title">FAQ Test 001</h1>
 
   
 
