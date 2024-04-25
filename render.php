@@ -73,15 +73,15 @@ if (Config::quit()) {
     exit(0);
 }
 
-function make_reader(Config $config) {
+function make_reader() {
     //Partial Rendering
     $idlist = Config::render_ids() + Config::skip_ids();
     if (!empty($idlist)) {
         v("Running partial build", VERBOSE_RENDER_STYLE);
 
         $parents = [];
-        if ($config->indexcache()) {
-            $sqlite = $config->indexcache();
+        if (file_exists(Config::output_dir() . "index.sqlite")) {
+            $sqlite = new \SQLite3(Config::output_dir() . "index.sqlite");
             // Fetch all ancestors of the ids we should render
             foreach(Config::render_ids() as $p => $v) {
                 do {
@@ -116,25 +116,32 @@ if (Config::process_xincludes()) {
     $readerOpts |= LIBXML_XINCLUDE;
 }
 
-if (Config::memoryindex()) {
-    $db = new \SQLite3(":memory:");
-} else {
+if (file_exists(Config::output_dir() . 'index.sqlite')) {
     $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
+} else {
+    $db = null;
 }
 
-Config::set_indexcache($db);
-
 // Indexing
-if (requireIndexing(new Config)) {
+if (requireIndexing(new Config, $db)) {
     v("Indexing...", VERBOSE_INDEXING);
+    if (Config::memoryindex()) {
+        $db = new \SQLite3(":memory:");
+    } else {
+        $db = $db ?? new \SQLite3(Config::output_dir() . 'index.sqlite');
+    }
     // Create indexer
     $indexRepository = new IndexRepository($db);
     $format = new Index($indexRepository);
     $render->attach($format);
 
-    $reader = make_reader(new Config);
+    $reader = make_reader();
     $reader->open(Config::xml_file(), NULL, $readerOpts);
     $render->execute($reader);
+
+    if (Config::memoryindex()) {
+        Config::set_indexcache($db);
+    }
 
     $render->detach($format);
 
@@ -158,7 +165,7 @@ foreach((array)Config::package() as $package) {
 }
 
 // Render formats
-$reader = make_reader(new Config);
+$reader = make_reader();
 $reader->open(Config::xml_file(), NULL, $readerOpts);
 foreach($render as $format) {
     $format->notify(Render::VERBOSE, true);
