@@ -53,4 +53,30 @@
   </simplelist>
  </section>
 
+ <section>
+  <para>5. Simplelist with no type and various elements inside members</para>
+  <simplelist>
+   <member>1 <literal>First</literal></member>
+   <member>2 <constant>Second</constant></member>
+   <member>3 <code>Third</code></member>
+   <member>4 <literal>Fourth</literal></member>
+   <member>5 <constant>Fifth</constant></member>
+   <member>6 <code>Sixth</code></member>
+   <member>7 <literal>Seventh</literal></member>
+  </simplelist>
+ </section>
+
+ <section>
+  <para>6. Simplelist with "inline" type and various elements inside members</para>
+  <simplelist type="inline">
+   <member>1 <literal>First</literal></member>
+   <member>2 <constant>Second</constant></member>
+   <member>3 <code>Third</code></member>
+   <member>4 <literal>Fourth</literal></member>
+   <member>5 <constant>Fifth</constant></member>
+   <member>6 <code>Sixth</code></member>
+   <member>7 <literal>Seventh</literal></member>
+  </simplelist>
+ </section>
+
 </chapter>

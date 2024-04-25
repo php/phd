@@ -2166,6 +2166,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if ($this->cchunk["simplelist"]["type"] === "inline"
             || $this->cchunk["simplelist"]["type"] === "vert"
             || $this->cchunk["simplelist"]["type"] === "horiz") {
+            $this->appendToBuffer = $open;
+            if (! $open) {
+                $this->cchunk["simplelist"]["members"][] = $this->buffer;
+            }
+            $this->buffer = '';
             return '';
         }
         if ($open) {
@@ -2175,12 +2180,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
 
     public function format_member_text($value, $tag) {
-        if ($this->cchunk["simplelist"]["type"] === "inline"
-            || $this->cchunk["simplelist"]["type"] === "vert"
-            || $this->cchunk["simplelist"]["type"] === "horiz") {
-            $this->cchunk["simplelist"]["members"][] = $value;
-            return '';
-        }
         return $value;
     }
 
