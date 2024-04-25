@@ -81,4 +81,22 @@ Content:
   </table>
  </div>
 
+ <div class="section">
+  <p class="para">5. Simplelist with no type and various elements inside members</p>
+  <ul class="simplelist">
+   <li>1 <code class="literal">First</code></li>
+   <li>2 <strong><code>Second</code></strong></li>
+   <li>3 <code class="code">Third</code></li>
+   <li>4 <code class="literal">Fourth</code></li>
+   <li>5 <strong><code>Fifth</code></strong></li>
+   <li>6 <code class="code">Sixth</code></li>
+   <li>7 <code class="literal">Seventh</code></li>
+  </ul>
+ </div>
+
+ <div class="section">
+  <p class="para">6. Simplelist with &quot;inline&quot; type and various elements inside members</p>
+  <span class="simplelist">1 <code class="literal">First</code>, 2 <strong><code>Second</code></strong>, 3 <code class="code">Third</code>, 4 <code class="literal">Fourth</code>, 5 <strong><code>Fifth</code></strong>, 6 <code class="code">Sixth</code>, 7 <code class="literal">Seventh</code></span>
+ </div>
+
 </div>
