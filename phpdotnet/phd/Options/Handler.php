@@ -210,8 +210,14 @@ class Options_Handler implements Options_Interface
         if (is_array($v)) {
             trigger_error("Only a single output location can be supplied", E_USER_ERROR);
         }
-        if (!is_dir($v)) {
-            mkdir($v, 0777, true);
+        if (!file_exists($v)) {
+            v("Creating output directory..", VERBOSE_MESSAGES);
+            if (!mkdir($v, 0777, true)) {
+                v("Can't create output directory : %s", $v, E_USER_ERROR);
+            }
+            v("Output directory created", VERBOSE_MESSAGES);
+        } elseif (!is_dir($v)) {
+            v("Output directory is a file?", E_USER_ERROR);
         }
         if (!is_dir($v) || !is_readable($v)) {
             trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
