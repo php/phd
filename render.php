@@ -76,30 +76,18 @@ if (Config::quit()) {
 
 function make_reader() {
     //Partial Rendering
-    $idlist = Config::render_ids() + Config::skip_ids();
+    $idlist = $config->render_ids() + $config->skip_ids();
     if (!empty($idlist)) {
         v("Running partial build", VERBOSE_RENDER_STYLE);
 
         $parents = [];
-        if (file_exists(Config::output_dir() . "index.sqlite")) {
-            $sqlite = new \SQLite3(Config::output_dir() . "index.sqlite");
-            // Fetch all ancestors of the ids we should render
-            foreach(Config::render_ids() as $p => $v) {
-                do {
-                    $id = $sqlite->escapeString($p);
-                    $row = $sqlite->query("SELECT parent_id FROM ids WHERE docbook_id = '$id'")->fetchArray(SQLITE3_ASSOC);
-                    if ($row["parent_id"]) {
-                        $parents[] = $p = $row["parent_id"];
-                        continue;
-                    }
-                    break;
-                } while(1);
-            }
+        if ($config->indexcache()) {
+            $parents = $config->indexcache()->getParents($config->render_ids());
         }
 
         $reader = new Reader_Partial(
-            Config::render_ids(),
-            Config::skip_ids(),
+            $config->render_ids(),
+            $config->skip_ids(),
             $parents
         );
     } else {
@@ -117,23 +105,27 @@ if (Config::process_xincludes()) {
     $readerOpts |= LIBXML_XINCLUDE;
 }
 
-if (file_exists(Config::output_dir() . 'index.sqlite')) {
+if (Config::memoryindex()) {
+    $db = new \SQLite3(":memory:");
+    $initializeDb = true;
+} else {
+    $initializeDb = !file_exists(Config::output_dir() . 'index.sqlite');
     $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
 } else {
     $db = null;
 }
+$indexRepository = new IndexRepository($db);
+if ($initializeDb) {
+    $indexRepository->init();
+}
+Config::set_indexcache($indexRepository);
 
 // Indexing
 if (requireIndexing(new Config, $db)) {
     v("Indexing...", VERBOSE_INDEXING);
-    if (Config::memoryindex()) {
-        $db = new \SQLite3(":memory:");
-    } else {
-        $db = $db ?? new \SQLite3(Config::output_dir() . 'index.sqlite');
-    }
+    Config::indexcache()->init();
     // Create indexer
-    $indexRepository = new IndexRepository($db);
-    $format = new Index($indexRepository);
+    $format = new Index(Config::indexcache());
     $render->attach($format);
 
     $reader = make_reader();
