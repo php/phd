@@ -111,8 +111,6 @@ if (Config::memoryindex()) {
 } else {
     $initializeDb = !file_exists(Config::output_dir() . 'index.sqlite');
     $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
-} else {
-    $db = null;
 }
 $indexRepository = new IndexRepository($db);
 if ($initializeDb) {
