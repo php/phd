@@ -1,0 +1,29 @@
+name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    name: doc-en full render test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PhD
+        uses: actions/checkout@v2
+        with:
+          path: "phd"
+
+      - name: "Checkout php/doc-en"
+        uses: "actions/checkout@v4"
+        with:
+          path: "en"
+          repository: "php/doc-en"
+
+      - name: "Checkout php/doc-base"
+        uses: "actions/checkout@v4"
+        with:
+          path: "doc-base"
+          repository: "php/doc-base"
+
+      - name: "Build documentation for doc-en"
+        run: "php8.0 doc-base/configure.php --disable-libxml-check --enable-xml-details --redirect-stderr-to-stdout --w"
+
+      - name: "Render documentation for doc-en"
+        run: "php8.0 phd/render.php --docbook doc-base/.manual.xml --package PHP --format xhtml --format bigxhtml --format php --format tocfeed --forceindex"
