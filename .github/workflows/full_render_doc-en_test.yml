@@ -1,8 +1,8 @@
-name: Test
+name: Render Test
 on: [push, pull_request]
 jobs:
   test:
-    name: doc-en full render test
+    name: doc-en
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PhD
