@@ -26,4 +26,4 @@ jobs:
         run: "php doc-base/configure.php --disable-libxml-check --enable-xml-details --redirect-stderr-to-stdout"
 
       - name: "Render documentation for doc-en"
-        run: "php phd/render.php --docbook doc-base/.manual.xml --package PHP --format xhtml --format bigxhtml --format php --format tocfeed --forceindex"
+        run: "php phd/render.php --docbook doc-base/.manual.xml --package PHP --format xhtml --format bigxhtml --format php --format tocfeed --forceindex --output output"
