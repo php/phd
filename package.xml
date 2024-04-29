@@ -130,6 +130,7 @@
           <file name="functions.php" role="php"/>
           <file name="Highlighter.php" role="php"/>
           <file name="Index.php" role="php"/>
+          <file name="IndexRepository.php" role="php"/>
           <file name="MediaManager.php" role="php"/>
           <file name="ObjectStorage.php" role="php"/>
           <file name="PIHandler.php" role="php"/>
