@@ -586,7 +586,7 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
             $display_value = $value;
         }
 
-        $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
+        $ref = strtolower($value);
         if (($linkend = $this->getRefnameLink($ref)) !== null) {
             $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0, 0, 1)); // blue
             $linkAreas = $this->pdfDoc->add(PdfWriter::LINK_ANNOTATION, $display_value.($tag == "function" ? "()" : ""));

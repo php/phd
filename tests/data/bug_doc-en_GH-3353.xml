@@ -1,0 +1,41 @@
+<refentry xml:id="bug_doc-en_GH-3353">
+ <refentry xml:id="method.and.function">
+  <refnamediv>
+   <refname>ClassName::methodName</refname>
+   <refname>classname_methodname</refname>
+   <refpurpose>1. This is the first method/function description</refpurpose>
+  </refnamediv>
+  <refsect1 role="description" xml:id="method.and.function-description">
+   <para>
+    Link to <function>ClassName::methodName</function>
+    and to <function>classname_methodname</function>
+   </para>
+  </refsect1>
+ </refentry>
+
+ <refentry xml:id="method.only">
+  <refnamediv>
+   <refname>ClassName::methodName</refname>
+   <refpurpose>2. This is the second (method) description</refpurpose>
+  </refnamediv>
+  <refsect1 role="description" xml:id="method.only-description">
+   <para>
+    Link to <function>ClassName::methodName</function>
+    and to <function>classname_methodname</function>
+   </para>
+  </refsect1>
+ </refentry>
+
+ <refentry xml:id="function.only">
+  <refnamediv>
+   <refname>classname_methodname</refname>
+   <refpurpose>3. This is the third (function) description</refpurpose>
+  </refnamediv>
+  <refsect1 role="description" xml:id="function.only-description">
+   <para>
+    Link to <function>ClassName::methodName</function>
+    and to <function>classname_methodname</function>
+   </para>
+  </refsect1>
+ </refentry>
+</refentry>

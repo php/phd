@@ -189,13 +189,7 @@ SQL;
 
 
     private function SQLiteRefname($context, $index, $id, $sdesc): void {
-        $ref = strtolower(
-                str_replace(
-                    ["_", "::", "->"],
-                    ["-", "-", "-"],
-                    html_entity_decode($sdesc, ENT_QUOTES, 'UTF-8')
-                )
-            );
+        $ref = strtolower(html_entity_decode($sdesc, ENT_QUOTES, 'UTF-8'));
         $this->refs[$ref] = $id;
     }
 

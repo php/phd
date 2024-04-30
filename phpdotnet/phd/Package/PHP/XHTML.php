@@ -837,7 +837,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if (isset($non_functions[$value])) {
             $filename = "function." . str_replace("_", "-", $value);
         } else {
-            $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), $value));
+            $ref = strtolower($value);
             $filename = $this->getRefnameLink($ref);
         }
         if ($filename !== null) {
