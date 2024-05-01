@@ -43,7 +43,13 @@ if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
     trigger_error("No Docbook file given. Specify it on the command line with --docbook.", E_USER_ERROR);
 }
 if (!file_exists(Config::output_dir())) {
-    v("Output directory doesn't exist", E_USER_ERROR);
+    v("Creating output directory..", VERBOSE_MESSAGES);
+    if (!mkdir(Config::output_dir(), 0777, True)) {
+        v("Can't create output directory : %s", Config::output_dir(), E_USER_ERROR);
+    }
+    v("Output directory created", VERBOSE_MESSAGES);
+} elseif (!is_dir(Config::output_dir())) {
+    v("Output directory is not a file?", E_USER_ERROR);
 }
 
 // This needs to be moved. Preferably into the PHP package.
