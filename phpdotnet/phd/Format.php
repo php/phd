@@ -24,7 +24,7 @@ abstract class Format extends ObjectStorage
     private $elementmap = array();
     private $textmap = array();
     private $formatname = "UNKNOWN";
-    private IndexRepository $indexRepository;
+    protected $sqlite;
 
     protected $title;
     protected $fp = array();
@@ -63,11 +63,15 @@ abstract class Format extends ObjectStorage
     protected $CURRENT_ID = "";
 
     public function __construct() {
-        if (Config::indexcache()) {
-            $this->indexRepository = Config::indexcache();
-            if (!($this instanceof Index)) {
-                $this->sortIDs();
+        $sqlite = Config::indexcache();
+        if (!$sqlite) {
+            if (file_exists(Config::output_dir() . "index.sqlite")) {
+                $sqlite = new \SQLite3(Config::output_dir() . 'index.sqlite');
             }
+        }
+        if ($sqlite) {
+            $this->sqlite = $sqlite;
+            $this->sortIDs();
         }
     }
 
@@ -142,12 +146,18 @@ abstract class Format extends ObjectStorage
     }
 
     public function sortIDs() {
-        $this->indexes = $this->indexRepository->getIndexes();
-        $this->children = $this->indexRepository->getChildren();
-        $this->refs = $this->indexRepository->getRefNames();
-        $this->vars = $this->indexRepository->getVarNames();
-        $this->classes = $this->indexRepository->getClassNames();
-        $this->examples = $this->indexRepository->getExamples();
+        $this->sqlite->createAggregate("indexes", array($this, "SQLiteIndex"), array($this, "SQLiteFinal"), 9);
+        $this->sqlite->createAggregate("children", array($this, "SQLiteChildren"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->createAggregate("refname", array($this, "SQLiteRefname"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->createAggregate("varname", array($this, "SQLiteVarname"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->createAggregate("classname", array($this, "SQLiteClassname"), array($this, "SQLiteFinal"), 2);
+        $this->sqlite->createAggregate("example", array($this, "SQLiteExample"), array($this, "SQLiteFinal"), 1);
+        $this->sqlite->query('SELECT indexes(docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) FROM ids');
+        $this->sqlite->query('SELECT children(docbook_id, parent_id) FROM ids WHERE chunk != 0');
+        $this->sqlite->query('SELECT refname(docbook_id, sdesc) FROM ids WHERE element=\'refentry\'');
+        $this->sqlite->query('SELECT varname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:varentry\'');
+        $this->sqlite->query('SELECT classname(docbook_id, sdesc) FROM ids WHERE element=\'phpdoc:exceptionref\' OR element=\'phpdoc:classref\'');
+        $this->sqlite->query('SELECT example(docbook_id) FROM ids WHERE element=\'example\'');
     }
 
     public function SQLiteIndex($context, $index, $id, $filename, $parent, $sdesc, $ldesc, $element, $previous, $next, $chunk) {
@@ -162,6 +172,36 @@ abstract class Format extends ObjectStorage
             "next"       => $next,
             "chunk"      => $chunk,
         );
+    }
+
+    public function SQLiteChildren($context, $index, $id, $parent)
+    {
+        if (!isset($this->children[$parent])
+            || !is_array($this->children[$parent])
+        ) {
+            $this->children[$parent] = array();
+        }
+        $this->children[$parent][] = $id;
+    }
+
+    public function SQLiteRefname($context, $index, $id, $sdesc) {
+        $ref = strtolower(str_replace(array("_", "::", "->"), array("-", "-", "-"), html_entity_decode($sdesc, ENT_QUOTES, 'UTF-8')));
+        $this->refs[$ref] = $id;
+    }
+
+    public function SQLiteVarname($context, $index, $id, $sdesc) {
+        $this->vars[$sdesc] = $id;
+    }
+
+    public function SQLiteClassname($context, $index, $id, $sdesc) {
+        $this->classes[strtolower($sdesc)] = $id;
+    }
+    public function SQLiteExample($context, $index, $id) {
+        $this->examples[] = $id;
+    }
+
+    public static function SQLiteFinal($context) {
+        return $context;
     }
 
     /**
@@ -255,10 +295,31 @@ abstract class Format extends ObjectStorage
         $this->vars[$var] = $id;
     }
     public function getChangelogsForChildrenOf($bookids) {
-        return $this->indexRepository->getChangelogsForChildrenOf($bookids);
+        $ids = array();
+        foreach((array)$bookids as $bookid) {
+            $ids[] = "'" . $this->sqlite->escapeString($bookid) . "'";
+        }
+        $results = $this->sqlite->query("SELECT * FROM changelogs WHERE parent_id IN (" . join(", ", $ids) . ")");
+        return $this->_returnChangelog($results);
     }
     public function getChangelogsForMembershipOf($memberships) {
-        return $this->indexRepository->getChangelogsForMembershipOf($memberships);
+        $ids = array();
+        foreach((array)$memberships as $membership) {
+            $ids[] = "'" . $this->sqlite->escapeString($membership) . "'";
+        }
+        $results = $this->sqlite->query("SELECT * FROM changelogs WHERE membership IN (" . join(", ", $ids) . ")");
+        return $this->_returnChangelog($results);
+    }
+    public function _returnChangelog($results) {
+        if (!$results) {
+            return array();
+        }
+
+        $changelogs = array();
+        while ($row = $results->fetchArray()) {
+            $changelogs[] = $row;
+        }
+        return $changelogs;
     }
     public function getRefs() {
         return $this->refs;
@@ -429,7 +490,7 @@ abstract class Format extends ObjectStorage
     final public function getRootIndex() {
         static $root = null;
         if ($root == null) {
-            $root = $this->indexRepository->getRootIndex();
+            $root = $this->sqlite->querySingle('SELECT * FROM ids WHERE parent_id=""', true);
         }
         return $root;
     }

@@ -211,12 +211,19 @@ function requireIndexing(Config $config, ?\SQLite3 $db = null): bool {
         return true;
     }
 
-    if ($config->indexcache()->getIndexingTimeCount() === 0) {
+    if ($db === null) {
+        $db = new \SQLite3($indexfile);
+    }
+    $indexingCount = $db->query('SELECT COUNT(time) FROM indexing')
+        ->fetchArray(SQLITE3_NUM);
+    if ($indexingCount[0] == 0) {
         return true;
     }
 
+    $indexing = $db->query('SELECT time FROM indexing')
+        ->fetchArray(SQLITE3_ASSOC);
     $xmlLastModification = filemtime($config->xml_file());
-    if ($config->indexcache()->getIndexingTime() > $xmlLastModification) {
+    if ($indexing['time'] > $xmlLastModification) {
         return false;
     }
     return true;
