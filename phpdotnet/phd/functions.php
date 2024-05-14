@@ -195,8 +195,8 @@ set_error_handler(__NAMESPACE__ . '\\errh');
  *
  * @return boolean True if indexing is required.
  */
-function requireIndexing(Config $config, ?\SQLite3 $db = null): bool {
-    if ($db === null) {
+function requireIndexing(Config $config): bool {
+    if (! $config->indexcache()) {
         $indexfile = $config->output_dir() . 'index.sqlite';
         if (!file_exists($indexfile)) {
             return true;
@@ -211,19 +211,12 @@ function requireIndexing(Config $config, ?\SQLite3 $db = null): bool {
         return true;
     }
 
-    if ($db === null) {
-        $db = new \SQLite3($indexfile);
-    }
-    $indexingCount = $db->query('SELECT COUNT(time) FROM indexing')
-        ->fetchArray(SQLITE3_NUM);
-    if ($indexingCount[0] == 0) {
+    if ($config->indexcache()->getIndexingTimeCount() === 0) {
         return true;
     }
 
-    $indexing = $db->query('SELECT time FROM indexing')
-        ->fetchArray(SQLITE3_ASSOC);
     $xmlLastModification = filemtime($config->xml_file());
-    if ($indexing['time'] > $xmlLastModification) {
+    if ($config->indexcache()->getIndexingTime() > $xmlLastModification) {
         return false;
     }
     return true;
