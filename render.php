@@ -74,7 +74,7 @@ if (Config::quit()) {
     exit(0);
 }
 
-function make_reader() {
+function make_reader(Config $config) {
     //Partial Rendering
     $idlist = $config->render_ids() + $config->skip_ids();
     if (!empty($idlist)) {
