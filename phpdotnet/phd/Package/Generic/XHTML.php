@@ -145,7 +145,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'methodsynopsis'        => 'format_methodsynopsis',
         'methodname'            => 'format_methodname',
         'member'                => 'format_member',
-        'modifier'              => 'span',
+        'modifier'              => 'format_modifier',
         'note'                  => 'format_note',
         'orgname'               => 'span',
         'othercredit'           => 'format_div',
@@ -393,6 +393,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'modifier'             => array(
             /* DEFAULT */         false,
             'fieldsynopsis'    => 'format_fieldsynopsis_modifier_text',
+            'methodparam'      => 'format_modifier_text',
+            'methodsynopsis'   => 'format_modifier_text',
         ),
         /** Those are used to retrieve the class/interface name to be able to remove it from method names */
         'classname' => [
@@ -1215,6 +1217,31 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_fieldsynopsis_modifier_text($value, $tag) {
         $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
         return $this->TEXT($value);
+    }
+
+    public function format_modifier($open, $name, $attrs, $props) {
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"]);
+                return '<span class="' . $this->getRole() . '">';
+            }
+            return '<span class="modifier">';
+        }
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+            $this->popRole();
+        }
+        return '</span>';
+    }
+
+    public function format_modifier_text($value, $tag) {
+        if ($this->getRole() === "attribute") {
+            $attribute = trim(strtolower($value), "#[]\\");
+            $href = Format::getFilename("class.$attribute");
+            if ($href) {
+                return '<a href="' . $href . $this->getExt() . '">' .$value. '</a> ';
+            }
+        }
+        return false;
     }
 
     public function format_methodsynopsis($open, $name, $attrs, $props) {

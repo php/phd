@@ -1,0 +1,35 @@
+<chapter xml:id="attribute-formatting">
+ <section>
+  <para>1. Class methodparameter with unknown attribute</para>
+  <constructorsynopsis role="mysqli">
+   <modifier>public</modifier> <methodname>mysqli::__construct</methodname>
+   <methodparam><modifier role="attribute">#[\UnknownAttribute]</modifier><type class="union"><type>string</type><type>null</type></type><parameter>password</parameter><initializer><type>null</type></initializer></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>2. Class methodparameter with known attribute</para>
+  <constructorsynopsis role="mysqli">
+   <modifier>public</modifier> <methodname>mysqli::__construct</methodname>
+   <methodparam><modifier role="attribute">#[\KnownAttribute]</modifier><type class="union"><type>string</type><type>null</type></type><parameter>password</parameter><initializer><type>null</type></initializer></methodparam>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>3. Function parameter with unknown attribute</para>
+  <methodsynopsis>
+   <type>bool</type><methodname>password_verify</methodname>
+   <modifier role="attribute">#[\UnknownAttribute]</modifier><methodparam><type>string</type><parameter>password</parameter></methodparam>
+   <methodparam><type>string</type><parameter>hash</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>4. Function parameter with known attribute</para>
+  <methodsynopsis>
+   <type>bool</type><methodname>password_verify</methodname>
+   <modifier role="attribute">#[\KnownAttribute]</modifier><methodparam><type>string</type><parameter>password</parameter></methodparam>
+   <methodparam><type>string</type><parameter>hash</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+</chapter>
