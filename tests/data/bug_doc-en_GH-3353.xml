@@ -7,8 +7,10 @@
   </refnamediv>
   <refsect1 role="description" xml:id="method.and.function-description">
    <para>
-    Link to <function>ClassName::methodName</function>
-    and to <function>classname_methodname</function>
+    Link to <function>ClassName::methodName</function> with a function tag
+    and to <function>classname_methodname</function> with a function tag
+    and to <methodname>ClassName::methodName</methodname> with a methodname tag
+    and to <methodname>classname_methodname</methodname> with a methodname tag
    </para>
   </refsect1>
  </refentry>
@@ -20,8 +22,10 @@
   </refnamediv>
   <refsect1 role="description" xml:id="method.only-description">
    <para>
-    Link to <function>ClassName::methodName</function>
-    and to <function>classname_methodname</function>
+    Link to <function>ClassName::methodName</function> with a function tag
+    and to <function>classname_methodname</function> with a function tag
+    and to <methodname>ClassName::methodName</methodname> with a methodname tag
+    and to <methodname>classname_methodname</methodname> with a methodname tag
    </para>
   </refsect1>
  </refentry>
@@ -33,8 +37,10 @@
   </refnamediv>
   <refsect1 role="description" xml:id="function.only-description">
    <para>
-    Link to <function>ClassName::methodName</function>
-    and to <function>classname_methodname</function>
+    Link to <function>ClassName::methodName</function> with a function tag
+    and to <function>classname_methodname</function> with a function tag
+    and to <methodname>ClassName::methodName</methodname> with a methodname tag
+    and to <methodname>classname_methodname</methodname> with a methodname tag
    </para>
   </refsect1>
  </refentry>

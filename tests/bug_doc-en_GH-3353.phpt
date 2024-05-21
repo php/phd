@@ -52,8 +52,10 @@ Content:
   </div>
   <div class="refsect1 description" id="method.and.function-description">
    <p class="para">
-    Link to <span class="function"><a href="method.only.html" class="function">ClassName::methodName()</a></span>
-    and to <span class="function"><a href="function.only.html" class="function">classname_methodname()</a></span>
+    Link to <span class="function"><a href="method.only.html" class="function">ClassName::methodName()</a></span> with a function tag
+    and to <span class="function"><a href="function.only.html" class="function">classname_methodname()</a></span> with a function tag
+    and to <span class="methodname"><a href="method.only.html" class="methodname">ClassName::methodName()</a></span> with a methodname tag
+    and to <span class="methodname"><a href="function.only.html" class="methodname">classname_methodname()</a></span> with a methodname tag
    </p>
   </div>
 
@@ -68,8 +70,10 @@ Content:
   </div>
   <div class="refsect1 description" id="method.only-description">
    <p class="para">
-    Link to <span class="function"><strong>ClassName::methodName()</strong></span>
-    and to <span class="function"><a href="function.only.html" class="function">classname_methodname()</a></span>
+    Link to <span class="function"><strong>ClassName::methodName()</strong></span> with a function tag
+    and to <span class="function"><a href="function.only.html" class="function">classname_methodname()</a></span> with a function tag
+    and to <span class="methodname"><strong>ClassName::methodName()</strong></span> with a methodname tag
+    and to <span class="methodname"><a href="function.only.html" class="methodname">classname_methodname()</a></span> with a methodname tag
    </p>
   </div>
 
@@ -84,8 +88,10 @@ Content:
   </div>
   <div class="refsect1 description" id="function.only-description">
    <p class="para">
-    Link to <span class="function"><a href="method.only.html" class="function">ClassName::methodName()</a></span>
-    and to <span class="function"><strong>classname_methodname()</strong></span>
+    Link to <span class="function"><a href="method.only.html" class="function">ClassName::methodName()</a></span> with a function tag
+    and to <span class="function"><strong>classname_methodname()</strong></span> with a function tag
+    and to <span class="methodname"><a href="method.only.html" class="methodname">ClassName::methodName()</a></span> with a methodname tag
+    and to <span class="methodname"><strong>classname_methodname()</strong></span> with a methodname tag
    </p>
   </div>
 
