@@ -83,6 +83,10 @@ class Index extends Format
         'phpdoc'            => 'PI_PHPDOCHandler',
     );
 
+    private bool $inLdesc = false;
+    private bool $inSdesc = false;
+    private string $currentLdesc = "";
+    private string $currentSdesc = "";
     private $currentchunk;
     private $ids       = array();
     private $currentid;
@@ -93,6 +97,7 @@ class Index extends Format
     private $previousId = "";
     private $inChangelog = false;
     private $currentChangelog = array();
+    private string $currentChangeLogString = "";
     private $changelog        = array();
     private $currentMembership = null;
     private $commit     = array();
@@ -107,12 +112,30 @@ class Index extends Format
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
     }
     public function TEXT($value) {
+        if ($this->inLdesc) {
+            $this->currentLdesc .= $value;
+        }
+        if ($this->inSdesc) {
+            $this->currentSdesc .= $value;
+        }
+        if ($this->inChangelog) {
+            $this->currentChangeLogString .= $value;
+        }
     }
     public function CDATA($value) {
     }
     public function createLink($for, &$desc = null, $type = Format::SDESC) {
     }
     public function appendData($data) {
+        if ($this->inLdesc && is_string($data) && trim($data) === "") {
+            $this->currentLdesc .= $data;
+        }
+        if ($this->inSdesc && is_string($data) && trim($data) === "") {
+            $this->currentSdesc .= $data;
+        }
+        if ($this->inChangelog && is_string($data) && trim($data) === "") {
+            $this->currentChangeLogString .= $data;
+        }
     }
 
     public function update($event, $value = null)
@@ -323,26 +346,31 @@ class Index extends Format
 
     public function format_ldesc($open, $name, $attrs, $props) {
         if ($open) {
-            if (empty($this->nfo[$this->currentid]["ldesc"])) {
-                /* FIXME: How can I mark that node with "reparse" flag? */
-                $s = htmlentities(trim(ReaderKeeper::getReader()->readContent()), ENT_COMPAT, "UTF-8");
-                $this->nfo[$this->currentid]["ldesc"] = $s;
-            }
+            $this->inLdesc = true;
+            $this->currentLdesc = "";
+            return;
+        }
+        $this->inLdesc = false;
+        if (empty($this->nfo[$this->currentid]["ldesc"])) {
+            $this->nfo[$this->currentid]["ldesc"] = htmlentities(trim($this->currentLdesc), ENT_COMPAT, "UTF-8");
         }
     }
     public function format_sdesc($open, $name, $attrs, $props) {
         if ($open) {
-            $s = htmlentities(trim(ReaderKeeper::getReader()->readContent()), ENT_COMPAT, "UTF-8");
-            if (empty($this->nfo[$this->currentid]["sdesc"])) {
-                /* FIXME: How can I mark that node with "reparse" flag? */
-                $this->nfo[$this->currentid]["sdesc"] = $s;
-            } else {
-                if (!is_array($this->nfo[$this->currentid]["sdesc"])) {
-                    $this->nfo[$this->currentid]["sdesc"] = (array)$this->nfo[$this->currentid]["sdesc"];
-                }
-                //In the beginning of the array to stay compatible with 0.4
-                array_unshift($this->nfo[$this->currentid]["sdesc"], $s);
+            $this->inSdesc = true;
+            $this->currentSdesc = "";
+            return;
+        }
+        $this->inSdesc = false;
+        $s = htmlentities(trim($this->currentSdesc), ENT_COMPAT, "UTF-8");
+        if (empty($this->nfo[$this->currentid]["sdesc"])) {
+            $this->nfo[$this->currentid]["sdesc"] = $s;
+        } else {
+            if (!is_array($this->nfo[$this->currentid]["sdesc"])) {
+                $this->nfo[$this->currentid]["sdesc"] = (array)$this->nfo[$this->currentid]["sdesc"];
             }
+            //In the beginning of the array to stay compatible with 0.4
+            array_unshift($this->nfo[$this->currentid]["sdesc"], $s);
         }
     }
 
@@ -380,10 +408,11 @@ class Index extends Format
 
     public function format_entry($open, $name, $attrs, $props) {
         if ($open) {
-            if ($this->inChangelog) {
-                /* FIXME: How can I mark that node with "reparse" flag? */
-                $this->currentChangelog[] = htmlentities(trim(ReaderKeeper::getReader()->readContent()), ENT_COMPAT, "UTF-8");
-            }
+            $this->currentChangeLogString = "";
+            return;
+        }
+        if ($this->inChangelog) {
+            $this->currentChangelog[] = htmlentities(trim($this->currentChangeLogString), ENT_COMPAT, "UTF-8");
         }
     }
     public function format_row($open, $name, $attrs, $props) {
