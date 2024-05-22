@@ -122,7 +122,6 @@ Config::set_indexcache($indexRepository);
 // Indexing
 if (requireIndexing(new Config)) {
     v("Indexing...", VERBOSE_INDEXING);
-    Config::indexcache()->init();
     // Create indexer
     $format = new Index(Config::indexcache());
     $render->attach($format);
