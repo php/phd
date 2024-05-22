@@ -83,7 +83,6 @@ class Index extends Format
         'phpdoc'            => 'PI_PHPDOCHandler',
     );
 
-    private IndexRepository $indexRepository;
     private $currentchunk;
     private $ids       = array();
     private $currentid;
