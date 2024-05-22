@@ -24,7 +24,7 @@ abstract class Format extends ObjectStorage
     private $elementmap = array();
     private $textmap = array();
     private $formatname = "UNKNOWN";
-    private IndexRepository $indexRepository;
+    protected IndexRepository $indexRepository;
 
     protected $title;
     protected $fp = array();
