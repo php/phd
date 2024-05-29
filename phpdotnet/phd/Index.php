@@ -297,6 +297,8 @@ class Index extends Format
                 'class', 'enum' => $this->format_container_chunk($open, 'phpdoc:classref', $attrs, $props),
                 'exception' => $this->format_container_chunk($open, 'phpdoc:exceptionref', $attrs, $props),
                 'variable' => $this->format_chunk($open, 'phpdoc:varentry', $attrs, $props),
+                'stream_wrapper' => $this->format_chunk($open, 'stream_wrapper', $attrs, $props),
+                'stream_context_option' => $this->format_chunk($open, 'stream_context_option', $attrs, $props),
                 default => $this->format_chunk($open, $name, $attrs, $props),
             };
         }
