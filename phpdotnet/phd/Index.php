@@ -57,10 +57,10 @@ class Index extends Format
     ),
     'set'                   => 'format_container_chunk',
     'setindex'              => 'format_chunk',
-    'title'                 => 'format_ldesc',
-    'refpurpose'            => 'format_ldesc',
-    'refname'               => 'format_sdesc',
-    'titleabbrev'           => 'format_sdesc',
+    'title'                 => 'format_long_desc',
+    'refpurpose'            => 'format_long_desc',
+    'refname'               => 'format_short_desc',
+    'titleabbrev'           => 'format_short_desc',
     'example'               => 'format_example',
     'refsect1'              => 'format_refsect1',
     'tbody'                 => array(
@@ -83,6 +83,10 @@ class Index extends Format
         'phpdoc'            => 'PI_PHPDOCHandler',
     );
 
+    private bool $inLongDesc = false;
+    private bool $inShortDesc = false;
+    private string $currentLongDesc = "";
+    private string $currentShortDesc = "";
     private $currentchunk;
     private $ids       = array();
     private $currentid;
@@ -93,6 +97,7 @@ class Index extends Format
     private $previousId = "";
     private $inChangelog = false;
     private $currentChangelog = array();
+    private string $currentChangeLogString = "";
     private $changelog        = array();
     private $currentMembership = null;
     private $commit     = array();
@@ -107,12 +112,30 @@ class Index extends Format
     public function transformFromMap($open, $tag, $name, $attrs, $props) {
     }
     public function TEXT($value) {
+        if ($this->inLongDesc) {
+            $this->currentLongDesc .= $value;
+        }
+        if ($this->inShortDesc) {
+            $this->currentShortDesc .= $value;
+        }
+        if ($this->inChangelog) {
+            $this->currentChangeLogString .= $value;
+        }
     }
     public function CDATA($value) {
     }
     public function createLink($for, &$desc = null, $type = Format::SDESC) {
     }
     public function appendData($data) {
+        if ($this->inLongDesc && is_string($data) && trim($data) === "") {
+            $this->currentLongDesc .= $data;
+        }
+        if ($this->inShortDesc && is_string($data) && trim($data) === "") {
+            $this->currentShortDesc .= $data;
+        }
+        if ($this->inChangelog && is_string($data) && trim($data) === "") {
+            $this->currentChangeLogString .= $data;
+        }
     }
 
     public function update($event, $value = null)
@@ -321,28 +344,33 @@ class Index extends Format
         return false;
     }
 
-    public function format_ldesc($open, $name, $attrs, $props) {
+    public function format_long_desc($open, $name, $attrs, $props) {
         if ($open) {
-            if (empty($this->nfo[$this->currentid]["ldesc"])) {
-                /* FIXME: How can I mark that node with "reparse" flag? */
-                $s = htmlentities(trim(ReaderKeeper::getReader()->readContent()), ENT_COMPAT, "UTF-8");
-                $this->nfo[$this->currentid]["ldesc"] = $s;
-            }
+            $this->inLongDesc = true;
+            $this->currentLongDesc = "";
+            return;
+        }
+        $this->inLongDesc = false;
+        if (empty($this->nfo[$this->currentid]["ldesc"])) {
+            $this->nfo[$this->currentid]["ldesc"] = htmlentities(trim($this->currentLongDesc), ENT_COMPAT, "UTF-8");
         }
     }
-    public function format_sdesc($open, $name, $attrs, $props) {
+    public function format_short_desc($open, $name, $attrs, $props) {
         if ($open) {
-            $s = htmlentities(trim(ReaderKeeper::getReader()->readContent()), ENT_COMPAT, "UTF-8");
-            if (empty($this->nfo[$this->currentid]["sdesc"])) {
-                /* FIXME: How can I mark that node with "reparse" flag? */
-                $this->nfo[$this->currentid]["sdesc"] = $s;
-            } else {
-                if (!is_array($this->nfo[$this->currentid]["sdesc"])) {
-                    $this->nfo[$this->currentid]["sdesc"] = (array)$this->nfo[$this->currentid]["sdesc"];
-                }
-                //In the beginning of the array to stay compatible with 0.4
-                array_unshift($this->nfo[$this->currentid]["sdesc"], $s);
+            $this->inShortDesc = true;
+            $this->currentShortDesc = "";
+            return;
+        }
+        $this->inShortDesc = false;
+        $s = htmlentities(trim($this->currentShortDesc), ENT_COMPAT, "UTF-8");
+        if (empty($this->nfo[$this->currentid]["sdesc"])) {
+            $this->nfo[$this->currentid]["sdesc"] = $s;
+        } else {
+            if (!is_array($this->nfo[$this->currentid]["sdesc"])) {
+                $this->nfo[$this->currentid]["sdesc"] = (array)$this->nfo[$this->currentid]["sdesc"];
             }
+            //In the beginning of the array to stay compatible with 0.4
+            array_unshift($this->nfo[$this->currentid]["sdesc"], $s);
         }
     }
 
@@ -380,10 +408,11 @@ class Index extends Format
 
     public function format_entry($open, $name, $attrs, $props) {
         if ($open) {
-            if ($this->inChangelog) {
-                /* FIXME: How can I mark that node with "reparse" flag? */
-                $this->currentChangelog[] = htmlentities(trim(ReaderKeeper::getReader()->readContent()), ENT_COMPAT, "UTF-8");
-            }
+            $this->currentChangeLogString = "";
+            return;
+        }
+        if ($this->inChangelog) {
+            $this->currentChangelog[] = htmlentities(trim($this->currentChangeLogString), ENT_COMPAT, "UTF-8");
         }
     }
     public function format_row($open, $name, $attrs, $props) {
