@@ -152,6 +152,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             /* DEFAULT */          'format_suppressed_text',
             'phpdoc:classref'   => 'format_grep_classname_text',
             'phpdoc:exceptionref'  => 'format_grep_classname_text',
+            'reference'            => 'format_reference_titleabbrev_text',
             'refentry' => 'format_grep_classname_text',
         ),
          'varname'               => array(
@@ -1065,9 +1066,22 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
             if ($attrs[Reader::XMLNS_DOCBOOK]['role'] === "class"
                 || $attrs[Reader::XMLNS_DOCBOOK]['role'] === "exception") {
+                if ($open) {
+                    $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]['role']);
+                } else {
+                    $this->popRole();
+                }
                 return $this->format_class_chunk($open, $name, $attrs, $props);
             }
         }
         return $this->format_container_chunk($open, $name, $attrs, $props);
+    }
+
+    public function format_reference_titleabbrev_text($value, $tag) {
+        if ($this->getRole() === "class"
+            || $this->getRole() === "exception") {
+            return $this->format_grep_classname_text($value, $tag);
+        }
+        return $this->format_suppressed_text($value, $tag);
     }
 }
