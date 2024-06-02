@@ -25,7 +25,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'phpdoc:exceptionref'   => 'format_class_chunk',
         'phpdoc:varentry'       => 'format_varentry_chunk',
         'refentry'              => 'format_refentry',
-        'reference'             => 'format_container_chunk',
+        'reference'             => 'format_reference',
         'refpurpose'            => 'format_refpurpose',
         'refsynopsisdiv'        => 'format_refsynopsisdiv',
         'set'                   => 'format_root_chunk',
@@ -1061,6 +1061,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         return $this->format_container_chunk($open, "reference", $attrs, $props);
     }
 
+    public function format_reference($open, $name, $attrs, $props) {
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+            if ($attrs[Reader::XMLNS_DOCBOOK]['role'] === "class"
+                || $attrs[Reader::XMLNS_DOCBOOK]['role'] === "exception") {
+                return $this->format_class_chunk($open, $name, $attrs, $props);
+            }
+        }
+        return $this->format_container_chunk($open, $name, $attrs, $props);
+    }
 }
-
-
