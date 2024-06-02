@@ -1626,7 +1626,21 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_screen($open, $name, $attrs) {
         if ($open) {
+            if ($this->getRole() !== "examples"
+                && $this->getRole() !== "description"
+                && $this->getRole() !== "notes"
+                && $this->getRole() !== "returnvalues"
+                && $this->getRole() !== "parameters") {
+                $this->pushRole('');
+            }
             return '<div class="example-contents ' .$name. '">';
+        }
+        if ($this->getRole() !== "examples"
+            && $this->getRole() !== "description"
+            && $this->getRole() !== "notes"
+            && $this->getRole() !== "returnvalues"
+            && $this->getRole() !== "parameters") {
+            $this->popRole();
         }
         return '</div>';
     }
