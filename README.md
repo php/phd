@@ -10,7 +10,7 @@ The goal of PhD is to become a fast, general DocBook rendering system.
 At the moment of writing, PhD is already very fast: It can create the
 chunked version of PEAR's manual (some 3000 files) in less than a minute
 on a 2GHz system. It also renders the PHP and PEAR manual flawlessly. It
-does not support every DocBook 5 tag yet, and using it to render own
+does not support every DocBook 5 tag yet, and using it to render your own
 DocBook files may need some tweaks.
 
 ## Requirements
@@ -37,8 +37,8 @@ $ php phd/render.php --docbook doc-base/.manual.xml --package PHP --format php
 
 ## Installation
 
-PhD is distributed via an own PEAR channel, [doc.php.net](http://doc.php.net).
-Using it is also the easiest way to get it.
+PhD is distributed via its own PEAR channel, [doc.php.net](http://doc.php.net).
+Using this channel is also the easiest way to get it.
 
 ### Installation via PEAR
 
@@ -60,7 +60,7 @@ PHP Version: 5.3.3
 Copyright(c) 2007-2024 The PHP Documentation Group
 ```
 
-To see list all available PhD packages:
+To see the list of all available PhD packages:
 
 ```shell
 $ pear remote-list -c doc.php.net
@@ -79,8 +79,6 @@ downloading PhD_PEAR-1.0.0.tgz ...
 [...]
 install ok: channel://doc.php.net/PhD_PEAR-1.0.0
 ```
-
-That's it!
 
 ### Installation from Git
 
@@ -110,8 +108,6 @@ PhD Version: phd-from-svn
 PHP Version: 5.3.3-dev
 Copyright(c) 2007-2010 The PHP Documentation Group
 ```
-
-And now you're done.
 
 ### Using PhD without installation
 
@@ -160,14 +156,15 @@ $ git clone https://github.com/php/doc-en en
   - [Ukrainian](https://github.com/php/doc-uk) (doc-uk)
 </details>
 
-To prepare the documentation, `cd` to the phpdoc directory, and run
-configure.php.
+To prepare the English documentation,
+`cd` to the directory that `doc-base` and `en` (`doc-en`) is in
+and run `configure.php`.
 
 ```shell
 $ php doc-base/configure.php
 ```
 
-This process will generate a .manual.xml file in the current directory,
+This process will generate a .manual.xml file in the `doc-base` directory,
 which is what we need for building the docs. Now we're ready to proceed
 with running PhD to generate the PHP docs.
 
@@ -180,8 +177,7 @@ surprisingly simple, so we'll start with that.
 $ phd -d doc-base/.manual.xml -P PHP
 ```
 
-
-After a running for a few moments, PhD will generate all the output
+After running for a few moments, PhD will generate all the output
 formats of the PHP Package into the default `./output/` directory.
 
 So now that you've seen the fruits of your labor, let's take a closer
@@ -255,8 +251,6 @@ Copyright(c) 2007-2013 The PHP Documentation Group
     --packagedir               Use an external package directory.
 ```
 
-Most options can be passed multiple times for greater effect.
-
 As you can see, there are plenty of options to look into in PhD. The
 most important options are those which allow you to select a format and
 package to output your documentation to.
@@ -303,7 +297,7 @@ Supported packages:
 > default.
 
 You can tell by the output of the `--list` option that PhD can also be
-used to render the docs as a PDF file, or as Unix Man Pages.
+used to render the docs as a PDF file or as Unix Man Pages.
 
 To select a format and package, you must use the `-f [formatName]` and
 `-P [packageName]` options.
@@ -317,7 +311,7 @@ Man page format.
 
 ## Compiling the PhD guide
 
-The PhD guide is this manual you are reading currently. It lives in
+The PhD guide is this manual you are reading. It lives in
 PhD's Git repository under `docs/phd-guide/phd-guide.xml`. If you
 installed PhD from Git, you already have it. Otherwise, get it:
 
@@ -335,8 +329,6 @@ $ phd -f bigxhtml -d phd-guide.xml
 
 There should be an .html file in the directory now. View it with a
 browser!
-
-That's all to say. This way you can render your own docbook files, too.
 
 ## Customizing the rendering results
 
@@ -366,7 +358,7 @@ echo "Hello world!";
 ```
 
 By default, PhD uses the source code highlighter that is built into PHP
-itself. It is only able to highlight PHP code and nothing else.
+itself which is only able to highlight PHP code.
 
 If your documentation contains other types of source code or markup,
 like XML, HTML, Javascript or any other language, you should try the
@@ -392,12 +384,12 @@ If you have GeSHi version 1.1.x installed, you should use the
 GeSHi's new API.
 
 Apart from using the highlighter shipped with PhD, you can [build your
-own highlighters](#phd-extension-highlighter).
+own highlighters](#writing-a-custom-syntax-highlighter).
 
 # DocBook extensions
 
 PhD has been tailored for PHP and PEAR manuals. To make writing
-documentation as easy as possible, some own tags have been added to the
+documentation as easy as possible, some custom tags have been added to the
 DTD.
 
 All extensions live in their own XML namespace "`phd:`" which resolves
@@ -417,17 +409,17 @@ The extensions listed here are available in all PhD themes and formats.
 PhD automatically chooses which sections, chapters or other tags get
 their own file (chunk) when using a chunked theme. Sometimes the result
 of this automatism is not optimal and you want to fine-tune it. The
-attribute "phd:chunk" is offered as solution by PhD.
+attribute "phd:chunk" is offered as a solution by PhD.
 
 #### Allowed values
 
-`phd:chunk` may have values `true` and `false`. They force the element
+The value of `phd:chunk` can only be `true` or `false` which force the element
 to be chunked or not.
 
 #### Allowed in
 
 `phd:chunk` may be used in every tag that accepts
-[db.common.attributes](https://www.docbook.org/tdg5/en/html/ref-elements.html#common.attributes).
+[db.common.attributes](https://tdg.docbook.org/tdg/5.0/ref-elements.html#common.attributes).
 
 #### Example
 
@@ -449,14 +441,14 @@ to be chunked or not.
 
 ### Generating Table Of Contents: \<phd:toc\> (Tag)
 
-To manually insert a Table Of Contents (TOC) that creates a list of
-links to children elements of a specified tag.
+This tag can be used to manually insert a Table Of Contents (TOC)
+that creates a list of links to children elements of a tag.
 
 phd:toc-depth
 
 #### Allowed in
 
-`<phd:toc>` is can be used everywhere `<para>` is allowed.
+`<phd:toc>` can be used everywhere `<para>` elements are allowed.
 
 #### Children
 
@@ -495,8 +487,8 @@ tag, or specify the tag text via the tag's content.
 <phd:pearapi phd:package="HTML_QuickForm">some text</phd:pearapi>
 ```
 
-    HTML_QuickForm
-    some text
+[» HTML_QuickForm](https://pear.php.net/package/HTML_QuickForm/docs/latest/li_HTML_QuickForm.html)
+[» some text](https://pear.php.net/package/HTML_QuickForm/docs/latest/li_HTML_QuickForm.html)
 
 #### Class links
 
@@ -507,8 +499,8 @@ Class name as `phd:linkend` attribute value.
 <phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element">some text</phd:pearapi>
 ```
 
-    HTML_QuickForm_element
-    some text
+[» HTML_QuickForm_element](https://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html)
+[» some text](https://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html)
 
 #### Class method links
 
@@ -520,9 +512,8 @@ colon.
 <phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element::setName">some text</phd:pearapi>
 ```
 
-
-    HTML_QuickForm_element::setName()
-    some text
+[» HTML_QuickForm_element::setName()](https://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html#methodsetName)
+[» some text](https://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html#methodsetName)
 
 #### Class variable links
 
@@ -534,41 +525,41 @@ colon and a dollar sign before the variable name.
 <phd:pearapi phd:package="Net_Geo" phd:linkend="Net_Geo::$cache_ttl">some text</phd:pearapi>
 ```
 
-    Net_Geo::$cache_ttl
-    some text
+[» Net_Geo::$cache_ttl](https://pear.php.net/package/Net_Geo/docs/latest/apidoc/Net_Geo/Net_Geo.html#var$cache_ttl)
+[» some text](https://pear.php.net/package/Net_Geo/docs/latest/apidoc/Net_Geo/Net_Geo.html#var$cache_ttl)
 
 # Extending PhD
 
 Written in PHP, PhD is easy to hack on and easy to extend. It provides
-command line parameters to use custom code without changing PhD
-internals, like source code highlighters.
+command line parameters to allow using custom code (like source code highlighters)
+without changing the internals of PhD.
 
-## Writing an own syntax highlighter
+## Writing a custom syntax highlighter
 
 A syntax highlighter for PhD is nothing more than a simple PHP class
-that has two methods, a `factory` and `highlight`.
+that has two methods: `factory` and `highlight`.
 
-`factory` is static and takes the format name (i.e. `pdf`, `xhtml`,
-`troff`) as only parameter. It returns the highlighter instance object
+`factory` is static, takes the format name (i.e. `pdf`, `xhtml`,
+`troff`) as its only parameter and returns the highlighter instance object
 for the given format. The method is called for each output format the
 documentation is rendered to.
 
-`highlight` takes three parameters, `text`, `role` and `format`. It is
+`highlight` takes three parameters: `text`, `role` and `format`. It is
 called whenever a piece of source code needs to be highlighted and
-expects the highlighted source code to be returned in whatever format
-the current rendering format is expected to be.
+expects the highlighted source code to be returned in the format
+of the current rendering format.
 
 Take a look at the provided highlighters, `phpdotnet\phd\Highlighter`,
 `phpdotnet\phd\Highlighter_GeSHi` and
 `phpdotnet\phd\Highlighter_GeSHi11x`. They will serve as good examples
-how to implement your own highlighter.
+on how to implement your own highlighter.
 
 Once you wrote your custom source code highlighting class, it's time to
-[try it out](#render-custom-highlighter).
+[try it out](#source-code-highlighter).
 
 # Links
 
-Some other articles for further reading. Latest are on top.
+PhD 0.1RC1 release announcement:
 
 -   [PhD 0.1RC1
     released](https://bjori.blogspot.com/2007/10/phd-php-based-docbook-renderer-rc1.html)
