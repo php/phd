@@ -35,7 +35,7 @@ class Index extends Format
     'phpdoc:varentry'       => 'format_chunk',
     'preface'               => 'format_chunk',
     'refentry'              => 'format_refentry',
-    'reference'             => 'format_container_chunk',
+    'reference'             => 'format_reference',
     'sect1'                 => 'format_chunk',
     'section'               => array(
         /* DEFAULT */          false,
@@ -446,4 +446,14 @@ class Index extends Format
         $this->currentMembership = $membership;
     }
 
+    public function format_reference($open, $name, $attrs, $props) {
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
+            $name = match ($attrs[Reader::XMLNS_DOCBOOK]['role']) {
+                "class" => "phpdoc:classref",
+                "exception" => "phpdoc:exceptionref",
+                default => $name,
+            };
+        }
+        return $this->format_container_chunk($open, $name, $attrs, $props);
+    }
 }

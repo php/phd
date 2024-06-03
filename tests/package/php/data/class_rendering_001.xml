@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpdoc:classref xml:id="class.classname" xmlns:phpdoc="http://php.net/ns/phpdoc" xmlns="http://docbook.org/ns/docbook" >
+
+ <title>The ClassName class</title>
+ <titleabbrev>ClassName</titleabbrev>
+
+ <partintro>
+
+  <section xml:id="classname.intro">
+   <title>Introduction</title>
+   <para>
+    Introductory paragraph about the class.
+   </para>
+  </section>
+
+  <section xml:id="classname.synopsis">
+   <title>Class synopsis</title>
+
+   <classsynopsis class="class">
+    <ooclass>
+     <classname>ClassName</classname>
+    </ooclass>
+
+    <oointerface>
+     <modifier>implements</modifier>
+     <interfacename>InterfaceName</interfacename>
+    </oointerface>
+
+    <classsynopsisinfo role="comment">Constants</classsynopsisinfo>
+    <fieldsynopsis>
+     <modifier>public</modifier>
+     <modifier>const</modifier>
+     <type>string</type>
+     <varname linkend="classname.constants.first-constant">ClassName::FIRST_CONSTANT</varname>
+     <initializer>"Initial value"</initializer>
+    </fieldsynopsis>
+
+    <classsynopsisinfo role="comment">Methods</classsynopsisinfo>
+
+    <refentry xml:id="classname.construct" xmlns="http://docbook.org/ns/docbook">
+     <refnamediv>
+      <refname>ClassName::__construct</refname>
+      <refpurpose>Returns new ClassName object</refpurpose>
+     </refnamediv>
+
+     <refsect1 role="description">
+      Description
+      <constructorsynopsis>
+       <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+       <methodparam choice="opt"><type>string</type><parameter>firstParameter</parameter><initializer>"now"</initializer></methodparam>
+      </constructorsynopsis>
+      <para>
+       Returns new a ClassName object.
+      </para>
+     </refsect1>
+
+     <refsect1 role="parameters">
+      <title>Parameters</title>
+      <variablelist>
+       <varlistentry>
+        <term><parameter>firstParameter</parameter></term>
+        <listitem>
+         <para>
+          The description of the parameter.
+         </para>
+        </listitem>
+       </varlistentry>
+      </variablelist>
+     </refsect1>
+
+     <refsect1 role="returnvalues">
+      <title>Return Values</title>
+      <para>
+       Return values of the method.
+      </para>
+     </refsect1>
+
+     <refsect1 role="errors">
+      <title>Errors/Exceptions</title>
+      <para>
+       Exceptions thrown and/or errors raised by the method.
+      </para>
+     </refsect1>
+
+    </refentry>
+   </classsynopsis>
+
+  </section>
+
+  <section xml:id="classname.constants.types">
+   <title>Predefined Constants</title>
+   <variablelist>
+    <varlistentry xml:id="classname.constants.first-constant">
+     <term><constant>ClassName::FIRST_CONSTANT</constant></term>
+     <listitem>
+      <simpara>
+       The description of the class constant.
+      </simpara>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </section>
+
+ </partintro>
+
+</phpdoc:classref>
