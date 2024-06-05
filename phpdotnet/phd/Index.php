@@ -103,6 +103,7 @@ class Index extends Format
     private $commit     = array();
     private $POST_REPLACEMENT_INDEXES = array();
     private $POST_REPLACEMENT_VALUES  = array();
+    private int $exampleCounter = 0;
 
     public function __construct(IndexRepository $indexRepository) {
         $this->indexRepository = $indexRepository;
@@ -377,16 +378,14 @@ class Index extends Format
     }
 
     public function format_example($open, $name, $attrs, $props) {
-        static $n = 0;
-
         if ($open) {
-            ++$n;
+            ++$this->exampleCounter;
 
             if(isset($attrs[Reader::XMLNS_XML]["id"])) {
                 $id = $attrs[Reader::XMLNS_XML]["id"];
             }
             else {
-                $id = "example-" . $n;
+                $id = "example-" . $this->exampleCounter;
             }
 
             $this->storeInfo($name, $id, $this->currentchunk, false);

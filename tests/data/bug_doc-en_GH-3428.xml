@@ -1,0 +1,31 @@
+<chapter xml:id="example-numbering">
+ <section>
+  <example>
+    <title>- 1. example without an xml:id</title>
+  </example>
+ </section>
+
+ <section>
+  <example>
+    <title>- 2. example without an xml:id</title>
+  </example>
+ </section>
+
+ <section>
+  <example xml:id="third-example-id">
+    <title>- 3. example with an xml:id</title>
+  </example>
+ </section>
+
+ <section>
+  <example>
+    <title>- 4. example without an xml:id</title>
+  </example>
+ </section>
+
+ <section>
+  <example>
+    <title>- 5. example without an xml:id</title>
+  </example>
+ </section>
+</chapter>
