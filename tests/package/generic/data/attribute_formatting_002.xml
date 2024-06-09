@@ -1,0 +1,140 @@
+<chapter xml:id="attribute-formatting-002">
+ <section>
+  <para>1. Class with unknown attributes</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\UnknownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherUnknownAttribute]</modifier>
+    <classname>DateTime</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>2. Class with known attributes</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\KnownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherKnownAttribute]</modifier>
+    <classname>DateTime</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>3. Method with unknown attributes</para>
+  <methodsynopsis>
+   <modifier role="attribute">#[\UnknownAttribute]</modifier>
+   <modifier role="attribute">#[\AnotherUnknownAttribute]</modifier>
+   <modifier>public</modifier> <methodname>ClassName::methodName</methodname>
+   <void/>
+ </methodsynopsis>
+ </section>
+
+ <section>
+  <para>4. Method with known attributes</para>
+  <methodsynopsis>
+   <modifier role="attribute">#[\KnownAttribute]</modifier>
+   <modifier role="attribute">#[\AnotherKnownAttribute]</modifier>
+   <modifier>public</modifier> <methodname>ClassName::methodName</methodname>
+   <void/>
+ </methodsynopsis>
+ </section>
+
+ <section>
+  <para>5. Constructor with unknown attributes</para>
+  <constructorsynopsis>
+   <modifier role="attribute">#[\UnknownAttribute]</modifier>
+   <modifier role="attribute">#[\AnotherUnknownAttribute]</modifier>
+   <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <void/>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>6. Constructor with known attributes</para>
+  <constructorsynopsis>
+   <modifier role="attribute">#[\KnownAttribute]</modifier>
+   <modifier role="attribute">#[\AnotherKnownAttribute]</modifier>
+   <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+   <void/>
+  </constructorsynopsis>
+ </section>
+
+ <section>
+  <para>7. Class, constructor and methods with unknown attributes</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\UnknownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherUnknownAttribute]</modifier>
+    <classname>DateTime</classname>
+   </ooclass>
+   <constructorsynopsis>
+    <modifier role="attribute">#[\UnknownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherUnknownAttribute]</modifier>
+    <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+    <void/>
+   </constructorsynopsis>
+   <methodsynopsis>
+    <modifier role="attribute">#[\UnknownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherUnknownAttribute]</modifier>
+    <modifier>public</modifier> <methodname>ClassName::methodName1</methodname>
+    <void/>
+   </methodsynopsis>
+   <methodsynopsis>
+    <modifier role="attribute">#[\UnknownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherUnknownAttribute]</modifier>
+    <modifier>public</modifier> <methodname>ClassName::methodName2</methodname>
+    <void/>
+   </methodsynopsis>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>8. Class, constructor and methods with known attributes</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\KnownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherKnownAttribute]</modifier>
+    <classname>DateTime</classname>
+   </ooclass>
+   <constructorsynopsis>
+    <modifier role="attribute">#[\KnownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherKnownAttribute]</modifier>
+    <modifier>public</modifier> <methodname>ClassName::__construct</methodname>
+    <void/>
+   </constructorsynopsis>
+   <methodsynopsis>
+    <modifier role="attribute">#[\KnownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherKnownAttribute]</modifier>
+    <modifier>public</modifier> <methodname>ClassName::methodName1</methodname>
+    <void/>
+   </methodsynopsis>
+   <methodsynopsis>
+    <modifier role="attribute">#[\KnownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherKnownAttribute]</modifier>
+    <modifier>public</modifier> <methodname>ClassName::methodName2</methodname>
+    <void/>
+   </methodsynopsis>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>9. Function with unknown attributes</para>
+  <methodsynopsis>
+   <modifier role="attribute">#[\UnknownAttribute]</modifier>
+   <modifier role="attribute">#[\AnotherUnknownAttribute]</modifier>
+   <type>void</type><methodname>function_name</methodname>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>10. Function with known attributes</para>
+  <methodsynopsis>
+   <modifier role="attribute">#[\KnownAttribute]</modifier>
+   <modifier role="attribute">#[\AnotherKnownAttribute]</modifier>
+   <type>void</type><methodname>function_name</methodname>
+  </methodsynopsis>
+ </section>
+
+</chapter>
