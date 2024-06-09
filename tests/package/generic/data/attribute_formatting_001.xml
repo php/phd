@@ -19,7 +19,7 @@
   <para>3. Function parameter with unknown attribute</para>
   <methodsynopsis>
    <type>bool</type><methodname>password_verify</methodname>
-   <modifier role="attribute">#[\UnknownAttribute]</modifier><methodparam><type>string</type><parameter>password</parameter></methodparam>
+   <methodparam><modifier role="attribute">#[\UnknownAttribute]</modifier><type>string</type><parameter>password</parameter></methodparam>
    <methodparam><type>string</type><parameter>hash</parameter></methodparam>
   </methodsynopsis>
  </section>
@@ -28,7 +28,7 @@
   <para>4. Function parameter with known attribute</para>
   <methodsynopsis>
    <type>bool</type><methodname>password_verify</methodname>
-   <modifier role="attribute">#[\KnownAttribute]</modifier><methodparam><type>string</type><parameter>password</parameter></methodparam>
+   <methodparam><modifier role="attribute">#[\KnownAttribute]</modifier><type>string</type><parameter>password</parameter></methodparam>
    <methodparam><type>string</type><parameter>hash</parameter></methodparam>
   </methodsynopsis>
  </section>

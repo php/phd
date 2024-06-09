@@ -145,7 +145,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'methodsynopsis'        => 'format_methodsynopsis',
         'methodname'            => 'format_methodname',
         'member'                => 'format_member',
-        'modifier'              => 'format_modifier',
+        'modifier'              => array(
+            /* DEFAULT */          'format_modifier',
+            'methodparam'       => 'format_methodparam_modifier',
+        ),
         'note'                  => 'format_note',
         'orgname'               => 'span',
         'othercredit'           => 'format_div',
@@ -395,6 +398,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'fieldsynopsis'    => 'format_fieldsynopsis_modifier_text',
             'methodparam'      => 'format_modifier_text',
             'methodsynopsis'   => 'format_modifier_text',
+            'constructorsynopsis' => 'format_modifier_text',
+            'ooclass'          => 'format_modifier_text',
+            'ooexception'      => 'format_modifier_text',
+            'oointerface'      => 'format_modifier_text',
         ),
         /** Those are used to retrieve the class/interface name to be able to remove it from method names */
         'classname' => [
@@ -1220,6 +1227,23 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
 
     public function format_modifier($open, $name, $attrs, $props) {
+        if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"]);
+                return '<span class="' . $this->getRole() . '">';
+            }
+            return '<span class="modifier">';
+        }
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+            if ($attrs[Reader::XMLNS_DOCBOOK]["role"] === "attribute") {
+                return '</span><br>';
+            }
+            $this->popRole();
+        }
+        return '</span>';
+    }
+
+    public function format_methodparam_modifier($open, $name, $attrs, $props) {
         if ($open) {
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
                 $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"]);
