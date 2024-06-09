@@ -2,34 +2,15 @@
 
 ## About PhD
 
-PhD is PHP's very own DocBook 5 rendering system which is used to convert
-the PHP Manual into different output formats.
+PhD is PHP's DocBook rendering system
+which is used to convert the PHP Manual into different output formats.
 
 
 ## Requirements
 
-Requirements:
 - PHP 8.0+
 - DOM, libXML2, XMLReader and SQLite3.
 
-
-## Using PhD
-
-To use PhD you must clone the git repo
-
-```shell
-$ git clone https://github.com/php/phd.git
-```
-
-and render your documentation file (`doc-base/.manual.xml` in this example)
-in `xhtml` format
-
-```shell
-$ php phd/render.php --docbook doc-base/.manual.xml --package PHP --format xhtml
-```
-
-
-# Using PhD to render documentation
 
 ## Rendering the PHP Documentation Sources
 
@@ -59,7 +40,7 @@ $ git clone https://github.com/php/doc-en en
   - [Spanish](https://github.com/php/doc-es) (doc-es)
   - [Turkish](https://github.com/php/doc-tr) (doc-tr)
   - [Ukrainian](https://github.com/php/doc-uk) (doc-uk)
-</details>
+</details><br>
 
 To check the documentation and combine it into one file,
 you need to clone PHP's `doc-base` repository
@@ -74,22 +55,22 @@ and run `configure.php`
 $ php doc-base/configure.php
 ```
 
-This process will generate a `.manual.xml` file in the `doc-base` directory.
+which will generate a `.manual.xml` file in the `doc-base` directory.
 
-Running PhD to render the docs is
-surprisingly simple, so we'll start with that.
+To render the documentation in `xhtml` format
+into the default `./output/` directory:
 
 ```shell
-$ phd -d doc-base/.manual.xml -P PHP
+$ php phd/render.php -d doc-base/.manual.xml -P PHP -f xhtml
 ```
 
-After running for a few moments, PhD will generate all the output
-formats of the PHP Package into the default `./output/` directory.
+
+## PhD's rendering options
 
 Let's take a closer look at PhD and see what capabilities are available to us.
 
 ```shell
-$ phd --help
+$ php phd/render.php --help
 PhD version: 1.1.12
 Copyright(c) 2007-2024 The PHP Documentation Group
 
@@ -161,7 +142,7 @@ most important options are those which allow you to select a format and
 package to output your documentation to.
 
 ```shell
-$ phd --list
+$ php phd/render.php --list
 Supported packages:
         Generic
                 xhtml
@@ -194,26 +175,17 @@ Supported packages:
                 enhancedchm
 ```
 
-You can tell by the output of the `--list` option that PhD can also be
-used to render the docs as a PDF file or as Unix Man Pages.
-
 To select a format and package, you must use the `-f [formatName]` and
 `-P [packageName]` options.
 
+E.g.: to generate the documentation in the same format used on `php.net`,
+use the PHP package's `php` format.
 ```shell
-$ phd -f manpage -P PHP -d .manual.xml
+$ php phd/render.php -d .manual.xml -P PHP -f php
 ```
 
-This command will output the documentation for PHP functions in the Unix
-Man page format.
 
-
-## Customizing the rendering results
-
-PhD lets you specify a number of options to customize the generated
-documentation files. The following sections describe some of them.
-
-### Source code highlighter
+## Syntax highlighting
 
 Part of the documentation of programming languages is source code
 examples. PhD is able to colorize the source code of many types of
@@ -239,16 +211,10 @@ By default, PhD uses the source code highlighter that is built into PHP
 itself which is only able to highlight PHP code.
 
 If your documentation contains other types of source code or markup,
-you can [build your own syntax highlighter](#writing-a-custom-syntax-highlighter).
+you can write a custom syntax highlighter.
 
 
-# Extending PhD
-
-Written in PHP, PhD is easy to hack on and easy to extend. It provides
-command line parameters to allow using custom code (like source code highlighters)
-without changing the internals of PhD.
-
-## Writing a custom syntax highlighter
+### Writing a custom syntax highlighter
 
 A syntax highlighter for PhD is nothing more than a simple PHP class
 that has two methods: `factory` and `highlight`.
@@ -269,4 +235,4 @@ Take a look at the provided highlighters, `phpdotnet\phd\Highlighter`,
 on how to implement your own highlighter.
 
 Once you wrote your custom source code highlighting class, it's time to
-[try it out](#source-code-highlighter).
+[try it out](#syntax-highlighting).
