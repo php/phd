@@ -2,16 +2,9 @@
 
 ## About PhD
 
-PhD is PHP's very own DocBook 5 rendering system. It is used to convert
-the PHP Manual and PEAR Documentation into different output formats like
-XHTML, PDF, Man pages and CHM.
+PhD is PHP's very own DocBook 5 rendering system which is used to convert
+the PHP Manual into different output formats.
 
-The goal of PhD is to become a fast, general DocBook rendering system.
-At the moment of writing, PhD is already very fast: It can create the
-chunked version of PEAR's manual (some 3000 files) in less than a minute
-on a 2GHz system. It also renders the PHP and PEAR manual flawlessly. It
-does not support every DocBook 5 tag yet, and using it to render your own
-DocBook files may need some tweaks.
 
 ## Requirements
 
@@ -19,121 +12,33 @@ Requirements:
 - PHP 8.0+
 - DOM, libXML2, XMLReader and SQLite3.
 
-## Quickstart
 
-Get PhD from the source repository
+## Using PhD
+
+To use PhD you must clone the git repo
 
 ```shell
 $ git clone https://github.com/php/phd.git
 ```
 
 and render your documentation file (`doc-base/.manual.xml` in this example)
-in `php` format
+in `xhtml` format
 
 ```shell
-$ php phd/render.php --docbook doc-base/.manual.xml --package PHP --format php
+$ php phd/render.php --docbook doc-base/.manual.xml --package PHP --format xhtml
 ```
-
-
-## Installation
-
-PhD is distributed via its own PEAR channel, [doc.php.net](http://doc.php.net).
-Using this channel is also the easiest way to get it.
-
-### Installation via PEAR
-
-> **_NOTE:_**
-> You need a working [PEAR
-> installation](https://pear.php.net/manual/en/installation.php).
-
-To install the latest version of PhD:
-
-```shell
-$ pear install doc.php.net/phd
-```
-
-Verify the installation:
-```shell
-$ phd --version
-PhD Version: 1.0.0-stable
-PHP Version: 5.3.3
-Copyright(c) 2007-2024 The PHP Documentation Group
-```
-
-To see the list of all available PhD packages:
-
-```shell
-$ pear remote-list -c doc.php.net
-```
-
-Installing the PhD Packages:
-
-```shell
-$ pear install doc.php.net/phd_php
-Starting to download PhD_PHP-1.0.0.tgz (18,948 bytes)
-[...]
-install ok: channel://doc.php.net/PhD_PHP-1.0.0
-
-$ pear install doc.php.net/phd_pear
-downloading PhD_PEAR-1.0.0.tgz ...
-[...]
-install ok: channel://doc.php.net/PhD_PEAR-1.0.0
-```
-
-### Installation from Git
-
-To get the latest and greatest features that have not been released yet,
-you can use PhD from Git.
-
-```shell
-$ git clone https://github.com/php/phd.git
-... output
-
-$ pear install package.xml package_generic.xml package_php.xml package_pear.xml
-[...]
-install ok: channel://doc.php.net/PhD-1.0.1
-install ok: channel://doc.php.net/PhD_Generic-1.0.1
-install ok: channel://doc.php.net/PhD_PHP-1.0.1
-install ok: channel://doc.php.net/PhD_PEAR-1.0.1
-```
-
-To install the standalone Packages:
-```shell
-for i in package_*.xml; do pear install $i; done
-```
-
-```shell
-$ phd --version
-PhD Version: phd-from-svn
-PHP Version: 5.3.3-dev
-Copyright(c) 2007-2010 The PHP Documentation Group
-```
-
-### Using PhD without installation
-
-You can use PhD without installing it or PEAR by simply cloning the git repository:
-
-```shell
-$ git clone https://github.com/php/phd.git
-```
-and running it with
-
-```shell
-$ php phd/render.php
-```
-
-You can now either use PhD using the above line
-or you can also create an alias for it.
 
 
 # Using PhD to render documentation
 
 ## Rendering the PHP Documentation Sources
 
-To get the PHP documentation sources, simply clone them from the official GitHub
-repositories.
+To render the PHP documentation, you will need to clone the
+documentation source files, `doc-base` and PhD.
 
-To clone the English documentation:
+To get the PHP documentation sources, clone them from the official GitHub
+repositories. To clone the English documentation:
+
 ```shell
 $ git clone https://github.com/php/doc-en en
 ```
@@ -156,20 +61,21 @@ $ git clone https://github.com/php/doc-en en
   - [Ukrainian](https://github.com/php/doc-uk) (doc-uk)
 </details>
 
-To prepare the English documentation,
-`cd` to the directory that `doc-base` and `en` (`doc-en`) is in
-and run `configure.php`.
+To check the documentation and combine it into one file,
+you need to clone PHP's `doc-base` repository
+
+```shell
+$ git clone https://github.com/php/doc-base
+```
+
+and run `configure.php`
 
 ```shell
 $ php doc-base/configure.php
 ```
 
-This process will generate a .manual.xml file in the `doc-base` directory,
-which is what we need for building the docs. Now we're ready to proceed
-with running PhD to generate the PHP docs.
+This process will generate a `.manual.xml` file in the `doc-base` directory.
 
-To quickly become familiar with using PhD, you can download the PHP
-documentation sources and render those.
 Running PhD to render the docs is
 surprisingly simple, so we'll start with that.
 
@@ -180,13 +86,12 @@ $ phd -d doc-base/.manual.xml -P PHP
 After running for a few moments, PhD will generate all the output
 formats of the PHP Package into the default `./output/` directory.
 
-So now that you've seen the fruits of your labor, let's take a closer
-look at PhD and see what capabilities are available to us.
+Let's take a closer look at PhD and see what capabilities are available to us.
 
 ```shell
 $ phd --help
-PhD version: 1.1.6
-Copyright(c) 2007-2013 The PHP Documentation Group
+PhD version: 1.1.12
+Copyright(c) 2007-2024 The PHP Documentation Group
 
     -v
     --verbose <int>            Adjusts the verbosity level
@@ -289,13 +194,6 @@ Supported packages:
                 enhancedchm
 ```
 
-
-> **_NOTE:_**
-> The format packages are provided by separate PEAR packages
-> (doc.php.net/PhD_Generic, doc.php.net/PhD_IDE, doc.php.net/PhD_PEAR
-> and doc.php.net/PhD_PHP) where only the Generic is installed by
-> default.
-
 You can tell by the output of the `--list` option that PhD can also be
 used to render the docs as a PDF file or as Unix Man Pages.
 
@@ -309,26 +207,6 @@ $ phd -f manpage -P PHP -d .manual.xml
 This command will output the documentation for PHP functions in the Unix
 Man page format.
 
-## Compiling the PhD guide
-
-The PhD guide is this manual you are reading. It lives in
-PhD's Git repository under `docs/phd-guide/phd-guide.xml`. If you
-installed PhD from Git, you already have it. Otherwise, get it:
-
-```shell
-$ svn checkout http://svn.php.net:/repository/phd/trunk/docs/phd-guide
-U phd/docs/phd-guide/phd-guide.xml
-```
-
-Now you have everything you need. Just type
-
-```shell
-$ cd phd/docs/phd-guide/
-$ phd -f bigxhtml -d phd-guide.xml
-```
-
-There should be an .html file in the directory now. View it with a
-browser!
 
 ## Customizing the rendering results
 
@@ -361,172 +239,8 @@ By default, PhD uses the source code highlighter that is built into PHP
 itself which is only able to highlight PHP code.
 
 If your documentation contains other types of source code or markup,
-like XML, HTML, Javascript or any other language, you should try the
-[GeSHi](http://qbnz.com/highlighter/) highlighter that is shipped with
-PhD:
+you can [build your own syntax highlighter](#writing-a-custom-syntax-highlighter).
 
-1.  Install GeSHi from the MediaWiki PEAR channel:
-
-```shell
-$ pear channel-discover mediawiki.googlecode.com/svn
-$ pear install mediawiki/geshi
-```
-
-2.  Use the GeSHi syntax highlighting class when rendering your
-    documentation:
-
-```shell
-$ phd -g 'phpdotnet\phd\Highlighter_GeSHi' -d phd-guide.xml
-```
-
-If you have GeSHi version 1.1.x installed, you should use the
-`phpdotnet\phd\Highlighter_GeSHi11x` highlighter, which is adapted to
-GeSHi's new API.
-
-Apart from using the highlighter shipped with PhD, you can [build your
-own highlighters](#writing-a-custom-syntax-highlighter).
-
-# DocBook extensions
-
-PhD has been tailored for PHP and PEAR manuals. To make writing
-documentation as easy as possible, some custom tags have been added to the
-DTD.
-
-All extensions live in their own XML namespace "`phd:`" which resolves
-to <http://www.php.net/ns/phd>. When using one of the attributes or tags
-described here, remember to set the namespace:
-
-```xml
-xmlns:phd="http://www.php.net/ns/phd"
-```
-
-## General DocBook extensions
-
-The extensions listed here are available in all PhD themes and formats.
-
-### Manual chunking with "phd:chunk" (Attribute)
-
-PhD automatically chooses which sections, chapters or other tags get
-their own file (chunk) when using a chunked theme. Sometimes the result
-of this automatism is not optimal and you want to fine-tune it. The
-attribute "phd:chunk" is offered as a solution by PhD.
-
-#### Allowed values
-
-The value of `phd:chunk` can only be `true` or `false` which force the element
-to be chunked or not.
-
-#### Allowed in
-
-`phd:chunk` may be used in every tag that accepts
-[db.common.attributes](https://tdg.docbook.org/tdg/5.0/ref-elements.html#common.attributes).
-
-#### Example
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<preface xmlns="http://docbook.org/ns/docbook"
-    xmlns:phd="http://www.php.net/ns/phd"
-    xml:id="preface"
-    phd:chunk="false"
->
-    <info>
-    <title>Preface</title>
-    ..
-    </info>
-    ..
-</preface>
-```
-
-
-### Generating Table Of Contents: \<phd:toc\> (Tag)
-
-This tag can be used to manually insert a Table Of Contents (TOC)
-that creates a list of links to children elements of a tag.
-
-phd:toc-depth
-
-#### Allowed in
-
-`<phd:toc>` can be used everywhere `<para>` elements are allowed.
-
-#### Children
-
-You can add a title with `<title>`.
-
-#### Attributes
-
-| Attribute name | Description | Default value |
-|----|----|----|
-| phd:element | ID of the element whose children shall be linked | *none* |
-| phd:toc-depth | Depth of the TOC/Number of levels | `1` |
-
-Attributes for \<phd:toc\>
-
-## PEAR specific DocBook extensions
-
-The DocBook extensions listed here are only available when using a PEAR
-theme.
-
-### Linking to PEAR API documentation: \<phd:pearapi\> (Tag)
-
-A large part of the PEAR manual is about packages and how to use them.
-Package authors often find they need to link to the API documentation of
-a specific method, variable or class of their package. To ease the
-linking process, the `<phd:pearapi>` tag was introduced.
-
-You can let PhD automatically create the link text by just closing the
-tag, or specify the tag text via the tag's content.
-
-#### Package links
-
-`phd:package` name is put into the attribute, any text:
-
-```xml
-<phd:pearapi phd:package="HTML_QuickForm"/>
-<phd:pearapi phd:package="HTML_QuickForm">some text</phd:pearapi>
-```
-
-[» HTML_QuickForm](https://pear.php.net/package/HTML_QuickForm/docs/latest/li_HTML_QuickForm.html)
-[» some text](https://pear.php.net/package/HTML_QuickForm/docs/latest/li_HTML_QuickForm.html)
-
-#### Class links
-
-Class name as `phd:linkend` attribute value.
-
-```xml
-<phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element"/>
-<phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element">some text</phd:pearapi>
-```
-
-[» HTML_QuickForm_element](https://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html)
-[» some text](https://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html)
-
-#### Class method links
-
-Class and method name as `phd:linkend` text, separated by a double
-colon.
-
-```xml
-<phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element::setName"/>
-<phd:pearapi phd:package="HTML_QuickForm" phd:linkend="HTML_QuickForm_element::setName">some text</phd:pearapi>
-```
-
-[» HTML_QuickForm_element::setName()](https://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html#methodsetName)
-[» some text](https://pear.php.net/package/HTML_QuickForm/docs/latest/HTML_QuickForm/HTML_QuickForm_element.html#methodsetName)
-
-#### Class variable links
-
-Class and variable name as `phd:linkend` text, separated by a double
-colon and a dollar sign before the variable name.
-
-```xml
-<phd:pearapi phd:package="Net_Geo" phd:linkend="Net_Geo::$cache_ttl"/>
-<phd:pearapi phd:package="Net_Geo" phd:linkend="Net_Geo::$cache_ttl">some text</phd:pearapi>
-```
-
-[» Net_Geo::$cache_ttl](https://pear.php.net/package/Net_Geo/docs/latest/apidoc/Net_Geo/Net_Geo.html#var$cache_ttl)
-[» some text](https://pear.php.net/package/Net_Geo/docs/latest/apidoc/Net_Geo/Net_Geo.html#var$cache_ttl)
 
 # Extending PhD
 
@@ -556,13 +270,3 @@ on how to implement your own highlighter.
 
 Once you wrote your custom source code highlighting class, it's time to
 [try it out](#source-code-highlighter).
-
-# Links
-
-PhD 0.1RC1 release announcement:
-
--   [PhD 0.1RC1
-    released](https://bjori.blogspot.com/2007/10/phd-php-based-docbook-renderer-rc1.html)
-    by Hannes Magnusson (PhD 0.1RC1)
-
-Copyright(c) 2007-2024 The PHP Documentation Team
