@@ -1967,9 +1967,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_qandaset($open, $name, $attrs, $props) {
         if ($open) {
-            $node = ReaderKeeper::getReader()->expand();
+            $xml = "<qandaset>" . $props["innerXml"] . "</qandaset>";
             $doc = new \DOMDocument;
-            $doc->appendChild($node);
+            $doc->loadXml($xml);
 
             $xp = new \DOMXPath($doc);
             $xp->registerNamespace("db", Reader::XMLNS_DOCBOOK);
