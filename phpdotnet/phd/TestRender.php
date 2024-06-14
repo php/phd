@@ -22,6 +22,9 @@ class TestRender extends Render {
 
         if ($this->format !== null) {
             $this->attach($this->format);
+        }
+
+        if (count($this) > 0) {
             $this->reader->open($this->config->xml_file());
             $this->execute($this->reader);
         }

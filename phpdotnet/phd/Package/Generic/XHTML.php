@@ -528,6 +528,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     protected $isSectionChunk = array();
     protected $params = array();
 
+    protected int $exampleCounter = 0;
+
     public function __construct() {
         parent::__construct();
         $this->registerPIHandlers($this->pihandlers);
@@ -1735,13 +1737,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '</strong><br />';
     }
     public function format_example($open, $name, $attrs, $props) {
-        static $n = 0;
         if ($open) {
-            ++$n;
+            ++$this->exampleCounter;
             if (isset($props["id"])) {
                 return '<div class="' . $name . '" id="' . $props["id"] . '">';
             }
-            return '<div class="' . $name . '" id="' . $this->getGeneratedExampleId($n-1) . '">';
+            return '<div class="' . $name . '" id="' . $this->getGeneratedExampleId($this->exampleCounter - 1) . '">';
         }
         return '</div>';
     }
