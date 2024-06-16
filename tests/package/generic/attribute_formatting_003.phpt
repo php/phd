@@ -52,7 +52,7 @@ Content:
  <div class="section">
   <p class="para">1. Property/Constant with unknown attributes</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="modifier">class</span> <strong class="classname">ClassName</strong>
     {</div>
    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Properties/Constants */</div>
@@ -70,7 +70,7 @@ Content:
  <div class="section">
   <p class="para">2. Property/Constant with known attributes</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="modifier">class</span> <strong class="classname">ClassName</strong>
     {</div>
    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Properties/Constants */</div>
