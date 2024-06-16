@@ -15,7 +15,7 @@ namespace phpdotnet\phd;
 require_once __DIR__ . "/../setup.php";
 
 $optionsParser = new Options_Parser(
-    new Options_Handler(new Config, new Package_Generic_Factory)
+    new Options_Handler($config, new Package_Generic_Factory)
 );
 $commandLineOptions = $optionsParser->getopt();
 

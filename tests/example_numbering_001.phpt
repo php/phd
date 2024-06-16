@@ -8,18 +8,16 @@ require_once __DIR__ . "/setup.php";
 
 $xml_file = __DIR__ . "/data/example_numbering_001.xml";
 
-Config::init([
-    "force_index"    => true,
-    "xml_file" => $xml_file,
-]);
+$config->setForce_index(true);
+$config->setXml_file($xml_file);
 
 $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
-Config::set_indexcache($indexRepository);
+$config->set_indexcache($indexRepository);
 
 $index = new TestIndex($indexRepository);
 
-$render = new TestRender(new Reader, new Config, null, $index);
+$render = new TestRender(new Reader, $config, null, $index);
 
 $render->run();
 
@@ -31,7 +29,7 @@ var_dump($indexes);
 
 $format = new TestGenericChunkedXHTML;
 
-$render = new TestRender(new Reader, new Config, $format);
+$render = new TestRender(new Reader, $config, $format);
 
 $render->run();
 
