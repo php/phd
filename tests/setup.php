@@ -8,9 +8,10 @@ spl_autoload_register(["phpdotnet\\phd\\Autoloader", "autoload"]);
 
 require_once __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR . "phd" . DIRECTORY_SEPARATOR . "functions.php";
 
-Config::init([
-    "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR
-                    . "phpdotnet" . DIRECTORY_SEPARATOR . "phd" . DIRECTORY_SEPARATOR
-                    . "data" . DIRECTORY_SEPARATOR . "langs" . DIRECTORY_SEPARATOR,
-    "package_dirs" => [__INSTALLDIR__],
-]);
+$config = new Config;
+
+$config->init([]);
+$config->setLang_dir(__INSTALLDIR__ . DIRECTORY_SEPARATOR
+. "phpdotnet" . DIRECTORY_SEPARATOR . "phd" . DIRECTORY_SEPARATOR
+. "data" . DIRECTORY_SEPARATOR . "langs" . DIRECTORY_SEPARATOR);
+$config->setPackage_dirs([__INSTALLDIR__]);

@@ -8,10 +8,10 @@ require_once __DIR__ . "/../../setup.php";
 
 $xml_file = __DIR__ . "/data/type_rendering_methodsynopsis_return_types.xml";
 
-Config::init(["xml_file" => $xml_file]);
+$config->setXml_file($xml_file);
 
 $format = new TestPHPChunkedXHTML;
-$render = new TestRender(new Reader, new Config, $format);
+$render = new TestRender(new Reader, $config, $format);
 
 $render->run();
 ?>

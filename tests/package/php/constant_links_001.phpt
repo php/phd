@@ -8,7 +8,7 @@ require_once __DIR__ . "/../../setup.php";
 
 $xml_file = __DIR__ . "/data/constant_links.xml";
 
-Config::init(["xml_file" => $xml_file]);
+$config->setXml_file($xml_file);
 
 $indices = [
     [
@@ -47,7 +47,7 @@ foreach ($indices as $index) {
     );
 }
 
-$render = new TestRender(new Reader, new Config, $format);
+$render = new TestRender(new Reader, $config, $format);
 
 $render->run();
 ?>

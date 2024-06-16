@@ -8,16 +8,14 @@ require_once __DIR__ . "/../setup.php";
 
 $xml_file = __DIR__ . "/data/bug_GH-98.xml";
 
-Config::init([
-    "force_index"    => true,
-    "xml_file" => $xml_file,
-]);
+$config->setForce_index(true);
+$config->setXml_file($xml_file);
 
 $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
 
 $index = new TestIndex($indexRepository);
-$render = new TestRender(new Reader, new Config, null, $index);
+$render = new TestRender(new Reader, $config, null, $index);
 
 $render->run();
 

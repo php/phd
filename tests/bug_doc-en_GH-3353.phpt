@@ -8,16 +8,14 @@ require_once __DIR__ . "/setup.php";
 
 $xml_file = __DIR__ . "/data/bug_doc-en_GH-3353.xml";
 
-Config::init([
-    "force_index"    => true,
-    "xml_file" => $xml_file,
-]);
+$config->setForce_index(true);
+$config->setXml_file($xml_file);
 
 $render = new Render();
 
 $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
-Config::set_indexcache($indexRepository);
+$config->set_indexcache($indexRepository);
 
 
 // Indexing
@@ -25,7 +23,7 @@ $index = new TestIndex($indexRepository);
 $render->attach($index);
 
 $reader = new Reader;
-$reader->open(Config::xml_file(), null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
+$reader->open($config->xml_file(), null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
 $render->execute($reader);
 
 $render->detach($index);
@@ -36,7 +34,7 @@ $format = new TestPHPChunkedXHTML;
 $render->attach($format);
 
 $reader = new Reader;
-$reader->open(Config::xml_file(), null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
+$reader->open($config->xml_file(), null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
 
 $render->execute($reader);
 ?>
