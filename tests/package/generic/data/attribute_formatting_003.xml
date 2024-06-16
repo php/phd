@@ -1,0 +1,38 @@
+<chapter xml:id="attribute-formatting-003">
+ <section>
+  <para>1. Property/Constant with unknown attributes</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <classname>ClassName</classname>
+   </ooclass>
+   <classsynopsisinfo role="comment">Properties/Constants</classsynopsisinfo>
+   <fieldsynopsis>
+    <modifier role="attribute">#[\UnknownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherUnknownAttribute]</modifier>
+    <modifier>public</modifier>
+    <modifier>readonly</modifier>
+    <type>string</type>
+    <varname>CONSTANT_NAME</varname>
+   </fieldsynopsis>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>2. Property/Constant with known attributes</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <classname>ClassName</classname>
+   </ooclass>
+   <classsynopsisinfo role="comment">Properties/Constants</classsynopsisinfo>
+   <fieldsynopsis>
+    <modifier role="attribute">#[\KnownAttribute]</modifier>
+    <modifier role="attribute">#[\AnotherKnownAttribute]</modifier>
+    <modifier>public</modifier>
+    <modifier>readonly</modifier>
+    <type>string</type>
+    <varname>propertyName</varname>
+   </fieldsynopsis>
+  </classsynopsis>
+ </section>
+
+</chapter>
