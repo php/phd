@@ -1218,12 +1218,26 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_fieldsynopsis($open, $name, $attrs) {
         $this->cchunk["fieldsynopsis"] = $this->dchunk["fieldsynopsis"];
         if ($open) {
+            if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+                $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"]);
+            }
             return '<div class="'.$name.'">';
+        }
+        if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+            $this->popRole();
         }
         return ";</div>\n";
     }
 
     public function format_fieldsynopsis_modifier_text($value, $tag) {
+        if ($this->getRole() === "attribute") {
+            $attribute = trim(strtolower($value), "#[]\\");
+            $href = Format::getFilename("class.$attribute");
+            if ($href) {
+                return '<a href="' . $href . $this->getExt() . '">' .$value. '</a> ';
+            }
+            return false;
+        }
         $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
         return $this->TEXT($value);
     }
