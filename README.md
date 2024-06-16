@@ -153,53 +153,6 @@ Copyright(c) 2007-2024 The PHP Documentation Group
     --packagedir               Use an external package directory.
 ```
 
-As you can see, there are plenty of options to look into in PhD. The
-most important options are those which allow you to select a format and
-package to output your documentation to.
-
-```shell
-$ php phd/render.php --list
-Supported packages:
-        Generic
-                xhtml
-                bigxhtml
-                manpage
-        IDE
-                xml
-                funclist
-                json
-                php
-                phpstub
-        PEAR
-                xhtml
-                bigxhtml
-                php
-                chm
-                tocfeed
-        PHP
-                xhtml
-                bigxhtml
-                php
-                howto
-                manpage
-                pdf
-                bigpdf
-                kdevelop
-                chm
-                tocfeed
-                epub
-                enhancedchm
-```
-
-To select a format and package, you must use the `-f [formatName]` and
-`-P [packageName]` options.
-
-E.g.: to generate the documentation in the same format used on `php.net`,
-use the PHP package's `php` format.
-```shell
-$ php phd/render.php -d .manual.xml -P PHP -f php
-```
-
 
 ## Syntax highlighting
 
