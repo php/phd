@@ -13,64 +13,65 @@ require_once __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
 
 spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
 
+$config = new Config;
 
 $conf = array();
 if (file_exists("phd.config.php")) {
     $conf = include "phd.config.php";
-    Config::init($conf);
+    $config->init($conf);
     v("Loaded config from existing file", VERBOSE_MESSAGES);
 } else {
     // need to init regardless so we get package-dirs from the include-path
-    Config::init(array());
+    $config->init(array());
 }
 
 $packageHandlers = array();
-foreach (Config::getSupportedPackages() as $package) {
+foreach ($config->getSupportedPackages() as $package) {
     if ($handler = Format_Factory::createFactory($package)->getOptionsHandler()) {
         $packageHandlers[strtolower($package)] = $handler;
     }
 }
 $optionsParser = new Options_Parser(
-    new Options_Handler(new Config, new Package_Generic_Factory),
+    new Options_Handler($config, new Package_Generic_Factory),
     ...$packageHandlers
 );
 $commandLineOptions = $optionsParser->getopt();
 
-Config::init($commandLineOptions);
+$config->init($commandLineOptions);
 
 /* If no docbook file was passed, die */
-if (!is_dir(Config::xml_root()) || !is_file(Config::xml_file())) {
+if (!is_dir($config->xml_root()) || !is_file($config->xml_file())) {
     trigger_error("No Docbook file given. Specify it on the command line with --docbook.", E_USER_ERROR);
 }
-if (!file_exists(Config::output_dir())) {
+if (!file_exists($config->output_dir())) {
     v("Creating output directory..", VERBOSE_MESSAGES);
-    if (!mkdir(Config::output_dir(), 0777, True)) {
-        v("Can't create output directory : %s", Config::output_dir(), E_USER_ERROR);
+    if (!mkdir($config->output_dir(), 0777, True)) {
+        v("Can't create output directory : %s", $config->output_dir(), E_USER_ERROR);
     }
     v("Output directory created", VERBOSE_MESSAGES);
-} elseif (!is_dir(Config::output_dir())) {
+} elseif (!is_dir($config->output_dir())) {
     v("Output directory is not a file?", E_USER_ERROR);
 }
 
 // This needs to be moved. Preferably into the PHP package.
 if (!$conf) {
-    Config::init(array(
+    $config->init(array(
         "lang_dir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
                         . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
                         . "langs" . DIRECTORY_SEPARATOR,
-        "phpweb_version_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
-        "phpweb_acronym_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
-        "phpweb_sources_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'sources.xml',
-        "phpweb_history_filename" => Config::xml_root() . DIRECTORY_SEPARATOR . 'fileModHistory.php',
+        "phpweb_version_filename" => $config->xml_root() . DIRECTORY_SEPARATOR . 'version.xml',
+        "phpweb_acronym_filename" => $config->xml_root() . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
+        "phpweb_sources_filename" => $config->xml_root() . DIRECTORY_SEPARATOR . 'sources.xml',
+        "phpweb_history_filename" => $config->xml_root() . DIRECTORY_SEPARATOR . 'fileModHistory.php',
     ));
 }
 
-if (Config::saveconfig()) {
+if ($config->saveconfig()) {
     v("Writing the config file", VERBOSE_MESSAGES);
-    file_put_contents("phd.config.php", "<?php\nreturn " . var_export(Config::getAllFiltered(), 1) . ";");
+    file_put_contents("phd.config.php", "<?php\nreturn " . var_export($config->getAllFiltered(), 1) . ";");
 }
 
-if (Config::quit()) {
+if ($config->quit()) {
     exit(0);
 }
 
@@ -101,33 +102,33 @@ $render = new Render();
 
 // Set reader LIBXML options
 $readerOpts = LIBXML_PARSEHUGE;
-if (Config::process_xincludes()) {
+if ($config->process_xincludes()) {
     $readerOpts |= LIBXML_XINCLUDE;
 }
 
 // Setup indexing database
-if (Config::memoryindex()) {
+if ($config->memoryindex()) {
     $db = new \SQLite3(":memory:");
     $initializeDb = true;
 } else {
-    $initializeDb = !file_exists(Config::output_dir() . 'index.sqlite');
-    $db = new \SQLite3(Config::output_dir() . 'index.sqlite');
+    $initializeDb = !file_exists($config->output_dir() . 'index.sqlite');
+    $db = new \SQLite3($config->output_dir() . 'index.sqlite');
 }
 $indexRepository = new IndexRepository($db);
 if ($initializeDb) {
     $indexRepository->init();
 }
-Config::set_indexcache($indexRepository);
+$config->set_indexcache($indexRepository);
 
 // Indexing
-if (requireIndexing(new Config)) {
+if (requireIndexing($config)) {
     v("Indexing...", VERBOSE_INDEXING);
     // Create indexer
-    $format = new Index(Config::indexcache());
+    $format = new Index($config->indexcache());
     $render->attach($format);
 
-    $reader = make_reader(new Config);
-    $reader->open(Config::xml_file(), NULL, $readerOpts);
+    $reader = make_reader($config);
+    $reader->open($config->xml_file(), NULL, $readerOpts);
     $render->execute($reader);
 
     $render->detach($format);
@@ -137,23 +138,23 @@ if (requireIndexing(new Config)) {
     v("Skipping indexing", VERBOSE_INDEXING);
 }
 
-foreach((array)Config::package() as $package) {
+foreach((array)$config->package() as $package) {
     $factory = Format_Factory::createFactory($package);
 
     // Default to all output formats specified by the package
-    if (count(Config::output_format()) == 0) {
-        Config::set_output_format((array)$factory->getOutputFormats());
+    if (count($config->output_format()) == 0) {
+        $config->set_output_format((array)$factory->getOutputFormats());
     }
 
     // Register the formats
-    foreach (Config::output_format() as $format) {
+    foreach ($config->output_format() as $format) {
         $render->attach($factory->createFormat($format));
     }
 }
 
 // Render formats
-$reader = make_reader(new Config);
-$reader->open(Config::xml_file(), NULL, $readerOpts);
+$reader = make_reader($config);
+$reader->open($config->xml_file(), NULL, $readerOpts);
 foreach($render as $format) {
     $format->notify(Render::VERBOSE, true);
 }
