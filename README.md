@@ -5,6 +5,12 @@
 PhD is PHP's DocBook rendering system
 which is used to convert the PHP Manual into different output formats.
 
+If you would like to contribute to PHP's documentation please refer to the
+[contribution guidelines](https://github.com/php/doc-base/blob/master/CONTRIBUTING_DOCS.md).
+
+If you would like to know more about how PHP's documentation is built
+and what the different parts of its pipeline are, please refer to the
+[documentation overview](https://github.com/php/doc-base/blob/master/OVERVIEW.md).
 
 ## Requirements
 
@@ -64,6 +70,16 @@ into the default `./output/` directory:
 $ php phd/render.php -d doc-base/.manual.xml -P PHP -f xhtml
 ```
 
+`xhtml` files are standalone files that can be opened directly in a browser.
+To render the documentation in the same `php` format used on the `php.net` website:
+
+```shell
+$ php phd/render.php -d doc-base/.manual.xml -P PHP -f php
+```
+
+Please refer to the appropriate section of the
+[contribution guidelines](https://github.com/php/doc-base/blob/master/CONTRIBUTING_DOCS.md#more-complex-changes--building-the-php-documentation)
+on setting up a local mirror of the PHP documentation.
 
 ## PhD's rendering options
 
