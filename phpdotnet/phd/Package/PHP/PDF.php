@@ -118,7 +118,6 @@ class Package_PHP_PDF extends Package_Generic_PDF {
             break;
 
         case Render::INIT:
-            if (!class_exists("HaruDoc")) die ("PDF output needs libharu & haru/pecl extensions... Please install them and start PhD again.\n");
             $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR);
             if(!file_exists($this->getOutputDir()) || is_file($this->getOutputDir())) mkdir($this->getOutputDir(), 0777, true) or die("Can't create the cache directory.\n");
             break;
@@ -149,8 +148,8 @@ class Package_PHP_PDF extends Package_Generic_PDF {
             $this->cchunk = $this->dchunk;
             $pdfDoc = new PdfWriter();
             try {
-                $pdfDoc->setCompressionMode(\HaruDoc::COMP_ALL);
-            } catch (\HaruException $e) {
+                $pdfDoc->setCompressionMode(Haru_HaruDoc::COMP_ALL);
+            } catch (Haru_HaruException $e) {
                 v("PDF Compression failed, you need to compile libharu with Zlib...", E_USER_WARNING);
             }
             parent::setPdfDoc($pdfDoc);

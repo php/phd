@@ -134,10 +134,10 @@ class PdfWriter {
 
     function __construct($pageWidth = 210, $pageHeight = 297) {
     	// Initialization of properties
-    	$this->haruDoc = new \HaruDoc;
-    	$this->haruDoc->addPageLabel(1, \HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
+    	$this->haruDoc = new Haru_HaruDoc;
+    	$this->haruDoc->addPageLabel(1, Haru_HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
 
-        $this->haruDoc->setPageMode(\HaruDoc::PAGE_MODE_USE_OUTLINE);
+        $this->haruDoc->setPageMode(Haru_HaruDoc::PAGE_MODE_USE_OUTLINE);
         $this->haruDoc->setPagesConfiguration(2);
 
     	// Page format
@@ -157,7 +157,7 @@ class PdfWriter {
     	$this->currentFontSize = 12;
     	$this->currentFontColor = array(0, 0, 0); // Black
     	$this->nextPage();
-    	$this->haruDoc->addPageLabel(1, \HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
+    	$this->haruDoc->addPageLabel(1, Haru_HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
     }
 
     public function getCurrentPage() {
@@ -241,7 +241,7 @@ class PdfWriter {
                     $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
             }
             if ($textToAppend)
-                $this->current["char"] = $textToAppend{strlen($textToAppend)-1};
+                $this->current["char"] = $textToAppend[strlen($textToAppend)-1];
 
             // Offsets for next line
             if (!$isLastLine) {
@@ -302,7 +302,7 @@ class PdfWriter {
         $this->currentPage->textOut(self::HMARGIN + $this->hOffset + $this->permanentLeftSpacing,
             $this->PAGE_HEIGHT - (self::VMARGIN + $this->vOffset), $textToAppend);
         if ($textToAppend)
-            $this->current["char"] = $textToAppend{strlen($textToAppend)-1};
+            $this->current["char"] = $textToAppend[strlen($textToAppend)-1];
 
         $this->hOffset += $this->currentPage->getTextWidth($textToAppend);
 
@@ -531,7 +531,7 @@ class PdfWriter {
         } else {
             $this->pages[$this->currentPageNumber] = $this->haruDoc->addPage();
             $this->currentPage = $this->pages[$this->currentPageNumber];
-            $this->currentPage->setTextRenderingMode(\HaruPage::FILL);
+            $this->currentPage->setTextRenderingMode(Haru_HaruPage::FILL);
             $this->vOffset = $this->currentFontSize;
             $this->hOffset = ($this->hOffset ? $this->hOffset : 0);
             $footerToAppend = true;
@@ -858,18 +858,18 @@ class PdfWriter {
             }
 
             $this->currentPage->moveTo($x, $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["vOffset"]));
-            $this->currentPage->lineTo($x, $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
+            $this->currentPage->lineTo($x, $this->PAGE_HEIGHT - self::VMARGIN - ((int)$this->current["row"]["vPosition"] % (int)$this->PAGE_HEIGHT));
             $this->currentPage->stroke();
             $this->current["vOffset"] = $vOffset;
         }
         // Horizontal line
-        $this->currentPage->moveTo(self::HMARGIN + $this->current["leftSpacing"], $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
+        $this->currentPage->moveTo(self::HMARGIN + $this->current["leftSpacing"], $this->PAGE_HEIGHT - self::VMARGIN - ((int)$this->current["row"]["vPosition"] % (int)$this->PAGE_HEIGHT));
         $this->currentPage->lineTo($this->PAGE_WIDTH - self::HMARGIN - $this->current["rightSpacing"],
-            $this->PAGE_HEIGHT - self::VMARGIN - ($this->current["row"]["vPosition"] % $this->PAGE_HEIGHT));
+            $this->PAGE_HEIGHT - self::VMARGIN - ((int)$this->current["row"]["vPosition"] % (int)$this->PAGE_HEIGHT));
         $this->currentPage->stroke();
 
         // Store position
-        $this->vOffset = $this->current["row"]["vPosition"] % $this->PAGE_HEIGHT;
+        $this->vOffset = (int)$this->current["row"]["vPosition"] % (int)$this->PAGE_HEIGHT;
 
         // Store pages
         $last = array_pop($this->old);

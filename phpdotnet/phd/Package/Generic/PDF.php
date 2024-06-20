@@ -266,7 +266,7 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
         "links-to-resolve"      => array(
             /* $id => array( $target ), */
         ),
-        "refname"               => "",
+        "refname"               => array(),
         "table"                 => false,
         "verbatim-block"        => false,
         "segmentedlist"         => array(
