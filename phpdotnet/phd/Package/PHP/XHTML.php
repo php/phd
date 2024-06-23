@@ -208,8 +208,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'phpdoc'        => 'PI_PHPDOCHandler',
     );
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->myelementmap = array_merge(parent::getDefaultElementMap(), static::getDefaultElementMap());
         $this->mytextmap = array_merge(parent::getDefaultTextMap(), static::getDefaultTextMap());
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());

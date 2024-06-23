@@ -2,8 +2,8 @@
 namespace phpdotnet\phd;
 
 class Package_PEAR_BigXHTML extends Package_PEAR_XHTML {
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("PEAR-BigXHTML");
         $this->setTitle("PEAR Manual");
         $this->setExt(Config::ext() === null ? ".html" : Config::ext());

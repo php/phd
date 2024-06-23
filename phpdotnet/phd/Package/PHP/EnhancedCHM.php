@@ -9,8 +9,8 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
     // Where are the usernotes?
     protected $userNotesBaseDir = null;
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("PHP-EnhancedCHM");
     }
 

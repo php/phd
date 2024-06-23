@@ -97,8 +97,8 @@ class Package_PHP_PDF extends Package_Generic_PDF {
         "root-outline"              => null,
     );
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("PHP-PDF");
         $this->setTitle("PHP Manual");
     }
