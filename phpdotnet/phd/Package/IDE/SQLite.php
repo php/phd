@@ -6,7 +6,8 @@ class Package_IDE_SQLite extends Package_IDE_Base {
     private $sql = array();
     private $db = null;
 
-    public function __construct() {
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName('IDE-SQLite');
         $this->setExt(Config::ext() === null ? ".sqlite" : Config::ext());
     }

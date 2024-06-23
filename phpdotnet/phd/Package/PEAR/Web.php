@@ -14,9 +14,9 @@ namespace phpdotnet\phd;
  */
 class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML
 {
-    public function __construct()
+    public function __construct(Config $config)
     {
-        parent::__construct();
+        parent::__construct($config);
         $this->registerFormatName('PEAR-Web');
         $this->setExt(Config::ext() === null ? '.php' : Config::ext());
     }

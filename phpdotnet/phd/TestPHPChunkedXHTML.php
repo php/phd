@@ -2,6 +2,10 @@
 namespace phpdotnet\phd;
 
 class TestPHPChunkedXHTML extends Package_PHP_ChunkedXHTML {
+    public function __construct(Config $config) {
+        parent::__construct($config);
+    }
+
     public function update($event, $val = null) {
         switch($event) {
         case Render::CHUNK:

@@ -3,7 +3,8 @@ namespace phpdotnet\phd;
 
 class Package_IDE_PHP extends Package_IDE_Base {
 
-    public function __construct() {
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName('IDE-PHP');
         $this->setExt(Config::ext() === null ? ".php" : Config::ext());
     }

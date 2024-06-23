@@ -10,7 +10,7 @@ $xml_file = __DIR__ . "/data/simplelist.xml";
 
 $config->setXml_file($xml_file);
 
-$format = new TestGenericChunkedXHTML;
+$format = new TestGenericChunkedXHTML($config);
 $render = new TestRender(new Reader, $config, $format);
 
 $render->run();

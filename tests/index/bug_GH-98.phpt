@@ -14,7 +14,7 @@ $config->setXml_file($xml_file);
 $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
 
-$index = new TestIndex($indexRepository);
+$index = new TestIndex($indexRepository, $config);
 $render = new TestRender(new Reader, $config, null, $index);
 
 $render->run();

@@ -530,8 +530,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     protected int $exampleCounter = 0;
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerPIHandlers($this->pihandlers);
         $this->setExt(Config::ext() === null ? ".html" : Config::ext());
     }

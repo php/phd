@@ -29,7 +29,7 @@ $indices = [
     ],
 ];
 
-$format = new TestPHPChunkedXHTML;
+$format = new TestPHPChunkedXHTML($config);
 
 foreach ($indices as $index) {
     $format->SQLiteIndex(

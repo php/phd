@@ -14,7 +14,8 @@ class Package_IDE_Funclist extends Format {
     protected $isRefname = false;
     protected $buffer = "";
 
-    public function __construct() {
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("IDE-Funclist");
         $this->setExt(Config::ext() === null ? ".txt" : Config::ext());
     }

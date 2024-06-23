@@ -2,8 +2,8 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_BigPDF extends Package_PHP_PDF {
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("PHP-BigPDF");
     }
 

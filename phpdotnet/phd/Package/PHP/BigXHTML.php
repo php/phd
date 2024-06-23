@@ -2,8 +2,8 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_BigXHTML extends Package_PHP_XHTML {
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("PHP-BigXHTML");
         $this->setTitle("PHP Manual");
         $this->setChunked(false);

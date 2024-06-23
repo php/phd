@@ -14,8 +14,8 @@ abstract class Format_Abstract_XHTML extends Format {
     protected $mediamanager = null;
     protected $lang = 'en';
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
     }
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {

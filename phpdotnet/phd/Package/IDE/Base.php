@@ -76,6 +76,10 @@ abstract class Package_IDE_Base extends Format {
         'seealso'               => array(),
     );
 
+    public function __construct(Config $config){
+        parent::__construct($config);
+    }
+
     public function createLink($for, &$desc = null, $type = Format::SDESC) {}
     public function UNDEF($open, $name, $attrs, $props) {}
     public function TEXT($value) {}

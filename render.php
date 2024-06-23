@@ -124,7 +124,7 @@ $config->set_indexcache($indexRepository);
 if (requireIndexing($config)) {
     v("Indexing...", VERBOSE_INDEXING);
     // Create indexer
-    $format = new Index($config->indexcache());
+    $format = new Index($config->indexcache(), $config);
     $render->attach($format);
 
     $reader = make_reader($config);
@@ -148,7 +148,7 @@ foreach((array)$config->package() as $package) {
 
     // Register the formats
     foreach ($config->output_format() as $format) {
-        $render->attach($factory->createFormat($format));
+        $render->attach($factory->createFormat($format, $config));
     }
 }
 

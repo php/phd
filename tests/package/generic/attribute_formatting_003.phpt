@@ -12,7 +12,7 @@ $config = new Config;
 
 $config->setXml_file($xml_file);
 
-$format = new TestGenericChunkedXHTML;
+$format = new TestGenericChunkedXHTML($config);
 
 $format->SQLiteIndex(
     null, // $context,

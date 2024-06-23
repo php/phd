@@ -2,8 +2,8 @@
 namespace phpdotnet\phd;
 
 class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("Chunked-XHTML");
         $this->setTitle("Index");
         $this->setChunked(true);

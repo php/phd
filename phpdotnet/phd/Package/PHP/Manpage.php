@@ -37,8 +37,8 @@ class Package_PHP_Manpage extends Package_Generic_Manpage {
     /* Default Chunk settings */
     protected $dchunk          = array();
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
 
         $this->registerFormatName("PHP-Functions");
         $this->setTitle("PHP Manual");

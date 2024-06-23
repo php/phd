@@ -194,8 +194,8 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
 	// Project files Output directory
 	protected $chmdir;
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("PEAR-CHM");
     }
 

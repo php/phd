@@ -8,8 +8,8 @@ class Package_PHP_Web extends Package_PHP_XHTML {
     /** $var array<string, array<string, mixed>> */
     protected array $history = [];
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("PHP-Web");
         $this->setTitle("PHP Manual");
         $this->setChunked(true);
