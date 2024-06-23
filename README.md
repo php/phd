@@ -83,75 +83,41 @@ on setting up a local mirror of the PHP documentation.
 
 ## PhD's rendering options
 
-Let's take a closer look at PhD and see what capabilities are available to us.
+The following sections list PhD's the most frequently used options.
+To see the list of all options run PhD with the `-h` \ `--help` option.
 
-```shell
-$ php phd/render.php --help
-PhD version: 1.1.12
-Copyright(c) 2007-2024 The PHP Documentation Group
+### Input
 
-    -v
-    --verbose <int>            Adjusts the verbosity level
-    -f <formatname>
-    --format <formatname>      The build format to use
-    -P <packagename>
-    --package <packagename>    The package to use
-    -I
-    --noindex                  Do not index before rendering but load from cache
-                                (default: false)
-    -M
-    --memoryindex              Do not save indexing into a file, store it in memory.
-                                (default: false)
-    -r
-    --forceindex               Force re-indexing under all circumstances
-                                (default: false)
-    -t
-    --notoc                    Do not rewrite TOC before rendering but load from
-                                cache (default: false)
-    -d <filename>
-    --docbook <filename>       The Docbook file to render from
-    -x
-    --xinclude                 Process XML Inclusions (XInclude)
-                                (default: false)
-    -p <id[=bool]>
-    --partial <id[=bool]>      The ID to render, optionally skipping its children
-                                chunks (default to true; render children)
-    -s <id[=bool]>
-    --skip <id[=bool]>         The ID to skip, optionally skipping its children
-                                chunks (default to true; skip children)
-    -l
-    --list                     Print out the supported packages and formats
-    -o <directory>
-    --output <directory>       The output directory (default: .)
-    -F filename
-    --outputfilename filename  Filename to use when writing standalone formats
-                                (default: <packagename>-<formatname>.<formatext>)
-    -L <language>
-    --lang <language>          The language of the source file (used by the CHM
-                                theme). (default: en)
-    -c <bool>
-    --color <bool>             Enable color output when output is to a terminal
-                                (default: true)
-    -C <filename>
-    --css <filename>           Link for an external CSS file.
-    -g <classname>
-    --highlighter <classname>  Use custom source code highlighting php class
-    -V
-    --version                  Print the PhD version information
-    -h
-    --help                     This help
-    -e <extension>
-    --ext <extension>          The alternative filename extension to use,
-                                including the dot. Use 'false' for no extension.
-    -S <bool>
-    --saveconfig <bool>        Save the generated config (default: false).
+`-d` \ `--docbook` `<filename>`    The Docbook file to render
 
-    -Q
-    --quit                     Don't run the build. Use with --saveconfig to
-                                just save the config.
-    -k
-    --packagedir               Use an external package directory.
-```
+`-p` \ `--partial` `<id[=bool]>`   Partial rendering: the ID to render, optionally skipping its children chunks (default to true; render children)
+
+`-s` \ `--skip` `<id[=bool]>`      Partial rendering: the ID to skip, optionally skipping its children chunks (default to true; skip children)
+
+### Output
+
+`-P` \ `--package` `<packagename>`  The package to use.
+If a package is specified without a format the input file is rendered
+in every format of the package.
+
+`-f` \ `--format` `<formatname>`    The build format to use.
+If no package is specified, the appropriate format of the `Generic` package is used.
+
+`-o` \ `--output` `<directory>`     The output directory (default: .)
+
+### Indexing
+
+`-I` \ `--noindex`       Do not index before rendering but load from cache. (default: false)
+
+`-M` \ `--memoryindex`   Do not save indexing into a file, store it in memory. (default: false)
+
+`-r` \ `--forceindex`    Force re-indexing. (default: false)
+
+### Information
+
+`-h` \ `--help`          Lists all available options.
+
+`-l` \ `--list`          Lists all supported packages and formats.
 
 
 ## Syntax highlighting
