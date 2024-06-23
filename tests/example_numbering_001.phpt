@@ -15,7 +15,7 @@ $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
 $config->set_indexcache($indexRepository);
 
-$index = new TestIndex($indexRepository);
+$index = new TestIndex($indexRepository, $config);
 
 $render = new TestRender(new Reader, $config, null, $index);
 
@@ -27,7 +27,7 @@ echo "Indexes stored:\n";
 
 var_dump($indexes);
 
-$format = new TestGenericChunkedXHTML;
+$format = new TestGenericChunkedXHTML($config);
 
 $render = new TestRender(new Reader, $config, $format);
 

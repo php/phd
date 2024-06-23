@@ -10,7 +10,7 @@ $xml_file = __DIR__ . "/data/bug49101-1.xml";
 
 $config->setXml_file($xml_file);
 
-$format = new TestPHPBigXHTML;
+$format = new TestPHPBigXHTML($config);
 $render = new TestRender(new Reader, $config, $format);
 
 $render->run();

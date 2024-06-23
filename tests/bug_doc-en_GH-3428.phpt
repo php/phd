@@ -15,7 +15,7 @@ $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
 $config->set_indexcache($indexRepository);
 
-$index = new TestIndex($indexRepository);
+$index = new TestIndex($indexRepository, $config);
 
 $render = new TestRender(new Reader, $config, null, $index);
 
@@ -29,9 +29,9 @@ var_dump($indexes);
 
 $render = new TestRender(new Reader, $config);
 
-$format1 = new TestGenericChunkedXHTML;
-$format2 = new TestGenericChunkedXHTML;
-$format3 = new TestGenericChunkedXHTML;
+$format1 = new TestGenericChunkedXHTML($config);
+$format2 = new TestGenericChunkedXHTML($config);
+$format3 = new TestGenericChunkedXHTML($config);
 
 $render->attach($format1);
 $render->attach($format2);
