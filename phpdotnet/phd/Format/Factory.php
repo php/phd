@@ -39,11 +39,11 @@ abstract class Format_Factory {
         return $this->packageName;
     }
 
-    public final function createFormat($format) {
+    public final function createFormat($format, ...$formatParams) {
         if (isset($this->formats[$format]) && $this->formats[$format]) {
             $classname = __NAMESPACE__ . "\\" . $this->formats[$format];
 
-            $obj = new $classname();
+            $obj = new $classname(...$formatParams);
             if (!($obj instanceof Format)) {
                 throw new \Exception("All Formats must inherit Format");
              }

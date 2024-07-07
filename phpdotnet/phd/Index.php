@@ -105,9 +105,12 @@ class Index extends Format
     private $POST_REPLACEMENT_VALUES  = array();
     private int $exampleCounter = 0;
 
-    public function __construct(IndexRepository $indexRepository) {
+    public function __construct(
+        IndexRepository $indexRepository,
+        Config $config
+    ) {
         $this->indexRepository = $indexRepository;
-        parent::__construct();
+        parent::__construct($config);
     }
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {

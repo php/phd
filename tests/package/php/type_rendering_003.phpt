@@ -10,7 +10,7 @@ $xml_file = __DIR__ . "/data/type_rendering_constructorsynopsis_parameters-and-r
 
 $config->setXml_file($xml_file);
 
-$format = new TestPHPChunkedXHTML;
+$format = new TestPHPChunkedXHTML($config);
 $render = new TestRender(new Reader, $config, $format);
 
 $render->run();

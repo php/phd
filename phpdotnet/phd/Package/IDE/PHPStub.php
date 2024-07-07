@@ -2,7 +2,8 @@
 namespace phpdotnet\phd;
 class Package_IDE_PHPStub extends Package_IDE_Base {
 
-    public function __construct() {
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName('IDE-PHPStub');
         $this->setExt(Config::ext() === null ? ".php" : Config::ext());
     }

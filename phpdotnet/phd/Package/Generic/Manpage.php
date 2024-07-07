@@ -256,8 +256,8 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         "firstrefname"          => true,
     );
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
 
         $this->registerFormatName("Generic Unix Manual Pages");
         $this->setExt(Config::ext() === null ? ".3.gz" : Config::ext());

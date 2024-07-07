@@ -131,9 +131,9 @@ abstract class Package_Generic_TocFeed extends Format
     /**
      * Creates a new instance.
      */
-    public function __construct()
+    public function __construct(Config $config)
     {
-        parent::__construct();
+        parent::__construct($config);
         $this->registerFormatName($this->formatName);
         $this->setTitle('Index');
         $this->setChunked(true);

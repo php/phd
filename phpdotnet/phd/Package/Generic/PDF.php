@@ -296,8 +296,8 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
         "callouts"              => 0,
     );
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->setExt(Config::ext() === null ? ".pdf" : Config::ext());
         $this->pdfDoc = new PdfWriter();
     }

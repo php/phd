@@ -4,8 +4,8 @@ namespace phpdotnet\phd;
 class Package_PHP_HowTo extends Package_PHP_Web {
     private $nav = "";
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("PHP-HowTo");
     }
 

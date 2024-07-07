@@ -65,8 +65,8 @@ class Package_PHP_KDevelop extends Format {
     // CHM Index Map
     protected $hhkStream;
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct(Config $config) {
+        parent::__construct($config);
         $this->registerFormatName("PHP-KDevelop");
         $this->setTitle("PHP Manual");
         $this->setExt(Config::ext() === null ? ".php" : Config::ext());

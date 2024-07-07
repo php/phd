@@ -19,7 +19,7 @@ $config->set_indexcache($indexRepository);
 
 
 // Indexing
-$index = new TestIndex($indexRepository);
+$index = new TestIndex($indexRepository, $config);
 $render->attach($index);
 
 $reader = new Reader;
@@ -30,7 +30,7 @@ $render->detach($index);
 
 
 // Rendering
-$format = new TestPHPChunkedXHTML;
+$format = new TestPHPChunkedXHTML($config);
 $render->attach($format);
 
 $reader = new Reader;

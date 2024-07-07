@@ -4,6 +4,10 @@ namespace phpdotnet\phd;
 abstract class Format_Abstract_Manpage extends Format {
     public $role = false;
 
+    public function __construct(Config $config) {
+        parent::__construct($config);
+    }
+
     public function UNDEF($open, $name, $attrs, $props) {
         if ($open) {
             trigger_error("No mapper found for '{$name}'", E_USER_WARNING);

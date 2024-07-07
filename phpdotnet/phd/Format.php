@@ -21,6 +21,8 @@ abstract class Format extends ObjectStorage
      */
     const LDESC = 2;
 
+    protected Config $config;
+
     private $elementmap = array();
     private $textmap = array();
     private $formatname = "UNKNOWN";
@@ -62,7 +64,8 @@ abstract class Format extends ObjectStorage
     */
     protected $CURRENT_ID = "";
 
-    public function __construct() {
+    public function __construct(Config $config) {
+        $this->config = $config;
         if (Config::indexcache()) {
             $this->indexRepository = Config::indexcache();
             if (!($this instanceof Index)) {
