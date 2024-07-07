@@ -10,6 +10,7 @@ if (!defined("__INSTALLDIR__")) {
 
 require_once __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
 require_once __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
+Autoloader::setPackageDirs([__INSTALLDIR__]);
 
 spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
 
@@ -38,6 +39,10 @@ $optionsParser = new Options_Parser(
 $commandLineOptions = $optionsParser->getopt();
 
 $config->init($commandLineOptions);
+
+if (isset($commandLineOptions["package_dirs"])) {
+    Autoloader::setPackageDirs($config->package_dirs());
+}
 
 /* If no docbook file was passed, die */
 if (!is_dir($config->xml_root()) || !is_file($config->xml_file())) {
