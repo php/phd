@@ -1,16 +1,19 @@
 <?php
 namespace phpdotnet\phd;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'Config.php';
-
 class Autoloader
 {
+    /**
+     * @var array<string> Absolute pathnames to package directories
+     */
+    private static array $package_dirs = [];
+
     public static function autoload($name)
     {
         // Only try autoloading classes we know about (i.e. from our own namespace)
         if (strncmp('phpdotnet\phd\\', $name, 14) === 0) {
             $filename = DIRECTORY_SEPARATOR . str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $name) . '.php';
-            foreach(Config::package_dirs() as $dir) {
+            foreach(self::$package_dirs as $dir) {
                 $file = $dir . $filename;
 
                 // Using fopen() because it has use_include_path parameter.
@@ -23,11 +26,16 @@ class Autoloader
 
                 return false;
             }
-            v('Cannot find file for %s: %s', $name, $file, E_USER_ERROR);
+            v('Cannot find file for %s: %s', $name, $file ?? $filename, E_USER_ERROR);
         }
 
         return false;
     }
+
+    /**
+     * @var array<string> Absolute pathnames to package directories
+     */
+    public static function setPackageDirs(array $dirs): void {
+        self::$package_dirs = $dirs;
+    }
 }
-
-
