@@ -46,7 +46,7 @@ abstract class Format extends ObjectStorage
     protected $classes = array();
     protected $examples = array();
 
-    private static $autogen = array();
+    private $autogen = array();
 
     private static $highlighters = array();
 
@@ -66,8 +66,8 @@ abstract class Format extends ObjectStorage
 
     public function __construct(Config $config) {
         $this->config = $config;
-        if (Config::indexcache()) {
-            $this->indexRepository = Config::indexcache();
+        if ($this->config->indexcache()) {
+            $this->indexRepository = $this->config->indexcache();
             if (!($this instanceof Index)) {
                 $this->sortIDs();
             }
@@ -328,28 +328,28 @@ abstract class Format extends ObjectStorage
         return $parsed;
     }
 
-    final public static function autogen($text, $lang = null) {
+    final public function autogen($text, $lang = null) {
         if ($lang == NULL) {
-            $lang = Config::language();
+            $lang = $this->config->language();
         }
-        if (isset(self::$autogen[$lang])) {
-            if (isset(self::$autogen[$lang][$text])) {
-                return self::$autogen[$lang][$text];
+        if (isset($this->autogen[$lang])) {
+            if (isset($this->autogen[$lang][$text])) {
+                return $this->autogen[$lang][$text];
             }
-            if ($lang == Config::fallback_language()) {
+            if ($lang == $this->config->fallback_language()) {
                 throw new \InvalidArgumentException("Cannot autogenerate text for '$text'");
             }
-            return self::autogen($text, Config::fallback_language());
+            return $this->autogen($text, $this->config->fallback_language());
         }
 
-        $filename = Config::lang_dir() . $lang . ".ini";
+        $filename = $this->config->lang_dir() . $lang . ".ini";
 
         if (!file_exists($filename) && strncmp(basename($filename), 'doc-', 4) === 0) {
             $filename = dirname($filename) . DIRECTORY_SEPARATOR . substr(basename($filename), 4);
         }
 
-        self::$autogen[$lang] = parse_ini_file($filename);
-        return self::autogen($text, $lang);
+        $this->autogen[$lang] = parse_ini_file($filename);
+        return $this->autogen($text, $lang);
     }
 
 /* {{{ TOC helper functions */
@@ -516,7 +516,7 @@ abstract class Format extends ObjectStorage
     public function highlight($text, $role = 'php', $format = 'xhtml')
     {
         if (!isset(self::$highlighters[$format])) {
-            $class = Config::highlighter();
+            $class = $this->config->highlighter();
             self::$highlighters[$format] = $class::factory($format);
         }
 

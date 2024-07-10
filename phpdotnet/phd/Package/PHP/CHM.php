@@ -229,16 +229,16 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 
         case Render::INIT:
             $this->loadVersionAcronymInfo();
-            $this->chmdir = Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
+            $this->chmdir = $this->config->output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
             if(!file_exists($this->chmdir) || is_file($this->chmdir)) {
                 mkdir($this->chmdir, 0777, true) or die("Can't create the CHM project directory");
             }
-            $this->outputdir = Config::output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
+            $this->outputdir = $this->config->output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
             $this->postConstruct();
             if(!file_exists($this->outputdir) || is_file($this->outputdir)) {
                 mkdir($this->outputdir, 0777, true) or die("Can't create the cache directory");
             }
-            $lang = Config::language();
+            $lang = $this->config->language();
             $this->hhpStream = fopen($this->chmdir . "php_manual_{$lang}.hhp", "w");
             $this->hhcStream = fopen($this->chmdir . "php_manual_{$lang}.hhc", "w");
             $this->hhkStream = fopen($this->chmdir . "php_manual_{$lang}.hhk", "w");
@@ -261,7 +261,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 
     protected function appendChm($name, $ref, $hasChild) {
         if ($this->flags & Render::OPEN) {
-            $charset = $this->LANGUAGES[Config::language()]["preferred_charset"];
+            $charset = $this->LANGUAGES[$this->config->language()]["preferred_charset"];
             $name = htmlspecialchars(iconv('UTF-8', $charset, html_entity_decode($name, ENT_QUOTES, 'UTF-8')), ENT_QUOTES, $charset);
 
             $this->currentTocDepth++;
@@ -303,7 +303,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 
 
     protected function headerChm() {
-        $lang = Config::language();
+        $lang = $this->config->language();
         fwrite($this->hhpStream, '[OPTIONS]
 Binary TOC=Yes
 Compatibility=1.1 or later
@@ -386,7 +386,7 @@ res' . DIRECTORY_SEPARATOR . 'style.css
     public function format_varlistentry($open, $name, $attrs) {
         if ($open) {
             $this->collectContent($attrs);
-            $charset = $this->LANGUAGES[Config::language()]["preferred_charset"];
+            $charset = $this->LANGUAGES[$this->config->language()]["preferred_charset"];
             $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
 
             if ($content) {

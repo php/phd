@@ -17,7 +17,7 @@ class Package_IDE_Funclist extends Format {
     public function __construct(Config $config) {
         parent::__construct($config);
         $this->registerFormatName("IDE-Funclist");
-        $this->setExt(Config::ext() === null ? ".txt" : Config::ext());
+        $this->setExt($this->config->ext() === null ? ".txt" : $this->config->ext());
     }
 
     public function createLink($for, &$desc = null, $type = Format::SDESC) {}
@@ -39,7 +39,7 @@ class Package_IDE_Funclist extends Format {
             $this->registerTextMap($this->textmap);
             break;
        case Render::FINALIZE:
-            $filename = Config::output_dir() . strtolower($this->getFormatName()) . $this->getExt();
+            $filename = $this->config->output_dir() . strtolower($this->getFormatName()) . $this->getExt();
             file_put_contents($filename, $this->buffer);
             break;
         case Render::VERBOSE:

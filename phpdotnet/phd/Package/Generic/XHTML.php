@@ -533,7 +533,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function __construct(Config $config) {
         parent::__construct($config);
         $this->registerPIHandlers($this->pihandlers);
-        $this->setExt(Config::ext() === null ? ".html" : Config::ext());
+        $this->setExt($this->config->ext() === null ? ".html" : $this->config->ext());
     }
 
     public function getDefaultElementMap() {
@@ -631,7 +631,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     protected function fetchStylesheet($name = null) {
         if (!$this->isChunked()) {
-            foreach ((array)Config::css() as $css) {
+            foreach ((array)$this->config->css() as $css) {
                 if ($style = file_get_contents($css)) {
                     $this->stylesheets[] = $style;
                 } else {
@@ -642,7 +642,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         $stylesDir = $this->getOutputDir();
         if (!$stylesDir) {
-            $stylesDir = Config::output_dir();
+            $stylesDir = $this->config->output_dir();
         }
         $stylesDir .= 'styles/';
         if (file_exists($stylesDir)) {
@@ -654,7 +654,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 v("Can't create the styles/ directory.", E_USER_ERROR);
             }
         }
-        foreach ((array)Config::css() as $css) {
+        foreach ((array)$this->config->css() as $css) {
             $basename = basename($css);
             $dest = md5(substr($css, 0, -strlen($basename))) . '-' . $basename;
             if (@copy($css, $stylesDir . $dest)) {

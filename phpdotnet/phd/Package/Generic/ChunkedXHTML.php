@@ -70,7 +70,7 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
                 return; //Don't create output dir when rendering to buffer
             }
 
-            $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            $this->setOutputDir($this->config->output_dir() . strtolower($this->getFormatName()) . '/');
             $this->postConstruct();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
@@ -81,7 +81,7 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
-            if (Config::css()) {
+            if ($this->config->css()) {
                 $this->fetchStylesheet();
             }
             break;
@@ -93,7 +93,7 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
 
     public function header($id) {
         $title = $this->getLongDescription($id);
-        $lang = Config::language();
+        $lang = $this->config->language();
         $root = Format::getRootIndex();
         static $cssLinks = null;
         if ($cssLinks === null) {

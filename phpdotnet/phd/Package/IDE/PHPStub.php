@@ -5,7 +5,7 @@ class Package_IDE_PHPStub extends Package_IDE_Base {
     public function __construct(Config $config) {
         parent::__construct($config);
         $this->registerFormatName('IDE-PHPStub');
-        $this->setExt(Config::ext() === null ? ".php" : Config::ext());
+        $this->setExt($this->config->ext() === null ? ".php" : $this->config->ext());
     }
 
     public function parseFunction() {

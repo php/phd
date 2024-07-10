@@ -6,7 +6,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
         parent::__construct($config);
         $this->registerFormatName("PEAR-Chunked-XHTML");
         $this->setTitle("PEAR Manual");
-        $this->setExt(Config::ext() === null ? ".html" : Config::ext());
+        $this->setExt($this->config->ext() === null ? ".html" : $this->config->ext());
         $this->setChunked(true);
     }
 
@@ -68,7 +68,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
             break;
 
         case Render::INIT:
-            $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            $this->setOutputDir($this->config->output_dir() . strtolower($this->getFormatName()) . '/');
             $this->postConstruct();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
@@ -79,7 +79,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
                     v("Can't create output directory", E_USER_ERROR);
                 }
             }
-            if (Config::css()) {
+            if ($this->config->css()) {
                 $this->fetchStylesheet();
             }
             break;
@@ -100,7 +100,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
     */
     public function header($id) {
         $title = $this->getShortDescription($id);
-        $lang = Config::language();
+        $lang = $this->config->language();
         static $cssLinks = null;
         if ($cssLinks === null) {
             $cssLinks = $this->createCSSLinks();

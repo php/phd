@@ -17,7 +17,7 @@ class Package_PHP_BigPDF extends Package_PHP_PDF {
             break;
 
         case Render::INIT:
-            $this->setOutputDir(Config::output_dir());
+            $this->setOutputDir($this->config->output_dir());
             break;
 
         case Render::VERBOSE:
@@ -53,8 +53,8 @@ class Package_PHP_BigPDF extends Package_PHP_PDF {
             v("Writing Full PDF Manual (%s)", $this->cchunk["setname"], VERBOSE_TOC_WRITING);
 
             $filename = $this->getOutputDir();
-            if (Config::output_filename()) {
-                $filename .= Config::output_filename();
+            if ($this->config->output_filename()) {
+                $filename .= $this->config->output_filename();
             } else {
                 $filename .= strtolower($this->getFormatName()) . $this->getExt();
             }

@@ -39,9 +39,9 @@ HEADER;
     }
 
     public function createFileName() {
-        $filename = Config::output_dir();
-        if (Config::output_filename()) {
-            $filename .= Config::output_filename();
+        $filename = $this->config->output_dir();
+        if ($this->config->output_filename()) {
+            $filename .= $this->config->output_filename();
         } else {
             $filename .= strtolower($this->getFormatName()) . $this->getExt();
         }
@@ -90,7 +90,7 @@ HEADER;
             if ($val) {
                 $this->loadVersionAcronymInfo();
                 $this->postConstruct();
-                if (Config::css()) {
+                if ($this->config->css()) {
                     $this->fetchStylesheet();
                 }
                 $this->createOutputFile();
