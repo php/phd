@@ -18,7 +18,7 @@ class Package_PEAR_Web extends Package_PEAR_ChunkedXHTML
     {
         parent::__construct($config);
         $this->registerFormatName('PEAR-Web');
-        $this->setExt(Config::ext() === null ? '.php' : Config::ext());
+        $this->setExt($this->config->ext() === null ? '.php' : $this->config->ext());
     }
 
     public function __destruct()

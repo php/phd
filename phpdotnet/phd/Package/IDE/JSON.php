@@ -6,7 +6,7 @@ class Package_IDE_JSON extends Package_IDE_Base {
     public function __construct(Config $config) {
         parent::__construct($config);
         $this->registerFormatName('IDE-JSON');
-        $this->setExt(Config::ext() === null ? ".json" : Config::ext());
+        $this->setExt($this->config->ext() === null ? ".json" : $this->config->ext());
     }
 
     public function parseFunction() {

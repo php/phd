@@ -21,7 +21,7 @@ class Package_PHP_HowTo extends Package_PHP_Web {
             parent::update($event, $val);
             break;
         case Render::INIT:
-            $this->setOutputDir(Config::output_dir() . strtolower($this->getFormatName()) . '/');
+            $this->setOutputDir($this->config->output_dir() . strtolower($this->getFormatName()) . '/');
             $this->postConstruct();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {

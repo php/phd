@@ -215,8 +215,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
         $this->registerPIHandlers($this->pihandlers);
 
-        if (Config::css() === []) {
-            Config::setCss(array(
+        if ($this->config->css() === []) {
+            $this->config->setCss(array(
                 "http://www.php.net/styles/theme-base.css",
                 "http://www.php.net/styles/theme-medium.css",
             ));
@@ -236,9 +236,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function loadVersionAcronymInfo() {
-        $this->versions = self::generateVersionInfo(Config::phpweb_version_filename());
-        $this->deprecated = self::generateDeprecatedInfo(Config::phpweb_version_filename());
-        $this->acronyms = self::generateAcronymInfo(Config::phpweb_acronym_filename());
+        $this->versions = self::generateVersionInfo($this->config->phpweb_version_filename());
+        $this->deprecated = self::generateDeprecatedInfo($this->config->phpweb_version_filename());
+        $this->acronyms = self::generateAcronymInfo($this->config->phpweb_acronym_filename());
     }
 
     public static function generateVersionInfo($filename) {

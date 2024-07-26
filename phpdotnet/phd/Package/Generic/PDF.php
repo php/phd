@@ -298,7 +298,7 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
 
     public function __construct(Config $config) {
         parent::__construct($config);
-        $this->setExt(Config::ext() === null ? ".pdf" : Config::ext());
+        $this->setExt($this->config->ext() === null ? ".pdf" : $this->config->ext());
         $this->pdfDoc = new PdfWriter();
     }
 
@@ -1131,7 +1131,7 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
     public function format_imagedata($open, $name, $attrs, $props) {
         if ($props["empty"] && isset($this->cchunk["xml-base"]) && ($base = $this->cchunk["xml-base"]) &&
             isset($attrs[Reader::XMLNS_DOCBOOK]["fileref"]) && ($fileref = $attrs[Reader::XMLNS_DOCBOOK]["fileref"])) {
-            $imagePath = Config::xml_root() . DIRECTORY_SEPARATOR . $base . $fileref;
+            $imagePath = $this->config->xml_root() . DIRECTORY_SEPARATOR . $base . $fileref;
             if (file_exists($imagePath))
                 $this->pdfDoc->add(PdfWriter::IMAGE, $imagePath);
 

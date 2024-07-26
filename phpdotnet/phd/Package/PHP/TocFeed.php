@@ -136,7 +136,7 @@ class Package_PHP_TocFeed extends Package_Generic_TocFeed
     {
         parent::__construct($config);
 
-        $language = Config::language();
+        $language = $this->config->language();
         $variables = array('targetBaseUri', 'feedBaseUri', 'idprefix');
         foreach ($variables as $varname) {
             $this->$varname = str_replace(

@@ -6,7 +6,7 @@ class Package_IDE_XML extends Package_IDE_Base {
     public function __construct(Config $config) {
         parent::__construct($config);
         $this->registerFormatName('IDE-XML');
-        $this->setExt(Config::ext() === null ? ".xml" : Config::ext());
+        $this->setExt($this->config->ext() === null ? ".xml" : $this->config->ext());
     }
 
     public function parseFunction() {
