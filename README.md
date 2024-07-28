@@ -99,9 +99,13 @@ To see the list of all options run PhD with the `-h` \ `--help` option.
 `-P` \ `--package` `<packagename>`  The package to use.
 If a package is specified without a format the input file is rendered
 in every format of the package.
+For a list of supported packages, see the list of
+[Supported output formats](#supported-output-formats).
 
 `-f` \ `--format` `<formatname>`    The build format to use.
 If no package is specified, the appropriate format of the `Generic` package is used.
+For a list of supported formats, see the list of
+[Supported output formats](#supported-output-formats)
 
 `-o` \ `--output` `<directory>`     The output directory (default: .)
 
@@ -171,3 +175,71 @@ on how to implement your own highlighter.
 
 Once you wrote your custom source code highlighting class, it's time to
 [try it out](#syntax-highlighting).
+
+## Supported output formats
+
+PhD currently supports the following output formats:
+
+<table>
+  <tr>
+    <td><b>PACKAGE</b></td>
+    <td><b>Generic</b></td>
+    <td><b>IDE</b></td>
+    <td><b>PEAR</b></td>
+    <td><b>PHP</b></td>
+  </tr>
+  <tr>
+    <td rowspan="12"><b>FORMAT</b></td>
+    <td>xhtml</td>
+    <td>xml</td>
+    <td>xhtml</td>
+    <td>xhtml</td>
+  </tr>
+  <tr>
+    <td>bigxhtml</td>
+    <td>funclist</td>
+    <td>bigxhtml</td>
+    <td>bigxhtml</td>
+  </tr>
+  <tr>
+    <td>manpage</td>
+    <td>json</td>
+    <td>php</td>
+    <td>php</td>
+  </tr>
+  <tr>
+    <td rowspan="9"></td>
+    <td>php</td>
+    <td>chm</td>
+    <td>chm</td>
+  </tr>
+  <tr>
+    <td>phpstub</td>
+    <td>tocfeed</td>
+    <td>tocfeed</td>
+  </tr>
+  <tr>
+    <td>sqlite</td>
+    <td rowspan="7"></td>
+    <td>manpage</td>
+  </tr>
+  <tr>
+    <td rowspan="6"></td>
+    <td>howto</td>
+  </tr>
+  <tr>
+    <td>pdf</td>
+  </tr>
+  <tr>
+    <td>bigpdf</td>
+  </tr>
+  <tr>
+    <td>kdevelop</td>
+  </tr>
+  <tr>
+    <td>epub</td>
+  </tr>
+  <tr>
+    <td>enhancedchm</td>
+  </tr>
+</table>
