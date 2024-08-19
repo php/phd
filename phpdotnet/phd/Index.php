@@ -63,9 +63,9 @@ class Index extends Format
     'titleabbrev'           => 'format_short_desc',
     'example'               => 'format_example',
     'refsect1'              => 'format_refsect1',
-    'tbody'                 => array(
+    'row'                   => array(
         /* DEFAULT */          null,
-        'row'               => 'format_row',
+        'tbody'             => 'format_row',
     ),
     'entry'                 => array(
         /* DEFAULT */          null,
