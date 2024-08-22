@@ -103,14 +103,16 @@ SQL;
         $log = "";
         foreach($changelog as $id => $arr) {
             foreach($arr as $entry) {
-                $log .= sprintf(
-                    "INSERT INTO changelogs (membership, docbook_id, parent_id, version, description) VALUES('%s', '%s', '%s', '%s', '%s');\n",
-                    $this->db->escapeString($entry[0] ?? ''),
-                    $this->db->escapeString($id),
-                    $this->db->escapeString($entry[1]),
-                    $this->db->escapeString($entry[2]),
-                    $this->db->escapeString($entry[3])
-                );
+                foreach(preg_split('/,\s+/', $entry[2]) as $version) {
+                    $log .= sprintf(
+                        "INSERT INTO changelogs (membership, docbook_id, parent_id, version, description) VALUES('%s', '%s', '%s', '%s', '%s');\n",
+                        $this->db->escapeString($entry[0] ?? ''),
+                        $this->db->escapeString($id),
+                        $this->db->escapeString($entry[1]),
+                        $this->db->escapeString($version),
+                        $this->db->escapeString($entry[3])
+                    );
+                }
             }
         }
         $this->db->exec('BEGIN TRANSACTION; ' . $log. ' COMMIT');
