@@ -5,3 +5,4 @@ vendor
 *.tgz
 *.tar
 *.zip
+run-tests.php
