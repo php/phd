@@ -108,12 +108,31 @@
   <title>The <interfacename>Traversable</interfacename> interface</title>
   <titleabbrev>Traversable</titleabbrev>
   <partintro>
-   <section role="changelog">
+   <refsect1 role="changelog">
     <title xmlns="http://docbook.org/ns/docbook">Changelog</title>
     <para>
-     Changes
+     <informaltable>
+      <tgroup cols="2">
+       <thead>
+        <row>
+         <entry>Version</entry>
+         <entry>Description</entry>
+        </row>
+       </thead>
+       <tbody>
+        <row>
+         <entry>7.3.4, 8.0.0</entry>
+         <entry>Something happened.</entry>
+        </row>
+        <row>
+         <entry>PECL example 3.5.4</entry>
+         <entry>Something happened in PECL.</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </informaltable>
     </para>
-   </section>
+   </refsect1>
   </partintro>
  </phpdoc:classref>
 

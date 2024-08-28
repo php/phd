@@ -98,7 +98,7 @@ class Index extends Format
     private $inChangelog = false;
     private $currentChangelog = array();
     private string $currentChangeLogString = "";
-    private $changelog        = array();
+    protected $changelog       = array();
     private $currentMembership = null;
     private $commit     = array();
     private $POST_REPLACEMENT_INDEXES = array();

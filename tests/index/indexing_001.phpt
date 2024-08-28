@@ -24,6 +24,12 @@ $indexes = array_keys($index->getNfo());
 echo "Indexes stored:\n";
 
 var_dump($indexes);
+
+$changelog = array_keys($index->getChangelog());
+
+echo "Changelog stored:\n";
+
+var_dump($changelog);
 ?>
 --EXPECT--
 Indexes stored:
@@ -57,5 +63,10 @@ array(15) {
   [13]=>
   string(19) "reserved.interfaces"
   [14]=>
+  string(17) "class.traversable"
+}
+Changelog stored:
+array(1) {
+  [0]=>
   string(17) "class.traversable"
 }
