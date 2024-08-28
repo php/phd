@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="constants">
+ <section>
+  <para>Constant within a table (GH-87)</para>
+  <para>
+   <informaltable>
+    <tgroup cols="1">
+     <thead>
+      <row>
+       <entry>Header</entry>
+      </row>
+     </thead>
+     <tbody>
+      <row xml:id="constant.defined">
+       <entry><constant>CONSTANT_IS_DEFINED</constant></entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </informaltable>
+  </para>
+ </section>
+ <section>
+  <para>
+   <link linkend="constant.defined">CONSTANT_IS_DEFINED</link>
+  </para>
+ </section>
+</chapter>
