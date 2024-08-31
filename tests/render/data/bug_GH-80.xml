@@ -7,6 +7,7 @@
  </refentry>
 
  <refentry xml:id="test-class" role="class">
+  <titleabbrev>Example</titleabbrev>
   <classsynopsis class="class">
    <ooclass>
     <classname>Example</classname>

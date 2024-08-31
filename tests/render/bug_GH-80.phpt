@@ -53,6 +53,7 @@ Content:
 Filename: test-class.html
 Content:
 <div id="test-class" class="reference">
+  
   <div class="classsynopsis"><div class="classsynopsisinfo">
    
     <span class="modifier">class</span> <strong class="classname"><strong class="classname">Example</strong></strong>
