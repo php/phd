@@ -1,4 +1,4 @@
-<refentry xml:id="bug_GH-80">
+<refentry xmlns="http://docbook.org/ns/docbook" xml:id="bug_GH-80">
  <refentry xml:id="test-function">
   <refnamediv>
    <refname>test_function</refname>
