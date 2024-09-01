@@ -541,21 +541,21 @@ class Options_Handler implements Options_Interface
   --package <packagename>    The package to use
   -I
   --noindex                  Do not index before rendering but load from cache
-                             (default: false)
+                             (default: " . ($this->config->noindex() ? 'true' : 'false') . ")
   -M
   --memoryindex              Do not save indexing into a file, store it in memory.
-                             (default: false)
+                             (default: " . ($this->config->memoryindex() ? 'true' : 'false') . ")
   -r
   --forceindex               Force re-indexing under all circumstances
-                             (default: false)
+                             (default: " . ($this->config->forceindex() ? 'true' : 'false') . ")
   -t
   --notoc                    Do not rewrite TOC before rendering but load from
-                             cache (default: false)
+                             cache (default: " . ($this->config->notoc() ? 'true' : 'false') . ")
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -x
   --xinclude                 Process XML Inclusions (XInclude)
-                             (default: false)
+                             (default: " . ($this->config->xinclude() ? 'true' : 'false') . ")
   -p <id[=bool]>
   --partial <id[=bool]>      The ID to render, optionally skipping its children
                              chunks (default to true; render children)
@@ -565,13 +565,13 @@ class Options_Handler implements Options_Interface
   -l
   --list                     Print out the supported packages and formats
   -o <directory>
-  --output <directory>       The output directory (default: .)
+  --output <directory>       The output directory (default: " . $this->config->output_dir() . ")
   -F filename
   --outputfilename filename  Filename to use when writing standalone formats
                              (default: <packagename>-<formatname>.<formatext>)
   -L <language>
   --lang <language>          The language of the source file (used by the CHM
-                             theme). (default: en)
+                             theme). (default: " . $this->config->language() . ")
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal
                              (default: " . ($this->config->color_output() ? 'true' : 'false') . ")
@@ -587,11 +587,11 @@ class Options_Handler implements Options_Interface
   --ext <extension>          The alternative filename extension to use,
                              including the dot. Use 'false' for no extension.
   -S <bool>
-  --saveconfig <bool>        Save the generated config (default: false).
+  --saveconfig <bool>        Save the generated config (default: " . ($this->config->saveconfig() ? 'true' : 'false') . ").
 
   -Q
   --quit                     Don't run the build. Use with --saveconfig to
-                             just save the config.
+                             just save the config (default: " . ($this->config->quit() ? 'true' : 'false') . ").
   -k
   --packagedir               Use an external package directory.
 
