@@ -93,7 +93,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
             }
             if ($this->getFormatName() == "PHP-Web") {
                 if (!$this->config->no_toc() && is_dir($this->getOutputDir() . 'toc')) {
-                    removeDir($this->getOutputDir() . 'toc');
+                    $this->removeDir($this->getOutputDir() . 'toc');
                 }
                 if (!file_exists($this->getOutputDir() . "toc") || is_file($this->getOutputDir() . "toc")) {
                     mkdir($this->getOutputDir() . "toc", 0777, true) or die("Can't create the toc directory");
@@ -107,6 +107,19 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
         	break;
         }
+    }
+
+    /* {{{ Removes a directory, recursively. Taken from: http://php.net/is_link */
+    private function removeDir($path) {
+        $dir = new \DirectoryIterator($path);
+        foreach ($dir as $fileinfo) {
+            if ($fileinfo->isFile() || $fileinfo->isLink()) {
+                \unlink($fileinfo->getPathName());
+            } elseif (!$fileinfo->isDot() && $fileinfo->isDir()) {
+                $this->removeDir($fileinfo->getPathName());
+            }
+        }
+        \rmdir($path);
     }
 
     public function header($id) {
