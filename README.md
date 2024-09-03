@@ -12,6 +12,14 @@ which is used to convert the PHP Manual into different output formats.
 - DOM, libXML2, XMLReader and SQLite3.
 
 
+## Running the test suite
+
+Running the test suite uses the same test runner as the `php-src` repository.
+
+```shell
+$ make test
+```
+
 ## Rendering the PHP Documentation Sources
 
 To render the PHP documentation, you will need to clone the
