@@ -10,7 +10,7 @@ class TestRender extends Render {
     ) {}
 
     public function run() {
-        if ($this->index && $this->config->requireIndexing()) {
+        if ($this->index && $this->config->requiresIndexing()) {
             if (!file_exists($this->config->output_dir())) {
                 mkdir($this->config->output_dir(), 0755);
             }

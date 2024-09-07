@@ -126,7 +126,7 @@ if ($initializeDb) {
 $config->set_indexcache($indexRepository);
 
 // Indexing
-if ($config->requireIndexing()) {
+if ($config->requiresIndexing()) {
     v("Indexing...", VERBOSE_INDEXING);
     // Create indexer
     $format = new Index($config->indexcache(), $config);

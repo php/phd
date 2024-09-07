@@ -200,7 +200,7 @@ class Config
      *
      * @return boolean True if indexing is required.
      */
-    public function requireIndexing(): bool {
+    public function requiresIndexing(): bool {
         if (! $this->indexcache()) {
             $indexfile = $this->output_dir() . 'index.sqlite';
             if (!\file_exists($indexfile)) {
