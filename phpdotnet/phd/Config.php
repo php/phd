@@ -11,10 +11,6 @@ class Config
 
     private static $optionArrayDefault = array(
         'output_format'     => array(),
-        'chunk_extra'       => array(
-            'legalnotice'      => true,
-            'phpdoc:exception' => true,
-        ),
         'no_index'          => false,
         'force_index'       => false,
         'no_toc'            => false,
@@ -33,7 +29,6 @@ class Config
         'color_output'      => true,
         'output_dir'        => './output/',
         'output_filename'   => '',
-        'intermediate_output_dir' => '.',
         'php_error_output'  => STDERR,
         'php_error_color'   => '01;31', // Red
         'user_error_output' => STDERR,
