@@ -50,7 +50,7 @@ Copyright(c) %d-%d The PHP Documentation Group
   -l
   --list                     Print out the supported packages and formats
   -o <directory>
-  --output <directory>       The output directory (default: .)
+  --output <directory>       The output directory (default: %s)
   -F filename
   --outputfilename filename  Filename to use when writing standalone formats
                              (default: <packagename>-<formatname>.<formatext>)
@@ -76,7 +76,7 @@ Copyright(c) %d-%d The PHP Documentation Group
 
   -Q
   --quit                     Don't run the build. Use with --saveconfig to
-                             just save the config.
+                             just save the config (default: %s).
   -k
   --packagedir               Use an external package directory.
 
