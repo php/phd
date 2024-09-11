@@ -55,20 +55,6 @@ function term_color($text, $color)
 }
 /* }}} */
 
-/* {{{ Removes a directory, recursively. Taken from: http://php.net/is_link */
-function removeDir($path) {
-    $dir = new \DirectoryIterator($path);
-    foreach ($dir as $fileinfo) {
-        if ($fileinfo->isFile() || $fileinfo->isLink()) {
-            unlink($fileinfo->getPathName());
-        } elseif (!$fileinfo->isDot() && $fileinfo->isDir()) {
-            removeDir($fileinfo->getPathName());
-        }
-    }
-    rmdir($path);
-}
-/* }}} */
-
 /* {{{ The PhD errorhandler */
 function errh($errno, $msg, $file, $line, $ctx = null) {
     static $err = array(
