@@ -182,4 +182,43 @@ class Config
         return sprintf('Copyright(c) 2007-%s The PHP Documentation Group', date('Y'));
     }
 
+    /**
+     * Checks if indexing is needed.
+     *
+     * This is determined the following way:
+     * 0. If no index file exists, indexing is required.
+     * 1. If the config option --no-index is supplied, nothing is indexed
+     * 2. If the config option --force-index is supplied, indexing is required
+     * 3. If no option is given, the file modification time of the index and
+     *    the manual docbook file are compared. If the index is older than
+     *    the docbook file, indexing will be done.
+     *
+     * @return boolean True if indexing is required.
+     */
+    public function requiresIndexing(): bool {
+        if (! $this->indexcache()) {
+            $indexfile = $this->output_dir() . 'index.sqlite';
+            if (!\file_exists($indexfile)) {
+                return true;
+            }
+        }
+
+        if ($this->no_index()) {
+            return false;
+        }
+
+        if ($this->force_index()) {
+            return true;
+        }
+
+        if ($this->indexcache()->getIndexingTimeCount() === 0) {
+            return true;
+        }
+
+        $xmlLastModification = \filemtime($this->xml_file());
+        if ($this->indexcache()->getIndexingTime() > $xmlLastModification) {
+            return false;
+        }
+        return true;
+    }
 }
