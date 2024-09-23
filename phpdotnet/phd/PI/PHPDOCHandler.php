@@ -118,7 +118,7 @@ class PI_PHPDOCHandler extends PIHandler {
     // usort() callback function used in generate-changelog-for, higest (newest) version first
     // 1.2.11 comes before 1.2.2, then function name (actually its id.. but close enough :))
     protected static function _sortByVersion($a, $b) {
-        $retval = -1 * strnatcasecmp($a["version"], $b["version"]);
+        $retval = -1 * version_compare($a["version"], $b["version"]);
 
         if ($retval === 0) {
             return strnatcasecmp($a["docbook_id"], $b["docbook_id"]);
@@ -138,7 +138,7 @@ class PI_PHPDOCHandler extends PIHandler {
 
         $version = "";
         foreach($changelogs as $entry) {
-            if (!$this->_changelogSince || strnatcasecmp($entry["version"], $this->_changelogSince) >= 0) {
+            if (!$this->_changelogSince || version_compare($entry["version"], $this->_changelogSince) >= 0) {
                 $link = $this->format->createLink($entry["docbook_id"], $desc);
                 if ($version == $entry["version"]) {
                     $v = "&nbsp;";

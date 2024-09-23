@@ -63,9 +63,9 @@ class Index extends Format
     'titleabbrev'           => 'format_short_desc',
     'example'               => 'format_example',
     'refsect1'              => 'format_refsect1',
-    'tbody'                 => array(
+    'row'                   => array(
         /* DEFAULT */          null,
-        'row'               => 'format_row',
+        'tbody'             => 'format_row',
     ),
     'entry'                 => array(
         /* DEFAULT */          null,
@@ -98,7 +98,7 @@ class Index extends Format
     private $inChangelog = false;
     private $currentChangelog = array();
     private string $currentChangeLogString = "";
-    private $changelog        = array();
+    protected $changelog       = array();
     private $currentMembership = null;
     private $commit     = array();
     private $POST_REPLACEMENT_INDEXES = array();
@@ -419,17 +419,19 @@ class Index extends Format
             $this->currentChangelog[] = htmlentities(trim($this->currentChangeLogString), ENT_COMPAT, "UTF-8");
         }
     }
+
     public function format_row($open, $name, $attrs, $props) {
-        if ($open) {
-            if ($this->inChangelog) {
-                end($this->ids); prev($this->ids);
-                $this->currentChangelog = array($this->currentMembership, current($this->ids));
-            }
-            return;
-        }
         if ($this->inChangelog) {
-            $this->changelog[$this->currentid][] = $this->currentChangelog;
+            if ($open) {
+                $parent_id = $this->ids[count($this->ids) - 2];
+                $this->currentChangelog = array($this->currentMembership, $parent_id);
+            } else {
+                $this->changelog[$this->currentid][] = $this->currentChangelog;
+            }
         }
+
+        /* Fall back to regular handling so contents get processed */
+        return $this->UNDEF($open, $name, $attrs, $props);
     }
 
     public function processFilename() {
