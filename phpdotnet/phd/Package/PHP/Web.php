@@ -232,6 +232,8 @@ contributors($setup);
                 $index["sdesc"] = $index["ldesc"];
 
                 $parentId = $index['parent_id'];
+                // isset() to guard against undefined array keys, either for root
+                // elements (no parent) or in case the index structure is broken.
                 while (isset($this->indexes[$parentId])) {
                     $parent = $this->indexes[$parentId];
                     if ($parent['element'] == 'book') {
