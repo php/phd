@@ -228,7 +228,7 @@ contributors($setup);
                 continue;
             }
 
-            if (empty($index["sdesc"]) && !empty($index["ldesc"])) {
+            if ($index["sdesc"] === "" && $index["ldesc"] !== "") {
                 $index["sdesc"] = $index["ldesc"];
 
                 $parentId = $index['parent_id'];
