@@ -63,10 +63,15 @@ class Highlighter
 
         if ($role == 'php') {
             try {
-                return strtr(highlight_string($text, 1), [
-                    '&nbsp;' => ' ',
-                    "\n" => '',
-                ]);
+                $highlight = highlight_string($text, true);
+                if (PHP_VERSION_ID >= 80300) {
+                    return $highlight;
+                } else {
+                    return strtr($highlight, [
+                        '&nbsp;' => ' ',
+                        "\n" => '',
+                    ]);
+                }
             } catch (\ParseException $e) {
                 v("Parse error while highlighting PHP code: %s\nText: %s", (string) $e, $text, E_USER_WARNING);
 
