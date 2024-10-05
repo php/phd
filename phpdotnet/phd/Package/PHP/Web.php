@@ -236,7 +236,7 @@ contributors($setup);
                 // elements (no parent) or in case the index structure is broken.
                 while (isset($this->indexes[$parentId])) {
                     $parent = $this->indexes[$parentId];
-                    if ($parent['element'] == 'book') {
+                    if ($parent['element'] === 'book') {
                         $index["ldesc"] = Format::getLongDescription($parent['docbook_id']);
                         break;
                     }
