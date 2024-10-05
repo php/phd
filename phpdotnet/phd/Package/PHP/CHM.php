@@ -387,7 +387,7 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         if ($open) {
             $this->collectContent($attrs);
             $charset = $this->LANGUAGES[$this->config->language()]["preferred_charset"];
-            $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"]), ENT_QUOTES);
+            $content = htmlspecialchars(iconv('UTF-8', $charset, $this->lastContent["name"] ?? ""), ENT_QUOTES);
 
             if ($content) {
                 fwrite($this->hhkStream,
