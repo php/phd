@@ -224,17 +224,13 @@ contributors($setup);
         $ids = array();
         $desc = array();
         foreach($this->indexes as $id => $index) {
-            // Skip indexes that are not chunks
             if (!$index["chunk"]) {
                 continue;
             }
 
-            // Handle items with long description but no short description
             if (empty($index["sdesc"]) && !empty($index["ldesc"])) {
-                // Use long desc as short desc
                 $index["sdesc"] = $index["ldesc"];
 
-                // Find the parent book and use its long desc
                 $parentId = $index['parent_id'];
                 while (isset($this->indexes[$parentId])) {
                     $parent = $this->indexes[$parentId];
