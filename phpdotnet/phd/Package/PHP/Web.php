@@ -237,6 +237,26 @@ contributors($setup);
         $ids = array();
         $desc = array();
         foreach($this->indexes as $id => $index) {
+            if (!$index["chunk"]) {
+                continue;
+            }
+
+            if ($index["sdesc"] === "" && $index["ldesc"] !== "") {
+                $index["sdesc"] = $index["ldesc"];
+
+                $parentId = $index['parent_id'];
+                // isset() to guard against undefined array keys, either for root
+                // elements (no parent) or in case the index structure is broken.
+                while (isset($this->indexes[$parentId])) {
+                    $parent = $this->indexes[$parentId];
+                    if ($parent['element'] === 'book') {
+                        $index["ldesc"] = Format::getLongDescription($parent['docbook_id']);
+                        break;
+                    }
+                    $parentId = $parent['parent_id'];
+                }
+            }
+
             $ids[] = array($index["sdesc"], $index["filename"], $index["element"]);
             $desc[$id] = $index["ldesc"];
         }
