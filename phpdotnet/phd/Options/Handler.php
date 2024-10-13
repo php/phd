@@ -74,7 +74,7 @@ class Options_Handler implements Options_Interface
     public function option_format(string $k, mixed $v): array
     {
         $formats = [];
-        foreach((array)$v as $i => $val) {
+        foreach((array)$v as $val) {
             if (!in_array($val, $formats)) {
                 $formats[] = $val;
             }
@@ -319,7 +319,7 @@ class Options_Handler implements Options_Interface
     public function option_skip(string $k, mixed $v): array
     {
         $skip_ids = $this->config->skip_ids();
-        foreach((array)$v as $i => $val) {
+        foreach((array)$v as $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
                 list($val, $recursive) = explode("=", $val);
@@ -370,7 +370,7 @@ class Options_Handler implements Options_Interface
     {
         static $verbose = 0;
 
-        foreach((array)$v as $i => $val) {
+        foreach((array)$v as $val) {
             foreach(explode("|", $val) as $const) {
                 if (defined($const)) {
                     $verbose |= (int)constant($const);
@@ -452,7 +452,7 @@ class Options_Handler implements Options_Interface
     public function option_css(string $k, mixed $v): array
     {
         $styles = [];
-        foreach((array)$v as $key => $val) {
+        foreach((array)$v as $val) {
             if (!in_array($val, $styles)) {
                 $styles[] = $val;
             }
@@ -474,7 +474,7 @@ class Options_Handler implements Options_Interface
     public function option_packagedir(string $k, mixed $v): array
     {
         $packages = $this->config->package_dirs();
-        foreach((array)$v as $key => $val) {
+        foreach((array)$v as $val) {
             if ($path = realpath($val)) {
                 if (!in_array($path, $packages)) {
                     $packages[] = $path;

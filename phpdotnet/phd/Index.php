@@ -343,7 +343,7 @@ class Index extends Format
             return false;
         }
         if (array_pop($this->isChunk)) {
-            $lastchunk = array_pop($this->chunks);
+            array_pop($this->chunks);
             $this->currentchunk = end($this->chunks);
             $this->appendID();
         }
