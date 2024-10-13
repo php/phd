@@ -26,7 +26,6 @@ class PI_PHPDOCHandler extends PIHandler {
                     case "function":
                     case "refentry":
                         $tmp = $this->format->getRefs();
-                        $ret   = "";
                         $refs = array();
                         $info = array();
                         foreach($tmp as $id) {

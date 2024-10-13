@@ -79,7 +79,6 @@ class PdfWriter {
     const LINE_SPACING = 2; // nb of points between two lines
     const INDENT_SPACING = 10; // nb of points for indent
     const DEFAULT_SHIFT = 20; // default value (points) for shifted paragraph
-    private $SCALE; // nb of points for 1 centimeter
     private $PAGE_WIDTH; // in points
     private $PAGE_HEIGHT; // in points
 
@@ -94,7 +93,6 @@ class PdfWriter {
     private $currentFontColor;
     private $fonts;
     private $oldFonts = array();
-    private $text;
 
     private $vOffset = 0;
     private $hOffset = 0;
@@ -142,9 +140,9 @@ class PdfWriter {
         $this->haruDoc->setPagesConfiguration(2);
 
     	// Page format
-    	$this->SCALE = 72/25.4;
-    	$this->PAGE_WIDTH = $pageWidth * $this->SCALE;
-    	$this->PAGE_HEIGHT = $pageHeight * $this->SCALE;
+    	$scale = 72/25.4;
+    	$this->PAGE_WIDTH = $pageWidth * $scale;
+    	$this->PAGE_HEIGHT = $pageHeight * $scale;
 
     	// Set fonts
     	$this->fonts["Helvetica"] = $this->haruDoc->getFont("Helvetica", "WinAnsiEncoding");

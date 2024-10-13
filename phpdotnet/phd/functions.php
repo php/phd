@@ -56,7 +56,7 @@ function term_color($text, $color)
 /* }}} */
 
 /* {{{ The PhD errorhandler */
-function errh($errno, $msg, $file, $line, $ctx = null) {
+function errh($errno, $msg, $file, $line) {
     static $err = array(
         // PHP Triggered Errors
         E_DEPRECATED                  => 'E_DEPRECATED          ',

@@ -48,7 +48,7 @@ class Render extends ObjectStorage
         $lastdepth = -1;
         while($r->read()) {
             $type = $r->nodeType;
-            $data = $retval = $name = $open = false;
+            $open = false;
 
             switch($type) {
                 case \XMLReader::ELEMENT: /* {{{ */

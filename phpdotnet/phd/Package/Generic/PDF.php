@@ -771,7 +771,6 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
         if ($open) {
             $dbattrs = Format::getColspec($attrs[Reader::XMLNS_DOCBOOK]);
             $align = (isset($dbattrs["align"]) ? $dbattrs["align"] : $align);
-            $retval = "";
             if (isset($dbattrs["colname"])) {
                 for($i=Format::getEntryOffset($dbattrs); $i>0; --$i) {
                     $this->pdfDoc->add(PdfWriter::TABLE_ENTRY, array(1, 1, $align));
@@ -995,7 +994,6 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
     public function format_footnoteref($open, $name, $attrs, $props) {
         if ($open) {
             $linkend = $attrs[Reader::XMLNS_DOCBOOK]["linkend"];
-            $found = false;
             foreach($this->cchunk["footnote"] as $k => $note) {
                 if ($note["id"] === $linkend) {
                     $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0,0,1));
@@ -1031,7 +1029,7 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
     }
 
     public function format_co($open, $name, $attrs, $props) {
-        if (($open || $props["empty"]) && isset($attrs[Reader::XMLNS_XML]["id"]) && $id = $attrs[Reader::XMLNS_XML]["id"]) {
+        if (($open || $props["empty"]) && isset($attrs[Reader::XMLNS_XML]["id"]) && $attrs[Reader::XMLNS_XML]["id"]) {
             $co = ++$this->cchunk["co"];
             $this->pdfDoc->setFont(PdfWriter::FONT_NORMAL, 12, array(0,0,1));
             if (isset($attrs[Reader::XMLNS_DOCBOOK]["linkends"]) && $linkends = $attrs[Reader::XMLNS_DOCBOOK]["linkends"]) {

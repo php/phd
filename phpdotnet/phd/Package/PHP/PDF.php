@@ -79,8 +79,6 @@ class Package_PHP_PDF extends Package_Generic_PDF {
 
     );
 
-    private   $acronyms = array();
-
     /* Common properties for all functions pages */
     protected $bookName = "";
 
@@ -253,10 +251,9 @@ class Package_PHP_PDF extends Package_Generic_PDF {
         }
     }
 
-    public function format_type_text($type, $tagname) {
+    public function format_type_text($type) {
         $type = trim(preg_replace('/[ \n\t]+/', ' ', $type));
         $t = strtolower($type);
-        $href = $fragment = "";
 
         switch($t) {
         case "bool":
@@ -284,7 +281,6 @@ class Package_PHP_PDF extends Package_Generic_PDF {
             break;
         case "mixed":
             $href = "language.types.declarations";
-            $fragment = "language.types.declarations.$t";
             break;
         default:
             /* Check if its a classname. */
@@ -304,15 +300,15 @@ class Package_PHP_PDF extends Package_Generic_PDF {
         return '';
     }
 
-    public function format_type_if_object_or_pseudo_text($type, $tagname) {
+    public function format_type_if_object_or_pseudo_text($type) {
         if (in_array(strtolower($type), array("bool", "int", "double", "boolean", "integer", "float", "string", "array", "object", "resource", "null"))) {
             parent::getPdfDoc()->appendText(" " . $type);
             return false;
         }
-        return self::format_type_text($type, $tagname);
+        return self::format_type_text($type);
     }
 
-    public function format_collect_id($open, $name, $attrs, $props, $newpage = false) {
+    public function format_collect_id($open, $name, $attrs) {
         if ($open && isset($attrs[Reader::XMLNS_XML]["id"]) && $id = $attrs[Reader::XMLNS_XML]["id"]) {
                 $this->setIdToPage($id);
         }

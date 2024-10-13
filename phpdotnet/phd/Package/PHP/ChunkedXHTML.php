@@ -2,8 +2,6 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
-    private $nav = "";
-
     public function __construct(Config $config) {
         parent::__construct($config);
         $this->registerFormatName("PHP-Chunked-XHTML");
@@ -30,7 +28,6 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
  </head>
  <body class="docs">
 HEADER;
-        $next = $prev = $up = array("href" => null, "desc" => null);
         $nextLink = $prevLink = $upLink = '';
         if ($prevId = Format::getPrevious($id)) {
             $prev = array(

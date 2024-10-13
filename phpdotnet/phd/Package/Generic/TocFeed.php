@@ -357,7 +357,7 @@ abstract class Package_Generic_TocFeed extends Format
 
         $toc  = '';
         $date = $this->date;
-        foreach ($chunks as $junk => $chunkid) {
+        foreach ($chunks as $chunkid) {
             $long  = $this->getLongDescription($chunkid);
             $short = $this->getShortDescription($chunkid);
             $id    = $this->idprefix . $chunkid;

@@ -124,7 +124,6 @@ manualHeader("index.php"'
     public function footer($id)
     {
         $ext = $this->ext;
-        $parent = Format::getParent($id);
 
         return '<?php manualFooter("'
             . $this->getFilename($id) . $ext . '", '

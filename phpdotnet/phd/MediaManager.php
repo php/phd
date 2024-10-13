@@ -127,7 +127,7 @@ class MediaManager
         );
 
         $foundfile = false;
-        foreach($sourcefilenames as $pathoffset => $filenameinfo) {
+        foreach($sourcefilenames as $filenameinfo) {
             // Look for current language specific file.
             if (file_exists($testingfile = $this->relative_source_path . $filenameinfo[0] . $filenameinfo[1])) {
                 $foundfile = $testingfile;
