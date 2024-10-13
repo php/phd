@@ -962,7 +962,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             if ($long && $short && $long != $short) {
                 $content .= '<li><a href="' .$href. '">' .$short. '</a> — ' .$long;
             } else {
-                $content .= '<li><a href="' .$href. '">' .($long ? $long : $short). '</a>';
+                $content .= '<li><a href="' .$href. '">' . $long . '</a>';
             }
             $children = Format::getChildren($chunkid);
             if (count($children)) {
@@ -974,7 +974,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                     if ($long && $short && $long != $short) {
                         $content .= '<li><a href="' .$href. '">' .$short. '</a> — ' .$long. '</li>';
                     } else {
-                        $content .= '<li><a href="' .$href. '">' .($long ? $long : $short). '</a></li>';
+                        $content .= '<li><a href="' .$href. '">' . $long . '</a></li>';
                     }
                 }
                 $content .="</ul>";

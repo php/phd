@@ -364,7 +364,7 @@ abstract class Package_Generic_TocFeed extends Format
             if ($long && $short && $long != $short) {
                 $title = $short . ' -- ' . $long;
             } else {
-                $title = ($long ?: $short);
+                $title = $long;
             }
             $link = $this->createTargetLink($chunkid);
             $toc .= <<<ATM

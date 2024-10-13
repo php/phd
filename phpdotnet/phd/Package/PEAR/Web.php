@@ -71,10 +71,9 @@ manualHeader("index.php"'
         $siblingIDs = Format::getChildren($parent);
         foreach ($siblingIDs as $sid) {
             $sdesc = Format::getShortDescription($sid);
-            $ldesc = Format::getLongDescription($sid);
             $toc[] = array(
                 $sid . $ext,
-                empty($sdesc) ? $ldesc : $sdesc
+                $sdesc
             );
         }
 
