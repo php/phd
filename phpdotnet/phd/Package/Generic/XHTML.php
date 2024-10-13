@@ -575,7 +575,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             if ($isLDesc && $isSDesc) {
                 $toc .= '<li><a href="' . $link . '">' . $short . '</a> — ' . $long . $list . "</li>\n";
             } else {
-                $toc .= '<li><a href="' . $link . '">' . ($long ? $long : $short) . '</a>' . $list .  "</li>\n";
+                $toc .= '<li><a href="' . $link . '">' . $long . '</a>' . $list .  "</li>\n";
             }
         }
         $toc .= "</ul>\n";
