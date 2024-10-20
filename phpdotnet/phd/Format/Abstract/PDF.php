@@ -130,8 +130,7 @@ class PdfWriter {
     // To temporarily store $current(s)
     private $old = array();
 
-    function __construct($pageWidth = 210, $pageHeight = 297, Config $config) {
-        parent::__construct($config);
+    function __construct($pageWidth = 210, $pageHeight = 297) {
     	// Initialization of properties
     	$this->haruDoc = new \HaruDoc;
     	$this->haruDoc->addPageLabel(1, \HaruPage::NUM_STYLE_DECIMAL, 1, "Page ");
