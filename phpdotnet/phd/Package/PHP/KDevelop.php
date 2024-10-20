@@ -84,16 +84,16 @@ class Package_PHP_KDevelop extends Format {
     public function createLink($for, &$desc = null, $type = Format::SDESC) {}
     public function appendData($data) {}
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap($this->elementmap);
                 $this->registerTextMap($this->textmap);
             }
             break;
         case Render::INIT:
-            if ($val) {
+            if ($value) {
                 $this->setOutputDir($this->config->output_dir());
                 $this->setFileStream(fopen($this->getOutputDir() . strtolower($this->getFormatName()), "w"));
                 self::headerToc();

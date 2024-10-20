@@ -204,11 +204,11 @@ abstract class Package_Generic_TocFeed extends Format
      *
      * @return void
      */
-    public function update($event, $val = null)
+    public function update($event, $value = null)
     {
         switch($event) {
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap(static::getDefaultElementMap());
                 $this->registerTextMap(static::getDefaultTextMap());
             }

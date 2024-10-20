@@ -29,7 +29,7 @@ class Package_PHP_Epub extends Package_PHP_ChunkedXHTML
         $this->registerFormatName("PHP-Epub");
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::INIT:
             $this->parentdir = $this->config->output_dir()
@@ -64,7 +64,7 @@ class Package_PHP_Epub extends Package_PHP_ChunkedXHTML
             $this->closeNCX();
             break;
         default:
-            parent::update($event, $val);
+            parent::update($event, $value);
         }
     }
 

@@ -59,18 +59,18 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         file_put_contents($filename, $this->footer($id), FILE_APPEND);
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::FINALIZE:
             $this->writeJsonIndex();
             break;
 
         case Render::CHUNK:
-            $this->flags = $val;
+            $this->flags = $value;
             break;
 
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap(static::getDefaultElementMap());
                 $this->registerTextMap(static::getDefaultTextMap());
             }

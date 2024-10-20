@@ -103,10 +103,10 @@ class Package_PHP_PDF extends Package_Generic_PDF {
 
     public function __destruct() {}
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap($this->getDefaultElementMap());
                 $this->registerTextMap($this->getDefaultTextMap());
             } else {

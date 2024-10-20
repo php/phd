@@ -52,14 +52,14 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
         }
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::CHUNK:
-            $this->flags = $val;
+            $this->flags = $value;
             break;
 
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap(static::getDefaultElementMap());
                 $this->registerTextMap(static::getDefaultTextMap());
             }

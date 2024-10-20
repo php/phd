@@ -265,10 +265,10 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         $this->cchunk = $this->dchunk;
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::CHUNK:
-            switch($val) {
+            switch($value) {
             case self::OPEN_CHUNK:
                 if ($this->getFileStream()) {
                     /* I have an already open stream, back it up */
@@ -299,7 +299,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
             break;
 
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap(self::getDefaultElementMap());
                 $this->registerTextMap(self::getDefaultTextMap());
             } else {

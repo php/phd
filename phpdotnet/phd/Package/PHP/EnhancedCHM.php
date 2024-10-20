@@ -14,10 +14,10 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
         $this->registerFormatName("PHP-EnhancedCHM");
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::INIT:
-            parent::update($event, $val);
+            parent::update($event, $value);
 
             // Use %TEMP%/usernotes as base directory for Usernotes.
             $temp = sys_get_temp_dir();
@@ -105,7 +105,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
             break;
 
         default:
-            parent::update($event, $val);
+            parent::update($event, $value);
         }
     }
 
