@@ -6,13 +6,13 @@ class TestGenericChunkedXHTML extends Package_Generic_ChunkedXHTML {
         parent::__construct($config);
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::CHUNK:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
         case Render::STANDALONE:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
         case Render::INIT:
             $this->setOutputDir($this->config->output_dir() . strtolower($this->getFormatName()) . '/');

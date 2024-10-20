@@ -13,12 +13,12 @@ class Package_PHP_HowTo extends Package_PHP_Web {
         parent::__destruct();
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::CHUNK:
         case Render::STANDALONE:
         case Render::VERBOSE:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
         case Render::INIT:
             $this->setOutputDir($this->config->output_dir() . strtolower($this->getFormatName()) . '/');

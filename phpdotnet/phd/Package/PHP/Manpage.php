@@ -49,10 +49,10 @@ class Package_PHP_Manpage extends Package_Generic_Manpage {
         $this->close();
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap(array_merge(parent::getDefaultElementMap(), $this->elementmap));
                 $this->registerTextMap(array_merge(parent::getDefaultTextMap(), $this->textmap));
             } else {
@@ -61,7 +61,7 @@ class Package_PHP_Manpage extends Package_Generic_Manpage {
             }
             break;
         default:
-            return parent::update($event, $val);
+            return parent::update($event, $value);
             break;
         }
     }

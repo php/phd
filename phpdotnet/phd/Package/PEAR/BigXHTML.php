@@ -78,21 +78,21 @@ HEADER;
         }
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::CHUNK:
-            $this->flags = $val;
+            $this->flags = $value;
             break;
 
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap(parent::getDefaultElementMap());
                 $this->registerTextMap(parent::getDefaultTextMap());
             }
             break;
 
         case Render::INIT:
-            if ($val) {
+            if ($value) {
                 $this->postConstruct();
                 if ($this->config->css()) {
                     $this->fetchStylesheet();

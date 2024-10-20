@@ -7,10 +7,10 @@ class Package_PHP_BigPDF extends Package_PHP_PDF {
         $this->registerFormatName("PHP-BigPDF");
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap(parent::getDefaultElementMap());
                 $this->registerTextMap(parent::getDefaultTextMap());
             }

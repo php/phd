@@ -2,13 +2,13 @@
 namespace phpdotnet\phd;
 
 class TestPHPBigXHTML extends Package_PHP_BigXHTML {
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::CHUNK:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
         case Render::STANDALONE:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
         case Render::INIT:
             echo "Filename: " . $this->createFileName() . "\n";

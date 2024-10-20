@@ -209,13 +209,13 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
         parent::__destruct();
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::CHUNK:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
         case Render::STANDALONE:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
         case Render::INIT:
             $this->chmdir = $this->config->output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
@@ -239,7 +239,7 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
             self::headerChm();
             break;
         case Render::VERBOSE:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
         }
     }

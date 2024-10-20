@@ -217,14 +217,14 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
         parent::__destruct();
     }
 
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::CHUNK:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
 
         case Render::STANDALONE:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
 
         case Render::INIT:
@@ -254,7 +254,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 			);
             break;
         case Render::VERBOSE:
-            parent::update($event, $val);
+            parent::update($event, $value);
             break;
         }
     }

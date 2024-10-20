@@ -115,17 +115,17 @@ class Package_PHP_TocFeed extends Package_Generic_TocFeed
      * Overriding the update() method to extend the parent element map.
      * Only the Render::STANDALONE event is overrided.
      */
-    public function update($event, $val = null) {
+    public function update($event, $value = null) {
         switch($event) {
         case Render::STANDALONE:
-            if ($val) {
+            if ($value) {
                 $this->registerElementMap(array_merge(
                     parent::getDefaultElementMap(),
                     $this->myelementmap));
             }
             break;
         default:
-            parent::update($event, $val);
+            parent::update($event, $value);
         }
     }
 
