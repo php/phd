@@ -15,8 +15,8 @@ abstract class Format_Abstract_Manpage extends Format {
         return "\n.B [NOT PROCESSED] $name [/NOT PROCESSED]";
     }
 
-    public function CDATA($str) {
-        return $this->highlight(trim($str), $this->role, 'troff');
+    public function CDATA($value) {
+        return $this->highlight(trim($value), $this->role, 'troff');
     }
 
     public function TEXT($str) {

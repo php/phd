@@ -40,15 +40,15 @@ abstract class Format_Abstract_XHTML extends Format {
         }
     }
 
-    public function CDATA($str) {
+    public function CDATA($value) {
         switch($this->getRole()) {
         case '':
             return '<div class="cdata"><pre>'
-                . htmlspecialchars($str, ENT_QUOTES, "UTF-8")
+                . htmlspecialchars($value, ENT_QUOTES, "UTF-8")
                 . '</pre></div>';
         default:
             return '<div class="' . $this->getRole() . 'code">'
-                . $this->highlight(trim($str), $this->getRole(), 'xhtml')
+                . $this->highlight(trim($value), $this->getRole(), 'xhtml')
                 . '</div>';
         }
     }

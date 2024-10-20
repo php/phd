@@ -744,42 +744,42 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     * Format a CDATA section. Automatically trims and highlights
     * the text when necessary.
     *
-    * @param string $str CDATA content
+    * @param string $value CDATA content
     *
     * @return string Formatted string
     *
     * @see $trim
     * @see $role
     */
-    public function CDATA($str)
+    public function CDATA($value)
     {
         if ($this->trim) {
-            $str = rtrim($str);
+            $value = rtrim($value);
         }
         if (!$this->getRole()) {
             return str_replace(
                 array("\n", ' '), array('<br/>', '&nbsp;'),
-                htmlspecialchars($str, ENT_QUOTES, 'UTF-8')
+                htmlspecialchars($value, ENT_QUOTES, 'UTF-8')
             );
         }
 
         switch ($this->getRole()) {
         case 'php':
-            if (strrpos($str, '<?php') || strrpos($str, '?>')) {
-                $str = $this->highlight(trim($str), $this->getRole(), 'xhtml');
+            if (strrpos($value, '<?php') || strrpos($value, '?>')) {
+                $value = $this->highlight(trim($value), $this->getRole(), 'xhtml');
             } else {
-                $str = $this->highlight("<?php\n" . trim($str) . "\n?>", $this->getRole(), 'xhtml');
+                $value = $this->highlight("<?php\n" . trim($value) . "\n?>", $this->getRole(), 'xhtml');
             }
             break;
         case '':
-            $str = htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+            $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
             break;
         default:
-            $str = $this->highlight($str, $this->getRole(), 'xhtml');
+            $value = $this->highlight($value, $this->getRole(), 'xhtml');
             break;
         }
 
-        return $str;
+        return $value;
     }
 
     public function format_surname($open, $name, $attrs)

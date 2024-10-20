@@ -22,8 +22,8 @@ abstract class Format_Abstract_PDF extends Format {
         return "";
     }
 
-    public function CDATA($str) {
-        $this->pdfDoc->appendText(utf8_decode(trim($str)));
+    public function CDATA($value) {
+        $this->pdfDoc->appendText(utf8_decode(trim($value)));
         return "";
     }
 
