@@ -499,9 +499,9 @@ XML;
      *
      * @uses $targetBaseUri
      */
-    public function createLink($id, &$desc = null, $type = Format::SDESC)
+    public function createLink($for, &$desc = null, $type = Format::SDESC)
     {
-        return $this->feedBaseUri . $id . $this->ext;
+        return $this->feedBaseUri . $for . $this->ext;
     }
 
     /**
