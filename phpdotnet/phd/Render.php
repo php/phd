@@ -27,7 +27,7 @@ class Render extends ObjectStorage
         return $tag;
     } /* }}} */
 
-    public function attach($object, $info = array()): void { /* {{{ */
+    public function attach(object $object, mixed $info = array()): void { /* {{{ */
         if (!($object instanceof Format)) {
             throw new \InvalidArgumentException(
                 'All formats *MUST* inherit ' . __NAMESPACE__ . '\\Format'

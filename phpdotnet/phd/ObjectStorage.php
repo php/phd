@@ -3,7 +3,7 @@ namespace phpdotnet\phd;
 
 class ObjectStorage extends \SplObjectStorage
 {
-	public function attach($object, $info = array()): void {
+	public function attach(object $object, mixed $info = array()): void {
 		if (!($object instanceof Format)) {
 			throw new \InvalidArgumentException(
                 'Only classess inheriting ' . __NAMESPACE__ . '\\Format supported'

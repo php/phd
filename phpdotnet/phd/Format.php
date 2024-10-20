@@ -290,7 +290,7 @@ abstract class Format extends ObjectStorage
     final public function registerTextMap(array $map) {
         $this->textmap = $map;
     }
-    final public function attach($object, $info = array()): void {
+    final public function attach(object $object, mixed $info = array()): void {
         if (!($object instanceof $this) && get_class($object) != get_class($this)) {
             throw new \InvalidArgumentException(get_class($this) . " themes *MUST* _inherit_ " .get_class($this). ", got " . get_class($object));
         }
