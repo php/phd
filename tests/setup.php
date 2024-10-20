@@ -1,8 +1,7 @@
 <?php
 namespace phpdotnet\phd;
 
-define("__INSTALLDIR__", "@php_dir@" == "@"."php_dir@" ? dirname(__DIR__) : "@php_dir@");
-
+require_once dirname(__DIR__) . '/phpdotnet/phd/constants.php';
 require_once __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR . "phd" . DIRECTORY_SEPARATOR . "Autoloader.php";
 Autoloader::setPackageDirs([__INSTALLDIR__]);
 spl_autoload_register(["phpdotnet\\phd\\Autoloader", "autoload"]);
