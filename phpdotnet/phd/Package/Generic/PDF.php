@@ -328,16 +328,16 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
         return $this->textmap;
     }
 
-    public function TEXT($str) {
+    public function TEXT($value) {
         if (isset($this->cchunk["refsection"]) && $this->cchunk["refsection"]) // DUMMY REFSECTION DELETION
             return "";
 
         if (isset($this->cchunk["verbatim-block"]) && $this->cchunk["verbatim-block"]) {
-            $this->pdfDoc->appendText(utf8_decode($str));
+            $this->pdfDoc->appendText(utf8_decode($value));
             return "";
         }
 
-        $ret = utf8_decode(trim(preg_replace('/[ \n\t]+/', ' ', $str)));
+        $ret = utf8_decode(trim(preg_replace('/[ \n\t]+/', ' ', $value)));
         // No whitespace if current text value begins with ',', ';', ':', '.'
         if (strncmp($ret, ",", 1) && strncmp($ret, ";", 1) && strncmp($ret, ":", 1) && strncmp($ret, ".", 1))
             $this->pdfDoc->appendText(" " . $ret);

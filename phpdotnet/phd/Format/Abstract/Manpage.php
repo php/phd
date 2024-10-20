@@ -19,8 +19,8 @@ abstract class Format_Abstract_Manpage extends Format {
         return $this->highlight(trim($value), $this->role, 'troff');
     }
 
-    public function TEXT($str) {
-        $ret = preg_replace( '/[ \n\t]+/', ' ', $str);
+    public function TEXT($value) {
+        $ret = preg_replace( '/[ \n\t]+/', ' ', $value);
 
         // Escape \ ' and NUL byte
         $ret = addcslashes($ret, "\\'\0");
