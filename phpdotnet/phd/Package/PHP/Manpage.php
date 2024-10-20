@@ -42,7 +42,7 @@ class Package_PHP_Manpage extends Package_Generic_Manpage {
 
         $this->registerFormatName("PHP-Functions");
         $this->setTitle("PHP Manual");
-        $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
+        $this->dchunk = array_merge(parent::getDefaultChunkInfo(), $this->getDefaultChunkInfo());
     }
 
     public function __destruct() {
@@ -56,8 +56,8 @@ class Package_PHP_Manpage extends Package_Generic_Manpage {
                 $this->registerElementMap(array_merge(parent::getDefaultElementMap(), $this->elementmap));
                 $this->registerTextMap(array_merge(parent::getDefaultTextMap(), $this->textmap));
             } else {
-                $this->registerElementMap(static::getDefaultElementMap());
-                $this->registerTextMap(static::getDefaultTextMap());
+                $this->registerElementMap($this->getDefaultElementMap());
+                $this->registerTextMap($this->getDefaultTextMap());
             }
             break;
         default:
