@@ -73,7 +73,7 @@ class Package_PHP_Manpage extends Package_Generic_Manpage {
     public function format_chunk($open, $name, $attrs, $props) {
         return parent::format_chunk($open, $name, $attrs, $props);
     }
-    public function format_class_title_text($value, $tag) {
+    public function format_class_title_text($value) {
         $this->cchunk["funcname"][] = $this->toValidName(trim($value));
     }
 

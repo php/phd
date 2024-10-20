@@ -676,7 +676,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
 
     public function format_link($open, $name, $attrs, $props) {
-        $link = null;
         if ($open) {
             $link = $class = $content = "";
 
@@ -855,7 +854,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
 
         $toc = '<ol>';
-        $desc = "";
         if (!in_array($id, $this->TOC_WRITTEN ?? [])) {
             $toc = $this->createTOC($id, $name, $props);
         }
@@ -1419,7 +1417,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_footnoteref($open, $name, $attrs, $props) {
         if ($open) {
             $linkend = $attrs[Reader::XMLNS_DOCBOOK]["linkend"];
-            $found = false;
             foreach($this->cchunk["footnote"] as $k => $note) {
                 if ($note["id"] === $linkend) {
                     return '<a href="#fnid' .$note["id"]. '"><sup>[' .($k + 1). ']</sup></a>';

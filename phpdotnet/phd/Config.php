@@ -173,7 +173,7 @@ class Config
         self::$optionArray['color_output'] = $color_output;
     }
 
-    public static function set_color_output($color_output)
+    public static function set_color_output()
     {
         trigger_error('Use setColor_output()', E_USER_DEPRECATED);
     }

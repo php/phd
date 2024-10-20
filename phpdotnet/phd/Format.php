@@ -312,7 +312,6 @@ abstract class Format extends ObjectStorage
 
     /* Buffer where append data instead of the standard stream (see format's appendData()) */
     final public function parse($xml) {
-        $parsed = "";
         $reader = new Reader();
         $render = new Render();
 
@@ -468,7 +467,7 @@ abstract class Format extends ObjectStorage
     }
     public function getEntryOffset(array $attrs) {
         $curr = $this->TABLE["next_colnum"];
-        foreach($this->TABLE["colspec"] as $col => $spec) {
+        foreach($this->TABLE["colspec"] as $spec) {
             if ($spec["colname"] == $attrs["colname"]) {
                 $colnum = $spec["colnum"];
                 $this->TABLE["next_colnum"] += $colnum-$curr;
@@ -479,7 +478,7 @@ abstract class Format extends ObjectStorage
     }
     public function colspan(array $attrs) {
         if (isset($attrs["namest"])) {
-            foreach($this->TABLE["colspec"] as $colnum => $spec) {
+            foreach($this->TABLE["colspec"] as $spec) {
                 if ($spec["colname"] == $attrs["namest"]) {
                     $from = $spec["colnum"];
                     continue;

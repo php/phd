@@ -664,7 +664,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_type_text($type, $tagname) {
         $t = strtr(strtolower($type), ["_" => "-", "\\" => "-"]);
-        $href = $fragment = "";
+        $fragment = "";
 
         switch($t) {
         case "void":
