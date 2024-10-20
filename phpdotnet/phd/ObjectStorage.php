@@ -3,19 +3,19 @@ namespace phpdotnet\phd;
 
 class ObjectStorage extends \SplObjectStorage
 {
-	public function attach($obj, $inf = array()): void {
-		if (!($obj instanceof Format)) {
+	public function attach($object, $info = array()): void {
+		if (!($object instanceof Format)) {
 			throw new \InvalidArgumentException(
                 'Only classess inheriting ' . __NAMESPACE__ . '\\Format supported'
             );
 		}
-		if (empty($inf)) {
-			$inf = array(
-				\XMLReader::ELEMENT => $obj->getElementMap(),
-				\XMLReader::TEXT    => $obj->getTextMap(),
+		if (empty($info)) {
+			$info = array(
+				\XMLReader::ELEMENT => $object->getElementMap(),
+				\XMLReader::TEXT    => $object->getTextMap(),
 			);
 		}
-		parent::attach($obj, $inf);
+		parent::attach($object, $info);
 	}
 }
 
