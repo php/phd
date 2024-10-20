@@ -30,8 +30,8 @@ abstract class Format_Abstract_XHTML extends Format {
         return '</' .$tag. '>';
     }
 
-    public function TEXT($str) {
-        return htmlspecialchars($str, ENT_QUOTES, "UTF-8");
+    public function TEXT($value) {
+        return htmlspecialchars($value, ENT_QUOTES, "UTF-8");
     }
 
     public function UNDEF($open, $name, $attrs, $props) {

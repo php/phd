@@ -33,7 +33,7 @@ abstract class Format_Abstract_PDF extends Format {
 
     public function createLink($for, &$desc = null, $type = Format::SDESC){}
 
-    public function TEXT($str) {}
+    public function TEXT($value) {}
 
 }
 
