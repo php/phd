@@ -210,9 +210,9 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function __construct(Config $config) {
         parent::__construct($config);
-        $this->myelementmap = array_merge(parent::getDefaultElementMap(), static::getDefaultElementMap());
-        $this->mytextmap = array_merge(parent::getDefaultTextMap(), static::getDefaultTextMap());
-        $this->dchunk = array_merge(parent::getDefaultChunkInfo(), static::getDefaultChunkInfo());
+        $this->myelementmap = array_merge(parent::getDefaultElementMap(), $this->getDefaultElementMap());
+        $this->mytextmap = array_merge(parent::getDefaultTextMap(), $this->getDefaultTextMap());
+        $this->dchunk = array_merge(parent::getDefaultChunkInfo(), $this->getDefaultChunkInfo());
         $this->registerPIHandlers($this->pihandlers);
 
         if ($this->config->css() === []) {
