@@ -14,7 +14,7 @@ and what the different parts of its pipeline are, please refer to the
 
 ## Requirements
 
-- PHP 8.0+
+- PHP 8.1+
 - DOM, libXML2, XMLReader and SQLite3.
 
 
