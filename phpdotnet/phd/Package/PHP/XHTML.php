@@ -809,10 +809,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_function($open, $tag, $attrs, $props) {
         if ($open) {
-            /* TODO Drop support when https://github.com/php/doc-en/pull/2864 has made its way to translations */
-            if (isset($attrs[Reader::XMLNS_PHD]["args"])) {
-                $this->cchunk["args"] = $attrs[Reader::XMLNS_PHD]["args"];
-            }
             return '<span class="' . $tag . '">';
         }
         return "</span>";
