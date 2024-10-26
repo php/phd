@@ -635,7 +635,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 if ($style = file_get_contents($css)) {
                     $this->stylesheets[] = $style;
                 } else {
-                    v("Stylesheet %s not fetched.", $css, E_USER_WARNING);
+                    trigger_error(vsprintf("Stylesheet %s not fetched.", [$css]), E_USER_WARNING);
                 }
             }
             return;
@@ -647,11 +647,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         $stylesDir .= 'styles/';
         if (file_exists($stylesDir)) {
             if (!is_dir($stylesDir)) {
-                v("The styles/ directory is a file?", E_USER_ERROR);
+                trigger_error("The styles/ directory is a file?", E_USER_ERROR);
             }
         } else {
             if (!mkdir($stylesDir, 0777, true)) {
-                v("Can't create the styles/ directory.", E_USER_ERROR);
+                trigger_error("Can't create the styles/ directory.", E_USER_ERROR);
             }
         }
         foreach ((array)$this->config->css() as $css) {
@@ -660,7 +660,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             if (@copy($css, $stylesDir . $dest)) {
                 $this->stylesheets[] = $dest;
             } else {
-                v('Impossible to copy the %s file.', $css, E_USER_WARNING);
+                trigger_error(vsprintf('Impossible to copy the %s file.', [$css]), E_USER_WARNING);
             }
         }
     }
@@ -2300,7 +2300,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
         if (isset($attrs[Reader::XMLNS_DOCBOOK]["action"])) {
             if ($attrs[Reader::XMLNS_DOCBOOK]["action"] !== "simul") {
-                v('No support for keycombo action = %s', $attrs[Reader::XMLNS_DOCBOOK]["action"], E_USER_WARNING);
+                trigger_error(vsprintf('No support for keycombo action = %s', [$attrs[Reader::XMLNS_DOCBOOK]["action"]]), E_USER_WARNING);
             }
         }
         if ($open) {

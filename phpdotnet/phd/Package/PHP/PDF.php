@@ -149,7 +149,7 @@ class Package_PHP_PDF extends Package_Generic_PDF {
             try {
                 $pdfDoc->setCompressionMode(\HaruDoc::COMP_ALL);
             } catch (\HaruException $e) {
-                v("PDF Compression failed, you need to compile libharu with Zlib...", E_USER_WARNING);
+                trigger_error("PDF Compression failed, you need to compile libharu with Zlib...", E_USER_WARNING);
             }
             parent::setPdfDoc($pdfDoc);
             if (isset($attrs[Reader::XMLNS_XML]["base"]) && $base = $attrs[Reader::XMLNS_XML]["base"])

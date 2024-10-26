@@ -73,7 +73,7 @@ class Highlighter
                     ]);
                 }
             } catch (\ParseException $e) {
-                v("Parse error while highlighting PHP code: %s\nText: %s", (string) $e, $text, E_USER_WARNING);
+                trigger_error(vsprintf("Parse error while highlighting PHP code: %s\nText: %s", [(string) $e, $text]), E_USER_WARNING);
 
                 return '<pre class="'. ($role ? $role . 'code' : 'programlisting') .'">'
                     . htmlspecialchars($text, ENT_QUOTES, 'UTF-8')

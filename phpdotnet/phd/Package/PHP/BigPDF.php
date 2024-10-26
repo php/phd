@@ -37,7 +37,7 @@ class Package_PHP_BigPDF extends Package_PHP_PDF {
             try {
                 $pdfDoc->setCompressionMode(\HaruDoc::COMP_ALL);
             } catch (\HaruException $e) {
-                v("PDF Compression failed, you need to compile libharu with Zlib...", E_USER_WARNING);
+                trigger_error("PDF Compression failed, you need to compile libharu with Zlib...", E_USER_WARNING);
             }
             parent::setPdfDoc($pdfDoc);
 

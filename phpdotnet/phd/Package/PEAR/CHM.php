@@ -403,7 +403,7 @@ $1</head>',
 		$stylesheet = file_get_contents("http://pear.php.net/css/$name.css");
 		if ($stylesheet) return $stylesheet;
 		else {
-			v("Stylesheet %s not fetched. Uses default rendering style.", $name, E_USER_WARNING);
+			trigger_error(vsprintf("Stylesheet %s not fetched. Uses default rendering style.", [$name]), E_USER_WARNING);
 			return "";
 		}
     }

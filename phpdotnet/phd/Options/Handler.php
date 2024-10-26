@@ -213,11 +213,11 @@ class Options_Handler implements Options_Interface
         if (!file_exists($v)) {
             v("Creating output directory..", VERBOSE_MESSAGES);
             if (!mkdir($v, 0777, true)) {
-                v("Can't create output directory : %s", $v, E_USER_ERROR);
+                trigger_error(vsprintf("Can't create output directory : %s", [$v]), E_USER_ERROR);
             }
             v("Output directory created", VERBOSE_MESSAGES);
         } elseif (!is_dir($v)) {
-            v("Output directory is a file?", E_USER_ERROR);
+            trigger_error("Output directory is a file?", E_USER_ERROR);
         }
         if (!is_dir($v) || !is_readable($v)) {
             trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
@@ -480,7 +480,7 @@ class Options_Handler implements Options_Interface
                     $packages[] = $path;
                 }
             } else {
-                v('Invalid path: %s', $val, E_USER_WARNING);
+                trigger_error(vsprintf('Invalid path: %s', [$val]), E_USER_WARNING);
             }
         }
         return ['package_dirs' => $packages];

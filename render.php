@@ -46,11 +46,11 @@ if (!is_dir($config->xml_root()) || !is_file($config->xml_file())) {
 if (!file_exists($config->output_dir())) {
     v("Creating output directory..", VERBOSE_MESSAGES);
     if (!mkdir($config->output_dir(), 0777, True)) {
-        v("Can't create output directory : %s", $config->output_dir(), E_USER_ERROR);
+        trigger_error(vsprintf("Can't create output directory : %s", [$config->output_dir()]), E_USER_ERROR);
     }
     v("Output directory created", VERBOSE_MESSAGES);
 } elseif (!is_dir($config->output_dir())) {
-    v("Output directory is not a file?", E_USER_ERROR);
+    trigger_error("Output directory is not a file?", E_USER_ERROR);
 }
 
 // This needs to be moved. Preferably into the PHP package.

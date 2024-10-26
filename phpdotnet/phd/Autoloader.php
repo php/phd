@@ -26,7 +26,7 @@ class Autoloader
 
                 return false;
             }
-            v('Cannot find file for %s: %s', $name, $file ?? $filename, E_USER_ERROR);
+            trigger_error(vsprintf('Cannot find file for %s: %s', [$name, $file ?? $filename]), E_USER_ERROR);
         }
 
         return false;

@@ -247,13 +247,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return $info;
         }
         if (!is_file($filename)) {
-            v("Can't find Version information file (%s), skipping!", $filename, E_USER_WARNING);
+            trigger_error(vsprintf("Can't find Version information file (%s), skipping!", [$filename]), E_USER_WARNING);
             return array();
         }
 
         $r = new \XMLReader;
         if (!$r->open($filename)) {
-            v("Can't open the version info file (%s)", $filename, E_USER_ERROR);
+            trigger_error(vsprintf("Can't open the version info file (%s)", [$filename]), E_USER_ERROR);
         }
         $versions = array();
         while($r->read()) {
@@ -284,13 +284,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return $info;
         }
         if (!is_file($filename)) {
-            v("Can't find Version information file (%s), skipping!", $filename, E_USER_WARNING);
+            trigger_error(vsprintf("Can't find Version information file (%s), skipping!", [$filename]), E_USER_WARNING);
             return array();
         }
 
         $r = new \XMLReader;
         if (!$r->open($filename)) {
-            v("Can't open the version info file (%s)", $filename, E_USER_ERROR);
+            trigger_error(vsprintf("Can't open the version info file (%s)", [$filename]), E_USER_ERROR);
         }
         $deprecated = array();
         while($r->read()) {
@@ -318,13 +318,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return $info;
         }
         if (!is_file($filename)) {
-            v("Can't find acronym file (%s), skipping", $filename, E_USER_WARNING);
+            trigger_error(vsprintf("Can't find acronym file (%s), skipping", [$filename]), E_USER_WARNING);
             return array();
         }
 
         $r = new \XMLReader;
         if (!$r->open($filename)) {
-            v("Could not open file for accessing acronym information (%s)", $filename, E_USER_ERROR);
+            trigger_error(vsprintf("Could not open file for accessing acronym information (%s)", [$filename]), E_USER_ERROR);
         }
 
         $acronyms = array();
@@ -989,7 +989,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
             else {
                 $id = uniqid();
-                v("Uhm. Can't find an ID for a chunk? - Generating a random one (%s)\n%s", $id, $this->getDebugTree($name, $props), E_USER_WARNING);
+                trigger_error(vsprintf("Uhm. Can't find an ID for a chunk? - Generating a random one (%s)\n%s", [$id, $this->getDebugTree($name, $props)]), E_USER_WARNING);
             }
 
             $this->CURRENT_CHUNK = $this->CURRENT_ID = $id;
