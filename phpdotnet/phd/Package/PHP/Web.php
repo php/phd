@@ -84,11 +84,11 @@ class Package_PHP_Web extends Package_PHP_XHTML {
             $this->loadHistoryInfo();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
-                    v("Output directory is a file?", E_USER_ERROR);
+                    trigger_error("Output directory is a file?", E_USER_ERROR);
                 }
             } else {
                 if (!mkdir($this->getOutputDir(), 0777, true)) {
-                    v("Can't create output directory", E_USER_ERROR);
+                    trigger_error("Can't create output directory", E_USER_ERROR);
                 }
             }
             if ($this->getFormatName() == "PHP-Web") {
@@ -275,13 +275,14 @@ contributors($setup);
             return $info;
         }
         if (!is_file($filename)) {
-            v("Can't find sources file (%s), skipping!", $filename, E_USER_NOTICE);
+            trigger_error(vsprintf("Can't find sources file (%s), skipping!", [$filename]), E_USER_NOTICE);
             return array();
         }
 
         $r = new \XMLReader;
         if (!$r->open($filename)) {
-            v("Can't open the sources file (%s)", $filename, E_USER_ERROR);
+            trigger_error(vsprintf("Can't open the sources file (%s)", [$filename]), E_USER_ERROR);
+            return array();
         }
         $info = array();
         $r->read();
@@ -304,7 +305,7 @@ contributors($setup);
 
     public function sourceInfo($id) {
         if (!isset($this->sources[$id])) {
-            v("Missing source for: %s", $id, E_USER_WARNING);
+            trigger_error(vsprintf("Missing source for: %s", [$id]), E_USER_WARNING);
         }
         return isset($this->sources[$id]) ? $this->sources[$id] : null;
     }

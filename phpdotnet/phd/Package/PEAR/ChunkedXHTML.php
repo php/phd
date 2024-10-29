@@ -72,11 +72,11 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
             $this->postConstruct();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
-                    v("Output directory is a file?", E_USER_ERROR);
+                    trigger_error("Output directory is a file?", E_USER_ERROR);
                 }
             } else {
                 if (!mkdir($this->getOutputDir(), 0777, true)) {
-                    v("Can't create output directory", E_USER_ERROR);
+                    trigger_error("Can't create output directory", E_USER_ERROR);
                 }
             }
             if ($this->config->css()) {

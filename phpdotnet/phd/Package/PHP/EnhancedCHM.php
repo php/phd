@@ -22,7 +22,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
             // Use %TEMP%/usernotes as base directory for Usernotes.
             $temp = sys_get_temp_dir();
             if (!$temp || !is_dir($temp)) {
-                v('Unable to locate the systems temporary system directory for EnhancedCHM.', E_USER_ERROR);
+                trigger_error('Unable to locate the systems temporary system directory for EnhancedCHM.', E_USER_ERROR);
                 break;
             }
 
@@ -30,7 +30,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
 
             // Make the usernotes directory.
             if(!file_exists($this->userNotesBaseDir) || is_file($this->userNotesBaseDir)) {
-                mkdir($this->userNotesBaseDir, 0777, true) or v("Can't create the usernotes directory : %s", $this->userNotesBaseDir, E_USER_ERROR);
+                mkdir($this->userNotesBaseDir, 0777, true) or trigger_error(vsprintf("Can't create the usernotes directory : %s", [$this->userNotesBaseDir]), E_USER_ERROR);
             }
 
             // Get the local last-updated value.
@@ -50,7 +50,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                 }
 
                 if (!extension_loaded('bz2')) {
-                    v('The BZip2 extension is not available.', E_USER_ERROR);
+                    trigger_error('The BZip2 extension is not available.', E_USER_ERROR);
                     break;
                 }
 
@@ -61,7 +61,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
 
                 // Use a decompression stream filter to save having to store anything locally other than the expanded user notes.
                 if (false === ($fpNotes = fopen('http://www.php.net/backend/notes/all.bz2', 'rb'))) {
-                    v('Failed to access the usernotes archive.', E_USER_ERROR);
+                    trigger_error('Failed to access the usernotes archive.', E_USER_ERROR);
                     break;
                 }
 
