@@ -277,32 +277,23 @@ contributors($setup);
 
     /**
      * Finds the closest parent book or set in the index hierarchy.
-     * 
-     * Books are prioritized over sets. If no book is found,
-     * the closest set is returned. If neither is found, null is returned.
      */
     private function findParentBookOrSet(string $id): ?array
     {
-        $set = null;
-
         // array_key_exists() to guard against undefined array keys, either for
         // root elements (no parent) or in case the index structure is broken.
         while (array_key_exists($id, $this->indexes)) {
             $parent = $this->indexes[$id];
             $element = $parent['element'];
 
-            if ($element === 'book') {
+            if ($element === 'book' || $element === 'set') {
                 return $parent;
-            }
-
-            if ($element === 'set') {
-                $set ??= $parent;
             }
 
             $id = $parent['parent_id'];
         }
 
-        return $set;
+        return null;
     }
 
     public function loadSourcesInfo() {
