@@ -285,9 +285,9 @@ contributors($setup);
     {
         $set = null;
 
-        // isset() to guard against undefined array keys, either for root
-        // elements (no parent) or in case the index structure is broken.
-        while (isset($this->indexes[$id])) {
+        // array_key_exists() to guard against undefined array keys, either for
+        // root elements (no parent) or in case the index structure is broken.
+        while (array_key_exists($id, $this->indexes)) {
             $parent = $this->indexes[$id];
             $element = $parent['element'];
 
