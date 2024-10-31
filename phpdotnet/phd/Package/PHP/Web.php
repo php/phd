@@ -234,7 +234,7 @@ contributors($setup);
 
     protected function writeJsonIndex() {
         v("Writing search indexes..", VERBOSE_FORMAT_RENDERING);
-        [$entries, $descriptions] = $this->processIndexForSearch();
+        [$entries, $descriptions] = $this->processJsonIndex();
         file_put_contents(
             $this->getOutputDir() . "search-index.json",
             json_encode($entries)
@@ -247,9 +247,10 @@ contributors($setup);
     }
 
     /**
-     * Processes the search index to extract entries and descriptions.
+     * Processes the index to extract entries and descriptions. These are
+     * used to generate the search index and the descriptions JSON files.
      */
-    private function processIndexForSearch(): array {
+    private function processJsonIndex(): array {
         $entries = [];
         $descriptions = [];
         foreach($this->indexes as $id => $index) {
