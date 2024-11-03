@@ -77,7 +77,7 @@ class Render extends ObjectStorage
                         $r->name === "type" ||
                         $r->name === "classsynopsis" ||
                         $r->name === "qandaset" ||
-                        in_array($r->name, ["methodsynopsis", "constructorsynopsis", "destructorsynopsis"], true)
+                        in_array($r->name, ["methodsynopsis", "constructorsynopsis", "destructorsynopsis", "constant"], true)
                     )
                 ) {
                     $innerXml = $r->readInnerXml();

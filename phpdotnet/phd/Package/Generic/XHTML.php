@@ -235,7 +235,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'refname'               => 'h1',
         'refnamediv'            => 'div',
         'releaseinfo'           => 'div',
-        'replaceable'           => 'span',
+        'replaceable'           => array(
+            /* DEFAULT */          'span',
+            'constant'          => 'format_replaceable',
+        ),
         'revhistory'            => 'format_table',
         'revision'              => 'format_row',
         'revremark'             => 'format_entry',
@@ -402,6 +405,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'ooclass'          => 'format_modifier_text',
             'ooexception'      => 'format_modifier_text',
             'oointerface'      => 'format_modifier_text',
+        ),
+        'replaceable'          => array(
+            /* DEFAULT */         false,
+            'constant'         => 'format_suppressed_text',
         ),
         /** Those are used to retrieve the class/interface name to be able to remove it from method names */
         'classname' => [
@@ -1681,26 +1688,92 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return '</div>';
     }
-    public function format_constant($open, $name, $attrs)
+    public function format_constant($open, $name, $attrs, $props)
     {
         if ($open) {
+            if (str_contains($props["innerXml"], '<replaceable')) {
+                $this->pushRole("constant_group");
+                $this->cchunk["constant"] = $props["innerXml"];
+            }
             return "<strong><code>";
+        }
+        
+        if ($this->getRole() === "constant_group") {
+            $this->popRole();
+            
+            $value = str_replace(
+                ["<replaceable xmlns=\"http://docbook.org/ns/docbook\">", "</replaceable>"],
+                ["<span class=\"replaceable\">", "</span>"],
+                strip_tags($this->cchunk["constant"], "<replaceable>")
+            );
+            
+            $link = $this->createReplaceableConstantLink(strip_tags($this->cchunk["constant"], "<replaceable>"));
+            $this->cchunk["constant"] = "";
+            
+            if ($link === "") {
+                return $value . '</code></strong>';
+            }
+            
+            return '<a href="' . $link . '">' . $value . '</a></code></strong>';
         }
         return "</code></strong>";
     }
-    public function format_constant_text($value, $tag) {
+
+    /**
+     * Creates a link to the first constant in the index 
+     * that matches the pattern of a constant containing a <replaceable> tag
+     * or returns an empty string if no match was found.
+     * 
+     * This works only with one set of <replaceable> tags in a constant
+     * e.g. CURLE_<replaceable>*</replaceable> or DOM_<replaceable>*</replaceable>_NODE
+     */
+    private function createReplaceableConstantLink(string $constant): string {
+        $pattern = "/" . preg_replace(
+            "/<replaceable.*<\/replaceable>/", 
+            ".*", 
+            str_replace(
+                ".", 
+                "\.", 
+                $this->convertConstantNameToId($constant)
+            )
+        ) ."/";
+        
+        $matchingConstantId = "";
+        foreach ($this->indexes as $index) {
+            if (preg_match($pattern, $index["docbook_id"])) {
+                $matchingConstantId = $index["docbook_id"];
+                break;
+            }
+        }
+        
+        return $matchingConstantId === "" ? "" : $this->createLink($matchingConstantId);
+    }
+    
+    private function convertConstantNameToId(string $constantName): string {
         $tempLinkValue = str_replace(
             array("\\", "_"),
             array("-", "-"),
-            strtolower(trim($value, "_"))
+            strtolower(trim($constantName, "_"))
         );
-        if (str_contains($value, '::')) {
+        
+        if (str_contains($constantName, '::')) {
             // class constant
             list($extensionAndClass, $constant) = explode("::", $tempLinkValue);
             $normalizedLinkFormat = $extensionAndClass . ".constants." . trim($constant, "-");
         } else {
             $normalizedLinkFormat = 'constant.' . $tempLinkValue;
         }
+        
+        return $normalizedLinkFormat;
+    }
+
+    public function format_constant_text($value, $tag) {
+        if ($this->getRole() === "constant_group") {
+            return "";
+        }
+
+        $normalizedLinkFormat = $this->convertConstantNameToId($value);
+        
         $link = $this->createLink($normalizedLinkFormat);
 
         if ($link === null) {
@@ -1708,6 +1781,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
 
         return '<a href="' . $link . '">' . $value . '</a>';
+    }
+    public function format_replaceable($open, $name, $attrs, $props) {
+        if ($this->getRole() === "constant_group") {
+            return "";
+        }
+        return false;
     }
     public function admonition_title($title, $lang)
     {
