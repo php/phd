@@ -27,6 +27,10 @@ $indices = [
         "docbook_id" => "extension-class.constants.leading-and-trailing-undescores2",
         "filename"   => "extensionname4.constantspage4",
     ],
+    [
+        "docbook_id" => "constant.extension-namespace-definitely-exists3",
+        "filename"   => "extensionname.constantspage",
+    ],
 ];
 
 $format = new TestPHPChunkedXHTML($config);
@@ -77,6 +81,13 @@ Content:
   <strong><code><a href="extensionname3.constantspage3.html#constant.leading-and-trailing-undescores">__LEADING_AND_TRAILING_UNDESCORES__</a></code></strong>
   <p class="para">
    <strong><code><a href="extensionname4.constantspage4.html#extension-class.constants.leading-and-trailing-undescores2">Extension\Class::__LEADING_AND_TRAILING_UNDESCORES2__</a></code></strong>
+  </p>
+ </div>
+ 
+ <div class="section">
+  <p class="para">4. Constant with replacable parts links to first ID in the index</p>
+  <p class="para">
+   <strong><code><a href="extensionname.constantspage.html#constant.extension-namespace-definitely-exists">Extension\Namespace\DEFINITELY_<span class="replaceable">SHOULD_EXIST</span></a></code></strong>
   </p>
  </div>
 
