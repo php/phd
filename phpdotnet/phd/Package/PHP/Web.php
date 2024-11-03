@@ -234,8 +234,25 @@ contributors($setup);
 
     protected function writeJsonIndex() {
         v("Writing search indexes..", VERBOSE_FORMAT_RENDERING);
-        $ids = array();
-        $desc = array();
+        [$entries, $descriptions] = $this->processJsonIndex();
+        file_put_contents(
+            $this->getOutputDir() . "search-index.json",
+            json_encode($entries)
+        );
+        file_put_contents(
+            $this->getOutputDir() . "search-description.json",
+            json_encode($descriptions)
+        );
+        v("Index written", VERBOSE_FORMAT_RENDERING);
+    }
+
+    /**
+     * Processes the index to extract entries and descriptions. These are
+     * used to generate the search index and the descriptions JSON files.
+     */
+    private function processJsonIndex(): array {
+        $entries = [];
+        $descriptions = [];
         foreach($this->indexes as $id => $index) {
             if (!$index["chunk"]) {
                 continue;
@@ -243,26 +260,41 @@ contributors($setup);
 
             if ($index["sdesc"] === "" && $index["ldesc"] !== "") {
                 $index["sdesc"] = $index["ldesc"];
-
-                $parentId = $index['parent_id'];
-                // isset() to guard against undefined array keys, either for root
-                // elements (no parent) or in case the index structure is broken.
-                while (isset($this->indexes[$parentId])) {
-                    $parent = $this->indexes[$parentId];
-                    if ($parent['element'] === 'book') {
-                        $index["ldesc"] = Format::getLongDescription($parent['docbook_id']);
-                        break;
-                    }
-                    $parentId = $parent['parent_id'];
+                $bookOrSet = $this->findParentBookOrSet($index['parent_id']);
+                if ($bookOrSet) {
+                    $index["ldesc"] = Format::getLongDescription(
+                        $bookOrSet['docbook_id']
+                    );
                 }
             }
 
-            $ids[] = array($index["sdesc"], $index["filename"], $index["element"]);
-            $desc[$id] = $index["ldesc"];
+            $entries[] = [
+                $index["sdesc"], $index["filename"], $index["element"]
+            ];
+            $descriptions[$id] = $index["ldesc"];
         }
-        file_put_contents($this->getOutputDir() . "search-index.json", json_encode($ids));
-        file_put_contents($this->getOutputDir() . "search-description.json", json_encode($desc));
-        v("Index written", VERBOSE_FORMAT_RENDERING);
+        return [$entries, $descriptions];
+    }
+
+    /**
+     * Finds the closest parent book or set in the index hierarchy.
+     */
+    private function findParentBookOrSet(string $id): ?array
+    {
+        // array_key_exists() to guard against undefined array keys, either for
+        // root elements (no parent) or in case the index structure is broken.
+        while (array_key_exists($id, $this->indexes)) {
+            $parent = $this->indexes[$id];
+            $element = $parent['element'];
+
+            if ($element === 'book' || $element === 'set') {
+                return $parent;
+            }
+
+            $id = $parent['parent_id'];
+        }
+
+        return null;
     }
 
     public function loadSourcesInfo() {
