@@ -95,8 +95,11 @@ class Package_PHP_PDF extends Package_Generic_PDF {
         "root-outline"              => null,
     );
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-PDF");
         $this->setTitle("PHP Manual");
     }
@@ -121,7 +124,7 @@ class Package_PHP_PDF extends Package_Generic_PDF {
             if(!file_exists($this->getOutputDir()) || is_file($this->getOutputDir())) mkdir($this->getOutputDir(), 0777, true) or die("Can't create the cache directory.\n");
             break;
         case Render::VERBOSE:
-        	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+        	$this->outputHandler->v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
         	break;
         }
     }
@@ -162,7 +165,7 @@ class Package_PHP_PDF extends Package_Generic_PDF {
         } else {
             $this->resolveLinks($this->cchunk["bookname"]);
             $pdfDoc = parent::getPdfDoc();
-            v("Writing PDF Manual (%s)", $this->cchunk["bookname"], VERBOSE_TOC_WRITING);
+            $this->outputHandler->v("Writing PDF Manual (%s)", $this->cchunk["bookname"], VERBOSE_TOC_WRITING);
             $pdfDoc->saveToFile($this->getOutputDir() . $this->toValidName($this->cchunk["bookname"]) . $this->getExt());
             unset($pdfDoc);
         }
@@ -237,7 +240,7 @@ class Package_PHP_PDF extends Package_Generic_PDF {
     }
 
     protected function resolveLinks($name) {
-        v("Resolving Internal Links... (%s)", $name, VERBOSE_TOC_WRITING);
+        $this->outputHandler->v("Resolving Internal Links... (%s)", $name, VERBOSE_TOC_WRITING);
         $linksToResolve = parent::getChunkInfo("links-to-resolve");
         foreach ($linksToResolve as $link => $targets) {
             if (isset($this->cchunk["id-to-page"][$link]) && $destPage = $this->cchunk["id-to-page"][$link]) {
@@ -316,5 +319,3 @@ class Package_PHP_PDF extends Package_Generic_PDF {
     }
 
 }
-
-

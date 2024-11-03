@@ -31,7 +31,7 @@ $xml = <<<XML
 XML;
 
 try {
-    $reader = new Reader_Partial([]);
+    $reader = new Reader_Partial($outputHandler, []);
 } catch (\Exception $e) {
     var_dump($e->getMessage());
 }
@@ -48,7 +48,7 @@ $skipIds = [
 ];
 $parentIds = [];
 
-$reader = new Reader_Partial($renderIds, $skipIds, $parentIds);
+$reader = new Reader_Partial($outputHandler, $renderIds, $skipIds, $parentIds);
 $reader->XML($xml);
 
 while ($reader->read()) {

@@ -10,8 +10,8 @@ $xml_filePhpdoc = __DIR__ . "/data/class_rendering_001.xml";
 
 $config->setXml_file($xml_filePhpdoc);
 
-$formatPhpdoc = new TestPHPChunkedXHTML($config);
-$renderPhpdoc = new TestRender(new Reader, $config, $formatPhpdoc);
+$formatPhpdoc = new TestPHPChunkedXHTML($config, $outputHandler);
+$renderPhpdoc = new TestRender(new Reader($outputHandler), $config, $formatPhpdoc);
 
 ob_start();
 $renderPhpdoc->run();
@@ -22,8 +22,8 @@ $xml_fileReferenceWithRole = __DIR__ . "/data/class_rendering_002.xml";
 
 $config->setXml_file($xml_fileReferenceWithRole);
 
-$formatReferenceWithRole = new TestPHPChunkedXHTML($config);
-$renderReferenceWithRole = new TestRender(new Reader, $config, $formatReferenceWithRole);
+$formatReferenceWithRole = new TestPHPChunkedXHTML($config, $outputHandler);
+$renderReferenceWithRole = new TestRender(new Reader($outputHandler), $config, $formatReferenceWithRole);
 
 ob_start();
 $renderReferenceWithRole->run();

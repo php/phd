@@ -2,8 +2,11 @@
 namespace phpdotnet\phd;
 
 class Package_Generic_BigXHTML extends Package_Generic_XHTML {
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("Big-XHTML");
         $this->setTitle("Index");
         $this->setChunked(false);
@@ -94,7 +97,7 @@ HEADER;
             break;
 
         case Render::VERBOSE:
-            v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+            $this->outputHandler->v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
             break;
         }
     }
@@ -113,5 +116,3 @@ HEADER;
     }
 
 }
-
-

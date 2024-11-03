@@ -10,8 +10,8 @@ $xml_file = __DIR__ . "/data/exception_rendering_001.xml";
 
 $config->setXml_file($xml_file);
 
-$format = new TestPHPChunkedXHTML($config);
-$render = new TestRender(new Reader, $config, $format);
+$format = new TestPHPChunkedXHTML($config, $outputHandler);
+$render = new TestRender(new Reader($outputHandler), $config, $format);
 
 $render->run();
 ?>

@@ -1,9 +1,13 @@
 <?php
 namespace phpdotnet\phd;
+
 class Package_IDE_PHPStub extends Package_IDE_Base {
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName('IDE-PHPStub');
         $this->setExt($this->config->ext() === null ? ".php" : $this->config->ext());
     }
@@ -81,5 +85,3 @@ EOD;
         return implode(", ", $result);
     }
 }
-
-

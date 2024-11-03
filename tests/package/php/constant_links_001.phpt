@@ -33,7 +33,7 @@ $indices = [
     ],
 ];
 
-$format = new TestPHPChunkedXHTML($config);
+$format = new TestPHPChunkedXHTML($config, $outputHandler);
 
 foreach ($indices as $index) {
     $format->SQLiteIndex(
@@ -51,7 +51,7 @@ foreach ($indices as $index) {
     );
 }
 
-$render = new TestRender(new Reader, $config, $format);
+$render = new TestRender(new Reader($outputHandler), $config, $format);
 
 $render->run();
 ?>

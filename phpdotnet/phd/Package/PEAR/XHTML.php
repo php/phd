@@ -405,8 +405,11 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     /**
      * Constructor
      */
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->myelementmap = array_merge(parent::getDefaultElementMap(), $this->getDefaultElementMap());
         $this->mytextmap = array_merge(parent::getDefaultTextMap(), $this->getDefaultTextMap());
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), $this->getDefaultChunkInfo());
@@ -1129,5 +1132,3 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         return '</div>';
     }
 }
-
-

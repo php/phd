@@ -84,9 +84,11 @@ class Package_PEAR_TocFeed extends Package_Generic_TocFeed
     /**
      * Create new instance.
      */
-    public function __construct(Config $config)
-    {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
 
         $language = $this->config->language();
         $variables = array('targetBaseUri', 'feedBaseUri', 'idprefix');

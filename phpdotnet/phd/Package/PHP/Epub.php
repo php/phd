@@ -23,8 +23,11 @@ class Package_PHP_Epub extends Package_PHP_ChunkedXHTML
         'epub_file'     => '',
     );
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->setExt('.xhtml');
         $this->registerFormatName("PHP-Epub");
     }
@@ -323,5 +326,3 @@ XHTML;
         return $link;
     }
 }
-
-

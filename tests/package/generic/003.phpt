@@ -10,8 +10,8 @@ $xml_file = __DIR__ . "/data/003.xml";
 
 $config->setXml_file($xml_file);
 
-$format = new TestGenericChunkedXHTML($config);
-$render = new TestRender(new Reader, $config, $format);
+$format = new TestGenericChunkedXHTML($config, $outputHandler);
+$render = new TestRender(new Reader($outputHandler), $config, $format);
 
 $render->run();
 ?>

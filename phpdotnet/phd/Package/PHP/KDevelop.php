@@ -65,8 +65,11 @@ class Package_PHP_KDevelop extends Format {
     // CHM Index Map
     protected $hhkStream;
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-KDevelop");
         $this->setTitle("PHP Manual");
         $this->setExt($this->config->ext() === null ? ".php" : $this->config->ext());
@@ -100,7 +103,7 @@ class Package_PHP_KDevelop extends Format {
             }
             break;
         case Render::VERBOSE:
-            v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+            $this->outputHandler->v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
             break;
         }
     }
@@ -166,5 +169,3 @@ class Package_PHP_KDevelop extends Format {
     }
 
 }
-
-

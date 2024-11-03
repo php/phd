@@ -256,8 +256,11 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         "firstrefname"          => true,
     );
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
 
         $this->registerFormatName("Generic Unix Manual Pages");
         $this->setExt($this->config->ext() === null ? ".3.gz" : $this->config->ext());
@@ -321,7 +324,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
             }
             break;
         case Render::VERBOSE:
-        	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+        	$this->outputHandler->v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
         	break;
         }
     }
@@ -354,7 +357,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         gzwrite($gzfile, $this->header($index));
         gzwrite($gzfile, stream_get_contents($stream));
         gzclose($gzfile);
-        v("Wrote %s", $this->getOutputDir() . $filename, VERBOSE_CHUNK_WRITING);
+        $this->outputHandler->v("Wrote %s", $this->getOutputDir() . $filename, VERBOSE_CHUNK_WRITING);
 
         /* methods/functions with the same name */
         while(isset($this->cchunk["funcname"][++$index])) {
@@ -370,7 +373,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
             gzwrite($gzfile, $content);
             gzclose($gzfile);
 
-            v("Wrote %s", $this->getOutputDir() . $filename, VERBOSE_CHUNK_WRITING);
+            $this->outputHandler->v("Wrote %s", $this->getOutputDir() . $filename, VERBOSE_CHUNK_WRITING);
         }
     }
 
@@ -788,5 +791,3 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         return false;
     }
 }
-
-

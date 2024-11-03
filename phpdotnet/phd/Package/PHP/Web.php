@@ -8,8 +8,11 @@ class Package_PHP_Web extends Package_PHP_XHTML {
     /** $var array<string, array<string, mixed>> */
     protected array $history = [];
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-Web");
         $this->setTitle("PHP Manual");
         $this->setChunked(true);
@@ -104,7 +107,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
             }
             break;
         case Render::VERBOSE:
-        	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+        	$this->outputHandler->v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
         	break;
         }
     }
@@ -169,7 +172,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
 
                 file_put_contents($this->getOutputDir() . $filename, $content);
 
-                v("Wrote TOC (%s)", $this->getOutputDir() . $filename, VERBOSE_TOC_WRITING);
+                $this->outputHandler->v("Wrote TOC (%s)", $this->getOutputDir() . $filename, VERBOSE_TOC_WRITING);
             }
 
             $incl = 'include_once dirname(__FILE__) ."/toc/' .$parent. '.inc";';
@@ -233,7 +236,7 @@ contributors($setup);
     }
 
     protected function writeJsonIndex() {
-        v("Writing search indexes..", VERBOSE_FORMAT_RENDERING);
+        $this->outputHandler->v("Writing search indexes..", VERBOSE_FORMAT_RENDERING);
         [$entries, $descriptions] = $this->processJsonIndex();
         file_put_contents(
             $this->getOutputDir() . "search-index.json",
@@ -243,7 +246,7 @@ contributors($setup);
             $this->getOutputDir() . "search-description.json",
             json_encode($descriptions)
         );
-        v("Index written", VERBOSE_FORMAT_RENDERING);
+        $this->outputHandler->v("Index written", VERBOSE_FORMAT_RENDERING);
     }
 
     /**

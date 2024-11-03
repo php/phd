@@ -2,8 +2,11 @@
 namespace phpdotnet\phd;
 
 class Package_PEAR_BigXHTML extends Package_PEAR_XHTML {
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("PEAR-BigXHTML");
         $this->setTitle("PEAR Manual");
         $this->setExt($this->config->ext() === null ? ".html" : $this->config->ext());
@@ -102,7 +105,7 @@ HEADER;
             break;
 
         case Render::VERBOSE:
-            v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+            $this->outputHandler->v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
             break;
         }
     }
@@ -120,6 +123,3 @@ HEADER;
         return $retval;
     }
 }
-
-
-

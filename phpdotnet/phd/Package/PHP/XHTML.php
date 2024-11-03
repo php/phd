@@ -208,8 +208,11 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'phpdoc'        => 'PI_PHPDOCHandler',
     );
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->myelementmap = array_merge(parent::getDefaultElementMap(), $this->getDefaultElementMap());
         $this->mytextmap = array_merge(parent::getDefaultTextMap(), $this->getDefaultTextMap());
         $this->dchunk = array_merge(parent::getDefaultChunkInfo(), $this->getDefaultChunkInfo());
@@ -758,7 +761,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if(isset($this->versions[$funcname])) {
            return $this->versions[$funcname];
         }
-        v("No version info for %s", $funcname, VERBOSE_NOVERSION);
+        $this->outputHandler->v("No version info for %s", $funcname, VERBOSE_NOVERSION);
         return false;
     }
 
@@ -852,7 +855,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 return '<a href="'.$href. '" class="' . $tag . '"'.$rel.'>' .$display_value. '</a>'.$desc;
             }
         } elseif ($this->CURRENT_ID !== $filename) {
-            v("No link found for %s", $value, VERBOSE_BROKEN_LINKS);
+            $this->outputHandler->v("No link found for %s", $value, VERBOSE_BROKEN_LINKS);
         }
 
         return '<strong>' .$display_value. '</strong>';

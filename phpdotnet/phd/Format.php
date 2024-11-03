@@ -22,6 +22,7 @@ abstract class Format extends ObjectStorage
     const LDESC = 2;
 
     protected Config $config;
+    protected OutputHandler $outputHandler;
 
     private $elementmap = array();
     private $textmap = array();
@@ -64,8 +65,9 @@ abstract class Format extends ObjectStorage
     */
     protected $CURRENT_ID = "";
 
-    public function __construct(Config $config) {
+    public function __construct(Config $config, OutputHandler $outputHandler) {
         $this->config = $config;
+        $this->outputHandler = $outputHandler;
         if ($this->config->indexcache()) {
             $this->indexRepository = $this->config->indexcache();
             if (!($this instanceof Index)) {
@@ -312,7 +314,7 @@ abstract class Format extends ObjectStorage
 
     /* Buffer where append data instead of the standard stream (see format's appendData()) */
     final public function parse($xml) {
-        $reader = new Reader();
+        $reader = new Reader($this->outputHandler);
         $render = new Render();
 
         $reader->XML("<notatag>" . $xml . "</notatag>");

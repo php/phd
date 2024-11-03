@@ -2,8 +2,11 @@
 namespace phpdotnet\phd;
 
 class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("Chunked-XHTML");
         $this->setTitle("Index");
         $this->setChunked(true);
@@ -86,7 +89,7 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
             }
             break;
         case Render::VERBOSE:
-        	v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+        	$this->outputHandler->v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
         	break;
         }
     }
@@ -207,5 +210,3 @@ ul.toc li a:hover {
     }
 
 }
-
-

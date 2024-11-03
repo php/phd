@@ -2,8 +2,11 @@
 namespace phpdotnet\phd;
 
 class TestPHPChunkedXHTML extends Package_PHP_ChunkedXHTML {
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
     }
 
     public function update($event, $value = null) {

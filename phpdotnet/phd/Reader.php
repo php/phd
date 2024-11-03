@@ -7,8 +7,11 @@ class Reader extends \XMLReader
     const XMLNS_XLINK   = "http://www.w3.org/1999/xlink";
     const XMLNS_PHD     = "http://www.php.net/ns/phd";
     const XMLNS_DOCBOOK = "http://docbook.org/ns/docbook";
+    
+    protected OutputHandler $outputHandler;
 
-    public function __construct() {
+    public function __construct(OutputHandler $outputHandler) {
+        $this->outputHandler = $outputHandler;
     }
 
     /* Get the content of a named node, or the current node. */
@@ -24,7 +27,7 @@ class Reader extends \XMLReader
             if (\LIBXML_VERSION >= 20620) {
                 return self::readString();
             }
-            v("You are using libxml2 v%d, but v20620 or newer is preferred", \LIBXML_VERSION, VERBOSE_OLD_LIBXML);
+            $this->outputHandler->v("You are using libxml2 v%d, but v20620 or newer is preferred", \LIBXML_VERSION, VERBOSE_OLD_LIBXML);
 
             $node = $this->name;
         }
