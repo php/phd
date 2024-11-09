@@ -34,21 +34,21 @@ class OutputHandler
         return $this->config->color_output() && $color !== false ? "\033[" . $color . "m" . $text . "\033[m" : $text;
     }
 
-    public function printPhdInfo(string $msg, ?string $info = ""): int {
+    public function printPhdInfo(string $msg, string $info = ""): int {
         $color = $this->config->phd_info_color();
         $outputStream = $this->config->phd_info_output();
 
         return $this->print($msg, $outputStream, $color, $info);
     }
 
-    private function printPhdWarning(string $msg, ?string $warning = ""): int {
+    private function printPhdWarning(string $msg, string $warning = ""): int {
         $color = $this->config->phd_warning_color();
         $outputStream = $this->config->phd_warning_output();
 
         return $this->print($msg, $outputStream, $color, $warning);
     }
 
-    public function printUserError(string $msg, string $file, int $line, ?string $error = ""): int {
+    public function printUserError(string $msg, string $file, int $line, string $error = ""): int {
         $color = $this->config->user_error_color();
         $outputStream = $this->config->user_error_output();
         $data = \sprintf("%s:%d\n\t%s", $file, $line, $msg);
@@ -56,7 +56,7 @@ class OutputHandler
         return $this->print($data, $outputStream, $color, $error);
     }
 
-    public function printPhpError(string $msg, string $file, int $line, ?string $error = ""): int {
+    public function printPhpError(string $msg, string $file, int $line, string $error = ""): int {
         $color = $this->config->php_error_color();
         $outputStream = $this->config->php_error_output();
         $data = \sprintf("%s:%d\n\t%s", $file, $line, $msg);
@@ -64,7 +64,7 @@ class OutputHandler
         return $this->print($data, $outputStream, $color, $error);
     }
 
-    private function print(string $msg, $outputStream, string|false $color = false, ?string $infoOrErrorString = ""): int {
+    private function print(string $msg, $outputStream, string|false $color = false, string $infoOrErrorString = ""): int {
         if ($infoOrErrorString === "") {
             $colorMsg = $this->term_color(\sprintf("%s", $msg), $color);
 
