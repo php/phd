@@ -10,7 +10,7 @@ class OutputHandler
     /**
      * Method to get a color escape sequence
      */
-    private function term_color(string $text, string|bool $color): string {
+    private function term_color(string $text, string|false $color): string {
         return $this->config->color_output() && $color !== false ? "\033[" . $color . "m" . $text . "\033[m" : $text;
     }
 
