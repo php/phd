@@ -3,6 +3,26 @@ namespace phpdotnet\phd;
 
 class OutputHandler
 {
+    /** @var array */
+    private const CONSTANT_TO_MESSAGE_CATEGORY_MAP = [
+        // PhD informationals
+        VERBOSE_INDEXING              => 'Indexing              ',
+        VERBOSE_FORMAT_RENDERING      => 'Rendering Format      ',
+        VERBOSE_THEME_RENDERING       => 'Rendering Theme       ',
+        VERBOSE_RENDER_STYLE          => 'Rendering Style       ',
+        VERBOSE_PARTIAL_READING       => 'Partial Reading       ',
+        VERBOSE_PARTIAL_CHILD_READING => 'Partial Child Reading ',
+        VERBOSE_TOC_WRITING           => 'Writing TOC           ',
+        VERBOSE_CHUNK_WRITING         => 'Writing Chunk         ',
+        VERBOSE_MESSAGES              => 'Heads up              ',
+
+        // PhD warnings
+        VERBOSE_NOVERSION             => 'No version information',
+        VERBOSE_BROKEN_LINKS          => 'Broken links          ',
+        VERBOSE_OLD_LIBXML            => 'Old libxml2           ',
+        VERBOSE_MISSING_ATTRIBUTES    => 'Missing attributes    ',
+    ];
+    
     public function __construct(
         private Config $config
     ) {}
@@ -61,34 +81,15 @@ class OutputHandler
      * Print info messages: v("printf-format-text" [, $arg1, ...], $verbose-level)
      */
     public function v(...$args): bool {
-        $errno = \array_pop($args);
+        $messageCategory = \array_pop($args);
         $msg = \vsprintf(\array_shift($args), $args);
 
-        static $err = [
-            // PhD informationals
-            VERBOSE_INDEXING              => 'Indexing              ',
-            VERBOSE_FORMAT_RENDERING      => 'Rendering Format      ',
-            VERBOSE_THEME_RENDERING       => 'Rendering Theme       ',
-            VERBOSE_RENDER_STYLE          => 'Rendering Style       ',
-            VERBOSE_PARTIAL_READING       => 'Partial Reading       ',
-            VERBOSE_PARTIAL_CHILD_READING => 'Partial Child Reading ',
-            VERBOSE_TOC_WRITING           => 'Writing TOC           ',
-            VERBOSE_CHUNK_WRITING         => 'Writing Chunk         ',
-            VERBOSE_MESSAGES              => 'Heads up              ',
-
-            // PhD warnings
-            VERBOSE_NOVERSION             => 'No version information',
-            VERBOSE_BROKEN_LINKS          => 'Broken links          ',
-            VERBOSE_OLD_LIBXML            => 'Old libxml2           ',
-            VERBOSE_MISSING_ATTRIBUTES    => 'Missing attributes    ',
-        ];
-
         // Respect the error_reporting setting
-        if (!(\error_reporting() & $errno)) {
+        if (!(\error_reporting() & $messageCategory)) {
             return false;
         }
 
-        switch($errno) {
+        switch($messageCategory) {
             case VERBOSE_INDEXING:
             case VERBOSE_FORMAT_RENDERING:
             case VERBOSE_THEME_RENDERING:
@@ -98,14 +99,14 @@ class OutputHandler
             case VERBOSE_TOC_WRITING:
             case VERBOSE_CHUNK_WRITING:
             case VERBOSE_MESSAGES:
-                $this->printPhdInfo($msg, $err[$errno]);
+                $this->printPhdInfo($msg, self::CONSTANT_TO_MESSAGE_CATEGORY_MAP[$messageCategory]);
                 break;
 
             case VERBOSE_NOVERSION:
             case VERBOSE_BROKEN_LINKS:
             case VERBOSE_OLD_LIBXML:
             case VERBOSE_MISSING_ATTRIBUTES:
-                $this->printPhdWarning($msg, $err[$errno]);
+                $this->printPhdWarning($msg, self::CONSTANT_TO_MESSAGE_CATEGORY_MAP[$messageCategory]);
                 break;
                 
             default:
