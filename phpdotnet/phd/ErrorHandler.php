@@ -3,25 +3,26 @@ namespace phpdotnet\phd;
 
 class ErrorHandler
 {
+    private const ERROR_MAP = [
+        // PHP Triggered Errors
+        E_DEPRECATED                  => 'E_DEPRECATED          ',
+        E_RECOVERABLE_ERROR           => 'E_RECOVERABLE_ERROR   ',
+        E_STRICT                      => 'E_STRICT              ',
+        E_WARNING                     => 'E_WARNING             ',
+        E_NOTICE                      => 'E_NOTICE              ',
+
+        // User Triggered Errors
+        E_USER_ERROR                  => 'E_USER_ERROR          ',
+        E_USER_WARNING                => 'E_USER_WARNING        ',
+        E_USER_NOTICE                 => 'E_USER_NOTICE         ',
+        E_USER_DEPRECATED             => 'E_USER_DEPRECATED     ',
+    ];
+    
     public function __construct(
         private OutputHandler $outputHandler
     ) {}
 
     public function errh($errno, $msg, $file, $line) {
-        static $err = array(
-            // PHP Triggered Errors
-            E_DEPRECATED                  => 'E_DEPRECATED          ',
-            E_RECOVERABLE_ERROR           => 'E_RECOVERABLE_ERROR   ',
-            E_STRICT                      => 'E_STRICT              ',
-            E_WARNING                     => 'E_WARNING             ',
-            E_NOTICE                      => 'E_NOTICE              ',
-
-            // User Triggered Errors
-            E_USER_ERROR                  => 'E_USER_ERROR          ',
-            E_USER_WARNING                => 'E_USER_WARNING        ',
-            E_USER_NOTICE                 => 'E_USER_NOTICE         ',
-            E_USER_DEPRECATED             => 'E_USER_DEPRECATED     ',
-        );
         static $recursive = false;
 
         // Respect the error_reporting setting
@@ -43,7 +44,7 @@ class ErrorHandler
             case E_USER_ERROR:
             case E_USER_WARNING:
             case E_USER_NOTICE:
-                $this->outputHandler->printUserError($msg, $file, $line, $err[$errno]);
+                $this->outputHandler->printUserError($msg, $file, $line, self::ERROR_MAP[$errno]);
                 break;
 
             // PHP triggered errors
@@ -52,7 +53,7 @@ class ErrorHandler
             case E_STRICT:
             case E_WARNING:
             case E_NOTICE:
-                $this->outputHandler->printPhpError($msg, $file, $line, $err[$errno]);
+                $this->outputHandler->printPhpError($msg, $file, $line, self::ERROR_MAP[$errno]);
                 break;
 
             default:
