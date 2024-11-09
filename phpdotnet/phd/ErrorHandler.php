@@ -18,26 +18,26 @@ class ErrorHandler
         E_USER_DEPRECATED             => 'E_USER_DEPRECATED     ',
     ];
     
+    private static $recursive = false;
+    
     public function __construct(
         private OutputHandler $outputHandler
     ) {}
 
     public function errh($errno, $msg, $file, $line) {
-        static $recursive = false;
-
         // Respect the error_reporting setting
         if (!(error_reporting() & $errno)) {
             return false;
         }
 
         // Recursive protection
-        if ($recursive) {
+        if (self::$recursive) {
             // Thats bad.. lets print a backtrace right away
             debug_print_backtrace();
             // Fallback to the default errorhandler
             return false;
         }
-        $recursive = true;
+        self::$recursive = true;
 
         switch($errno) {
             // User triggered errors
@@ -57,7 +57,7 @@ class ErrorHandler
                 break;
 
             default:
-                $recursive = false;
+                self::$recursive = false;
                 return false;
         }
 
@@ -66,7 +66,7 @@ class ErrorHandler
             exit(1);
         }
 
-        $recursive = false;
+        self::$recursive = false;
         return true;
     }
 }
