@@ -14,7 +14,7 @@ $outputHandler = new OutputHandler($config);
 $errorHandler = new ErrorHandler($outputHandler);
 $olderrrep = error_reporting();
 error_reporting($olderrrep | VERBOSE_DEFAULT);
-set_error_handler([$errorHandler, "errh"]);
+set_error_handler([$errorHandler, "handleError"]);
 
 $config->init([]);
 $config->setLang_dir(__INSTALLDIR__ . DIRECTORY_SEPARATOR

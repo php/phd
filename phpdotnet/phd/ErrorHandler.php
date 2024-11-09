@@ -24,7 +24,7 @@ class ErrorHandler
         private OutputHandler $outputHandler
     ) {}
 
-    public function errh($errno, $msg, $file, $line) {
+    public function handleError($errno, $msg, $file, $line) {
         // Respect the error_reporting setting
         if (!(error_reporting() & $errno)) {
             return false;
