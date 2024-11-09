@@ -60,8 +60,7 @@ class OutputHandler
     /**
      * Print info messages: v("printf-format-text" [, $arg1, ...], $verbose-level)
      */
-    public function v(): bool {
-        $args = \func_get_args();
+    public function v(...$args): bool {
         $errno = \array_pop($args);
         $msg = \vsprintf(\array_shift($args), $args);
 
