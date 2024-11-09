@@ -18,7 +18,7 @@ class ErrorHandler
         E_USER_DEPRECATED             => 'E_USER_DEPRECATED     ',
     ];
     
-    private static $recursive = false;
+    private bool $recursive = false;
     
     public function __construct(
         private OutputHandler $outputHandler
@@ -31,13 +31,13 @@ class ErrorHandler
         }
 
         // Recursive protection
-        if (self::$recursive) {
+        if ($this->recursive) {
             // Thats bad.. lets print a backtrace right away
             debug_print_backtrace();
             // Fallback to the default errorhandler
             return false;
         }
-        self::$recursive = true;
+        $this->recursive = true;
 
         switch($errno) {
             // User triggered errors
@@ -57,7 +57,7 @@ class ErrorHandler
                 break;
 
             default:
-                self::$recursive = false;
+                $this->recursive = false;
                 return false;
         }
 
@@ -66,7 +66,7 @@ class ErrorHandler
             exit(1);
         }
 
-        self::$recursive = false;
+        $this->recursive = false;
         return true;
     }
 }
