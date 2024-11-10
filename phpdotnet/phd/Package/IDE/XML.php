@@ -3,8 +3,11 @@ namespace phpdotnet\phd;
 
 class Package_IDE_XML extends Package_IDE_Base {
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName('IDE-XML');
         $this->setExt($this->config->ext() === null ? ".xml" : $this->config->ext());
     }
@@ -86,5 +89,3 @@ class Package_IDE_XML extends Package_IDE_Base {
     }
 
 }
-
-

@@ -202,8 +202,11 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
     // Project files Output directory
     protected $chmdir;
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-CHM");
     }
 
@@ -446,5 +449,3 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         return $link;
     }
 }
-
-

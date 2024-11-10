@@ -76,8 +76,11 @@ abstract class Package_IDE_Base extends Format {
         'seealso'               => array(),
     );
 
-    public function __construct(Config $config){
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
     }
 
     public function createLink($for, &$desc = null, $type = Format::SDESC) {}
@@ -139,7 +142,7 @@ abstract class Package_IDE_Base extends Format {
     }
 
     public function VERBOSE($value) {
-        v('Starting %s rendering', $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+        $this->outputHandler->v('Starting %s rendering', $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
     }
 
     public function update($event, $value = null) {
@@ -199,7 +202,7 @@ abstract class Package_IDE_Base extends Format {
         if(isset($this->versions[$funcname])) {
            return $this->versions[$funcname];
         }
-        v('No version info for %s', $funcname, VERBOSE_NOVERSION);
+        $this->outputHandler->v('No version info for %s', $funcname, VERBOSE_NOVERSION);
         return false;
     }
 
@@ -458,5 +461,3 @@ abstract class Package_IDE_Base extends Format {
     }
 
 }
-
-

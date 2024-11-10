@@ -131,9 +131,11 @@ abstract class Package_Generic_TocFeed extends Format
     /**
      * Creates a new instance.
      */
-    public function __construct(Config $config)
-    {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName($this->formatName);
         $this->setTitle('Index');
         $this->setChunked(true);
@@ -232,7 +234,7 @@ abstract class Package_Generic_TocFeed extends Format
             break;
 
         case Render::VERBOSE:
-            v(
+            $this->outputHandler->v(
                 'Starting %s rendering',
                 $this->getFormatName(), VERBOSE_FORMAT_RENDERING
             );
@@ -524,5 +526,3 @@ XML;
     }
 
 }
-
-

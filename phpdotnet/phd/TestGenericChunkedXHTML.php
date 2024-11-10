@@ -2,8 +2,11 @@
 namespace phpdotnet\phd;
 
 class TestGenericChunkedXHTML extends Package_Generic_ChunkedXHTML {
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
     }
 
     public function update($event, $value = null) {
@@ -36,5 +39,3 @@ class TestGenericChunkedXHTML extends Package_Generic_ChunkedXHTML {
         echo "Content:" . $content . "\n";
     }
 }
-
-

@@ -19,7 +19,7 @@ $xml = <<<XML
 
 XML;
 
-$reader = new Reader;
+$reader = new Reader($outputHandler);
 $reader->XML($xml);
 
 echo "Read current node contents\n";

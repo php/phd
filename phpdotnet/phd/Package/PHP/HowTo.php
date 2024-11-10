@@ -4,8 +4,11 @@ namespace phpdotnet\phd;
 class Package_PHP_HowTo extends Package_PHP_Web {
     private $nav = "";
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-HowTo");
     }
 
@@ -85,5 +88,3 @@ NAV;
         return "$nav<?php site_footer(); ?>\n";
     }
 }
-
-

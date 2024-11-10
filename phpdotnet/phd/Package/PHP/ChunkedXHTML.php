@@ -2,8 +2,11 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+      Config $config,
+      OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-Chunked-XHTML");
         $this->setExt($this->config->ext() === null ? ".html" : $this->config->ext());
     }
@@ -81,5 +84,3 @@ NAV;
         return '</div></div></body></html>';
     }
 }
-
-

@@ -107,10 +107,11 @@ class Index extends Format
 
     public function __construct(
         IndexRepository $indexRepository,
-        Config $config
+        Config $config,
+        OutputHandler $outputHandler
     ) {
         $this->indexRepository = $indexRepository;
-        parent::__construct($config);
+        parent::__construct($config, $outputHandler);
     }
 
     public function transformFromMap($open, $tag, $name, $attrs, $props) {

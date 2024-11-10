@@ -14,8 +14,11 @@ class Package_IDE_Funclist extends Format {
     protected $isRefname = false;
     protected $buffer = "";
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("IDE-Funclist");
         $this->setExt($this->config->ext() === null ? ".txt" : $this->config->ext());
     }
@@ -43,7 +46,7 @@ class Package_IDE_Funclist extends Format {
             file_put_contents($filename, $this->buffer);
             break;
         case Render::VERBOSE:
-            v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
+            $this->outputHandler->v("Starting %s rendering", $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
             break;
         }
     }
@@ -68,5 +71,3 @@ class Package_IDE_Funclist extends Format {
     }
 
 }
-
-

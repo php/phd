@@ -4,8 +4,11 @@ namespace phpdotnet\phd;
 abstract class Format_Abstract_Manpage extends Format {
     public $role = false;
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config, 
+        OutputHandler $outputHandler,
+    ) {
+        parent::__construct($config, $outputHandler);
     }
 
     public function UNDEF($open, $name, $attrs, $props) {
@@ -55,5 +58,3 @@ abstract class Format_Abstract_Manpage extends Format {
     }
 
 }
-
-

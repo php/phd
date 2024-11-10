@@ -19,10 +19,10 @@ $config->set_indexcache($indexRepository);
 
 
 // Indexing
-$index = new TestIndex($indexRepository, $config);
+$index = new TestIndex($indexRepository, $config, $outputHandler);
 $render->attach($index);
 
-$reader = new Reader;
+$reader = new Reader($outputHandler);
 $reader->open($config->xml_file(), null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
 $render->execute($reader);
 
@@ -30,10 +30,10 @@ $render->detach($index);
 
 
 // Rendering
-$format = new TestPHPChunkedXHTML($config);
+$format = new TestPHPChunkedXHTML($config, $outputHandler);
 $render->attach($format);
 
-$reader = new Reader;
+$reader = new Reader($outputHandler);
 $reader->open($config->xml_file(), null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
 
 $render->execute($reader);

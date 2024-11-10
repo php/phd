@@ -5,7 +5,8 @@ class Options_Handler implements Options_Interface
 {
     public function __construct(
         private Config $config,
-        private Format_Factory $formatFactory
+        private Format_Factory $formatFactory,
+        private OutputHandler $outputHandler
     ) {}
 
     /**
@@ -211,11 +212,11 @@ class Options_Handler implements Options_Interface
             trigger_error("Only a single output location can be supplied", E_USER_ERROR);
         }
         if (!file_exists($v)) {
-            v("Creating output directory..", VERBOSE_MESSAGES);
+            $this->outputHandler->v("Creating output directory..", VERBOSE_MESSAGES);
             if (!mkdir($v, 0777, true)) {
                 trigger_error(vsprintf("Can't create output directory : %s", [$v]), E_USER_ERROR);
             }
-            v("Output directory created", VERBOSE_MESSAGES);
+            $this->outputHandler->v("Output directory created", VERBOSE_MESSAGES);
         } elseif (!is_dir($v)) {
             trigger_error("Output directory is a file?", E_USER_ERROR);
         }
@@ -510,17 +511,14 @@ class Options_Handler implements Options_Interface
      */
     public function option_version(string $k, mixed $v): never
     {
-        $color  = $this->config->phd_info_color();
-        $output = $this->config->phd_info_output();
-        fprintf($output, "%s\n", term_color('PhD Version: ' . $this->config::VERSION, $color));
-
+        $this->outputHandler->printPhdInfo('PhD Version: ' . $this->config::VERSION);
         $packageList = $this->config->getSupportedPackages();
         foreach ($packageList as $package) {
             $version = $this->formatFactory::createFactory($package)->getPackageVersion();
-            fprintf($output, "\t%s: %s\n", term_color($package, $color), term_color($version, $color));
+            $this->outputHandler->printPhdInfo("\t$package: $version");
         }
-        fprintf($output, "%s\n", term_color('PHP Version: ' . phpversion(), $color));
-        fprintf($output, "%s\n", term_color($this->config->copyright(), $color));
+        $this->outputHandler->printPhdInfo('PHP Version: ' . phpversion());
+        $this->outputHandler->printPhdInfo($this->config->copyright());
         exit(0);
     }
 

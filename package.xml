@@ -122,17 +122,19 @@
             <file name="PHPDOCHandler.php" role="php"/>
           </dir>
           <file name="Autoloader.php" role="php"/>
+          <file name="constants.php" role="php"/>
           <file name="Config.php" role="php">
             <tasks:replace from="@php_dir@" to="php_dir" type="pear-config"/>
             <tasks:replace from="@phd_version@" to="version" type="package-info" />
           </file>
+          <file name="ErrorHandler.php" role="php"/>
           <file name="Format.php" role="php"/>
-          <file name="functions.php" role="php"/>
           <file name="Highlighter.php" role="php"/>
           <file name="Index.php" role="php"/>
           <file name="IndexRepository.php" role="php"/>
           <file name="MediaManager.php" role="php"/>
           <file name="ObjectStorage.php" role="php"/>
+          <file name="OutputHandler.php" role="php"/>
           <file name="PIHandler.php" role="php"/>
           <file name="Reader.php" role="php"/>
           <file name="ReaderKeeper.php" role="php"/>

@@ -10,9 +10,9 @@ $xml_file = __DIR__ . "/data/caption_001.xml";
 
 $config->setXml_file($xml_file);
 
-$format = new TestGenericChunkedXHTML($config);
+$format = new TestGenericChunkedXHTML($config, $outputHandler);
 $format->postConstruct();
-$render = new TestRender(new Reader, $config, $format);
+$render = new TestRender(new Reader($outputHandler), $config, $format);
 
 $render->run();
 ?>

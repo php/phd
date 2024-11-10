@@ -9,8 +9,11 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
     // Where are the usernotes?
     protected $userNotesBaseDir = null;
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-EnhancedCHM");
     }
 
@@ -37,7 +40,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
             $userNotesLastUpdatedLocal = file_exists($this->userNotesBaseDir . 'last-updated') ? intval(file_get_contents($this->userNotesBaseDir . 'last-updated')) : 0;
 
             // Get the remote last-updated value to see if we need to do anything with the usernotes we already have.
-            v('Checking usernotes.', VERBOSE_MESSAGES);
+            $this->outputHandler->v('Checking usernotes.', VERBOSE_MESSAGES);
             $userNotesLastUpdatedRemote = intval(file_get_contents('http://www.php.net/backend/notes/last-updated'));
 
             // Compare the remote and local last-updated values.
@@ -68,7 +71,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                 $fpsfNotes = stream_filter_append($fpNotes, 'bzip2.decompress', STREAM_FILTER_READ, array('small' => true));
 
                 // Extract the usernotes and store them by page and date.
-                v('Preparing usernotes.', VERBOSE_MESSAGES);
+                $this->outputHandler->v('Preparing usernotes.', VERBOSE_MESSAGES);
 
                 // Decompress the 'all' file into single files - one file per sectionid.
                 while($fpNotes && !feof($fpNotes) && false !== ($userNote = fgetcsv($fpNotes, 0, '|'))) {
@@ -97,9 +100,9 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                 file_put_contents($this->userNotesBaseDir . 'last-updated', $userNotesLastUpdatedRemote);
 
                 $this->haveNotes = true;
-                v('Usernotes prepared.', VERBOSE_MESSAGES);
+                $this->outputHandler->v('Usernotes prepared.', VERBOSE_MESSAGES);
             } else {
-                v('Usernotes not updated.', VERBOSE_MESSAGES);
+                $this->outputHandler->v('Usernotes not updated.', VERBOSE_MESSAGES);
             }
 
             break;

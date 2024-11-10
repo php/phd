@@ -12,7 +12,7 @@ $config = new Config;
 
 $config->setXml_file($xml_file);
 
-$format = new TestGenericChunkedXHTML($config);
+$format = new TestGenericChunkedXHTML($config, $outputHandler);
 
 $format->SQLiteIndex(
     null, // $context,
@@ -41,7 +41,7 @@ $format->SQLiteIndex(
     0, // $chunk
 );
 
-$render = new TestRender(new Reader, $config, $format);
+$render = new TestRender(new Reader($outputHandler), $config, $format);
 
 $render->run();
 ?>

@@ -16,9 +16,9 @@ require_once __DIR__ . "/../../render.php";
 ?>
 --EXPECTF--
 %sPhD Version: %s
-	%sGeneric%s: %s
-	%sIDE%s: %s
-	%sPEAR%s: %s
-	%sPHP%s: %s
+%s	Generic: %s
+%s	IDE: %s
+%s	PEAR: %s
+%s	PHP: %s
 %sPHP Version: %s
 %sCopyright(c) %d-%d The PHP Documentation Group%s

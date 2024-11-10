@@ -8,11 +8,12 @@ class Reader_Partial extends Reader
     protected $parents = array();
 
     public function __construct(
+        OutputHandler $outputHandler,
         array $render_ids,
         ?array $skip_ids   = [],
         ?array $parents    = [],
     ) {
-        parent::__construct();
+        parent::__construct($outputHandler);
 
         if ($render_ids === []) {
             throw new \Exception("Didn't get any IDs to seek");
@@ -35,13 +36,13 @@ class Reader_Partial extends Reader
             $currentSkip = end($arraySkip);
             if (isset($this->partial[$id])) {
                 if ($currentPartial == $id) {
-                    v("%s done", $id, VERBOSE_PARTIAL_READING);
+                    $this->outputHandler->v("%s done", $id, VERBOSE_PARTIAL_READING);
 
                     unset($this->partial[$id]);
                     $currently_reading = false;
                     array_pop($arrayPartial);
                 } else {
-                    v("Starting %s...", $id, VERBOSE_PARTIAL_READING);
+                    $this->outputHandler->v("Starting %s...", $id, VERBOSE_PARTIAL_READING);
 
                     $currently_reading = $id;
                     $arrayPartial[] = $id;
@@ -49,29 +50,29 @@ class Reader_Partial extends Reader
                 return $ret;
             } elseif (isset($this->skip[$id])) {
                 if ($currentSkip == $id) {
-                    v("%s done", $id, VERBOSE_PARTIAL_READING);
+                    $this->outputHandler->v("%s done", $id, VERBOSE_PARTIAL_READING);
 
                     unset($this->skip[$id]);
                     $currently_skipping = false;
                     array_pop($arraySkip);
                 } else {
-                    v("Skipping %s...", $id, VERBOSE_PARTIAL_READING);
+                    $this->outputHandler->v("Skipping %s...", $id, VERBOSE_PARTIAL_READING);
 
                     $currently_skipping = $id;
                     $arraySkip[] = $id;
                 }
             } elseif ($currently_skipping && $this->skip[$currently_skipping]) {
                 if ($currentSkip == $id) {
-                    v("Skipping child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
+                    $this->outputHandler->v("Skipping child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
                 } else {
-                    v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
+                    $this->outputHandler->v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
                 }
 
             } elseif ($currently_reading && $this->partial[$currently_reading]) {
                 if ($currentPartial == $id) {
-                    v("Rendering child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
+                    $this->outputHandler->v("Rendering child of %s, %s", $currently_reading, $id, VERBOSE_PARTIAL_CHILD_READING);
                 } else {
-                    v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
+                    $this->outputHandler->v("%s done", $id, VERBOSE_PARTIAL_CHILD_READING);
                 }
 
                 return $ret;

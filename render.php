@@ -4,18 +4,24 @@ namespace phpdotnet\phd;
 
 require_once __DIR__ . '/phpdotnet/phd/constants.php';
 require_once __INSTALLDIR__ . '/phpdotnet/phd/Autoloader.php';
-require_once __INSTALLDIR__ . '/phpdotnet/phd/functions.php';
 Autoloader::setPackageDirs([__INSTALLDIR__]);
 
 spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
 
 $config = new Config;
 
+$outputHandler = new OutputHandler($config);
+
+$errorHandler = new ErrorHandler($outputHandler);
+$olderrrep = error_reporting();
+error_reporting($olderrrep | VERBOSE_DEFAULT);
+set_error_handler($errorHandler->handleError(...));
+
 $conf = array();
 if (file_exists("phd.config.php")) {
     $conf = include "phd.config.php";
     $config->init($conf);
-    v("Loaded config from existing file", VERBOSE_MESSAGES);
+    $outputHandler->v("Loaded config from existing file", VERBOSE_MESSAGES);
 } else {
     // need to init regardless so we get package-dirs from the include-path
     $config->init(array());
@@ -28,7 +34,7 @@ foreach ($config->getSupportedPackages() as $package) {
     }
 }
 $optionsParser = new Options_Parser(
-    new Options_Handler($config, new Package_Generic_Factory),
+    new Options_Handler($config, new Package_Generic_Factory, $outputHandler),
     ...$packageHandlers
 );
 $commandLineOptions = $optionsParser->getopt();
@@ -44,11 +50,11 @@ if (!is_dir($config->xml_root()) || !is_file($config->xml_file())) {
     trigger_error("No Docbook file given. Specify it on the command line with --docbook.", E_USER_ERROR);
 }
 if (!file_exists($config->output_dir())) {
-    v("Creating output directory..", VERBOSE_MESSAGES);
+    $outputHandler->v("Creating output directory..", VERBOSE_MESSAGES);
     if (!mkdir($config->output_dir(), 0777, True)) {
         trigger_error(vsprintf("Can't create output directory : %s", [$config->output_dir()]), E_USER_ERROR);
     }
-    v("Output directory created", VERBOSE_MESSAGES);
+    $outputHandler->v("Output directory created", VERBOSE_MESSAGES);
 } elseif (!is_dir($config->output_dir())) {
     trigger_error("Output directory is not a file?", E_USER_ERROR);
 }
@@ -67,7 +73,7 @@ if (!$conf) {
 }
 
 if ($config->saveconfig()) {
-    v("Writing the config file", VERBOSE_MESSAGES);
+    $outputHandler->v("Writing the config file", VERBOSE_MESSAGES);
     file_put_contents("phd.config.php", "<?php\nreturn " . var_export($config->getAllFiltered(), 1) . ";");
 }
 
@@ -75,11 +81,11 @@ if ($config->quit()) {
     exit(0);
 }
 
-function make_reader(Config $config) {
+function make_reader(Config $config, OutputHandler $outputHandler) {
     //Partial Rendering
     $idlist = $config->render_ids() + $config->skip_ids();
     if (!empty($idlist)) {
-        v("Running partial build", VERBOSE_RENDER_STYLE);
+        $outputHandler->v("Running partial build", VERBOSE_RENDER_STYLE);
 
         $parents = [];
         if ($config->indexcache()) {
@@ -87,13 +93,14 @@ function make_reader(Config $config) {
         }
 
         $reader = new Reader_Partial(
+            $outputHandler,
             $config->render_ids(),
             $config->skip_ids(),
-            $parents
+            $parents,
         );
     } else {
-        v("Running full build", VERBOSE_RENDER_STYLE);
-        $reader = new Reader();
+        $outputHandler->v("Running full build", VERBOSE_RENDER_STYLE);
+        $reader = new Reader($outputHandler);
     }
     return $reader;
 }
@@ -122,20 +129,21 @@ $config->set_indexcache($indexRepository);
 
 // Indexing
 if ($config->requiresIndexing()) {
-    v("Indexing...", VERBOSE_INDEXING);
+    $outputHandler->v("Indexing...", VERBOSE_INDEXING);
     // Create indexer
-    $format = new Index($config->indexcache(), $config);
+    $format = new Index($config->indexcache(), $config, $outputHandler);
+    
     $render->attach($format);
 
-    $reader = make_reader($config);
+    $reader = make_reader($config, $outputHandler);
     $reader->open($config->xml_file(), NULL, $readerOpts);
     $render->execute($reader);
 
     $render->detach($format);
 
-    v("Indexing done", VERBOSE_INDEXING);
+    $outputHandler->v("Indexing done", VERBOSE_INDEXING);
 } else {
-    v("Skipping indexing", VERBOSE_INDEXING);
+    $outputHandler->v("Skipping indexing", VERBOSE_INDEXING);
 }
 
 foreach((array)$config->package() as $package) {
@@ -148,16 +156,16 @@ foreach((array)$config->package() as $package) {
 
     // Register the formats
     foreach ($config->output_format() as $format) {
-        $render->attach($factory->createFormat($format, $config));
+        $render->attach($factory->createFormat($format, $config, $outputHandler));
     }
 }
 
 // Render formats
-$reader = make_reader($config);
+$reader = make_reader($config, $outputHandler);
 $reader->open($config->xml_file(), NULL, $readerOpts);
 foreach($render as $format) {
     $format->notify(Render::VERBOSE, true);
 }
 $render->execute($reader);
 
-v("Finished rendering", VERBOSE_FORMAT_RENDERING);
+$outputHandler->v("Finished rendering", VERBOSE_FORMAT_RENDERING);

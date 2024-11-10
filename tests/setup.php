@@ -3,12 +3,18 @@ namespace phpdotnet\phd;
 
 require_once dirname(__DIR__) . '/phpdotnet/phd/constants.php';
 require_once __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR . "phd" . DIRECTORY_SEPARATOR . "Autoloader.php";
+
 Autoloader::setPackageDirs([__INSTALLDIR__]);
 spl_autoload_register(["phpdotnet\\phd\\Autoloader", "autoload"]);
 
-require_once __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR . "phd" . DIRECTORY_SEPARATOR . "functions.php";
-
 $config = new Config;
+
+$outputHandler = new OutputHandler($config);
+
+$errorHandler = new ErrorHandler($outputHandler);
+$olderrrep = error_reporting();
+error_reporting($olderrrep | VERBOSE_DEFAULT);
+set_error_handler($errorHandler->handleError(...));
 
 $config->init([]);
 $config->setLang_dir(__INSTALLDIR__ . DIRECTORY_SEPARATOR

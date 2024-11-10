@@ -537,8 +537,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     protected int $exampleCounter = 0;
 
-    public function __construct(Config $config) {
-        parent::__construct($config);
+    public function __construct(
+        Config $config,
+        OutputHandler $outputHandler
+    ) {
+        parent::__construct($config, $outputHandler);
         $this->registerPIHandlers($this->pihandlers);
         $this->setExt($this->config->ext() === null ? ".html" : $this->config->ext());
     }
@@ -1891,10 +1894,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
             // Generate warnings when only 1 dimension supplied or alt is not supplied.
             if (!$width xor !$height) {
-                v('Missing %s attribute for %s', (!$width ? 'width' : 'height'), $file, VERBOSE_MISSING_ATTRIBUTES);
+                $this->outputHandler->v('Missing %s attribute for %s', (!$width ? 'width' : 'height'), $file, VERBOSE_MISSING_ATTRIBUTES);
             }
             if (false === $this->cchunk["mediaobject"]["alt"]) {
-                v('Missing alt attribute for %s', $file, VERBOSE_MISSING_ATTRIBUTES);
+                $this->outputHandler->v('Missing alt attribute for %s', $file, VERBOSE_MISSING_ATTRIBUTES);
             }
 
             return '<img src="' . $newpath . '" ' . $alt . ' ' . $dimensions . ' />';

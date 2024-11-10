@@ -15,15 +15,15 @@ $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
 $config->set_indexcache($indexRepository);
 
-$index = new TestIndex($indexRepository, $config);
+$index = new TestIndex($indexRepository, $config, $outputHandler);
 
-$render = new TestRender(new Reader, $config, null, $index);
+$render = new TestRender(new Reader($outputHandler), $config, null, $index);
 
 $render->run();
 
-$render = new TestRender(new Reader, $config);
+$render = new TestRender(new Reader($outputHandler), $config);
 
-$format = new TestGenericChunkedXHTML($config);
+$format = new TestGenericChunkedXHTML($config, $outputHandler);
 
 $render->attach($format);
 
