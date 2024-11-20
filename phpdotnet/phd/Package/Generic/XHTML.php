@@ -191,6 +191,16 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 'classsynopsisinfo' => 'format_classsynopsisinfo_oointerface_interfacename',
             ),
         ),
+        /** Enum synopsis related */
+        'enumsynopsis' => 'format_enumsynopsis',
+        'enumname'              => [
+            /* DEFAULT */          'span',
+            'enumsynopsis'      => 'format_enumsynopsis_enumname'
+        ],
+        'enumitem'              => 'format_enumitem',
+        'enumidentifier'        => 'format_enumidentifier',
+        'enumvalue'             => 'format_enumvalue',
+        'enumitemdescription'   => 'format_enumitemdescription',
         'option'                => 'format_option',
         'orderedlist'           => 'format_orderedlist',
         'para'                  => array(
@@ -1203,6 +1213,48 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             return $value;
         }
         return $method;
+    }
+
+    public function format_enumsynopsis($open, $name, $attrs, $props) {
+        if ($open) {
+            //return '<div class="enumsynopsis">';
+            return '<div class="classsynopsis"><div class="classsynopsisinfo">';
+        } else {
+            return '}</div>';
+        }
+    }
+    public function format_enumsynopsis_enumname($open, $name, $attrs, $props): string {
+        if ($open) {
+            /** Actual enum name in bold */
+            return '<span class="modifier">enum</span> <strong class="classname">';
+            //return '<span class="modifier">enum</span> <strong class="enumname">';
+        }
+        //return "</strong><br/>{<br/>";
+        return "</strong><br/>{</div>";
+    }
+    public function format_enumitem($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<div class="fieldsynopsis">';
+        }
+        return '</div>';
+    }
+    public function format_enumidentifier($open, $name, $attrs, $props) {
+        if ($open) {
+            return '    <span class="modifier">case</span>  <span class="classname">';
+        }
+        return '</span>';
+    }
+    public function format_enumvalue($open, $name, $attrs, $props) {
+        if ($open) {
+            return ' = ';
+        }
+        return '';
+    }
+    public function format_enumitemdescription($open, $name, $attrs, $props) {
+        if ($open) {
+            return ';<br/>/** ';
+        }
+        return ' */';
     }
 
     public function format_emphasis($open, $name, $attrs)
