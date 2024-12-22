@@ -4,6 +4,7 @@ namespace phpdotnet\phd;
 class Config
 {
     const VERSION = '@phd_version@';
+    public readonly string $copyright;
 
     /** @var array<string, string> */
     public array $output_format = [];
@@ -52,6 +53,8 @@ class Config
     public bool $memoryindex = false;
 
     public function __construct() {
+        $this->copyright = 'Copyright(c) 2007-'  . \date('Y') . ' The PHP Documentation Group';
+        
         if('WIN' === \strtoupper(\substr(\PHP_OS, 0, 3))) {
         	$this->color_output = false;
         }
@@ -128,10 +131,6 @@ class Config
             }
         }
         $this->color_output = $color_output;
-    }
-
-    public static function copyright() {
-        return sprintf('Copyright(c) 2007-%s The PHP Documentation Group', date('Y'));
     }
 
     /**
