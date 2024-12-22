@@ -51,6 +51,12 @@ class Config
     public ?IndexRepository $indexcache = null;
     public bool $memoryindex = false;
 
+    public function __construct() {
+        if('WIN' === \strtoupper(\substr(\PHP_OS, 0, 3))) {
+        	$this->color_output = false;
+        }
+    }
+    
     /**
      * Sets one or more configuration options from an array
      * 
@@ -96,6 +102,13 @@ class Config
     }
 
     /**
+     * Returns whether terminal output supports colors 
+     */
+    public function getColor_output(): bool {
+        return $this->color_output;
+    }
+
+    /**
      * Enables/disables color output on the terminal
      */
     public function setColor_output(bool $color_output): void {
@@ -115,11 +128,6 @@ class Config
             }
         }
         $this->color_output = $color_output;
-    }
-
-    public static function set_color_output()
-    {
-        trigger_error('Use setColor_output()', E_USER_DEPRECATED);
     }
 
     public static function copyright() {
