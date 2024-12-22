@@ -10,7 +10,7 @@ $xml_file = __DIR__ . "/data/attribute_formatting_003.xml";
 
 $config = new Config;
 
-$config->setXml_file($xml_file);
+$config->xml_file = $xml_file;
 
 $format = new TestGenericChunkedXHTML($config, $outputHandler);
 

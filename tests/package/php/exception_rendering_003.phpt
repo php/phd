@@ -8,7 +8,7 @@ require_once __DIR__ . "/../../setup.php";
 
 $xml_filePhpdoc = __DIR__ . "/data/exception_rendering_001.xml";
 
-$config->setXml_file($xml_filePhpdoc);
+$config->xml_file = $xml_filePhpdoc;
 
 $formatPhpdoc = new TestPHPChunkedXHTML($config, $outputHandler);
 $renderPhpdoc = new TestRender(new Reader($outputHandler), $config, $formatPhpdoc);
@@ -20,7 +20,7 @@ $phpdocOutput = ob_get_clean();
 
 $xml_fileReferenceWithRole = __DIR__ . "/data/exception_rendering_002.xml";
 
-$config->setXml_file($xml_fileReferenceWithRole);
+$config->xml_file = $xml_fileReferenceWithRole;
 
 $formatReferenceWithRole = new TestPHPChunkedXHTML($config, $outputHandler);
 $renderReferenceWithRole = new TestRender(new Reader($outputHandler), $config, $formatReferenceWithRole);

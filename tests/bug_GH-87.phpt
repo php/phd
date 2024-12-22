@@ -8,12 +8,12 @@ require_once __DIR__ . "/setup.php";
 
 $xml_file = __DIR__ . "/data/bug_GH-87.xml";
 
-$config->setForce_index(true);
-$config->setXml_file($xml_file);
+$config->force_index = true;
+$config->xml_file = $xml_file;
 
 $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
-$config->set_indexcache($indexRepository);
+$config->indexcache = $indexRepository;
 
 $index = new TestIndex($indexRepository, $config, $outputHandler);
 

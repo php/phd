@@ -8,7 +8,7 @@ require_once __DIR__ . "/../../setup.php";
 
 $xml_file = __DIR__ . "/data/constant_links.xml";
 
-$config->setXml_file($xml_file);
+$config->xml_file = $xml_file;
 
 $indices = [
     [
