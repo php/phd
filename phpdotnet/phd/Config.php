@@ -100,50 +100,18 @@ class Config
         }
         return $val;
     }
+
     /**
-     * Maps static function calls to config option setter/getters.
-     *
-     * To set an option, call "Config::setOptionname($value)".
-     * To retrieve an option, call "Config::optionname()".
-     *
-     * It is also possible, but deprecated, to call
-     * "Config::set_optionname($value)".
-     *
-     * @param string $name   Name of called function
-     * @param array  $params Array of function parameters
-     *
-     * @return mixed Config value that was requested or set.
+     * Returns the list of supported formats from the package directories set
+     * 
+     * @return array<string>
      */
-    public static function __callStatic($name, $params)
-    {
-        $name = strtolower($name); // FC if this becomes case-sensitive
-
-        if (strncmp($name, 'set', 3) === 0) {
-            $name = substr($name, 3);
-            if ($name[0] === '_') {
-                $name = substr($name, 1);
-            }
-            if (strlen($name) < 1 || count($params) !== 1) { // assert
-                trigger_error('Misuse of config option setter', E_USER_ERROR);
-            }
-            self::$optionArray[$name] = $params[0];
-            // no return, intentional
-        }
-        return isset(self::$optionArray[$name])
-            ? self::$optionArray[$name]
-            : NULL;
-    }
-
-    public function __call($name, $params) {
-        return self::__callStatic($name, $params);
-    }
-
-    public static function getSupportedPackages() {
-        $packageList = array();
-        foreach(Config::package_dirs() as $dir) {
-            foreach (glob($dir . "/phpdotnet/phd/Package/*", GLOB_ONLYDIR) as $item) {
-                $baseitem = basename($item);
-                if ($baseitem[0] != '.') {
+    public function getSupportedPackages(): array {
+        $packageList = [];
+        foreach($this->package_dirs as $dir) {
+            foreach (\glob($dir . "/phpdotnet/phd/Package/*", \GLOB_ONLYDIR) as $item) {
+                $baseitem = \basename($item);
+                if ($baseitem[0] !== '.') {
                     $packageList[] = $baseitem;
                 }
             }
@@ -151,24 +119,26 @@ class Config
         return $packageList;
     }
 
-    public static function setColor_output($color_output)
-    {
+    /**
+     * Enables/disables color output on the terminal
+     */
+    public function setColor_output(bool $color_output): void {
         // Disable colored output if the terminal doesn't support colors
         if ($color_output && function_exists('posix_isatty')) {
-            if (!posix_isatty(Config::phd_info_output())) {
-                Config::setPhd_info_color(false);
+            if (!posix_isatty($this->phd_info_output)) {
+                $this->phd_info_color = false;
             }
-            if (!posix_isatty(Config::phd_warning_output())) {
-                Config::setPhd_warning_color(false);
+            if (!posix_isatty($this->phd_warning_output)) {
+                $this->phd_warning_color = false;
             }
-            if (!posix_isatty(Config::php_error_output())) {
-                Config::setPhd_error_color(false);
+            if (!posix_isatty($this->php_error_output)) {
+                $this->php_error_color = false;
             }
-            if (!posix_isatty(Config::user_error_output())) {
-                Config::setUser_error_color(false);
+            if (!posix_isatty($this->user_error_output)) {
+                $this->user_error_color = false;
             }
         }
-        self::$optionArray['color_output'] = $color_output;
+        $this->color_output = $color_output;
     }
 
     public static function set_color_output()
@@ -194,27 +164,27 @@ class Config
      * @return boolean True if indexing is required.
      */
     public function requiresIndexing(): bool {
-        if (! $this->indexcache()) {
-            $indexfile = $this->output_dir() . 'index.sqlite';
+        if (! $this->indexcache) {
+            $indexfile = $this->output_dir . 'index.sqlite';
             if (!\file_exists($indexfile)) {
                 return true;
             }
         }
 
-        if ($this->no_index()) {
+        if ($this->no_index) {
             return false;
         }
 
-        if ($this->force_index()) {
+        if ($this->force_index) {
             return true;
         }
 
-        if ($this->indexcache()->getIndexingTimeCount() === 0) {
+        if ($this->indexcache->getIndexingTimeCount() === 0) {
             return true;
         }
 
-        $xmlLastModification = \filemtime($this->xml_file());
-        if ($this->indexcache()->getIndexingTime() > $xmlLastModification) {
+        $xmlLastModification = \filemtime($this->xml_file);
+        if ($this->indexcache->getIndexingTime() > $xmlLastModification) {
             return false;
         }
         return true;
