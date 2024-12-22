@@ -72,7 +72,7 @@ class Package_PHP_KDevelop extends Format {
         parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-KDevelop");
         $this->setTitle("PHP Manual");
-        $this->setExt($this->config->ext() === null ? ".php" : $this->config->ext());
+        $this->setExt($this->config->ext === null ? ".php" : $this->config->ext);
     }
 
     public function __destruct() {
@@ -97,7 +97,7 @@ class Package_PHP_KDevelop extends Format {
             break;
         case Render::INIT:
             if ($value) {
-                $this->setOutputDir($this->config->output_dir());
+                $this->setOutputDir($this->config->output_dir);
                 $this->setFileStream(fopen($this->getOutputDir() . strtolower($this->getFormatName()), "w"));
                 self::headerToc();
             }

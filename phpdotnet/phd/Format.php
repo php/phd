@@ -68,8 +68,8 @@ abstract class Format extends ObjectStorage
     public function __construct(Config $config, OutputHandler $outputHandler) {
         $this->config = $config;
         $this->outputHandler = $outputHandler;
-        if ($this->config->indexcache()) {
-            $this->indexRepository = $this->config->indexcache();
+        if ($this->config->indexcache) {
+            $this->indexRepository = $this->config->indexcache;
             if (!($this instanceof Index)) {
                 $this->sortIDs();
             }
@@ -331,19 +331,19 @@ abstract class Format extends ObjectStorage
 
     final public function autogen($text, $lang = null) {
         if ($lang == NULL) {
-            $lang = $this->config->language();
+            $lang = $this->config->language;
         }
         if (isset($this->autogen[$lang])) {
             if (isset($this->autogen[$lang][$text])) {
                 return $this->autogen[$lang][$text];
             }
-            if ($lang == $this->config->fallback_language()) {
+            if ($lang == $this->config->fallback_language) {
                 throw new \InvalidArgumentException("Cannot autogenerate text for '$text'");
             }
-            return $this->autogen($text, $this->config->fallback_language());
+            return $this->autogen($text, $this->config->fallback_language);
         }
 
-        $filename = $this->config->lang_dir() . $lang . ".ini";
+        $filename = $this->config->lang_dir . $lang . ".ini";
 
         if (!file_exists($filename) && strncmp(basename($filename), 'doc-', 4) === 0) {
             $filename = dirname($filename) . DIRECTORY_SEPARATOR . substr(basename($filename), 4);
@@ -517,7 +517,7 @@ abstract class Format extends ObjectStorage
     public function highlight($text, $role = 'php', $format = 'xhtml')
     {
         if (!isset(self::$highlighters[$format])) {
-            $class = $this->config->highlighter();
+            $class = $this->config->highlighter;
             self::$highlighters[$format] = $class::factory($format);
         }
 

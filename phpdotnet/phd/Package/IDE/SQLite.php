@@ -12,7 +12,7 @@ class Package_IDE_SQLite extends Package_IDE_Base {
     ) {
         parent::__construct($config, $outputHandler);
         $this->registerFormatName('IDE-SQLite');
-        $this->setExt($this->config->ext() === null ? ".sqlite" : $this->config->ext());
+        $this->setExt($this->config->ext === null ? ".sqlite" : $this->config->ext);
     }
 
     public function INIT($value) {
@@ -93,7 +93,7 @@ class Package_IDE_SQLite extends Package_IDE_Base {
     }
 
     public function createDatabase() {
-        $db = new \SQLite3($this->config->output_dir() . strtolower($this->getFormatName()) . $this->getExt());
+        $db = new \SQLite3($this->config->output_dir . strtolower($this->getFormatName()) . $this->getExt());
         $db->exec('DROP TABLE IF EXISTS functions');
         $db->exec('DROP TABLE IF EXISTS params');
         $db->exec('DROP TABLE IF EXISTS notes');

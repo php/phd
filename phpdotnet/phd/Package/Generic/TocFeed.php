@@ -139,7 +139,7 @@ abstract class Package_Generic_TocFeed extends Format
         $this->registerFormatName($this->formatName);
         $this->setTitle('Index');
         $this->setChunked(true);
-        $this->setExt($this->config->ext() === null ? ".atom" : $this->config->ext());
+        $this->setExt($this->config->ext === null ? ".atom" : $this->config->ext);
         $this->date = date('c');
         if ($this->feedBaseUri === null) {
             $this->feedBaseUri = $this->targetBaseUri;
@@ -218,7 +218,7 @@ abstract class Package_Generic_TocFeed extends Format
 
         case Render::INIT:
             $this->setOutputDir(
-                $this->config->output_dir()
+                $this->config->output_dir
                 . strtolower($this->getFormatName()) . '/'
             );
             $dir = $this->getOutputDir();
@@ -397,7 +397,7 @@ ATM;
     {
         $title    = htmlspecialchars($this->getLongDescription($id));
         $date     = $this->date;
-        $lang     = $this->config->language();
+        $lang     = $this->config->language;
         $selflink = $this->createLink($id);
         $htmllink = $this->createTargetLink($id);
         $author   = htmlspecialchars($this->author);

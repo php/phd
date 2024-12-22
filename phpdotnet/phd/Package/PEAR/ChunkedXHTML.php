@@ -9,7 +9,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
         parent::__construct($config, $outputHandler);
         $this->registerFormatName("PEAR-Chunked-XHTML");
         $this->setTitle("PEAR Manual");
-        $this->setExt($this->config->ext() === null ? ".html" : $this->config->ext());
+        $this->setExt($this->config->ext === null ? ".html" : $this->config->ext);
         $this->setChunked(true);
     }
 
@@ -71,7 +71,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
             break;
 
         case Render::INIT:
-            $this->setOutputDir($this->config->output_dir() . strtolower($this->getFormatName()) . '/');
+            $this->setOutputDir($this->config->output_dir . strtolower($this->getFormatName()) . '/');
             $this->postConstruct();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
@@ -82,7 +82,7 @@ class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
                     trigger_error("Can't create output directory", E_USER_ERROR);
                 }
             }
-            if ($this->config->css()) {
+            if ($this->config->css) {
                 $this->fetchStylesheet();
             }
             break;

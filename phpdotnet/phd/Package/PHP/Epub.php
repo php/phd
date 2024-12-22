@@ -35,7 +35,7 @@ class Package_PHP_Epub extends Package_PHP_ChunkedXHTML
     public function update($event, $value = null) {
         switch($event) {
         case Render::INIT:
-            $this->parentdir = $this->config->output_dir()
+            $this->parentdir = $this->config->output_dir
                 . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
 
             if(!file_exists($this->parentdir) || is_file($this->parentdir)) {
@@ -73,7 +73,7 @@ class Package_PHP_Epub extends Package_PHP_ChunkedXHTML
 
     protected function initInfo() {
         $root = parent::getRootIndex();
-        $lang = $this->config->language();
+        $lang = $this->config->language;
         return array(
             'book_id' => 'php-manual',
             'title' => $root['ldesc'],
