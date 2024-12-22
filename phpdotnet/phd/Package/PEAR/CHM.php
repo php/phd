@@ -221,16 +221,16 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
             parent::update($event, $value);
             break;
         case Render::INIT:
-            $this->chmdir = $this->config->output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
+            $this->chmdir = $this->config->output_dir . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR;
             if(!file_exists($this->chmdir) || is_file($this->chmdir)) {
                 mkdir($this->chmdir, 0777, true) or die("Can't create the CHM project directory");
             }
-            $this->outputdir = $this->config->output_dir() . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
+            $this->outputdir = $this->config->output_dir . strtolower($this->getFormatName()) . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR;
             $this->postConstruct();
             if(!file_exists($this->outputdir) || is_file($this->outputdir)) {
                 mkdir($this->outputdir, 0777, true) or die("Can't create the cache directory");
             }
-            $lang = $this->config->language();
+            $lang = $this->config->language;
             $this->hhpStream = fopen($this->chmdir . "pear_manual_{$lang}.hhp", "w");
             $this->hhcStream = fopen($this->chmdir . "pear_manual_{$lang}.hhc", "w");
             $this->hhkStream = fopen($this->chmdir . "pear_manual_{$lang}.hhk", "w");
@@ -286,7 +286,7 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
     }
 
     protected function headerChm() {
-		$lang = $this->config->language();
+		$lang = $this->config->language;
 		fwrite($this->hhpStream, '[OPTIONS]
 Binary TOC=Yes
 Compatibility=1.1 or later

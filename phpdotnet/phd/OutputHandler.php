@@ -31,34 +31,34 @@ class OutputHandler
      * Method to get a color escape sequence
      */
     private function term_color(string $text, string|false $color): string {
-        return $this->config->color_output() && $color !== false ? "\033[" . $color . "m" . $text . "\033[m" : $text;
+        return $this->config->getColor_output() && $color !== false ? "\033[" . $color . "m" . $text . "\033[m" : $text;
     }
 
     public function printPhdInfo(string $msg, string $info = ""): int {
-        $color = $this->config->phd_info_color();
-        $outputStream = $this->config->phd_info_output();
+        $color = $this->config->phd_info_color;
+        $outputStream = $this->config->phd_info_output;
 
         return $this->print($msg, $outputStream, $color, $info);
     }
 
     private function printPhdWarning(string $msg, string $warning = ""): int {
-        $color = $this->config->phd_warning_color();
-        $outputStream = $this->config->phd_warning_output();
+        $color = $this->config->phd_warning_color;
+        $outputStream = $this->config->phd_warning_output;
 
         return $this->print($msg, $outputStream, $color, $warning);
     }
 
     public function printUserError(string $msg, string $file, int $line, string $error = ""): int {
-        $color = $this->config->user_error_color();
-        $outputStream = $this->config->user_error_output();
+        $color = $this->config->user_error_color;
+        $outputStream = $this->config->user_error_output;
         $data = \sprintf("%s:%d\n\t%s", $file, $line, $msg);
 
         return $this->print($data, $outputStream, $color, $error);
     }
 
     public function printPhpError(string $msg, string $file, int $line, string $error = ""): int {
-        $color = $this->config->php_error_color();
-        $outputStream = $this->config->php_error_output();
+        $color = $this->config->php_error_color;
+        $outputStream = $this->config->php_error_output;
         $data = \sprintf("%s:%d\n\t%s", $file, $line, $msg);
 
         return $this->print($data, $outputStream, $color, $error);
@@ -71,7 +71,7 @@ class OutputHandler
             return \fprintf($outputStream, "%s\n", $colorMsg);
         }
         
-        $time = \date($this->config->date_format());
+        $time = \date($this->config->date_format);
         $timestamp = $this->term_color(\sprintf("[%s - %s]", $time, $infoOrErrorString), $color);
 
         return \fprintf($outputStream, "%s %s\n", $timestamp, $msg);

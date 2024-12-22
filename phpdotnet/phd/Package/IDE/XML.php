@@ -9,7 +9,7 @@ class Package_IDE_XML extends Package_IDE_Base {
     ) {
         parent::__construct($config, $outputHandler);
         $this->registerFormatName('IDE-XML');
-        $this->setExt($this->config->ext() === null ? ".xml" : $this->config->ext());
+        $this->setExt($this->config->ext === null ? ".xml" : $this->config->ext);
     }
 
     public function parseFunction() {

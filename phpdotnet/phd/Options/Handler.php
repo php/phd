@@ -257,7 +257,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_partial(string $k, mixed $v): array
     {
-        $render_ids = $this->config->render_ids();
+        $render_ids = $this->config->render_ids;
         foreach((array)$v as $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
@@ -319,7 +319,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_skip(string $k, mixed $v): array
     {
-        $skip_ids = $this->config->skip_ids();
+        $skip_ids = $this->config->skip_ids;
         foreach((array)$v as $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
@@ -474,7 +474,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_packagedir(string $k, mixed $v): array
     {
-        $packages = $this->config->package_dirs();
+        $packages = $this->config->package_dirs;
         foreach((array)$v as $val) {
             if ($path = realpath($val)) {
                 if (!in_array($path, $packages)) {
@@ -518,7 +518,7 @@ class Options_Handler implements Options_Interface
             $this->outputHandler->printPhdInfo("\t$package: $version");
         }
         $this->outputHandler->printPhdInfo('PHP Version: ' . phpversion());
-        $this->outputHandler->printPhdInfo($this->config->copyright());
+        $this->outputHandler->printPhdInfo($this->config->copyright);
         exit(0);
     }
 
@@ -530,7 +530,7 @@ class Options_Handler implements Options_Interface
     public function option_help(string $k, mixed $v): never
     {
         echo "PhD version: " .$this->config::VERSION;
-        echo "\n" . $this->config->copyright() . "\n
+        echo "\n" . $this->config->copyright . "\n
   -v
   --verbose <int>            Adjusts the verbosity level
   -f <formatname>
@@ -539,21 +539,21 @@ class Options_Handler implements Options_Interface
   --package <packagename>    The package to use
   -I
   --noindex                  Do not index before rendering but load from cache
-                             (default: " . ($this->config->noindex() ? 'true' : 'false') . ")
+                             (default: " . ($this->config->no_index ? 'true' : 'false') . ")
   -M
   --memoryindex              Do not save indexing into a file, store it in memory.
-                             (default: " . ($this->config->memoryindex() ? 'true' : 'false') . ")
+                             (default: " . ($this->config->memoryindex ? 'true' : 'false') . ")
   -r
   --forceindex               Force re-indexing under all circumstances
-                             (default: " . ($this->config->forceindex() ? 'true' : 'false') . ")
+                             (default: " . ($this->config->force_index ? 'true' : 'false') . ")
   -t
   --notoc                    Do not rewrite TOC before rendering but load from
-                             cache (default: " . ($this->config->notoc() ? 'true' : 'false') . ")
+                             cache (default: " . ($this->config->no_toc ? 'true' : 'false') . ")
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -x
   --xinclude                 Process XML Inclusions (XInclude)
-                             (default: " . ($this->config->xinclude() ? 'true' : 'false') . ")
+                             (default: " . ($this->config->process_xincludes ? 'true' : 'false') . ")
   -p <id[=bool]>
   --partial <id[=bool]>      The ID to render, optionally skipping its children
                              chunks (default to true; render children)
@@ -563,16 +563,16 @@ class Options_Handler implements Options_Interface
   -l
   --list                     Print out the supported packages and formats
   -o <directory>
-  --output <directory>       The output directory (default: " . $this->config->output_dir() . ")
+  --output <directory>       The output directory (default: " . $this->config->output_dir . ")
   -F filename
   --outputfilename filename  Filename to use when writing standalone formats
                              (default: <packagename>-<formatname>.<formatext>)
   -L <language>
   --lang <language>          The language of the source file (used by the CHM
-                             theme). (default: " . $this->config->language() . ")
+                             theme). (default: " . $this->config->language . ")
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal
-                             (default: " . ($this->config->color_output() ? 'true' : 'false') . ")
+                             (default: " . ($this->config->getColor_output() ? 'true' : 'false') . ")
   -C <filename>
   --css <filename>           Link for an external CSS file.
   -g <classname>
@@ -585,11 +585,11 @@ class Options_Handler implements Options_Interface
   --ext <extension>          The alternative filename extension to use,
                              including the dot. Use 'false' for no extension.
   -S <bool>
-  --saveconfig <bool>        Save the generated config (default: " . ($this->config->saveconfig() ? 'true' : 'false') . ").
+  --saveconfig <bool>        Save the generated config (default: " . ($this->config->saveconfig ? 'true' : 'false') . ").
 
   -Q
   --quit                     Don't run the build. Use with --saveconfig to
-                             just save the config (default: " . ($this->config->quit() ? 'true' : 'false') . ").
+                             just save the config (default: " . ($this->config->quit ? 'true' : 'false') . ").
   -k
   --packagedir               Use an external package directory.
 

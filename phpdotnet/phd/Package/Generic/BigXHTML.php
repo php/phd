@@ -79,15 +79,15 @@ HEADER;
         case Render::INIT:
             if ($value) {
                 if (!is_resource($this->getFileStream())) {
-                    $filename = $this->config->output_dir();
-                    if ($this->config->output_filename()) {
-                        $filename .= $this->config->output_filename();
+                    $filename = $this->config->output_dir;
+                    if ($this->config->output_filename) {
+                        $filename .= $this->config->output_filename;
                     } else {
                         $filename .= strtolower($this->getFormatName()) . $this->getExt();
                     }
 
                     $this->postConstruct();
-                    if ($this->config->css()) {
+                    if ($this->config->css) {
                         $this->fetchStylesheet();
                     }
                     $this->setFileStream(fopen($filename, "w+"));

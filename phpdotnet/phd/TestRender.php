@@ -11,11 +11,11 @@ class TestRender extends Render {
 
     public function run() {
         if ($this->index && $this->config->requiresIndexing()) {
-            if (!file_exists($this->config->output_dir())) {
-                mkdir($this->config->output_dir(), 0755);
+            if (!file_exists($this->config->output_dir)) {
+                mkdir($this->config->output_dir, 0755);
             }
             $this->attach($this->index);
-            $this->reader->open($this->config->xml_file());
+            $this->reader->open($this->config->xml_file);
             $this->execute($this->reader);
             $this->detach($this->index);
         }
@@ -25,7 +25,7 @@ class TestRender extends Render {
         }
 
         if (count($this) > 0) {
-            $this->reader->open($this->config->xml_file());
+            $this->reader->open($this->config->xml_file);
             $this->execute($this->reader);
         }
     }

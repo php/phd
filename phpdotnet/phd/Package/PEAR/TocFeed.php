@@ -90,7 +90,7 @@ class Package_PEAR_TocFeed extends Package_Generic_TocFeed
     ) {
         parent::__construct($config, $outputHandler);
 
-        $language = $this->config->language();
+        $language = $this->config->language;
         $variables = array('targetBaseUri', 'feedBaseUri', 'idprefix');
         foreach ($variables as $varname) {
             $this->$varname = str_replace(

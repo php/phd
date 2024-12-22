@@ -263,7 +263,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
         parent::__construct($config, $outputHandler);
 
         $this->registerFormatName("Generic Unix Manual Pages");
-        $this->setExt($this->config->ext() === null ? ".3.gz" : $this->config->ext());
+        $this->setExt($this->config->ext === null ? ".3.gz" : $this->config->ext);
         $this->setChunked(true);
         $this->cchunk = $this->dchunk;
     }
@@ -312,7 +312,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
             break;
 
         case Render::INIT:
-            $this->setOutputDir($this->config->output_dir() . strtolower($this->toValidName($this->getFormatName())) . '/');
+            $this->setOutputDir($this->config->output_dir . strtolower($this->toValidName($this->getFormatName())) . '/');
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
                     trigger_error("Output directory is a file?", E_USER_ERROR);

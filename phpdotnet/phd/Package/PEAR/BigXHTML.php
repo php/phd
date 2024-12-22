@@ -9,7 +9,7 @@ class Package_PEAR_BigXHTML extends Package_PEAR_XHTML {
         parent::__construct($config, $outputHandler);
         $this->registerFormatName("PEAR-BigXHTML");
         $this->setTitle("PEAR Manual");
-        $this->setExt($this->config->ext() === null ? ".html" : $this->config->ext());
+        $this->setExt($this->config->ext === null ? ".html" : $this->config->ext);
         $this->setChunked(false);
     }
 
@@ -45,9 +45,9 @@ HEADER;
     }
 
     public function createFileName() {
-        $filename = $this->config->output_dir();
-        if ($this->config->output_filename()) {
-            $filename .= $this->config->output_filename();
+        $filename = $this->config->output_dir;
+        if ($this->config->output_filename) {
+            $filename .= $this->config->output_filename;
         } else {
             $filename .= strtolower($this->getFormatName()) . $this->getExt();
         }
@@ -97,7 +97,7 @@ HEADER;
         case Render::INIT:
             if ($value) {
                 $this->postConstruct();
-                if ($this->config->css()) {
+                if ($this->config->css) {
                     $this->fetchStylesheet();
                 }
                 $this->createOutputFile();

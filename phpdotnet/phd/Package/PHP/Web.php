@@ -16,7 +16,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         $this->registerFormatName("PHP-Web");
         $this->setTitle("PHP Manual");
         $this->setChunked(true);
-        $this->setExt($this->config->ext() === null ? ".php" : $this->config->ext());
+        $this->setExt($this->config->ext === null ? ".php" : $this->config->ext);
     }
 
     public function close() {
@@ -82,7 +82,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         case Render::INIT:
             $this->loadVersionAcronymInfo();
             $this->loadSourcesInfo();
-            $this->setOutputDir($this->config->output_dir() . strtolower($this->getFormatName()) . '/');
+            $this->setOutputDir($this->config->output_dir . strtolower($this->getFormatName()) . '/');
             $this->postConstruct();
             $this->loadHistoryInfo();
             if (file_exists($this->getOutputDir())) {
@@ -95,14 +95,14 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                 }
             }
             if ($this->getFormatName() == "PHP-Web") {
-                if (!$this->config->no_toc() && is_dir($this->getOutputDir() . 'toc')) {
+                if (!$this->config->no_toc && is_dir($this->getOutputDir() . 'toc')) {
                     $this->removeDir($this->getOutputDir() . 'toc');
                 }
                 if (!file_exists($this->getOutputDir() . "toc") || is_file($this->getOutputDir() . "toc")) {
                     mkdir($this->getOutputDir() . "toc", 0777, true) or die("Can't create the toc directory");
                 }
             }
-            if ($this->config->css()) {
+            if ($this->config->css) {
                 $this->fetchStylesheet();
             }
             break;
@@ -204,7 +204,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
         );
         $setup["history"] = $this->history[$setup["source"]["path"]] ?? [];
         if ($this->getChildren($id)) {
-            $lang = $this->config->language();
+            $lang = $this->config->language;
             $setup["extra_header_links"] = array(
                 "rel"   => "alternate",
                 "href"  => "/manual/{$lang}/feeds/{$id}.atom",
@@ -301,7 +301,7 @@ contributors($setup);
     }
 
     public function loadSourcesInfo() {
-        $this->sources = self::generateSourcesInfo($this->config->phpweb_sources_filename());
+        $this->sources = self::generateSourcesInfo($this->config->phpweb_sources_filename);
     }
 
     public static function generateSourcesInfo($filename) {
@@ -346,12 +346,12 @@ contributors($setup);
     }
 
     public function loadHistoryInfo() {
-        if (!is_file($this->config->phpweb_history_filename())) {
+        if (!is_file($this->config->phpweb_history_filename)) {
             $this->history = [];
             return;
         }
 
-        $history = include $this->config->phpweb_history_filename();
+        $history = include $this->config->phpweb_history_filename;
 
         $this->history = (is_array($history)) ? $history : [];
     }

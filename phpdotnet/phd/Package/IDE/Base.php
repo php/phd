@@ -207,15 +207,15 @@ abstract class Package_IDE_Base extends Format {
     }
 
     public function loadVersionInfo() {
-        if (file_exists($this->config->phpweb_version_filename())) {
-            $this->versions = self::generateVersionInfo($this->config->phpweb_version_filename());
+        if (file_exists($this->config->phpweb_version_filename)) {
+            $this->versions = self::generateVersionInfo($this->config->phpweb_version_filename);
         } else {
             trigger_error("Can't load the versions file", E_USER_ERROR);
         }
     }
 
     public function createOutputDirectory() {
-        $this->setOutputDir($this->config->output_dir() . strtolower($this->getFormatName()) . '/');
+        $this->setOutputDir($this->config->output_dir . strtolower($this->getFormatName()) . '/');
         if (file_exists($this->getOutputDir())) {
             if (!is_dir($this->getOutputDir())) {
                 trigger_error("Output directory is a file?", E_USER_ERROR);

@@ -9,7 +9,7 @@ class Package_IDE_PHPStub extends Package_IDE_Base {
     ) {
         parent::__construct($config, $outputHandler);
         $this->registerFormatName('IDE-PHPStub');
-        $this->setExt($this->config->ext() === null ? ".php" : $this->config->ext());
+        $this->setExt($this->config->ext === null ? ".php" : $this->config->ext);
     }
 
     public function parseFunction() {
