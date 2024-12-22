@@ -51,54 +51,30 @@ class Config
     public ?IndexRepository $indexcache = null;
     public bool $memoryindex = false;
 
-    public static function init(array $a) {
-        // Override any defaults due to operating system constraints
-        // and copy defaults to working optionArray
-        if ($newInit = is_null(self::$optionArray)) {
-
-            // By default, Windows does not support colors on the console.
-            // ANSICON by Jason Hood (http://adoxa.110mb.com/ansicon/index.html)
-            // can be used to provide colors at the console on Windows.
-            // Color output can still be enabled via the command line parameters --color
-            if('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
-        	self::$optionArrayDefault['color_output'] = false;
+    /**
+     * Sets one or more configuration options from an array
+     * 
+     * @param array<string, mixed>
+     */
+    public function init(array $configOptions): void {
+        foreach ($configOptions as $option => $value) {
+            if (! \property_exists($this, $option)) {
+                throw new \Exception("Invalid option supplied: $option");
             }
-
-            self::$optionArray = self::$optionArrayDefault;
+            
+            $this->$option = $value;
         }
-
-        // now merge other options
-        self::$optionArray = array_merge(self::$optionArray, (array)$a);
-
-        if ($newInit) {
-            // Always set saveconfig to false for a new initialization, even after restoring
-            // a save configuration. This allows additional options to be added at the
-            // command line without them being automatically saved.
-            self::$optionArray['saveconfig'] = false;
-
-            // As well as the quit option.
-            self::$optionArray['quit'] = false;
-
-            // Set the error reporting level to the restored level.
-            error_reporting($GLOBALS['olderrrep'] | self::$optionArray['verbose']);
-        }
+        
+        \error_reporting($GLOBALS['olderrrep'] | $this->verbose);
     }
 
-    public static function getAllFiltered() {
-        $retval = self::$optionArray;
-        return self::exportable($retval);
-    }
-    public static function exportable($val) {
-        foreach($val as $k => &$opt) {
-            if (is_array($opt)) {
-                $opt = self::exportable($opt);
-                continue;
-            }
-            if (is_resource($opt)) {
-                unset($val[$k]);
-            }
-        }
-        return $val;
+    /**
+     * Returns all configuration options and their values
+     * 
+     * @return array<string, mixed>
+     */
+    public function getAllFiltered(): array {
+        return \get_object_vars($this);
     }
 
     /**
