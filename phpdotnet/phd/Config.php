@@ -5,49 +5,51 @@ class Config
 {
     const VERSION = '@phd_version@';
 
-    private static $optionArrayDefault = array(
-        'output_format'     => array(),
-        'no_index'          => false,
-        'force_index'       => false,
-        'no_toc'            => false,
-        'xml_root'          => '.',
-        'xml_file'          => './.manual.xml',
-        'history_file'      => './fileModHistory.php',
-        'lang_dir'          => './',
-        'language'          => 'en',
-        'fallback_language' => 'en',
-        'verbose'           => VERBOSE_DEFAULT,
-        'date_format'       => 'H:i:s',
-        'render_ids'        => array(
-        ),
-        'skip_ids'          => array(
-        ),
-        'color_output'      => true,
-        'output_dir'        => './output/',
-        'output_filename'   => '',
-        'php_error_output'  => STDERR,
-        'php_error_color'   => '01;31', // Red
-        'user_error_output' => STDERR,
-        'user_error_color'  => '01;33', // Yellow
-        'phd_info_output'   => STDOUT,
-        'phd_info_color'    => '01;32', // Green
-        'phd_warning_output' => STDOUT,
-        'phd_warning_color' => '01;35', // Magenta
-        'highlighter'       => 'phpdotnet\\phd\\Highlighter',
-        'package'           => array(
-            'Generic',
-        ),
-        'css'               => array(),
-        'process_xincludes' => false,
-        'ext'               => null,
-        'package_dirs'      => array(__INSTALLDIR__),
-        'saveconfig'        => false,
-        'quit'              => false,
-        'indexcache'        => '',
-        'memoryindex'       => '',
-    );
-
-    private static $optionArray = null;
+    /** @var array<string, string> */
+    public array $output_format = [];
+    public bool $no_index = false;
+    public bool $force_index = false;
+    public bool $no_toc = false;
+    public string $xml_root = '.';
+    public string $xml_file = './.manual.xml';
+    public string $history_file = './fileModHistory.php';
+    public string $lang_dir = './';
+    public string $language = 'en';
+    public string $fallback_language = 'en';
+    public int $verbose = VERBOSE_DEFAULT;
+    public string $date_format = 'H:i:s';
+    /** @var array<string> */
+    public array $render_ids = [];
+    /** @var array<string> */
+    public array $skip_ids = [];
+    private bool $color_output = true;
+    public string $output_dir = './output/';
+    public string $output_filename = '';
+    /** @var resource */
+    public $php_error_output = \STDERR;
+    public string $php_error_color = '01;31'; // Red
+    /** @var resource */
+    public $user_error_output = \STDERR;
+    public string $user_error_color = '01;33'; // Yellow
+    /** @var resource */
+    public $phd_info_output = \STDOUT;
+    public string $phd_info_color = '01;32'; // Green
+    /** @var resource */
+    public $phd_warning_output = \STDOUT;
+    public string $phd_warning_color = '01;35'; // Magenta
+    public string $highlighter = 'phpdotnet\\phd\\Highlighter';
+    /** @var array<string> */
+    public array $package =['Generic'];
+    /** @var array<string> $css */
+    public array $css = [];
+    public bool $process_xincludes = false;
+    public ?string $ext = null;
+    /** @var array<string> */
+    public array $package_dirs = [__INSTALLDIR__];
+    public bool $saveconfig = false;
+    public bool $quit = false;
+    public ?IndexRepository $indexcache = null;
+    public bool $memoryindex = false;
 
     public static function init(array $a) {
         // Override any defaults due to operating system constraints
