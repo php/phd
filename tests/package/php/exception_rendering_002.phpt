@@ -8,7 +8,7 @@ require_once __DIR__ . "/../../setup.php";
 
 $xml_file = __DIR__ . "/data/exception_rendering_002.xml";
 
-$config->setXml_file($xml_file);
+$config->xml_file = $xml_file;
 
 $format = new TestPHPChunkedXHTML($config, $outputHandler);
 $render = new TestRender(new Reader($outputHandler), $config, $format);

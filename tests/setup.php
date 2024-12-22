@@ -17,7 +17,7 @@ error_reporting($olderrrep | VERBOSE_DEFAULT);
 set_error_handler($errorHandler->handleError(...));
 
 $config->init([]);
-$config->setLang_dir(__INSTALLDIR__ . DIRECTORY_SEPARATOR
+$config->lang_dir = __INSTALLDIR__ . DIRECTORY_SEPARATOR
 . "phpdotnet" . DIRECTORY_SEPARATOR . "phd" . DIRECTORY_SEPARATOR
-. "data" . DIRECTORY_SEPARATOR . "langs" . DIRECTORY_SEPARATOR);
-$config->setPackage_dirs([__INSTALLDIR__]);
+. "data" . DIRECTORY_SEPARATOR . "langs" . DIRECTORY_SEPARATOR;
+$config->package_dirs = [__INSTALLDIR__];

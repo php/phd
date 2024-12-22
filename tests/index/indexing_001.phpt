@@ -8,8 +8,8 @@ require_once __DIR__ . "/../setup.php";
 
 $xml_file = __DIR__ . "/data/indexing_001.xml";
 
-$config->setForce_index(true);
-$config->setXml_file($xml_file);
+$config->force_index = true;
+$config->xml_file = $xml_file;
 
 $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
