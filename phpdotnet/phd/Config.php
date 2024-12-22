@@ -52,6 +52,11 @@ class Config
     public ?IndexRepository $indexcache = null;
     public bool $memoryindex = false;
 
+    public string $phpweb_version_filename = '';
+    public string $phpweb_acronym_filename = '';
+    public string $phpweb_sources_filename = '';
+    public string $phpweb_history_filename = '';
+    
     public function __construct() {
         $this->copyright = 'Copyright(c) 2007-'  . \date('Y') . ' The PHP Documentation Group';
         
