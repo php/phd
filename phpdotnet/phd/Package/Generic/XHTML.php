@@ -462,6 +462,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             /* DEFAULT */          false,
             'footnote'             => 'format_footnote_para_text',
         ),
+        'property'              => [
+           /* DEFAULT */           'format_property_text',
+        ],
         /* FIXME: This is one crazy stupid workaround for footnotes */
         'constant'              => array(
             /* DEFAULT */          'format_constant_text',
@@ -1843,6 +1846,30 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return false;
     }
+    
+    public function format_property_text($value, $tag) {
+        if (! str_contains($value, '::')) {
+            return $value;
+        }
+        
+        $tempLinkValue = str_replace(
+            array("\\", "_", "$"),
+            array("-", "-", ""),
+            strtolower(trim($value, "_"))
+        );
+        
+        list($extensionAndClass, $property) = explode("::", $tempLinkValue);
+        $normalizedLinkFormat = $extensionAndClass . ".props." . trim($property, "-");
+        
+        $link = $this->createLink($normalizedLinkFormat);
+        
+        if ($link === null || $link === "") {
+            return $value;
+        }
+        
+        return '<a href="' . $link . '">' . $value . '</a>';
+    }
+    
     public function admonition_title($title, $lang)
     {
         return '<strong class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</strong>';
