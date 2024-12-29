@@ -6,9 +6,7 @@ namespace phpdotnet\phd;
 
 require_once __DIR__ . "/../../setup.php";
 
-$xml_file = __DIR__ . "/data/property_linking.xml";
-
-$config->setXml_file($xml_file);
+$config->xmlFile = __DIR__ . "/data/property_linking.xml";
 
 $indices = [
     [
