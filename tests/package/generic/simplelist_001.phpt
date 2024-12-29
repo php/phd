@@ -6,9 +6,9 @@ namespace phpdotnet\phd;
 
 require_once __DIR__ . "/../../setup.php";
 
-$xml_file = __DIR__ . "/data/simplelist.xml";
+$xmlFile = __DIR__ . "/data/simplelist.xml";
 
-$config->xml_file = $xml_file;
+$config->xmlFile = $xmlFile;
 
 $format = new TestGenericChunkedXHTML($config, $outputHandler);
 $render = new TestRender(new Reader($outputHandler), $config, $format);

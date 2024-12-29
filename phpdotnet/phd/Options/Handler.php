@@ -55,7 +55,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_memoryindex(string $k, mixed $v): array
     {
-        return ['memoryindex' => true];
+        return ['memoryIndex' => true];
     }
 
     /**
@@ -80,7 +80,7 @@ class Options_Handler implements Options_Interface
                 $formats[] = $val;
             }
         }
-        return ['output_format' => $formats];
+        return ['outputFormat' => $formats];
     }
 
     /**
@@ -135,7 +135,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_noindex(string $k, mixed $v): array
     {
-        return ['no_index' => true];
+        return ['noIndex' => true];
     }
 
     /**
@@ -151,7 +151,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_forceindex(string $k, mixed $v): array
     {
-        return ['force_index' => true];
+        return ['forceIndex' => true];
     }
 
     /**
@@ -167,7 +167,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_notoc(string $k, mixed $v): array
     {
-        return ['no_toc' => true];
+        return ['noToc' => true];
     }
 
     /**
@@ -190,8 +190,8 @@ class Options_Handler implements Options_Interface
             trigger_error(sprintf("'%s' is not a readable docbook file", $v), E_USER_ERROR);
         }
         return [
-            'xml_root' => dirname($v),
-            'xml_file' => $v,
+            'xmlRoot' => dirname($v),
+            'xmlFile' => $v,
         ];
     }
 
@@ -225,7 +225,7 @@ class Options_Handler implements Options_Interface
         }
         $v = (substr($v, strlen($v) - strlen(DIRECTORY_SEPARATOR)) === DIRECTORY_SEPARATOR) ? $v : ($v . DIRECTORY_SEPARATOR);
 
-        return ['output_dir' => $v];
+        return ['outputDir' => $v];
     }
 
     /**
@@ -238,7 +238,7 @@ class Options_Handler implements Options_Interface
         }
         $file = basename($v);
 
-        return ['output_filename' => $file];
+        return ['outputFilename' => $file];
     }
 
     /**
@@ -257,7 +257,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_partial(string $k, mixed $v): array
     {
-        $render_ids = $this->config->render_ids;
+        $renderIds = $this->config->renderIds;
         foreach((array)$v as $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
@@ -268,9 +268,9 @@ class Options_Handler implements Options_Interface
                 }
                 $recursive = (bool) $recursive;
             }
-            $render_ids[$val] = $recursive;
+            $renderIds[$val] = $recursive;
         }
-        return ['render_ids' => $render_ids];
+        return ['renderIds' => $renderIds];
     }
 
     /**
@@ -319,7 +319,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_skip(string $k, mixed $v): array
     {
-        $skip_ids = $this->config->skip_ids;
+        $skipIds = $this->config->skipIds;
         foreach((array)$v as $val) {
             $recursive = true;
             if (strpos($val, "=") !== false) {
@@ -330,9 +330,9 @@ class Options_Handler implements Options_Interface
                 }
                 $recursive = (bool) $recursive;
             }
-            $skip_ids[$val] = $recursive;
+            $skipIds[$val] = $recursive;
         }
-        return ['skip_ids' => $skip_ids];
+        return ['skipIds' => $skipIds];
     }
 
     /**
@@ -350,7 +350,7 @@ class Options_Handler implements Options_Interface
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
 
-        return ['saveconfig' => $val];
+        return ['saveConfig' => $val];
     }
 
     /**
@@ -444,7 +444,7 @@ class Options_Handler implements Options_Interface
         if (!is_bool($val)) {
             trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
         }
-        return ['color_output' => $val];
+        return ['colorOutput' => $val];
     }
 
     /**
@@ -474,7 +474,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_packagedir(string $k, mixed $v): array
     {
-        $packages = $this->config->package_dirs;
+        $packages = $this->config->packageDirs;
         foreach((array)$v as $val) {
             if ($path = realpath($val)) {
                 if (!in_array($path, $packages)) {
@@ -484,7 +484,7 @@ class Options_Handler implements Options_Interface
                 trigger_error(vsprintf('Invalid path: %s', [$val]), E_USER_WARNING);
             }
         }
-        return ['package_dirs' => $packages];
+        return ['packageDirs' => $packages];
     }
 
     /**
@@ -500,7 +500,7 @@ class Options_Handler implements Options_Interface
      */
     public function option_xinclude(string $k, mixed $v): array
     {
-        return ['process_xincludes' => true];
+        return ['processXincludes' => true];
     }
 
     /**
@@ -539,21 +539,21 @@ class Options_Handler implements Options_Interface
   --package <packagename>    The package to use
   -I
   --noindex                  Do not index before rendering but load from cache
-                             (default: " . ($this->config->no_index ? 'true' : 'false') . ")
+                             (default: " . ($this->config->noIndex ? 'true' : 'false') . ")
   -M
   --memoryindex              Do not save indexing into a file, store it in memory.
-                             (default: " . ($this->config->memoryindex ? 'true' : 'false') . ")
+                             (default: " . ($this->config->memoryIndex ? 'true' : 'false') . ")
   -r
   --forceindex               Force re-indexing under all circumstances
-                             (default: " . ($this->config->force_index ? 'true' : 'false') . ")
+                             (default: " . ($this->config->forceIndex ? 'true' : 'false') . ")
   -t
   --notoc                    Do not rewrite TOC before rendering but load from
-                             cache (default: " . ($this->config->no_toc ? 'true' : 'false') . ")
+                             cache (default: " . ($this->config->noToc ? 'true' : 'false') . ")
   -d <filename>
   --docbook <filename>       The Docbook file to render from
   -x
   --xinclude                 Process XML Inclusions (XInclude)
-                             (default: " . ($this->config->process_xincludes ? 'true' : 'false') . ")
+                             (default: " . ($this->config->processXincludes ? 'true' : 'false') . ")
   -p <id[=bool]>
   --partial <id[=bool]>      The ID to render, optionally skipping its children
                              chunks (default to true; render children)
@@ -563,7 +563,7 @@ class Options_Handler implements Options_Interface
   -l
   --list                     Print out the supported packages and formats
   -o <directory>
-  --output <directory>       The output directory (default: " . $this->config->output_dir . ")
+  --output <directory>       The output directory (default: " . $this->config->outputDir . ")
   -F filename
   --outputfilename filename  Filename to use when writing standalone formats
                              (default: <packagename>-<formatname>.<formatext>)
@@ -572,7 +572,7 @@ class Options_Handler implements Options_Interface
                              theme). (default: " . $this->config->language . ")
   -c <bool>
   --color <bool>             Enable color output when output is to a terminal
-                             (default: " . ($this->config->getColor_output() ? 'true' : 'false') . ")
+                             (default: " . ($this->config->getColorOutput() ? 'true' : 'false') . ")
   -C <filename>
   --css <filename>           Link for an external CSS file.
   -g <classname>
@@ -585,7 +585,7 @@ class Options_Handler implements Options_Interface
   --ext <extension>          The alternative filename extension to use,
                              including the dot. Use 'false' for no extension.
   -S <bool>
-  --saveconfig <bool>        Save the generated config (default: " . ($this->config->saveconfig ? 'true' : 'false') . ").
+  --saveconfig <bool>        Save the generated config (default: " . ($this->config->saveConfig ? 'true' : 'false') . ").
 
   -Q
   --quit                     Don't run the build. Use with --saveconfig to

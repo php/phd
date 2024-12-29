@@ -662,7 +662,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         $stylesDir = $this->getOutputDir();
         if (!$stylesDir) {
-            $stylesDir = $this->config->output_dir;
+            $stylesDir = $this->config->outputDir;
         }
         $stylesDir .= 'styles/';
         if (file_exists($stylesDir)) {

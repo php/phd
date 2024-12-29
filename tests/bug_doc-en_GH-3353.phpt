@@ -6,16 +6,16 @@ namespace phpdotnet\phd;
 
 require_once __DIR__ . "/setup.php";
 
-$xml_file = __DIR__ . "/data/bug_doc-en_GH-3353.xml";
+$xmlFile = __DIR__ . "/data/bug_doc-en_GH-3353.xml";
 
-$config->force_index = true;
-$config->xml_file = $xml_file;
+$config->forceIndex = true;
+$config->xmlFile = $xmlFile;
 
 $render = new Render();
 
 $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();
-$config->indexcache = $indexRepository;
+$config->indexCache = $indexRepository;
 
 
 // Indexing
@@ -23,7 +23,7 @@ $index = new TestIndex($indexRepository, $config, $outputHandler);
 $render->attach($index);
 
 $reader = new Reader($outputHandler);
-$reader->open($config->xml_file, null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
+$reader->open($config->xmlFile, null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
 $render->execute($reader);
 
 $render->detach($index);
@@ -34,7 +34,7 @@ $format = new TestPHPChunkedXHTML($config, $outputHandler);
 $render->attach($format);
 
 $reader = new Reader($outputHandler);
-$reader->open($config->xml_file, null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
+$reader->open($config->xmlFile, null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
 
 $render->execute($reader);
 ?>

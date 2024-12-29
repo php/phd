@@ -71,12 +71,12 @@ abstract class Format_Abstract_XHTML extends Format {
     * @return void
     */
     public function postConstruct() {
-        $this->mediamanager = new MediaManager($this->config->xml_root);
+        $this->mediamanager = new MediaManager($this->config->xmlRoot);
         $outputdir = $this->getOutputDir();
         if (isset($outputdir) && $outputdir) {
             $this->mediamanager->output_dir = $outputdir;
         } else {
-            $this->mediamanager->output_dir        = $this->config->output_dir . '/' . strtolower($this->getFormatName()) . '-data/';
+            $this->mediamanager->output_dir        = $this->config->outputDir . '/' . strtolower($this->getFormatName()) . '-data/';
             $this->mediamanager->relative_ref_path = basename($this->mediamanager->output_dir) . '/';
         }
     }

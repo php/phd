@@ -6,9 +6,9 @@ namespace phpdotnet\phd;
 
 require_once __DIR__ . "/../../setup.php";
 
-$xml_file = __DIR__ . "/data/constant_links.xml";
+$xmlFile = __DIR__ . "/data/constant_links.xml";
 
-$config->xml_file = $xml_file;
+$config->xmlFile = $xmlFile;
 
 $indices = [
     [

@@ -68,8 +68,8 @@ abstract class Format extends ObjectStorage
     public function __construct(Config $config, OutputHandler $outputHandler) {
         $this->config = $config;
         $this->outputHandler = $outputHandler;
-        if ($this->config->indexcache) {
-            $this->indexRepository = $this->config->indexcache;
+        if ($this->config->indexCache) {
+            $this->indexRepository = $this->config->indexCache;
             if (!($this instanceof Index)) {
                 $this->sortIDs();
             }
@@ -337,13 +337,13 @@ abstract class Format extends ObjectStorage
             if (isset($this->autogen[$lang][$text])) {
                 return $this->autogen[$lang][$text];
             }
-            if ($lang == $this->config->fallback_language) {
+            if ($lang == $this->config->fallbackLanguage) {
                 throw new \InvalidArgumentException("Cannot autogenerate text for '$text'");
             }
-            return $this->autogen($text, $this->config->fallback_language);
+            return $this->autogen($text, $this->config->fallbackLanguage);
         }
 
-        $filename = $this->config->lang_dir . $lang . ".ini";
+        $filename = $this->config->langDir . $lang . ".ini";
 
         if (!file_exists($filename) && strncmp(basename($filename), 'doc-', 4) === 0) {
             $filename = dirname($filename) . DIRECTORY_SEPARATOR . substr(basename($filename), 4);

@@ -7,61 +7,61 @@ class Config
     public readonly string $copyright;
 
     /** @var array<string, string> */
-    public array $output_format = [];
-    public bool $no_index = false;
-    public bool $force_index = false;
-    public bool $no_toc = false;
-    public string $xml_root = '.';
-    public string $xml_file = './.manual.xml';
-    public string $history_file = './fileModHistory.php';
-    public string $lang_dir = './';
+    public array $outputFormat = [];
+    public bool $noIndex = false;
+    public bool $forceIndex = false;
+    public bool $noToc = false;
+    public string $xmlRoot = '.';
+    public string $xmlFile = './.manual.xml';
+    public string $historyFile = './fileModHistory.php';
+    public string $langDir = './';
     public string $language = 'en';
-    public string $fallback_language = 'en';
+    public string $fallbackLanguage = 'en';
     public int $verbose = VERBOSE_DEFAULT;
-    public string $date_format = 'H:i:s';
+    public string $dateFormat = 'H:i:s';
     /** @var array<string> */
-    public array $render_ids = [];
+    public array $renderIds = [];
     /** @var array<string> */
-    public array $skip_ids = [];
-    private bool $color_output = true;
-    public string $output_dir = './output/';
-    public string $output_filename = '';
+    public array $skipIds = [];
+    private bool $colorOutput = true;
+    public string $outputDir = './output/';
+    public string $outputFilename = '';
     /** @var resource */
-    public $php_error_output = \STDERR;
-    public string $php_error_color = '01;31'; // Red
+    public $phpErrorOutput = \STDERR;
+    public string $phpErrorColor = '01;31'; // Red
     /** @var resource */
-    public $user_error_output = \STDERR;
-    public string $user_error_color = '01;33'; // Yellow
+    public $userErrorOutput = \STDERR;
+    public string $userErrorColor = '01;33'; // Yellow
     /** @var resource */
-    public $phd_info_output = \STDOUT;
-    public string $phd_info_color = '01;32'; // Green
+    public $phdInfoOutput = \STDOUT;
+    public string $phdInfoColor = '01;32'; // Green
     /** @var resource */
-    public $phd_warning_output = \STDOUT;
-    public string $phd_warning_color = '01;35'; // Magenta
+    public $phdWarningOutput = \STDOUT;
+    public string $phdWarningColor = '01;35'; // Magenta
     public string $highlighter = 'phpdotnet\\phd\\Highlighter';
     /** @var array<string> */
     public array $package =['Generic'];
     /** @var array<string> $css */
     public array $css = [];
-    public bool $process_xincludes = false;
+    public bool $processXincludes = false;
     public ?string $ext = null;
     /** @var array<string> */
-    public array $package_dirs = [__INSTALLDIR__];
-    public bool $saveconfig = false;
+    public array $packageDirs = [__INSTALLDIR__];
+    public bool $saveConfig = false;
     public bool $quit = false;
-    public ?IndexRepository $indexcache = null;
-    public bool $memoryindex = false;
+    public ?IndexRepository $indexCache = null;
+    public bool $memoryIndex = false;
 
-    public string $phpweb_version_filename = '';
-    public string $phpweb_acronym_filename = '';
-    public string $phpweb_sources_filename = '';
-    public string $phpweb_history_filename = '';
+    public string $phpwebVersionFilename = '';
+    public string $phpwebAcronymFilename = '';
+    public string $phpwebSourcesFilename = '';
+    public string $phpwebHistoryFilename = '';
     
     public function __construct() {
         $this->copyright = 'Copyright(c) 2007-'  . \date('Y') . ' The PHP Documentation Group';
         
         if('WIN' === \strtoupper(\substr(\PHP_OS, 0, 3))) {
-        	$this->color_output = false;
+        	$this->colorOutput = false;
         }
     }
     
@@ -98,7 +98,7 @@ class Config
      */
     public function getSupportedPackages(): array {
         $packageList = [];
-        foreach($this->package_dirs as $dir) {
+        foreach($this->packageDirs as $dir) {
             foreach (\glob($dir . "/phpdotnet/phd/Package/*", \GLOB_ONLYDIR) as $item) {
                 $baseitem = \basename($item);
                 if ($baseitem[0] !== '.') {
@@ -112,30 +112,30 @@ class Config
     /**
      * Returns whether terminal output supports colors 
      */
-    public function getColor_output(): bool {
-        return $this->color_output;
+    public function getColorOutput(): bool {
+        return $this->colorOutput;
     }
 
     /**
      * Enables/disables color output on the terminal
      */
-    public function setColor_output(bool $color_output): void {
+    public function setColorOutput(bool $colorOutput): void {
         // Disable colored output if the terminal doesn't support colors
-        if ($color_output && function_exists('posix_isatty')) {
-            if (!posix_isatty($this->phd_info_output)) {
-                $this->phd_info_color = false;
+        if ($colorOutput && function_exists('posix_isatty')) {
+            if (!posix_isatty($this->phdInfoOutput)) {
+                $this->phdInfoColor = false;
             }
-            if (!posix_isatty($this->phd_warning_output)) {
-                $this->phd_warning_color = false;
+            if (!posix_isatty($this->phdWarningOutput)) {
+                $this->phdWarningColor = false;
             }
-            if (!posix_isatty($this->php_error_output)) {
-                $this->php_error_color = false;
+            if (!posix_isatty($this->phpErrorOutput)) {
+                $this->phpErrorColor = false;
             }
-            if (!posix_isatty($this->user_error_output)) {
-                $this->user_error_color = false;
+            if (!posix_isatty($this->userErrorOutput)) {
+                $this->userErrorColor = false;
             }
         }
-        $this->color_output = $color_output;
+        $this->colorOutput = $colorOutput;
     }
 
     /**
@@ -152,27 +152,27 @@ class Config
      * @return boolean True if indexing is required.
      */
     public function requiresIndexing(): bool {
-        if (! $this->indexcache) {
-            $indexfile = $this->output_dir . 'index.sqlite';
+        if (! $this->indexCache) {
+            $indexfile = $this->outputDir . 'index.sqlite';
             if (!\file_exists($indexfile)) {
                 return true;
             }
         }
 
-        if ($this->no_index) {
+        if ($this->noIndex) {
             return false;
         }
 
-        if ($this->force_index) {
+        if ($this->forceIndex) {
             return true;
         }
 
-        if ($this->indexcache->getIndexingTimeCount() === 0) {
+        if ($this->indexCache->getIndexingTimeCount() === 0) {
             return true;
         }
 
-        $xmlLastModification = \filemtime($this->xml_file);
-        if ($this->indexcache->getIndexingTime() > $xmlLastModification) {
+        $xmlLastModification = \filemtime($this->xmlFile);
+        if ($this->indexCache->getIndexingTime() > $xmlLastModification) {
             return false;
         }
         return true;

@@ -42,7 +42,7 @@ class Package_IDE_Funclist extends Format {
             $this->registerTextMap($this->textmap);
             break;
        case Render::FINALIZE:
-            $filename = $this->config->output_dir . strtolower($this->getFormatName()) . $this->getExt();
+            $filename = $this->config->outputDir . strtolower($this->getFormatName()) . $this->getExt();
             file_put_contents($filename, $this->buffer);
             break;
         case Render::VERBOSE:
