@@ -218,7 +218,7 @@ abstract class Package_Generic_TocFeed extends Format
 
         case Render::INIT:
             $this->setOutputDir(
-                $this->config->output_dir
+                $this->config->outputDir
                 . strtolower($this->getFormatName()) . '/'
             );
             $dir = $this->getOutputDir();

@@ -82,7 +82,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         case Render::INIT:
             $this->loadVersionAcronymInfo();
             $this->loadSourcesInfo();
-            $this->setOutputDir($this->config->output_dir . strtolower($this->getFormatName()) . '/');
+            $this->setOutputDir($this->config->outputDir . strtolower($this->getFormatName()) . '/');
             $this->postConstruct();
             $this->loadHistoryInfo();
             if (file_exists($this->getOutputDir())) {
@@ -95,7 +95,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                 }
             }
             if ($this->getFormatName() == "PHP-Web") {
-                if (!$this->config->no_toc && is_dir($this->getOutputDir() . 'toc')) {
+                if (!$this->config->noToc && is_dir($this->getOutputDir() . 'toc')) {
                     $this->removeDir($this->getOutputDir() . 'toc');
                 }
                 if (!file_exists($this->getOutputDir() . "toc") || is_file($this->getOutputDir() . "toc")) {
@@ -301,7 +301,7 @@ contributors($setup);
     }
 
     public function loadSourcesInfo() {
-        $this->sources = self::generateSourcesInfo($this->config->phpweb_sources_filename);
+        $this->sources = self::generateSourcesInfo($this->config->phpwebSourcesFilename);
     }
 
     public static function generateSourcesInfo($filename) {
@@ -346,12 +346,12 @@ contributors($setup);
     }
 
     public function loadHistoryInfo() {
-        if (!is_file($this->config->phpweb_history_filename)) {
+        if (!is_file($this->config->phpwebHistoryFilename)) {
             $this->history = [];
             return;
         }
 
-        $history = include $this->config->phpweb_history_filename;
+        $history = include $this->config->phpwebHistoryFilename;
 
         $this->history = (is_array($history)) ? $history : [];
     }

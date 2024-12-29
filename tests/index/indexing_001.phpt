@@ -6,10 +6,10 @@ namespace phpdotnet\phd;
 
 require_once __DIR__ . "/../setup.php";
 
-$xml_file = __DIR__ . "/data/indexing_001.xml";
+$xmlFile = __DIR__ . "/data/indexing_001.xml";
 
-$config->force_index = true;
-$config->xml_file = $xml_file;
+$config->forceIndex = true;
+$config->xmlFile = $xmlFile;
 
 $indexRepository = new IndexRepository(new \SQLite3(":memory:"));
 $indexRepository->init();

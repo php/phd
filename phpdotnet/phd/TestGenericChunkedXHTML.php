@@ -18,7 +18,7 @@ class TestGenericChunkedXHTML extends Package_Generic_ChunkedXHTML {
             parent::update($event, $value);
             break;
         case Render::INIT:
-            $this->setOutputDir($this->config->output_dir . strtolower($this->getFormatName()) . '/');
+            $this->setOutputDir($this->config->outputDir . strtolower($this->getFormatName()) . '/');
             break;
         //No verbose
         }
@@ -32,7 +32,7 @@ class TestGenericChunkedXHTML extends Package_Generic_ChunkedXHTML {
         $content .= stream_get_contents($fp);
 
         if ($id === "") {
-            $filename = $this->config->xml_file;
+            $filename = $this->config->xmlFile;
         }
 
         echo "Filename: " . basename($filename) . "\n";

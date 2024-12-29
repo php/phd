@@ -6,11 +6,11 @@ namespace phpdotnet\phd;
 
 require_once __DIR__ . "/../../setup.php";
 
-$xml_file = __DIR__ . "/data/attribute_formatting_003.xml";
+$xmlFile = __DIR__ . "/data/attribute_formatting_003.xml";
 
 $config = new Config;
 
-$config->xml_file = $xml_file;
+$config->xmlFile = $xmlFile;
 
 $format = new TestGenericChunkedXHTML($config, $outputHandler);
 

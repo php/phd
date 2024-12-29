@@ -45,9 +45,9 @@ HEADER;
     }
 
     public function createFileName() {
-        $filename = $this->config->output_dir;
-        if ($this->config->output_filename) {
-            $filename .= $this->config->output_filename;
+        $filename = $this->config->outputDir;
+        if ($this->config->outputFilename) {
+            $filename .= $this->config->outputFilename;
         } else {
             $filename .= strtolower($this->getFormatName()) . $this->getExt();
         }

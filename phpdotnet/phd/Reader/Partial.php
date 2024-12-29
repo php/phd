@@ -9,18 +9,18 @@ class Reader_Partial extends Reader
 
     public function __construct(
         OutputHandler $outputHandler,
-        array $render_ids,
-        ?array $skip_ids   = [],
+        array $renderIds,
+        ?array $skipIds   = [],
         ?array $parents    = [],
     ) {
         parent::__construct($outputHandler);
 
-        if ($render_ids === []) {
+        if ($renderIds === []) {
             throw new \Exception("Didn't get any IDs to seek");
         }
 
-        $this->partial = $render_ids;
-        $this->skip = $skip_ids;
+        $this->partial = $renderIds;
+        $this->skip = $skipIds;
         $this->parents = $parents;
     }
 

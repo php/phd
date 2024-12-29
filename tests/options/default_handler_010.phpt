@@ -27,31 +27,31 @@ var_dump($commandLineOptions);
 ?>
 --EXPECTF--
 array(20) {
-  ["output_format"]=>
+  ["outputFormat"]=>
   array(1) {
     [0]=>
     string(5) "xhtml"
   }
-  ["no_index"]=>
+  ["noIndex"]=>
   bool(true)
-  ["force_index"]=>
+  ["forceIndex"]=>
   bool(true)
-  ["no_toc"]=>
+  ["noToc"]=>
   bool(true)
-  ["xml_root"]=>
+  ["xmlRoot"]=>
   string(13) "tests/options"
-  ["xml_file"]=>
+  ["xmlFile"]=>
   string(38) "tests/options/default_handler_009.phpt"
-  ["output_dir"]=>
+  ["outputDir"]=>
   string(14) "tests/options/"
-  ["output_filename"]=>
+  ["outputFilename"]=>
   string(23) "default_handler_009.xml"
-  ["render_ids"]=>
+  ["renderIds"]=>
   array(1) {
     ["bookId"]=>
     bool(true)
   }
-  ["skip_ids"]=>
+  ["skipIds"]=>
   array(1) {
     ["idToSkip"]=>
     bool(true)
@@ -60,7 +60,7 @@ array(20) {
   int(%d)
   ["language"]=>
   string(2) "en"
-  ["color_output"]=>
+  ["colorOutput"]=>
   bool(true)
   ["highlighter"]=>
   string(11) "highlighter"
@@ -74,13 +74,13 @@ array(20) {
     [0]=>
     string(8) "some.css"
   }
-  ["process_xincludes"]=>
+  ["processXincludes"]=>
   bool(true)
   ["ext"]=>
   string(5) ".html"
-  ["memoryindex"]=>
+  ["memoryIndex"]=>
   bool(true)
-  ["package_dirs"]=>
+  ["packageDirs"]=>
   array(2) {
     [0]=>
     string(%d) "%s"

@@ -6,9 +6,9 @@ namespace phpdotnet\phd;
 
 require_once __DIR__ . "/../../setup.php";
 
-$xml_filePhpdoc = __DIR__ . "/data/class_rendering_001.xml";
+$xmlFilePhpdoc = __DIR__ . "/data/class_rendering_001.xml";
 
-$config->xml_file = $xml_filePhpdoc;
+$config->xmlFile = $xmlFilePhpdoc;
 
 $formatPhpdoc = new TestPHPChunkedXHTML($config, $outputHandler);
 $renderPhpdoc = new TestRender(new Reader($outputHandler), $config, $formatPhpdoc);
@@ -18,9 +18,9 @@ $renderPhpdoc->run();
 $phpdocOutput = ob_get_clean();
 
 
-$xml_fileReferenceWithRole = __DIR__ . "/data/class_rendering_002.xml";
+$xmlFileReferenceWithRole = __DIR__ . "/data/class_rendering_002.xml";
 
-$config->xml_file = $xml_fileReferenceWithRole;
+$config->xmlFile = $xmlFileReferenceWithRole;
 
 $formatReferenceWithRole = new TestPHPChunkedXHTML($config, $outputHandler);
 $renderReferenceWithRole = new TestRender(new Reader($outputHandler), $config, $formatReferenceWithRole);

@@ -97,7 +97,7 @@ class Package_PHP_KDevelop extends Format {
             break;
         case Render::INIT:
             if ($value) {
-                $this->setOutputDir($this->config->output_dir);
+                $this->setOutputDir($this->config->outputDir);
                 $this->setFileStream(fopen($this->getOutputDir() . strtolower($this->getFormatName()), "w"));
                 self::headerToc();
             }
