@@ -6,6 +6,9 @@
   <para>
    <property>Vendor\Namespace::$definitely_exists</property>
   </para>
+  <para>
+   <property>Vendor\Namespace::$definitelyExists2</property>
+  </para>
  </section>
 
  <section>
@@ -13,12 +16,18 @@
   <para>
    <property>Vendor\Namespace::$this_does_not_exist</property>
   </para>
+  <para>
+   <property>Vendor\Namespace::$thisDoesNotExist2</property>
+  </para>
  </section>
 
  <section>
   <para>3. Properties with leading and trailing underscores in ID</para>
   <para>
    <property>Extension\Class::$__leading_and_trailing_undescores__</property>
+  </para>
+  <para>
+   <property>Extension\Class::$__leadingAndTrailingUndescores2__</property>
   </para>
  </section>
 

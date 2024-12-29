@@ -16,7 +16,15 @@ $indices = [
         "filename"   => "extensionname.page",
     ],
     [
+        "docbook_id" => "vendor-namespace.props.definitelyexists2",
+        "filename"   => "extensionname.page",
+    ],
+    [
         "docbook_id" => "extension-class.props.leading-and-trailing-undescores",
+        "filename"   => "extensionname2.page2",
+    ],
+    [
+        "docbook_id" => "extension-class.props.leadingandtrailingundescores2",
         "filename"   => "extensionname2.page2",
     ],
 ];
@@ -53,6 +61,9 @@ Content:
   <p class="para">
    <span class="property"><a href="extensionname.page.html#vendor-namespace.props.definitely-exists">Vendor\Namespace::$definitely_exists</a></span>
   </p>
+  <p class="para">
+   <span class="property"><a href="extensionname.page.html#vendor-namespace.props.definitelyexists2">Vendor\Namespace::$definitelyExists2</a></span>
+  </p>
  </div>
 
  <div class="section">
@@ -60,12 +71,18 @@ Content:
   <p class="para">
    <span class="property">Vendor\Namespace::$this_does_not_exist</span>
   </p>
+  <p class="para">
+   <span class="property">Vendor\Namespace::$thisDoesNotExist2</span>
+  </p>
  </div>
 
  <div class="section">
   <p class="para">%d. Properties with leading and trailing underscores in ID</p>
   <p class="para">
    <span class="property"><a href="extensionname2.page2.html#extension-class.props.leading-and-trailing-undescores">Extension\Class::$__leading_and_trailing_undescores__</a></span>
+  </p>
+  <p class="para">
+   <span class="property"><a href="extensionname2.page2.html#extension-class.props.leadingandtrailingundescores2">Extension\Class::$__leadingAndTrailingUndescores2__</a></span>
   </p>
  </div>
 
