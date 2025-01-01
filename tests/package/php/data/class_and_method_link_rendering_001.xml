@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="class_and_method_link_rendering" xmlns="http://docbook.org/ns/docbook">
+
+ <section>
+  <para>1. Class linking</para>
+  <classname>Extension\Namespace\Existing_Class</classname>
+  <classname>\Extension\Namespace\Existing_Class</classname>
+ </section>
+ 
+ <section>
+  <para>2. Method/Function linking</para>
+  <methodname>Extension\Namespace\Classname::existingMethodName</methodname>
+  <methodname>\Extension\Namespace\Classname::existingMethodName</methodname>
+ </section>
+ 
+ <section>
+  <para>3. Class linking (non-FQN) in method/function parameter and return type</para>
+  <methodsynopsis>
+   <type>Extension\Namespace\Existing_Class</type><methodname>method_name</methodname>
+   <methodparam><type>Extension\Namespace\Existing_Class</type><parameter>paramName</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+ 
+ <section>
+  <para>4. Class linking (FQN) in method/function parameter and return type</para>
+  <methodsynopsis>
+   <type>\Extension\Namespace\Existing_Class</type><methodname>method_name</methodname>
+   <methodparam><type>\Extension\Namespace\Existing_Class</type><parameter>paramName</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+</chapter>
