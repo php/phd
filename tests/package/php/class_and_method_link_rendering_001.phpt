@@ -6,9 +6,7 @@ namespace phpdotnet\phd;
 
 require_once __DIR__ . "/../../setup.php";
 
-$config->setXml_file(
-    __DIR__ . "/data/class_and_method_link_rendering_001.xml"
-);
+$config->xmlFile = __DIR__ . "/data/class_and_method_link_rendering_001.xml";
 
 $indices = [
     [
