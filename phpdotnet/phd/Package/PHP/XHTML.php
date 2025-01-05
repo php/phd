@@ -666,7 +666,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_type_text($type, $tagname) {
-        $t = strtr(ltrim(strtolower($type), "\\"), ["_" => "-", "\\" => "-"]);
+        $t = strtr($this->normalizeFQN($type), ["_" => "-", "\\" => "-"]);
         $fragment = "";
 
         switch($t) {
@@ -722,6 +722,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return '<a href="#' .($fragment ? $fragment : $href). '" class="' . $classNames . '">' .$type. '</a>';
         }
         return '<span class="' . $classNames . '">' .$type. '</span>';
+    }
+    
+    private function normalizeFQN(string $fqn): string {
+        return \ltrim(\strtolower($fqn), "\\");
     }
 
     public function format_void($open, $name, $attrs, $props) {
@@ -837,7 +841,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if (isset($non_functions[$value])) {
             $filename = "function." . str_replace("_", "-", $value);
         } else {
-            $ref = ltrim(strtolower($value), "\\");
+            $ref = $this->normalizeFQN($value);
             $filename = $this->getRefnameLink($ref);
         }
         if ($filename !== null) {
@@ -880,7 +884,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_classname_text($value, $tag) {
-        if (($filename = $this->getClassnameLink(ltrim(strtolower($value), "\\"))) !== null && $this->cchunk["class_name_ref"] !== strtolower($value)) {
+        if (($filename = $this->getClassnameLink($this->normalizeFQN($value))) !== null && $this->cchunk["class_name_ref"] !== strtolower($value)) {
             $href = $this->chunked ? $filename.$this->ext : "#$filename";
             return '<a href="'.$href. '" class="' .$tag. '">' .$value. '</a>';
         }
