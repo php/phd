@@ -7,6 +7,10 @@
   <para>
    <constant>Vendor\Namespace::DEFINITELY_EXISTS2</constant>
   </para>
+  <constant>\Extension\Namespace\DEFINITELY_EXISTS</constant>
+  <para>
+   <constant>\Vendor\Namespace::DEFINITELY_EXISTS2</constant>
+  </para>
  </section>
 
  <section>

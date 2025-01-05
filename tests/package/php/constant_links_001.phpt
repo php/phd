@@ -66,6 +66,10 @@ Content:
   <p class="para">
    <strong><code><a href="extensionname2.constantspage2.html#vendor-namespace.constants.definitely-exists2">Vendor\Namespace::DEFINITELY_EXISTS2</a></code></strong>
   </p>
+  <strong><code><a href="extensionname.constantspage.html#constant.extension-namespace-definitely-exists">\Extension\Namespace\DEFINITELY_EXISTS</a></code></strong>
+  <p class="para">
+   <strong><code><a href="extensionname2.constantspage2.html#vendor-namespace.constants.definitely-exists2">\Vendor\Namespace::DEFINITELY_EXISTS2</a></code></strong>
+  </p>
  </div>
 
  <div class="section">
