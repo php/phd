@@ -75,6 +75,8 @@ abstract class Package_IDE_Base extends Format {
         'changelog'             => array(),
         'seealso'               => array(),
     );
+    
+    private array $chunkFlags = [];
 
     public function __construct(
         Config $config,

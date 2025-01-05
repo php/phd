@@ -479,6 +479,8 @@ abstract class Format extends ObjectStorage
         return -1;
     }
     public function colspan(array $attrs) {
+        $to = 0;
+        $from = 0;
         if (isset($attrs["namest"])) {
             foreach($this->TABLE["colspec"] as $spec) {
                 if ($spec["colname"] == $attrs["namest"]) {

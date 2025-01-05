@@ -235,6 +235,7 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
     protected $bookName = "";
     protected $date = "";
 
+    private array $pChunk = [];
     /* Current Chunk variables */
     protected $cchunk      = array();
     /* Default Chunk variables */

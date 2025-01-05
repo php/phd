@@ -361,6 +361,8 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     * @var string
     */
     public $phd_pearapi_urlprefix = 'http://pear.php.net/package/';
+    
+    private string $phd_pearapi_text = "";
 
     /* Current Chunk settings */
     protected $cchunk          = array();
@@ -541,7 +543,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     public function format_link($open, $name, $attrs, $props)
     {
         if ($open) {
-            $content = $fragment = '';
+            $content = $fragment = $href = $id = '';
             $class = $name;
 
             if (isset($attrs[Reader::XMLNS_DOCBOOK]['linkend'])) {

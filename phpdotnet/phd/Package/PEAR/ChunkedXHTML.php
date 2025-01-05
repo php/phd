@@ -2,6 +2,11 @@
 namespace phpdotnet\phd;
 
 class Package_PEAR_ChunkedXHTML extends Package_PEAR_XHTML {
+    
+    private array $prev = [];
+    private array $next = [];
+    private array $up = [];
+    
     public function __construct(
         Config $config,
         OutputHandler $outputHandler
