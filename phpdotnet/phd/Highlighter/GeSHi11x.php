@@ -35,6 +35,8 @@ require 'geshi11x/class.geshi.php';
  */
 class Highlighter_GeSHi11x extends Highlighter
 {
+    private $geshi;
+    
     /**
     * Create a new highlighter instance for the given format.
     *

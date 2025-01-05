@@ -331,6 +331,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
 
         $acronyms = array();
+        $k = "";
         while ($r->read()) {
             if ($r->nodeType != \XMLReader::ELEMENT) {
                 continue;

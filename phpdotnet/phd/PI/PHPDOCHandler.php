@@ -22,12 +22,14 @@ class PI_PHPDOCHandler extends PIHandler {
                 if ($this->format instanceof Index) {
                     return;
                 }
+                $desc = "";
                 switch($matches["value"]) {
                     case "function":
                     case "refentry":
                         $tmp = $this->format->getRefs();
                         $refs = array();
                         $info = array();
+                        $islong = false;
                         foreach($tmp as $id) {
                             $filename = $this->format->createLink($id, $desc);
                             $refs[$filename] = $desc;
@@ -136,6 +138,7 @@ class PI_PHPDOCHandler extends PIHandler {
         $ret .= "</tr></thead>";
 
         $version = "";
+        $desc = "";
         foreach($changelogs as $entry) {
             if (!$this->_changelogSince || version_compare($entry["version"], $this->_changelogSince) >= 0) {
                 $link = $this->format->createLink($entry["docbook_id"], $desc);

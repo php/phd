@@ -295,6 +295,8 @@ abstract class Package_Generic_PDF extends Format_Abstract_PDF {
         "corefs"                => array(),
         "callouts"              => 0,
     );
+    
+    private array $params = [];
 
     public function __construct(
         Config $config,
