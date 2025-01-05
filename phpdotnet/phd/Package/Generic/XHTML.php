@@ -1855,7 +1855,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         $tempLinkValue = str_replace(
             ["\\", "_", "$"],
             ["-", "-", ""],
-            strtolower(trim($value, "_"))
+            trim($this->normalizeFQN($value), "_")
         );
         
         list($extensionAndClass, $property) = explode("::", $tempLinkValue);
@@ -1868,6 +1868,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         
         return '<a href="' . $link . '">' . $value . '</a>';
+    }
+    
+    protected function normalizeFQN(string $fqn): string {
+        return \ltrim(\strtolower($fqn), "\\");
     }
     
     public function admonition_title($title, $lang)

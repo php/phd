@@ -723,10 +723,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
         return '<span class="' . $classNames . '">' .$type. '</span>';
     }
-    
-    private function normalizeFQN(string $fqn): string {
-        return \ltrim(\strtolower($fqn), "\\");
-    }
 
     public function format_void($open, $name, $attrs, $props) {
         if (isset($props['sibling']) && $props['sibling'] == 'methodname') {

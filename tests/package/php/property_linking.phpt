@@ -83,5 +83,15 @@ Content:
    <span class="property"><a href="extensionname2.page2.html#extension-class.props.leadingandtrailingundescores2">Extension\Class::$__leadingAndTrailingUndescores2__</a></span>
   </p>
  </div>
+ 
+ <div class="section">
+  <p class="para">%d. Properties (FQN)</p>
+  <p class="para">
+   <span class="property"><a href="extensionname.page.html#vendor-namespace.props.definitely-exists">\Vendor\Namespace::$definitely_exists</a></span>
+  </p>
+  <p class="para">
+   <span class="property"><a href="extensionname.page.html#vendor-namespace.props.definitelyexists2">\Vendor\Namespace::$definitelyExists2</a></span>
+  </p>
+ </div>
 
 </div>
