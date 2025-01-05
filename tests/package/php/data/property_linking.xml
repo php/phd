@@ -30,5 +30,15 @@
    <property>Extension\Class::$__leadingAndTrailingUndescores2__</property>
   </para>
  </section>
+ 
+ <section>
+  <para>4. Properties (FQN)</para>
+  <para>
+   <property>\Vendor\Namespace::$definitely_exists</property>
+  </para>
+  <para>
+   <property>\Vendor\Namespace::$definitelyExists2</property>
+  </para>
+ </section>
 
 </chapter>
