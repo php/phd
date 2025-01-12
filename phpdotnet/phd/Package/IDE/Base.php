@@ -121,7 +121,10 @@ abstract class Package_IDE_Base extends Format {
     public function renderHTML() {
         static $format = null;
         if ($format == null) {
-            $format = new Package_Generic_ChunkedXHTML($this->config);
+            $format = new Package_Generic_ChunkedXHTML(
+                $this->config,
+                $this->outputHandler
+            );
         }
         return $format->parse(trim(ReaderKeeper::getReader()->readInnerXML()));
     }
