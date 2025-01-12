@@ -89,7 +89,7 @@ abstract class Format extends ObjectStorage
      * @param integer $type  Format of description, Format::SDESC or
      *                       Format::LDESC
      *
-     * @return string Relative or absolute URI to access $for
+     * @return string|null|void Relative or absolute URI to access $for
      */
     abstract public function createLink(
         $for, &$desc = null, $type = Format::SDESC
