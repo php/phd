@@ -28,16 +28,16 @@ class Config
     public string $outputFilename = '';
     /** @var resource */
     public $phpErrorOutput = \STDERR;
-    public string $phpErrorColor = '01;31'; // Red
+    public string|false $phpErrorColor = '01;31'; // Red
     /** @var resource */
     public $userErrorOutput = \STDERR;
-    public string $userErrorColor = '01;33'; // Yellow
+    public string|false $userErrorColor = '01;33'; // Yellow
     /** @var resource */
     public $phdInfoOutput = \STDOUT;
-    public string $phdInfoColor = '01;32'; // Green
+    public string|false $phdInfoColor = '01;32'; // Green
     /** @var resource */
     public $phdWarningOutput = \STDOUT;
-    public string $phdWarningColor = '01;35'; // Magenta
+    public string|false $phdWarningColor = '01;35'; // Magenta
     public string $highlighter = 'phpdotnet\\phd\\Highlighter';
     /** @var array<string> */
     public array $package =['Generic'];
