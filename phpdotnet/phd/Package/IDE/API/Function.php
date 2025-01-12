@@ -108,7 +108,7 @@ class Package_IDE_API_Function
     /**
      * Creates a new instance of Package_IDE_API_Function.
      *
-     * @param SimpleXMLElement $xmlElement A new SimpleXMLElement
+     * @param \SimpleXMLElement $xmlElement A new SimpleXMLElement
      *        of the function file.
      */
     public function __construct(\SimpleXMLElement $xmlElement)

@@ -33,7 +33,7 @@ class Autoloader
     }
 
     /**
-     * @var array<string> Absolute pathnames to package directories
+     * @param array<string> $dirs Absolute pathnames to package directories
      */
     public static function setPackageDirs(array $dirs): void {
         self::$package_dirs = $dirs;

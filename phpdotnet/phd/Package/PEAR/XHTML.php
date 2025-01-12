@@ -678,8 +678,8 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     * Highlighting an such is done in format_programlisting_text()
     *
     *
-    * @param string $value Value of the text to format.
-    * @param string $tag   Tag name
+    * @param string $open  Whether we should open or close this element
+    * @param string $name  Tag name
     * @param array  $attrs Array of attributes
     *
     * @return string Generated programlisting html

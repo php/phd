@@ -122,7 +122,7 @@ abstract class Format extends ObjectStorage
      *     Value is either Render::OPEN or Render::CLOSE
      *
      * @param integer $event Event flag (see Render class)
-     * @param mixed   $val   Additional value flag. Depends
+     * @param mixed   $value Additional value flag. Depends
      *                       on $event type
      *
      * @return void
