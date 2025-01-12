@@ -201,7 +201,7 @@ abstract class Package_Generic_TocFeed extends Format
      *     Value is either Render::OPEN or Render::CLOSE
      *
      * @param integer $event Event flag (see Render class)
-     * @param mixed   $val   Additional value flag. Depends
+     * @param mixed   $value Additional value flag. Depends
      *                       on $event type
      *
      * @return void
@@ -490,7 +490,7 @@ XML;
      * to overwrite this method to return full absolute URIs,
      * or modify $targetBaseUri.
      *
-     * @param string  $id    Chunk ID
+     * @param string  $for   Chunk ID
      * @param string  &$desc Description of link, to be filled if neccessary.
      *                       Not used here.
      * @param integer $type  Format of description, Format::SDESC or

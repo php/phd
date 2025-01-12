@@ -61,7 +61,7 @@ class Package_IDE_API_Param
     /**
      * Creates a new instance.
      *
-     * @param SimpleXMLElement $xmlElement
+     * @param \SimpleXMLElement $xmlElement
      */
     public function __construct(\SimpleXMLElement $xmlElement)
     {

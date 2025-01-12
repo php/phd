@@ -68,7 +68,7 @@ class Config
     /**
      * Sets one or more configuration options from an array
      * 
-     * @param array<string, mixed>
+     * @param array<string, mixed> $configOptions
      */
     public function init(array $configOptions): void {
         foreach ($configOptions as $option => $value) {
