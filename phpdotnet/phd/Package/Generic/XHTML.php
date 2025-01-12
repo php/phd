@@ -82,7 +82,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'constructorsynopsis'   => 'format_methodsynopsis',
         'destructorsynopsis'    => 'format_methodsynopsis',
         'emphasis'              => 'format_emphasis',
-        'enumname'              => 'span',
         'entry'                 => array (
             /* DEFAULT */          'format_entry',
             'row'               => array(
@@ -137,7 +136,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'literal'               => 'format_literal',
         'literallayout'         => 'pre',
         'link'                  => 'format_link',
-        'xref'                  => 'format_xref',
         'manvolnum'             => 'format_manvolnum',
         'inlinemediaobject'     => 'format_mediaobject',
         'mediaobject'           => 'format_mediaobject',
