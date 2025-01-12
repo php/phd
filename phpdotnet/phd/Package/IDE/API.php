@@ -83,7 +83,7 @@ class Package_IDE_API
      * Loads a function file and returns a Package_IDE_API_Function.
      *
      * @param string $filename File of the function.
-     * @return Package_IDE_API_Function Object representing the function.
+     * @return ?Package_IDE_API_Function Object representing the function.
      */
     private function loadFunction($filename)
     {

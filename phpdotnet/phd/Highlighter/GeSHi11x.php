@@ -45,7 +45,7 @@ class Highlighter_GeSHi11x extends Highlighter
     *
     * @param string $format Output format (pdf, xhtml, troff, ...)
     *
-    * @return PhDHighlighter Highlighter object
+    * @return Highlighter Highlighter object
     */
     public static function factory($format)
     {
@@ -122,7 +122,7 @@ class Highlighter_GeSHi11x extends Highlighter
      *
      * @param string $role   Source code role to use (php, xml, html, ...)
      *
-     * @return string Language name for GeSHi or null if not found.
+     * @return ?string Language name for GeSHi or null if not found.
      */
     protected function getGeSHiLanguage($role)
     {
