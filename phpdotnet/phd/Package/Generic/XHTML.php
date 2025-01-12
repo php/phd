@@ -838,7 +838,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         $this->CURRENT_CHUNK = $id;
         $this->notify(Render::CHUNK, Render::CLOSE);
         $toc = "";
-        if (!in_array($id, $this->TOC_WRITTEN ?? [])) {
+        if (!in_array($id, $this->TOC_WRITTEN)) {
             $toc = $this->createTOC($id, $name, $props);
         }
 
@@ -875,7 +875,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
 
         $toc = '<ol>';
-        if (!in_array($id, $this->TOC_WRITTEN ?? [])) {
+        if (!in_array($id, $this->TOC_WRITTEN)) {
             $toc = $this->createTOC($id, $name, $props);
         }
         $toc .= "</ol>\n";
