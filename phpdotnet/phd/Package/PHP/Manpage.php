@@ -4,7 +4,6 @@ namespace phpdotnet\phd;
 class Package_PHP_Manpage extends Package_Generic_Manpage {
 
     protected $elementmap = array(
-        'phpdoc:varentry'               => 'format_chunk',
         'phpdoc:classref'               => 'format_chunk',
         'phpdoc:exception'              => 'format_chunk',
         'phpdoc:exceptionref'           => 'format_chunk',

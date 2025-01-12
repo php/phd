@@ -146,7 +146,6 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
         'phd:toc'               => 'format_phd_toc',
         'phpdoc:exception'      => 'format_exception_chunk',
         'releaseinfo'           => 'format_div',
-        'replaceable'           => 'span',
         'refname'               => 'format_refname',
         'refnamediv'            => 'format_suppressed_tags',
         'refpurpose'            => 'format_refpurpose',
