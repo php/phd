@@ -2,7 +2,7 @@
 <?php
 use phpdotnet\phd as PhD;
 
-define('__INSTALLDIR__', '@php_dir@' == '@'.'php_dir@' ? dirname(dirname(dirname(dirname(__DIR__)))) : '@php_dir@');
+require dirname(__DIR__, 2) . 'constants.php';
 define('DS', DIRECTORY_SEPARATOR);
 
 require __INSTALLDIR__ . DS . 'phpdotnet' . DS . 'phd' . DS . 'Autoloader.php';

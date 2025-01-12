@@ -75,7 +75,7 @@ class Highlighter
             } catch (\ParseException $e) {
                 trigger_error(vsprintf("Parse error while highlighting PHP code: %s\nText: %s", [(string) $e, $text]), E_USER_WARNING);
 
-                return '<pre class="'. ($role ? $role . 'code' : 'programlisting') .'">'
+                return '<pre class="'. $role . 'code">'
                     . htmlspecialchars($text, ENT_QUOTES, 'UTF-8')
                     . "</pre>\n";
             }
