@@ -137,6 +137,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                 if ($noteUser) {
                     $noteUser = '<strong class="user">' . htmlspecialchars($noteUser) . '</strong>';
                 }
+                $noteTimestamp = $noteTimestamp === "" ? null : (int) $noteTimestamp;
                 $noteDate = '<a href="#' . $noteId . '" class="date">' . date("d-M-Y h:i", $noteTimestamp) . '</a>';
                 $anchor   = '<a name="' . $noteId . '""></a>';
 
