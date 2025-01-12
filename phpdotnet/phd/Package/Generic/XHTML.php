@@ -2003,8 +2003,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         if (isset($this->cchunk["tablefootnotes"]) && $this->cchunk["tablefootnotes"]) {
             $opts = array(Reader::XMLNS_DOCBOOK => array());
 
-            $str =  $this->format_tbody(true, "footnote", $opts, $props);
-            $str .= $this->format_row(true, "footnote", $opts, $props);
+            $str =  $this->format_tbody(true, "footnote", $opts);
+            $str .= $this->format_row(true, "footnote", $opts);
             $str .= $this->format_entry(true, "footnote", $opts, $props+array("colspan" => $this->getColCount()));
 
             foreach ($this->cchunk["tablefootnotes"] as $k => $noteid) {
@@ -2015,8 +2015,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
             }
             $str .= $this->format_entry(false, "footnote", $opts, $props);
-            $str .= $this->format_row(false, "footnote", $opts, $props);
-            $str .= $this->format_tbody(false, "footnote", $opts, $props);
+            $str .= $this->format_row(false, "footnote", $opts);
+            $str .= $this->format_tbody(false, "footnote", $opts);
 
             $this->cchunk["tablefootnotes"] = $this->dchunk["tablefootnotes"];
         }
