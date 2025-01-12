@@ -668,7 +668,6 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_type_text($type, $tagname) {
         $t = strtr($this->normalizeFQN($type), ["_" => "-", "\\" => "-"]);
-        $fragment = "";
 
         switch($t) {
         case "void":
@@ -717,10 +716,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
         $classNames = ($type === "?") ? ($tagname . ' null') : ($tagname . ' ' . ltrim($type, "\\"));
         if ($href && $this->chunked) {
-            return '<a href="' .$href. $this->getExt().($fragment ? "#$fragment" : ""). '" class="' . $classNames . '">' .$type. '</a>';
+            return '<a href="' .$href. $this->getExt(). '" class="' . $classNames . '">' .$type. '</a>';
         }
         if ($href) {
-            return '<a href="#' .($fragment ? $fragment : $href). '" class="' . $classNames . '">' .$type. '</a>';
+            return '<a href="#' .$href. '" class="' . $classNames . '">' .$type. '</a>';
         }
         return '<span class="' . $classNames . '">' .$type. '</span>';
     }
