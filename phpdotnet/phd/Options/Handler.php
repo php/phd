@@ -242,7 +242,7 @@ class Options_Handler implements Options_Interface
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, array<string>>
      */
     public function option_p(string $k, mixed $v): array
     {
@@ -288,7 +288,7 @@ class Options_Handler implements Options_Interface
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, true>
      */
     public function option_q(string $k, mixed $v): array
     {
@@ -296,7 +296,7 @@ class Options_Handler implements Options_Interface
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, true>
      */
     public function option_quit(string $k, mixed $v): array
     {

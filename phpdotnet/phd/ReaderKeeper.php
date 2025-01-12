@@ -35,7 +35,7 @@ class ReaderKeeper
     /**
      * Removes the reader from the top of the stack.
      *
-     * @return void
+     * @return mixed
      */
     public static function popReader()
     {

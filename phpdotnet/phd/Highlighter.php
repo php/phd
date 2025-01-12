@@ -31,7 +31,7 @@ class Highlighter
     *
     * @param string $format Output format (pdf, xhtml, troff, ...)
     *
-    * @return PhDHighlighter Highlighter object
+    * @return Highlighter Highlighter object
     */
     public static function factory($format)
     {
