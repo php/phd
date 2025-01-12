@@ -757,7 +757,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_literal_text($value, $tag) {
         switch ($this->getRole()) {
             case 'infdec':
-                $value = (float)$value;
+                $value = (string) (float)$value;
                 $p = strpos($value, '.');
                 $str = substr($value, 0, $p + 1);
                 $str .= '<span style="text-decoration: overline;">';
