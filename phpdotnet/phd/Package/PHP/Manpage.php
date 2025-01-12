@@ -64,7 +64,7 @@ class Package_PHP_Manpage extends Package_Generic_Manpage {
             }
             break;
         default:
-            return parent::update($event, $value);
+            parent::update($event, $value);
             break;
         }
     }
