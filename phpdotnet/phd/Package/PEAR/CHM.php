@@ -258,7 +258,7 @@ class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
 			if ($hasChild) fwrite($this->hhcStream, "{$this->offset(2)}<ul>\n");
 			fwrite($this->hhkStream, "      <li><object type=\"text/sitemap\">\n" .
 				"          <param name=\"Local\" value=\"{$ref}\">\n" .
-				"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name, ENT_COMPAT, "UTF-8")) . "\">\n" .
+				"          <param name=\"Name\" value=\"" . htmlentities(self::cleanIndexName($name), ENT_COMPAT, "UTF-8") . "\">\n" .
 				"        </object>\n");
 		} elseif ($this->flags & Render::CLOSE) {
 			if ($hasChild) {
