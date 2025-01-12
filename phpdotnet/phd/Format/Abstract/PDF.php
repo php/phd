@@ -354,7 +354,7 @@ class PdfWriter {
                 $this->lineJump();
                 break;
             case self::DRAW_LINE:
-                $this->traceLine($option);
+                $this->traceLine();
                 break;
             case self::LINE_JUMP:
                 if ($option)
