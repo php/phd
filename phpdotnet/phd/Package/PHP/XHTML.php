@@ -118,6 +118,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 'classsynopsis' => 'format_classsynopsis_oo_name_text',
             ]
         ],
+        'enumname' => [
+            /* DEFAULT */ 'format_classname_text',
+            'oointerface' => [
+                /* DEFAULT */     'format_classname_text',
+                'classsynopsis' => 'format_classsynopsis_oo_name_text',
+            ]
+        ],
         'methodname'            => array(
             /* DEFAULT */          'format_function_text',
             'constructorsynopsis' => array(

@@ -454,7 +454,7 @@ class Index extends Format
     public function format_reference($open, $name, $attrs, $props) {
         if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
             $name = match ($attrs[Reader::XMLNS_DOCBOOK]['role']) {
-                "class" => "phpdoc:classref",
+                "class", "enum" => "phpdoc:classref",
                 "exception" => "phpdoc:exceptionref",
                 default => $name,
             };
