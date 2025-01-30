@@ -120,7 +120,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         ],
         'enumname' => [
             /* DEFAULT */ 'format_classname_text',
-            'oointerface' => [
+            'ooenum' => [
                 /* DEFAULT */     'format_classname_text',
                 'classsynopsis' => 'format_classsynopsis_oo_name_text',
             ]
