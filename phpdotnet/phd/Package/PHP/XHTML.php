@@ -715,6 +715,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         default:
             /* Check if its a classname. */
             $href = Format::getFilename("class.$t");
+            if (!$href) {
+                /* Check if its a enumname. */
+                $href = Format::getFilename("enum.$t");
+            }
         }
 
         if ($href === false) {
