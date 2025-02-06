@@ -118,6 +118,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 'classsynopsis' => 'format_classsynopsis_oo_name_text',
             ]
         ],
+        'enumname' => [
+            /* DEFAULT */ 'format_classname_text',
+            'ooenum' => [
+                /* DEFAULT */     'format_classname_text',
+                'classsynopsis' => 'format_classsynopsis_oo_name_text',
+            ]
+        ],
         'methodname'            => array(
             /* DEFAULT */          'format_function_text',
             'constructorsynopsis' => array(
@@ -708,6 +715,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         default:
             /* Check if its a classname. */
             $href = Format::getFilename("class.$t");
+            if (!$href) {
+                /* Check if its an enumname. */
+                $href = Format::getFilename("enum.$t");
+            }
         }
 
         if ($href === false) {
