@@ -7,7 +7,6 @@ class ErrorHandler
         // PHP Triggered Errors
         E_DEPRECATED                  => 'E_DEPRECATED          ',
         E_RECOVERABLE_ERROR           => 'E_RECOVERABLE_ERROR   ',
-        E_STRICT                      => 'E_STRICT              ',
         E_WARNING                     => 'E_WARNING             ',
         E_NOTICE                      => 'E_NOTICE              ',
 
@@ -50,7 +49,6 @@ class ErrorHandler
             // PHP triggered errors
             case E_DEPRECATED:
             case E_RECOVERABLE_ERROR:
-            case E_STRICT:
             case E_WARNING:
             case E_NOTICE:
                 $this->outputHandler->printPhpError($msg, $file, $line, self::ERROR_MAP[$errno]);

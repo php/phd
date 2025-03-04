@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_STRICT);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 require_once "PEAR/PackageFileManager2.php";
 
 PEAR::setErrorHandling(PEAR_ERROR_DIE);
