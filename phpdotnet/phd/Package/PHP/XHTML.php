@@ -1075,6 +1075,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_reference($open, $name, $attrs, $props) {
         if (isset($attrs[Reader::XMLNS_DOCBOOK]['role'])) {
             if ($attrs[Reader::XMLNS_DOCBOOK]['role'] === "class"
+                || $attrs[Reader::XMLNS_DOCBOOK]['role'] === "enum"
                 || $attrs[Reader::XMLNS_DOCBOOK]['role'] === "exception") {
                 if ($open) {
                     $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]['role']);
@@ -1089,6 +1090,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_reference_titleabbrev_text($value, $tag) {
         if ($this->getRole() === "class"
+            || $this->getRole() === "enum"
             || $this->getRole() === "exception") {
             return $this->format_grep_classname_text($value, $tag);
         }
