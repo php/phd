@@ -914,6 +914,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_container_chunk($open, $name, $attrs, $props) {
+        $hasAnnotations = array_key_exists('annotations', $attrs[Reader::XMLNS_DOCBOOK]);
+
         $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"] ?? '';
 
         if ($this->isChunkedByAttributes($attrs)) {
@@ -921,6 +923,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
 
         if ($open) {
+            if ($hasAnnotations) {
+                $this->pushAnnotations($attrs[Reader::XMLNS_DOCBOOK]["annotations"]);
+            }
+
             $this->notify(Render::CHUNK, Render::OPEN);
             if ($name != "reference") {
                 $chunks = Format::getChildren($id);
@@ -937,6 +943,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
             return '<div id="'.$id.'" class="'.$name.'">';
         }
+        if ($hasAnnotations) {
+            $this->popAnnotations();
+        }
+
         $this->notify(Render::CHUNK, Render::CLOSE);
 
         $content = "";
@@ -957,11 +967,22 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     }
 
     public function format_root_chunk($open, $name, $attrs) {
+        $hasAnnotations = array_key_exists('annotations', $attrs[Reader::XMLNS_DOCBOOK]);
+
         $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"] ?? '';
         if ($open) {
+            if ($hasAnnotations) {
+                $this->pushAnnotations($attrs[Reader::XMLNS_DOCBOOK]["annotations"]);
+            }
+
             $this->notify(Render::CHUNK, Render::OPEN);
             return '<div id="'.$id.'" class="'.$name.'">';
         }
+
+        if ($hasAnnotations) {
+            $this->popAnnotations();
+        }
+
         $this->notify(Render::CHUNK, Render::CLOSE);
         $chunks = Format::getChildren($id);
         $content = '<ul class="chunklist chunklist_'.$name.'">';
