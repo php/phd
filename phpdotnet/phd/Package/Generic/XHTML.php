@@ -1753,47 +1753,47 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             }
             return "<strong><code>";
         }
-        
+
         if ($this->getRole() === "constant_group") {
             $this->popRole();
-            
+
             $value = str_replace(
                 ["<replaceable xmlns=\"http://docbook.org/ns/docbook\">", "</replaceable>"],
                 ["<span class=\"replaceable\">", "</span>"],
                 strip_tags($this->cchunk["constant"], "<replaceable>")
             );
-            
+
             $link = $this->createReplaceableConstantLink(strip_tags($this->cchunk["constant"], "<replaceable>"));
             $this->cchunk["constant"] = "";
-            
+
             if ($link === "") {
                 return $value . '</code></strong>';
             }
-            
+
             return '<a href="' . $link . '">' . $value . '</a></code></strong>';
         }
         return "</code></strong>";
     }
 
     /**
-     * Creates a link to the first constant in the index 
+     * Creates a link to the first constant in the index
      * that matches the pattern of a constant containing a <replaceable> tag
      * or returns an empty string if no match was found.
-     * 
+     *
      * This works only with one set of <replaceable> tags in a constant
      * e.g. CURLE_<replaceable>*</replaceable> or DOM_<replaceable>*</replaceable>_NODE
      */
     private function createReplaceableConstantLink(string $constant): string {
         $pattern = "/" . preg_replace(
-            "/<replaceable.*<\/replaceable>/", 
-            ".*", 
+            "/<replaceable.*<\/replaceable>/",
+            ".*",
             str_replace(
-                ".", 
-                "\.", 
+                ".",
+                "\.",
                 $this->convertConstantNameToId($constant)
             )
         ) ."/";
-        
+
         $matchingConstantId = "";
         foreach ($this->indexes as $index) {
             if (preg_match($pattern, $index["docbook_id"])) {
@@ -1801,17 +1801,17 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 break;
             }
         }
-        
+
         return $matchingConstantId === "" ? "" : $this->createLink($matchingConstantId);
     }
-    
+
     private function convertConstantNameToId(string $constantName): string {
         $tempLinkValue = str_replace(
             array("\\", "_"),
             array("-", "-"),
             trim($this->normalizeFQN($constantName), "_")
         );
-        
+
         if (str_contains($constantName, '::')) {
             // class constant
             list($extensionAndClass, $constant) = explode("::", $tempLinkValue);
@@ -1819,7 +1819,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         } else {
             $normalizedLinkFormat = 'constant.' . $tempLinkValue;
         }
-        
+
         return $normalizedLinkFormat;
     }
 
@@ -1829,7 +1829,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
 
         $normalizedLinkFormat = $this->convertConstantNameToId($value);
-        
+
         $link = $this->createLink($normalizedLinkFormat);
 
         if ($link === null) {
@@ -1844,34 +1844,34 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
         return false;
     }
-    
+
     public function format_property_text($value, $tag) {
         if (! str_contains($value, '::')) {
             return $value;
         }
-        
+
         $tempLinkValue = str_replace(
             ["\\", "_", "$"],
             ["-", "-", ""],
             trim($this->normalizeFQN($value), "_")
         );
-        
+
         list($extensionAndClass, $property) = explode("::", $tempLinkValue);
         $normalizedLinkFormat = $extensionAndClass . ".props." . trim($property, "-");
-        
+
         $link = $this->createLink($normalizedLinkFormat);
-        
+
         if ($link === null || $link === "") {
             return $value;
         }
-        
+
         return '<a href="' . $link . '">' . $value . '</a>';
     }
-    
+
     protected function normalizeFQN(string $fqn): string {
         return \ltrim(\strtolower($fqn), "\\");
     }
-    
+
     public function admonition_title($title, $lang)
     {
         return '<strong class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</strong>';
