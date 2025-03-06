@@ -6,6 +6,9 @@ abstract class Format_Abstract_XHTML extends Format {
     /** @var array<?string> Last In First Out stack of roles */
     private array $role = [];
 
+    /** @var array<?string> Last In First Out stack of annotations */
+    private array $annotations = [];
+
     /* XHTMLPhDFormat */
     protected $openPara = 0;
     protected $escapedPara = array();
@@ -44,13 +47,19 @@ abstract class Format_Abstract_XHTML extends Format {
     }
 
     public function CDATA($value) {
+        $annotations = $this->getAnnotations();
+        $annotationsStr = '';
+        if (count($annotations) > 0) {
+            $annotationsStr = 'annotation-' . join(' annotation-', $annotations) . ' ';
+        }
+
         switch($this->getRole()) {
         case '':
-            return '<div class="cdata"><pre>'
+            return '<div class="' . $annotationsStr . 'cdata"><pre>'
                 . htmlspecialchars($value, ENT_QUOTES, "UTF-8")
                 . '</pre></div>';
         default:
-            return '<div class="' . $this->getRole() . 'code">'
+            return '<div class="' . $annotationsStr . $this->getRole() . 'code' . '">'
                 . $this->highlight(trim($value), $this->getRole(), 'xhtml')
                 . '</div>';
         }
@@ -138,5 +147,21 @@ abstract class Format_Abstract_XHTML extends Format {
 
     protected function popRole(): ?string {
         return array_pop($this->role);
+    }
+
+    protected function pushAnnotations(?string $annotations): void {
+        $this->annotations[] = ($annotations != null ? explode(' ', $annotations) : []);
+    }
+
+    protected function getAnnotations() : ?array {
+        $top = end($this->annotations);
+        if ($top === false) {
+            $top = [];
+        }
+        return $top;
+    }
+
+    protected function popAnnotations() : ?array {
+        return array_pop($this->annotations);
     }
 }

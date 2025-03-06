@@ -820,6 +820,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
 
     public function format_container_chunk_top($open, $name, $attrs, $props) {
+        $hasAnnotations = array_key_exists('annotations', $attrs[Reader::XMLNS_DOCBOOK]);
+
         $this->cchunk = $this->dchunk;
         $this->cchunk["name"] = $name;
         if(isset($attrs[Reader::XMLNS_XML]["id"])) {
@@ -829,10 +831,18 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
 
         if ($open) {
+            if ($hasAnnotations) {
+                $this->pushAnnotations($attrs[Reader::XMLNS_DOCBOOK]["annotations"]);
+            }
+
             $this->CURRENT_CHUNK = $id;
             $this->notify(Render::CHUNK, Render::OPEN);
 
             return '<div id="' .$id. '" class="' .$name. '">';
+        }
+
+        if ($hasAnnotations) {
+            $this->popAnnotations();
         }
 
         $this->CURRENT_CHUNK = $id;
@@ -1714,9 +1724,16 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return "</p></div>";
     }
     public function format_programlisting($open, $name, $attrs) {
+        $hasAnnotations = array_key_exists('annotations', $attrs[Reader::XMLNS_DOCBOOK]);
         if ($open) {
             $this->pushRole($attrs[Reader::XMLNS_DOCBOOK]["role"] ?? null);
+            if ($hasAnnotations) {
+                $this->pushAnnotations($attrs[Reader::XMLNS_DOCBOOK]["annotations"]);
+            }
             return '<div class="example-contents">';
+        }
+        if ($hasAnnotations) {
+            $this->popAnnotations();
         }
         $this->popRole();
         return "</div>\n";
