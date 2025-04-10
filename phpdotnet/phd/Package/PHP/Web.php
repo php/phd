@@ -274,7 +274,7 @@ contributors($setup);
             $entries[] = [
                 $index["sdesc"], $index["filename"], $index["element"]
             ];
-            $descriptions[$id] = $index["ldesc"];
+            $descriptions[$id] = html_entity_decode($index["ldesc"]);
         }
         return [$entries, $descriptions];
     }
