@@ -693,7 +693,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             break;
         case "false":
         case "true":
-            $href = "language.types.value";
+            $href = "language.types.singleton";
             break;
         case "null":
             if ($this->simple_nullable) {
