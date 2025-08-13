@@ -6,18 +6,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PhD
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: "phd"
 
       - name: "Checkout php/doc-en"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v5"
         with:
           path: "en"
           repository: "php/doc-en"
 
       - name: "Checkout php/doc-base"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v5"
         with:
           path: "doc-base"
           repository: "php/doc-base"
