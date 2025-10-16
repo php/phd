@@ -8,7 +8,7 @@ class Autoloader
      */
     private static array $package_dirs = [];
 
-    public static function autoload($name)
+    public static function autoload(string $name): void
     {
         // Only try autoloading classes we know about (i.e. from our own namespace)
         if (strncmp('phpdotnet\phd\\', $name, 14) === 0) {
@@ -24,12 +24,10 @@ class Autoloader
                 fclose($fp);
                 require $file;
 
-                return false;
+                return;
             }
             trigger_error(vsprintf('Cannot find file for %s: %s', [$name, $file ?? $filename]), E_USER_ERROR);
         }
-
-        return false;
     }
 
     /**
