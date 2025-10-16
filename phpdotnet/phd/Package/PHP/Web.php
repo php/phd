@@ -126,6 +126,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
     }
 
     public function header($id) {
+        $this->exampleCounter = 0;
         static $written_toc = array();
         $ext = $this->getExt();
         $parent = Format::getParent($id);
@@ -354,5 +355,10 @@ contributors($setup);
         $history = include $this->config->phpwebHistoryFilename;
 
         $this->history = (is_array($history)) ? $history : [];
+    }
+
+    public function getGeneratedExampleID($index)
+    {
+        return 'example-'. $this->exampleCounter;
     }
 }
