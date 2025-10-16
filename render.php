@@ -81,7 +81,7 @@ if ($config->quit) {
     exit(0);
 }
 
-function make_reader(Config $config, OutputHandler $outputHandler) {
+function make_reader(Config $config, OutputHandler $outputHandler): Reader {
     //Partial Rendering
     $idlist = $config->renderIds + $config->skipIds;
     if (!empty($idlist)) {
