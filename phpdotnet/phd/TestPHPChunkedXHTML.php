@@ -25,6 +25,7 @@ class TestPHPChunkedXHTML extends Package_PHP_ChunkedXHTML {
     }
 
     public function writeChunk($id, $fp) {
+        $this->onNewPage();
         $filename = $this->getOutputDir() . $id . $this->getExt();
 
         rewind($fp);

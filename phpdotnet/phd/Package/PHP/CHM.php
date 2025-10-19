@@ -208,6 +208,7 @@ class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
     ) {
         parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-CHM");
+        $this->exampleCounterIsPerPage = false;
     }
 
     public function __destruct() {

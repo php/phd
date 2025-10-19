@@ -16,7 +16,6 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
     }
 
     public function header($id) {
-        $this->exampleCounter = 0;
         $title = Format::getLongDescription($id);
         static $cssLinks = null;
         if ($cssLinks === null) {
@@ -83,10 +82,5 @@ NAV;
     public function footer($id)
     {
         return '</div></div></body></html>';
-    }
-
-    public function getGeneratedExampleID($index)
-    {
-        return 'example-'. $this->exampleCounter;
     }
 }
