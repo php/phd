@@ -14,7 +14,7 @@
 
     <para>PhD is PHP's very own DocBook 5 rendering system. It is used to
     convert the <acronym>PHP</acronym> Manual and PEAR Documentation into
-    different output formats like XHTML, PDF, Man pages and CHM.</para>
+    different output formats like XHTML, Man pages and CHM.</para>
 
     <para>The goal of PhD is to become a fast, general DocBook rendering
     system. At the moment of writing, PhD is already very fast: It can create
@@ -261,8 +261,6 @@ Supported packages:
                 php
                 howto
                 manpage
-                pdf
-                bigpdf
                 kdevelop
                 chm
                 tocfeed
@@ -280,7 +278,7 @@ Supported packages:
 
 
       <para>You can tell by the output of the <literal>--list</literal> option
-      that PhD can also be used to render the docs as a PDF file, or as Unix
+      that PhD can also be used to render the docs as Unix
       Man Pages.</para>
 
       <para>To select a format and package, you must use the <literal>-f
@@ -645,7 +643,7 @@ $ pear install mediawiki/geshi]]></screen>
       and <literal>highlight</literal>.</para>
 
       <para><literal>factory</literal> is static and takes the format name
-      (i.e. <literal>pdf</literal>, <literal>xhtml</literal>,
+      (i.e. <literal>xhtml</literal>,
       <literal>troff</literal>) as only parameter. It returns
       the highlighter instance object for the given format.
       The method is called for each output format the documentation

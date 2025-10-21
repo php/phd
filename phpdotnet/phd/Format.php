@@ -512,7 +512,7 @@ abstract class Format extends ObjectStorage
     *
     * @param string $text   Text to highlight
     * @param string $role   Source code role to use (php, xml, html, ...)
-    * @param string $format Format to highlight (pdf, xhtml, troff, ...)
+    * @param string $format Format to highlight (xhtml, troff, ...)
     *
     * @return string Highlighted code
     */
