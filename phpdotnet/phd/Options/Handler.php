@@ -15,13 +15,13 @@ class Options_Handler implements Options_Interface
     public function optionList(): array
     {
         return [
-            'format:'      => 'f:',        // The format to render (xhtml, pdf...)
+            'format:'      => 'f:',        // The format to render (xhtml, troff...)
             'noindex'      => 'I',         // Do not re-index
             'forceindex'   => 'r',         // Force re-indexing under all circumstances
             'notoc'        => 't',         // Do not re-create TOC
             'docbook:'     => 'd:',        // The Docbook XML file to render from (.manual.xml)
             'output:'      => 'o:',        // The output directory
-            'outputfilename:' => 'F:',     // The output filename (only useful for bightml/bigpdf)
+            'outputfilename:' => 'F:',     // The output filename (only useful for bightml)
             'partial:'     => 'p:',        // The ID to render (optionally ignoring its children)
             'skip:'        => 's:',        // The ID to skip (optionally skipping its children too)
             'verbose::'    => 'v::',       // Adjust the verbosity level

@@ -29,7 +29,7 @@ class Highlighter
     * We use a factory so you can return different objects/classes
     * per format.
     *
-    * @param string $format Output format (pdf, xhtml, troff, ...)
+    * @param string $format Output format (xhtml, troff, ...)
     *
     * @return Highlighter Highlighter object
     */
@@ -47,7 +47,7 @@ class Highlighter
     *
     * @param string $text   Text to highlight
     * @param string $role   Source code role to use (php, xml, html, ...)
-    * @param string $format Output format (pdf, xhtml, troff, ...)
+    * @param string $format Output format (xhtml, troff, ...)
     *
     * @return string Highlighted code
     */
