@@ -16,4 +16,5 @@ require_once __DIR__ . "/../../render.php";
 %s[%d:%d:%d - Rendering Format      ]%s Starting PHP-Web rendering
 %s[%d:%d:%d - Rendering Format      ]%s Writing search indexes..
 %s[%d:%d:%d - Rendering Format      ]%s Index written
+%s[%d:%d:%d - Rendering Format      ]%s Combined Index written
 %s[%d:%d:%d - Rendering Format      ]%s Finished rendering
