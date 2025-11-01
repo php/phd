@@ -247,6 +247,18 @@ contributors($setup);
             json_encode($descriptions)
         );
         $this->outputHandler->v("Index written", VERBOSE_FORMAT_RENDERING);
+
+        $entries = $this->processCombinedJsonIndex();
+        file_put_contents(
+            $this->getOutputDir() . "search-combined.json",
+            json_encode($entries)
+        );
+        $entries = 'var localSearchIndexes = '. json_encode($entries) .';';
+        file_put_contents(
+            $this->getOutputDir() . "search-combined.js",
+            $entries
+        );
+        $this->outputHandler->v("Combined Index written", VERBOSE_FORMAT_RENDERING);
     }
 
     /**
@@ -277,6 +289,64 @@ contributors($setup);
             $descriptions[$id] = html_entity_decode($index["ldesc"]);
         }
         return [$entries, $descriptions];
+    }
+
+    private function processCombinedJsonIndex(): array
+    {
+        $entries = [];
+        foreach ($this->indexes as $index) {
+            if (!$index["chunk"]) {
+                continue;
+            }
+
+            if ($index["sdesc"] === "" && $index["ldesc"] !== "") {
+                $index["sdesc"] = $index["ldesc"];
+                $bookOrSet = $this->findParentBookOrSet($index['parent_id']);
+                if ($bookOrSet) {
+                    $index["ldesc"] = Format::getLongDescription(
+                        $bookOrSet['docbook_id']
+                    );
+                }
+            }
+
+            $nameParts = explode('::', $index['sdesc']);
+            $methodName = array_pop($nameParts);
+
+            $type = 'General';
+            switch ($index['element']) {
+                case "phpdoc:varentry":
+                    $type = "Variable";
+                    break;
+
+                case "refentry":
+                    $type = "Function";
+                    break;
+
+                case "phpdoc:exceptionref":
+                    $type = "Exception";
+                    break;
+
+                case "phpdoc:classref":
+                    $type = "Class";
+                    break;
+
+                case "set":
+                case "book":
+                case "reference":
+                    $type = "Extension";
+                    break;
+            }
+
+            $entries[] = [
+                'id' => $index['filename'],
+                'name' => $index['sdesc'],
+                'description' => html_entity_decode($index['ldesc']),
+                'tag' => $index['element'],
+                'type' => $type,
+                'methodName' => $methodName,
+            ];
+        }
+        return $entries;
     }
 
     /**

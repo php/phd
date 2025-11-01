@@ -3,7 +3,6 @@ namespace phpdotnet\phd;
 
 class Package_PHP_Factory extends Format_Factory {
     private $formats = array(
-        'searchable'    => 'Package_PHP_SearchableXHTML',
         'xhtml'         => 'Package_PHP_ChunkedXHTML',
         'bigxhtml'      => 'Package_PHP_BigXHTML',
         'php'           => 'Package_PHP_Web',
