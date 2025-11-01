@@ -216,7 +216,7 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
                   <div>
                     <kbd>↑</kbd> and <kbd>↓</kbd> to navigate •
                     <kbd>Enter</kbd> to select •
-                    <kbd>Esc</kbd> to close
+                    <kbd>Esc</kbd> to close • <kbd>/</kbd> to open
                   </div>
                 </div>
               </div>
