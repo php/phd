@@ -130,7 +130,7 @@ class Package_PHP_SearchableXHTML extends Package_PHP_ChunkedXHTML
           SVG;
 
         $searchNav = <<<HTML
-            <div class="navbar__item search">
+            <li class="navbar__item search">
               <!-- Desktop encanced search -->
               <button
                 id="navbar__search-button"
@@ -138,9 +138,9 @@ class Package_PHP_SearchableXHTML extends Package_PHP_ChunkedXHTML
                 hidden
               >
                 $searchIcon
-                Search docs
+                Search
               </button>
-            </div>
+            </li>
             HTML;
 
         $title = Format::getLongDescription($id);
@@ -155,14 +155,25 @@ class Package_PHP_SearchableXHTML extends Package_PHP_ChunkedXHTML
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <style>
     .navbar__local {
-      display: flex;
       flex-grow: 1;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr min-content 1fr;
       margin: 0;
-      justify-content: space-between;
-      align-items: center;
-
-      .navbar__item { flex-grow: 1 }
-      .navbar__item.next .navbar__link { justify-content: end; }
+      height: 100%;
+      
+      .navbar__item {
+        align-content: center;
+      }
+      .navbar__link {
+        display: inline;
+      }
+      .search {
+        text-align: center;
+      }
+      .next {
+        text-align: right;
+      }
     }
   </style>
   <title>$title</title>
@@ -177,6 +188,8 @@ HEADER;
                 "desc" => $this->getShortDescription($prevId),
             );
             $prevLink = "<li class=\"navbar__item prev\"><a href=\"{$prev["href"]}\" class=\"navbar__link\">« {$prev["desc"]}</a></li>";
+        } else {
+            $prevLink = "<li class=\"navbar__item prev\"></li>";
         }
         if ($nextId = Format::getNext($id)) {
             $next = array(
@@ -184,6 +197,8 @@ HEADER;
                 "desc" => $this->getShortDescription($nextId),
             );
             $nextLink = "<li class=\"navbar__item next\"><a href=\"{$next["href"]}\" class=\"navbar__link\">{$next["desc"]} »</a></li>";
+        } else {
+            $nextLink = "<li class=\"navbar__item next\"></li>";
         }
         if ($parentId = Format::getParent($id)) {
             $up = array(
