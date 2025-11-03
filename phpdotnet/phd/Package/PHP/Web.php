@@ -278,8 +278,8 @@ contributors($setup);
         $descriptions = [];
         foreach($this->indexes as $id => $index) {
             if (
-                (! in_array($index['element'], $alwaysIncludeElements, true))
-                && (! $index['chunk'])
+                (! $index['chunk'])
+                && (! in_array($index['element'], $alwaysIncludeElements, true))
             ) {
                 continue;
             }
@@ -316,8 +316,8 @@ contributors($setup);
         $indexes = $this->indexRepository->getIndexesWithDuplicates();
         foreach ($indexes as $index) {
             if (
-                (! in_array($index['element'], $alwaysIncludeElements, true))
-                && (! $index['chunk'])
+                (! $index['chunk'])
+                && (! in_array($index['element'], $alwaysIncludeElements, true))
             ) {
                 continue;
             }
