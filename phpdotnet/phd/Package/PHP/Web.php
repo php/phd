@@ -254,10 +254,21 @@ contributors($setup);
      * used to generate the search index and the descriptions JSON files.
      */
     private function processJsonIndex(): array {
+        $alwaysIncludeElements = [
+            'refentry',
+            'stream_wrapper',
+            'phpdoc:classref',
+            'phpdoc:exceptionref',
+            'phpdoc:varentry',
+        ];
+
         $entries = [];
         $descriptions = [];
         foreach($this->indexes as $id => $index) {
-            if (!$index["chunk"]) {
+            if (
+                (! in_array($index['element'], $alwaysIncludeElements, true))
+                && (! $index['chunk'])
+            ) {
                 continue;
             }
 
