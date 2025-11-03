@@ -4,7 +4,6 @@ namespace phpdotnet\phd;
 class IndexRepository
 {
     private array $indexes  = [];
-    private array $indexesDuped = [];
     private array $children = [];
     private array $refs     = [];
     private array $vars     = [];
