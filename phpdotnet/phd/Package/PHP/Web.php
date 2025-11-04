@@ -337,10 +337,6 @@ contributors($setup);
             $nameParts = explode('::', $index['sdesc']);
             $methodName = array_pop($nameParts);
 
-            if (str_contains('wrapper', $index['filename'])) {
-                print "Combined index: adding " . $index['filename'] . " :: " . $index['sdesc'] . "\n";
-            }
-
             $type = 'General';
             switch ($index['element']) {
                 case "phpdoc:varentry":

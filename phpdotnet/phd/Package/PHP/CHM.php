@@ -449,4 +449,14 @@ res' . DIRECTORY_SEPARATOR . 'style.css
         $link = preg_replace($search, $replacement, $link);
         return $link;
     }
+
+    protected function headerNav($id): string
+    {
+        return '';
+    }
+
+    protected function footerSearch(): string
+    {
+        return '';
+    }
 }
