@@ -162,6 +162,16 @@ SQL;
         ];
     }
 
+    public function getIndexesWithDuplicates(): array
+    {
+        $results =  $this->db->query('SELECT docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk FROM ids');
+        $indexes = [];
+        while ($row = $results->fetchArray(SQLITE3_ASSOC)) {
+            $indexes[] = $row;
+        }
+        return $indexes;
+    }
+
     private static function SQLiteFinal($context): mixed {
         return $context;
     }
