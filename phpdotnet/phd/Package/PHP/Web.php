@@ -17,6 +17,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         $this->setTitle("PHP Manual");
         $this->setChunked(true);
         $this->setExt($this->config->ext === null ? ".php" : $this->config->ext);
+        $this->exampleCounterIsPerPage = true;
     }
 
     public function close() {
@@ -54,6 +55,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
     }
 
     public function writeChunk($id, $fp) {
+        $this->onNewPage();
         $filename = $this->getOutputDir() . $id . $this->getExt();
 
         rewind($fp);
@@ -266,10 +268,21 @@ contributors($setup);
      * used to generate the search index and the descriptions JSON files.
      */
     private function processJsonIndex(): array {
+        $alwaysIncludeElements = [
+            'refentry',
+            'stream_wrapper',
+            'phpdoc:classref',
+            'phpdoc:exceptionref',
+            'phpdoc:varentry',
+        ];
+
         $entries = [];
         $descriptions = [];
         foreach($this->indexes as $id => $index) {
-            if (!$index["chunk"]) {
+            if (
+                (! $index['chunk'])
+                && (! in_array($index['element'], $alwaysIncludeElements, true))
+            ) {
                 continue;
             }
 
@@ -293,9 +306,21 @@ contributors($setup);
 
     private function processCombinedJsonIndex(): array
     {
+        $alwaysIncludeElements = [
+            'refentry',
+            'stream_wrapper',
+            'phpdoc:classref',
+            'phpdoc:exceptionref',
+            'phpdoc:varentry',
+        ];
+
         $entries = [];
-        foreach ($this->indexes as $index) {
-            if (!$index["chunk"]) {
+        $indexes = $this->indexRepository->getIndexesWithDuplicates();
+        foreach ($indexes as $index) {
+            if (
+                (! $index['chunk'])
+                && (! in_array($index['element'], $alwaysIncludeElements, true))
+            ) {
                 continue;
             }
 

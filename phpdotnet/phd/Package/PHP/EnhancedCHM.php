@@ -15,6 +15,7 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
     ) {
         parent::__construct($config, $outputHandler);
         $this->registerFormatName("PHP-EnhancedCHM");
+        $this->exampleCounterIsPerPage = false;
     }
 
     public function update($event, $value = null) {

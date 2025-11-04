@@ -166,7 +166,7 @@ you can write a custom syntax highlighter.
 A syntax highlighter for PhD is nothing more than a simple PHP class
 that has two methods: `factory` and `highlight`.
 
-`factory` is static, takes the format name (i.e. `pdf`, `xhtml`,
+`factory` is static, takes the format name (i.e. `xhtml`,
 `troff`) as its only parameter and returns the highlighter instance object
 for the given format. The method is called for each output format the
 documentation is rendered to.
@@ -234,13 +234,6 @@ PhD currently supports the following output formats:
   <tr>
     <td rowspan="6"></td>
     <td>howto</td>
-  </tr>
-  <tr>
-    <td>pdf</td>
-  </tr>
-  <tr>
-    <td>bigpdf</td>
-  </tr>
   <tr>
     <td>kdevelop</td>
   </tr>

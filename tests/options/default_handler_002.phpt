@@ -39,8 +39,6 @@ Supported packages:
 		php
 		howto
 		manpage
-		pdf
-		bigpdf
 		kdevelop
 		chm
 		tocfeed
