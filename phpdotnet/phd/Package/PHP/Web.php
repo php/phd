@@ -17,6 +17,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
         $this->setTitle("PHP Manual");
         $this->setChunked(true);
         $this->setExt($this->config->ext === null ? ".php" : $this->config->ext);
+        $this->exampleCounterIsPerPage = true;
     }
 
     public function close() {
@@ -54,6 +55,7 @@ class Package_PHP_Web extends Package_PHP_XHTML {
     }
 
     public function writeChunk($id, $fp) {
+        $this->onNewPage();
         $filename = $this->getOutputDir() . $id . $this->getExt();
 
         rewind($fp);

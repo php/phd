@@ -548,6 +548,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     protected int $exampleCounter = 0;
 
+    protected int $perPageExampleCounter = 0;
+
+    protected bool $exampleCounterIsPerPage = false;
+
+    protected array $perPageExampleIds = [];
+
     public function __construct(
         Config $config,
         OutputHandler $outputHandler
@@ -631,7 +637,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             $rsl = $this->indexes[$for];
             $retval = $rsl["filename"] . $this->ext;
             if ($rsl["filename"] != $rsl["docbook_id"]) {
-                $retval .= '#' . $rsl["docbook_id"];
+                if (isset($this->perPageExampleIds[$for])) {
+                    $retval .= '#' . $this->perPageExampleIds[$for];
+                } else {
+                    $retval .= '#' . $rsl["docbook_id"];
+                }
             }
             $desc = $rsl["sdesc"] ?: $rsl["ldesc"];
         }
@@ -2537,5 +2547,24 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_caption($open, $name, $attrs, $props) {
         return $open ? '<div class="caption">' : '</div>';
+    }
+
+    public function getGeneratedExampleID($index)
+    {
+        $originalId = parent::getGeneratedExampleID($index);
+        if (! $this->exampleCounterIsPerPage) {
+            return $originalId;
+        }
+        if (preg_match('/^example\-[0-9]+$/', $originalId)) {
+            $this->perPageExampleCounter++;
+            $this->perPageExampleIds[$originalId] = 'example-' . $this->perPageExampleCounter;
+            return $this->perPageExampleIds[$originalId];
+        }
+        return $originalId;
+    }
+
+    public function onNewPage(): void
+    {
+        $this->perPageExampleCounter = 0;
     }
 }
