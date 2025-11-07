@@ -272,12 +272,15 @@ abstract class Format extends ObjectStorage
         return $this->examples;
     }
     public function getRefnameLink($ref) {
+        $ref = trim($ref);
         return isset($this->refs[$ref]) ? $this->refs[$ref] : null;
     }
     public function getClassnameLink($class) {
+        $class = trim($class);
         return isset($this->classes[$class]) ? $this->classes[$class] : null;
     }
     public function getVarnameLink($var) {
+        $var = trim($var);
         return isset($this->vars[$var]) ? $this->vars[$var] : null;
     }
     public function getGeneratedExampleID($index) {
