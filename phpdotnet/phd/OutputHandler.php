@@ -4,7 +4,7 @@ namespace phpdotnet\phd;
 class OutputHandler
 {
     /** @var array */
-    private const CONSTANT_TO_MESSAGE_CATEGORY_MAP = [
+    private const array CONSTANT_TO_MESSAGE_CATEGORY_MAP = [
         // PhD informationals
         VERBOSE_INDEXING              => 'Indexing              ',
         VERBOSE_FORMAT_RENDERING      => 'Rendering Format      ',
