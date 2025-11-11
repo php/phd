@@ -78,15 +78,13 @@ class Reader_Partial extends Reader
                 return $ret;
             } elseif (empty($this->partial)) {
                 return false;
-            } else {
+            } elseif ($id && $this->parents) {
                 // If we are used by the indexer then we have no clue about the
                 // parents :)
-                if ($id && $this->parents) {
-                    // If this id isn't one of our ancestors we can jump
-                    // completely over it
-                    if (!in_array($id, $this->parents)) {
-                        parent::next();
-                    }
+                // If this id isn't one of our ancestors we can jump
+                // completely over it
+                if (!in_array($id, $this->parents)) {
+                    parent::next();
                 }
             }
         }

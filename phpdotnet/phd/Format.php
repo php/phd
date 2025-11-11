@@ -7,19 +7,19 @@ abstract class Format extends ObjectStorage
      * Represents a short description.
      * Used in createLink()
      *
-     * @var    integer
+     * @var    int
      * @usedby createLink()
      */
-    const SDESC = 1;
+    public const SDESC = 1;
 
     /**
      * Represents a long description.
      * Used in createLink()
      *
-     * @var    integer
+     * @var    int
      * @usedby createLink()
      */
-    const LDESC = 2;
+    public const LDESC = 2;
 
     protected Config $config;
     protected OutputHandler $outputHandler;
@@ -86,7 +86,7 @@ abstract class Format extends ObjectStorage
      *
      * @param string  $for   Chunk ID
      * @param string  &$desc Description of link, to be filled if neccessary
-     * @param integer $type  Format of description, Format::SDESC or
+     * @param int $type  Format of description, Format::SDESC or
      *                       Format::LDESC
      *
      * @return string|null|void Relative or absolute URI to access $for
@@ -121,7 +121,7 @@ abstract class Format extends ObjectStorage
      *     Called when a new chunk is opened or closed.
      *     Value is either Render::OPEN or Render::CLOSE
      *
-     * @param integer $event Event flag (see Render class)
+     * @param int $event Event flag (see Render class)
      * @param mixed   $value Additional value flag. Depends
      *                       on $event type
      *
@@ -129,13 +129,13 @@ abstract class Format extends ObjectStorage
      */
     abstract public function update($event, $value = null);
 
-    public final function parsePI($target, $data) {
+    final public function parsePI($target, $data) {
         if (isset($this->pihandlers[$target])) {
             return $this->pihandlers[$target]->parse($target, $data);
         }
     }
 
-    public final function registerPIHandlers($pihandlers) {
+    final public function registerPIHandlers($pihandlers) {
         foreach ($pihandlers as $target => $classname) {
             $class = __NAMESPACE__ . "\\" . $classname;
             $this->pihandlers[$target] = new $class($this);
@@ -172,7 +172,7 @@ abstract class Format extends ObjectStorage
     /**
      * Calls update().
      *
-     * @param integer $event Event flag. See Render class for constants
+     * @param int $event Event flag. See Render class for constants
      *                       like Render::INIT and Render::CHUNK
      * @param mixed   $val   Value; depends on $event flag
      *
@@ -421,7 +421,7 @@ abstract class Format extends ObjectStorage
      *
      * @param string $id XML ID to get chunk status for
      *
-     * @return boolean True if it is to be chunked
+     * @return bool True if it is to be chunked
      */
     final public function isChunkID($id)
     {

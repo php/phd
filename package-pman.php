@@ -5,7 +5,7 @@ require_once "PEAR/PackageFileManager2.php";
 
 PEAR::setErrorHandling(PEAR_ERROR_DIE);
 
-$packagexml = new PEAR_PackageFileManager2;
+$packagexml = new PEAR_PackageFileManager2();
 $packagexml->setOptions(array(
   "outputdirectory"      => ".",
   "filelistgenerator"    => "file",

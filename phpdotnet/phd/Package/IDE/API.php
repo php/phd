@@ -35,14 +35,14 @@ class Package_IDE_API
      *
      * @var string
      */
-    const FUNCTIONS_DIR = 'ide-xml';
+    public const FUNCTIONS_DIR = 'ide-xml';
 
     /**
      * Output file of the funclist format in the IDE Package.
      *
      * @var string
      */
-    const FUNCLIST_FILE = 'ide-funclist.txt';
+    public const FUNCLIST_FILE = 'ide-funclist.txt';
 
     /**
      * PhD output directory.

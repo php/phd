@@ -1,55 +1,56 @@
 <?php
 namespace phpdotnet\phd;
 
-abstract class Package_IDE_Base extends Format {
+abstract class Package_IDE_Base extends Format
+{
     protected $elementmap = array(
-        'caution'               => 'format_notes',
-        'entry'                 => 'format_changelog_entry',
-        'function'              => 'format_seealso_entry',
-        'listitem'              => 'format_parameter_desc',
-        'methodparam'           => 'format_methodparam',
-        'methodname'            => 'format_seealso_entry',
-        'member'                => 'format_member',
-        'note'                  => 'format_notes',
-        'refentry'              => 'format_refentry',
-        'refpurpose'            => 'format_refpurpose',
-        'refnamediv'            => 'format_suppressed_tags',
-        'refsect1'              => 'format_refsect1',
-        'row'                   => 'format_changelog_row',
-        'set'                   => 'format_set',
-        'tbody'                 => 'format_changelog_tbody',
-        'tip'                   => 'format_notes',
-        'warning'               => 'format_notes',
+        'caution' => 'format_notes',
+        'entry' => 'format_changelog_entry',
+        'function' => 'format_seealso_entry',
+        'listitem' => 'format_parameter_desc',
+        'methodparam' => 'format_methodparam',
+        'methodname' => 'format_seealso_entry',
+        'member' => 'format_member',
+        'note' => 'format_notes',
+        'refentry' => 'format_refentry',
+        'refpurpose' => 'format_refpurpose',
+        'refnamediv' => 'format_suppressed_tags',
+        'refsect1' => 'format_refsect1',
+        'row' => 'format_changelog_row',
+        'set' => 'format_set',
+        'tbody' => 'format_changelog_tbody',
+        'tip' => 'format_notes',
+        'warning' => 'format_notes',
     );
-    protected $textmap    = array(
-        'function'              => 'format_seealso_entry_text',
-        'initializer'           => 'format_initializer_text',
-        'methodname'            => 'format_seealso_entry_text',
-        'parameter'             => 'format_parameter_text',
-        'refname'               => 'format_refname_text',
-        'title'                 => 'format_suppressed_text',
-        'type'                  => 'format_type_text',
+    protected $textmap = array(
+        'function' => 'format_seealso_entry_text',
+        'initializer' => 'format_initializer_text',
+        'methodname' => 'format_seealso_entry_text',
+        'parameter' => 'format_parameter_text',
+        'refname' => 'format_refname_text',
+        'title' => 'format_suppressed_text',
+        'type' => 'format_type_text',
     );
     protected $cchunk = array();
     protected $dchunk = array(
-        'function'              => array(),
-        'methodparam'           => false,
-        'param'                 => array(
-            'name'                  => false,
-            'type'                  => false,
-            'description'           => false,
-            'opt'                   => false,
-            'initializer'           => false,
+        'function' => array(),
+        'methodparam' => false,
+        'param' => array(
+            'name' => false,
+            'type' => false,
+            'description' => false,
+            'opt' => false,
+            'initializer' => false,
         ),
-        'seealso'               => array(
-            'name'                  => false,
-            'type'                  => false,
-            'description'           => false,
+        'seealso' => array(
+            'name' => false,
+            'type' => false,
+            'description' => false,
         ),
-        'changelog'             => array(
-            'entry'                 => false,
-            'version'               => false,
-            'change'                => false,
+        'changelog' => array(
+            'entry' => false,
+            'version' => false,
+            'change' => false,
         ),
     );
 
@@ -58,45 +59,64 @@ abstract class Package_IDE_Base extends Format {
     protected $role = false;
     protected $versions;
 
-    protected $function  = array();
+    protected $function = array();
     protected $dfunction = array(
-        'name'                  => null,
-        'purpose'               => null,
-        'manualid'              => null,
-        'version'               => null,
-        'params'                => array(),
-        'currentParam'          => null,
-        'return'                => array(
-            'type'              => null,
-            'description'       => null,
+        'name' => null,
+        'purpose' => null,
+        'manualid' => null,
+        'version' => null,
+        'params' => array(),
+        'currentParam' => null,
+        'return' => array(
+            'type' => null,
+            'description' => null,
         ),
-        'errors'                => null,
-        'notes'                 => array(),
-        'changelog'             => array(),
-        'seealso'               => array(),
+        'errors' => null,
+        'notes' => array(),
+        'changelog' => array(),
+        'seealso' => array(),
     );
-    
+
     private array $chunkFlags = [];
 
     public function __construct(
-        Config $config,
+        Config        $config,
         OutputHandler $outputHandler
-    ) {
+    )
+    {
         parent::__construct($config, $outputHandler);
     }
 
-    public function createLink($for, &$desc = null, $type = Format::SDESC) {}
-    public function UNDEF($open, $name, $attrs, $props) {}
-    public function TEXT($value) {}
-    public function CDATA($value) {}
-    public function transformFromMap($open, $tag, $name, $attrs, $props) {}
-    public function appendData($data) {}
+    public function createLink($for, &$desc = null, $type = Format::SDESC)
+    {
+    }
 
-    public abstract function parseFunction();
+    public function UNDEF($open, $name, $attrs, $props)
+    {
+    }
 
-    function writeChunk() {
+    public function TEXT($value)
+    {
+    }
+
+    public function CDATA($value)
+    {
+    }
+
+    public function transformFromMap($open, $tag, $name, $attrs, $props)
+    {
+    }
+
+    public function appendData($data)
+    {
+    }
+
+    abstract public function parseFunction();
+
+    public function writeChunk()
+    {
         if (!isset($this->cchunk['funcname'][0])) {
-             return;
+            return;
         }
         if (false !== strpos($this->cchunk['funcname'][0], ' ')) {
             return;
@@ -109,7 +129,7 @@ abstract class Package_IDE_Base extends Format {
         file_put_contents($filename, $data);
 
         $index = 0;
-        while(isset($this->cchunk['funcname'][++$index])) {
+        while (isset($this->cchunk['funcname'][++$index])) {
             $filename = $this->getOutputDir() . $this->cchunk['funcname'][$index] . $this->getExt();
             // Replace the default function name by the alternative one
             $content = preg_replace('/' . $this->cchunk['funcname'][0] . '/',
@@ -118,7 +138,8 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function renderHTML() {
+    public function renderHTML()
+    {
         static $format = null;
         if ($format == null) {
             $format = new Package_Generic_ChunkedXHTML(
@@ -129,63 +150,70 @@ abstract class Package_IDE_Base extends Format {
         return $format->parse(trim(ReaderKeeper::getReader()->readInnerXML()));
     }
 
-    public function CHUNK($value) {
+    public function CHUNK($value)
+    {
         $this->chunkFlags = $value;
     }
 
-    public function STANDALONE($value) {
+    public function STANDALONE($value)
+    {
         $this->registerElementMap($this->elementmap);
         $this->registerTextMap($this->textmap);
     }
 
-    public function INIT($value) {
+    public function INIT($value)
+    {
         $this->loadVersionInfo();
         $this->createOutputDirectory();
     }
 
-    public function FINALIZE($value) {
+    public function FINALIZE($value)
+    {
     }
 
-    public function VERBOSE($value) {
+    public function VERBOSE($value)
+    {
         $this->outputHandler->v('Starting %s rendering', $this->getFormatName(), VERBOSE_FORMAT_RENDERING);
     }
 
-    public function update($event, $value = null) {
-        switch($event) {
-        case Render::CHUNK:
-            $this->CHUNK($value);
-            break;
-        case Render::STANDALONE:
-            $this->STANDALONE($value);
-            break;
-        case Render::INIT:
-            $this->INIT($value);
-            break;
-        case Render::FINALIZE:
-            $this->FINALIZE($value);
-            break;
-        case Render::VERBOSE:
-            $this->VERBOSE($value);
-            break;
+    public function update($event, $value = null)
+    {
+        switch ($event) {
+            case Render::CHUNK:
+                $this->CHUNK($value);
+                break;
+            case Render::STANDALONE:
+                $this->STANDALONE($value);
+                break;
+            case Render::INIT:
+                $this->INIT($value);
+                break;
+            case Render::FINALIZE:
+                $this->FINALIZE($value);
+                break;
+            case Render::VERBOSE:
+                $this->VERBOSE($value);
+                break;
         }
     }
 
-    public static function generateVersionInfo($filename) {
+    public static function generateVersionInfo($filename)
+    {
         static $info;
         if ($info) {
             return $info;
         }
-        $r = new \XMLReader;
+        $r = new \XMLReader();
         if (!$r->open($filename)) {
-            throw new \Exception;
+            throw new \Exception();
         }
         $versions = array();
-        while($r->read()) {
+        while ($r->read()) {
             if (
                 $r->moveToAttribute('name')
                 && ($funcname = str_replace(
                     array('::', '->', '__', '_', '$'),
-                    array('-',  '-',  '-',  '-', ''),
+                    array('-', '-', '-', '-', ''),
                     $r->value))
                 && $r->moveToAttribute('from')
                 && ($from = $r->value)
@@ -199,19 +227,21 @@ abstract class Package_IDE_Base extends Format {
         return $versions;
     }
 
-    public function versionInfo($funcname) {
+    public function versionInfo($funcname)
+    {
         $funcname = str_replace(
-                array('.', '::', '-&gt;', '->', '__', '_', '$', '()'),
-                array('-', '-',  '-',     '-',  '-',  '-', '',  ''),
-                strtolower($funcname));
-        if(isset($this->versions[$funcname])) {
-           return $this->versions[$funcname];
+            array('.', '::', '-&gt;', '->', '__', '_', '$', '()'),
+            array('-', '-', '-', '-', '-', '-', '', ''),
+            strtolower($funcname));
+        if (isset($this->versions[$funcname])) {
+            return $this->versions[$funcname];
         }
         $this->outputHandler->v('No version info for %s', $funcname, VERBOSE_NOVERSION);
         return false;
     }
 
-    public function loadVersionInfo() {
+    public function loadVersionInfo()
+    {
         if (file_exists($this->config->phpwebVersionFilename)) {
             $this->versions = self::generateVersionInfo($this->config->phpwebVersionFilename);
         } else {
@@ -219,34 +249,37 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function createOutputDirectory() {
+    public function createOutputDirectory()
+    {
         $this->setOutputDir($this->config->outputDir . strtolower($this->getFormatName()) . '/');
         if (file_exists($this->getOutputDir())) {
             if (!is_dir($this->getOutputDir())) {
                 trigger_error("Output directory is a file?", E_USER_ERROR);
             }
-        } else {
-            if (!mkdir($this->getOutputDir(), 0777, true)) {
-                trigger_error("Can't create output directory", E_USER_ERROR);
-            }
+        } elseif (!mkdir($this->getOutputDir(), 0777, true)) {
+            trigger_error("Can't create output directory", E_USER_ERROR);
         }
     }
 
-    public function format_suppressed_tags($open, $name, $attrs, $props) {
+    public function format_suppressed_tags($open, $name, $attrs, $props)
+    {
         return '';
     }
 
-    public function format_suppressed_text($value, $tag) {
+    public function format_suppressed_text($value, $tag)
+    {
         return '';
     }
 
-    public function format_set($open, $name, $attrs, $props) {
+    public function format_set($open, $name, $attrs, $props)
+    {
         if (isset($attrs[Reader::XMLNS_XML]['id']) && $attrs[Reader::XMLNS_XML]['id'] == 'funcref') {
             $this->isFunctionRefSet = $open;
         }
     }
 
-    public function format_refentry($open, $name, $attrs, $props) {
+    public function format_refentry($open, $name, $attrs, $props)
+    {
         if (!$this->isFunctionRefSet) {
             return;
         }
@@ -254,25 +287,28 @@ abstract class Package_IDE_Base extends Format {
             $this->function = $this->dfunction;
             $this->cchunk = $this->dchunk;
 
-            $this->function['manualid'] =  $attrs[Reader::XMLNS_XML]['id'];
+            $this->function['manualid'] = $attrs[Reader::XMLNS_XML]['id'];
             return;
         }
         $this->writeChunk();
     }
 
-    public function format_refname_text($value, $tag) {
+    public function format_refname_text($value, $tag)
+    {
         if ($this->isFunctionRefSet) {
             $this->cchunk['funcname'][] = $this->toValidName(trim($value));
         }
     }
 
-    public function format_refpurpose($open, $name, $attrs, $props) {
+    public function format_refpurpose($open, $name, $attrs, $props)
+    {
         if ($this->isFunctionRefSet && $open) {
             $this->function['purpose'] = str_replace("\n", '', trim(ReaderKeeper::getReader()->readString()));
         }
     }
 
-    public function format_refsect1($open, $name, $attrs, $props) {
+    public function format_refsect1($open, $name, $attrs, $props)
+    {
         if (!$this->isFunctionRefSet) {
             return;
         }
@@ -292,7 +328,8 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_type_text($value, $tag) {
+    public function format_type_text($value, $tag)
+    {
         if (!$this->isFunctionRefSet) {
             return;
         }
@@ -305,8 +342,9 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_methodparam($open, $name, $attrs, $props) {
-        if ($this->role != 'description' || !$this->isFunctionRefSet ) {
+    public function format_methodparam($open, $name, $attrs, $props)
+    {
+        if ($this->role != 'description' || !$this->isFunctionRefSet) {
             return;
         }
         if ($open) {
@@ -329,7 +367,8 @@ abstract class Package_IDE_Base extends Format {
         $this->function['params'][$param['name']] = $param;
     }
 
-    public function format_parameter_text($value, $tag) {
+    public function format_parameter_text($value, $tag)
+    {
         if (!$this->isFunctionRefSet) {
             return;
         }
@@ -341,7 +380,8 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_parameter_desc($open, $name, $attrs, $props) {
+    public function format_parameter_desc($open, $name, $attrs, $props)
+    {
         if ($this->role != 'parameters') {
             return;
         }
@@ -354,7 +394,8 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_initializer_text($value, $tag) {
+    public function format_initializer_text($value, $tag)
+    {
         if (!$this->isFunctionRefSet) {
             return;
         }
@@ -364,7 +405,8 @@ abstract class Package_IDE_Base extends Format {
         $this->cchunk['param']['initializer'] = $value;
     }
 
-    public function format_return($open, $name, $attrs, $props) {
+    public function format_return($open, $name, $attrs, $props)
+    {
         if ($open) {
             //Read the description
             $content = $this->renderHTML();
@@ -374,7 +416,8 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_notes($open, $name, $attrs, $props) {
+    public function format_notes($open, $name, $attrs, $props)
+    {
         if ($this->role != 'notes' || !$this->isFunctionRefSet) {
             return;
         }
@@ -388,7 +431,8 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_errors($open, $name, $attrs, $props) {
+    public function format_errors($open, $name, $attrs, $props)
+    {
         if ($open) {
             //Read the description
             $content = $this->renderHTML();
@@ -398,13 +442,15 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_changelog_tbody($open, $name, $attrs, $props) {
+    public function format_changelog_tbody($open, $name, $attrs, $props)
+    {
         if ($this->role == 'changelog' && $this->isFunctionRefSet) {
             $this->isChangelogRow = $open;
         }
     }
 
-    public function format_changelog_row($open, $name, $attrs, $props) {
+    public function format_changelog_row($open, $name, $attrs, $props)
+    {
         if ($this->isChangelogRow) {
             if ($open) {
                 $this->cchunk['changelog'] = $this->dchunk['changelog'];
@@ -416,23 +462,26 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_changelog_entry($open, $name, $attrs, $props) {
+    public function format_changelog_entry($open, $name, $attrs, $props)
+    {
         if ($this->isChangelogRow && $open) {
             $entryType = ($this->cchunk['changelog']['entry'] == 'version')
-                    ? 'change'
-                    : 'version';
+                ? 'change'
+                : 'version';
             $this->cchunk['changelog'][$entryType] = trim(ReaderKeeper::getReader()->readString());
             $this->cchunk['changelog']['entry'] = $entryType;
         }
     }
 
-    public function format_changelog_entry_text($value, $tag) {
+    public function format_changelog_entry_text($value, $tag)
+    {
         if ($this->isChangelogRow) {
             $this->cchunk['changelog'][$this->cchunk['changelog']['entry']] = $value;
         }
     }
 
-    public function format_member($open, $name, $attrs, $props) {
+    public function format_member($open, $name, $attrs, $props)
+    {
         if ($this->role == 'seealso' && $this->isFunctionRefSet) {
             if ($open) {
                 $this->cchunk['seealso'] = $this->dchunk['seealso'];
@@ -449,19 +498,22 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
-    public function format_seealso_entry($open, $name, $attrs, $props) {
+    public function format_seealso_entry($open, $name, $attrs, $props)
+    {
         if ($this->role == 'seealso' && $this->isFunctionRefSet) {
             $this->cchunk['seealso']['type'] = $name;
         }
     }
 
-    public function format_seealso_entry_text($value, $tag) {
+    public function format_seealso_entry_text($value, $tag)
+    {
         if ($this->role == 'seealso' && $this->isFunctionRefSet) {
             $this->cchunk['seealso']['name'] = $value;
         }
     }
 
-    public function toValidName($functionName) {
+    public function toValidName($functionName)
+    {
         return str_replace(array('::', '->', '()'), array('.', '.', ''), $functionName);
     }
 

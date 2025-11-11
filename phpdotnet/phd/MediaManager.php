@@ -36,7 +36,7 @@ class MediaManager
     /**
     * If the image media directory exists
     *
-    * @var boolean
+    * @var bool
     */
     protected $media_dir_exists = false;
 
@@ -109,7 +109,7 @@ class MediaManager
     * based upon a specific language, then fallback to the English translation.
     *
     * @param string  $filename      Original filename
-    * @param boolean $allowfallback If the required file cannot be found then fallback to English
+    * @param bool $allowfallback If the required file cannot be found then fallback to English
     *
     * @return string Exact location of the file referenced with $filename or False if file not found.
     */

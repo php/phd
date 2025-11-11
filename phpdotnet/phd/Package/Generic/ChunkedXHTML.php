@@ -79,10 +79,8 @@ class Package_Generic_ChunkedXHTML extends Package_Generic_XHTML {
                 if (!is_dir($this->getOutputDir())) {
                     trigger_error("Output directory is a file?", E_USER_ERROR);
                 }
-            } else {
-                if (!mkdir($this->getOutputDir(), 0777, true)) {
-                    trigger_error("Can't create output directory", E_USER_ERROR);
-                }
+            } elseif (!mkdir($this->getOutputDir(), 0777, true)) {
+                trigger_error("Can't create output directory", E_USER_ERROR);
             }
             if ($this->config->css) {
                 $this->fetchStylesheet();

@@ -200,7 +200,7 @@ abstract class Package_Generic_TocFeed extends Format
      *     Called when a new chunk is opened or closed.
      *     Value is either Render::OPEN or Render::CLOSE
      *
-     * @param integer $event Event flag (see Render class)
+     * @param int $event Event flag (see Render class)
      * @param mixed   $value Additional value flag. Depends
      *                       on $event type
      *
@@ -226,10 +226,8 @@ abstract class Package_Generic_TocFeed extends Format
                 if (!is_dir($dir)) {
                     trigger_error("Output directory is a file?", E_USER_ERROR);
                 }
-            } else {
-                if (!mkdir($dir, 0777, true)) {
-                    trigger_error("Can't create output directory", E_USER_ERROR);
-                }
+            } elseif (!mkdir($dir, 0777, true)) {
+                trigger_error("Can't create output directory", E_USER_ERROR);
             }
             break;
 
@@ -267,7 +265,7 @@ abstract class Package_Generic_TocFeed extends Format
      *                        header and footer
      * @param string $content XML Atom content to save
      *
-     * @return boolean True if the file has been written, false if not.
+     * @return bool True if the file has been written, false if not.
      *
      * @uses Format::getFilename()
      * @uses header()
@@ -297,7 +295,7 @@ abstract class Package_Generic_TocFeed extends Format
     /**
      * Format a chunked element
      *
-     * @param boolean $open  If the tag is opened or closed
+     * @param bool $open  If the tag is opened or closed
      * @param string  $name  Name of the tag
      * @param array   $attrs XML tag attributes
      * @param array   $props FIXME
@@ -493,7 +491,7 @@ XML;
      * @param string  $for   Chunk ID
      * @param string  &$desc Description of link, to be filled if neccessary.
      *                       Not used here.
-     * @param integer $type  Format of description, Format::SDESC or
+     * @param int $type  Format of description, Format::SDESC or
      *                       Format::LDESC.
      *                       Not used here.
      *

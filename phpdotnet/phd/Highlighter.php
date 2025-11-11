@@ -57,7 +57,7 @@ class Highlighter
             return "\n.PP\n.nf\n"
                 . str_replace("\\", "\\\\", trim($text))
                 . "\n.fi";
-        } else if ($format != 'xhtml') {
+        } elseif ($format != 'xhtml') {
             return $text;
         }
 

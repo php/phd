@@ -7,39 +7,39 @@ abstract class Format_Factory {
     private $optionsHandler = null;
     private $pversion = "unknown";
 
-    public final function getPackageVersion() {
+    final public function getPackageVersion() {
         return $this->pversion;
     }
-    public final function setPackageVersion($version) {
+    final public function setPackageVersion($version) {
         $this->pversion = $version;
     }
-    public final function getOutputFormats() {
+    final public function getOutputFormats() {
         return array_keys($this->formats);
     }
 
-    public final function registerOutputFormats($formats) {
+    final public function registerOutputFormats($formats) {
         $this->formats = $formats;
     }
 
-    public final function getOptionsHandler() {
+    final public function getOptionsHandler() {
         return $this->optionsHandler;
     }
 
-    public final function registerOptionsHandler(Options_Interface $optionsHandler) {
+    final public function registerOptionsHandler(Options_Interface $optionsHandler) {
         $this->optionsHandler = $optionsHandler;
     }
 
-    protected final function setPackageName($name) {
+    final protected function setPackageName($name) {
         if (!is_string($name)) {
             throw new \Exception("Package names must be strings..");
         }
         $this->packageName = $name;
     }
-    public final function getPackageName() {
+    final public function getPackageName() {
         return $this->packageName;
     }
 
-    public final function createFormat($format, ...$formatParams) {
+    final public function createFormat($format, ...$formatParams) {
         if (isset($this->formats[$format]) && $this->formats[$format]) {
             $classname = __NAMESPACE__ . "\\" . $this->formats[$format];
 
@@ -52,7 +52,7 @@ abstract class Format_Factory {
         trigger_error("This format is not supported by this package", E_USER_ERROR);
     }
 
-    public static final function createFactory($package) {
+    final public static function createFactory($package) {
         static $factories = array();
 
         if (!is_string($package)) {
@@ -71,7 +71,7 @@ abstract class Format_Factory {
         return $factories[$package];
     }
 
-    public final function __toString() {
+    final public function __toString() {
         return $this->getPackageName();
     }
 }
