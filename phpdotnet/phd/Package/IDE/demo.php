@@ -11,7 +11,7 @@ require __INSTALLDIR__ . DS . 'phpdotnet' . DS . 'phd' . DS . 'functions.php';
 spl_autoload_register(array("phpdotnet\\phd\\Autoloader", "autoload"));
 
 //FIXME Remove this call to Config
-$config = new PhD\Config;
+$config = new PhD\Config();
 $config->init(array());
 
 function usage()

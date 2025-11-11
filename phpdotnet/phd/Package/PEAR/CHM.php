@@ -2,8 +2,8 @@
 namespace phpdotnet\phd;
 
 class Package_PEAR_CHM extends Package_PEAR_ChunkedXHTML {
-    const DEFAULT_FONT = "Arial,10,0";
-    const DEFAULT_TITLE = "PEAR Manual";
+    public const DEFAULT_FONT = "Arial,10,0";
+    public const DEFAULT_TITLE = "PEAR Manual";
 
     // Array to manual code -> HTML Help Code conversion
 	// Code list: http://www.helpware.net/htmlhelp/hh_info.htm

@@ -348,7 +348,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     * If whitespace should be trimmed.
     * Helpful for programlistings that are encapsulated in <pre> tags
     *
-    * @var boolean
+    * @var bool
     *
     * @see CDATA()
     */
@@ -643,7 +643,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
             if (count($arLinkend) == 1) {
                 //link to class
                 $linktpl = '{$package}/docs/latest/{$package}/{$class}.html';
-            } else if ($arLinkend[1]{0} == '$') {
+            } elseif ($arLinkend[1]{0} == '$') {
                 //link to class variable
                 $variable = $arLinkend[1];
                 $linktpl = '{$package}/docs/latest/{$package}/{$class}.html#var{$variable}';

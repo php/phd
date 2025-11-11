@@ -91,10 +91,8 @@ class Package_PHP_Web extends Package_PHP_XHTML {
                 if (!is_dir($this->getOutputDir())) {
                     trigger_error("Output directory is a file?", E_USER_ERROR);
                 }
-            } else {
-                if (!mkdir($this->getOutputDir(), 0777, true)) {
-                    trigger_error("Can't create output directory", E_USER_ERROR);
-                }
+            } elseif (!mkdir($this->getOutputDir(), 0777, true)) {
+                trigger_error("Can't create output directory", E_USER_ERROR);
             }
             if ($this->getFormatName() == "PHP-Web") {
                 if (!$this->config->noToc && is_dir($this->getOutputDir() . 'toc')) {
@@ -409,7 +407,7 @@ contributors($setup);
             return array();
         }
 
-        $r = new \XMLReader;
+        $r = new \XMLReader();
         if (!$r->open($filename)) {
             trigger_error(vsprintf("Can't open the sources file (%s)", [$filename]), E_USER_ERROR);
             return array();

@@ -7,7 +7,7 @@ require_once __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPA
 Autoloader::setPackageDirs([__INSTALLDIR__]);
 spl_autoload_register(["phpdotnet\\phd\\Autoloader", "autoload"]);
 
-$config = new Config;
+$config = new Config();
 
 $outputHandler = new OutputHandler($config);
 

@@ -8,7 +8,7 @@ Autoloader::setPackageDirs([__INSTALLDIR__]);
 
 spl_autoload_register(array(__NAMESPACE__ . "\\Autoloader", "autoload"));
 
-$config = new Config;
+$config = new Config();
 
 $outputHandler = new OutputHandler($config);
 
@@ -34,7 +34,7 @@ foreach ($config->getSupportedPackages() as $package) {
     }
 }
 $optionsParser = new Options_Parser(
-    new Options_Handler($config, new Package_Generic_Factory, $outputHandler),
+    new Options_Handler($config, new Package_Generic_Factory(), $outputHandler),
     ...$packageHandlers
 );
 $commandLineOptions = $optionsParser->getopt();

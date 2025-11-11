@@ -2,8 +2,8 @@
 namespace phpdotnet\phd;
 
 class Package_Generic_Manpage extends Format_Abstract_Manpage {
-    const OPEN_CHUNK    = 0x01;
-    const CLOSE_CHUNK   = 0x02;
+    public const OPEN_CHUNK = 0x01;
+    public const CLOSE_CHUNK = 0x02;
 
      private $elementmap = array( /* {{{ */
         'acronym'               => 'format_suppressed_tags',
@@ -318,10 +318,8 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
                 if (!is_dir($this->getOutputDir())) {
                     trigger_error("Output directory is a file?", E_USER_ERROR);
                 }
-            } else {
-                if (!mkdir($this->getOutputDir(), 0777, true)) {
-                    trigger_error("Can't create output directory", E_USER_ERROR);
-                }
+            } elseif (!mkdir($this->getOutputDir(), 0777, true)) {
+                trigger_error("Can't create output directory", E_USER_ERROR);
             }
             break;
         case Render::VERBOSE:

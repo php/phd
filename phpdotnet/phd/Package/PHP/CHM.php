@@ -3,8 +3,8 @@ namespace phpdotnet\phd;
 
 class Package_PHP_CHM extends Package_PHP_ChunkedXHTML
 {
-    const DEFAULT_FONT = "Arial,10,0";
-    const DEFAULT_TITLE = "PHP Manual";
+    public const DEFAULT_FONT = "Arial,10,0";
+    public const DEFAULT_TITLE = "PHP Manual";
 
     // Array to manual code -> HTML Help Code conversion
     // Code list: http://www.helpware.net/htmlhelp/hh_info.htm

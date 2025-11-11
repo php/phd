@@ -149,7 +149,7 @@ class Config
      *    the manual docbook file are compared. If the index is older than
      *    the docbook file, indexing will be done.
      *
-     * @return boolean True if indexing is required.
+     * @return bool True if indexing is required.
      */
     public function requiresIndexing(): bool {
         if (! $this->indexCache) {

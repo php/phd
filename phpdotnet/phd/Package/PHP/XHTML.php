@@ -261,7 +261,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return array();
         }
 
-        $r = new \XMLReader;
+        $r = new \XMLReader();
         if (!$r->open($filename)) {
             trigger_error(vsprintf("Can't open the version info file (%s)", [$filename]), E_USER_ERROR);
         }
@@ -298,7 +298,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return array();
         }
 
-        $r = new \XMLReader;
+        $r = new \XMLReader();
         if (!$r->open($filename)) {
             trigger_error(vsprintf("Can't open the version info file (%s)", [$filename]), E_USER_ERROR);
         }
@@ -332,7 +332,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return array();
         }
 
-        $r = new \XMLReader;
+        $r = new \XMLReader();
         if (!$r->open($filename)) {
             trigger_error(vsprintf("Could not open file for accessing acronym information (%s)", [$filename]), E_USER_ERROR);
         }
@@ -347,7 +347,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 $r->read();
                 $k = $r->value;
                 $acronyms[$k] = "";
-            } else if ($r->name == "simpara") {
+            } elseif ($r->name == "simpara") {
                 $r->read();
                 $acronyms[$k] = $r->value;
             }
@@ -425,15 +425,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                     "intersection" => "&amp;",
                 };
             }
-        } else {
-            if (
-                isset($attrs[Reader::XMLNS_DOCBOOK]["class"])
-                && ($attrs[Reader::XMLNS_DOCBOOK]["class"] === "union"
-                || $attrs[Reader::XMLNS_DOCBOOK]["class"] === "intersection")
-                ) {
-                $lastSeparator = array_pop($this->cchunk["methodsynopsis"]["type_separator_stack"]);
-                $this->cchunk["methodsynopsis"]["type_separator"][count($this->cchunk["methodsynopsis"]["type_separator"]) - 1] = end($this->cchunk["methodsynopsis"]["type_separator_stack"]) ?: $lastSeparator;
-            }
+        } elseif (
+            isset($attrs[Reader::XMLNS_DOCBOOK]["class"])
+            && ($attrs[Reader::XMLNS_DOCBOOK]["class"] === "union"
+            || $attrs[Reader::XMLNS_DOCBOOK]["class"] === "intersection")
+            ) {
+            $lastSeparator = array_pop($this->cchunk["methodsynopsis"]["type_separator_stack"]);
+            $this->cchunk["methodsynopsis"]["type_separator"][count($this->cchunk["methodsynopsis"]["type_separator"]) - 1] = end($this->cchunk["methodsynopsis"]["type_separator_stack"]) ?: $lastSeparator;
         }
 
         return "";
@@ -541,7 +539,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         $content = "";
         if ($this->params["paramCount"] > 3) {
             $content .= "<br>";
-        } else if ($this->params["paramCount"] === 0) {
+        } elseif ($this->params["paramCount"] === 0) {
             $content .= "(";
         }
 
@@ -652,15 +650,13 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                     "intersection" => "&amp;",
                 };
             }
-        } else {
-            if (
-                isset($attrs[Reader::XMLNS_DOCBOOK]["class"])
-                && ($attrs[Reader::XMLNS_DOCBOOK]["class"] === "union"
-                || $attrs[Reader::XMLNS_DOCBOOK]["class"] === "intersection")
-            ) {
-                $lastSeparator = array_pop($this->cchunk["methodparam"]["type_separator_stack"]);
-                $this->cchunk["methodparam"]["type_separator"][count($this->cchunk["methodparam"]["type_separator"]) - 1] = end($this->cchunk["methodparam"]["type_separator_stack"]) ?: $lastSeparator;
-            }
+        } elseif (
+            isset($attrs[Reader::XMLNS_DOCBOOK]["class"])
+            && ($attrs[Reader::XMLNS_DOCBOOK]["class"] === "union"
+            || $attrs[Reader::XMLNS_DOCBOOK]["class"] === "intersection")
+        ) {
+            $lastSeparator = array_pop($this->cchunk["methodparam"]["type_separator_stack"]);
+            $this->cchunk["methodparam"]["type_separator"][count($this->cchunk["methodparam"]["type_separator"]) - 1] = end($this->cchunk["methodparam"]["type_separator_stack"]) ?: $lastSeparator;
         }
 
         return "";
@@ -757,7 +753,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         /* TODO This should be migrated to the annotations attribute */
         if (isset($attrs[Reader::XMLNS_DOCBOOK]["annotations"])) {
             $this->cchunk["verinfo"] = !str_contains($attrs[Reader::XMLNS_DOCBOOK]["annotations"], 'verify_info:false');
-        } else if (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
+        } elseif (isset($attrs[Reader::XMLNS_DOCBOOK]["role"])) {
             $this->cchunk["verinfo"] = !($attrs[Reader::XMLNS_DOCBOOK]["role"] == "noversion");
         } else {
             $this->cchunk["verinfo"] = true;

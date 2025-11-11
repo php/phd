@@ -11,7 +11,7 @@ abstract class PIHandler {
         $this->format = $format;
     }
 
-    public abstract function parse($target, $data);
+    abstract public function parse($target, $data);
 
 }
 

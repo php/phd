@@ -62,7 +62,7 @@ class Highlighter_GeSHi11x extends Highlighter
         require_once GESHI_CLASSES_ROOT
             . 'renderers/class.' . strtolower($rendererclass) . '.php';
         $rendererclass = '\\' . $rendererclass;
-        $renderer = new $rendererclass;
+        $renderer = new $rendererclass();
 
 
         return new self($renderer);

@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_KDevelop extends Format {
-    const DEFAULT_HREF = "http://www.php.net/manual/en/";
+    public const DEFAULT_HREF = "http://www.php.net/manual/en/";
 
     protected $elementmap = array(
         'book'                  => 'format_tocsect1',
@@ -132,10 +132,8 @@ class Package_PHP_KDevelop extends Format {
             $name = htmlspecialchars(Format::getShortDescription($id), ENT_QUOTES, 'UTF-8');
             $url = (Format::getFilename($id) ? Format::getFilename($id) : $id) . $this->getExt();
             fwrite($this->getFileStream(), "<tocsect1 name=\"{$name}\" url=\"{$url}\"" . ($hasChild ? "" : "/") . ">\n");
-        } else {
-            if ($hasChild)
-                fwrite($this->getFileStream(), "</tocsect1>\n");
-        }
+        } elseif ($hasChild)
+            fwrite($this->getFileStream(), "</tocsect1>\n");
         return "";
     }
 

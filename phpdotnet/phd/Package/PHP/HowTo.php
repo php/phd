@@ -30,10 +30,8 @@ class Package_PHP_HowTo extends Package_PHP_Web {
                 if (!is_dir($this->getOutputDir())) {
                     trigger_error("Output directory is a file?", E_USER_ERROR);
                 }
-            } else {
-                if (!mkdir($this->getOutputDir(), 0777, true)) {
-                    trigger_error("Can't create output directory", E_USER_ERROR);
-                }
+            } elseif (!mkdir($this->getOutputDir(), 0777, true)) {
+                trigger_error("Can't create output directory", E_USER_ERROR);
             }
             break;
         }
