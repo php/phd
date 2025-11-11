@@ -47,16 +47,16 @@ if (isset($commandLineOptions["packageDirs"])) {
 
 /* If no docbook file was passed, die */
 if (!is_dir($config->xmlRoot) || !is_file($config->xmlFile)) {
-    trigger_error("No Docbook file given. Specify it on the command line with --docbook.", E_USER_ERROR);
+    throw new \Error('No Docbook file given. Specify it on the command line with --docbook.');
 }
 if (!file_exists($config->outputDir)) {
     $outputHandler->v("Creating output directory..", VERBOSE_MESSAGES);
     if (!mkdir($config->outputDir, 0777, True)) {
-        trigger_error(vsprintf("Can't create output directory : %s", [$config->outputDir]), E_USER_ERROR);
+        throw new \Error(vsprintf("Can't create output directory : %s", [$config->outputDir]));
     }
     $outputHandler->v("Output directory created", VERBOSE_MESSAGES);
 } elseif (!is_dir($config->outputDir)) {
-    trigger_error("Output directory is not a file?", E_USER_ERROR);
+    throw new \Error('Output directory is not a file?');
 }
 
 // This needs to be moved. Preferably into the PHP package.
