@@ -176,7 +176,7 @@ abstract class Package_IDE_Base extends Format {
             return $info;
         }
         $r = new \XMLReader;
-        if (!$r->open($filename)) {
+        if (!$r::open($filename)) {
             throw new \Exception;
         }
         $versions = array();

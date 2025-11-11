@@ -136,7 +136,7 @@ if ($config->requiresIndexing()) {
     $render->attach($format);
 
     $reader = make_reader($config, $outputHandler);
-    $reader->open($config->xmlFile, NULL, $readerOpts);
+    $reader::open($config->xmlFile, NULL, $readerOpts);
     $render->execute($reader);
 
     $render->detach($format);
@@ -162,7 +162,7 @@ foreach($config->package as $package) {
 
 // Render formats
 $reader = make_reader($config, $outputHandler);
-$reader->open($config->xmlFile, NULL, $readerOpts);
+$reader::open($config->xmlFile, NULL, $readerOpts);
 foreach($render as $format) {
     $format->notify(Render::VERBOSE, true);
 }

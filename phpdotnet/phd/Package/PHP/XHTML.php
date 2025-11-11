@@ -262,7 +262,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
 
         $r = new \XMLReader;
-        if (!$r->open($filename)) {
+        if (!$r::open($filename)) {
             trigger_error(vsprintf("Can't open the version info file (%s)", [$filename]), E_USER_ERROR);
         }
         $versions = array();
@@ -299,7 +299,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
 
         $r = new \XMLReader;
-        if (!$r->open($filename)) {
+        if (!$r::open($filename)) {
             trigger_error(vsprintf("Can't open the version info file (%s)", [$filename]), E_USER_ERROR);
         }
         $deprecated = array();
@@ -333,7 +333,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
 
         $r = new \XMLReader;
-        if (!$r->open($filename)) {
+        if (!$r::open($filename)) {
             trigger_error(vsprintf("Could not open file for accessing acronym information (%s)", [$filename]), E_USER_ERROR);
         }
 

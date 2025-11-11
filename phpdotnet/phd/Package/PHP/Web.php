@@ -410,7 +410,7 @@ contributors($setup);
         }
 
         $r = new \XMLReader;
-        if (!$r->open($filename)) {
+        if (!$r::open($filename)) {
             trigger_error(vsprintf("Can't open the sources file (%s)", [$filename]), E_USER_ERROR);
             return array();
         }

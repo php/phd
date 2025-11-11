@@ -317,7 +317,7 @@ abstract class Format extends ObjectStorage
         $reader = new Reader($this->outputHandler);
         $render = new Render();
 
-        $reader->XML("<notatag>" . $xml . "</notatag>");
+        $reader::XML("<notatag>" . $xml . "</notatag>");
 
         $this->appendToBuffer = true;
         $render->attach($this);

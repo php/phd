@@ -15,7 +15,7 @@ class TestRender extends Render {
                 mkdir($this->config->outputDir, 0755);
             }
             $this->attach($this->index);
-            $this->reader->open($this->config->xmlFile);
+            $this->reader::open($this->config->xmlFile);
             $this->execute($this->reader);
             $this->detach($this->index);
         }
@@ -25,7 +25,7 @@ class TestRender extends Render {
         }
 
         if (count($this) > 0) {
-            $this->reader->open($this->config->xmlFile);
+            $this->reader::open($this->config->xmlFile);
             $this->execute($this->reader);
         }
     }
