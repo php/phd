@@ -3,7 +3,7 @@ namespace phpdotnet\phd;
 
 class ErrorHandler
 {
-    private const ERROR_MAP = [
+    private const array ERROR_MAP = [
         // PHP Triggered Errors
         E_DEPRECATED                  => 'E_DEPRECATED          ',
         E_RECOVERABLE_ERROR           => 'E_RECOVERABLE_ERROR   ',
