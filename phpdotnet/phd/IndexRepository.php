@@ -11,7 +11,7 @@ class IndexRepository
     private array $examples = [];
 
     public function __construct(
-        private \SQLite3 $db
+        private readonly \SQLite3 $db
     ) {}
 
     public function init(): void {

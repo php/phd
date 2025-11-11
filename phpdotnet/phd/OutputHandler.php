@@ -24,7 +24,7 @@ class OutputHandler
     ];
     
     public function __construct(
-        private Config $config
+        private readonly Config $config
     ) {}
 
     /**
