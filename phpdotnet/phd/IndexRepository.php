@@ -62,26 +62,26 @@ SQL;
         }
 
         foreach ($postReplacementValues as $key => $postReplacementValue) {
-            $postReplacementValues[$key] = $this->db->escapeString($postReplacementValue);
+            $postReplacementValues[$key] = $this->db::escapeString($postReplacementValue);
         }
 
         foreach ($commitList as $key => $commit) {
             $commitList[$key] = sprintf(
                 "INSERT INTO ids (docbook_id, filename, parent_id, sdesc, ldesc, element, previous, next, chunk) VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d);\n",
-                $this->db->escapeString($commit["docbook_id"]),
-                $this->db->escapeString($commit["filename"]),
-                $this->db->escapeString($commit["parent_id"]),
-                $this->db->escapeString($commit["sdesc"]),
-                $this->db->escapeString($commit["ldesc"]),
-                $this->db->escapeString($commit["element"]),
-                $this->db->escapeString($commit["previous"]),
-                $this->db->escapeString($commit["next"]),
-                $this->db->escapeString($commit["chunk"])
+                $this->db::escapeString($commit["docbook_id"]),
+                $this->db::escapeString($commit["filename"]),
+                $this->db::escapeString($commit["parent_id"]),
+                $this->db::escapeString($commit["sdesc"]),
+                $this->db::escapeString($commit["ldesc"]),
+                $this->db::escapeString($commit["element"]),
+                $this->db::escapeString($commit["previous"]),
+                $this->db::escapeString($commit["next"]),
+                $this->db::escapeString($commit["chunk"])
             );
         }
 
-        $search = $this->db->escapeString("POST-REPLACEMENT");
-        $none = $this->db->escapeString("");
+        $search = $this->db::escapeString("POST-REPLACEMENT");
+        $none = $this->db::escapeString("");
 
         foreach($postReplacementIndexes as $a) {
             if (isset($postReplacementValues[$a["docbook_id"]])) {
@@ -106,11 +106,11 @@ SQL;
                 foreach(preg_split('/,\s+/', $entry[2]) as $version) {
                     $log .= sprintf(
                         "INSERT INTO changelogs (membership, docbook_id, parent_id, version, description) VALUES('%s', '%s', '%s', '%s', '%s');\n",
-                        $this->db->escapeString($entry[0] ?? ''),
-                        $this->db->escapeString($id),
-                        $this->db->escapeString($entry[1]),
-                        $this->db->escapeString($version),
-                        $this->db->escapeString($entry[3])
+                        $this->db::escapeString($entry[0] ?? ''),
+                        $this->db::escapeString($id),
+                        $this->db::escapeString($entry[1]),
+                        $this->db::escapeString($version),
+                        $this->db::escapeString($entry[3])
                     );
                 }
             }
@@ -245,7 +245,7 @@ SQL;
     public function getChangelogsForChildrenOf($bookids): array {
         $ids = [];
         foreach((array)$bookids as $bookid) {
-            $ids[] = "'" . $this->db->escapeString($bookid) . "'";
+            $ids[] = "'" . $this->db::escapeString($bookid) . "'";
         }
         $results = $this->db->query("SELECT * FROM changelogs WHERE parent_id IN (" . join(", ", $ids) . ")");
         return $this->_returnChangelog($results);
@@ -254,7 +254,7 @@ SQL;
     public function getChangelogsForMembershipOf($memberships): array {
         $ids = [];
         foreach((array)$memberships as $membership) {
-            $ids[] = "'" . $this->db->escapeString($membership) . "'";
+            $ids[] = "'" . $this->db::escapeString($membership) . "'";
         }
         $results = $this->db->query("SELECT * FROM changelogs WHERE membership IN (" . join(", ", $ids) . ")");
         return $this->_returnChangelog($results);
@@ -276,7 +276,7 @@ SQL;
         $parents = [];
         foreach($renderIds as $p => $v) {
             do {
-                $id = $this->db->escapeString($p);
+                $id = $this->db::escapeString($p);
                 $row = $this->db->query("SELECT parent_id FROM ids WHERE docbook_id = '$id'")->fetchArray(\SQLITE3_ASSOC);
                 if ($row["parent_id"]) {
                     $parents[] = $p = $row["parent_id"];
