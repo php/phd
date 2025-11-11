@@ -241,12 +241,12 @@ class Package_PHP_ChunkedXHTML extends Package_PHP_Web {
     {
         if (file_exists($dir)) {
             if (!is_dir($dir)) {
-                trigger_error("The specified directory is a file: {$dir}", E_USER_ERROR);
+                throw new \Error("The specified directory is a file: {$dir}");
             }
             return;
         }
         if (!mkdir($dir, 0777, true)) {
-            trigger_error("Can't create the specified directory: {$dir}", E_USER_ERROR);
+            throw new \Error("Can't create the specified directory: {$dir}");
         }
     }
 
