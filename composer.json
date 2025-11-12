@@ -23,6 +23,9 @@
         "ext-sqlite3": "*",
         "ext-xmlreader": "*"
     },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.4.0"
+    },
     "suggest": {
         "easybook/geshi": "For using GeSHi as code highlighter"
     },
@@ -30,5 +33,9 @@
         "psr-0": {
             "phpdotnet\\": "."
         }
+    },
+    "scripts": {
+        "cs-check": "vendor/bin/php-cs-fixer fix --ansi --diff --dry-run --verbose --config=.php-cs-fixer.php",
+        "cs-fix": "vendor/bin/php-cs-fixer fix --ansi --verbose --config=.php-cs-fixer.php"
     }
 }
