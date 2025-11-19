@@ -81,30 +81,6 @@ if ($config->quit) {
     exit(0);
 }
 
-function make_reader(Config $config, OutputHandler $outputHandler): Reader {
-    //Partial Rendering
-    $idlist = $config->renderIds + $config->skipIds;
-    if (!empty($idlist)) {
-        $outputHandler->v("Running partial build", VERBOSE_RENDER_STYLE);
-
-        $parents = [];
-        if ($config->indexCache) {
-            $parents = $config->indexCache->getParents($config->renderIds);
-        }
-
-        $reader = new Reader_Partial(
-            $outputHandler,
-            $config->renderIds,
-            $config->skipIds,
-            $parents,
-        );
-    } else {
-        $outputHandler->v("Running full build", VERBOSE_RENDER_STYLE);
-        $reader = new Reader($outputHandler);
-    }
-    return $reader;
-}
-
 $render = new Render();
 
 // Set reader LIBXML options
@@ -135,7 +111,8 @@ if ($config->requiresIndexing()) {
     
     $render->attach($format);
 
-    $reader = make_reader($config, $outputHandler);
+    $outputHandler->v("Running full build", VERBOSE_RENDER_STYLE);
+    $reader = new Reader($outputHandler);
     $reader->open($config->xmlFile, NULL, $readerOpts);
     $render->execute($reader);
 
@@ -160,8 +137,28 @@ foreach($config->package as $package) {
     }
 }
 
+//Partial Rendering
+$idlist = $config->renderIds + $config->skipIds;
+if (!empty($idlist)) {
+    $outputHandler->v("Running partial build", VERBOSE_RENDER_STYLE);
+
+    $parents = [];
+    if ($config->indexCache) {
+        $parents = $config->indexCache->getParents($config->renderIds);
+    }
+
+    $reader = new Reader_Partial(
+        $outputHandler,
+        $config->renderIds,
+        $config->skipIds,
+        $parents,
+    );
+} else {
+    $outputHandler->v("Running full build", VERBOSE_RENDER_STYLE);
+    $reader = new Reader($outputHandler);
+}
+
 // Render formats
-$reader = make_reader($config, $outputHandler);
 $reader->open($config->xmlFile, NULL, $readerOpts);
 foreach($render as $format) {
     $format->notify(Render::VERBOSE, true);
