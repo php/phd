@@ -4,9 +4,9 @@ namespace phpdotnet\phd;
 class Options_Handler implements Options_Interface
 {
     public function __construct(
-        private Config $config,
-        private Format_Factory $formatFactory,
-        private OutputHandler $outputHandler
+        private readonly Config         $config,
+        private readonly Format_Factory $formatFactory,
+        private readonly OutputHandler  $outputHandler
     ) {}
 
     /**

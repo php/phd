@@ -20,7 +20,7 @@ class ErrorHandler
     private bool $recursive = false;
     
     public function __construct(
-        private OutputHandler $outputHandler
+        private readonly OutputHandler $outputHandler
     ) {}
 
     public function handleError($errno, $msg, $file, $line) {
