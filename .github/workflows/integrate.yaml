@@ -1,0 +1,42 @@
+name: Integrate
+
+on:
+  pull_request:
+  push:
+    branches: [ master ]
+
+jobs:
+  coding-standards:
+    name: Coding Standards
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+          # ✅ Extensions required for PHD
+          extensions: >
+            dom,
+            xml,
+            xmlreader,
+            xmlwriter,
+            libxml,
+            simplexml,
+            sqlite3,
+            json,
+            mbstring,
+            tokenizer
+
+      - name: Validate composer.json
+        run: composer validate --ansi --strict
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --ansi
+
+      - name: Run PHP-CS-Fixer
+        run: composer cs-check
