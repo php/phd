@@ -16,6 +16,12 @@ class ObjectStorage extends \SplObjectStorage
 			);
 		}
 		parent::attach($object, $info);
+
+        if (PHP_VERSION_ID < 80500) {
+            parent::attach($object, $info);
+        }
+
+        $this->offsetSet($object, $info);
 	}
 }
 
