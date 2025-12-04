@@ -14,3 +14,4 @@ run-tests.php
 **/tests/**/*.log
 **/tests/**/*.sh
 .php-cs-fixer.cache
+.php-cs-fixer.php
