@@ -215,7 +215,7 @@ abstract class Package_IDE_Base extends Format {
         if (file_exists($this->config->phpwebVersionFilename)) {
             $this->versions = self::generateVersionInfo($this->config->phpwebVersionFilename);
         } else {
-            trigger_error("Can't load the versions file", E_USER_ERROR);
+            throw new \Error("Can't load the versions file");
         }
     }
 
@@ -223,11 +223,11 @@ abstract class Package_IDE_Base extends Format {
         $this->setOutputDir($this->config->outputDir . strtolower($this->getFormatName()) . '/');
         if (file_exists($this->getOutputDir())) {
             if (!is_dir($this->getOutputDir())) {
-                trigger_error("Output directory is a file?", E_USER_ERROR);
+                throw new \Error('Output directory is a file?');
             }
         } else {
             if (!mkdir($this->getOutputDir(), 0777, true)) {
-                trigger_error("Can't create output directory", E_USER_ERROR);
+                throw new \Error("Can't create output directory");
             }
         }
     }

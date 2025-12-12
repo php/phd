@@ -64,21 +64,21 @@ foreach ($options as $k => $v) {
     case 'd':
     case 'dir':
         if (is_array($v)) {
-            trigger_error('Is not possible to pass the --dir option more then once', E_USER_ERROR);
+            throw new \Error('Is not possible to pass the --dir option more then once');
         }
         $OPTION['dir'] = $v;
         break;
     case 'f':
     case 'function':
         if (is_array($v)) {
-            trigger_error('Is not possible to pass the --function option more then once', E_USER_ERROR);
+            throw new \Error('Is not possible to pass the --function option more then once');
         }
         $OPTION['function'] = $v;
         break;
     case 'c':
     case 'class':
         if (is_array($v)) {
-            trigger_error('Is not possible to pass the --class option more then once', E_USER_ERROR);
+            throw new \Error('Is not possible to pass the --class option more then once');
         }
         $OPTION['class'] = $v;
         break;
@@ -107,7 +107,7 @@ foreach ($options as $k => $v) {
         $OPTION['help'] = true;
         break;
     default:
-        trigger_error('Invalid Option: ' . $k, E_USER_ERROR);
+        throw new \Error('Invalid Option: ' . $k);
     }
 }
 
@@ -117,11 +117,11 @@ if ($OPTION['help'] === true || !$options) {
 }
 
 if ($OPTION['dir'] == NULL) {
-    trigger_error('You must specify the PhD output directory with the --dir option.', E_USER_ERROR);
+    throw new \Error('You must specify the PhD output directory with the --dir option.');
 }
 
 if ($OPTION['function'] == NULL && $OPTION['class'] == NULL) {
-    trigger_error('You must pass either --class or --function options.', E_USER_ERROR);
+    throw new \Error('You must pass either --class or --function options.');
 }
 
 $api = new PhD\Package_IDE_API($OPTION['dir']);
@@ -129,7 +129,7 @@ $api = new PhD\Package_IDE_API($OPTION['dir']);
 if ($OPTION['class'] != NULL) {
     $methods = $api->getMethodsByClass($OPTION['class']);
     if ($methods == NULL) {
-        trigger_error('Invalid Class name: ' . $OPTION['class'], E_USER_ERROR);
+        throw new \Error('Invalid Class name: ' . $OPTION['class']);
     }
     foreach ($methods as $method) {
         echo $method . PHP_EOL;
@@ -140,7 +140,7 @@ if ($OPTION['class'] != NULL) {
 $function = $api->getFunctionByName($OPTION['function']);
 
 if ($function == NULL) {
-    trigger_error('Invalid Function: ' . $OPTION['function'], E_USER_ERROR);
+    throw new \Error('Invalid Function: ' . $OPTION['function']);
 }
 
 if ($OPTION['signature'] === true) {
