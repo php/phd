@@ -6,6 +6,10 @@ GH-225 - SaveConfig tries to overwrite readonly property
 <?php
 namespace phpdotnet\phd;
 
+if (!\file_exists(__DIR__ . "./output/")) {
+    \mkdir(__DIR__ . "./output/", 0777, true);
+}
+
 if (\file_exists(__DIR__ . "/../phd.config.php")) {
     \unlink(__DIR__ . "/../phd.config.php");
 }
