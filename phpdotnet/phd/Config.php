@@ -57,6 +57,15 @@ class Config
     public string $phpwebSourcesFilename = '';
     public string $phpwebHistoryFilename = '';
     
+    private const NON_SERIALIZABLE_PROPERTIES = [
+        "copyright",
+        "indexCache",
+        "phpErrorOutput",
+        "userErrorOutput",
+        "phdInfoOutput",
+        "phdWarningOutput",
+    ];
+    
     public function __construct() {
         $this->copyright = 'Copyright(c) 2007-'  . \date('Y') . ' The PHP Documentation Group';
         
@@ -76,6 +85,10 @@ class Config
                 throw new \Exception("Invalid option supplied: $option");
             }
             
+            if (\in_array($option, self::NON_SERIALIZABLE_PROPERTIES, true)) {
+                continue;
+            }
+            
             $this->$option = $value;
         }
         
@@ -83,12 +96,18 @@ class Config
     }
 
     /**
-     * Returns all configuration options and their values
+     * Returns all serializable configuration options and their values
      * 
      * @return array<string, mixed>
      */
-    public function getAllFiltered(): array {
-        return \get_object_vars($this);
+    public function getAllSerializableProperties(): array {
+        $object_vars = \get_object_vars($this);
+        
+        foreach (self::NON_SERIALIZABLE_PROPERTIES as $property) {
+            unset($object_vars[$property]);
+        }
+        
+        return $object_vars;
     }
 
     /**
