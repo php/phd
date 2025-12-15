@@ -204,7 +204,8 @@ $PARENTS = ' . var_export($parents, true) . ';';
             "alternatives" => $this->cchunk["alternatives"],
             "source" => $this->sourceInfo($id),
         );
-        $setup["history"] = $this->history[$setup["source"]["path"]] ?? [];
+        $history = $this->history ?? [];
+        $setup["history"] = $history[$setup["source"]["path"]] ?? [];
         if ($this->getChildren($id)) {
             $lang = $this->config->language;
             $setup["extra_header_links"] = array(
