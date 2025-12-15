@@ -113,7 +113,7 @@ if ($config->requiresIndexing()) {
 
     $outputHandler->v("Running full build", VERBOSE_RENDER_STYLE);
     $reader = new Reader($outputHandler);
-    $reader::open($config->xmlFile, NULL, $readerOpts);
+    $reader->open($config->xmlFile, NULL, $readerOpts);
     $render->execute($reader);
 
     $render->detach($format);
@@ -159,7 +159,7 @@ if (!empty($idlist)) {
 }
 
 // Render formats
-$reader::open($config->xmlFile, NULL, $readerOpts);
+$reader->open($config->xmlFile, NULL, $readerOpts);
 foreach($render as $format) {
     $format->notify(Render::VERBOSE, true);
 }
