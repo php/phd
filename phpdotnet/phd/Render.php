@@ -3,13 +3,13 @@ namespace phpdotnet\phd;
 
 class Render extends ObjectStorage
 {
-    const CHUNK        = 0x001;
-    const OPEN         = 0x002;
-    const CLOSE        = 0x004;
-    const STANDALONE   = 0x008;
-    const INIT         = 0x010;
-    const FINALIZE     = 0x020;
-    const VERBOSE      = 0x040;
+    const int CHUNK        = 0x001;
+    const int OPEN         = 0x002;
+    const int CLOSE        = 0x004;
+    const int STANDALONE   = 0x008;
+    const int INIT         = 0x010;
+    const int FINALIZE     = 0x020;
+    const int VERBOSE      = 0x040;
 
     private   $STACK      = array();
 
