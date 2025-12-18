@@ -205,7 +205,13 @@ $PARENTS = ' . var_export($parents, true) . ';';
             "source" => $this->sourceInfo($id),
         );
         $history = $this->history ?? [];
-        $setup["history"] = $history[$setup["source"]["path"]] ?? [];
+
+        $sourcePath = $setup["source"]["path"] ?? null;
+
+        $setup["history"] = $sourcePath !== null
+            ? ($history[$sourcePath] ?? [])
+            : [];
+
         if ($this->getChildren($id)) {
             $lang = $this->config->language;
             $setup["extra_header_links"] = array(
