@@ -72,10 +72,10 @@ class Package_IDE_API
                         : $dir . DIRECTORY_SEPARATOR;
                 $this->funclist = file($this->dir . self::FUNCLIST_FILE, FILE_IGNORE_NEW_LINES);
             } else {
-                trigger_error('Is the PhD output directory a file?', E_USER_ERROR);
+                throw new \Error('Is the PhD output directory a file?');
             }
         } else {
-            trigger_error('The PhD output directory does not exist.', E_USER_ERROR);
+            throw new \Error('The PhD output directory does not exist.');
         }
     }
 
