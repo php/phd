@@ -74,7 +74,7 @@ if (!$conf) {
 
 if ($config->saveConfig) {
     $outputHandler->v("Writing the config file", VERBOSE_MESSAGES);
-    file_put_contents("phd.config.php", "<?php\nreturn " . var_export($config->getAllFiltered(), 1) . ";");
+    file_put_contents("phd.config.php", "<?php\nreturn " . var_export($config->getAllSerializableProperties(), 1) . ";");
 }
 
 if ($config->quit) {
