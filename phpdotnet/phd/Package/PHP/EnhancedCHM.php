@@ -80,7 +80,11 @@ class Package_PHP_EnhancedCHM extends Package_PHP_CHM
                 $this->outputHandler->v('Preparing usernotes.', VERBOSE_MESSAGES);
 
                 // Decompress the 'all' file into single files - one file per sectionid.
-                while($fpNotes && !feof($fpNotes) && false !== ($userNote = fgetcsv($fpNotes, 0, '|'))) {
+                while (
+                    $fpNotes
+                    && !feof($fpNotes)
+                    && false !== ($userNote = fgetcsv($fpNotes, 0, '|', '"', '\\'))
+                ) {
                     // Usernote index
                     // 0 = Note ID
                     // 1 = Section ID
