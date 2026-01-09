@@ -26,7 +26,7 @@ $reader = new Reader($outputHandler);
 $reader->open($config->xmlFile, null, LIBXML_PARSEHUGE | LIBXML_XINCLUDE);
 $render->execute($reader);
 
-$render->detach($index);
+$render->offsetUnset($index);
 
 
 // Rendering
