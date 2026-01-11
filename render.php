@@ -116,7 +116,7 @@ if ($config->requiresIndexing()) {
     $reader->open($config->xmlFile, NULL, $readerOpts);
     $render->execute($reader);
 
-    $render->detach($format);
+    $render->offsetUnset($format);
 
     $outputHandler->v("Indexing done", VERBOSE_INDEXING);
 } else {
