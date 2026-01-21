@@ -2,8 +2,8 @@
 namespace phpdotnet\phd;
 
 class Package_Generic_Manpage extends Format_Abstract_Manpage {
-    const OPEN_CHUNK    = 0x01;
-    const CLOSE_CHUNK   = 0x02;
+    const int OPEN_CHUNK    = 0x01;
+    const int CLOSE_CHUNK   = 0x02;
 
      private $elementmap = array( /* {{{ */
         'acronym'               => 'format_suppressed_tags',

@@ -3,10 +3,10 @@ namespace phpdotnet\phd;
 
 class Reader extends \XMLReader
 {
-    const XMLNS_XML     = "http://www.w3.org/XML/1998/namespace";
-    const XMLNS_XLINK   = "http://www.w3.org/1999/xlink";
-    const XMLNS_PHD     = "http://www.php.net/ns/phd";
-    const XMLNS_DOCBOOK = "http://docbook.org/ns/docbook";
+    const string XMLNS_XML     = "http://www.w3.org/XML/1998/namespace";
+    const string XMLNS_XLINK   = "http://www.w3.org/1999/xlink";
+    const string XMLNS_PHD     = "http://www.php.net/ns/phd";
+    const string XMLNS_DOCBOOK = "http://docbook.org/ns/docbook";
     
     protected OutputHandler $outputHandler;
 
