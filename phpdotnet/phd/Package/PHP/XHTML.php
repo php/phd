@@ -125,6 +125,10 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
                 'classsynopsis' => 'format_classsynopsis_oo_name_text',
             ]
         ],
+        'enumidentifier' => [
+            /* DEFAULT */ 'format_enumidentifier_text',
+            'enumsynopsis' => false,
+        ],
         'methodname'            => array(
             /* DEFAULT */          'format_function_text',
             'constructorsynopsis' => array(
@@ -896,6 +900,25 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             return '<a href="'.$href. '" class="' .$tag. '">' .$value. '</a>';
         }
         return '<strong class="' .$tag. '">' .$value. '</strong>';
+    }
+
+    public function format_enumidentifier_text($value, $tag) {
+        if (!str_contains($value, '::')) {
+            return $value;
+        }
+
+        list($enumName) = explode('::', $value);
+        $t = strtr($this->normalizeFQN($enumName), ["_" => "-", "\\" => "-"]);
+        $href = Format::getFilename("enum.$t");
+
+        if ($href === false) {
+            return $value;
+        }
+
+        if ($this->chunked) {
+            return '<a href="' . $href . $this->ext . '" class="' . $tag . '">' . $value . '</a>';
+        }
+        return '<a href="#' . $href . '" class="' . $tag . '">' . $value . '</a>';
     }
 
 
