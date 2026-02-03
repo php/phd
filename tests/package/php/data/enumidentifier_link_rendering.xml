@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="enumidentifier_link_rendering" xmlns="http://docbook.org/ns/docbook">
+
+ <section>
+  <para>1. Enum case inside enumsynopsis (no link - definition context)</para>
+  <enumsynopsis>
+   <enumname>TestEnum</enumname>
+   <enumitem>
+    <enumidentifier>CaseDefinition</enumidentifier>
+   </enumitem>
+  </enumsynopsis>
+ </section>
+
+ <section>
+  <para>2. Enum case reference with FQN (linked)</para>
+  <enumidentifier>Enum\Namespace\Existing_Enum::SomeCase</enumidentifier>
+ </section>
+
+ <section>
+  <para>3. Enum case reference with FQN and leading backslash (linked)</para>
+  <enumidentifier>\Enum\Namespace\Existing_Enum::AnotherCase</enumidentifier>
+ </section>
+
+ <section>
+  <para>4. Enum case without namespace separator (no link)</para>
+  <enumidentifier>JustCaseName</enumidentifier>
+ </section>
+
+ <section>
+  <para>5. Enum case for non-existent enum (no link)</para>
+  <enumidentifier>NonExistent\Enum::SomeCase</enumidentifier>
+ </section>
+
+</chapter>
