@@ -49,7 +49,7 @@ abstract class Format_Factory {
              }
             return $obj;
         }
-        trigger_error("This format is not supported by this package", E_USER_ERROR);
+        throw new \Error('This format is not supported by this package');
     }
 
     public static final function createFactory($package) {

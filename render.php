@@ -47,16 +47,16 @@ if (isset($commandLineOptions["packageDirs"])) {
 
 /* If no docbook file was passed, die */
 if (!is_dir($config->xmlRoot) || !is_file($config->xmlFile)) {
-    trigger_error("No Docbook file given. Specify it on the command line with --docbook.", E_USER_ERROR);
+    throw new \Error('No Docbook file given. Specify it on the command line with --docbook.');
 }
 if (!file_exists($config->outputDir)) {
     $outputHandler->v("Creating output directory..", VERBOSE_MESSAGES);
     if (!mkdir($config->outputDir, 0777, True)) {
-        trigger_error(vsprintf("Can't create output directory : %s", [$config->outputDir]), E_USER_ERROR);
+        throw new \Error(vsprintf("Can't create output directory : %s", [$config->outputDir]));
     }
     $outputHandler->v("Output directory created", VERBOSE_MESSAGES);
 } elseif (!is_dir($config->outputDir)) {
-    trigger_error("Output directory is not a file?", E_USER_ERROR);
+    throw new \Error('Output directory is not a file?');
 }
 
 // This needs to be moved. Preferably into the PHP package.
@@ -79,30 +79,6 @@ if ($config->saveConfig) {
 
 if ($config->quit) {
     exit(0);
-}
-
-function make_reader(Config $config, OutputHandler $outputHandler): Reader {
-    //Partial Rendering
-    $idlist = $config->renderIds + $config->skipIds;
-    if (!empty($idlist)) {
-        $outputHandler->v("Running partial build", VERBOSE_RENDER_STYLE);
-
-        $parents = [];
-        if ($config->indexCache) {
-            $parents = $config->indexCache->getParents($config->renderIds);
-        }
-
-        $reader = new Reader_Partial(
-            $outputHandler,
-            $config->renderIds,
-            $config->skipIds,
-            $parents,
-        );
-    } else {
-        $outputHandler->v("Running full build", VERBOSE_RENDER_STYLE);
-        $reader = new Reader($outputHandler);
-    }
-    return $reader;
 }
 
 $render = new Render();
@@ -135,11 +111,12 @@ if ($config->requiresIndexing()) {
     
     $render->attach($format);
 
-    $reader = make_reader($config, $outputHandler);
+    $outputHandler->v("Running full build", VERBOSE_RENDER_STYLE);
+    $reader = new Reader($outputHandler);
     $reader->open($config->xmlFile, NULL, $readerOpts);
     $render->execute($reader);
 
-    $render->detach($format);
+    $render->offsetUnset($format);
 
     $outputHandler->v("Indexing done", VERBOSE_INDEXING);
 } else {
@@ -160,8 +137,28 @@ foreach($config->package as $package) {
     }
 }
 
+//Partial Rendering
+$idlist = $config->renderIds + $config->skipIds;
+if (!empty($idlist)) {
+    $outputHandler->v("Running partial build", VERBOSE_RENDER_STYLE);
+
+    $parents = [];
+    if ($config->indexCache) {
+        $parents = $config->indexCache->getParents($config->renderIds);
+    }
+
+    $reader = new Reader_Partial(
+        $outputHandler,
+        $config->renderIds,
+        $config->skipIds,
+        $parents,
+    );
+} else {
+    $outputHandler->v("Running full build", VERBOSE_RENDER_STYLE);
+    $reader = new Reader($outputHandler);
+}
+
 // Render formats
-$reader = make_reader($config, $outputHandler);
 $reader->open($config->xmlFile, NULL, $readerOpts);
 foreach($render as $format) {
     $format->notify(Render::VERBOSE, true);

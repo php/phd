@@ -224,11 +224,11 @@ abstract class Package_Generic_TocFeed extends Format
             $dir = $this->getOutputDir();
             if (file_exists($dir)) {
                 if (!is_dir($dir)) {
-                    trigger_error("Output directory is a file?", E_USER_ERROR);
+                    throw new \Error('Output directory is a file?');
                 }
             } else {
                 if (!mkdir($dir, 0777, true)) {
-                    trigger_error("Can't create output directory", E_USER_ERROR);
+                    throw new \Error("Can't create output directory");
                 }
             }
             break;

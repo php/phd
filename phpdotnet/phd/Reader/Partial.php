@@ -31,7 +31,7 @@ class Reader_Partial extends Reader
         static $arraySkip = array();
 
         while($ret = parent::read()) {
-            $id = $this->getAttributeNs("id", self::XMLNS_XML);
+            $id = $this->getAttributeNs("id", self::XMLNS_XML) ?? '';
             $currentPartial = end($arrayPartial);
             $currentSkip = end($arraySkip);
             if (isset($this->partial[$id])) {

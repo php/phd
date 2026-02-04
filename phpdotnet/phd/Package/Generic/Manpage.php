@@ -316,11 +316,11 @@ class Package_Generic_Manpage extends Format_Abstract_Manpage {
             $this->setOutputDir($this->config->outputDir . strtolower($this->toValidName($this->getFormatName())) . '/');
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
-                    trigger_error("Output directory is a file?", E_USER_ERROR);
+                    throw new \Error('Output directory is a file?');
                 }
             } else {
                 if (!mkdir($this->getOutputDir(), 0777, true)) {
-                    trigger_error("Can't create output directory", E_USER_ERROR);
+                    throw new \Error("Can't create output directory");
                 }
             }
             break;
