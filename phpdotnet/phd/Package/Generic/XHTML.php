@@ -678,11 +678,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         $stylesDir .= 'styles/';
         if (file_exists($stylesDir)) {
             if (!is_dir($stylesDir)) {
-                trigger_error("The styles/ directory is a file?", E_USER_ERROR);
+                throw new \Error('The styles/ directory is a file?');
             }
         } else {
             if (!mkdir($stylesDir, 0777, true)) {
-                trigger_error("Can't create the styles/ directory.", E_USER_ERROR);
+                throw new \Error("Can't create the styles/ directory.");
             }
         }
         foreach ((array)$this->config->css as $css) {

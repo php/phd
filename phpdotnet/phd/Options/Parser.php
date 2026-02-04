@@ -80,11 +80,11 @@ class Options_Parser
             $checkArgv = explode('=', $argv[$i]);
             if (substr($checkArgv[0], 0, 2) === '--') {
                 if (!in_array(substr($checkArgv[0], 2), $long)) {
-                    trigger_error('Invalid long option ' . $argv[$i], E_USER_ERROR);
+                    throw new \Error('Invalid long option ' . $argv[$i]);
                 }
             } elseif (substr($checkArgv[0], 0, 1) === '-') {
                 if (!in_array(substr($checkArgv[0], 1), $short)) {
-                    trigger_error('Invalid short option ' . $argv[$i], E_USER_ERROR);
+                    throw new \Error('Invalid short option ' . $argv[$i]);
                 }
            }
         }
@@ -98,7 +98,7 @@ class Options_Parser
 
         $args = getopt($this->getShortOptions(), $this->getLongOptions());
         if ($args === false) {
-            trigger_error("Something happend with getopt(), please report a bug", E_USER_ERROR);
+            throw new \Error('Something happend with getopt(), please report a bug');
         }
 
         $parsedOptions = [];
@@ -106,7 +106,7 @@ class Options_Parser
             $handler = $this->handlerForOption($k);
 
             if (!is_callable($handler)) {
-                trigger_error("Hmh, something weird has happend, I don't know this option", E_USER_ERROR);
+                throw new \Error("Hmh, something weird has happend, I don't know this option");
             }
 
             $retVal = call_user_func($handler, $k, $v);
