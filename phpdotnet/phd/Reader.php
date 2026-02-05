@@ -7,6 +7,7 @@ class Reader extends \XMLReader
     const XMLNS_XLINK   = "http://www.w3.org/1999/xlink";
     const XMLNS_PHD     = "http://www.php.net/ns/phd";
     const XMLNS_DOCBOOK = "http://docbook.org/ns/docbook";
+    const XMLNS_MATHML  = "http://www.w3.org/1998/Math/MathML";
     
     protected OutputHandler $outputHandler;
 
