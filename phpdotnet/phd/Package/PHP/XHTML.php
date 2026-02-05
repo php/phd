@@ -827,12 +827,24 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
     public function format_function($open, $tag, $attrs, $props) {
         if ($open) {
+            if (str_contains($props["innerXml"], '<replaceable')) {
+                $this->pushRole("function_replaceable");
+            }
             return '<span class="' . $tag . '">';
         }
+
+        if ($this->getRole() === "function_replaceable") {
+            $this->popRole();
+        }
+
         return "</span>";
     }
 
     public function format_function_text($value, $tag, $display_value = null) {
+        if ($this->getRole() === "function_replaceable") {
+            return $this->TEXT($value);
+        }
+
         static $non_functions = array(
             "echo" => true, "print" => true,
             "include" => true, "include_once" => true,
