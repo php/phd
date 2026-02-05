@@ -3,7 +3,7 @@ namespace phpdotnet\phd;
 
 class Config
 {
-    public const VERSION = '@phd_version@';
+    public const string VERSION = '@phd_version@';
     public readonly string $copyright;
 
     /** @var array<string, string> */

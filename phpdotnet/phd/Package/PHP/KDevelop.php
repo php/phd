@@ -2,7 +2,7 @@
 namespace phpdotnet\phd;
 
 class Package_PHP_KDevelop extends Format {
-    const DEFAULT_HREF = "http://www.php.net/manual/en/";
+    const string DEFAULT_HREF = "http://www.php.net/manual/en/";
 
     protected $elementmap = array(
         'book'                  => 'format_tocsect1',
