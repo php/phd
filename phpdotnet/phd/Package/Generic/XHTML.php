@@ -392,6 +392,48 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         //phd
         'phd:toc'               => 'format_phd_toc',
 
+        // MathML (namespace http://www.w3.org/1998/Math/MathML)
+        'mml:math'              => 'format_mml_element',
+        // Token
+        'mml:mi'                => 'format_mml_element',
+        'mml:mn'                => 'format_mml_element',
+        'mml:mo'                => 'format_mml_element',
+        'mml:mtext'             => 'format_mml_element',
+        'mml:mspace'            => 'format_mml_element',
+        'mml:ms'                => 'format_mml_element',
+        // Layout
+        'mml:mrow'              => 'format_mml_element',
+        'mml:mfrac'             => 'format_mml_element',
+        'mml:msqrt'             => 'format_mml_element',
+        'mml:mroot'             => 'format_mml_element',
+        'mml:mstyle'            => 'format_mml_element',
+        'mml:merror'            => 'format_mml_element',
+        'mml:mpadded'           => 'format_mml_element',
+        'mml:mphantom'          => 'format_mml_element',
+        'mml:mfenced'           => 'format_mml_element',
+        'mml:menclose'          => 'format_mml_element',
+        // Scripts and limits
+        'mml:msub'              => 'format_mml_element',
+        'mml:msup'              => 'format_mml_element',
+        'mml:msubsup'           => 'format_mml_element',
+        'mml:munder'            => 'format_mml_element',
+        'mml:mover'             => 'format_mml_element',
+        'mml:munderover'        => 'format_mml_element',
+        'mml:mmultiscripts'     => 'format_mml_element',
+        'mml:mprescripts'       => 'format_mml_element',
+        'mml:none'              => 'format_mml_element',
+        // Tables
+        'mml:mtable'            => 'format_mml_element',
+        'mml:mtr'               => 'format_mml_element',
+        'mml:mtd'               => 'format_mml_element',
+        'mml:mlabeledtr'        => 'format_mml_element',
+        // Semantics
+        'mml:semantics'         => 'format_mml_element',
+        'mml:annotation'        => 'format_mml_element',
+        'mml:annotation-xml'    => 'format_mml_element',
+        // Actions
+        'mml:maction'           => 'format_mml_element',
+
     ); /* }}} */
 
     private $mytextmap = array(
@@ -629,6 +671,37 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 ? (int)$attrs[Reader::XMLNS_PHD]['toc-depth'] : 1,
             false
         ) . "</div>\n";
+    }
+
+    /**
+    * Handle MathML elements (mml:* namespace).
+    * Strips the "mml:" prefix and outputs the HTML5 local name.
+    */
+    public function format_mml_element($open, $name, $attrs, $props) {
+        $localName = substr($name, 4);
+
+        if ($open) {
+            $attrStr = '';
+
+            // Add xmlns on the <math> root element for XHTML compatibility
+            if ($localName === 'math') {
+                $attrStr .= ' xmlns="' . Reader::XMLNS_MATHML . '"';
+            }
+
+            // Preserve MathML attributes (stored under XMLNS_DOCBOOK as they have no namespace)
+            foreach ($attrs[Reader::XMLNS_DOCBOOK] as $attr => $val) {
+                $attrStr .= ' ' . $attr . '="' . $this->TEXT($val) . '"';
+            }
+
+            // Preserve xml:id as id
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $attrStr .= ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
+            }
+
+            return '<' . $localName . $attrStr . ($props["empty"] ? '/>' : '>');
+        }
+
+        return '</' . $localName . '>';
     }
 
     public function createLink($for, &$desc = null, $type = Format::SDESC) {
