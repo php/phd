@@ -246,7 +246,13 @@ contributors($setup);
 
     protected function writeJsonIndex() {
         $this->outputHandler->v("Writing search indexes..", VERBOSE_FORMAT_RENDERING);
-        [$entries, $descriptions] = $this->processJsonIndex();
+
+        $jsonIndex = new JsonIndex(
+            $this->indexes,
+            $this->indexRepository->getIndexesWithDuplicates(),
+        );
+
+        [$entries, $descriptions] = $jsonIndex->processJsonIndex();
         file_put_contents(
             $this->getOutputDir() . "search-index.json",
             json_encode($entries)
@@ -257,7 +263,7 @@ contributors($setup);
         );
         $this->outputHandler->v("Index written", VERBOSE_FORMAT_RENDERING);
 
-        $entries = $this->processCombinedJsonIndex();
+        $entries = $jsonIndex->processCombinedJsonIndex();
         file_put_contents(
             $this->getOutputDir() . "search-combined.json",
             json_encode($entries)
@@ -268,138 +274,6 @@ contributors($setup);
             $entries
         );
         $this->outputHandler->v("Combined Index written", VERBOSE_FORMAT_RENDERING);
-    }
-
-    /**
-     * Processes the index to extract entries and descriptions. These are
-     * used to generate the search index and the descriptions JSON files.
-     */
-    private function processJsonIndex(): array {
-        $alwaysIncludeElements = [
-            'refentry',
-            'stream_wrapper',
-            'phpdoc:classref',
-            'phpdoc:exceptionref',
-            'phpdoc:varentry',
-        ];
-
-        $entries = [];
-        $descriptions = [];
-        foreach($this->indexes as $id => $index) {
-            if (
-                (! $index['chunk'])
-                && (! in_array($index['element'], $alwaysIncludeElements, true))
-            ) {
-                continue;
-            }
-
-            if ($index["sdesc"] === "" && $index["ldesc"] !== "") {
-                $index["sdesc"] = $index["ldesc"];
-                $bookOrSet = $this->findParentBookOrSet($index['parent_id']);
-                if ($bookOrSet) {
-                    $index["ldesc"] = Format::getLongDescription(
-                        $bookOrSet['docbook_id']
-                    );
-                }
-            }
-
-            $entries[] = [
-                $index["sdesc"], $index["filename"], $index["element"]
-            ];
-            $descriptions[$id] = html_entity_decode($index["ldesc"]);
-        }
-        return [$entries, $descriptions];
-    }
-
-    private function processCombinedJsonIndex(): array
-    {
-        $alwaysIncludeElements = [
-            'refentry',
-            'stream_wrapper',
-            'phpdoc:classref',
-            'phpdoc:exceptionref',
-            'phpdoc:varentry',
-        ];
-
-        $entries = [];
-        $indexes = $this->indexRepository->getIndexesWithDuplicates();
-        foreach ($indexes as $index) {
-            if (
-                (! $index['chunk'])
-                && (! in_array($index['element'], $alwaysIncludeElements, true))
-            ) {
-                continue;
-            }
-
-            if ($index["sdesc"] === "" && $index["ldesc"] !== "") {
-                $index["sdesc"] = $index["ldesc"];
-                $bookOrSet = $this->findParentBookOrSet($index['parent_id']);
-                if ($bookOrSet) {
-                    $index["ldesc"] = Format::getLongDescription(
-                        $bookOrSet['docbook_id']
-                    );
-                }
-            }
-
-            $nameParts = explode('::', $index['sdesc']);
-            $methodName = array_pop($nameParts);
-
-            $type = 'General';
-            switch ($index['element']) {
-                case "phpdoc:varentry":
-                    $type = "Variable";
-                    break;
-
-                case "refentry":
-                    $type = "Function";
-                    break;
-
-                case "phpdoc:exceptionref":
-                    $type = "Exception";
-                    break;
-
-                case "phpdoc:classref":
-                    $type = "Class";
-                    break;
-
-                case "set":
-                case "book":
-                case "reference":
-                    $type = "Extension";
-                    break;
-            }
-
-            $entries[] = [
-                'id' => $index['filename'],
-                'name' => $index['sdesc'],
-                'description' => html_entity_decode($index['ldesc']),
-                'tag' => $index['element'],
-                'type' => $type,
-                'methodName' => $methodName,
-            ];
-        }
-        return $entries;
-    }
-
-    /**
-     * Finds the closest parent book or set in the index hierarchy.
-     */
-    private function findParentBookOrSet(string $id): ?array
-    {
-        // array_key_exists() to guard against undefined array keys, either for
-        // root elements (no parent) or in case the index structure is broken.
-        while (array_key_exists($id, $this->indexes)) {
-            $parent = $this->indexes[$id];
-            $element = $parent['element'];
-
-            if ($element === 'book' || $element === 'set') {
-                return $parent;
-            }
-
-            $id = $parent['parent_id'];
-        }
-
-        return null;
     }
 
     public function loadSourcesInfo() {
