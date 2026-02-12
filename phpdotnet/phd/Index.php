@@ -358,7 +358,7 @@ class Index extends Format
             return;
         }
         $this->inLongDesc = false;
-        if (empty($this->nfo[$this->currentid]["ldesc"])) {
+        if ($this->nfo[$this->currentid]["ldesc"] === "") {
             $this->nfo[$this->currentid]["ldesc"] = htmlentities(trim($this->currentLongDesc), ENT_COMPAT, "UTF-8");
         }
     }
@@ -370,7 +370,7 @@ class Index extends Format
         }
         $this->inShortDesc = false;
         $s = htmlentities(trim($this->currentShortDesc), ENT_COMPAT, "UTF-8");
-        if (empty($this->nfo[$this->currentid]["sdesc"])) {
+        if ($this->nfo[$this->currentid]["sdesc"] === "") {
             $this->nfo[$this->currentid]["sdesc"] = $s;
         } else {
             if (!is_array($this->nfo[$this->currentid]["sdesc"])) {
