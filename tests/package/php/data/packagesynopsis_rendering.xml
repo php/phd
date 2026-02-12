@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="packagesynopsis_rendering" xmlns="http://docbook.org/ns/docbook">
+
+ <section>
+  <para>1. Namespaced class with packagesynopsis</para>
+  <packagesynopsis>
+   <package>BcMath</package>
+   <classsynopsis class="class">
+    <ooclass>
+     <modifier>final</modifier>
+     <modifier>readonly</modifier>
+     <classname>Number</classname>
+    </ooclass>
+    <oointerface>
+     <modifier>implements</modifier>
+     <interfacename>Stringable</interfacename>
+    </oointerface>
+   </classsynopsis>
+  </packagesynopsis>
+ </section>
+
+ <section>
+  <para>2. Namespaced enum with packagesynopsis</para>
+  <packagesynopsis>
+   <package>Pcntl</package>
+   <enumsynopsis>
+    <enumname>QosClass</enumname>
+    <enumitem>
+     <enumidentifier>Background</enumidentifier>
+     <enumitemdescription>Background QoS</enumitemdescription>
+    </enumitem>
+   </enumsynopsis>
+  </packagesynopsis>
+ </section>
+
+ <section>
+  <para>3. Standalone package element</para>
+  <para>The <package>Dom</package> namespace.</para>
+ </section>
+
+</chapter>

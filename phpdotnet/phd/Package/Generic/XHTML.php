@@ -150,6 +150,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'note'                  => 'format_note',
         'orgname'               => 'span',
         'othercredit'           => 'format_div',
+        /** Package/Namespace synopsis related tags */
+        'packagesynopsis'       => 'format_packagesynopsis',
+        'package'               => [
+            /* DEFAULT */          'span',
+            'packagesynopsis'   => 'format_packagesynopsis_package',
+        ],
         /** Class Synopsis related tags */
         'classsynopsis'         => 'format_classsynopsis',
         'classsynopsisinfo'     => 'format_classsynopsisinfo',
@@ -532,6 +538,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     protected $cchunk      = array();
     /* Default Chunk variables */
     private $dchunk      = array(
+        "packagesynopsis" => false,
         "classsynopsis" => [
             "close"        => false,
             "classname"    => false,
@@ -1250,6 +1257,8 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         /** Legacy presentation does not use the class attribute */
         $this->cchunk["classsynopsis"]['legacy'] = !isset($attrs[Reader::XMLNS_DOCBOOK]["class"]);
 
+        $inPackageSynopsis = $this->cchunk["packagesynopsis"] ?? false;
+
         if ($this->cchunk["classsynopsis"]['legacy']) {
             if ($open) {
                 // Think this just needs to be set on open and it will persist
@@ -1261,6 +1270,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                     $this->cchunk["classsynopsis"]["interface"] = true;
                 }
 
+                if ($inPackageSynopsis) {
+                    return '';
+                }
                 return '<div class="'.$name.'">';
             }
 
@@ -1271,6 +1283,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             }
             return "</div>";
             */
+            if ($inPackageSynopsis) {
+                return '}';
+            }
             return "}</div>";
         }
 
@@ -1281,8 +1296,14 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 + substr_count($props['innerXml'], '</oointerface>')
                 + substr_count($props['innerXml'], '</ooexception>');
             $this->cchunk["classsynopsis"]['nb_list'] = $occurrences;
+            if ($inPackageSynopsis) {
+                return '<div class="classsynopsisinfo">';
+            }
             return '<div class="classsynopsis"><div class="classsynopsisinfo">';
         } else {
+            if ($inPackageSynopsis) {
+                return '}';
+            }
             return '}</div>';
         }
     }
@@ -1309,11 +1330,33 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return $method;
     }
 
-    public function format_enumsynopsis($open, $name, $attrs, $props) {
+    public function format_packagesynopsis($open, $name, $attrs, $props) {
         if ($open) {
-            //return '<div class="enumsynopsis">';
+            $this->cchunk["packagesynopsis"] = true;
+            return '<div class="classsynopsis"><div class="classsynopsisinfo">';
+        }
+        $this->cchunk["packagesynopsis"] = false;
+        return '</div>';
+    }
+
+    public function format_packagesynopsis_package($open, $name, $attrs, $props) {
+        if ($open) {
+            return '<span class="modifier">namespace</span> <strong class="package">';
+        }
+        return '</strong>;</div>';
+    }
+
+    public function format_enumsynopsis($open, $name, $attrs, $props) {
+        $inPackageSynopsis = $this->cchunk["packagesynopsis"] ?? false;
+        if ($open) {
+            if ($inPackageSynopsis) {
+                return '<div class="classsynopsisinfo">';
+            }
             return '<div class="classsynopsis"><div class="classsynopsisinfo">';
         } else {
+            if ($inPackageSynopsis) {
+                return '}';
+            }
             return '}</div>';
         }
     }
