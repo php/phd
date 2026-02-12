@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="admonition_rendering" xmlns="http://docbook.org/ns/docbook">
+
+ <section>
+  <para>1. Warning with xml:id</para>
+  <warning xml:id="warn.test">
+   <para>This is a warning with an id.</para>
+  </warning>
+ </section>
+
+ <section>
+  <para>2. Caution without xml:id</para>
+  <caution>
+   <para>This is a caution without an id.</para>
+  </caution>
+ </section>
+
+ <section>
+  <para>3. Tip with xml:id</para>
+  <tip xml:id="tip.test">
+   <para>This is a tip with an id.</para>
+  </tip>
+ </section>
+
+ <section>
+  <para>4. Note with xml:id</para>
+  <note xml:id="note.test">
+   <para>This is a note with an id.</para>
+  </note>
+ </section>
+
+ <section>
+  <para>5. Important without xml:id</para>
+  <important>
+   <para>This is an important without an id.</para>
+  </important>
+ </section>
+
+</chapter>

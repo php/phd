@@ -1974,11 +1974,15 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function admonition_title($title, $lang)
     {
-        return '<strong class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</strong>';
+        return '<h5 class="' .(strtolower($title)). '">' .($this->autogen($title, $lang)). '</h5>';
     }
     public function format_admonition($open, $name, $attrs, $props) {
         if ($open) {
-            return '<div class="'. $name. '">' .$this->admonition_title($name, $props["lang"]);
+            $idstr = "";
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $idstr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
+            }
+            return '<div class="'. $name. '"' . $idstr . '>' .$this->admonition_title($name, $props["lang"]);
         }
         return "</div>";
     }
@@ -1999,7 +2003,12 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_note($open, $name, $attrs, $props) {
         if ($open) {
-            return '<blockquote class="note"><p>'.$this->admonition_title("note", $props["lang"]). ': ';
+            $idstr = "";
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $idstr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
+            }
+            return '<blockquote class="note"' . $idstr . '><p>'
+                .$this->admonition_title("note", $props["lang"]). ': ';
         }
         return "</p></blockquote>";
     }
