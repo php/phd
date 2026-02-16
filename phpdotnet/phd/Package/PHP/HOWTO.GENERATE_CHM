@@ -4,21 +4,21 @@ All Rights Reserved.
 
 Warning: you'll need Windows to build CHM files.
 
-First, you will need to get the last SVN version of the PhD renderer from the repository:
-	svn checkout http://svn.php.net/repository/phd/trunk phd
+First, you will need to get the latest version of the PhD renderer from the repository:
+	git clone https://github.com/php/phd.git phd
 
 Then, you need to get the documentation:
-	svn checkout http://svn.php.net/repository/phpdoc/modules/doc-en
+	git clone https://github.com/php/doc-en.git doc-en
 
 If you want to render a translated documentation instead:
-	svn checkout http://svn.php.net/repository/phpdoc/modules/doc-{lang}
-where {lang} is the ISO 639-1 Code of the desired language.
+	git clone https://github.com/php/doc-{lang}.git
+where {lang} is the ISO 639-1 language code (optionally followed by a country code).
 (see http://www.sil.org/iso639-3/codes.asp for a list of codes)
 e.g. 'pt' for Portuguese, or pt_BR for Brazillian Portuguese.
 The example above would change to:
-	svn checkout http://svn.php.net/repository/phpdoc/modules/doc-pt
+	git clone https://github.com/php/doc-pt.git
 or
-	svn checkout http://svn.php.net/repository/phpdoc/modules/doc-pt_BR
+	git clone https://github.com/php/doc-pt_BR.git
 
 To render the documentation:
 	#1) cd {PHPDOC_PATH}
@@ -35,7 +35,7 @@ Finally, to compile the CHM sources:
 	#3) In the "File" menu, click on "Compile...", then the "Compile" button.
 	#4) After the compilation process, you should see the message "Created {RENDER_PATH}\chm\php_manual_{lang}.chm". You can quit HTML Help Workshop.
 
-Done ! The compiled CHM file is located on "{RENDER_PATH}\chm\php_manual_{lang}.chm".
+Done! The compiled CHM file is located at "{RENDER_PATH}\chm\php_manual_{lang}.chm".
 
 Please read the README file for further information.
 

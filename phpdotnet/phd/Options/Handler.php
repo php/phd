@@ -184,10 +184,10 @@ class Options_Handler implements Options_Interface
     public function option_docbook(string $k, mixed $v): array
     {
         if (is_array($v)) {
-            trigger_error("Can only parse one file at a time", E_USER_ERROR);
+            throw new \Error('Can only parse one file at a time');
         }
         if (!file_exists($v) || is_dir($v) || !is_readable($v)) {
-            trigger_error(sprintf("'%s' is not a readable docbook file", $v), E_USER_ERROR);
+            throw new \Error(sprintf("'%s' is not a readable docbook file", $v));
         }
         return [
             'xmlRoot' => dirname($v),
@@ -209,19 +209,19 @@ class Options_Handler implements Options_Interface
     public function option_output(string $k, mixed $v): array
     {
         if (is_array($v)) {
-            trigger_error("Only a single output location can be supplied", E_USER_ERROR);
+            throw new \Error('Only a single output location can be supplied');
         }
         if (!file_exists($v)) {
             $this->outputHandler->v("Creating output directory..", VERBOSE_MESSAGES);
             if (!mkdir($v, 0777, true)) {
-                trigger_error(vsprintf("Can't create output directory : %s", [$v]), E_USER_ERROR);
+                throw new \Error(vsprintf("Can't create output directory : %s", [$v]));
             }
             $this->outputHandler->v("Output directory created", VERBOSE_MESSAGES);
         } elseif (!is_dir($v)) {
-            trigger_error("Output directory is a file?", E_USER_ERROR);
+            throw new \Error('Output directory is a file?');
         }
         if (!is_dir($v) || !is_readable($v)) {
-            trigger_error(sprintf("'%s' is not a valid directory", $v), E_USER_ERROR);
+            throw new \Error(sprintf("'%s' is not a valid directory", $v));
         }
         $v = (substr($v, strlen($v) - strlen(DIRECTORY_SEPARATOR)) === DIRECTORY_SEPARATOR) ? $v : ($v . DIRECTORY_SEPARATOR);
 
@@ -234,7 +234,7 @@ class Options_Handler implements Options_Interface
     public function option_outputfilename(string $k, mixed $v): array
     {
         if (is_array($v)) {
-            trigger_error("Only a single output location can be supplied", E_USER_ERROR);
+            throw new \Error('Only a single output location can be supplied');
         }
         $file = basename($v);
 
@@ -281,7 +281,7 @@ class Options_Handler implements Options_Interface
         foreach((array)$v as $package) {
             if (!in_array($package, $this->config->getSupportedPackages())) {
                 $supported = implode(', ', $this->config->getSupportedPackages());
-                trigger_error("Invalid Package (Tried: '$package' Supported: '$supported')", E_USER_ERROR);
+                throw new \Error("Invalid Package (Tried: '$package' Supported: '$supported')");
             }
         }
         return ['package' => (array) $v];
@@ -341,13 +341,13 @@ class Options_Handler implements Options_Interface
     public function option_saveconfig(string $k, mixed $v): array
     {
         if (is_array($v)) {
-            trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
+            throw new \Error(sprintf('You cannot pass %s more than once', $k));
         }
 
         $val = is_bool($v) ? true : self::boolval($v);
 
         if (!is_bool($val)) {
-            trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
+            throw new \Error('yes/no || on/off || true/false || 1/0 expected');
         }
 
         return ['saveConfig' => $val];
@@ -381,7 +381,7 @@ class Options_Handler implements Options_Interface
                     $verbose = max($verbose, 1);
                     $verbose <<= 1;
                 } else {
-                    trigger_error("Unknown option passed to --$k, '$const'", E_USER_ERROR);
+                    throw new \Error("Unknown option passed to --$k, '$const'");
                 }
             }
         }
@@ -438,11 +438,11 @@ class Options_Handler implements Options_Interface
     public function option_color(string $k, mixed $v): array
     {
         if (is_array($v)) {
-            trigger_error(sprintf("You cannot pass %s more than once", $k), E_USER_ERROR);
+            throw new \Error(sprintf('You cannot pass %s more than once', $k));
         }
         $val = self::boolval($v);
         if (!is_bool($val)) {
-            trigger_error("yes/no || on/off || true/false || 1/0 expected", E_USER_ERROR);
+            throw new \Error('yes/no || on/off || true/false || 1/0 expected');
         }
         return ['colorOutput' => $val];
     }

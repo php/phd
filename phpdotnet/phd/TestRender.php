@@ -17,7 +17,7 @@ class TestRender extends Render {
             $this->attach($this->index);
             $this->reader->open($this->config->xmlFile);
             $this->execute($this->reader);
-            $this->detach($this->index);
+            $this->offsetUnset($this->index);
         }
 
         if ($this->format !== null) {

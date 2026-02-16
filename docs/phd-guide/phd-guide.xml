@@ -97,10 +97,10 @@ install ok: channel://doc.php.net/PhD-1.0.1
 install ok: channel://doc.php.net/PhD_Generic-1.0.1
 install ok: channel://doc.php.net/PhD_PHP-1.0.1
 install ok: channel://doc.php.net/PhD_PEAR-1.0.1
-bjori@jessica:/usr/src/php/svn/phd/trunk$
 
+$ cd phd
 $ phd --version
-PhD Version: phd-from-svn
+PhD Version: phd-from-git
 PHP Version: 5.3.3-dev
 Copyright(c) 2007-2010 The PHP Documentation Group
 ]]>
@@ -113,20 +113,22 @@ Copyright(c) 2007-2010 The PHP Documentation Group
 
   <chapter xml:id="using-phd">
     <title>Using PhD to render documentation</title>
-
+      <note>
+          <para>
+              Earlier versions of the PHP documentation infrastructure used Subversion (SVN).
+              All PHP documentation repositories are now maintained using Git.
+          </para>
+      </note>
     <section xml:id="render-phpdoc">
       <title>Rendering the PHP Documentation Sources</title>
 
       <sidebar>
         <title>Getting the PHP Documentation Sources</title>
-
-        <para>To get the PHP documentation sources, simply <link
-        xlink:href="http://wiki.php.net/doc/scratchpad/howto/checkout">check them out from SVN</link>
-        with the following command.</para>
-
+        <para>To get the PHP documentation sources, simply clone them from the
+            official Git repository with the following command.</para>
         <screen>
 <![CDATA[
-$ svn co http://svn.php.net/repository/phpdoc/modules/doc-en phpdoc
+$ git clone https://github.com/php/doc-en.git phpdoc
 ... output
 ]]>
         </screen>
@@ -142,7 +144,7 @@ $ svn co http://svn.php.net/repository/phpdoc/modules/doc-en phpdoc
       </sidebar>
 
       <para>To quickly become familiar with using PhD, you can download the
-      PHP documentation sources and render those.Running PhD to render the
+      PHP documentation sources and render those. Running PhD to render the
       docs is surprisingly simple, so we'll start with that.</para>
 
       <screen>
@@ -300,8 +302,8 @@ Supported packages:
 
       <screen>
 <![CDATA[
-$ svn checkout http://svn.php.net:/repository/phd/trunk/docs/phd-guide
-U phd/docs/phd-guide/phd-guide.xml
+$ git clone https://github.com/php/phd.git
+$ cd phd/docs/phd-guide
 ]]>
       </screen>
 
@@ -677,12 +679,6 @@ $ pear install mediawiki/geshi]]></screen>
     <para>Some other articles for further reading. Latest are on top.</para>
 
     <itemizedlist>
-      <listitem>
-        <para><link
-        xlink:href="http://elizabethmariesmith.com/2009/02/setting-up-phd-on-windows/">Setting
-        up PhD on Windows</link> by Elizabeth Marie Smith (PhD 0.4.5)</para>
-      </listitem>
-
       <listitem>
         <para><link
         xlink:href="http://bjori.blogspot.com/2007/10/phd-php-based-docbook-renderer-rc1.html">PhD

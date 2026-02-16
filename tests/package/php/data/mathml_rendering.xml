@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="mathml_rendering" xmlns="http://docbook.org/ns/docbook" xmlns:mml="http://www.w3.org/1998/Math/MathML">
+
+ <section>
+  <para>1. Inline MathML equation</para>
+  <para>
+   The quadratic formula is
+   <mml:math display="inline"><mml:mi>x</mml:mi><mml:mo>=</mml:mo><mml:mfrac><mml:mrow><mml:mo>-</mml:mo><mml:mi>b</mml:mi><mml:mo>±</mml:mo><mml:msqrt><mml:mrow><mml:msup><mml:mi>b</mml:mi><mml:mn>2</mml:mn></mml:msup><mml:mo>-</mml:mo><mml:mn>4</mml:mn><mml:mi>a</mml:mi><mml:mi>c</mml:mi></mml:mrow></mml:msqrt></mml:mrow><mml:mrow><mml:mn>2</mml:mn><mml:mi>a</mml:mi></mml:mrow></mml:mfrac></mml:math>.
+  </para>
+ </section>
+
+ <section>
+  <para>2. Self-closing mspace element</para>
+  <para>
+   <mml:math><mml:mi>a</mml:mi><mml:mspace width="1em"/><mml:mi>b</mml:mi></mml:math>
+  </para>
+ </section>
+
+ <section>
+  <para>3. Element with mathvariant attribute</para>
+  <para>
+   <mml:math><mml:mi mathvariant="bold">x</mml:mi></mml:math>
+  </para>
+ </section>
+
+</chapter>

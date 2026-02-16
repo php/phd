@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="function_replaceable_rendering" xmlns="http://docbook.org/ns/docbook">
+
+ <section>
+  <para>1. Function with replaceable</para>
+  <para>
+   <function>xml_set_<replaceable>*</replaceable></function>
+  </para>
+ </section>
+
+ <section>
+  <para>2. Normal function (no replaceable)</para>
+  <para>
+   <function>strlen</function>
+  </para>
+ </section>
+
+</chapter>

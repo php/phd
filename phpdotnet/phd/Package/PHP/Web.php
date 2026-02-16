@@ -89,11 +89,11 @@ class Package_PHP_Web extends Package_PHP_XHTML {
             $this->loadHistoryInfo();
             if (file_exists($this->getOutputDir())) {
                 if (!is_dir($this->getOutputDir())) {
-                    trigger_error("Output directory is a file?", E_USER_ERROR);
+                    throw new \Error('Output directory is a file?');
                 }
             } else {
                 if (!mkdir($this->getOutputDir(), 0777, true)) {
-                    trigger_error("Can't create output directory", E_USER_ERROR);
+                    throw new \Error("Can't create output directory");
                 }
             }
             if ($this->getFormatName() == "PHP-Web") {
@@ -204,7 +204,14 @@ $PARENTS = ' . var_export($parents, true) . ';';
             "alternatives" => $this->cchunk["alternatives"],
             "source" => $this->sourceInfo($id),
         );
-        $setup["history"] = $this->history[$setup["source"]["path"]] ?? [];
+        $history = $this->history ?? [];
+
+        $sourcePath = $setup["source"]["path"] ?? null;
+
+        $setup["history"] = $sourcePath !== null
+            ? ($history[$sourcePath] ?? [])
+            : [];
+
         if ($this->getChildren($id)) {
             $lang = $this->config->language;
             $setup["extra_header_links"] = array(
@@ -411,7 +418,7 @@ contributors($setup);
 
         $r = new \XMLReader;
         if (!$r->open($filename)) {
-            trigger_error(vsprintf("Can't open the sources file (%s)", [$filename]), E_USER_ERROR);
+            throw new \Error(vsprintf("Can't open the sources file (%s)", [$filename]));
             return array();
         }
         $info = array();

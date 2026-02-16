@@ -26,7 +26,7 @@ class Autoloader
 
                 return;
             }
-            trigger_error(vsprintf('Cannot find file for %s: %s', [$name, $file ?? $filename]), E_USER_ERROR);
+            throw new \Error(vsprintf('Cannot find file for %s: %s', [$name, $file ?? $filename]));
         }
     }
 
