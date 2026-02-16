@@ -24,7 +24,7 @@
         "ext-xmlreader": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.92"
+        "php-cs-fixer/shim": "^3.94"
     },
     "suggest": {
         "easybook/geshi": "For using GeSHi as code highlighter"
