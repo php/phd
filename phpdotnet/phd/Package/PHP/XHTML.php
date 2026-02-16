@@ -935,7 +935,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
 
     /*Chunk Functions*/
-    private function isChunkedByAttributes(array $attributes): bool {
+    private function isChunkedByAttributes(array $attributes, string $name = ''): bool {
         /* Legacy way to mark chunks */
         if (isset($attributes[Reader::XMLNS_PHD]['chunk'])) {
             return $attributes[Reader::XMLNS_PHD]['chunk'] != 'false';
@@ -943,8 +943,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             /** Annotations attribute is a standard DocBook attribute and could be used for various things */
             return !str_contains($attributes[Reader::XMLNS_DOCBOOK]['annotations'], 'chunk:false');
         } else {
-            /* Chunked by default */
-            return true;
+            /* Chunked by default, except preface */
+            return $name !== 'preface';
         }
     }
 
@@ -953,7 +953,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
         $this->CURRENT_CHUNK = $this->CURRENT_ID = $id = $attrs[Reader::XMLNS_XML]["id"] ?? '';
 
-        if ($this->isChunkedByAttributes($attrs)) {
+        if ($this->isChunkedByAttributes($attrs, $name)) {
             $this->cchunk = $this->dchunk;
         }
 
@@ -1063,7 +1063,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
 
             $this->CURRENT_CHUNK = $this->CURRENT_ID = $id;
-            if ($this->isChunkedByAttributes($attrs)) {
+            if ($this->isChunkedByAttributes($attrs, $name)) {
                 $this->cchunk = $this->dchunk;
                 $this->notify(Render::CHUNK, Render::OPEN);
             }
@@ -1078,7 +1078,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             }
             return '<div id="'.$id.'" class="'.$name.'">';
         }
-        if ($this->isChunkedByAttributes($attrs)) {
+        if ($this->isChunkedByAttributes($attrs, $name)) {
             $this->notify(Render::CHUNK, Render::CLOSE);
         }
         return '</div>';

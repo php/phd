@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<set xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="index" xml:lang="en">
+ <title>Test Manual</title>
+
+ <book xml:id="test-book">
+  <title>Test Book</title>
+
+  <preface xml:id="preface-default">
+   <info><title>Default Preface</title></info>
+   <para>This preface should not be chunked by default.</para>
+  </preface>
+
+  <preface annotations="chunk:true" xml:id="preface-chunked">
+   <info><title>Chunked Preface</title></info>
+   <para>This preface should be chunked because of the annotation.</para>
+  </preface>
+
+  <preface annotations="chunk:false" xml:id="preface-not-chunked">
+   <info><title>Not Chunked Preface</title></info>
+   <para>This preface should not be chunked because of the annotation.</para>
+  </preface>
+
+  <chapter xml:id="test-chapter">
+   <info><title>Test Chapter</title></info>
+   <para>A regular chapter for comparison.</para>
+  </chapter>
+ </book>
+
+</set>

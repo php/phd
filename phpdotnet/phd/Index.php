@@ -330,7 +330,7 @@ class Index extends Format
             } elseif (isset($attrs[Reader::XMLNS_DOCBOOK]['annotations'])) {
                 $this->isChunk[] = !str_contains($attrs[Reader::XMLNS_DOCBOOK]['annotations'], 'chunk:false');
             } else {
-                $this->isChunk[] = true;
+                $this->isChunk[] = ($name !== 'preface');
             }
 
             if (end($this->isChunk)) {
