@@ -116,9 +116,9 @@ Content:
     
      <dt id="classname.constants.first-constant"><strong><code>ClassName::FIRST_CONSTANT</code></strong></dt>
      <dd>
-      <span class="simpara">
+      <p class="simpara">
        The description of the class constant.
-      </span>
+      </p>
      </dd>
     
    </dl>
