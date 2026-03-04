@@ -10,7 +10,7 @@ abstract class Format extends ObjectStorage
      * @var    integer
      * @usedby createLink()
      */
-    const int SDESC = 1;
+    const SDESC = 1;
 
     /**
      * Represents a long description.
@@ -19,7 +19,7 @@ abstract class Format extends ObjectStorage
      * @var    integer
      * @usedby createLink()
      */
-    const int LDESC = 2;
+    const LDESC = 2;
 
     protected Config $config;
     protected OutputHandler $outputHandler;
