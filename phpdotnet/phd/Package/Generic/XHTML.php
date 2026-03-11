@@ -118,7 +118,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         ),
         'info'                  => array(
             /* DEFAULT */         'format_div',
-            'note'              => 'span',
         ),
         'informalexample'       => 'format_div',
         'informaltable'         => 'format_table',
@@ -294,7 +293,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'simplesect'            => 'div',
         'simpara'               => array(
             /* DEFAULT */          'p',
-            'note'              => 'span',
             'listitem'          => 'span',
             'entry'             => 'span',
             'example'           => 'format_example_content',
@@ -2042,16 +2040,16 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_note($open, $name, $attrs, $props) {
         if ($open) {
-            return '<blockquote class="note"><p>'.$this->admonition_title("note", $props["lang"]). ': ';
+            return '<div class="note">' .$this->admonition_title("note", $props["lang"]);
         }
-        return "</p></blockquote>";
+        return "</div>";
     }
     public function format_note_title($open, $name, $attrs)
     {
         if ($open) {
-            return '<strong>';
+            return '<h5 class="title">';
         }
-        return '</strong><br />';
+        return '</h5>';
     }
     public function format_example($open, $name, $attrs, $props) {
         if ($open) {
