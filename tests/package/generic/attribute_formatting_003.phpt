@@ -85,4 +85,21 @@ Content:
   }</div>
  </div>
 
+ <div class="section">
+  <p class="para">3. Constant of a class with attribute</p>
+  <div class="classsynopsis"><div class="classsynopsisinfo">
+   
+    <span class="attribute">#[\UnknownAttribute]</span><br>
+    <span class="modifier">class</span> <strong class="classname">ClassName</strong>
+    {</div>
+   <div class="classsynopsisinfo classsynopsisinfo_comment">/* Constants */</div>
+   <div class="fieldsynopsis">
+    <span class="modifier">public</span>
+    <span class="modifier">const</span>
+    <span class="type">string</span>
+    <var class="fieldsynopsis_varname">CONSTANT_NAME</var>;</div>
+
+  }</div>
+ </div>
+
 </div>

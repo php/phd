@@ -35,4 +35,21 @@
   </classsynopsis>
  </section>
 
+ <section>
+  <para>3. Constant of a class with attribute</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\UnknownAttribute]</modifier>
+    <classname>ClassName</classname>
+   </ooclass>
+   <classsynopsisinfo role="comment">Constants</classsynopsisinfo>
+   <fieldsynopsis>
+    <modifier>public</modifier>
+    <modifier>const</modifier>
+    <type>string</type>
+    <varname>CONSTANT_NAME</varname>
+   </fieldsynopsis>
+  </classsynopsis>
+ </section>
+
 </chapter>

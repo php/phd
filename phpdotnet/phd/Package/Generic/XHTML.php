@@ -1427,6 +1427,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
 
     public function format_fieldsynopsis_modifier_text($value, $tag) {
+        $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
         if ($this->getRole() === "attribute") {
             $attribute = trim(strtolower($value), "#[]\\");
             $href = Format::getFilename("class.$attribute");
@@ -1435,7 +1436,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             }
             return false;
         }
-        $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
         return $this->TEXT($value);
     }
 
