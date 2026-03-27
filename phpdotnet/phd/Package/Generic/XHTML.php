@@ -294,8 +294,6 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         'simplesect'            => 'div',
         'simpara'               => array(
             /* DEFAULT */          'p',
-            'note'              => 'span',
-            'listitem'          => 'span',
             'entry'             => 'span',
             'example'           => 'format_example_content',
         ),
