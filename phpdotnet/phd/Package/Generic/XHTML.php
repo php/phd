@@ -467,6 +467,11 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             'constant'         => 'format_suppressed_text',
         ),
         /** Those are used to retrieve the class/interface name to be able to remove it from method names */
+        'package' => [
+            /* DEFAULT */ false,
+            'packagesynopsis' => 'format_packagesynopsis_package_text'
+        ],
+        /** Those are used to retrieve the class/interface name to be able to remove it from method names */
         'classname' => [
             /* DEFAULT */ false,
             'ooclass' => [
@@ -538,7 +543,10 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     protected $cchunk      = array();
     /* Default Chunk variables */
     private $dchunk      = array(
-        "packagesynopsis" => false,
+        "packagesynopsis" => [
+            "open"         => false,
+            "namespace"    => false,
+        ],
         "classsynopsis" => [
             "close"        => false,
             "classname"    => false,
@@ -1257,7 +1265,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         /** Legacy presentation does not use the class attribute */
         $this->cchunk["classsynopsis"]['legacy'] = !isset($attrs[Reader::XMLNS_DOCBOOK]["class"]);
 
-        $inPackageSynopsis = $this->cchunk["packagesynopsis"] ?? false;
+        $inPackageSynopsis = $this->cchunk["packagesynopsis"]["open"] ?? false;
 
         if ($this->cchunk["classsynopsis"]['legacy']) {
             if ($open) {
@@ -1324,18 +1332,22 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
 
         list($class, $method) = explode($explode, $value);
-        if ($class !== $this->cchunk["classsynopsis"]["classname"]) {
+        $thisFqcn = $this->getFqcn();
+
+        if ($class !== $thisFqcn) {
             return $value;
         }
+
         return $method;
     }
 
     public function format_packagesynopsis($open, $name, $attrs, $props) {
+        $this->cchunk["packagesynopsis"] = $this->dchunk["packagesynopsis"];
         if ($open) {
-            $this->cchunk["packagesynopsis"] = true;
+            $this->cchunk["packagesynopsis"]["open"] = true;
             return '<div class="classsynopsis"><div class="classsynopsisinfo">';
         }
-        $this->cchunk["packagesynopsis"] = false;
+        $this->cchunk["packagesynopsis"]["open"] = false;
         return '</div>';
     }
 
@@ -1346,8 +1358,16 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         return '</strong>;</div>';
     }
 
+    public function format_packagesynopsis_package_text($value, $tag) {
+        if (!$this->cchunk["packagesynopsis"]["namespace"]) {
+            $this->cchunk["packagesynopsis"]["namespace"] = $value;
+        }
+
+        return $this->TEXT($value);
+    }
+
     public function format_enumsynopsis($open, $name, $attrs, $props) {
-        $inPackageSynopsis = $this->cchunk["packagesynopsis"] ?? false;
+        $inPackageSynopsis = $this->cchunk["packagesynopsis"]["open"] ?? false;
         if ($open) {
             if ($inPackageSynopsis) {
                 return '<div class="classsynopsisinfo">';
@@ -2682,5 +2702,15 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function onNewPage(): void
     {
         $this->perPageExampleCounter = 0;
+    }
+
+    protected function getFqcn() {
+        $fqcn = "";
+
+        if ($this->cchunk["packagesynopsis"]["namespace"]) {
+            $fqcn = $this->cchunk["packagesynopsis"]["namespace"] . "\\";
+        }
+
+        return $fqcn . $this->cchunk["classsynopsis"]["classname"];
     }
 }

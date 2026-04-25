@@ -807,7 +807,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_classsynopsis_fieldsynopsis_varname_text($value, $tag) {
         if ($this->cchunk["classsynopsis"]["classname"]) {
           if (strpos($value, "::") === false && strpos($value, "->") === false) {
-                $value = $this->cchunk["classsynopsis"]["classname"] . "->" . $value;
+                $value = $this->getFqcn() . "->" . $value;
             }
         }
 
@@ -817,7 +817,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
     public function format_classsynopsis_methodsynopsis_methodname_text($value, $tag) {
         if ($this->cchunk["classsynopsis"]["classname"]) {
           if (strpos($value, "::") === false && strpos($value, "->") === false) {
-                $value = $this->cchunk["classsynopsis"]["classname"] . "::" . $value;
+                $value = $this->getFqcn() . "::" . $value;
             }
         }
 

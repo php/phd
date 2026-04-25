@@ -34,6 +34,16 @@ Content:
     
      <span class="modifier">implements</span>
       <strong class="interfacename">Stringable</strong> {</div>
+
+    <div class="fieldsynopsis">
+     <span class="modifier">public</span>
+     <span class="type"><a href="language.types.integer.html" class="type int">int</a></span>
+      <var class="varname"><a href=".html#bcmath-number.props.scale">$<var class="varname">scale</var></a></var>;</div>
+
+
+    <div class="methodsynopsis dc-description">
+     <span class="modifier">public</span> <span class="methodname"><strong>floor</strong></span>(): <span class="type">BcMath\Number</span></div>
+
    }
   </div>
  </div>
