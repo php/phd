@@ -1332,11 +1332,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
 
         list($class, $method) = explode($explode, $value);
-        $thisFqcn = "";
-        if ($this->cchunk["packagesynopsis"]["namespace"]) {
-            $thisFqcn = $this->cchunk["packagesynopsis"]["namespace"] . '\\';
-        }
-        $thisFqcn .= $this->cchunk["classsynopsis"]["classname"];
+        $thisFqcn = $this->getFqcn();
 
         if ($class !== $thisFqcn) {
             return $value;
@@ -2706,5 +2702,15 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function onNewPage(): void
     {
         $this->perPageExampleCounter = 0;
+    }
+
+    protected function getFqcn() {
+        $fqcn = "";
+
+        if ($this->cchunk["packagesynopsis"]["namespace"]) {
+            $fqcn = $this->cchunk["packagesynopsis"]["namespace"] . "\\";
+        }
+
+        return $fqcn . $this->cchunk["classsynopsis"]["classname"];
     }
 }
