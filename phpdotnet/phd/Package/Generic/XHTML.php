@@ -545,7 +545,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     private $dchunk      = array(
         "packagesynopsis" => [
             "open"         => false,
-            "namespace"    => false,
+            "namespace"    => '',
         ],
         "classsynopsis" => [
             "close"        => false,
