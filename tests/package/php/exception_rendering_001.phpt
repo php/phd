@@ -27,7 +27,7 @@ Content:
 
       <div class="refsect1 description" id="refsect1-exceptionname.construct-description">
        Description
-       <div class="constructorsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>ExceptionName::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="language.types.string.html" class="type string">string</a></span> <code class="parameter">$propertyName</code><span class="initializer"> = &quot;&quot;</span></span>)</div>
+       <div class="constructorsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">function</span> <span class="methodname"><strong>ExceptionName::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="language.types.string.html" class="type string">string</a></span> <code class="parameter">$propertyName</code><span class="initializer"> = &quot;&quot;</span></span>)</div>
 
        <p class="para rdfs-comment">
         Constructs the Exception.

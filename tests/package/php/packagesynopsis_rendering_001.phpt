@@ -42,7 +42,7 @@ Content:
 
 
     <div class="methodsynopsis dc-description">
-     <span class="modifier">public</span> <span class="methodname"><strong>floor</strong></span>(): <span class="type">BcMath\Number</span></div>
+     <span class="modifier">public</span> <span class="modifier">function</span> <span class="methodname"><strong>floor</strong></span>(): <span class="type">BcMath\Number</span></div>
 
    }
   </div>

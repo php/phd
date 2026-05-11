@@ -27,7 +27,7 @@ Content:
 
      <div class="refsect1 description" id="refsect1-classname.construct-description">
       Description
-      <div class="constructorsynopsis dc-description"><span class="modifier">public</span> <span class="methodname"><strong>ClassName::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="language.types.string.html" class="type string">string</a></span> <code class="parameter">$firstParameter</code><span class="initializer"> = &quot;now&quot;</span></span>)</div>
+      <div class="constructorsynopsis dc-description"><span class="modifier">public</span> <span class="modifier">function</span> <span class="methodname"><strong>ClassName::__construct</strong></span>(<span class="methodparam"><span class="type"><a href="language.types.string.html" class="type string">string</a></span> <code class="parameter">$firstParameter</code><span class="initializer"> = &quot;now&quot;</span></span>)</div>
 
       <p class="para rdfs-comment">
        Returns new a ClassName object.

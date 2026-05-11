@@ -64,13 +64,13 @@ Content:
  
  <div class="section">
   <p class="para">3. Class linking (non-FQN) in method/function parameter and return type</p>
-  <div class="methodsynopsis dc-description"><span class="methodname"><strong>method_name</strong></span>(<span class="methodparam"><span class="type"><a href="extensionname.classpage.html" class="type Extension\Namespace\Existing_Class">Extension\Namespace\Existing_Class</a></span> <code class="parameter">$paramName</code></span>): <span class="type"><a href="extensionname.classpage.html" class="type Extension\Namespace\Existing_Class">Extension\Namespace\Existing_Class</a></span></div>
+  <div class="methodsynopsis dc-description"><span class="modifier">function</span> <span class="methodname"><strong>method_name</strong></span>(<span class="methodparam"><span class="type"><a href="extensionname.classpage.html" class="type Extension\Namespace\Existing_Class">Extension\Namespace\Existing_Class</a></span> <code class="parameter">$paramName</code></span>): <span class="type"><a href="extensionname.classpage.html" class="type Extension\Namespace\Existing_Class">Extension\Namespace\Existing_Class</a></span></div>
 
  </div>
  
  <div class="section">
   <p class="para">4. Class linking (FQN) in method/function parameter and return type</p>
-  <div class="methodsynopsis dc-description"><span class="methodname"><strong>method_name</strong></span>(<span class="methodparam"><span class="type"><a href="extensionname.classpage.html" class="type Extension\Namespace\Existing_Class">\Extension\Namespace\Existing_Class</a></span> <code class="parameter">$paramName</code></span>): <span class="type"><a href="extensionname.classpage.html" class="type Extension\Namespace\Existing_Class">\Extension\Namespace\Existing_Class</a></span></div>
+  <div class="methodsynopsis dc-description"><span class="modifier">function</span> <span class="methodname"><strong>method_name</strong></span>(<span class="methodparam"><span class="type"><a href="extensionname.classpage.html" class="type Extension\Namespace\Existing_Class">\Extension\Namespace\Existing_Class</a></span> <code class="parameter">$paramName</code></span>): <span class="type"><a href="extensionname.classpage.html" class="type Extension\Namespace\Existing_Class">\Extension\Namespace\Existing_Class</a></span></div>
 
  </div>
 

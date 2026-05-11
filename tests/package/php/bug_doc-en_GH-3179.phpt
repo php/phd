@@ -20,7 +20,7 @@ Filename: bug_doc-en_GH-3179.html
 Content:
 <div id="bug_doc-en_GH-3179" class="refentry">
  <div class="refsect1 unknown-1" id="refsect1-bug_doc-en_GH-3179-unknown-1">
-  <div class="methodsynopsis dc-description"><span class="methodname"><strong>method_name</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
+  <div class="methodsynopsis dc-description"><span class="modifier">function</span> <span class="methodname"><strong>method_name</strong></span>(): <span class="type"><a href="language.types.void.html" class="type void">void</a></span></div>
 
  </div>
 
