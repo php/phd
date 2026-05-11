@@ -10,7 +10,12 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         'chapter'               => 'format_container_chunk',
         'colophon'              => 'format_chunk',
         'function'              => 'format_function',
-        'methodname'            => 'format_function',
+        'methodname'            => array(
+            /* DEFAULT */          'format_function',
+            'methodsynopsis'      => 'format_methodsynopsis_function',
+            'constructorsynopsis' => 'format_methodsynopsis_function',
+            'destructorsynopsis'  => 'format_methodsynopsis_function',
+        ),
         'methodparam'           => 'format_methodparam',
         'methodsynopsis'        => 'format_methodsynopsis',
         'legalnotice'           => 'format_chunk',
@@ -838,6 +843,16 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         }
 
         return "</span>";
+    }
+
+    public function format_methodsynopsis_function($open, $tag, $attrs, $props) {
+        if ($open) {
+            return
+                '<span class="modifier">function</span> '
+                . $this->format_function($open, $tag, $attrs, $props);
+        }
+
+        return $this->format_function($open, $tag, $attrs, $props);
     }
 
     public function format_function_text($value, $tag, $display_value = null) {
