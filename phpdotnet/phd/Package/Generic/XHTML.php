@@ -1496,6 +1496,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         // Anything that is not a leading "#[\Attribute(" / "#[\Attribute]" chunk
         // e.g. "|" separator between arguments passes through.
         if (!preg_match('/^(#\[)(.+?)([](])$/', $value, $match)) {
+            if (trim($value) === '|') {
+                return ' | ';
+            }
             return $value;
         }
 

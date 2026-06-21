@@ -60,7 +60,7 @@ Content:
   <p class="para">2. Attribute with multiple constant arguments</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
    
-    <span class="attribute">#[<a href="class.attribute.html">\Attribute</a>(<a href="class.attribute.html#attribute.constants.target-class-constant">Attribute::TARGET_CLASS_CONSTANT</a>|<a href="class.attribute.html#attribute.constants.target-property">Attribute::TARGET_PROPERTY</a>)]</span><br>
+    <span class="attribute">#[<a href="class.attribute.html">\Attribute</a>(<a href="class.attribute.html#attribute.constants.target-class-constant">Attribute::TARGET_CLASS_CONSTANT</a> | <a href="class.attribute.html#attribute.constants.target-property">Attribute::TARGET_PROPERTY</a>)]</span><br>
     <span class="modifier">final</span>
     <span class="modifier">class</span> <strong class="classname">Attribute</strong>
     {</div>
