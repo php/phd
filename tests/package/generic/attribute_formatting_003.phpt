@@ -75,8 +75,8 @@ Content:
     {</div>
    <div class="classsynopsisinfo classsynopsisinfo_comment">/* Properties/Constants */</div>
    <div class="fieldsynopsis">
-    <span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
-    <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
+    <span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><br>
+    <span class="attribute">#[<a href="file.anotherknownattribute.is.in.html">\AnotherKnownAttribute</a>]</span><br>
     <span class="modifier">public</span>
     <span class="modifier">readonly</span>
     <span class="type">string</span>

@@ -42,7 +42,7 @@ Content:
 
  <div class="section">
   <p class="para">2. Class methodparameter with known attribute</p>
-  <div class="constructorsynopsis dc-description"><span class="modifier">public</span>  <span class="methodname">mysqli::__construct</span>(<span class="methodparam"><span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><span class="type"><span class="type">string</span><span class="type">null</span></span> <code class="parameter">$password</code><span class="initializer"> = <span class="type">null</span></span></span>)</div>
+  <div class="constructorsynopsis dc-description"><span class="modifier">public</span>  <span class="methodname">mysqli::__construct</span>(<span class="methodparam"><span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><span class="type"><span class="type">string</span><span class="type">null</span></span> <code class="parameter">$password</code><span class="initializer"> = <span class="type">null</span></span></span>)</div>
 
  </div>
 
@@ -54,7 +54,7 @@ Content:
 
  <div class="section">
   <p class="para">4. Function parameter with known attribute</p>
-  <div class="methodsynopsis dc-description"><span class="type">bool</span> <span class="methodname">password_verify</span>(<span class="methodparam"><span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><span class="type">string</span> <code class="parameter">$password</code></span>, <span class="methodparam"><span class="type">string</span> <code class="parameter">$hash</code></span>)</div>
+  <div class="methodsynopsis dc-description"><span class="type">bool</span> <span class="methodname">password_verify</span>(<span class="methodparam"><span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><span class="type">string</span> <code class="parameter">$password</code></span>, <span class="methodparam"><span class="type">string</span> <code class="parameter">$hash</code></span>)</div>
 
  </div>
 </div>

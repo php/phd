@@ -1,0 +1,45 @@
+<chapter xml:id="attribute-formatting-004">
+ <section>
+  <para>1. Attribute with one constant argument</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\Attribute(<constant>Attribute::TARGET_CLASS</constant>)]</modifier>
+    <modifier>final</modifier>
+    <classname>Attribute</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>2. Attribute with multiple constant arguments</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\Attribute(<constant>Attribute::TARGET_CLASS_CONSTANT</constant>|<constant>Attribute::TARGET_PROPERTY</constant>)]</modifier>
+    <modifier>final</modifier>
+    <classname>Attribute</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>3. Attribute with unknown constant argument</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\Attribute(<constant>Attribute::TARGET_UNKNOWN</constant>)]</modifier>
+    <modifier>final</modifier>
+    <classname>Attribute</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>4. Unknown attribute with constant argument</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\UnknownAttribute(<constant>Attribute::TARGET_CLASS</constant>)]</modifier>
+    <modifier>final</modifier>
+    <classname>Attribute</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+</chapter>

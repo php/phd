@@ -1449,12 +1449,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     public function format_fieldsynopsis_modifier_text($value, $tag) {
         $this->cchunk["fieldsynopsis"]["modifier"] = trim($value);
         if ($this->getRole() === "attribute") {
-            $attribute = trim(strtolower($value), "#[]\\");
-            $href = Format::getFilename("class.$attribute");
-            if ($href) {
-                return '<a href="' . $href . $this->getExt() . '">' .$value. '</a> ';
-            }
-            return false;
+            return $this->format_attribute_modifier_text($value);
         }
         return $this->TEXT($value);
     }
@@ -1492,13 +1487,26 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
 
     public function format_modifier_text($value, $tag) {
         if ($this->getRole() === "attribute") {
-            $attribute = trim(strtolower($value), "#[]\\");
-            $href = Format::getFilename("class.$attribute");
-            if ($href) {
-                return '<a href="' . $href . $this->getExt() . '">' .$value. '</a> ';
-            }
+            return $this->format_attribute_modifier_text($value);
         }
         return false;
+    }
+
+    private function format_attribute_modifier_text(string $value): string {
+        // Anything that is not a leading "#[\Attribute(" / "#[\Attribute]" chunk
+        // e.g. "|" separator between arguments passes through.
+        if (!preg_match('/^(#\[)(.+?)([](])$/', $value, $match)) {
+            return $value;
+        }
+
+        [, $prefix, $name, $suffix] = $match;
+        $attribute = strtolower(ltrim($name, "\\"));
+        $href = $this->getFilename('class.' . $attribute);
+        if (!$href) {
+            return $value;
+        }
+
+        return $prefix . '<a href="' . $href . $this->getExt() . '">' . $name . '</a>' . $suffix;
     }
 
     public function format_methodsynopsis($open, $name, $attrs, $props) {
@@ -1909,6 +1917,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
     public function format_constant($open, $name, $attrs, $props)
     {
+        if ($this->getRole() === "attribute") {
+            return "";
+        }
         if ($open) {
             if (str_contains($props["innerXml"], '<replaceable')) {
                 $this->pushRole("constant_group");

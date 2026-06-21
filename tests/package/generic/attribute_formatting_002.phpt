@@ -62,8 +62,8 @@ Content:
   <p class="para">2. Class with known attributes</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
    
-    <span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
-    <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
+    <span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><br>
+    <span class="attribute">#[<a href="file.anotherknownattribute.is.in.html">\AnotherKnownAttribute</a>]</span><br>
     <span class="modifier">class</span> <strong class="classname">DateTime</strong>
     {</div>
   }</div>
@@ -80,8 +80,8 @@ Content:
 
  <div class="section">
   <p class="para">4. Method with known attributes</p>
-  <div class="methodsynopsis dc-description"><span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
-   <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
+  <div class="methodsynopsis dc-description"><span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><br>
+   <span class="attribute">#[<a href="file.anotherknownattribute.is.in.html">\AnotherKnownAttribute</a>]</span><br>
    <span class="modifier">public</span>  <span class="methodname">ClassName::methodName</span>()</div>
 
  </div>
@@ -96,8 +96,8 @@ Content:
 
  <div class="section">
   <p class="para">6. Constructor with known attributes</p>
-  <div class="constructorsynopsis dc-description"><span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
-   <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
+  <div class="constructorsynopsis dc-description"><span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><br>
+   <span class="attribute">#[<a href="file.anotherknownattribute.is.in.html">\AnotherKnownAttribute</a>]</span><br>
    <span class="modifier">public</span>  <span class="methodname">ClassName::__construct</span>()</div>
 
  </div>
@@ -130,21 +130,21 @@ Content:
   <p class="para">8. Class, constructor and methods with known attributes</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
    
-    <span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
-    <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
+    <span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><br>
+    <span class="attribute">#[<a href="file.anotherknownattribute.is.in.html">\AnotherKnownAttribute</a>]</span><br>
     <span class="modifier">class</span> <strong class="classname">DateTime</strong>
     {</div>
    <div class="constructorsynopsis dc-description">
-    <span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
-    <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
+    <span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><br>
+    <span class="attribute">#[<a href="file.anotherknownattribute.is.in.html">\AnotherKnownAttribute</a>]</span><br>
     <span class="modifier">public</span>  <span class="methodname">ClassName::__construct</span>()</div>
 
-   <div class="methodsynopsis dc-description"><span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
-    <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
+   <div class="methodsynopsis dc-description"><span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><br>
+    <span class="attribute">#[<a href="file.anotherknownattribute.is.in.html">\AnotherKnownAttribute</a>]</span><br>
     <span class="modifier">public</span>  <span class="methodname">ClassName::methodName1</span>()</div>
 
-   <div class="methodsynopsis dc-description"><span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
-    <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
+   <div class="methodsynopsis dc-description"><span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><br>
+    <span class="attribute">#[<a href="file.anotherknownattribute.is.in.html">\AnotherKnownAttribute</a>]</span><br>
     <span class="modifier">public</span>  <span class="methodname">ClassName::methodName2</span>()</div>
 
   }</div>
@@ -161,8 +161,8 @@ Content:
 
  <div class="section">
   <p class="para">10. Function with known attributes</p>
-  <div class="methodsynopsis dc-description"><span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
-   <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
+  <div class="methodsynopsis dc-description"><span class="attribute">#[<a href="file.knownattribute.is.in.html">\KnownAttribute</a>]</span><br>
+   <span class="attribute">#[<a href="file.anotherknownattribute.is.in.html">\AnotherKnownAttribute</a>]</span><br>
    <span class="type">void</span> <span class="methodname">function_name</span>)</div>
 
  </div>
