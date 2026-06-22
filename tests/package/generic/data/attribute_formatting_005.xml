@@ -66,4 +66,15 @@
    </ooclass>
   </classsynopsis>
  </section>
+
+ <section>
+  <para>7. Attribute with bool, null, int and float literal arguments</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\UnknownAttribute(enabled: true, fallback: false, default: null, count: 42, ratio: 3.14)]</modifier>
+    <modifier>final</modifier>
+    <classname>Deprecated</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
 </chapter>

@@ -1544,13 +1544,13 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         $parts = $this->split_attribute_args($args);
 
         if (count($parts) <= 1) {
-            return $this->link_constants_in_text($parts[0]['value'] ?? '');
+            return $this->render_attribute_arg_value($parts[0]['value'] ?? '');
         }
 
         $lines = [];
         $prefix = '';
         foreach ($parts as $part) {
-            $rendered = $this->link_constants_in_text($part['value']);
+            $rendered = $this->render_attribute_arg_value($part['value']);
             $line = '&nbsp;&nbsp;&nbsp;&nbsp;' . $prefix . $rendered;
             if ($part['separator'] === ',') {
                 $line .= ',';
@@ -1619,6 +1619,75 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
         }
 
         return $parts;
+    }
+
+    private function render_attribute_arg_value(string $value): string {
+        $prefix = '';
+        if (preg_match('/^([A-Za-z_][A-Za-z0-9_]*)\s*:(?!:)\s*/', $value, $m)) {
+            $prefix = '<code class="parameter">' . $m[1] . '</code>: ';
+            $value = substr($value, strlen($m[0]));
+        }
+
+        $out = '';
+        $buffer = '';
+        $length = strlen($value);
+        for ($i = 0; $i < $length; $i++) {
+            $ch = $value[$i];
+            if ($ch !== '"' && $ch !== "'") {
+                $buffer .= $ch;
+                continue;
+            }
+
+            if ($buffer !== '') {
+                $out .= $this->format_attribute_non_string_segment($buffer);
+                $buffer = '';
+            }
+
+            $stringChar = $ch;
+            $literal = $ch;
+            $i++;
+            for (; $i < $length; $i++) {
+                $sc = $value[$i];
+                $literal .= $sc;
+                if ($sc === '\\' && $i + 1 < $length) {
+                    $literal .= $value[++$i];
+                    continue;
+                }
+                if ($sc === $stringChar) {
+                    break;
+                }
+            }
+            $out .= '<span class="type string">' . htmlspecialchars($literal, ENT_NOQUOTES, 'UTF-8') . '</span>';
+        }
+        if ($buffer !== '') {
+            $out .= $this->format_attribute_non_string_segment($buffer);
+        }
+
+        return $prefix . $out;
+    }
+
+    private function format_attribute_non_string_segment(string $segment): string {
+        $linked = $this->link_constants_in_text($segment);
+
+        // Split out <a>...</a> regions so we don't touch their contents.
+        $parts = preg_split('/(<a [^>]*>[^<]*<\/a>)/', $linked, -1, PREG_SPLIT_DELIM_CAPTURE);
+        foreach ($parts as $i => $part) {
+            if ($i % 2 === 1) {
+                continue;
+            }
+            $part = preg_replace_callback(
+                '/\b(true|false|null)\b/i',
+                fn(array $m) => '<span class="type ' . strtolower($m[1]) . '">' . $m[1] . '</span>',
+                $part,
+            );
+            $part = preg_replace_callback(
+                '/(?<![\w.])-?\d+(\.\d+)?(?![\w.])/',
+                fn(array $m) => '<span class="type ' . (isset($m[1]) && $m[1] !== '' ? 'float' : 'int') . '">' . $m[0] . '</span>',
+                $part,
+            );
+            $parts[$i] = $part;
+        }
+        return implode('', $parts);
     }
 
     private function link_constants_in_text(string $text): string {
