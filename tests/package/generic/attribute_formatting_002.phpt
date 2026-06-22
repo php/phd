@@ -50,7 +50,7 @@ Content:
  <div class="section">
   <p class="para">1. Class with unknown attributes</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute">#[\UnknownAttribute]</span><br>
     <span class="attribute">#[\AnotherUnknownAttribute]</span><br>
     <span class="modifier">class</span> <strong class="classname">DateTime</strong>
@@ -61,7 +61,7 @@ Content:
  <div class="section">
   <p class="para">2. Class with known attributes</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
     <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
     <span class="modifier">class</span> <strong class="classname">DateTime</strong>
@@ -105,7 +105,7 @@ Content:
  <div class="section">
   <p class="para">7. Class, constructor and methods with unknown attributes</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute">#[\UnknownAttribute]</span><br>
     <span class="attribute">#[\AnotherUnknownAttribute]</span><br>
     <span class="modifier">class</span> <strong class="classname">DateTime</strong>
@@ -129,7 +129,7 @@ Content:
  <div class="section">
   <p class="para">8. Class, constructor and methods with known attributes</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute"><a href="file.knownattribute.is.in.html">#[\KnownAttribute]</a> </span><br>
     <span class="attribute"><a href="file.anotherknownattribute.is.in.html">#[\AnotherKnownAttribute]</a> </span><br>
     <span class="modifier">class</span> <strong class="classname">DateTime</strong>

@@ -54,7 +54,7 @@ Content:
  <div class="section">
   <p class="para">1. Attribute with literal named arguments</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute">#[<a href="class.deprecated.html">\Deprecated</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;since: '8.5',<br>&nbsp;&nbsp;&nbsp;&nbsp;message: 'Deprecated since PHP 8.4'<br>)]</span><br>
     <span class="modifier">final</span>
     <span class="modifier">class</span> <strong class="classname">Deprecated</strong>
@@ -65,7 +65,7 @@ Content:
  <div class="section">
   <p class="para">2. Attribute with single literal positional argument</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute">#[<a href="class.deprecated.html">\Deprecated</a>('Deprecated since PHP 8.4')]</span><br>
     <span class="modifier">final</span>
     <span class="modifier">class</span> <strong class="classname">Deprecated</strong>
@@ -76,7 +76,7 @@ Content:
  <div class="section">
   <p class="para">3. Unknown attribute with literal argument</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute">#[\UnknownAttribute(foo: 'bar')]</span><br>
     <span class="modifier">final</span>
     <span class="modifier">class</span> <strong class="classname">Deprecated</strong>
@@ -87,7 +87,7 @@ Content:
  <div class="section">
   <p class="para">4. Namespaced attribute with literal argument</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute">#[\Some\Namespaced\Attribute(value: 42)]</span><br>
     <span class="modifier">final</span>
     <span class="modifier">class</span> <strong class="classname">Deprecated</strong>
@@ -98,7 +98,7 @@ Content:
  <div class="section">
   <p class="para">5. Multi-line attribute with literal class constant arguments</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute">#[<a href="class.attribute.html">\Attribute</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;<a href="class.attribute.html#attribute.constants.target-function">Attribute::TARGET_FUNCTION</a><br>&nbsp;&nbsp;&nbsp;&nbsp;| <a href="class.attribute.html#attribute.constants.target-method">Attribute::TARGET_METHOD</a><br>&nbsp;&nbsp;&nbsp;&nbsp;| <a href="class.attribute.html#attribute.constants.target-class">Attribute::TARGET_CLASS</a><br>)]</span><br>
     <span class="modifier">final</span>
     <span class="modifier">class</span> <strong class="classname">Deprecated</strong>
@@ -109,7 +109,7 @@ Content:
  <div class="section">
   <p class="para">6. Attribute with mix of known and unknown class constants</p>
   <div class="classsynopsis"><div class="classsynopsisinfo">
-
+   
     <span class="attribute">#[<a href="class.attribute.html">\Attribute</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;<a href="class.attribute.html#attribute.constants.target-class">Attribute::TARGET_CLASS</a><br>&nbsp;&nbsp;&nbsp;&nbsp;| Unknown::CONST<br>)]</span><br>
     <span class="modifier">final</span>
     <span class="modifier">class</span> <strong class="classname">Deprecated</strong>
