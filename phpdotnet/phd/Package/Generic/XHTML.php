@@ -1493,23 +1493,150 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
     }
 
     private function format_attribute_modifier_text(string $value): string {
-        // Anything that is not a leading "#[\Attribute(" / "#[\Attribute]" chunk
-        // e.g. "|" separator between arguments passes through.
-        if (!preg_match('/^(#\[)(.+?)([](])$/', $value, $match)) {
-            if (trim($value) === '|') {
-                return ' | ';
-            }
-            return $value;
+        $trimmed = trim($value);
+        $namePattern = '\\\\?[A-Za-z_][A-Za-z0-9_\\\\]*';
+
+        // Full attribute with literal arguments: #[\Name(args)]
+        if (preg_match('/^(#\[)(' . $namePattern . ')\((.+)\)]$/s', $trimmed, $match)) {
+            [, $prefix, $name, $args] = $match;
+            return $prefix . $this->link_attribute_name($name) . '(' . $this->render_attribute_args($args) . ')]';
         }
 
-        [, $prefix, $name, $suffix] = $match;
+        // Simple attribute: #[\Name]
+        if (preg_match('/^#\[(' . $namePattern . ')]$/', $trimmed, $match)) {
+            $name = $match[1];
+            $attribute = strtolower(ltrim($name, "\\"));
+            $href = $this->getFilename('class.' . $attribute);
+            $token = '#[' . $name . ']';
+            if (!$href) {
+                return $token;
+            }
+
+            return '<a href="' . $href . $this->getExt() . '">' . $token . '</a> ';
+        }
+
+        // Opening of an attribute followed by child elements: #[\Name(
+        if (preg_match('/^(#\[)(' . $namePattern . ')\($/', $trimmed, $match)) {
+            [, $prefix, $name] = $match;
+            return $prefix . $this->link_attribute_name($name) . '(';
+        }
+
+        // Separator between attribute arguments
+        if ($trimmed === '|') {
+            return ' | ';
+        }
+
+        return $trimmed === '' ? '' : $value;
+    }
+
+    private function link_attribute_name(string $name): string {
         $attribute = strtolower(ltrim($name, "\\"));
         $href = $this->getFilename('class.' . $attribute);
         if (!$href) {
-            return $value;
+            return $name;
         }
 
-        return $prefix . '<a href="' . $href . $this->getExt() . '">' . $name . '</a>' . $suffix;
+        return '<a href="' . $href . $this->getExt() . '">' . $name . '</a>';
+    }
+
+    private function render_attribute_args(string $args): string {
+        $args = trim(preg_replace('/\s+/', ' ', $args));
+        $parts = $this->split_attribute_args($args);
+
+        if (count($parts) <= 1) {
+            return $this->link_constants_in_text($parts[0]['value'] ?? '');
+        }
+
+        $lines = [];
+        $prefix = '';
+        foreach ($parts as $part) {
+            $rendered = $this->link_constants_in_text($part['value']);
+            $line = '&nbsp;&nbsp;&nbsp;&nbsp;' . $prefix . $rendered;
+            if ($part['separator'] === ',') {
+                $line .= ',';
+                $prefix = '';
+            } elseif ($part['separator'] === '|') {
+                $prefix = '| ';
+            } else {
+                $prefix = '';
+            }
+            $lines[] = $line;
+        }
+
+        return '<br>' . implode('<br>', $lines) . '<br>';
+    }
+
+    /**
+     * @return list<array{value: string, separator: string|null}>
+     */
+    private function split_attribute_args(string $args): array {
+        $parts = [];
+        $current = '';
+        $depth = 0;
+        $inString = false;
+        $stringChar = '';
+        $length = strlen($args);
+
+        for ($i = 0; $i < $length; $i++) {
+            $ch = $args[$i];
+
+            if ($inString) {
+                $current .= $ch;
+                if ($ch === '\\' && $i + 1 < $length) {
+                    $current .= $args[++$i];
+                    continue;
+                }
+                if ($ch === $stringChar) {
+                    $inString = false;
+                }
+                continue;
+            }
+
+            if ($ch === '"' || $ch === "'") {
+                $inString = true;
+                $stringChar = $ch;
+                $current .= $ch;
+                continue;
+            }
+
+            if ($ch === '(' || $ch === '[') {
+                $depth++;
+            } elseif ($ch === ')' || $ch === ']') {
+                $depth--;
+            }
+
+            if ($depth === 0 && ($ch === '|' || $ch === ',')) {
+                $parts[] = ['value' => trim($current), 'separator' => $ch];
+                $current = '';
+                continue;
+            }
+
+            $current .= $ch;
+        }
+
+        if (trim($current) !== '') {
+            $parts[] = ['value' => trim($current), 'separator' => null];
+        }
+
+        return $parts;
+    }
+
+    private function link_constants_in_text(string $text): string {
+        $escaped = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
+
+        // Link Class::CONST references that appear as literal text
+        return preg_replace_callback(
+            '/\\\\?[A-Za-z_][\w\\\\]*::[A-Za-z_][\w]*/',
+            function (array $match): string {
+                $constant = $match[0];
+                $link = $this->createLink($this->convertConstantNameToId($constant));
+                if ($link === null) {
+                    return $constant;
+                }
+                return '<a href="' . $link . '">' . $constant . '</a>';
+            },
+            $escaped,
+        );
     }
 
     public function format_methodsynopsis($open, $name, $attrs, $props) {
