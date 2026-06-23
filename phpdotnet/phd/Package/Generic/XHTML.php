@@ -1558,6 +1558,7 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
             } elseif ($part['separator'] === '|') {
                 $prefix = '| ';
             } else {
+                $line .= ',';
                 $prefix = '';
             }
             $lines[] = $line;
