@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<redirects>
+  <group scope="in-manual">
+    <redirect from="class.oldname" to="class.newname"/>
+  </group>
+  <group scope="shortcut">
+    <redirect from="if" to="control-structures.if"/>
+    <redirect from="anchored" to="page.foo#some.anchor"/>
+    <redirect from="bcmath" to="bc"/>
+  </group>
+  <group scope="both">
+    <redirect from="installation" to="install"/>
+  </group>
+</redirects>
