@@ -77,6 +77,20 @@ function phd_sources(array $conf): void
 {
     echo 'PhD sources:';
 
+    $dest  = $conf['srcdir'] . '/sources.xml';
+    $cache = $conf['srcdir'] . '/temp/phd-sources.xml';
+    // The source scan below reads every XML file of the manual, so it is by far
+    // the most expensive of these generators. configure.php wipes temp/ on
+    // every run, so a copy stashed there can be reused by repeated PhD runs
+    // without ever going out of sync with the manual.xml generated alongside it.
+    $cacheable = is_dir(dirname($cache));
+
+    if ($cacheable && is_file($cache)) {
+        echo ' cached,';
+        echo copy($cache, $dest) ? " done.\n" : " fail!\n";
+        return;
+    }
+
     echo ' reading,';
     $source_map = array();
     $en_dir = "{$conf['rootdir']}/{$conf['enDir']}";
@@ -114,7 +128,10 @@ function phd_sources(array $conf): void
         $sources_elem->appendChild($el);
     }
     echo " saving,";
-    if ($dom->save($conf['srcdir'] . '/sources.xml')) {
+    if ($dom->save($dest)) {
+        if ($cacheable) {
+            copy($dest, $cache);
+        }
         echo " done.\n";
     } else {
         echo " fail!\n";
