@@ -66,7 +66,7 @@ if (!$conf) {
                         . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
                         . "langs" . DIRECTORY_SEPARATOR,
         "phpwebVersionFilename" => $config->xmlRoot . DIRECTORY_SEPARATOR . 'version.xml',
-        "phpwebAcronymFilename" => $config->xmlRoot . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
+        "phpwebAcronymFilename" => $config->xmlRoot . DIRECTORY_SEPARATOR . 'temp' . DIRECTORY_SEPARATOR . 'entities.ent',
         "phpwebSourcesFilename" => $config->xmlRoot . DIRECTORY_SEPARATOR . 'sources.xml',
         "phpwebHistoryFilename" => $config->xmlRoot . DIRECTORY_SEPARATOR . 'fileModHistory.php',
     ));
