@@ -336,53 +336,29 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($info) {
             return $info;
         }
+
         if (!is_file($filename)) {
             trigger_error(vsprintf("Can't find acronym file (%s), skipping", [$filename]), E_USER_WARNING);
             return array();
         }
 
-        $subset = file_get_contents($filename);
-        if ($subset === false) {
-            throw new \Error(vsprintf('Could not open file for accessing acronym information (%s)', [$filename]));
-        }
-
-        // libxml only exposes entity content once referenced, so collect
-        // the acronym.* entity names first, then reference each of them.
         $useInternalErrors = libxml_use_internal_errors(true);
-        $dom = new \DOMDocument;
-        $loaded = $dom->loadXML("<!DOCTYPE acronyms [" . $subset . "]><acronyms/>");
-        if (!$loaded) {
-            libxml_clear_errors();
-            libxml_use_internal_errors($useInternalErrors);
+        $entities = simplexml_load_file($filename);
+        libxml_clear_errors();
+        libxml_use_internal_errors($useInternalErrors);
+        if ($entities === false) {
             trigger_error(vsprintf("Can't parse acronym file (%s), skipping", [$filename]), E_USER_WARNING);
             return [];
         }
 
-        $names = [];
-        foreach ($dom->doctype->entities as $entity) {
-            if (str_starts_with($entity->nodeName, "acronym.")) {
-                $names[] = $entity->nodeName;
+        $acronyms = [];
+        foreach ($entities as $entity) {
+            $name = (string) $entity["name"];
+            if (str_starts_with($name, "acronym.expansion.")) {
+                $acronyms[substr($name, strlen("acronym.expansion."))] = trim(preg_replace('/\s+/', ' ', (string) $entity));
             }
         }
 
-        $body = "";
-        foreach ($names as $name) {
-            $body .= '<acronym name="' . $name . '">&' . $name . ';</acronym>';
-        }
-        $dom = new \DOMDocument;
-        $loaded = $dom->loadXML("<!DOCTYPE acronyms [" . $subset . "]><acronyms>" . $body . "</acronyms>", LIBXML_NOENT);
-        libxml_clear_errors();
-        libxml_use_internal_errors($useInternalErrors);
-        if (!$loaded) {
-            trigger_error(vsprintf("Can't expand acronym entities (%s), skipping", [$filename]), E_USER_WARNING);
-            return [];
-        }
-
-        $acronyms = [];
-        foreach ($dom->documentElement->childNodes as $node) {
-            $acronym = substr($node->getAttribute("name"), strlen("acronym."));
-            $acronyms[$acronym] = trim(preg_replace('/\s+/', ' ', $node->textContent));
-        }
         ksort($acronyms);
         $info = $acronyms;
         return $acronyms;

@@ -1,12 +1,12 @@
 --TEST--
-Acronym info 001 - Acronyms are read from acronym.* XML entities
+Acronym info 001 - Acronyms are read from acronym.expansion.* entity elements
 --FILE--
 <?php
 namespace phpdotnet\phd;
 
 require_once __DIR__ . "/../../setup.php";
 
-$acronyms = Package_PHP_XHTML::generateAcronymInfo(__DIR__ . "/data/acronyms.ent");
+$acronyms = Package_PHP_XHTML::generateAcronymInfo(__DIR__ . "/data/entities.acronyms.ent");
 
 var_dump($acronyms);
 ?>
