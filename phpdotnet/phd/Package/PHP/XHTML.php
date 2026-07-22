@@ -360,7 +360,7 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
         $names = [];
         foreach ($dom->doctype->entities as $entity) {
-            if (strncmp($entity->nodeName, "acronym.", 8) === 0) {
+            if (str_starts_with($entity->nodeName, "acronym.")) {
                 $names[] = $entity->nodeName;
             }
         }
