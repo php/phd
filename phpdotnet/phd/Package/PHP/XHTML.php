@@ -380,7 +380,8 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
 
         $acronyms = [];
         foreach ($dom->documentElement->childNodes as $node) {
-            $acronyms[substr($node->getAttribute("name"), 8)] = trim(preg_replace('/\s+/', ' ', $node->textContent));
+            $acronym = substr($node->getAttribute("name"), strlen("acronym."));
+            $acronyms[$acronym] = trim(preg_replace('/\s+/', ' ', $node->textContent));
         }
         ksort($acronyms);
         $info = $acronyms;
