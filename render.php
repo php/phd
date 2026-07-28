@@ -61,12 +61,21 @@ if (!file_exists($config->outputDir)) {
 
 // This needs to be moved. Preferably into the PHP package.
 if (!$conf) {
+    // Acronym expansions come from the translatable entity file in the
+    // language checkout (e.g. en/, it/), languages without a
+    // translated copy fall back to the English one.
+    $acronymFilename = dirname($config->xmlRoot) . DIRECTORY_SEPARATOR . $config->language
+                        . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'entities.acronyms.ent';
+    if (!is_file($acronymFilename)) {
+        $acronymFilename = dirname($config->xmlRoot) . DIRECTORY_SEPARATOR . 'en'
+                            . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'entities.acronyms.ent';
+    }
     $config->init(array(
         "langDir"  => __INSTALLDIR__ . DIRECTORY_SEPARATOR . "phpdotnet" . DIRECTORY_SEPARATOR
                         . "phd" . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR
                         . "langs" . DIRECTORY_SEPARATOR,
         "phpwebVersionFilename" => $config->xmlRoot . DIRECTORY_SEPARATOR . 'version.xml',
-        "phpwebAcronymFilename" => $config->xmlRoot . DIRECTORY_SEPARATOR . 'entities' . DIRECTORY_SEPARATOR . 'acronyms.xml',
+        "phpwebAcronymFilename" => $acronymFilename,
         "phpwebSourcesFilename" => $config->xmlRoot . DIRECTORY_SEPARATOR . 'sources.xml',
         "phpwebHistoryFilename" => $config->xmlRoot . DIRECTORY_SEPARATOR . 'fileModHistory.php',
     ));
@@ -108,7 +117,7 @@ if ($config->requiresIndexing()) {
     $outputHandler->v("Indexing...", VERBOSE_INDEXING);
     // Create indexer
     $format = new Index($config->indexCache, $config, $outputHandler);
-    
+
     $render->attach($format);
 
     $outputHandler->v("Running full build", VERBOSE_RENDER_STYLE);
