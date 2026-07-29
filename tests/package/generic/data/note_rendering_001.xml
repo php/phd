@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<article xml:id="test_note" xmlns='http://docbook.org/ns/docbook'>
+<title>Note rendering test</title>
+
+<note>
+ <simpara>Simple note content</simpara>
+</note>
+
+<note>
+ <title>Custom Title</title>
+ <simpara>Note with a title</simpara>
+</note>
+
+</article>
