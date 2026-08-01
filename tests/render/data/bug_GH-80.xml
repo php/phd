@@ -1,0 +1,47 @@
+<refentry xmlns="http://docbook.org/ns/docbook" xml:id="bug_GH-80">
+ <refentry xml:id="test-function">
+  <refnamediv>
+   <refname>test_function</refname>
+  </refnamediv>
+  <refpurpose>For testing</refpurpose>
+ </refentry>
+
+ <refentry xml:id="test-class" role="class">
+  <titleabbrev>Example</titleabbrev>
+  <classsynopsis class="class">
+   <ooclass>
+    <classname>Example</classname>
+   </ooclass>
+  </classsynopsis>
+  <refentry xml:id="example.test-method">
+   <refnamediv>
+    <refname>Example::testMethod</refname>
+    <refpurpose>An example method for testing</refpurpose>
+   </refnamediv>
+  </refentry>
+ </refentry>
+
+ <refentry xml:id="test-variable" role="variable">
+  <refnamediv>
+   <refname>$TEST_VARIABLE</refname>
+   <refpurpose>A test variable</refpurpose>
+  </refnamediv>
+ </refentry>
+
+ <refentry xml:id="test-references">
+  <refsect1>
+   <para>
+    <function> test_function</function> should be linked.
+   </para>
+   <para>
+    <classname> Example</classname> should be linked.
+   </para>
+   <para>
+    <methodname> Example::testMethod</methodname> should be linked.
+   </para>
+   <para>
+    <varname> $TEST_VARIABLE</varname> should be linked.
+   </para>
+  </refsect1>
+ </refentry>
+</refentry>
