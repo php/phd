@@ -1,0 +1,80 @@
+<chapter xml:id="attribute-formatting-005">
+ <section>
+  <para>1. Attribute with literal named arguments</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\Deprecated(since: '8.5', message: 'Deprecated since PHP 8.4')]</modifier>
+    <modifier>final</modifier>
+    <classname>Deprecated</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>2. Attribute with single literal positional argument</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\Deprecated('Deprecated since PHP 8.4')]</modifier>
+    <modifier>final</modifier>
+    <classname>Deprecated</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>3. Unknown attribute with literal argument</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\UnknownAttribute(foo: 'bar')]</modifier>
+    <modifier>final</modifier>
+    <classname>Deprecated</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>4. Namespaced attribute with literal argument</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\Some\Namespaced\Attribute(value: 42)]</modifier>
+    <modifier>final</modifier>
+    <classname>Deprecated</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>5. Multi-line attribute with literal class constant arguments</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">
+     #[\Attribute(Attribute::TARGET_FUNCTION|Attribute::TARGET_METHOD|Attribute::TARGET_CLASS)]
+    </modifier>
+    <modifier>final</modifier>
+    <classname>Deprecated</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>6. Attribute with mix of known and unknown class constants</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\Attribute(Attribute::TARGET_CLASS | Unknown::CONST)]</modifier>
+    <modifier>final</modifier>
+    <classname>Deprecated</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>7. Attribute with bool, null, int and float literal arguments</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\UnknownAttribute(enabled: true, fallback: false, default: null, count: 42, ratio: 3.14)]</modifier>
+    <modifier>final</modifier>
+    <classname>Deprecated</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+</chapter>
