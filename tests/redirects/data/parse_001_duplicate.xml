@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<redirects>
+  <group scope="shortcut">
+    <redirect from="if" to="control-structures.if"/>
+    <redirect from="if" to="language.control-structures"/>
+  </group>
+</redirects>
