@@ -508,6 +508,26 @@ abstract class Format extends ObjectStorage
 /* }}} */
 
     /**
+     * Trim whitespace from a tag value and emit a warning if whitespace was found.
+     *
+     * @param string $value   The value to trim
+     * @param string $tagName The name of the tag for the warning message
+     *
+     * @return string The trimmed value
+     */
+    public static function trimValue(string $value, string $tagName): string
+    {
+        $trimmed = trim($value);
+        if ($trimmed !== $value) {
+            trigger_error(
+                "Whitespace found in <$tagName> tag content, this should be fixed in the XML source",
+                E_USER_WARNING,
+            );
+        }
+        return $trimmed;
+    }
+
+    /**
     * Highlight (color) the given piece of source code
     *
     * @param string $text   Text to highlight

@@ -918,6 +918,7 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
 
     public function format_function_text($value)
     {
+        $value = Format::trimValue($value, 'function');
         return $this->TEXT($value.'()');
     }
 
