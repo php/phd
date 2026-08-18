@@ -2,6 +2,8 @@
 Default options handler 008 - Save config (long option) and quit (long option)
 --ARGS--
 --docbook tests/options/default_handler_008.phpt --saveconfig --quit
+--CONFLICTS--
+all
 --SKIPIF--
 <?php
 if (file_exists(__DIR__ . "/../../phd.config.php")) {

@@ -6,7 +6,22 @@ Render 001 - Smoke test render.php
 <?php
 namespace phpdotnet\phd;
 
+if (!\file_exists(__DIR__ . "/../../output/")) {
+    \mkdir(__DIR__ . "/../../output/", 0777, true);
+}
+
 require_once __DIR__ . "/../../render.php";
+?>
+--CLEAN--
+<?php
+$iterator = new \RecursiveIteratorIterator(
+    new \RecursiveDirectoryIterator(__DIR__ . "/../../output/", \FilesystemIterator::SKIP_DOTS),
+    \RecursiveIteratorIterator::CHILD_FIRST
+);
+foreach ($iterator as $file) {
+    $file->isDir() ? \rmdir($file->getPathname()) : \unlink($file->getPathname());
+}
+\rmdir(__DIR__ . "/../../output/");
 ?>
 --EXPECTF--
 %s[%d:%d:%d - Indexing              ]%s Indexing...

@@ -2,6 +2,8 @@
 GH-225 - SaveConfig tries to overwrite readonly property
 --ARGS--
 --docbook tests/data/bug-GH-225.xml --quit
+--CONFLICTS--
+all
 --FILE--
 <?php
 namespace phpdotnet\phd;
