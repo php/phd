@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference xml:id="class.myclass" role="class" xmlns="http://docbook.org/ns/docbook">
+
+ <title>The MyClass class</title>
+ <titleabbrev>MyClass</titleabbrev>
+
+ <partintro>
+
+  <section>
+   <simpara>1. Bare methodname colliding with a global function links to the method of the current class</simpara>
+   <methodname>conflictingName</methodname>
+  </section>
+
+  <section>
+   <simpara>2. Function with the same name still links to the global function</simpara>
+   <function>conflictingName</function>
+  </section>
+
+  <section>
+   <simpara>3. Bare methodname without a matching method falls back to the global function</simpara>
+   <methodname>onlyFunction</methodname>
+  </section>
+
+ </partintro>
+
+</reference>
