@@ -26,9 +26,9 @@ Content:
    
     <dt id="constant.variablelist-test-constant"><strong><code>VARIABLELIST_TEST_CONSTANT</code></strong></dt>
     <dd>
-     <span class="simpara">
+     <p class="simpara">
       Description of constant
-     </span>
+     </p>
     </dd>
    
   </dl>
@@ -44,17 +44,17 @@ Content:
    <tr>
     <td id="constant.variablelist-test-constant-in-constant-list"><strong><code>VARIABLELIST_TEST_CONSTANT_IN_CONSTANT_LIST</code></strong></td>
     <td>
-     <span class="simpara">
+     <p class="simpara">
       <code class="literal">literal</code> will add its own &quot;role&quot;
-     </span>
+     </p>
     </td>
    </tr>
    <tr>
     <td id="constant.variablelist-test-constant-in-constant-list2"><strong><code>VARIABLELIST_TEST_CONSTANT_IN_CONSTANT_LIST2</code></strong></td>
     <td>
-     <span class="simpara">
+     <p class="simpara">
       Role should have not been overwritten by literal
-     </span>
+     </p>
     </td>
    </tr>
   </table>

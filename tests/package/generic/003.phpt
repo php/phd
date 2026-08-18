@@ -191,29 +191,29 @@ Content:
      <td rowspan="2" style="vertical-align: middle;">
       <ul class="itemizedlist">
        <li class="listitem">
-        <span class="simpara">
+        <p class="simpara">
           Returns 0 if parentheses surround the quantity and currency_symbol.
-        </span>
+        </p>
        </li>
        <li class="listitem">
-        <span class="simpara">
+        <p class="simpara">
          Returns 1 if the sign string precedes the quantity and currency_symbol.
-        </span>
+        </p>
        </li>
        <li class="listitem">
-        <span class="simpara">
+        <p class="simpara">
          Returns 2 if the sign string follows the quantity and currency_symbol.
-        </span>
+        </p>
        </li>
        <li class="listitem">
-        <span class="simpara">
+        <p class="simpara">
          Returns 3 if the sign string immediately precedes the currency_symbol.
-        </span>
+        </p>
        </li>
        <li class="listitem">
-        <span class="simpara">
+        <p class="simpara">
          Returns 4 if the sign string immediately follows the currency_symbol.
-        </span>
+        </p>
        </li>
       </ul>
      </td>
