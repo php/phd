@@ -8,9 +8,8 @@ all
 <?php
 namespace phpdotnet\phd;
 
-if (!\file_exists(__DIR__ . "/../output/")) {
-    \mkdir(__DIR__ . "/../output/", 0777, true);
-}
+require_once __DIR__ . "/helpers.php";
+ensureOutputFolder();
 
 if (\file_exists(__DIR__ . "/../phd.config.php")) {
     \unlink(__DIR__ . "/../phd.config.php");
@@ -27,14 +26,9 @@ require_once __DIR__ . "/../render.php";
 --CLEAN--
 <?php
 \unlink(__DIR__ . "/../phd.config.php");
-$iterator = new \RecursiveIteratorIterator(
-    new \RecursiveDirectoryIterator(__DIR__ . "/../output/", \FilesystemIterator::SKIP_DOTS),
-    \RecursiveIteratorIterator::CHILD_FIRST
-);
-foreach ($iterator as $file) {
-    $file->isDir() ? \rmdir($file->getPathname()) : \unlink($file->getPathname());
-}
-\rmdir(__DIR__ . "/../output/");
+
+require_once __DIR__ . "/helpers.php";
+\phpdotnet\phd\removeOutputFolder();
 ?>
 --EXPECTF--
 %s[%d:%d:%d - Heads up              ]%s Loaded config from existing file
