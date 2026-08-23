@@ -62,8 +62,17 @@ class Highlighter
         }
 
         if ($role == 'php') {
+            $origText = $text;
+            $prepended = false;
+            if (strpos($text, '<?') === false) {
+                $text = "<?php\n" . $text;
+                $prepended = true;
+            }
             try {
                 $highlight = highlight_string($text, true);
+                if ($prepended) {
+                    $highlight = preg_replace('/&lt;\?php(?:<br \/>|\n)/', '', $highlight, 1);
+                }
                 if (PHP_VERSION_ID >= 80300) {
                     return $highlight;
                 } else {
@@ -73,10 +82,10 @@ class Highlighter
                     ]);
                 }
             } catch (\ParseException $e) {
-                trigger_error(vsprintf("Parse error while highlighting PHP code: %s\nText: %s", [(string) $e, $text]), E_USER_WARNING);
+                trigger_error(vsprintf("Parse error while highlighting PHP code: %s\nText: %s", [(string) $e, $origText]), E_USER_WARNING);
 
                 return '<pre class="'. $role . 'code">'
-                    . htmlspecialchars($text, ENT_QUOTES, 'UTF-8')
+                    . htmlspecialchars($origText, ENT_QUOTES, 'UTF-8')
                     . "</pre>\n";
             }
         } else {
