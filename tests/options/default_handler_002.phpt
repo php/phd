@@ -44,3 +44,4 @@ Supported packages:
 		tocfeed
 		epub
 		enhancedchm
+		markdown

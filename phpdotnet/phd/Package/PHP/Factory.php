@@ -13,6 +13,7 @@ class Package_PHP_Factory extends Format_Factory {
         'tocfeed'       => 'Package_PHP_TocFeed',
         'epub'          => 'Package_PHP_Epub',
         'enhancedchm'   => 'Package_PHP_EnhancedCHM',
+        'markdown'      => 'Package_PHP_Markdown',
     );
 
     /**
