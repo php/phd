@@ -879,7 +879,19 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
             $filename = "function." . str_replace("_", "-", $value);
         } else {
             $ref = $this->normalizeFQN($value);
-            $filename = $this->getRefnameLink($ref);
+            $filename = null;
+            /* A bare methodname may collide with a global function
+             * (e.g. Serializable::serialize vs serialize), so prefer
+             * a method of the class currently being documented */
+            if ($tag === "methodname"
+                && !str_contains($ref, "::")
+                && $this->cchunk["class_name_ref"] !== null
+            ) {
+                $filename = $this->getRefnameLink($this->cchunk["class_name_ref"] . "::" . $ref);
+            }
+            if ($filename === null) {
+                $filename = $this->getRefnameLink($ref);
+            }
         }
         if ($filename !== null) {
             if ($this->CURRENT_ID !== $filename) {
