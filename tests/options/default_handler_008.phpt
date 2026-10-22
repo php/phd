@@ -2,6 +2,8 @@
 Default options handler 008 - Save config (long option) and quit (long option)
 --ARGS--
 --docbook tests/options/default_handler_008.phpt --saveconfig --quit
+--CONFLICTS--
+all
 --SKIPIF--
 <?php
 if (file_exists(__DIR__ . "/../../phd.config.php")) {
@@ -12,11 +14,17 @@ if (file_exists(__DIR__ . "/../../phd.config.php")) {
 <?php
 namespace phpdotnet\phd;
 
+require_once __DIR__ . "/../helpers.php";
+ensureOutputFolder();
+
 require_once __DIR__ . "/../../render.php";
 ?>
 --CLEAN--
 <?php
 unlink(__DIR__ . "/../../phd.config.php");
+
+require_once __DIR__ . "/../helpers.php";
+\phpdotnet\phd\removeOutputFolder();
 ?>
 --EXPECTF--
 %s[%d:%d:%d - Heads up              ]%s Writing the config file

@@ -1,0 +1,32 @@
+<chapter xml:id="attribute-formatting-007">
+ <section>
+  <para>1. Known attribute without leading backslash</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[Deprecated]</modifier>
+    <classname>ClassName</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>2. Known attribute with arguments without leading backslash</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[Deprecated(since: '8.4')]</modifier>
+    <classname>ClassName</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+ <section>
+  <para>3. Fully qualified attribute does not warn</para>
+  <classsynopsis class="class">
+   <ooclass>
+    <modifier role="attribute">#[\Deprecated]</modifier>
+    <classname>ClassName</classname>
+   </ooclass>
+  </classsynopsis>
+ </section>
+
+</chapter>

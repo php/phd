@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Revision$ -->
+
+<entities xmlns       = "http://docbook.org/ns/docbook"
+          xmlns:xlink = "http://www.w3.org/1999/xlink"
+          translate   = "yes">
+
+<entity name="sample.other">Some other, non acronym, entity</entity>
+
+<entity name="php"><acronym>PHP</acronym></entity>
+
+<entity name="acronym.expansion.API">Application Programming Interface</entity>
+
+<entity name="acronym.expansion.CSPRNG">
+ Cryptographically Secure
+ PseudoRandom Number Generator
+</entity>
+
+<entity name="acronym.expansion.PHP">PHP: Hypertext Preprocessor</entity>
+
+<entity name="acronym.expansion.cURL">Client URL Library</entity>
+
+</entities>

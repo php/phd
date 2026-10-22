@@ -201,7 +201,7 @@ $PARENTS = ' . var_export($parents, true) . ';';
             "up"   => $up,
             "prev" => $prev,
             "next" => $next,
-            "alternatives" => $this->cchunk["alternatives"],
+            "alternatives" => $this->cchunk["alternatives"] ?? [],
             "source" => $this->sourceInfo($id),
         );
         $history = $this->history ?? [];

@@ -1,0 +1,57 @@
+<chapter xml:id="attribute-formatting-006">
+ <section>
+  <para>1. methodparam with unknown attribute</para>
+  <methodsynopsis>
+   <type>void</type><methodname>example1</methodname>
+   <methodparam><modifier role="attribute">#[\UnknownAttribute]</modifier><type>string</type><parameter>password</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>2. methodparam with known attribute</para>
+  <methodsynopsis>
+   <type>void</type><methodname>example2</methodname>
+   <methodparam><modifier role="attribute">#[\SensitiveParameter]</modifier><type>string</type><parameter>password</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>3. methodparam with attribute with named args (rendered inline)</para>
+  <methodsynopsis>
+   <type>void</type><methodname>example3</methodname>
+   <methodparam><modifier role="attribute">#[\Deprecated(since: '8.5', message: 'Use foo()')]</modifier><type>string</type><parameter>password</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>4. methodparam with attribute with single constant arg</para>
+  <methodsynopsis>
+   <type>void</type><methodname>example4</methodname>
+   <methodparam><modifier role="attribute">#[\Attribute(Attribute::TARGET_PARAMETER)]</modifier><type>string</type><parameter>password</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>5. methodparam with attribute with pipe-separated constants (rendered inline)</para>
+  <methodsynopsis>
+   <type>void</type><methodname>example5</methodname>
+   <methodparam><modifier role="attribute">#[\Attribute(Attribute::TARGET_PARAMETER|Attribute::TARGET_PROPERTY)]</modifier><type>string</type><parameter>password</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>6. methodparam with attribute with literal args (rendered inline)</para>
+  <methodsynopsis>
+   <type>void</type><methodname>example6</methodname>
+   <methodparam><modifier role="attribute">#[\UnknownAttribute(enabled: true, default: null, count: 42, ratio: 3.14)]</modifier><type>string</type><parameter>password</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+
+ <section>
+  <para>7. methodparam with multiple attributes</para>
+  <methodsynopsis>
+   <type>void</type><methodname>example7</methodname>
+   <methodparam><modifier role="attribute">#[\SensitiveParameter]</modifier><modifier role="attribute">#[\Deprecated(since: '8.5')]</modifier><type>string</type><parameter>password</parameter></methodparam>
+  </methodsynopsis>
+ </section>
+</chapter>

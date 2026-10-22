@@ -336,31 +336,30 @@ abstract class Package_PHP_XHTML extends Package_Generic_XHTML {
         if ($info) {
             return $info;
         }
+
         if (!is_file($filename)) {
             trigger_error(vsprintf("Can't find acronym file (%s), skipping", [$filename]), E_USER_WARNING);
             return array();
         }
 
-        $r = new \XMLReader;
-        if (!$r->open($filename)) {
-            throw new \Error(vsprintf('Could not open file for accessing acronym information (%s)', [$filename]));
+        $useInternalErrors = libxml_use_internal_errors(true);
+        $entities = simplexml_load_file($filename);
+        libxml_clear_errors();
+        libxml_use_internal_errors($useInternalErrors);
+        if ($entities === false) {
+            trigger_error(vsprintf("Can't parse acronym file (%s), skipping", [$filename]), E_USER_WARNING);
+            return [];
         }
 
-        $acronyms = array();
-        $k = "";
-        while ($r->read()) {
-            if ($r->nodeType != \XMLReader::ELEMENT) {
-                continue;
-            }
-            if ($r->name == "term") {
-                $r->read();
-                $k = $r->value;
-                $acronyms[$k] = "";
-            } else if ($r->name == "simpara") {
-                $r->read();
-                $acronyms[$k] = $r->value;
+        $acronyms = [];
+        foreach ($entities as $entity) {
+            $name = (string) $entity["name"];
+            if (str_starts_with($name, "acronym.expansion.")) {
+                $acronyms[substr($name, strlen("acronym.expansion."))] = trim(preg_replace('/\s+/', ' ', (string) $entity));
             }
         }
+
+        ksort($acronyms);
         $info = $acronyms;
         return $acronyms;
     }
