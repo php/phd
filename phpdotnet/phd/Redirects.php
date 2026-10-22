@@ -35,6 +35,7 @@ final class Redirects
     ];
 
     private const OUTPUT_SUBDIR = 'php-web';
+    private const OUTPUT_FILE = 'redirects.json';
 
     public static function renderTo(string $outputDir, string $xmlRoot, OutputHandler $out): void
     {
@@ -67,14 +68,15 @@ final class Redirects
             throw new \Error('Could not create' . $output);
         }
 
-        if (file_put_contents($output, json_encode($maps) . "\n") === false) {
-            throw new \Error('Could not write' . $output);
+        $file = $output . DIRECTORY_SEPARATOR . self::OUTPUT_FILE;
+        if (file_put_contents($file, json_encode($maps) . "\n") === false) {
+            throw new \Error('Could not write ' . $file);
         }
 
         $out->v(
             sprintf(
                 'Rendered %s (shortcut=%d, in_manual=%d, both=%d)',
-                $output,
+                $file,
                 count($maps['shortcut']),
                 count($maps['in_manual']),
                 count($maps['both'])
