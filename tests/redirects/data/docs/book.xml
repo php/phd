@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<book xmlns="http://docbook.org/ns/docbook" xml:id="book.bc">
+  <title>BC</title>
+  <chapter xml:id="page.foo">
+    <title>Page</title>
+    <sect1 xml:id="some.anchor"><title>Anchor</title></sect1>
+  </chapter>
+  <chapter xml:id="install"><title>Install</title></chapter>
+</book>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<redirects>
+  <group scope="shortcut">
+    <redirect from="if" to="control-structures.if"/>
+    <redirect from="legacy" to="gone.page"/>
+  </group>
+  <group scope="in-manual">
+    <redirect from="oldid" to="still.missing"/>
+  </group>
+</redirects>

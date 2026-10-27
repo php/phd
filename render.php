@@ -174,4 +174,8 @@ foreach($render as $format) {
 }
 $render->execute($reader);
 
+// Emit redirects.json alongside the manual output when the doc source
+// root ships a redirects.xml sidecar
+Redirects::renderTo($config->outputDir, $config->xmlRoot, $outputHandler);
+
 $outputHandler->v("Finished rendering", VERBOSE_FORMAT_RENDERING);
