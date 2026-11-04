@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns="http://docbook.org/ns/docbook" xml:id="funcref">
+ <refentry xml:id="function.array-key-first">
+  <refnamediv>
+   <refname>array_key_first</refname>
+   <refpurpose>Gets the first key of an array</refpurpose>
+  </refnamediv>
+  <refsect1 role="description">
+   <methodsynopsis>
+    <type class="union"><type>int</type><type>string</type><type>null</type></type><methodname>array_key_first</methodname>
+    <methodparam><type>array</type><parameter>array</parameter></methodparam>
+   </methodsynopsis>
+  </refsect1>
+ </refentry>
+
+ <refentry xml:id="function.type-rendering">
+  <refnamediv>
+   <refname>type_rendering</refname>
+   <refpurpose>Function with union, intersection and DNF parameter types</refpurpose>
+  </refnamediv>
+  <refsect1 role="description">
+   <methodsynopsis>
+    <type>void</type><methodname>type_rendering</methodname>
+    <methodparam><type class="union"><type>array</type><type>string</type></type><parameter>union</parameter></methodparam>
+    <methodparam><type class="intersection"><type>Countable</type><type>Traversable</type></type><parameter>intersection</parameter></methodparam>
+    <methodparam choice="opt"><type class="union"><type class="intersection"><type>Countable</type><type>Traversable</type></type><type>null</type></type><parameter>dnf</parameter><initializer>null</initializer></methodparam>
+   </methodsynopsis>
+  </refsect1>
+ </refentry>
+</set>

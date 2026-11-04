@@ -25,7 +25,7 @@ class Package_IDE_XML extends Package_IDE_Base {
         foreach ((array)$this->function['params'] as $param) {
             $str .= '  <param>' . PHP_EOL;
             $str .= '    <name>' . $param['name'] . '</name>'  . PHP_EOL;
-            $str .= '    <type>' . $param['type'] . '</type>'  . PHP_EOL;
+            $str .= '    <type>' . $this->e($param['type'] ?? '') . '</type>'  . PHP_EOL;
             $str .= '    <optional>' . $param['optional'] . '</optional>'  . PHP_EOL;
             if (isset($param['initializer'])) {
                 $str .= '    <initializer>' . $param['initializer'] . '</initializer>'  . PHP_EOL;
@@ -37,7 +37,7 @@ class Package_IDE_XML extends Package_IDE_Base {
 
         //Return
         $str .= '<return>' . PHP_EOL;
-        $str .= '  <type>' . $this->function['return']['type'] . '</type>' . PHP_EOL;
+        $str .= '  <type>' . $this->e($this->function['return']['type'] ?? '') . '</type>' . PHP_EOL;
         $str .= '  <description>' . $this->cdata_str($this->function['return']['description']) . '</description>' . PHP_EOL;
         $str .= '</return>' . PHP_EOL;
 
