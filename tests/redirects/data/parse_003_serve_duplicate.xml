@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<redirects>
+  <group scope="shortcut" serve="in-place">
+    <redirect from="try" to="language.exceptions"/>
+  </group>
+  <group scope="shortcut">
+    <redirect from="try" to="language.exceptions"/>
+  </group>
+</redirects>

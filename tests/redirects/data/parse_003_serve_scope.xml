@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<redirects>
+  <group scope="in-manual" serve="in-place">
+    <redirect from="class.oldname" to="class.newname"/>
+  </group>
+</redirects>

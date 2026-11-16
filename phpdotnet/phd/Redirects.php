@@ -75,9 +75,10 @@ final class Redirects
 
         $out->v(
             sprintf(
-                'Rendered %s (shortcut=%d, in_manual=%d, both=%d)',
+                'Rendered %s (shortcut=%d, in_place=%d, in_manual=%d, both=%d)',
                 $file,
                 count($maps['shortcut']),
+                count($maps['in_place']),
                 count($maps['in_manual']),
                 count($maps['both'])
             ),
@@ -86,9 +87,13 @@ final class Redirects
     }
 
     /**
-     * Parse a redirects.xml file into three scope-keyed maps.
+     * Parse a redirects.xml file into scope-keyed maps.
      *
-     * @return array{shortcut: array<string,string>, in_manual: array<string,string>, both: array<string,string>}
+     * A shortcut group marked serve="in-place" is an expansion, not a
+     * redirect: its entries go to `in_place` so that the page is served at
+     * the requested URL instead of answering a 301.
+     *
+     * @return array{shortcut: array<string,string>, in_manual: array<string,string>, both: array<string,string>, in_place: array<string,string>}
      */
     public static function parse(string $path): array
     {
@@ -113,13 +118,24 @@ final class Redirects
             );
         }
 
-        $maps = ['shortcut' => [], 'in_manual' => [], 'both' => []];
+        $maps = ['shortcut' => [], 'in_manual' => [], 'both' => [], 'in_place' => []];
 
         foreach ($xml->group as $group) {
             $scope = (string)$group['scope'];
             $key = $scope === 'in-manual' ? 'in_manual' : $scope;
-            if (!array_key_exists($key, $maps)) {
+            if ($key === 'in_place' || !array_key_exists($key, $maps)) {
                 throw new \Error("Unknown scope in $path: $scope");
+            }
+
+            $serve = (string)$group['serve'];
+            if ($serve !== '') {
+                if ($serve !== 'in-place') {
+                    throw new \Error("Unknown serve value in $path: $serve");
+                }
+                if ($key !== 'shortcut') {
+                    throw new \Error("serve=\"in-place\" only applies to the shortcut scope in $path");
+                }
+                $key = 'in_place';
             }
 
             foreach ($group->redirect as $r) {
@@ -128,8 +144,16 @@ final class Redirects
                 if ($from === '' || $to === '') {
                     throw new \Error(sprintf('Empty from/to in %s (scope=%s)', $path, $scope));
                 }
-                if (isset($maps[$key][$from])) {
+                // A bare URI is either redirected or served in place, never both.
+                $duplicate = $key === 'shortcut' || $key === 'in_place'
+                    ? isset($maps['shortcut'][$from]) || isset($maps['in_place'][$from])
+                    : isset($maps[$key][$from]);
+                if ($duplicate) {
                     throw new \Error(sprintf('Duplicate key in %s (scope=%s): %s', $path, $scope, $from));
+                }
+                // The anchor of a page that is not redirected to is lost.
+                if ($key === 'in_place' && str_contains($to, '#')) {
+                    throw new \Error(sprintf('Cannot serve an anchor in place in %s: %s -> %s', $path, $from, $to));
                 }
                 $maps[$key][$from] = $to;
             }
