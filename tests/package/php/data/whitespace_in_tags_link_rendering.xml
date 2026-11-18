@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xml:id="whitespace_in_tags_link_rendering" xmlns="http://docbook.org/ns/docbook">
+
+ <section>
+  <para>1. Function with leading/trailing whitespace</para>
+  <para>
+   <function>
+    strlen
+   </function>
+  </para>
+ </section>
+
+ <section>
+  <para>2. Methodname with leading/trailing whitespace</para>
+  <para>
+   <methodname>
+    Extension\Namespace\Classname::existingMethodName
+   </methodname>
+  </para>
+ </section>
+
+ <section>
+  <para>3. Classname with leading/trailing whitespace</para>
+  <para>
+   <classname>
+    Extension\Namespace\Existing_Class
+   </classname>
+  </para>
+ </section>
+
+ <section>
+  <para>4. Varname with leading/trailing whitespace</para>
+  <para>
+   <varname>
+    _SERVER
+   </varname>
+  </para>
+ </section>
+
+</chapter>
