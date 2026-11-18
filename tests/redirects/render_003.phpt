@@ -26,4 +26,4 @@ unlink($lang . '/redirects.xml');
 rmdir($lang);
 ?>
 --EXPECT--
-{"shortcut":{"if":"control-structures.if","anchored":"page.foo#some.anchor","bcmath":"bc"},"in_manual":{"class.oldname":"class.newname"},"both":{"installation":"install"}}
+{"shortcut":{"if":"control-structures.if","anchored":"page.foo#some.anchor","bcmath":"bc"},"in_manual":{"class.oldname":"class.newname"},"both":{"installation":"install"},"in_place":[]}

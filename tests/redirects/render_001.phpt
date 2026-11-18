@@ -15,4 +15,4 @@ echo json_encode($maps) . PHP_EOL;
 ?>
 --EXPECT--
 Broken targets: 0
-{"shortcut":{"if":"control-structures.if","anchored":"page.foo#some.anchor","bcmath":"bc"},"in_manual":{"class.oldname":"class.newname"},"both":{"installation":"install"}}
+{"shortcut":{"if":"control-structures.if","anchored":"page.foo#some.anchor","bcmath":"bc"},"in_manual":{"class.oldname":"class.newname"},"both":{"installation":"install"},"in_place":[]}
