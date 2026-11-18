@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<article xmlns="http://docbook.org/ns/docbook" xml:id="empty_title_test">
+ <section xml:id="empty-title-section">
+  <title/>
+  <simpara>Some content after empty title</simpara>
+ </section>
+</article>
