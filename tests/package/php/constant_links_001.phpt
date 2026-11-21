@@ -95,4 +95,20 @@ Content:
   </p>
  </div>
 
+ <div class="section">
+  <p class="para">5. Constants sharing a description have their own ID</p>
+  <dl>
+   
+    <dt>
+     <strong id="constant.first-alias"><code>FIRST_ALIAS</code></strong>,
+     <strong id="constant.second-alias"><code>SECOND_ALIAS</code></strong>
+     (<span class="type"><a href="language.types.boolean.html" class="type bool">bool</a></span>)
+    </dt>
+    <dd>
+     <p class="simpara">Shared description</p>
+    </dd>
+   
+  </dl>
+ </div>
+
 </div>

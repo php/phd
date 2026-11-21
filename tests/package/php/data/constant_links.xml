@@ -36,4 +36,20 @@
   </para>
  </section>
 
+ <section>
+  <para>5. Constants sharing a description have their own ID</para>
+  <variablelist>
+   <varlistentry>
+    <term>
+     <constant xml:id="constant.first-alias">FIRST_ALIAS</constant>,
+     <constant xml:id="constant.second-alias">SECOND_ALIAS</constant>
+     (<type>bool</type>)
+    </term>
+    <listitem>
+     <simpara>Shared description</simpara>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </section>
+
 </chapter>
