@@ -2122,6 +2122,9 @@ abstract class Package_Generic_XHTML extends Format_Abstract_XHTML {
                 $this->pushRole("constant_group");
                 $this->cchunk["constant"] = $props["innerXml"];
             }
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                return '<strong id="' . $attrs[Reader::XMLNS_XML]["id"] . '"><code>';
+            }
             return "<strong><code>";
         }
 
