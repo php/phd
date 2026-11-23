@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<redirects>
+  <group scope="shortcut">
+    <redirect from="tut.php" to="install"/>
+    <redirect from="mysql.trace-mode" to="mysql.configuration#ini.mysql.trace-mode" manual="extensions"/>
+  </group>
+  <group scope="in-manual">
+    <redirect from="pool.submitto" to="pool.submitTo" manual="extensions"/>
+    <redirect from="only.french" to="seulement" manual="fr"/>
+  </group>
+  <group scope="both">
+    <redirect from="set.mongodb" to="book.mongodb" manual="extensions"/>
+  </group>
+</redirects>

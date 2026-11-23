@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<redirects>
+  <group scope="shortcut">
+    <redirect from="apcu" to="book.apcu" manual="../pecl"/>
+  </group>
+</redirects>
