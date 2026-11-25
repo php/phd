@@ -31,7 +31,10 @@ abstract class Format_Abstract_XHTML extends Format {
                 $id = $attrs[Reader::XMLNS_XML]["id"];
                 $idstr = ' id="' .$id. '"';
             }
-            return '<' .$tag. ' class="' .$name. '"' . $idstr . ($props["empty"] ? '/' : "") . '>';
+            if ($props["empty"]) {
+                return '<' .$tag. ' class="' .$name. '"' . $idstr . '></' .$tag. '>';
+            }
+            return '<' .$tag. ' class="' .$name. '"' . $idstr . '>';
         }
         return '</' .$tag. '>';
     }
