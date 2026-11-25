@@ -20,6 +20,7 @@ abstract class Package_IDE_Base extends Format {
         'tbody'                 => 'format_changelog_tbody',
         'tip'                   => 'format_notes',
         'warning'               => 'format_notes',
+        'type'                  => 'format_type',
     );
     protected $textmap    = array(
         'function'              => 'format_seealso_entry_text',
@@ -54,6 +55,8 @@ abstract class Package_IDE_Base extends Format {
     );
 
     protected $isFunctionRefSet;
+    /** Stack of the <type> elements being read, used to build union and intersection types */
+    protected $typeStack = [];
     protected $isChangelogRow = false;
     protected $role = false;
     protected $versions;
@@ -253,6 +256,7 @@ abstract class Package_IDE_Base extends Format {
         if ($open) {
             $this->function = $this->dfunction;
             $this->cchunk = $this->dchunk;
+            $this->typeStack = [];
 
             $this->function['manualid'] =  $attrs[Reader::XMLNS_XML]['id'];
             return;
@@ -292,16 +296,48 @@ abstract class Package_IDE_Base extends Format {
         }
     }
 
+    public function format_type($open, $name, $attrs, $props) {
+        if (!$this->isFunctionRefSet || $this->role != 'description') {
+            return;
+        }
+        if ($open) {
+            if (!$props['empty']) {
+                $this->typeStack[] = [
+                    'class' => $attrs[Reader::XMLNS_DOCBOOK]['class'] ?? '',
+                    'parts' => [],
+                ];
+            }
+            return;
+        }
+        $frame = array_pop($this->typeStack);
+        if ($frame === null) {
+            return;
+        }
+        $type = match ($frame['class']) {
+            'union'        => implode('|', $frame['parts']),
+            'intersection' => implode('&', $frame['parts']),
+            default        => implode('', $frame['parts']),
+        };
+        if ($this->typeStack !== []) {
+            if ($frame['class'] === 'intersection') {
+                $type = '(' . $type . ')';
+            }
+            $this->typeStack[array_key_last($this->typeStack)]['parts'][] = $type;
+            return;
+        }
+        if (isset($this->cchunk['methodparam']) && !$this->cchunk['methodparam']) {
+            $this->function['return']['type'] = $type;
+            return;
+        }
+        $this->cchunk['param']['type'] = $type;
+    }
+
     public function format_type_text($value, $tag) {
         if (!$this->isFunctionRefSet) {
             return;
         }
-        if ($this->role == 'description') {
-            if (isset($this->cchunk['methodparam']) && !$this->cchunk['methodparam']) {
-                $this->function['return']['type'] = $value;
-                return;
-            }
-            $this->cchunk['param']['type'] = $value;
+        if ($this->role == 'description' && $this->typeStack !== []) {
+            $this->typeStack[array_key_last($this->typeStack)]['parts'][] = trim($value);
         }
     }
 
