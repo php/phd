@@ -868,7 +868,11 @@ abstract class Package_PEAR_XHTML extends Package_Generic_XHTML {
     public function format_warning($open, $name, $attrs, $props)
     {
         if ($open) {
-            return '<blockquote class="warning">' . "\n";
+            $idstr = "";
+            if (isset($attrs[Reader::XMLNS_XML]["id"])) {
+                $idstr = ' id="' . $attrs[Reader::XMLNS_XML]["id"] . '"';
+            }
+            return '<blockquote class="warning"' . $idstr . '>' . "\n";
         }
         return "</blockquote>\n";
     }
