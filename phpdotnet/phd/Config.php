@@ -13,7 +13,6 @@ class Config
     public bool $noToc = false;
     public string $xmlRoot = '.';
     public string $xmlFile = './.manual.xml';
-    public string $historyFile = './fileModHistory.php';
     public string $langDir = './';
     public string $language = 'en';
     public string $fallbackLanguage = 'en';
